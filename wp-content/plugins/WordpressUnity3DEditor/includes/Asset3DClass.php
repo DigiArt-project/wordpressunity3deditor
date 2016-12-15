@@ -21,6 +21,7 @@ class Asset3DClass
         add_action('admin_footer', array($this, 'checktoradio'));
         add_filter('get_sample_permalink', array($this, 'disable_permalink'));
 
+        // TODO: use wp_handle_upload() to overwrite uploaded files
 
         // TODO: Stathis help me. DISABLE UPDATE BUTTON AND DISPLAY ADMIN NOTICES
 //        $caterory_terms = wp_get_post_terms( $post_id, 'asset3d_category');
@@ -106,26 +107,76 @@ class Asset3DClass
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    /*
+     *    Unity3D fields Metaboxes
+     *
+     */
     function asset3d_customfields_3d_unity3d($object)
     {
+
+
+
         wp_nonce_field(basename(__FILE__), "meta-box-nonce");
 
-        // fbx and guid_fbx
-        // mat and guid_fbx
-        // jpg texture and guid_fbx
+        $url_fbx_arr = get_post_meta($object->ID, "fbx-file", true);
+        $url_fbx = empty($url_fbx_arr)?'':$url_fbx_arr['url'];
 
+        $url_mat_arr = get_post_meta($object->ID, "mat-file", true);
+        $url_mat = empty($url_mat_arr)?'':$url_mat_arr['url'];
+
+        // fbx and guid_fbx
+        ?>
+
+        <!-- FBX field and text preview -->
+        <div style="margin-bottom:20px">
+            <label for="fbx-file-input" style="margin-right:30px; vertical-align: top">FBX file</label>
+            <input type="file" name="fbx-file-input" id="fbx-file-input" accept=".fbx,.FBX">
+            <br />
+            <div style="margin-left:100px">Current file:<?php echo $url_fbx; ?></div>
+            <br />
+
+            <textarea name="fbx-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_fbx);?></textarea>
+        </div>
+
+        <div style="margin-bottom:20px">
+            <label for="fbx-guid-input" style="margin-right:30px; vertical-align: top">FBX guid</label>
+
+            <input type="text" name="fbx-guid-input" id="fbx-guid-input"
+                   value="<?php echo get_post_meta($object->ID, "fbx-guid", true); ?>">
+
+        </div>
+
+        <!-- MAT file and mat_guid -->
+        <div style="margin-bottom:20px">
+            <label for="mat-file-input" style="margin-right:30px; vertical-align: top">MAT file</label>
+            <input type="file" name="mat-file-input" id="mat-file-input" accept=".mat,.MAT">
+            <br />
+            <div style="margin-left:100px">Current file:<?php echo $url_mat;?></div>
+            <br />
+
+            <textarea name="mat-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_mat);?></textarea>
+        </div>
+
+        <div style="margin-bottom:20px">
+            <label for="mat-guid-input" style="margin-right:30px; vertical-align: top">MAT guid</label>
+
+            <input type="text" name="mat-guid-input" id="mat-guid-input"
+                   value="<?php echo get_post_meta($object->ID, "mat-guid", true); ?>">
+
+        </div>
+
+        <!-- jpg texture guid -->
+
+        <div style="margin-bottom:20px">
+            <label for="jpg-guid-input" style="margin-right:30px; vertical-align: top">JPG guid</label>
+
+            <input type="text" name="jpg-guid-input" id="jpg-guid-input"
+                   value="<?php echo get_post_meta($object->ID, "jpg-guid", true); ?>">
+
+        </div>
+
+
+        <?php
     }
 
     function asset3d_customfields_3d_web($object)
@@ -160,7 +211,7 @@ class Asset3DClass
             <div style="margin-left:100px">Current file:<?php echo $url_mtl; ?></div>
             <br />
 
-            <textarea name="mtl-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php echo readfile($url_mtl); ?></textarea>
+            <textarea name="mtl-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_mtl); ?></textarea>
         </div>
 
         <!-- OBJ field and text preview -->
@@ -171,7 +222,7 @@ class Asset3DClass
             <div style="margin-left:100px">Current file:<?php echo $url_obj; ?></div>
             <br />
 
-            <textarea name="obj-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php echo readfile($url_obj); ?></textarea>
+            <textarea name="obj-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_obj); ?></textarea>
         </div>
 
         <!-- Diffusion map (jpg or png)-->
@@ -377,6 +428,13 @@ class Asset3DClass
         // Screenshot image file
         $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['screenshot-file-input'], array('image/jpg','image/jpeg','image/png') , 'screenshot-file');
 
+        // FBX
+        $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['fbx-file-input'], array('text/plain', 'application/fbx') , 'fbx-file');
+
+        // MAT
+        $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['mat-file-input'], array('text/plain', 'application/mat') , 'mat-file');
+
+
         //if ( $asset3d_category_slug == "static3dmodels") {}
 
         if ($asset3d_category_slug == "pois" || $asset3d_category_slug == "dynamic3dmodels"){
@@ -405,12 +463,35 @@ class Asset3DClass
             update_post_meta($post_id, "destination-scene", $destination_scene);
 
         }
-    }
 
 
-    function custom_modify_file_name( $file )
-    {
-        return $file['name'];
+        // FBX and its guid
+        $fbx_guid = "";
+
+        if(isset($_POST["fbx-guid-input"]))
+            $fbx_guid = $_POST["fbx-guid-input"];
+
+        update_post_meta($post_id, "fbx-guid", $fbx_guid);
+
+
+        // MAT and its guid
+        $mat_guid = "";
+
+        if(isset($_POST["mat-guid-input"]))
+            $mat_guid = $_POST["mat-guid-input"];
+
+        update_post_meta($post_id, "mat-guid", $mat_guid);
+
+
+        // JPG guid
+        $jpg_guid = "";
+
+        if(isset($_POST["jpg-guid-input"]))
+            $jpg_guid = $_POST["jpg-guid-input"];
+
+        update_post_meta($post_id, "jpg-guid", $jpg_guid);
+
+
     }
 
 
@@ -460,8 +541,6 @@ class Asset3DClass
                 // set directory
                 add_filter('upload_dir', array(&$this,'custom_modify_upload_dir'));
 
-                // set filename to override wp style (wp by default does not overwrite files)
-                add_filter('wp_handle_upload_prefilter', array(&$this,'custom_modify_upload_dir'));
 
                 //add_filter('upload_dir', array(&$this,'awesome_wallpaper_dir'));
 
@@ -623,18 +702,20 @@ class Asset3DClass
         }
 
         // now create the taxonomy terms for asset3d_scene_assignment custom taxonomy
-        foreach ($this->termsScenes as $term_key => $term) {
+        if (!empty($this->termsScenes)) {
+            foreach ($this->termsScenes as $term_key => $term) {
 
-            if (get_term($term)->slug == 'uncategorized') {
-                wp_insert_term(
-                    $term['name'],
-                    $this->taxonomy2,
-                    array(
-                        'description' => $term['description'],
-                        'slug' => $term['slug'],
-                    )
-                );
-                unset($term);
+                if (get_term($term)->slug == 'uncategorized') {
+                    wp_insert_term(
+                        $term['name'],
+                        $this->taxonomy2,
+                        array(
+                            'description' => $term['description'],
+                            'slug' => $term['slug'],
+                        )
+                    );
+                    unset($term);
+                }
             }
         }
     }

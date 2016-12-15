@@ -5,7 +5,7 @@
  * Description: functions for VR actions that are added to the main functions.php
  * Author: Dimitrios Ververidis
  * Author URI: http://yoursite.com
- * Version: 0.1.0
+ * Version: 0.1.1
  */
 
 
@@ -69,11 +69,12 @@ $asset3dClass = new Asset3DClass();
  * @return mixed
  */
 function my_myme_types($mime_types){
-    $mime_types['json'] = 'text/json'; //Adding json extension
-    $mime_types['obj'] = 'text/plain'; //Adding json extension
-    $mime_types['mp4'] = 'video/mp4'; //Adding json extension
-    $mime_types['mtl'] = 'application/mtl'; //Adding json extension
-    $mime_types['MTL'] = 'application/mtl'; //Adding json extension
+    $mime_types['json'] = 'text/json';
+    $mime_types['obj'] = 'text/plain';
+    $mime_types['mp4'] = 'video/mp4';
+    $mime_types['mtl'] = 'application/mtl';
+    $mime_types['fbx'] = 'application/fbx';
+    $mime_types['mat'] = 'application/mat';
     return $mime_types;
 }
 
