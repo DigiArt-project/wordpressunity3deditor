@@ -1,0 +1,80 @@
+.dg {
+    max-font-size: 12pt;
+    min-font-size: 10pt;
+    font-size: 0.6vw;
+    color: #000;
+    text-shadow: none !important;
+}
+
+.dg.main.taller-than-window .close-button {
+    border-top: 1px solid #ddd;
+}
+
+.dg.main .close-button {
+    background-color: #ccc;
+}
+
+.dg.main .close-button:hover {
+    background-color: #ddd;
+}
+
+
+.dg.main::-webkit-scrollbar {
+    background: #fafafa;
+}
+
+.dg.main::-webkit-scrollbar-thumb {
+    background: #bbb;
+}
+
+.dg li:not(.folder) {
+    background: #fafafa;
+    height:2.5vw;
+    border-bottom: 1px solid #ddd;
+}
+
+.dg li.save-row .button {
+    text-shadow: none !important;
+}
+
+.dg li.title {
+    background: #e8e8e8 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;
+}
+
+.dg .cr.function:hover,.dg .cr.boolean:hover {
+    background: #fff;
+}
+
+.dg .c input[type=text] {
+    background: #e9e9e9;
+}
+
+.dg .c input[type=text]:hover {
+    background: #eee;
+}
+
+.dg .c input[type=text]:focus {
+    background: #eee;
+    color: #555;
+}
+
+.dg .c .slider {
+    background: #e9e9e9;
+}
+
+.dg .c .slider:hover {
+    background: #eee;
+}
+
+.dg li {
+    margin-bottom:0px;
+}
+
+.dg .c .button {
+    height:0px;
+    visibility: hidden;
+}
+
+.dg .c .checkbox {
+    height:1vw;
+}
