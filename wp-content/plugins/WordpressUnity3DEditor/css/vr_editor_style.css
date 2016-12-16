@@ -1,0 +1,167 @@
+/* Three js */
+#vr_editor_main_div {
+    background-color: #eee;
+    position:relative;
+    width: 95%;
+    height:600px;
+}
+
+/* Php info top right */
+#infophp {
+        font-size:0.6vw;
+        max-font-size: 20pt;
+        background:rgba(255, 255, 255, 1);
+        color:#000;
+        position: absolute;
+        text-align: center;
+        top: 0px;
+        left: 40%;
+        width: 20%;
+        padding: 2px;
+        opacity: 0.7;
+}
+
+.btphp {
+        font-size:0.8vw;
+        max-font-size: 20pt;
+        background:#000;
+        color:#fff;
+        opacity: 1;
+        margin-top: 5px;
+        padding: 2px;
+}
+
+#formdiv{
+    font-size: 1vw;
+    overflow-y: scroll;
+    max-height:40%;
+    width:50%;
+    position:absolute;
+    bottom:0;
+    opacity:0.5;
+}
+
+#paramsform {
+        font-size: 0.6vw;
+        background:#eee;
+        color:#000;
+        padding: 10px;
+    }
+
+#paramsform input{
+    font-size: 0.6vw;
+}
+
+#dat-gui-container {
+            position: absolute;
+            text-align: left;
+            top: 0px;
+            left: 2%;
+            width: 20%;
+            padding: 0px;
+        }
+
+/* Progress bar */
+#progress {
+    color:#64dee3;
+    top:7em;
+    width: auto;
+    font-size:2em;
+    font-variant:small-caps;
+    font-weight:bold;
+    z-index:100;
+    text-align: center;
+    text-shadow: #000 0px 0px 0px;
+    display:none;
+}
+
+#progressbar {
+    text-align: center;
+    background: white;
+    width: auto;
+    height: 5px;
+}
+
+#bar {
+    background:#64dee3;
+    width:auto;
+    height:5px;
+}
+
+.enabled {
+    color: lime!important;
+    cursor:pointer;
+}
+
+.enabled:hover {
+    text-shadow: #0f0 0px 0px 0px !important;
+}
+
+.disabled {
+    background:gray;
+    cursor:default;
+}
+
+
+
+/* Links have red color 
+a { color:red }
+*/
+
+/* This disables the mouse rotation of canvas 
+canvas { pointer-events:none; z-index:10; }
+*/
+
+/* Result */
+.result {
+    margin: 1px;
+    font-size: smaller;
+}
+/* ---------------------------------------------- */
+
+#popUpDiv{
+    z-index: 100;
+    position: absolute;
+    background-color: rgba(123, 123,123, 0.8);
+    display: none;
+}
+#popupSelect{
+    z-index: 1000;
+}
+
+/* ------------------------------------------ */
+
+#blocker {
+    position: absolute;
+    width: 20%;
+    height: 3vw;
+    margin-left: 40%;
+    bottom: 1%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+#instructions {
+    width: 100%;
+    height: 100%;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+
+    color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
+
