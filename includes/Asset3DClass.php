@@ -87,7 +87,6 @@ class Asset3DClass
 
         // General 3D fields
         add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "asset3d", "normal", "default", null);
-        add_meta_box("asset3d_custom_fields_metabox_3d_unity3d", "3D fields Unity3D ", array($this, "asset3d_customfields_3d_unity3d"), "asset3d", "normal", "default", null);
 
         if (get_the_terms($object, 'asset3d_category')) {
 
@@ -107,77 +106,6 @@ class Asset3DClass
         }
     }
 
-    /*
-     *    Unity3D fields Metaboxes
-     *
-     */
-    function asset3d_customfields_3d_unity3d($object)
-    {
-
-
-
-        wp_nonce_field(basename(__FILE__), "meta-box-nonce");
-
-        $url_fbx_arr = get_post_meta($object->ID, "fbx-file", true);
-        $url_fbx = empty($url_fbx_arr)?'':$url_fbx_arr['url'];
-
-        $url_mat_arr = get_post_meta($object->ID, "mat-file", true);
-        $url_mat = empty($url_mat_arr)?'':$url_mat_arr['url'];
-
-        // fbx and guid_fbx
-        ?>
-
-        <!-- FBX field and text preview -->
-        <div style="margin-bottom:20px">
-            <label for="fbx-file-input" style="margin-right:30px; vertical-align: top">FBX file</label>
-            <input type="file" name="fbx-file-input" id="fbx-file-input" accept=".fbx,.FBX">
-            <br />
-            <div style="margin-left:100px">Current file:<?php echo $url_fbx; ?></div>
-            <br />
-
-            <textarea name="fbx-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_fbx);?></textarea>
-        </div>
-
-        <div style="margin-bottom:20px">
-            <label for="fbx-guid-input" style="margin-right:30px; vertical-align: top">FBX guid</label>
-
-            <input type="text" name="fbx-guid-input" id="fbx-guid-input"
-                   value="<?php echo get_post_meta($object->ID, "fbx-guid", true); ?>">
-
-        </div>
-
-        <!-- MAT file and mat_guid -->
-        <div style="margin-bottom:20px">
-            <label for="mat-file-input" style="margin-right:30px; vertical-align: top">MAT file</label>
-            <input type="file" name="mat-file-input" id="mat-file-input" accept=".mat,.MAT">
-            <br />
-            <div style="margin-left:100px">Current file:<?php echo $url_mat;?></div>
-            <br />
-
-            <textarea name="mat-file-preview" readonly style="margin-left:100px;width:70%;height:200px;"><?php readfile($url_mat);?></textarea>
-        </div>
-
-        <div style="margin-bottom:20px">
-            <label for="mat-guid-input" style="margin-right:30px; vertical-align: top">MAT guid</label>
-
-            <input type="text" name="mat-guid-input" id="mat-guid-input"
-                   value="<?php echo get_post_meta($object->ID, "mat-guid", true); ?>">
-
-        </div>
-
-        <!-- jpg texture guid -->
-
-        <div style="margin-bottom:20px">
-            <label for="jpg-guid-input" style="margin-right:30px; vertical-align: top">JPG guid</label>
-
-            <input type="text" name="jpg-guid-input" id="jpg-guid-input"
-                   value="<?php echo get_post_meta($object->ID, "jpg-guid", true); ?>">
-
-        </div>
-
-
-        <?php
-    }
 
     function asset3d_customfields_3d_web($object)
     {
@@ -326,9 +254,7 @@ class Asset3DClass
             <input type="file" name="infovideo-file-input" accept="video/mp4">
             <div style="margin-left:100px">Current file:<?php echo $url_inf_vid ?></div>
             <br/>
-            <video name="infovideo-file-preview" style="margin-left:100px;height:256px;border:2px solid black"
-                   controls
-                   type="video/mp4" src="<?php echo $url_inf_vid; ?>"/>
+            <video name="infovideo-file-preview" style="margin-left:100px;height:256px;border:2px solid black" controls type="video/mp4" src="<?php echo $url_inf_vid; ?>"></video>
         </div>
 
         <?php
@@ -408,108 +334,42 @@ class Asset3DClass
         // Generate folder and set temporary uploading path to it
         $this->generate_asset3d_folder($asset3d_category_slug, $post_slug);
 
-        // --------------- Mtl -------------------
-//        $mtl_content = "";
-//
-//        if(isset($_POST["mtl-content-input"]))
-//            $mtl_content = $_POST["mtl-content-input"];
-//
-//        update_post_meta($post_id, "mtl-content", $mtl_content);
-
-        // mtl
+        // upload files
         $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['mtl-file-input'], array('text/plain', 'application/mtl') , 'mtl-file');
-
-        // obj
         $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['obj-file-input'], array('text/plain', 'application/obj') , 'obj-file');
-
-        // diffusion image file
         $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['diffusion-file-input'], array('image/jpg','image/jpeg','image/png') , 'diffusion-file');
-
-        // Screenshot image file
         $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['screenshot-file-input'], array('image/jpg','image/jpeg','image/png') , 'screenshot-file');
 
-        // FBX
-        $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['fbx-file-input'], array('text/plain', 'application/fbx') , 'fbx-file');
-
-        // MAT
-        $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['mat-file-input'], array('text/plain', 'application/mat') , 'mat-file');
-
-
-        //if ( $asset3d_category_slug == "static3dmodels") {}
-
+        // Information images and video
         if ($asset3d_category_slug == "pois" || $asset3d_category_slug == "dynamic3dmodels"){
-
-            // Information image 1
             $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['infoimage1-file-input'], array('image/jpg','image/png') , 'infoimage1-file');
-
-            // Information image 2
             $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['infoimage2-file-input'], array('image/jpg','image/png') , 'infoimage2-file');
-
-            // Information image 3
             $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['infoimage3-file-input'], array('image/jpg','image/png') , 'infoimage3-file');
-
-            // Information video
             $this->uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $_FILES['infovideo-file-input'], array('video/mp4') , 'infovideo-file');
         }
 
 
+
         if ($asset3d_category_slug == "doors"){
-
             $destination_scene = "";
-
             if(isset($_POST["destination-scene-input"]))
                 $destination_scene = $_POST["destination-scene-input"];
-
             update_post_meta($post_id, "destination-scene", $destination_scene);
-
         }
-
-
-        // FBX and its guid
-        $fbx_guid = "";
-
-        if(isset($_POST["fbx-guid-input"]))
-            $fbx_guid = $_POST["fbx-guid-input"];
-
-        update_post_meta($post_id, "fbx-guid", $fbx_guid);
-
-
-        // MAT and its guid
-        $mat_guid = "";
-
-        if(isset($_POST["mat-guid-input"]))
-            $mat_guid = $_POST["mat-guid-input"];
-
-        update_post_meta($post_id, "mat-guid", $mat_guid);
-
-
-        // JPG guid
-        $jpg_guid = "";
-
-        if(isset($_POST["jpg-guid-input"]))
-            $jpg_guid = $_POST["jpg-guid-input"];
-
-        update_post_meta($post_id, "jpg-guid", $jpg_guid);
-
 
     }
 
 
     function custom_modify_upload_dir( $param ){
         $param['path'] = $this->asset_path; // $param['path'] . $mydir;
-
-//        wp_die(print_r($param));
-
         $param['url']  = $this->asset_path_url; //$param['url'] . $mydir;
         $param['subdir'] = $this->asset_subdir;
-
 //        error_log("path={$param['path']}");
 //        error_log("url={$param['url']}");
 //        error_log("subdir={$param['subdir']}");
 //        error_log("basedir={$param['basedir']}");
 //        error_log("baseurl={$param['baseurl']}");
 //        error_log("error={$param['error']}");
-
         return $param;
     }
 
@@ -669,10 +529,8 @@ class Asset3DClass
             }
         }
 
-
         // == 2. Asset3D Scene assigment  ====
         $this->taxonomy2 = 'asset3d_scene_assignment';
-
 
         // Get the Scenes available
         $args = array(
@@ -719,8 +577,6 @@ class Asset3DClass
             }
         }
     }
-
-
 
 
     /**

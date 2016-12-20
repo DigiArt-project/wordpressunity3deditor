@@ -6,13 +6,16 @@
     }
     .yaml_input_large {
         width:80%;
-        height:50em;
+        height:12em;
         font-family: monospace;
     }
     .yaml_input_small {
         width:80%;
         height:4em;
         font-family: monospace;
+    }
+    .div_yaml_input {
+        margin-bottom:30px;
     }
 </style>
 
@@ -85,7 +88,15 @@ class SceneTemplateClass
             array($this, "scene_template_fixed_custom_fields"), "scene_template", "normal", "default", null);
 
 
+        add_meta_box("scene_template_dotmeta_custom_fields_metabox", "Scene template .meta pattern",
+            array($this, "scene_template_dotmeta_custom_fields"), "scene_template", "normal", "default", null);
 
+
+        add_meta_box("scene_template_mat_custom_fields_metabox", "Scene template material .mat pattern",
+            array($this, "scene_template_mat_custom_fields"), "scene_template", "normal", "default", null);
+
+        add_meta_box("scene_template_doorscript_custom_fields_metabox", "Scene template doors javascript js pattern",
+            array($this, "scene_template_doorjs_custom_fields"), "scene_template", "normal", "default", null);
 
     }
 
@@ -98,41 +109,41 @@ class SceneTemplateClass
         <div style="margin-bottom:30px ">Write the fixed things of the Scene such as
             Occlussion, Render, LightMap and NavMesh settings</div>
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-OCS-input" class="yaml_label">Occlusion Culling Settings</label>
             <textarea name="scene-OCS-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-OCS", true); ?></textarea>
         </div>
 
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-RS-input" class="yaml_label">Render Settings</label>
             <textarea name="scene-RS-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-RS", true); ?></textarea>
         </div>
 
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-LMS-input" class="yaml_label">LightMap Settings</label>
             <textarea name="scene-LMS-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-LMS", true); ?></textarea>
         </div>
 
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-NMS-input" class="yaml_label">NavMesh Settings</label>
             <textarea name="scene-NMS-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-NMS", true); ?></textarea>
         </div>
 
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-FPS-input" class="yaml_label">First Person Prefab</label>
             <textarea name="scene-FPS-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-FPS", true); ?></textarea>
         </div>
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-light-input" class="yaml_label">Light pattern</label>
             <textarea name="scene-light-input" class="yaml_input_small"
             ><?php echo get_post_meta($object->ID, "scene-light", true); ?></textarea>
@@ -140,6 +151,9 @@ class SceneTemplateClass
 
         <div style="margin-top:30px">The guid of the FPS Fab can be found in:<br />
             "Standard Assets\Characters\FirstPersonCharacter\Prefabs\FPSController.prefab.mat"</div>
+
+
+        <div style="margin-top:30px">fids up to 7 are used. First available fid is 8.</div>
 
 
 
@@ -161,19 +175,19 @@ class SceneTemplateClass
 
         <div style="margin-bottom:30px">Write the patterns for the prefabricated objects, staticObjects (floor), dynamic objects, doors, and POIs</div>
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-static-object-pattern-input" class="yaml_label">Static object pattern</label>
             <textarea name="scene-static-object-pattern-input" class="yaml_input_large"
             ><?php echo get_post_meta($object->ID, "scene-static-object-pattern", true);?></textarea>
         </div>
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-dynamic-object-pattern-input" class="yaml_label">Dynamic object pattern</label>
             <textarea name="scene-dynamic-object-pattern-input" class="yaml_input_large"
               ><?php echo get_post_meta($object->ID, "scene-dynamic-object-pattern", true);?></textarea>
         </div>
 
-        <div>
+        <div class="div_yaml_input">
             <label for="scene-door-pattern-input" class="yaml_label">Door pattern</label>
             <textarea name="scene-door-pattern-input" class="yaml_input_large"
                 ><?php echo get_post_meta($object->ID, "scene-door-pattern", true); ?></textarea>
@@ -192,6 +206,110 @@ class SceneTemplateClass
 
         // end of prefab custom fields
     }
+
+
+
+    /**
+     * Prefabricated objects in the scene
+     *
+     * @param $object
+     */
+    function scene_template_dotmeta_custom_fields($object)
+    {
+        wp_nonce_field(basename(__FILE__), "meta-box-nonce");
+
+        ?>
+
+        <div style="margin-bottom:30px">Write the pattern for the .meta files.</div>
+
+        <div class="div_yaml_input">
+            <label for="scene-folder-dotmeta-pattern-input" class="yaml_label">Folder.meta pattern</label>
+            <textarea name="scene-folder-dotmeta-pattern-input" class="yaml_input_small"
+            ><?php echo get_post_meta($object->ID, "scene-folder-dotmeta-pattern", true);?></textarea>
+        </div>
+
+
+        <div class="div_yaml_input">
+            <label for="scene-obj-dotmeta-pattern-input" class="yaml_label">obj.meta pattern</label>
+            <textarea name="scene-obj-dotmeta-pattern-input" class="yaml_input_large"
+            ><?php echo get_post_meta($object->ID, "scene-obj-dotmeta-pattern", true);?></textarea>
+        </div>
+
+
+        <div class="div_yaml_input">
+            <label for="scene-mat-dotmeta-pattern-input" class="yaml_label">mat.meta pattern</label>
+            <textarea name="scene-mat-dotmeta-pattern-input" class="yaml_input_small"
+            ><?php echo get_post_meta($object->ID, "scene-mat-dotmeta-pattern", true);?></textarea>
+        </div>
+
+        <div class="div_yaml_input">
+            <label for="scene-jpg-dotmeta-pattern-input" class="yaml_label">jpg.meta pattern</label>
+            <textarea name="scene-jpg-dotmeta-pattern-input" class="yaml_input_large"
+            ><?php echo get_post_meta($object->ID, "scene-jpg-dotmeta-pattern", true);?></textarea>
+        </div>
+
+
+        <div class="div_yaml_input">
+            <label for="scene-js-dotmeta-pattern-input" class="yaml_label">js.meta pattern</label>
+            <textarea name="scene-js-dotmeta-pattern-input" class="yaml_input_small"
+            ><?php echo get_post_meta($object->ID, "scene-js-dotmeta-pattern", true);?></textarea>
+        </div>
+
+
+        <?php
+        // end of prefab custom fields
+    }
+
+
+    /**
+     * Prefabricated objects in the scene
+     *
+     * @param $object
+     */
+    function scene_template_mat_custom_fields($object)
+    {
+        wp_nonce_field(basename(__FILE__), "meta-box-nonce");
+
+        ?>
+
+        <div style="margin-bottom:30px">Write the pattern for the .mat files.<br />- HINT 1: The .mat should take info from .mtl.<br />
+            - HINT 2: the name of the .mat should be "myobjname-defaultMat.mat"</div>
+
+        <div class="div_yaml_input">
+            <label for="scene-mat-pattern-input" class="yaml_label">Material (.mat) pattern</label>
+            <textarea name="scene-mat-pattern-input" class="yaml_input_large"
+            ><?php echo get_post_meta($object->ID, "scene-mat-pattern", true);?></textarea>
+        </div>
+
+        <?php
+        // end of prefab custom fields
+    }
+
+
+    /**
+     * Prefabricated objects in the scene
+     *
+     * @param $object
+     */
+    function scene_template_doorjs_custom_fields($object)
+    {
+        wp_nonce_field(basename(__FILE__), "meta-box-nonce");
+
+        ?>
+
+        <div style="margin-bottom:30px">Write the pattern for the .js files for the doors.</div>
+
+        <div class="div_yaml_input">
+            <label for="scene-doorjs-pattern-input" class="yaml_label">Door javascript (.js) pattern</label>
+            <textarea name="scene-doorjs-pattern-input" class="yaml_input_large"
+            ><?php echo get_post_meta($object->ID, "scene-doorjs-pattern", true);?></textarea>
+        </div>
+
+        <?php
+        // end of prefab custom fields
+    }
+
+
 
     /**
      * Now Save everything to db
@@ -229,13 +347,22 @@ class SceneTemplateClass
         $this->updateFieldWrapper($post_id, "scene-NMS-input", "scene-NMS");
         $this->updateFieldWrapper($post_id, "scene-FPS-input", "scene-FPS");
 
-
         $this->updateFieldWrapper($post_id, "scene-static-object-pattern-input", "scene-static-object-pattern");
         $this->updateFieldWrapper($post_id, "scene-dynamic-object-pattern-input", "scene-dynamic-object-pattern");
         $this->updateFieldWrapper($post_id, "scene-door-pattern-input", "scene-door-pattern");
         $this->updateFieldWrapper($post_id, "scene-POI-pattern-input", "scene-POI-pattern");
 
         $this->updateFieldWrapper($post_id, "scene-light-input", "scene-light");
+
+        $this->updateFieldWrapper($post_id, "scene-folder-dotmeta-pattern-input", "scene-folder-dotmeta-pattern");
+        $this->updateFieldWrapper($post_id, "scene-obj-dotmeta-pattern-input", "scene-obj-dotmeta-pattern");
+        $this->updateFieldWrapper($post_id, "scene-mat-dotmeta-pattern-input", "scene-mat-dotmeta-pattern");
+        $this->updateFieldWrapper($post_id, "scene-jpg-dotmeta-pattern-input", "scene-jpg-dotmeta-pattern");
+        $this->updateFieldWrapper($post_id, "scene-js-dotmeta-pattern-input", "scene-js-dotmeta-pattern");
+
+        $this->updateFieldWrapper($post_id, "scene-mat-pattern-input", "scene-mat-pattern");
+
+        $this->updateFieldWrapper($post_id, "scene-doorjs-pattern-input", "scene-doorjs-pattern");
     }
 
     function updateFieldWrapper($post_id, $fieldinput, $postmetaname){

@@ -5,7 +5,7 @@
  * Description: functions for VR actions that are added to the main functions.php
  * Author: Dimitrios Ververidis
  * Author URI: http://yoursite.com
- * Version: 0.1.4
+ * Version: 0.1.5
  */
 
 /*
