@@ -5,7 +5,7 @@
  * Description: functions for VR actions that are added to the main functions.php
  * Author: Dimitrios Ververidis
  * Author URI: http://yoursite.com
- * Version: 0.1.1
+ * Version: 0.1.4
  */
 
 /*
@@ -30,15 +30,30 @@ php_value max_input_time 300
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Asset3d Type they belong to)
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Scene they belong to)
 
+//================ Templates ===========================
+
+
+
+/**
+ * Scene cpt
+ */
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneTemplateClass.php');
+$sceneTemplateClass = new SceneTemplateClass();
+
+
 
 
 //=====================================================
+
+
 
 /**
  * Game cpt
  */
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/GameClass.php');
 $gameClass = new GameClass();
+
+
 
 /**
  * Scene cpt

@@ -15,7 +15,6 @@ class SceneClass
         add_action('init', array($this, 'register_new_taxonomy_terms_scene'));
         add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
         add_action('admin_footer', array($this, 'checktoradio'));
-        add_action('post_submitbox_misc_actions', array($this, 'vr_Scene_Edit'));
         add_filter('get_sample_permalink', array($this, 'disable_permalink'));
         add_action('edit_form_after_title', array($this, 'create_folder_scene'));
         add_filter('geodir_custom_field_input_textarea', array($this,'scene_json_textarea_prolong'), 10, 1);
@@ -254,22 +253,22 @@ class SceneClass
     /**
      * Add "Edit in VR button" to post edit
      */
-    function vr_Scene_Edit(){
-
-        if (get_post_type()=='scene') {
-
-            $html  = '<div id="major-publishing-actions" style="overflow:hidden">';
-            $html .= '<div id="publishing-action">';
-
-            $html .= '<input accesskey="v" tabindex="5" value="VR Web Editor" 
-							class="button-primary" id="editVR" name="editVR" onclick="window.open(\''.plugins_url().
-                                              '/WordpressUnity3DEditor/includes/vr_editor.php\',\'_blank\')">';
-            $html .= '</div>';
-            $html .= '</div>';
-            echo $html;
-        }
-
-    }
+//    function vr_Scene_Edit(){
+//
+//        if (get_post_type()=='scene') {
+//
+//            $html  = '<div id="major-publishing-actions" style="overflow:hidden">';
+//            $html .= '<div id="publishing-action">';
+//
+//            $html .= '<input accesskey="v" tabindex="5" value="VR Web Editor"
+//							class="button-primary" id="editVR" name="editVR" onclick="window.open(\''.plugins_url().
+//                                              '/WordpressUnity3DEditor/includes/vr_editor.php\',\'_blank\')">';
+//            $html .= '</div>';
+//            $html .= '</div>';
+//            echo $html;
+//        }
+//
+//    }
 
 
 
