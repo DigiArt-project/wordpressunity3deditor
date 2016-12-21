@@ -5,17 +5,24 @@ Version: 1.0
 Author: Dimitrios Ververidis
 License: AGPL
  */
-class Asset3DClass
-{
+
+$asset3dClass = new Asset3DClass();
+
+class Asset3DClass{
     public $asset_path = '';
     public $asset_path_url = '';
     public $asset_subdir = '';
 
-    function __construct()
-    {
+    function __construct(){
+
+        add_action('init', array($this, 'wpunity_assets_construct'));
+        add_action('init', array($this, 'wpunity_assets_taxcategory'));
+        add_action('init', array($this, 'wpunity_assets_taxcategory_fill'));
+        add_action('init', array($this, 'wpunity_assets_taxscene'));
+
         register_activation_hook(__FILE__, array($this, 'activate'));
-        add_action('init', array($this, 'init_cpt_asset3d'));
-        add_action('init', array($this, 'assets3d_create_taxonomies'));
+
+
         add_action('init', array($this, 'register_new_taxonomy_terms'));
         add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
         add_action('admin_footer', array($this, 'checktoradio'));
@@ -39,51 +46,208 @@ class Asset3DClass
 
     }
 
+    /**
+     * 2.01
+     * Create Assets
+     *
+     */
+    function wpunity_assets_construct(){
 
-
-    function activate($object)
-    {
-//        $this->init_cpt_asset3d();
-//        $this->assets3d_create_taxonomies();
-//        $this->register_new_taxonomy_terms();
-    }
-
-    function init_cpt_asset3d()
-    {
         $labels = array(
-            'name' => _x('Assets 3D', 'post type general name'),
-            'singular_name' => _x('Asset 3D', 'post type singular name'),
-            'add_new' => _x('Add New', 'Asset 3D'),
-            'add_new_item' => __('Add New Asset 3D'),
-            'edit_item' => __('Edit Asset 3D'),
-            'new_item' => __('New Asset 3D'),
-            'all_items' => __('All Assets 3D'),
-            'view_item' => __('View Asset 3D'),
-            'search_items' => __('Search Assets 3D'),
-            'not_found' => __('No Assets 3D found'),
-            'not_found_in_trash' => __('No Assets 3D found in the Trash'),
-            'parent_item_colon' => '',
-            'menu_name' => 'Assets 3D'
+            'name'               => _x( 'Assets 3D', 'post type general name'),
+            'singular_name'      => _x( 'Asset 3D', 'post type singular name'),
+            'menu_name'          => _x( 'Assets 3D', 'admin menu'),
+            'name_admin_bar'     => _x( 'Asset 3D', 'add new on admin bar'),
+            'add_new'            => _x( 'Add New', 'add new on menu'),
+            'add_new_item'       => __( 'Add New Asset 3D'),
+            'new_item'           => __( 'New Asset 3D'),
+            'edit'               => __( 'Edit'),
+            'edit_item'          => __( 'Edit Asset 3D'),
+            'view'               => __( 'View'),
+            'view_item'          => __( 'View Asset 3D'),
+            'all_items'          => __( 'All Assets 3D'),
+            'search_items'       => __( 'Search Assets 3D'),
+            'parent_item_colon'  => __( 'Parent Assets 3D:'),
+            'parent'             => __( 'Parent Asset 3D'),
+            'not_found'          => __( 'No Assets 3D found.'),
+            'not_found_in_trash' => __( 'No Assets 3D found in Trash.')
         );
 
-        // args array
         $args = array(
-            'labels' => $labels,
-            'description' => 'Displays Assets 3D',
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' =>'dashicons-visibility',
-            'supports' => array('title', 'editor', 'thumbnail' ),
-            'has_archive' => true,
-            'register_meta_box_cb' => array($this, 'add_asset3d_metaboxes')
+            'labels'                => $labels,
+            'description'           => 'Displays Assets 3D',
+            'public'                => true,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => false,
+            'show_in_nav_menus'     => false,
+            'menu_position'     => 25,
+            'menu_icon'         =>'dashicons-visibility',
+            'taxonomies'        => array(),
+            'supports'          => array('title','editor','thumbnail','custom-fields'),
+            'hierarchical'      => false,
+            'has_archive'       => false,
+            'register_meta_box_cb' => array($this, 'add_asset3d_metaboxes'),
         );
 
         register_post_type('asset3d', $args);
     }
 
+    /**
+     * 2.02
+     * Create Asset Category
+     *
+     * Category of 3D asset as custom taxonomy
+     */
+    function wpunity_assets_taxcategory(){
 
-    function add_asset3d_metaboxes($object)
-    {
+        $labels = array(
+            'name'              => _x( 'Asset Category', 'taxonomy general name'),
+            'singular_name'     => _x( 'Asset Category', 'taxonomy singular name'),
+            'menu_name'         => _x( 'Asset Categories', 'admin menu'),
+            'search_items'      => __( 'Search Asset Categories'),
+            'all_items'         => __( 'All Asset Categories'),
+            'parent_item'       => __( 'Parent Asset Category'),
+            'parent_item_colon' => __( 'Parent Asset Category:'),
+            'edit_item'         => __( 'Edit Asset Category'),
+            'update_item'       => __( 'Update Asset Category'),
+            'add_new_item'      => __( 'Add New Asset Category'),
+            'new_item_name'     => __( 'New Asset Category')
+        );
+
+        $args = array(
+            'description' => 'Category of 3D asset',
+            'labels'    => $labels,
+            'public'    => false,
+            'show_ui'   => true,
+            'hierarchical' => true,
+            'show_admin_column' => true
+        );
+
+        register_taxonomy('asset3d_category', 'asset3d', $args);
+
+    }
+
+
+
+    /**
+     * 2.03
+     * Create Initial Asset Categories
+     *
+     */
+
+    function wpunity_assets_taxcategory_fill(){
+        wp_insert_term('Dynamic 3D models','asset3d_category','dynamic3dmodels','Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.');
+        wp_insert_term('Points of Interest','asset3d_category','pois','Points of interest (POIs) are spots at the game where information pops up.');
+        wp_insert_term('Static 3D models','asset3d_category','static3dmodels','Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)');
+        wp_insert_term('Doors','asset3d_category','doors','Doors are 3D model where avatar pass through and thus going from one Scene to another Scene');
+    }
+
+    /**
+     * 2.04
+     * Create Asset Scene
+     *
+     * Select To Which Scenes it belongs to (as custom taxonomy)
+     */
+    function wpunity_assets_taxscene(){
+
+        // 2. Select To Which Scenes it belongs to
+        $labels = array(
+            'name'              => _x( 'Asset Scene', 'taxonomy general name'),
+            'singular_name'     => _x( 'Asset Scene', 'taxonomy singular name'),
+            'menu_name'         => _x( 'Asset Scenes', 'admin menu'),
+            'search_items'      => __( 'Search Asset Scenes'),
+            'all_items'         => __( 'All Asset Scenes'),
+            'parent_item'       => __( 'Parent Asset Scene'),
+            'parent_item_colon' => __( 'Parent Asset Scene:'),
+            'edit_item'         => __( 'Edit Asset Scene'),
+            'update_item'       => __( 'Update Asset Scene'),
+            'add_new_item'      => __( 'Add New Asset Scene'),
+            'new_item_name'     => __( 'New Asset Scene')
+        );
+
+        $args = array(
+            'description' => 'Scene assignment of Asset 3D',
+            'labels'    => $labels,
+            'public'    => false,
+            'show_ui'   => true,
+            'hierarchical' => true,
+            'show_admin_column' => true
+        );
+
+        register_taxonomy('asset3d_scene_assignment', 'asset3d', $args);
+    }
+
+
+    /*********************************************************************************************************************/
+
+
+    function register_new_taxonomy_terms(){
+
+
+        // == 2. Asset3D Scene assigment  ====
+        $this->taxonomy2 = 'asset3d_scene_assignment';
+
+        // Get the Scenes available
+        $args = array(
+            'category_name'    => '',
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'include'          => '',
+            'exclude'          => '',
+            'meta_key'         => '',
+            'meta_value'       => '',
+            'post_type'        => 'scene',
+            'post_mime_type'   => '',
+            'post_parent'      => '',
+            'author'	   => '',
+            'author_name'	   => '',
+            'post_status'      => 'publish',
+            'suppress_filters' => true
+        );
+        $posts_array = get_posts( $args );
+
+        foreach ($posts_array as $p){
+            $this->termsScenes[] = array(
+                'name' => $p->post_title,
+                'slug' => $p->post_name,
+                'description' => ''
+            );
+        }
+
+        // now create the taxonomy terms for asset3d_scene_assignment custom taxonomy
+        if (!empty($this->termsScenes)) {
+            foreach ($this->termsScenes as $term_key => $term) {
+
+                if (get_term($term)->slug == 'uncategorized') {
+                    wp_insert_term(
+                        $term['name'],
+                        $this->taxonomy2,
+                        array(
+                            'description' => $term['description'],
+                            'slug' => $term['slug'],
+                        )
+                    );
+                    unset($term);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+    function activate($object){
+//        $this->wpunity_assets_construct();
+//        $this->wpunity_assets_taxcategory();
+//        $this->register_new_taxonomy_terms();
+    }
+
+
+
+
+    function add_asset3d_metaboxes($object){
 
         // General 3D fields
         add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "asset3d", "normal", "default", null);
@@ -107,8 +271,7 @@ class Asset3DClass
     }
 
 
-    function asset3d_customfields_3d_web($object)
-    {
+    function asset3d_customfields_3d_web($object){
         wp_nonce_field(basename(__FILE__), "meta-box-nonce");
 
         // Get the fields values
@@ -190,8 +353,7 @@ class Asset3DClass
      *
      * @param $object
      */
-    function asset3d_customfields_info($object)
-    {
+    function asset3d_customfields_info($object){
         wp_nonce_field(basename(__FILE__), "meta-box-nonce");
 
         // Info image1 (jpg or png)
@@ -267,8 +429,7 @@ class Asset3DClass
      * @param $object
      *
      */
-    function asset3d_customfields_fncs($object)
-    {
+    function asset3d_customfields_fncs($object){
         wp_nonce_field(basename(__FILE__), "meta-box-nonce");
 
         ?>
@@ -308,8 +469,7 @@ class Asset3DClass
      * @param $update
      * @return mixed
      */
-    function save_data_to_db_and_media($post_id, $post, $update)
-    {
+    function save_data_to_db_and_media($post_id, $post, $update){
         // Safety check for intruders
         if (!isset($_POST["meta-box-nonce"]) || !wp_verify_nonce($_POST["meta-box-nonce"], basename(__FILE__)))
             return $post_id;
@@ -422,161 +582,7 @@ class Asset3DClass
 
     }
 
-    /**
-     * New taxonomies for Assets custom post type
-     */
-    function assets3d_create_taxonomies()
-    {
-        // 1. Select Category of 3D asset
-        $labels = array(
-            'name' => _x('Asset 3D Categories', 'taxonomy general name'),
-            'singular_name' => _x('Asset 3D  Category', 'taxonomy singular name'),
-            'search_items' => __('Search Asset 3D Categories'),
-            'all_items' => __('All Assets 3D Categories'),
-            'parent_item' => __('Parent Asset 3D Category'),
-            'parent_item_colon' => __('Parent Asset 3D Category:'),
-            'edit_item' => __('Edit Asset 3D Category'),
-            'update_item' => __('Update Asset 3D Category'),
-            'add_new_item' => __('Add New Asset 3D Category'),
-            'new_item_name' => __('New Assets 3D Category'),
-            'menu_name' => __('Assets 3D Categories'),
-        );
 
-        $args = array(
-            'labels' => $labels,
-            'hierarchical' => true,
-            'capabilities' => array(
-                'manage_terms' => '',
-                'edit_terms' => '',
-                'delete_terms' => '',
-                'assign_terms' => 'edit_posts'
-            )
-        );
-
-        register_taxonomy('asset3d_category', 'asset3d', $args);
-
-        // 2. Select To Which Scenes it belongs to
-        $labels = array(
-            'name' => _x('Scene assignment of Asset 3D ', 'taxonomy general name'),
-            'singular_name' => _x('Scene assignment of Asset 3D', 'taxonomy singular name'),
-            'search_items' => __('Search Scene assignment of Asset 3D'),
-            'all_items' => __('All Scenes assignments of Asset 3D '),
-            'parent_item' => __('Parent Scene assignment of Asset 3D'),
-            'parent_item_colon' => __('Parent Scene assignment of Asset 3D:'),
-            'edit_item' => __('Edit Scene assignment of Asset 3D'),
-            'update_item' => __('Update Scene assignment of Asset 3D'),
-            'add_new_item' => __('Add New Scene assignment for Asset 3D'),
-            'new_item_name' => __('New Scene assignment for Assets 3D'),
-            'menu_name' => __('Assets 3D Categories'),
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'hierarchical' => true,
-            'capabilities' => array(
-                'manage_terms' => '',
-                'edit_terms' => '',
-                'delete_terms' => '',
-                'assign_terms' => 'edit_posts'
-            )
-        );
-
-        register_taxonomy('asset3d_scene_assignment', 'asset3d', $args);
-    }
-
-
-    function register_new_taxonomy_terms()
-    {
-        // 1. Category
-        $this->taxonomy = 'asset3d_category';
-
-        $this->terms = array(
-            '0' => array(
-                'name' => 'Dynamic 3D models',
-                'slug' => 'dynamic3dmodels',
-                'description' => 'Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.',
-            ),
-            '1' => array(
-                'name' => 'Points of Interest',
-                'slug' => 'pois',
-                'description' => 'Points of interest (POIs) are spots at the game where information pops up.',
-            ),
-            '2' => array(
-                'name' => 'Static 3D models',
-                'slug' => 'static3dmodels',
-                'description' => 'Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
-            ),
-            '3' => array(
-                'name' => 'Doors',
-                'slug' => 'doors',
-                'description' => 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene',
-            )
-        );
-
-        // now create the categories
-        foreach ($this->terms as $term_key => $term) {
-
-            if (get_term($term)->slug == 'uncategorized') {
-                wp_insert_term(
-                    $term['name'],
-                    $this->taxonomy,
-                    array(
-                        'description' => $term['description'],
-                        'slug' => $term['slug'],
-                    )
-                );
-                unset($term);
-            }
-        }
-
-        // == 2. Asset3D Scene assigment  ====
-        $this->taxonomy2 = 'asset3d_scene_assignment';
-
-        // Get the Scenes available
-        $args = array(
-            'category_name'    => '',
-            'orderby'          => 'date',
-            'order'            => 'DESC',
-            'include'          => '',
-            'exclude'          => '',
-            'meta_key'         => '',
-            'meta_value'       => '',
-            'post_type'        => 'scene',
-            'post_mime_type'   => '',
-            'post_parent'      => '',
-            'author'	   => '',
-            'author_name'	   => '',
-            'post_status'      => 'publish',
-            'suppress_filters' => true
-        );
-        $posts_array = get_posts( $args );
-
-        foreach ($posts_array as $p){
-            $this->termsScenes[] = array(
-                'name' => $p->post_title,
-                'slug' => $p->post_name,
-                'description' => ''
-            );
-        }
-
-        // now create the taxonomy terms for asset3d_scene_assignment custom taxonomy
-        if (!empty($this->termsScenes)) {
-            foreach ($this->termsScenes as $term_key => $term) {
-
-                if (get_term($term)->slug == 'uncategorized') {
-                    wp_insert_term(
-                        $term['name'],
-                        $this->taxonomy2,
-                        array(
-                            'description' => $term['description'],
-                            'slug' => $term['slug'],
-                        )
-                    );
-                    unset($term);
-                }
-            }
-        }
-    }
 
 
     /**

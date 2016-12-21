@@ -49,6 +49,11 @@ $sceneTemplateClass = new SceneTemplateClass();
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
 
 
+//2.01 Create Assets
+//2.02 Create Asset Category
+//2.03 Create Asset Scene
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
+
 /**
  * Game cpt
  */
@@ -62,13 +67,6 @@ $gameClass = new GameClass();
  */
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneClass.php');
 $sceneClass = new SceneClass();
-
-/**
- * asset3d cpt
- */
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/Asset3DClass.php' );
-$asset3dClass = new Asset3DClass();
-
 
 
 // ===================== Obsolete ===================================
