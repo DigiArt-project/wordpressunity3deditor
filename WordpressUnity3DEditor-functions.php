@@ -58,8 +58,8 @@ $gameClass = new GameClass();
 /**
  * Scene cpt
  */
-//require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneClass.php');
-//$sceneClass = new SceneClass();
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneClass.php');
+$sceneClass = new SceneClass();
 
 /**
  * asset3d cpt
