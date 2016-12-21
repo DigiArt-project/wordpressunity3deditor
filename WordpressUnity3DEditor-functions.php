@@ -45,6 +45,8 @@ $sceneTemplateClass = new SceneTemplateClass();
 
 //=====================================================
 
+//1.01 Overwrite Uploads
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
 
 
 /**
@@ -66,7 +68,6 @@ $sceneClass = new SceneClass();
  */
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/Asset3DClass.php' );
 $asset3dClass = new Asset3DClass();
-
 
 
 
