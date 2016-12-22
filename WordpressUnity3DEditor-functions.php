@@ -56,6 +56,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' 
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
+
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 register_activation_hook( __FILE__, 'wpunity_assets_taxcategory_fill' );
@@ -96,5 +98,18 @@ function my_myme_types($mime_types){
 }
 
 add_filter('upload_mimes', 'my_myme_types', 1, 1);
+
+
+
+//Scripts about Upload button in Metaboxes
+add_action('plugins_loaded', function(){
+    if($GLOBALS['pagenow']=='post.php'){
+        add_action('admin_print_scripts', 'my_admin_scripts');
+        add_action('admin_print_styles',  'my_admin_styles');
+    }
+});
+
+function my_admin_scripts() { wp_enqueue_script('jquery');    wp_enqueue_script('media-upload');   wp_enqueue_script('thickbox'); }   //  //wp_register_script('my-upload', WP_PLUGIN_URL.'/my-script.js', array('jquery','media-upload','thickbox'));  wp_enqueue_script('my-upload');
+function my_admin_styles()  { wp_enqueue_style('thickbox'); }
 
 ?>

@@ -13,10 +13,8 @@ class Asset3DClass{
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
         add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
 
-        register_activation_hook(__FILE__, array($this, 'activate'));
 
 
-        //add_action('init', array($this, 'register_new_taxonomy_terms'));
         add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
         add_action('admin_footer', array($this, 'checktoradio'));
         add_filter('get_sample_permalink', array($this, 'disable_permalink'));
@@ -66,6 +64,7 @@ class Asset3DClass{
             'supports'          => array('title','editor','thumbnail','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
+            'register_meta_box_cb' => array($this, 'add_asset3d_metaboxes')
         );
 
         register_post_type('wpunity_asset3d', $args);
@@ -149,93 +148,27 @@ class Asset3DClass{
     /*********************************************************************************************************************/
 
 
-//    function register_new_taxonomy_terms(){
-//
-//
-//        // == 2. Asset3D Scene assigment  ====
-//        $this->taxonomy2 = 'asset3d_scene_assignment';
-//
-//        // Get the Scenes available
-//        $args = array(
-//            'category_name'    => '',
-//            'orderby'          => 'date',
-//            'order'            => 'DESC',
-//            'include'          => '',
-//            'exclude'          => '',
-//            'meta_key'         => '',
-//            'meta_value'       => '',
-//            'post_type'        => 'scene',
-//            'post_mime_type'   => '',
-//            'post_parent'      => '',
-//            'author'	   => '',
-//            'author_name'	   => '',
-//            'post_status'      => 'publish',
-//            'suppress_filters' => true
-//        );
-//        $posts_array = get_posts( $args );
-//
-//        foreach ($posts_array as $p){
-//            $this->termsScenes[] = array(
-//                'name' => $p->post_title,
-//                'slug' => $p->post_name,
-//                'description' => ''
-//            );
-//        }
-//
-//        // now create the taxonomy terms for asset3d_scene_assignment custom taxonomy
-//        if (!empty($this->termsScenes)) {
-//            foreach ($this->termsScenes as $term_key => $term) {
-//
-//                if (get_term($term)->slug == 'uncategorized') {
-//                    wp_insert_term(
-//                        $term['name'],
-//                        $this->taxonomy2,
-//                        array(
-//                            'description' => $term['description'],
-//                            'slug' => $term['slug'],
-//                        )
-//                    );
-//                    unset($term);
-//                }
-//            }
-//        }
-//    }
-
-
-
-
-
-
-    function activate($object){
-//        $this->wpunity_assets_construct();
-//        $this->wpunity_assets_taxcategory();
-//        $this->register_new_taxonomy_terms();
-    }
-
-
-
-
     function add_asset3d_metaboxes($object){
 
         // General 3D fields
-        add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "asset3d", "normal", "default", null);
-
-        if (get_the_terms($object, 'asset3d_category')) {
-
-            // POIs and dynamic3dmodels
-            if (in_array(get_the_terms($object, 'asset3d_category')[0]->slug, array('pois', 'dynamic3dmodels'))) {
-
-                add_meta_box("asset3d_custom_fields_metabox_info", "Information fields", array($this, "asset3d_customfields_info"), "asset3d", "normal", "default", null);
-
-            }
-
-            // Doors
-            if (get_the_terms($object, 'asset3d_category')[0]->slug == 'doors') {
-
-                add_meta_box("asset3d_custom_fields_metabox_fncs", "Functionality fields", array($this, "asset3d_customfields_fncs"), "asset3d", "normal", "default", null);
-
-            }
-        }
+        add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "wpunity_asset3d", "normal", "default", null);
+//
+//        if (get_the_terms($object, 'asset3d_category')) {
+//
+//            // POIs and dynamic3dmodels
+//            if (in_array(get_the_terms($object, 'asset3d_category')[0]->slug, array('pois', 'dynamic3dmodels'))) {
+//
+//                add_meta_box("asset3d_custom_fields_metabox_info", "Information fields", array($this, "asset3d_customfields_info"), "asset3d", "normal", "default", null);
+//
+//            }
+//
+//            // Doors
+//            if (get_the_terms($object, 'asset3d_category')[0]->slug == 'doors') {
+//
+//                add_meta_box("asset3d_custom_fields_metabox_fncs", "Functionality fields", array($this, "asset3d_customfields_fncs"), "asset3d", "normal", "default", null);
+//
+//            }
+//        }
     }
 
 
