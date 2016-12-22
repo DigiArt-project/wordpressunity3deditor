@@ -11,7 +11,7 @@ class Asset3DClass{
 
         add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
-        add_action('init', array($this, 'wpunity_assets_taxscene')); //wpunity_asset3d_pscene
+        add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
 
         register_activation_hook(__FILE__, array($this, 'activate'));
 
@@ -112,7 +112,7 @@ class Asset3DClass{
      *
      * Select To Which Scenes it belongs to (as custom taxonomy)
      */
-    function wpunity_assets_taxscene(){
+    function wpunity_assets_taxpscene(){
 
         // 2. Select To Which Scenes it belongs to
         $labels = array(

@@ -6,7 +6,7 @@ class SceneClass{
 
     function __construct(){
         add_action('init', array($this, 'wpunity_scenes_construct')); //wpunity_scene
-        add_action('init', array($this, 'wpunity_scenes_taxgame')); //wpunity_scene_pgame
+        add_action('init', array($this, 'wpunity_scenes_taxpgame')); //wpunity_scene_pgame
 
 
         //register_activation_hook(__FILE__, array($this, 'activate'));
@@ -64,7 +64,7 @@ class SceneClass{
         register_post_type('wpunity_scene', $args);
     }
 
-    function wpunity_scenes_taxgame(){
+    function wpunity_scenes_taxpgame(){
 
         $labels = array(
             'name'              => _x( 'Scene Game', 'taxonomy general name'),
