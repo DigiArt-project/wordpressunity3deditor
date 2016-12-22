@@ -68,11 +68,10 @@ $gameClass = new GameClass();
 
 
 
-/**
- * Scene cpt
- */
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneClass.php');
-$sceneClass = new SceneClass();
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
 
 
 // ===================== Obsolete ===================================

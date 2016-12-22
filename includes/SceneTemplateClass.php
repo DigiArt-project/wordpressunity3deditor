@@ -40,7 +40,7 @@ class SceneTemplateClass
 
     function activate()
     {
-//        $this->init_cpt_scene();
+//        $this->wpunity_scenes_construct();
 //        $this->create_taxonomies_scene();
 //        $this->register_new_taxonomy_terms_scene();
     }

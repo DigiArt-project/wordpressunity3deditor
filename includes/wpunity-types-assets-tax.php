@@ -64,7 +64,7 @@ function wpunity_assets_taxcategory_box_content($post){
  * When the post is saved, also saves wpunity_asset3d_cat
  * @param $post_id
  */
-function wpunity_assets_taxcategorybox_content_save( $post_id ) {
+function wpunity_assets_taxcategory_box_content_save( $post_id ) {
 
     global $wpdb;
 
@@ -104,4 +104,24 @@ function wpunity_assets_taxcategorybox_content_save( $post_id ) {
 }
 
 /* Do something with the data entered */
-add_action( 'save_post', 'wpunity_assets_taxcategorybox_content_save' );
+add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
+
+
+
+function wpunity_create_sceneTax( $new_status, $old_status, $post ){
+    global $wpdb;
+
+    $post_id = $post->ID;
+    $post_title = get_the_title($post_id);
+    $post_slug = $post->post_name;
+    $post_type = get_post_type($post);
+
+    if ($post_type == 'wpunity_scene') {
+        if ( ($new_status == 'publish') && ($old_status != 'publish') ) {
+            wp_insert_term($post_title,'wpunity_asset3d_pscene',$post_slug,'Scene of a Game');
+        }
+
+    }
+}
+
+add_action(  'transition_post_status',  'wpunity_create_sceneTax', 10, 3 );
