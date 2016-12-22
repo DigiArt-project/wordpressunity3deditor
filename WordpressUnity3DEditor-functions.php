@@ -54,6 +54,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 //2.03 Create Asset Scene
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
