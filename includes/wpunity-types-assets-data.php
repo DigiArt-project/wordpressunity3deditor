@@ -61,78 +61,105 @@ add_action('admin_menu', 'wpunity_assets_databox_add');
  *
  */
 
-function wpunity_assets_databox_show(){
-    global $wpunity_databox, $post;
 
+function wpunity_assets_databox_show(){
+    global $wpunity_databox,$post;
+    $post_title = $post->post_title;
     echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<a href="#" class="button insert-media add_media" data-editor="content" title="Add Media">
-    <span class="wp-media-buttons-icon"></span> Add Media
-    </a>';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
+    echo '<tr><th style="width:20%"><label for="">', 'Asset 3D Preview', '</label></th>';
+
+//    $url_mtl_arr = get_post_meta($post->ID, "wpunity_asset3d_mtl", true);
+//    $url_mtl = $url_mtl_arr;
+//    $curr_path = 'http://localhost/wp-digiart/wp-content/uploads/2016/12/';
+//    $textmtl = 'floor.mtl';
+//    $url_obj_arr = get_post_meta($post->ID, "wpunity_asset3d_obj", true);
+//    $url_obj = $url_obj_arr;
+
+    //echo '<td><div name="wpunity_asset3d_preview" id="asset3d-preview">' ;
+    //    wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
+    //echo '</div></td></tr>';
     foreach ($wpunity_databox['fields'] as $field) {
-        // get current post meta data
-        $meta = get_post_meta($post->ID, 'my-image-for-post', true);
         echo '<tr>',
         '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
         '<td>';
+            $meta = get_post_meta($post->ID, $field['id'], true); ?>
+            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%" />
+            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"  />
 
-        switch ($field['type']) {
-            case 'text':
-                $url =get_post_meta($post->ID,'my-image-for-post', true);
-                echo '<input type="text" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                echo '<input id="my_upl_button" type="button" value="Upload" />
-                        <br/><img src="' . $url . ' style="width:200px;" id="picsrc" />';
-                break;
-            case 'numeric':
-                echo '<input type="number" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                break;
-            case 'textarea':
-                echo '<textarea name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" cols="60" rows="4" style="width:97%">', esc_attr($meta ? $meta : $field['std']), '</textarea>', '<br />', esc_html($field['desc']);
-                break;
-            case 'select':
-                echo '<select name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
-                foreach ($field['options'] as $option) {
-                    echo '<option ', $meta == $option ? ' selected="selected"' : '', '>', esc_html($option), '</option>';
-                }
-                echo '</select>';
-                break;
-            case 'checkbox':
-                echo '<input type="checkbox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '"', $meta ? ' checked="checked"' : '', ' />';
-                break;
-
-        }
+            <?php if ($field['id']=='wpunity_asset3d_mtl') { ?>
+                <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;"><?php readfile($meta); ?></textarea>
+            <?php
+            }elseif ($field['id']=='wpunity_asset3d_obj') { ?>
+                <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;"><?php readfile($meta); ?></textarea>
+            <?php
+            }elseif ($field['id']=='wpunity_asset3d_diffimage') { ?>
+                <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo $meta;?>"/>
+            <?php
+            }elseif ($field['id']=='wpunity_asset3d_screenimage') { ?>
+                <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo $meta;?>"/>
+            <?php
+            }
 
         echo     '</td><td>',
         '</td></tr>';
-
     }
-
     echo '</table>';
-
     ?>
     <script>
-        jQuery(document).ready( function( $ ) {
-            jQuery('#my_upl_button').click(function() {
-
-                window.send_to_editor = function(html) {
+        jQuery(document).ready(function ($) {
+            jQuery('#wpunity_asset3d_mtl_btn').click(function () {
+                window.send_to_editor = function (html) {
                     imgurl = jQuery(html).attr('src')
                     jQuery('#wpunity_asset3d_mtl').val(imgurl);
-                    jQuery('#picsrc').attr("src",imgurl);
+                    //jQuery('#picsrc').attr("src",imgurl);
                     tb_remove();
                 }
-
                 formfield = jQuery('#wpunity_asset3d_mtl').attr('name');
-                tb_show( '', 'media-upload.php?type=image&amp;TB_iframe=true' );
+                tb_show('', 'media-upload.php?type=file&amp;TB_iframe=true');
+                return false;
+            });
+
+            jQuery('#wpunity_asset3d_obj_btn').click(function () {
+                window.send_to_editor = function (html) {
+                    imgurl = jQuery(html).attr('src')
+                    jQuery('#wpunity_asset3d_obj').val(imgurl);
+                    //jQuery('#picsrc').attr("src",imgurl);
+                    tb_remove();
+                }
+                formfield = jQuery('#wpunity_asset3d_obj').attr('name');
+                tb_show('', 'media-upload.php?type=file&amp;TB_iframe=true');
+                return false;
+            });
+
+            jQuery('#wpunity_asset3d_diffimage_btn').click(function () {
+                window.send_to_editor = function (html) {
+                    imgurl = jQuery(html).attr('src')
+                    jQuery('#wpunity_asset3d_diffimage').val(imgurl);
+                    jQuery('#wpunity_asset3d_diffimage_preview').attr("src",imgurl);
+                    tb_remove();
+                }
+                formfield = jQuery('#wpunity_asset3d_diffimage').attr('name');
+                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
+                return false;
+            });
+
+            jQuery('#wpunity_asset3d_screenimage_btn').click(function () {
+                window.send_to_editor = function (html) {
+                    imgurl = jQuery(html).attr('src')
+                    jQuery('#wpunity_asset3d_screenimage').val(imgurl);
+                    jQuery('#wpunity_asset3d_screenimage_preview').attr("src",imgurl);
+                    tb_remove();
+                }
+                formfield = jQuery('#wpunity_asset3d_screenimage').attr('name');
+                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
                 return false;
             });
 
         });
     </script>
     <?php
-
 }
-
-
 
 
 /**
@@ -180,231 +207,5 @@ add_action('save_post', 'wpunity_assets_databox_save');
 
 /*********************************************************************************************************************/
 
-
-
-
-add_action('add_meta_boxes', function(){  add_meta_box('my-metaboxx1', 'my-metaboxx1-title','func99999', get_post_types(),'normal'); }, 9);
-function func99999($post){
-    $url =get_post_meta($post->ID,'my-image-for-post', true);   ?>
-    <input id="my_image_URL" name="my_image_URL" type="text" value="<?php echo $url;?>"  style="width:400px;" />
-    <input id="my_upl_button" type="button" value="Upload Image" /><br/><img src="<?php echo $url;?>" style="width:200px;" id="picsrc" />
-    <script>
-        jQuery(document).ready( function( $ ) {
-            jQuery('#my_upl_button').click(function() {
-
-                window.send_to_editor = function(html) {
-                    imgurl = jQuery(html).attr('src')
-                    jQuery('#my_image_URL').val(imgurl);
-                    jQuery('#picsrc').attr("src",imgurl);
-                    tb_remove();
-                }
-
-                formfield = jQuery('#my_image_URL').attr('name');
-                tb_show( '', 'media-upload.php?type=image&amp;TB_iframe=true' );
-                return false;
-            });
-
-        });
-    </script>
-    <?php
-}
-
-
-add_action( 'save_post', function ($post_id) {
-    if (isset($_POST['my_image_URL'])){
-        update_post_meta($post_id, 'my-image-for-post',$_POST['my_image_URL']);
-    }
-});
-
-
-
-
-
-
-
-
-
-
-/**
- * Display the image meta box
- */
-function wpunity_assets_databox_show2() {
-    global $post;
-
-    $image_src = '';
-
-    $image_id = get_post_meta( $post->ID, '_image_id', true );
-    $image_src = wp_get_attachment_url( $image_id );
-
-    ?>
-    Hello
-    <img id="book_image" src="<?php echo $image_src ?>" style="max-width:100%;" />
-    <input type="hidden" name="upload_image_id" id="upload_image_id" value="<?php echo $image_id; ?>" />
-    <p>
-        <a title="<?php esc_attr_e( 'Set book image' ) ?>" href="#" id="set-book-image"><?php _e( 'Set book image' ) ?></a>
-        <a title="<?php esc_attr_e( 'Remove book image' ) ?>" href="#" id="remove-book-image" style="<?php echo ( ! $image_id ? 'display:none;' : '' ); ?>"><?php _e( 'Remove book image' ) ?></a>
-    </p>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-
-            // save the send_to_editor handler function
-            window.send_to_editor_default = window.send_to_editor;
-
-            $('#set-book-image').click(function(){
-
-                // replace the default send_to_editor handler function with our own
-                window.send_to_editor = window.attach_image;
-                tb_show('', 'media-upload.php?post_id=<?php echo $post->ID ?>&amp;type=image&amp;TB_iframe=true');
-
-                return false;
-            });
-
-            $('#remove-book-image').click(function() {
-
-                $('#upload_image_id').val('');
-                $('img').attr('src', '');
-                $(this).hide();
-
-                return false;
-            });
-
-            // handler function which is invoked after the user selects an image from the gallery popup.
-            // this function displays the image and sets the id so it can be persisted to the post meta
-            window.attach_image = function(html) {
-
-                // turn the returned image html into a hidden image element so we can easily pull the relevant attributes we need
-                $('body').append('<div id="temp_image">' + html + '</div>');
-
-                var img = $('#temp_image').find('img');
-
-                imgurl   = img.attr('src');
-                imgclass = img.attr('class');
-                imgid    = parseInt(imgclass.replace(/\D/g, ''), 10);
-
-                $('#upload_image_id').val(imgid);
-                $('#remove-book-image').show();
-
-                $('img#book_image').attr('src', imgurl);
-                try{tb_remove();}catch(e){};
-                $('#temp_image').remove();
-
-                // restore the send_to_editor handler function
-                window.send_to_editor = window.send_to_editor_default;
-
-            }
-
-        });
-    </script>
-    <?php
-}
-
-
-
-
-
-
-
-
-
-
-
-// Callback function to show fields in infobox
-function imcplus_issues_infobox_show() {
-    global $imc_infobox, $post;
-    // Use nonce for verification
-    echo '<input type="hidden" name="mytheme_meta_box_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<table class="form-table" id="imc-custom-fields-table">';
-    foreach ($imc_infobox['fields'] as $field) {
-        // get current post meta data
-        $meta = get_post_meta($post->ID, $field['id'], true);
-        echo '<tr>',
-        '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
-        '<td>';
-
-
-        switch ($field['type']) {
-            case 'text':
-                echo '<input type="text" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                break;
-            case 'numeric':
-                echo '<input type="number" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                break;
-            case 'textarea':
-                echo '<textarea name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" cols="60" rows="4" style="width:97%">', esc_attr($meta ? $meta : $field['std']), '</textarea>', '<br />', esc_html($field['desc']);
-                break;
-            case 'select':
-                echo '<select name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
-                foreach ($field['options'] as $option) {
-                    echo '<option ', $meta == $option ? ' selected="selected"' : '', '>', esc_html($option), '</option>';
-                }
-                echo '</select>';
-                break;
-            case 'checkbox':
-                echo '<input type="checkbox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '"', $meta ? ' checked="checked"' : '', ' />';
-                break;
-
-        }
-        echo     '</td><td>',
-        '</td></tr>';
-    }
-    echo '</table>';
-
-    ?>
-
-    <input placeholder="<?php echo __('Enter an address','imc-translation'); ?>" type="text" id="map_input_id" class="IMCBackendInputLargeStyle" />
-
-    <button type="button" onclick="imcFindAddress('map_input_id', true);" class="IMCBackendButtonStyle">
-        <span class="dashicons dashicons-admin-site"></span>
-        <?php echo _e('Locate address','imc-translation'); ?>
-
-    </button>
-
-    <div id="map-canvas" class="IMCBackendIssueMapStyle"></div>
-
-    <script>
-        /*Google Maps API*/
-        google.maps.event.addDomListener(window, 'load', loadDefaultMapValues);
-
-        function loadDefaultMapValues() {
-            "use strict";
-
-            <?php $map_options = get_option('gmap_settings'); ?>
-
-            var mapId = "map-canvas";
-            var inputId = "map_input_id";
-
-            // Checking the saved latlng on custom fields
-            var lat = document.getElementById("imc_lat").value;
-            var lng = document.getElementById("imc_lng").value;
-
-            if (lat === '' || lng === '' ) {
-                lat = parseFloat('<?php echo floatval($map_options["gmap_initial_lat"]); ?>');
-                lng = parseFloat('<?php echo floatval($map_options["gmap_initial_lng"]); ?>');
-                if (lat === '' || lng === '' ) { lat = 40.1349854; lng = 22.0264538; }
-            }
-
-            // Options casting if empty
-            var zoom = parseInt("<?php echo intval($map_options["gmap_initial_zoom"], 10); ?>", 10);
-            if(!zoom){ zoom = 7; }
-
-            var allowScroll;
-            "<?php echo intval($map_options["gmap_mscroll"], 10); ?>" === '1' ? allowScroll = true : allowScroll = false;
-
-            var boundaries = <?php echo json_encode($map_options["gmap_boundaries"]);?> ?
-                <?php echo json_encode($map_options["gmap_boundaries"]);?>: null;
-
-            document.getElementById('map_input_id').value = "<?php echo esc_html($map_options['gmap_initial_address']); ?>";
-
-            imcInitializeMap(lat, lng, mapId, inputId, true, zoom, allowScroll, JSON.parse(boundaries));
-
-            imcFindAddress('map_input_id', false, lat, lng);
-
-        }
-
-    </script>
-
-    <?php
-}
 
 ?>

@@ -58,6 +58,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.p
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
+
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 register_activation_hook( __FILE__, 'wpunity_assets_taxcategory_fill' );

@@ -151,7 +151,7 @@ class Asset3DClass{
     function add_asset3d_metaboxes($object){
 
         // General 3D fields
-        add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "wpunity_asset3d", "normal", "default", null);
+        //add_meta_box("asset3d_custom_fields_metabox_3d_web", "3D fields Web", array($this, "asset3d_customfields_3d_web"), "wpunity_asset3d", "normal", "default", null);
 //
 //        if (get_the_terms($object, 'asset3d_category')) {
 //
@@ -192,7 +192,7 @@ class Asset3DClass{
 
         <div style="margin-bottom:20px">
             <label for="asset3d-preview" style="margin-right:30px;">Asset 3D preview</label>
-            <div name="asset3d-preview" id="asset3d-preview"><?php require_once("asset3d_viewer.php");?></div>
+            <div name="asset3d-preview" id="asset3d-preview"><?php require_once("wpunity-types-assets-viewer.php");?></div>
         </div>
 
         <!-- MTL field and text preview -->
