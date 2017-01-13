@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * ?3.01
+ * Create metabox with Custom Fields for Game
+ *
+ * ($wpunity_databox3)
+ */
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
@@ -13,14 +18,14 @@ $wpunity_databox3 = array(
     'fields' => array(
         array(
             'name' => 'Latitude',
-            'desc' => 'Latitude',
+            'desc' => 'Game\'s Latitude',
             'id' => $wpunity_prefix . 'lat',
             'type' => 'text',
             'std' => ''
         ),
         array(
             'name' => 'Longitude',
-            'desc' => 'Longitude',
+            'desc' => 'Game\'s Longitude',
             'id' => $wpunity_prefix . 'lng',
             'type' => 'text',
             'std' => ''
@@ -28,13 +33,21 @@ $wpunity_databox3 = array(
     )
 );
 
+//==========================================================================================================================================
+
+/**
+ * B3.02
+ * Add and Show the metabox with Custom Field for Game
+ *
+ * ($wpunity_databox3)
+ */
+
 function wpunity_games_databox_add() {
     global $wpunity_databox3;
     add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
 }
 
 add_action('admin_menu', 'wpunity_games_databox_add');
-
 
 function wpunity_games_databox_show(){
     global $wpunity_databox3, $post;
@@ -78,13 +91,14 @@ function wpunity_games_databox_show(){
 
 }
 
+//==========================================================================================================================================
 
 /**
- * 5.03
- * Save Data @ Box with Lat-Lng-Address-Votes
+ * B3.03
+ * Save data from this metabox with Custom Field for Game
  *
+ * ($wpunity_databox3)
  */
-
 
 function wpunity_games_databox_save($post_id) {
     global $wpunity_databox3;
@@ -115,9 +129,8 @@ function wpunity_games_databox_save($post_id) {
     }
 }
 
-// Save data from infobox
 add_action('save_post', 'wpunity_games_databox_save');
 
-
+//==========================================================================================================================================
 
 ?>
