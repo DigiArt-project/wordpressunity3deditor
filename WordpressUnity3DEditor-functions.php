@@ -67,7 +67,7 @@ register_activation_hook( __FILE__, 'wpunity_assets_taxcategory_fill' );
 /**
  * Game cpt
  */
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/GameClass.php');
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php');
 $gameClass = new GameClass();
 
 

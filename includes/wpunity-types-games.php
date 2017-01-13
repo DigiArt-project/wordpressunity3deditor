@@ -1,34 +1,58 @@
 <?php
-/**
-Description: Create a Game and its taxonomies
-Version: 1.0
-Author: Dimitrios Ververidis
-License: AGPL
- */
-class GameClass
-{
 
-    function __construct()
-    {
-        register_activation_hook(__FILE__, array($this, 'activate'));
-        add_action('init', array($this, 'init_cpt_game'));
-        add_action('init', array($this, 'create_taxonomies_games'));
-        add_action('init', array($this, 'register_new_taxonomy_terms_game'));
-        add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
-        add_action('admin_footer', array($this, 'checktoradio'));
-        add_filter('get_sample_permalink', array($this, 'disable_permalink'));
-        add_action('edit_form_after_title', array($this, 'generate_media_folder_game'));
-    }
+class GameClass{
 
-    function activate()
-    {
-        //$this->init_cpt_game();
-        //$this->create_taxonomies_games();
-        //$this->register_new_taxonomy_terms_game();
+    function __construct(){
+        //register_activation_hook(__FILE__, array($this, 'activate'));
+        add_action('init', array($this, 'wpunity_games_construct')); //wpunity_game
+        //add_action('init', array($this, 'create_taxonomies_games'));
+        //add_action('init', array($this, 'register_new_taxonomy_terms_game'));
+        //add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
+        //add_action('admin_footer', array($this, 'checktoradio'));
+        //add_filter('get_sample_permalink', array($this, 'disable_permalink'));
+        //add_action('edit_form_after_title', array($this, 'generate_media_folder_game'));
     }
 
 
-    function init_cpt_game(){
+    function wpunity_games_construct(){
+
+        $labels = array(
+            'name'               => _x( 'Games', 'post type general name'),
+            'singular_name'      => _x( 'Game', 'post type singular name'),
+            'menu_name'          => _x( 'Games', 'admin menu'),
+            'name_admin_bar'     => _x( 'Game', 'add new on admin bar'),
+            'add_new'            => _x( 'Add New', 'add new on menu'),
+            'add_new_item'       => __( 'Add New Game'),
+            'new_item'           => __( 'New Game'),
+            'edit'               => __( 'Edit'),
+            'edit_item'          => __( 'Edit Game'),
+            'view'               => __( 'View'),
+            'view_item'          => __( 'View Game'),
+            'all_items'          => __( 'All Games'),
+            'search_items'       => __( 'Search Games'),
+            'parent_item_colon'  => __( 'Parent Games:'),
+            'parent'             => __( 'Parent Game'),
+            'not_found'          => __( 'No Games found.'),
+            'not_found_in_trash' => __( 'No Games found in Trash.')
+        );
+
+        $args = array(
+            'labels'                => $labels,
+            'description'           => 'A Game consists of several scenes',
+            'public'                => true,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => false,
+            'show_in_nav_menus'     => false,
+            'menu_position'     => 25,
+            'menu_icon'         =>'dashicons-visibility',
+            'taxonomies'        => array(),
+            'supports'          => array('title','editor','thumbnail','custom-fields'),
+            'hierarchical'      => false,
+            'has_archive'       => false,
+        );
+
+        register_post_type('wpunity_game', $args);
+
 
         $labels = array(
             'name' => _x('Games', 'A game consists of several scenes'),
@@ -120,7 +144,7 @@ class GameClass
             return $post_id;
 
         // Avoid changing other custom types
-        if($post->post_type != 'game' )
+        if($post->post_type != 'wpunity_game' )
             return $post_id;
 
         // ============ Start of custom fields =============================================
@@ -178,7 +202,7 @@ class GameClass
             )
         );
 
-        register_taxonomy('game_category', 'game', $args);
+        register_taxonomy('game_category', 'wpunity_game', $args);
     }
 
 
@@ -226,7 +250,7 @@ class GameClass
      * in cpt Scene allow only one selection in custom taxonomy scene_category, i.e. the Scene belongs to one Game only
      */
     function checktoradio(){
-        echo '<script type="text/javascript">jQuery("#game_categorychecklist-pop input, #game_categorychecklist input, .game_categorychecklist input").each(function(){this.type="radio"});</script>';
+        echo '<script type="text/javascript">jQuery("#wpunity_game_categorychecklist-pop input, #wpunity_game_categorychecklist input, .wpunity_game_categorychecklist input").each(function(){this.type="radio"});</script>';
     }
 
 
@@ -241,7 +265,7 @@ class GameClass
     function generate_media_folder_game(){
         global $post;
 
-        if (get_post_type()=='game') {
+        if (get_post_type()=='wpunity_game') {
             $post_slug = $post->post_name;
 
             $media_subfolder_to_generate = $post_slug;
