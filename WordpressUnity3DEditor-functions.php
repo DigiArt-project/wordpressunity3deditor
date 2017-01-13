@@ -30,15 +30,50 @@ php_value max_input_time 300
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Asset3d Type they belong to)
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Scene they belong to)
 
-//================ Templates ===========================
 
 
+//================================= Scene YAML Templates ===================================
 
-/**
- * Scene cpt
- */
+/*
+custom type : wpunity_yamltemp
+custom taxonomy : wpunity_yamltemp_cat
+custom fields :
+        Occlusion Culling Settings -> wpunity_yamltemp_scene_ocs
+        Render Settings -> wpunity_yamltemp_scene_rs
+        LightMap Settings -> wpunity_yamltemp_scene_lms
+        NavMesh Settings -> wpunity_yamltemp_scene_nms
+        First Person Prefab -> wpunity_yamltemp_scene_fps
+        Light Pattern -> wpunity_yamltemp_scene_light
+
+        Static Object Pattern -> wpunity_yamltemp_scene_sop
+        Dynamic Object Pattern -> wpunity_yamltemp_scene_dop
+        Door Pattern -> wpunity_yamltemp_scene_doorp
+        POI Pattern -> wpunity_yamltemp_scene_poip
+
+        Folder.meta Pattern -> wpunity_yamltemp_scene_fdp
+        obj.meta Pattern -> wpunity_yamltemp_scene_odp
+        mat.meta Pattern -> wpunity_yamltemp_scene_mdp
+        jpg.meta Pattern -> wpunity_yamltemp_scene_jdp
+        js.meta Pattern -> wpunity_yamltemp_scene_jsdp
+
+        Material (.mat) Pattern -> wpunity_yamltemp_scene_matp
+
+        Door Javascript (.js) Pattern -> wpunity_yamltemp_scene_doorjsp
+*/
+
+//A1.01 Create Scene YAML Template (custom type : wpunity_yamltemp)
+//A1.02 Create Scene YAML Template Category (custom taxonomy : wpunity_yamltemp_cat)
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp.php');
 
+//A2.01 Create YAML Template Category Box @ YAML Template's backend (dropdown style)
+//A2.02 Save Data from Box
+//A2.03 Initial Terms - TO BE REMOVED
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-tax.php');
+
+//A3.01 Initial Values for all Custom Fields
+//A3.02 Create 5 metaboxes with Custom Fields ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e)
+//A3.03 Add and Show those 5 metaboxes
+//A3.04 Save data from those 5 metaboxes
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
 
 

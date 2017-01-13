@@ -64,7 +64,7 @@ class Asset3DClass{
             'supports'          => array('title','editor','thumbnail','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
-            'register_meta_box_cb' => array($this, 'add_asset3d_metaboxes')
+            /*'register_meta_box_cb' => array($this, 'add_asset3d_metaboxes')*/
         );
 
         register_post_type('wpunity_asset3d', $args);

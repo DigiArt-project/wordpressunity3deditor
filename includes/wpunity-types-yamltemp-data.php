@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * A3.01
+ * Initial Values for all Custom Fields (Scene YAML Template)
+ *
+ *
+ */
+
 $ini_scene_sop = array('
 --- !u!1 &___[sop_fid]___ stripped
 GameObject:
@@ -89,7 +96,6 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: ___[sop_guid]___, type: 3}
   m_IsPrefabParent: 0
 ');
-
 
 $ini_scene_dop = array('
 --- !u!1 &___[dop_fid]___ stripped
@@ -183,7 +189,6 @@ Prefab:
   m_IsPrefabParent: 0
 ');
 
-
 $ini_scene_doorp = array('
 --- !u!1 &___[door_fid]___ stripped
 GameObject:
@@ -259,7 +264,6 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
   m_IsPrefabParent: 0
 ');
-
 
 $ini_scene_poip = array('
 --- !u!1001 &___[poi_fid]___
@@ -673,7 +677,6 @@ ModelImporter:
   assetBundleVariant:
 ');
 
-
 $ini_scene_mdp = array('
 fileFormatVersion: 2
 guid: ___[mat_guid]___
@@ -755,7 +758,6 @@ TextureImporter:
   assetBundleName:
   assetBundleVariant:
 ');
-
 
 $ini_scene_jsdp = array('
 fileFormatVersion: 2
@@ -918,7 +920,14 @@ function OnTriggerEnter(col : Collider) {
 }
 ');
 
-/**************************************************************************/
+//==========================================================================================================================================
+
+/**
+ * A3.02
+ * Create 5 metaboxes with Custom Fields for Scene YAML Template
+ *
+ * ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e)
+ */
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_yamltemp_';
@@ -966,7 +975,7 @@ $wpunity_databox2a = array(
             'std' => $ini_scene_fps[0]
         ),
         array(
-            'name' => 'Light pattern',
+            'name' => 'Light Pattern',
             'desc' => 'scene-light',
             'id' => $wpunity_prefix . 'scene_light',
             'type' => 'textarea',
@@ -974,7 +983,6 @@ $wpunity_databox2a = array(
         ),
     )
 );
-
 
 //All information about our meta box
 $wpunity_databox2b = array(
@@ -984,28 +992,28 @@ $wpunity_databox2b = array(
     'priority' => 'high',
     'fields' => array(
         array(
-            'name' => 'Static object pattern',
+            'name' => 'Static Object Pattern',
             'desc' => 'scene-static-object-pattern',
             'id' => $wpunity_prefix . 'scene_sop',
             'type' => 'textarea',
             'std' => $ini_scene_sop[0]
         ),
         array(
-            'name' => 'Dynamic object pattern',
+            'name' => 'Dynamic Object Pattern',
             'desc' => 'scene-dynamic-object-pattern',
             'id' => $wpunity_prefix . 'scene_dop',
             'type' => 'textarea',
             'std' => $ini_scene_dop[0]
         ),
         array(
-            'name' => 'Door pattern',
+            'name' => 'Door Pattern',
             'desc' => 'scene-door-pattern',
             'id' => $wpunity_prefix . 'scene_doorp',
             'type' => 'textarea',
             'std' => $ini_scene_doorp[0]
         ),
         array(
-            'name' => 'POI pattern',
+            'name' => 'POI Pattern',
             'desc' => 'scene-POI-pattern',
             'id' => $wpunity_prefix . 'scene_poip',
             'type' => 'textarea',
@@ -1022,35 +1030,35 @@ $wpunity_databox2c = array(
     'priority' => 'high',
     'fields' => array(
         array(
-            'name' => 'Folder.meta pattern',
+            'name' => 'Folder.meta Pattern',
             'desc' => 'scene-folder-dotmeta-pattern',
             'id' => $wpunity_prefix . 'scene_fdp',
             'type' => 'textarea',
             'std' => $ini_scene_fdp[0]
         ),
         array(
-            'name' => 'obj.meta pattern',
+            'name' => 'obj.meta Pattern',
             'desc' => 'scene-obj-dotmeta-pattern',
             'id' => $wpunity_prefix . 'scene_odp',
             'type' => 'textarea',
             'std' => $ini_scene_odp[0]
         ),
         array(
-            'name' => 'mat.meta pattern',
+            'name' => 'mat.meta Pattern',
             'desc' => 'scene-mat-dotmeta-pattern',
             'id' => $wpunity_prefix . 'scene_mdp',
             'type' => 'textarea',
             'std' => $ini_scene_mdp[0]
         ),
         array(
-            'name' => 'jpg.meta pattern',
+            'name' => 'jpg.meta Pattern',
             'desc' => 'scene-jpg-dotmeta-pattern',
             'id' => $wpunity_prefix . 'scene_jdp',
             'type' => 'textarea',
             'std' => $ini_scene_jdp[0]
         ),
         array(
-            'name' => 'js.meta pattern',
+            'name' => 'js.meta Pattern',
             'desc' => 'scene-js-dotmeta-pattern',
             'id' => $wpunity_prefix . 'scene_jsdp',
             'type' => 'textarea',
@@ -1067,7 +1075,7 @@ $wpunity_databox2d = array(
     'priority' => 'high',
     'fields' => array(
         array(
-            'name' => 'Material (.mat) pattern',
+            'name' => 'Material (.mat) Pattern',
             'desc' => 'scene-mat-pattern',
             'id' => $wpunity_prefix . 'scene_matp',
             'type' => 'textarea',
@@ -1084,7 +1092,7 @@ $wpunity_databox2e = array(
     'priority' => 'high',
     'fields' => array(
         array(
-            'name' => 'Door javascript (.js) pattern',
+            'name' => 'Door Javascript (.js) Pattern',
             'desc' => 'scene-doorjs-pattern',
             'id' => $wpunity_prefix . 'scene_doorjsp',
             'type' => 'textarea',
@@ -1093,6 +1101,14 @@ $wpunity_databox2e = array(
     )
 );
 
+//==========================================================================================================================================
+
+/**
+ * A3.03
+ * Add and Show those 5 metaboxes with Custom Field for Scene YAML Template
+ *
+ * ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e)
+ */
 function wpunity_yamltemp_databoxes_add() {
     global $wpunity_databox2a;
     global $wpunity_databox2b;
@@ -1107,7 +1123,6 @@ function wpunity_yamltemp_databoxes_add() {
 }
 
 add_action('admin_menu', 'wpunity_yamltemp_databoxes_add');
-
 
 function wpunity_yamltemp_databox2a_show(){
     global $wpunity_databox2a, $post;
@@ -1158,7 +1173,6 @@ function wpunity_yamltemp_databox2a_show(){
         <div style="margin-top:30px">fids up to 7 are used. First available fid is 8.</div>';
 
 }
-
 
 function wpunity_yamltemp_databox2b_show(){
     global $wpunity_databox2b, $post;
@@ -1337,12 +1351,14 @@ function wpunity_yamltemp_databox2e_show(){
 
 }
 
-/**
- * 5.03
- * Save Data @ Box with Lat-Lng-Address-Votes
- *
- */
+//==========================================================================================================================================
 
+/**
+ * A3.04
+ * Save data from those 5 metaboxes with Custom Field for Scene YAML Template
+ *
+ * ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e)
+ */
 
 function wpunity_yamltemp_databox_save($post_id) {
     global $wpunity_databox2a;
@@ -1414,8 +1430,7 @@ function wpunity_yamltemp_databox_save($post_id) {
 
 }
 
-// Save data from infobox
 add_action('save_post', 'wpunity_yamltemp_databox_save');
 
-
+//==========================================================================================================================================
 ?>
