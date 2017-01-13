@@ -62,7 +62,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewe
 
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
-register_activation_hook( __FILE__, 'wpunity_assets_taxcategory_fill' );
+
 
 /**
  * Game cpt
@@ -71,7 +71,7 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php')
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.php');
 
-
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-tax.php');
 
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');

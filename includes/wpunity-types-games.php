@@ -7,7 +7,7 @@ class GameClass{
     function __construct(){
         //register_activation_hook(__FILE__, array($this, 'activate'));
         add_action('init', array($this, 'wpunity_games_construct')); //wpunity_game
-        //add_action('init', array($this, 'create_taxonomies_games'));
+        add_action('init', array($this, 'wpunity_games_taxcategory')); //wpunity_game_cat
         //add_action('init', array($this, 'register_new_taxonomy_terms_game'));
         //add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
         //add_action('admin_footer', array($this, 'checktoradio'));
@@ -48,7 +48,7 @@ class GameClass{
             'menu_position'     => 25,
             'menu_icon'         =>'dashicons-visibility',
             'taxonomies'        => array(),
-            'supports'          => array('title','editor','thumbnail','custom-fields'),
+            'supports'          => array('title','editor','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
         );
@@ -56,6 +56,41 @@ class GameClass{
         register_post_type('wpunity_game', $args);
 
     }
+
+
+
+    function wpunity_games_taxcategory(){
+
+        $labels = array(
+            'name'              => _x( 'Game Category', 'taxonomy general name'),
+            'singular_name'     => _x( 'Game Category', 'taxonomy singular name'),
+            'menu_name'         => _x( 'Game Categories', 'admin menu'),
+            'search_items'      => __( 'Search Game Categories'),
+            'all_items'         => __( 'All Game Categories'),
+            'parent_item'       => __( 'Parent Game Category'),
+            'parent_item_colon' => __( 'Parent Game Category:'),
+            'edit_item'         => __( 'Edit Game Category'),
+            'update_item'       => __( 'Update Game Category'),
+            'add_new_item'      => __( 'Add New Game Category'),
+            'new_item_name'     => __( 'New Game Category')
+        );
+
+        $args = array(
+            'description' => 'Category of Game',
+            'labels'    => $labels,
+            'public'    => false,
+            'show_ui'   => true,
+            'hierarchical' => true,
+            'show_admin_column' => true
+        );
+
+        register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
+
+    }
+
+
+    /****************************************************************************/
+
 
 
 
