@@ -125,3 +125,43 @@ function wpunity_create_sceneTax( $new_status, $old_status, $post ){
 }
 
 add_action(  'transition_post_status',  'wpunity_create_sceneTax', 10, 3 );
+
+
+function wpunity_assets_taxcategory_fill(){
+    wp_insert_term(
+        'Dynamic 3D models', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.',
+            'slug' => 'dynamic3dmodels',
+        )
+    );
+    wp_insert_term(
+        'Points of Interest', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'Points of interest (POIs) are spots at the game where information pops up.',
+            'slug' => 'pois',
+        )
+    );
+    wp_insert_term(
+        'Static 3D models', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
+            'slug' => 'static3dmodels',
+        )
+    );
+    wp_insert_term(
+        'Doors', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene.',
+            'slug' => 'doors',
+        )
+    );
+}
+
+add_action( 'init', 'wpunity_assets_taxcategory_fill' );
+
+?>

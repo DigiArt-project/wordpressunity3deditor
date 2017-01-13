@@ -5,7 +5,7 @@
 $wpunity_prefix = 'wpunity_game_';
 
 //All information about our meta box
-$wpunity_databox = array(
+$wpunity_databox3 = array(
     'id' => 'wpunity-games-databox',
     'page' => 'wpunity_game',
     'context' => 'normal',
@@ -29,19 +29,19 @@ $wpunity_databox = array(
 );
 
 function wpunity_games_databox_add() {
-    global $wpunity_databox;
-    add_meta_box($wpunity_databox['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox['page'], $wpunity_databox['context'], $wpunity_databox['priority']);
+    global $wpunity_databox3;
+    add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
 }
 
 add_action('admin_menu', 'wpunity_games_databox_add');
 
 
 function wpunity_games_databox_show(){
-    global $wpunity_databox, $post;
+    global $wpunity_databox3, $post;
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_games_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
-    foreach ($wpunity_databox['fields'] as $field) {
+    foreach ($wpunity_databox3['fields'] as $field) {
         // get current post meta data
         $meta = get_post_meta($post->ID, $field['id'], true);
         echo '<tr>',
@@ -87,7 +87,7 @@ function wpunity_games_databox_show(){
 
 
 function wpunity_games_databox_save($post_id) {
-    global $wpunity_databox;
+    global $wpunity_databox3;
     // verify nonce
     if (!wp_verify_nonce($_POST['wpunity_games_databox_nonce'], basename(__FILE__))) {
         return $post_id;
@@ -104,7 +104,7 @@ function wpunity_games_databox_save($post_id) {
     } elseif (!current_user_can('edit_post', $post_id)) {
         return $post_id;
     }
-    foreach ($wpunity_databox['fields'] as $field) {
+    foreach ($wpunity_databox3['fields'] as $field) {
         $old = get_post_meta($post_id, $field['id'], true);
         $new = $_POST[$field['id']];
         if ($new && $new != $old) {

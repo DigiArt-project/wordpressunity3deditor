@@ -21,61 +21,58 @@
 
 
 <?php
-/**
-Description: Create a Scene, and its taxonomies
-Version: 1.0
-Author: Dimitrios Ververidis
-License: AGPL
- */
-class SceneTemplateClass
-{
-    function __construct()
-    {
-        register_activation_hook(__FILE__, array($this, 'activate'));
-        add_action('init', array($this, 'init_cpt_scene_template'));
-        add_action('init', array($this, 'create_taxonomies_scene_template'));
-        add_action('init', array($this, 'register_new_taxonomy_terms_scene_template'));
-        add_action("save_post", array($this, 'save_scene_template_data_to_db_and_media'), 10, 3);
+
+
+$sceneTemplateClass = new YamlTemplateClass();
+
+class YamlTemplateClass{
+    function __construct(){
+        add_action('init', array($this, 'wpunity_yamltemp_construct'));
+//        add_action('init', array($this, 'create_taxonomies_scene_template'));
+//        add_action('init', array($this, 'register_new_taxonomy_terms_scene_template'));
+//        add_action("save_post", array($this, 'save_scene_template_data_to_db_and_media'), 10, 3);
     }
 
-    function activate()
-    {
-//        $this->wpunity_scenes_construct();
-//        $this->create_taxonomies_scene();
-//        $this->register_new_taxonomy_terms_scene();
-    }
 
-    function init_cpt_scene_template(){
+    function wpunity_yamltemp_construct(){
 
         $labels = array(
-            'name' => _x('Scene Templates', 'A Scene inherits properties of the Scene Template'),
-            'singular_name' => _x('Scene Template', 'Scene Template singular name'),
-            'add_new' => _x('Add New', 'Scene Template'),
-            'add_new_item' => __('Add New Scene Template'),
-            'edit_item' => __('Edit Scene Template'),
-            'new_item' => __('New Scene Template'),
-            'all_items' => __('All Scene Templates'),
-            'view_item' => __('View Scene Template'),
-            'search_items' => __('Search Scene Templates'),
-            'not_found' => __('No Scene Template found'),
-            'not_found_in_trash' => __('No Scene Template found in the Trash'),
-            'parent_item_colon' => '',
-            'menu_name' => 'Scene Templates'
+            'name'               => _x( 'Scene YAML templates', 'post type general name'),
+            'singular_name'      => _x( 'Scene YAML template', 'post type singular name'),
+            'menu_name'          => _x( 'Scene YAML templates', 'admin menu'),
+            'name_admin_bar'     => _x( 'Scene YAML template', 'add new on admin bar'),
+            'add_new'            => _x( 'Add New', 'add new on menu'),
+            'add_new_item'       => __( 'Add New Scene YAML template'),
+            'new_item'           => __( 'New Scene YAML template'),
+            'edit'               => __( 'Edit'),
+            'edit_item'          => __( 'Edit Scene YAML template'),
+            'view'               => __( 'View'),
+            'view_item'          => __( 'View Scene YAML template'),
+            'all_items'          => __( 'All Scene YAML templates'),
+            'search_items'       => __( 'Search Scene YAML templates'),
+            'parent_item_colon'  => __( 'Parent Scene YAML templates:'),
+            'parent'             => __( 'Parent Scene YAML template'),
+            'not_found'          => __( 'No Scene YAML templates found.'),
+            'not_found_in_trash' => __( 'No Scene YAML templates found in Trash.')
         );
 
-        // args array
         $args = array(
-            'labels' => $labels,
-            'description' => 'Displays Scene Templates',
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' =>'dashicons-visibility',
-            'supports' => array('title', 'editor', 'thumbnail' ),
-            'has_archive' => true,
-            'register_meta_box_cb' => array($this, 'add_scene_template_metaboxes')
+            'labels'                => $labels,
+            'description'           => 'Displays Scene YAML templates',
+            'public'                => true,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => false,
+            'show_in_nav_menus'     => false,
+            'menu_position'     => 25,
+            'menu_icon'         =>'dashicons-visibility',
+            'taxonomies'        => array(),
+            'supports'          => array('title','editor','custom-fields'),
+            'hierarchical'      => false,
+            'has_archive'       => false,
         );
 
-        register_post_type('scene_template', $args);
+        register_post_type('wpunity_yamltemp', $args);
+
     }
 
 
@@ -334,7 +331,7 @@ class SceneTemplateClass
             return $post_id;
 
         // Avoid changing other custom types
-        if($post->post_type != 'scene_template' )
+        if($post->post_type != 'wpunity_yamltemp' )
             return $post_id;
 
         // ============ Start of custom fields =============================================

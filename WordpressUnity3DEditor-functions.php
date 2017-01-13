@@ -37,9 +37,9 @@ php_value max_input_time 300
 /**
  * Scene cpt
  */
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/SceneTemplateClass.php');
-$sceneTemplateClass = new SceneTemplateClass();
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp.php');
 
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
 
 
 
