@@ -76,6 +76,7 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-ta
 //A3.04 Save data from those 5 metaboxes
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
 
+
 //===================================== Games ============================================
 
 /*
@@ -100,6 +101,28 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-tax.p
 //A3.02 Add and Show this metabox
 //A3.03 Save data from this metabox
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.php');
+
+
+//===================================== Scenes ============================================
+
+/*
+custom type : wpunity_scene
+custom taxonomy : wpunity_scene_pgame
+custom fields :
+        ? -> wpunity_game_lat
+        ? -> wpunity_game_lng
+*/
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
+
+
+
+
+
 
 
 
@@ -130,10 +153,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.ph
  */
 
 
-
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
-
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
 
 
 // ===================== Obsolete ===================================

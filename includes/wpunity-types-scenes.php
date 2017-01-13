@@ -9,13 +9,8 @@ class SceneClass{
         add_action('init', array($this, 'wpunity_scenes_taxpgame')); //wpunity_scene_pgame
 
 
-        //register_activation_hook(__FILE__, array($this, 'activate'));
-
-
 //        add_action('init', array($this, 'register_new_taxonomy_terms_scene'));
 //        add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
-//        add_action('admin_footer', array($this, 'checktoradio'));
-//        add_filter('get_sample_permalink', array($this, 'disable_permalink'));
 //        add_action('edit_form_after_title', array($this, 'create_folder_scene'));
 //        add_filter('geodir_custom_field_input_textarea', array($this,'scene_json_textarea_prolong'), 10, 1);
     }
@@ -290,18 +285,6 @@ class SceneClass{
 //    }
 
 
-
-    /**
-     * in cpt Scene allow only one selection in custom taxonomy scene_category, i.e. the Scene belongs to one Game only
-     */
-    function checktoradio(){
-        echo '<script type="text/javascript">jQuery("#scene_categorychecklist-pop input, #scene_categorychecklist input, .scene_categorychecklist input").each(function(){this.type="radio"});</script>';
-    }
-
-
-    function disable_permalink(){
-        return null;
-    }
 
 
     function create_folder_scene(){
