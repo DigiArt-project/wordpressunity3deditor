@@ -1,5 +1,7 @@
 <?php
 
+$gameClass = new GameClass();
+
 class GameClass{
 
     function __construct(){
@@ -53,36 +55,6 @@ class GameClass{
 
         register_post_type('wpunity_game', $args);
 
-
-        $labels = array(
-            'name' => _x('Games', 'A game consists of several scenes'),
-            'singular_name' => _x('Game', 'Game singular name'),
-            'add_new' => _x('Add New', 'Game'),
-            'add_new_item' => __('Add New Game'),
-            'edit_item' => __('Edit Game'),
-            'new_item' => __('New Game'),
-            'all_items' => __('All Games'),
-            'view_item' => __('View Game'),
-            'search_items' => __('Search Games'),
-            'not_found' => __('No Game found'),
-            'not_found_in_trash' => __('No Game found in the Trash'),
-            'parent_item_colon' => '',
-            'menu_name' => 'Games'
-        );
-
-        // args array
-        $args = array(
-            'labels' => $labels,
-            'description' => 'Displays Games',
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' =>'dashicons-visibility',
-            'supports' => array('title', 'editor', 'thumbnail' ),
-            'has_archive' => true,
-            'register_meta_box_cb' => array($this, 'add_game_metaboxes')
-        );
-
-        register_post_type('game', $args);
     }
 
 
