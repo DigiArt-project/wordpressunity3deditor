@@ -45,7 +45,6 @@ class SceneYamlTemplateClass{
             'show_in_nav_menus'     => false,
             'menu_position'     => 25,
             'menu_icon'         =>'dashicons-welcome-widgets-menus',
-            'taxonomies'        => array(),
             'supports'          => array('title','editor','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,

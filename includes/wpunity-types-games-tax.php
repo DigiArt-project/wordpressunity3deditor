@@ -1,14 +1,12 @@
 <?php
-
-
-add_action('add_meta_boxes','wpunity_games_taxcategory_box');
-
 /**
- * 2.04
- * Create Asset Category Box @ asset's backend
+ * B2.01
+ * Create Game Category Box @ Game's backend
  *
  * (dropdown style)
  */
+
+add_action('add_meta_boxes','wpunity_games_taxcategory_box');
 
 function wpunity_games_taxcategory_box() {
 
@@ -16,7 +14,6 @@ function wpunity_games_taxcategory_box() {
 
     add_meta_box( 'tagsdiv-wpunity_game_cat','Game Category','wpunity_games_taxcategory_box_content', 'wpunity_game', 'side' , 'high'); //Adds the custom metabox with select box
 }
-
 
 function wpunity_games_taxcategory_box_content($post){
     $tax_name = 'wpunity_game_cat';
@@ -60,11 +57,15 @@ function wpunity_games_taxcategory_box_content($post){
     <?php
 }
 
+//==========================================================================================================================================
 
 /**
- * When the post is saved, also saves wpunity_asset3d_cat
- * @param $post_id
+ * A2.02
+ * When the post is saved, also saves wpunity_game_cat
+ *
+ *
  */
+
 function wpunity_games_taxcategory_box_content_save( $post_id ) {
 
     global $wpdb;
@@ -107,9 +108,14 @@ function wpunity_games_taxcategory_box_content_save( $post_id ) {
 /* Do something with the data entered */
 add_action( 'save_post', 'wpunity_games_taxcategory_box_content_save' );
 
+//==========================================================================================================================================
 
-
-
+/**
+ * B2.03
+ * Create Initial wpunity_game_cat (Game Category) terms
+ *
+ *
+ */
 
 function wpunity_games_taxcategory_fill(){
     wp_insert_term(
@@ -134,5 +140,5 @@ function wpunity_games_taxcategory_fill(){
 
 add_action( 'init', 'wpunity_games_taxcategory_fill' );
 
-
+//==========================================================================================================================================
 ?>
