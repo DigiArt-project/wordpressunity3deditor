@@ -6,6 +6,20 @@
  * ($wpunity_databox3)
  */
 
+define( 'WP_DEBUG', true );
+
+wp_enqueue_style('wpunity_backend');
+
+wp_enqueue_script( 'wpunity_compiler_request',
+    plugins_url('wordpressunity3deditor/js_libs/compiler_commands/request_game.js'),
+    null, null, false);
+
+
+wp_localize_script('wpunity_compiler_request', 'phpvars',
+    array('pluginsUrl' => plugins_url(),
+          'PHP_OS'     =>PHP_OS,
+          'game_dirpath'   =>'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
 
@@ -45,9 +59,25 @@ $wpunity_databox3 = array(
 function wpunity_games_databox_add() {
     global $wpunity_databox3;
     add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
+
 }
 
+function wpunity_games_compilerbox_add(){
+    add_meta_box('wpunity-games-compiler-box', 'Game Compiler', 'wpunity_games_compiler_show', 'wpunity_game', 'side', 'low');
+}
+
+
 add_action('admin_menu', 'wpunity_games_databox_add');
+add_action('admin_menu', 'wpunity_games_compilerbox_add');
+
+function wpunity_games_compiler_show(){
+    echo '<div id="wpunity_compileButton" onclick="wpunity_compileAjax()">Compile</div>';
+
+    echo '<div id="wpunity_compile_report1">-</div>';
+    echo '<div id="wpunity_compile_report2">+</div>';
+    echo '<div id="wpunity_zipgame_report">()</div>';
+
+}
 
 function wpunity_games_databox_show(){
     global $wpunity_databox3, $post;

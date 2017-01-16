@@ -1,4 +1,7 @@
 <?php
+
+
+
 /**
  * Plugin Name: WordpressUnity3DEditor
  * Plugin URI: http://yoursite.com
@@ -60,6 +63,10 @@ custom fields :
 
         Door Javascript (.js) Pattern -> wpunity_yamltemp_scene_doorjsp
 */
+
+wp_register_style( 'wpunity_backend', plugins_url('wordpressunity3deditor/css/wpunity_backend.css' ));
+
+
 
 //A1.01 Create Scene YAML Template (custom type : wpunity_yamltemp)
 //A1.02 Create Scene YAML Template Category (custom taxonomy : wpunity_yamltemp_cat)
