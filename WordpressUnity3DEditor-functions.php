@@ -105,8 +105,8 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php')
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-tax.php');
 
 //B3.01 Create metabox with Custom Fields ($wpunity_databox3)
-//A3.02 Add and Show this metabox
-//A3.03 Save data from this metabox
+//B3.02 Add and Show this metabox
+//B3.03 Save data from this metabox
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.php');
 
 
@@ -120,9 +120,15 @@ custom fields :
         ? -> wpunity_game_lng
 */
 
+//C1.01 Create Scene (custom type : wpunity_scene)
+//C1.02 Create Scene Game (custom taxonomy : wpunity_scene_pgame)
+//C1.03 TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
 
+//C2.01 Create Scene's Game Box @ scene's backend (dropdown style)
+//C2.02 Save Data from Box
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
+
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
 

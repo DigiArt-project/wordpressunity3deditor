@@ -2,81 +2,94 @@
 
 $sceneClass = new SceneClass();
 
-class SceneClass{
+class SceneClass
+{
 
-    function __construct(){
+    function __construct()
+    {
         add_action('init', array($this, 'wpunity_scenes_construct')); //wpunity_scene
         add_action('init', array($this, 'wpunity_scenes_taxpgame')); //wpunity_scene_pgame
 
-
-//        add_action('init', array($this, 'register_new_taxonomy_terms_scene'));
-//        add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
-//        add_action('edit_form_after_title', array($this, 'create_folder_scene'));
 //        add_filter('geodir_custom_field_input_textarea', array($this,'scene_json_textarea_prolong'), 10, 1);
     }
 
-
-    function wpunity_scenes_construct(){
+    /**
+     * C1.01
+     * Create Scene
+     *
+     * Scene as custom type 'wpunity_scene'
+     */
+    function wpunity_scenes_construct()
+    {
 
         $labels = array(
-            'name'               => _x( 'Scenes', 'post type general name'),
-            'singular_name'      => _x( 'Scene', 'post type singular name'),
-            'menu_name'          => _x( 'Scenes', 'admin menu'),
-            'name_admin_bar'     => _x( 'Scene', 'add new on admin bar'),
-            'add_new'            => _x( 'Add New', 'add new on menu'),
-            'add_new_item'       => __( 'Add New Scene'),
-            'new_item'           => __( 'New Scene'),
-            'edit'               => __( 'Edit'),
-            'edit_item'          => __( 'Edit Scene'),
-            'view'               => __( 'View'),
-            'view_item'          => __( 'View Scene'),
-            'all_items'          => __( 'All Scenes'),
-            'search_items'       => __( 'Search Scenes'),
-            'parent_item_colon'  => __( 'Parent Scenes:'),
-            'parent'             => __( 'Parent Scene'),
-            'not_found'          => __( 'No Scenes found.'),
-            'not_found_in_trash' => __( 'No Scenes found in Trash.')
+            'name' => _x('Scenes', 'post type general name'),
+            'singular_name' => _x('Scene', 'post type singular name'),
+            'menu_name' => _x('Scenes', 'admin menu'),
+            'name_admin_bar' => _x('Scene', 'add new on admin bar'),
+            'add_new' => _x('Add New', 'add new on menu'),
+            'add_new_item' => __('Add New Scene'),
+            'new_item' => __('New Scene'),
+            'edit' => __('Edit'),
+            'edit_item' => __('Edit Scene'),
+            'view' => __('View'),
+            'view_item' => __('View Scene'),
+            'all_items' => __('All Scenes'),
+            'search_items' => __('Search Scenes'),
+            'parent_item_colon' => __('Parent Scenes:'),
+            'parent' => __('Parent Scene'),
+            'not_found' => __('No Scenes found.'),
+            'not_found_in_trash' => __('No Scenes found in Trash.')
         );
 
         $args = array(
-            'labels'                => $labels,
-            'description'           => 'Displays several Scenes of a Game',
-            'public'                => true,
-            'exclude_from_search'   => true,
-            'publicly_queryable'    => false,
-            'show_in_nav_menus'     => false,
-            'menu_position'     => 25,
-            'menu_icon'         =>'dashicons-media-default',
-            'taxonomies'        => array(),
-            'supports'          => array('title','editor','thumbnail','custom-fields'),
-            'hierarchical'      => false,
-            'has_archive'       => false,
+            'labels' => $labels,
+            'description' => 'Displays several Scenes of a Game',
+            'public' => true,
+            'exclude_from_search' => true,
+            'publicly_queryable' => false,
+            'show_in_nav_menus' => false,
+            'menu_position' => 25,
+            'menu_icon' => 'dashicons-media-default',
+            'taxonomies' => array('wpunity_scene_pgame'),
+            'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
+            'hierarchical' => false,
+            'has_archive' => false,
         );
 
         register_post_type('wpunity_scene', $args);
     }
 
-    function wpunity_scenes_taxpgame(){
+    //==========================================================================================================================================
+
+    /**
+     * C1.02
+     * Create Scene Game
+     *
+     * Game that the Scene belongs as custom taxonomy 'wpunity_scene_pgame'
+     */
+    function wpunity_scenes_taxpgame()
+    {
 
         $labels = array(
-            'name'              => _x( 'Scene Game', 'taxonomy general name'),
-            'singular_name'     => _x( 'Scene Game', 'taxonomy singular name'),
-            'menu_name'         => _x( 'Scene Games', 'admin menu'),
-            'search_items'      => __( 'Search Scene Games'),
-            'all_items'         => __( 'All Scene Games'),
-            'parent_item'       => __( 'Parent Scene Game'),
-            'parent_item_colon' => __( 'Parent Scene Game:'),
-            'edit_item'         => __( 'Edit Scene Game'),
-            'update_item'       => __( 'Update Scene Game'),
-            'add_new_item'      => __( 'Add New Scene Game'),
-            'new_item_name'     => __( 'New Scene Game')
+            'name' => _x('Scene Game', 'taxonomy general name'),
+            'singular_name' => _x('Scene Game', 'taxonomy singular name'),
+            'menu_name' => _x('Scene Games', 'admin menu'),
+            'search_items' => __('Search Scene Games'),
+            'all_items' => __('All Scene Games'),
+            'parent_item' => __('Parent Scene Game'),
+            'parent_item_colon' => __('Parent Scene Game:'),
+            'edit_item' => __('Edit Scene Game'),
+            'update_item' => __('Update Scene Game'),
+            'add_new_item' => __('Add New Scene Game'),
+            'new_item_name' => __('New Scene Game')
         );
 
         $args = array(
             'description' => 'Game that the Scene belongs',
-            'labels'    => $labels,
-            'public'    => false,
-            'show_ui'   => true,
+            'labels' => $labels,
+            'public' => false,
+            'show_ui' => true,
             'hierarchical' => true,
             'show_admin_column' => true
         );
@@ -85,58 +98,77 @@ class SceneClass{
 
     }
 
+}
 
-    /*********************************************************************************************************************/
+//==========================================================================================================================================
 
+/**
+ * C1.03 TODO
+ * Generate folder and Taxonomy (for assets3d) with Scene's slug/name
+ *
+ * Generate a folder in media to store assets named as the permalink of the scene
+ * Generate taxonomy for Asset3d usage (wpunity_asset3d_pscene)
+ */
 
+function wpunity_create_folder_scene( $new_status, $old_status, $post ){
 
+    $post_type = get_post_type($post);
+    $post_slug = $post->post_name;
+    $post_title = $post->post_title;
+    $post_tax_belongs = get_the_terms($post, 'wpunity_scene_pgame')[0]->slug;
 
+    if ($post_type == 'wpunity_scene') {
+        if ( ($new_status == 'publish') ) {
+            $media_subfolder_to_generate = $post_slug;
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'] . "/" . $post_tax_belongs;
+            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
 
-    function scene_custom_fields($object)
-    {
-        wp_nonce_field(basename(__FILE__), "meta-box-nonce");
+            $upload_dir = str_replace('\\','/',$upload_dir);
 
-        ?>
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755);
+            }
 
-
-        <div>
-            <label for="scene-vr-editor" style="margin-right:30px">VR Web Editor</label>
-            <div name="scene-vr-editor" style="margin-bottom:30px;">
-	            <?php require( "vr_editor.php" );?>
-            </div>
-        </div>
-
-        <div>
-            <label for="scene-json-input" style="margin-right:30px; vertical-align: top">Scene json</label>
-            <textarea name="scene-json-input" style="width:70%;height:800px;"
-            ><?php echo get_post_meta($object->ID, "scene-json", true); ?></textarea>
-        </div>
-
-        <div>
-            <label for="scene-latitude-input" style="margin-right:30px; vertical-align: top">Geolocation latitude</label>
-            <input type="text" name="scene-latitude-input" style="width: 10ch;height:1em"
-            value="<?php echo get_post_meta($object->ID, "scene-latitude", true); ?>"</input>
-        </div>
-
-
-        <div>
-            <label for="scene-longitude-input" style="margin-right:30px; vertical-align: top">Geolocation longitude</label>
-            <input type="text" name="scene-longitude-input" style="width: 10ch;height:1em"
-                   value="<?php echo get_post_meta($object->ID, "scene-longitude", true); ?>"</input>
-        </div>
+            //Create a parent scene tax category for the assets3d
+            wp_insert_term($post_title,'wpunity_asset3d_pscene',$post_slug,'Scene assignment of Asset 3D');
 
 
-        <?php
+        }else{
+            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
+        }
 
-        // end of custom fields
     }
+}
 
+//add_action('transition_post_status','wpunity_create_folder_scene',10,3);
+//    function create_folder_scene(){
+//
+//        global $post;
+//
+//        // Generate a folder in media to store assets named as the permalink of the game
+//        if (get_post_type($post)=='scene') {
+//            $post_slug = $post->post_name;
+//            $subfolder_game = get_the_terms($post, 'scene_category')[0]->slug;
+//
+//            // TODO: do not allow to continue saving and display a message if get_the_terms($post, 'scene_category')[0] has length 0
+//            //       i.e. not category is selected for this scene
+//            $media_subfolder_to_generate = $subfolder_game . '/' . $post_slug;
+//            $upload = wp_upload_dir();
+//            $upload_dir = $upload['basedir'];
+//            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
+//            if (!is_dir($upload_dir)) {
+//                mkdir($upload_dir, 0755);
+//            }
+//        }
+//
+//    }
 
-
+//==========================================================================================================================================
 
     /**
-     * Add "Edit in VR button" to post edit
-     */
+* Add "Edit in VR button" to post edit
+    */
 //    function vr_Scene_Edit(){
 //
 //        if (get_post_type()=='scene') {
@@ -155,29 +187,4 @@ class SceneClass{
 //    }
 
 
-
-
-    function create_folder_scene(){
-
-        global $post;
-
-        // Generate a folder in media to store assets named as the permalink of the game
-        if (get_post_type($post)=='scene') {
-            $post_slug = $post->post_name;
-            $subfolder_game = get_the_terms($post, 'scene_category')[0]->slug;
-
-            // TODO: do not allow to continue saving and display a message if get_the_terms($post, 'scene_category')[0] has length 0
-            //       i.e. not category is selected for this scene
-            $media_subfolder_to_generate = $subfolder_game . '/' . $post_slug;
-            $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'];
-            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755);
-            }
-        }
-
-    }
-
-}
 ?>
