@@ -1,10 +1,4 @@
 <?php
-/**
- * ?3.01
- * Create metabox with Custom Fields for Game
- *
- * ($wpunity_databox3)
- */
 
 $DS = DIRECTORY_SEPARATOR ;
 
@@ -20,11 +14,18 @@ wp_enqueue_script( 'wpunity_compiler_request',
 // Some parameters to pass in the request_game.js  ajax
 wp_localize_script('wpunity_compiler_request', 'phpvars',
     array('pluginsUrl' => plugins_url(),
-          'PHP_OS'     => PHP_OS,
-          'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
-          'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
-));
+        'PHP_OS'     => PHP_OS,
+        'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+        'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
+    ));
 ///=============================================
+
+/**
+ * B3.01
+ * Create metabox with Custom Fields for Game
+ *
+ * ($wpunity_databox3)
+ */
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
