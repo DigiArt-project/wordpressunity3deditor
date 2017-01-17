@@ -33,7 +33,13 @@ php_value max_input_time 300
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Asset3d Type they belong to)
 // TODO: Do not allow Assets3D to be saved if they do not have a category selected (Scene they belong to)
 
-wp_register_style( 'wpunity_backend', plugins_url('wordpressunity3deditor/css/wpunity_backend.css' ));
+
+//===================================== Styles & Scripts ====================================
+
+wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
+
+wp_register_script( 'wpunity_compiler_request', plugin_dir_url( __FILE__ ) . 'js_libs/compiler_commands/request_game.js',
+    null, null, false);
 
 //================================= Scene YAML Templates ===================================
 
@@ -101,7 +107,7 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php')
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-tax.php');
 
 //B3.01 Create metabox with Custom Fields ($wpunity_databox3)
-//B3.02 Add and Show this metabox
+//B3.02 Add and Show this metabox and the Compiler Box
 //B3.03 Save data from this metabox
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.php');
 
@@ -170,14 +176,10 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
 
 
-
-
-//=====================================================
+//===================================== Other ============================================
 
 //1.01 Overwrite Uploads
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
-
-
 
 
 //3.01 Create Initial Asset Categories
