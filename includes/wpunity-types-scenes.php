@@ -52,7 +52,7 @@ class SceneClass
             'menu_position' => 25,
             'menu_icon' => 'dashicons-media-default',
             'taxonomies' => array('wpunity_scene_pgame'),
-            'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
+            'supports' => array('title', 'editor', 'custom-fields'),
             'hierarchical' => false,
             'has_archive' => false,
         );
@@ -103,7 +103,7 @@ class SceneClass
 //==========================================================================================================================================
 
 /**
- * C1.03 TODO
+ * C1.03
  * Generate folder and Taxonomy (for assets3d) with Scene's slug/name
  *
  * Generate a folder in media to store assets named as the permalink of the scene
@@ -113,15 +113,23 @@ class SceneClass
 function wpunity_create_folder_scene( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
-    $post_slug = $post->post_name;
-    $post_title = $post->post_title;
-    $post_tax_belongs = get_the_terms($post, 'wpunity_scene_pgame')[0]->slug;
+
 
     if ($post_type == 'wpunity_scene') {
         if ( ($new_status == 'publish') ) {
+
+            $post_slug = $post->post_name;
+            $post_title = $post->post_title;
+            $type_ID = intval($_POST['wpunity_scene_pgame'], 10);
+            $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_scene_pgame' )->slug : NULL;
+            //$post_tax_belongs = get_the_terms($post, 'wpunity_scene_pgame')[0]->slug;
+            $post_tax_belongs = $type;
+
+
             $media_subfolder_to_generate = $post_slug;
             $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'] . "/" . $post_tax_belongs;
+            $upload_dir = $upload['basedir'];
+            $upload_dir = $upload_dir . "/" . $post_tax_belongs;
             $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
 
             $upload_dir = str_replace('\\','/',$upload_dir);
@@ -141,50 +149,8 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
     }
 }
 
-//add_action('transition_post_status','wpunity_create_folder_scene',10,3);
-//    function create_folder_scene(){
-//
-//        global $post;
-//
-//        // Generate a folder in media to store assets named as the permalink of the game
-//        if (get_post_type($post)=='scene') {
-//            $post_slug = $post->post_name;
-//            $subfolder_game = get_the_terms($post, 'scene_category')[0]->slug;
-//
-//            // TODO: do not allow to continue saving and display a message if get_the_terms($post, 'scene_category')[0] has length 0
-//            //       i.e. not category is selected for this scene
-//            $media_subfolder_to_generate = $subfolder_game . '/' . $post_slug;
-//            $upload = wp_upload_dir();
-//            $upload_dir = $upload['basedir'];
-//            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
-//            if (!is_dir($upload_dir)) {
-//                mkdir($upload_dir, 0755);
-//            }
-//        }
-//
-//    }
+add_action('transition_post_status','wpunity_create_folder_scene',10,3);
 
 //==========================================================================================================================================
-
-    /**
-* Add "Edit in VR button" to post edit
-    */
-//    function vr_Scene_Edit(){
-//
-//        if (get_post_type()=='scene') {
-//
-//            $html  = '<div id="major-publishing-actions" style="overflow:hidden">';
-//            $html .= '<div id="publishing-action">';
-//
-//            $html .= '<input accesskey="v" tabindex="5" value="VR Web Editor"
-//							class="button-primary" id="editVR" name="editVR" onclick="window.open(\''.plugins_url().
-//                                              '/WordpressUnity3DEditor/includes/vr_editor.php\',\'_blank\')">';
-//            $html .= '</div>';
-//            $html .= '</div>';
-//            echo $html;
-//        }
-//
-//    }
-
 
 ?>

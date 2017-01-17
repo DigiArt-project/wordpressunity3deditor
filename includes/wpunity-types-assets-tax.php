@@ -124,7 +124,7 @@ function wpunity_create_sceneTax( $new_status, $old_status, $post ){
     }
 }
 
-add_action(  'transition_post_status',  'wpunity_create_sceneTax', 10, 3 );
+//add_action(  'transition_post_status',  'wpunity_create_sceneTax', 10, 3 );
 
 
 function wpunity_assets_taxcategory_fill(){

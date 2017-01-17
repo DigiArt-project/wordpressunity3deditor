@@ -106,11 +106,14 @@ class GameClass{
 function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
-    $post_slug = $post->post_name;
-    $post_title = $post->post_title;
+
 
     if ($post_type == 'wpunity_game') {
         if ( ($new_status == 'publish') && ($old_status != 'publish') ) {
+
+            $post_slug = $post->post_name;
+            $post_title = $post->post_title;
+
             $media_subfolder_to_generate = $post_slug;
             $upload = wp_upload_dir();
             $upload_dir = $upload['basedir'];
