@@ -134,11 +134,24 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.
 
 //===================================== Assets ============================================
 
-//2.01 Create Assets
-//2.02 Create Asset Category
-//2.03 Create Asset Scene
+/*
+custom type : wpunity_asset3d
+custom taxonomy : wpunity_asset3d_cat
+                  wpunity_asset3d_pscene
+custom fields :
+        ? -> wpunity_scene_json_input
+        ? -> wpunity_scene_lat
+*/
+
+//D1.01 Create Asset3D (custom type : wpunity_asset3d)
+//D1.02 Create Asset Category (custom taxonomy : wpunity_asset3d_cat)
+//D1.03 Create Asset Scene (custom taxonomy : wpunity_asset3d_pscene)
+//D1.04 TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
 
+//D2.01 Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
+//D2.02 Save Data from Boxes
+//D2.03 Create Initial wpunity_asset3d_cat (Asset3D Category) terms - TO BE REMOVED TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
@@ -158,11 +171,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
-
-
-/**
- * Game cpt
- */
 
 
 
