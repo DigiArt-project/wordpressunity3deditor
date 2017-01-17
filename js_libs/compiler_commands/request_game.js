@@ -7,7 +7,8 @@ function wpunity_compileAjax() {
 
     var phpToExec = phpvars.PHP_OS.toUpperCase().substr(0, 3) === 'WIN'? 'exec_windows.php' : 'exec_linux.php';
 
-    console.log(phpvars.pluginsUrl + '/wordpressunity3deditor/includes/game_compile_phps/'+phpToExec+'?game_dirpath='+phpvars.game_dirpath);
+    console.log(phpvars.game_dirpath);
+    console.log(phpvars.game_urlpath);
 
     getRequestCompile(
             phpvars.pluginsUrl + '/wordpressunity3deditor/includes/game_compile_phps/'+phpToExec+'?game_dirpath='+phpvars.game_dirpath, // URL for the PHP file
@@ -30,19 +31,28 @@ function drawOutputCompile(responseText) {
 
 // helper function for cross-browser request object
 function getRequestCompile(url, success, error) {
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function(){
-        if(req.readyState == 4) {
+    var reqCompile = new XMLHttpRequest();
+    reqCompile.onreadystatechange = function(){
+        var os_dependend_var = phpvars.PHP_OS.toUpperCase().substr(0, 3) === 'WIN'? 1:4;
+
+        console.log("initiate compile", reqCompile.readyState);
+
+        if(reqCompile.readyState == os_dependend_var) {
             document.getElementById('wpunity_compileButton').innerHTML = "Compile" ;
 
             periodicalCheckCompilingStatus();
 
             //success(req.responseText) : error(req.status);
         }
+
+        if(reqCompile.readyState == 4) {
+            myzipajax();
+        }
+
     }
-    req.open("GET", url, true);
-    req.send(null);
-    return req;
+    reqCompile.open("POST", url, true);
+    reqCompile.send(null);
+    return reqCompile;
 }
 
 
@@ -50,7 +60,7 @@ function getRequestCompile(url, success, error) {
 // AJAX NO 2: Periodically check stdout.log file of Unity to see if we have finished
 function periodicalCheckCompilingStatus(){
     document.getElementById("wpunity_compile_report1").innerHTML = "-1";
-    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game";
+    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game ...";
 
     // Constantly monitor the stdout.log file
     var previousText = "";
@@ -63,7 +73,7 @@ function periodicalCheckCompilingStatus(){
         var ajax = new XMLHttpRequest();
 
         ajax.onreadystatechange = function() {
-            console.log("onread" + ajax.readyState);
+            console.log("onread stdout " + ajax.readyState);
             if (ajax.readyState == 4) {
                 if (ajax.responseText.length != counterCharsPrevious) {
 
@@ -72,26 +82,24 @@ function periodicalCheckCompilingStatus(){
 
                     counterCharsPrevious = ajax.responseText.length;
                 } else {
-                    document.getElementById("wpunity_compile_report1").innerHTML = "Compiling completed,"; //lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
+                    document.getElementById("wpunity_compile_report1").innerHTML = "Compiling completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
-                    if (ajax.responseText.indexOf("Exiting batchmode successfully now!")>0){
+                    if (ajax.responseText.indexOf("Exiting batchmode successfully now")>0){
                         document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
                         clearInterval(interval);
-                        myzipajax();
-
                     } else {
-
                         clearInterval(interval);
-                        document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [15] : HTML " + ajax.status;
+                        document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [15] : HTML " + ajax.status + "<br />" +
+                            ajax.getAllResponseHeaders(); // + " " + ajax.responseText ;
                     }
 
                 }
             }
         };
 
-        ajax.open("POST", phpvars.pluginsUrl + '/wordpressunity3deditor/test_compiler/game_windows/stdout.log', true); //Use POST to avoid caching
+        ajax.open("POST", phpvars.game_urlpath + '/stdout.log', true); //Use POST to avoid caching
         ajax.send();
-    }, 1000);
+    }, 2000);
 }
 
 
@@ -103,13 +111,8 @@ function myzipajax() {
 
     document.getElementById('wpunity_zipgame_report').innerHTML = "Zipping all in game.zip ...";
 
-    var buildsfolder = phpvars.game_dirpath+'\\builds';
-    var zipfile = phpvars.game_dirpath+'\\game.zip';
-
-    document.getElementById('wpunity_zipgame_report').innerHTML = buildsfolder + " " + zipfile;
-
     getRequestZip(
-        phpvars.pluginsUrl + '/wordpressunity3deditor/includes/game_compile_phps/game_zipper.php?buildsfolder='+buildsfolder+'&zipfile='+zipfile, // URL for the PHP file
+        phpvars.pluginsUrl + '/wordpressunity3deditor/includes/game_compile_phps/game_zipper.php?game_dirpath='+phpvars.game_dirpath, // URL for the PHP file
         drawOutputZip,  // handle successful request
         drawErrorZip    // handle error
     );
@@ -126,15 +129,17 @@ function drawOutputZip(responseText) {
 
 // helper function for cross-browser request object
 function getRequestZip(url, success, error) {
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function(){
-        if(req.readyState == 4) {
-            document.getElementById('wpunity_zipgame_report').innerHTML = '<a href="'+phpvars.pluginsUrl +
-                '/wordpressunity3deditor/test_compiler/game_windows/game.zip">Download game in a zip file </a>';
+    var reqZip = new XMLHttpRequest();
+    reqZip.onreadystatechange = function(){
+
+        console.log("zip request", reqZip.readyState);
+
+        if(reqZip.readyState == 4) {
+            document.getElementById('wpunity_zipgame_report').innerHTML = '<a href="'+ phpvars.game_urlpath + '/game.zip">Download game in a zip file </a>';
             //success(req.responseText) : error(req.status);
         }
     }
-    req.open("GET", url, true);
-    req.send(null);
-    return req;
+    reqZip.open("POST", url, true);
+    reqZip.send(null);
+    return reqZip;
 }

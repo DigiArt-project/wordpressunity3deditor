@@ -6,19 +6,25 @@
  * ($wpunity_databox3)
  */
 
-define( 'WP_DEBUG', true );
+$DS = DIRECTORY_SEPARATOR ;
 
+//============= Compile button resources ================
+// load css/wpunity_backend.css
 wp_enqueue_style('wpunity_backend');
 
+// load request_game.js script from js_libs
 wp_enqueue_script( 'wpunity_compiler_request',
     plugins_url('wordpressunity3deditor/js_libs/compiler_commands/request_game.js'),
     null, null, false);
 
-
+// Some parameters to pass in the request_game.js  ajax
 wp_localize_script('wpunity_compiler_request', 'phpvars',
     array('pluginsUrl' => plugins_url(),
-          'PHP_OS'     =>PHP_OS,
-          'game_dirpath'   =>'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+          'PHP_OS'     => PHP_OS,
+          'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+          'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
+));
+///=============================================
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
@@ -69,15 +75,6 @@ function wpunity_games_compilerbox_add(){
 
 add_action('admin_menu', 'wpunity_games_databox_add');
 add_action('admin_menu', 'wpunity_games_compilerbox_add');
-
-function wpunity_games_compiler_show(){
-    echo '<div id="wpunity_compileButton" onclick="wpunity_compileAjax()">Compile</div>';
-
-    echo '<div id="wpunity_compile_report1">-</div>';
-    echo '<div id="wpunity_compile_report2">+</div>';
-    echo '<div id="wpunity_zipgame_report">()</div>';
-
-}
 
 function wpunity_games_databox_show(){
     global $wpunity_databox3, $post;
@@ -162,5 +159,13 @@ function wpunity_games_databox_save($post_id) {
 add_action('save_post', 'wpunity_games_databox_save');
 
 //==========================================================================================================================================
+
+function wpunity_games_compiler_show(){
+    echo '<div id="wpunity_compileButton" onclick="wpunity_compileAjax()">Compile</div>';
+    echo '<div id="wpunity_compile_report1">-</div>';
+    echo '<div id="wpunity_compile_report2">+</div>';
+    echo '<div id="wpunity_zipgame_report">()</div>';
+}
+
 
 ?>

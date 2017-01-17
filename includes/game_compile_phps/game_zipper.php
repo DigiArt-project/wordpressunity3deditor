@@ -1,11 +1,9 @@
 <?php
 
-$builds_folder = $_GET['builds'];
-$zip_file = $_GET['zipfile'];
+$game_folder =  $_GET['game_dirpath'];  // '../../test_compiler/game_windows';
 
-$rootPath = $builds_folder; //realpath('builds');
-
-
+$rootPath = realpath($game_folder).'/builds';
+$zip_file = realpath($game_folder).'/game.zip';
 
 // Initialize archive object
 $zip = new ZipArchive();
