@@ -139,8 +139,15 @@ custom type : wpunity_asset3d
 custom taxonomy : wpunity_asset3d_cat
                   wpunity_asset3d_pscene
 custom fields :
-        ? -> wpunity_scene_json_input
-        ? -> wpunity_scene_lat
+        MTL File -> wpunity_asset3d_mtl
+        Obj File -> wpunity_asset3d_obj
+        Diffusion Image -> wpunity_asset3d_diffimage
+        Screenshot Image -> wpunity_asset3d_screenimage
+        Next Scene -> wpunity_asset3d_next_scene (for Doors)
+        Video -> wpunity_asset3d_video (for POI 7 Dynamics)
+        Image 1 -> wpunity_asset3d_image1 (for POI 7 Dynamics)
+        Image 2 -> wpunity_asset3d_image2 (for POI 7 Dynamics)
+        Image 3 -> wpunity_asset3d_image3 (for POI 7 Dynamics)
 */
 
 //D1.01 Create Asset3D (custom type : wpunity_asset3d)
@@ -154,6 +161,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' 
 //D2.03 Create Initial wpunity_asset3d_cat (Asset3D Category) terms - TO BE REMOVED TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
+//D3.01 Create metabox with Custom Fields ($wpunity_databox1)
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
