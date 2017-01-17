@@ -14,8 +14,6 @@ class Asset3DClass{
         add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
 
 
-//        add_action("save_post", array($this, 'save_data_to_db_and_media'), 10, 3);
-//        add_action('admin_footer', array($this, 'checktoradio'));
 //        add_filter('get_sample_permalink', array($this, 'disable_permalink'));
 
         // TODO: use wp_handle_upload() to overwrite uploaded files
@@ -60,7 +58,7 @@ class Asset3DClass{
             'publicly_queryable' => false,
             'show_in_nav_menus' => false,
             'menu_position' => 25,
-            'menu_icon' => 'dashicons-visibility',
+            'menu_icon' => 'dashicons-editor-textcolor',
             'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pscene'),
             'supports' => array('title', 'editor', 'custom-fields'),
             'hierarchical' => false,
@@ -153,12 +151,14 @@ class Asset3DClass{
 //==========================================================================================================================================
 
 /**
- * ??
- * Generate folder and Taxonomy (for scenes) with Game's slug/name
+ * D1.04
+ * Generate folders for Asset
  *
- * Generate a folder in media to store assets named as the permalink of the game
- * Generate taxonomy with for Scene usage (wpunity_scene_pgame)
+ *
+ *
  */
+
+
 
 
 //==========================================================================================================================================
