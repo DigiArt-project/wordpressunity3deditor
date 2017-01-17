@@ -97,15 +97,17 @@ class GameClass{
 
 /**
  * B1.03
- * Generate folder with Game's slug
+ * Generate folder and Taxonomy (for scenes) with Game's slug/name
  *
  * Generate a folder in media to store assets named as the permalink of the game
+ * Generate taxonomy with for Scene usage (wpunity_scene_pgame)
  */
 
 function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
     $post_slug = $post->post_name;
+    $post_title = $post->post_title;
 
     if ($post_type == 'wpunity_game') {
         if ( ($new_status == 'publish') && ($old_status != 'publish') ) {
@@ -119,8 +121,13 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755);
             }
+
+            //Create a parent game tax category for the scenes
+            wp_insert_term($post_title,'wpunity_scene_pgame',$post_slug,'Scene of a Game');
+
+
         }else{
-            //TODO It's not a new Game so DELETE everything
+            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }
 
     }

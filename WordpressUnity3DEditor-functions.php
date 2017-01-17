@@ -96,7 +96,7 @@ custom fields :
 
 //B1.01 Create Game (custom type : wpunity_game)
 //B1.02 Create Game Category (custom taxonomy : wpunity_game_cat)
-//B1.03 Generate folder with Game's slug TODO
+//B1.03 Generate folder and Taxonomy (for scenes) with Game's slug/name TODO
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php');
 
 //B2.01 Create Game Category Box @ Gamee's backend (dropdown style)

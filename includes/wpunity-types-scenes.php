@@ -16,9 +16,6 @@ class SceneClass{
     }
 
 
-
-
-
     function wpunity_scenes_construct(){
 
         $labels = array(
@@ -49,7 +46,7 @@ class SceneClass{
             'publicly_queryable'    => false,
             'show_in_nav_menus'     => false,
             'menu_position'     => 25,
-            'menu_icon'         =>'dashicons-visibility',
+            'menu_icon'         =>'dashicons-media-default',
             'taxonomies'        => array(),
             'supports'          => array('title','editor','thumbnail','custom-fields'),
             'hierarchical'      => false,
@@ -76,7 +73,7 @@ class SceneClass{
         );
 
         $args = array(
-            'description' => 'Game that the scene belongs',
+            'description' => 'Game that the Scene belongs',
             'labels'    => $labels,
             'public'    => false,
             'show_ui'   => true,
@@ -93,74 +90,6 @@ class SceneClass{
 
 
 
-    /*
-     *     This category is the Game which Scene belongs to.
-     *
-     */
-    function register_new_taxonomy_terms_scene(){
-
-        $args = array(
-            'category_name'    => '',
-            'orderby'          => 'date',
-            'order'            => 'DESC',
-            'include'          => '',
-            'exclude'          => '',
-            'meta_key'         => '',
-            'meta_value'       => '',
-            'post_type'        => 'game',
-            'post_mime_type'   => '',
-            'post_parent'      => '',
-            'author'	   => '',
-            'author_name'	   => '',
-            'post_status'      => 'publish',
-            'suppress_filters' => true
-        );
-        $posts_array = get_posts( $args );
-
-
-        foreach ($posts_array as $p){
-            $this->terms[] = array(
-                'name' => $p->post_title,
-                'slug' => $p->post_name,
-                'description' => ''
-            );
-        }
-
-
-        $this->taxonomy = 'scene_category';
-
-        // now create the categories
-        foreach ($this->terms as $term_key => $term) {
-
-            if (get_term($term)->slug == 'uncategorized') {
-                wp_insert_term(
-                    $term['name'],
-                    $this->taxonomy,
-                    array(
-                        'description' => $term['description'],
-                        'slug' => $term['slug'],
-                    )
-                );
-                unset($term);
-            }
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    function add_scene_metaboxes() {
-        add_meta_box("scene_custom_fields_metabox", "Scene custom fields", array($this, "scene_custom_fields"), "scene", "normal", "default", null);
-    }
 
 
     function scene_custom_fields($object)
@@ -200,65 +129,6 @@ class SceneClass{
         <?php
 
         // end of custom fields
-    }
-
-    function activate(){
-//        $this->wpunity_scenes_construct();
-//        $this->create_taxonomies_scene();
-//        $this->register_new_taxonomy_terms_scene();
-    }
-
-    /**
-     * Now Save everything to db
-     *
-     * @param $post_id
-     * @param $post
-     * @param $update
-     * @return mixed
-     */
-    function save_data_to_db_and_media($post_id, $post, $update)
-    {
-        // Safety check for intruders
-        if (!isset($_POST["meta-box-nonce"]) || !wp_verify_nonce($_POST["meta-box-nonce"], basename(__FILE__)))
-            return $post_id;
-
-        // check permissions for current user
-        if(!current_user_can("edit_post", $post_id))
-            return $post_id;
-
-        // check for autosave
-        if(defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
-            return $post_id;
-
-        // Avoid changing other custom types
-        if($post->post_type != 'scene' )
-            return $post_id;
-
-        // ============ Start of custom fields =============================================
-        // $scene_category_slug = get_the_terms($post, 'scene_category')[0]->slug;
-        $post_slug = $post->post_name;
-
-        // --------------- Scene JSON -------------------
-        $scene_json= "";
-
-        if(isset($_POST["scene-json-input"]))
-            $scene_json = $_POST["scene-json-input"];
-
-        update_post_meta($post_id, "scene-json", $scene_json);
-
-        //--------------- Scene Lat Long -------------------------
-        $scene_lat= "";
-        $scene_lng= "";
-
-        if(isset($_POST["scene-latitude-input"]))
-            $scene_lat = $_POST["scene-latitude-input"];
-
-        if(isset($_POST["scene-longitude-input"]))
-            $scene_lng = $_POST["scene-longitude-input"];
-
-        update_post_meta($post_id, "scene-latitude", $scene_lat);
-        update_post_meta($post_id, "scene-longitude", $scene_lng);
-        // =========================================================
     }
 
 
