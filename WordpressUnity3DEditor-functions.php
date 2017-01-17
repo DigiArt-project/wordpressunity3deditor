@@ -162,8 +162,11 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
 //D3.01 Create metabox with Custom Fields ($wpunity_databox1)
+//D3.02 Add and Show this metabox
+//D3.03 Save data from this metabox
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
 
+//D4.01 TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
 
 
