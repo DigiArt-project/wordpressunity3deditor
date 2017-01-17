@@ -60,10 +60,13 @@ function wpunity_scenes_databox_show(){
     global $wpunity_databox4, $post;
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_scenes_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<table class="form-table" id="wpunity-custom-fields-table">';
 
-    echo '<tr><th style="width:20%"><label for="scene-vr-editor">VR Web Editor</label></th>';
-    echo '<td><div name="scene-vr-editor" style="margin-bottom:30px;"></div></td><td></td></tr>';/*require( "vr_editor.php" )*/
+    echo '<label for="scene-vr-editor">VR Web Editor</label>';
+    echo '<div name="scene-vr-editor" style="margin-bottom:30px;">';
+    require( 'vr_editor.php' );
+    echo '</div>';
+
+    echo '<table class="form-table" id="wpunity-custom-fields-table">';
 
     foreach ($wpunity_databox4['fields'] as $field) {
         // get current post meta data
@@ -140,63 +143,6 @@ function wpunity_scenes_databox_save($post_id) {
 
 add_action('save_post', 'wpunity_scenes_databox_save');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//
-//function scene_custom_fields($object)
-//{
-//    wp_nonce_field(basename(__FILE__), "meta-box-nonce");
-//
-//    ?>
-<!---->
-<!---->
-<!--    <div>-->
-<!--        <label for="scene-vr-editor" style="margin-right:30px">VR Web Editor</label>-->
-<!--        <div name="scene-vr-editor" style="margin-bottom:30px;">-->
-<!--            --><?php //require( "vr_editor.php" );?>
-<!--        </div>-->
-<!--    </div>-->
-<!---->
-<!--    <div>-->
-<!--        <label for="scene-json-input" style="margin-right:30px; vertical-align: top">Scene json</label>-->
-<!--            <textarea name="scene-json-input" style="width:70%;height:800px;"-->
-<!--                >--><?php //echo get_post_meta($object->ID, "scene-json", true); ?><!--</textarea>-->
-<!--    </div>-->
-<!---->
-<!--    <div>-->
-<!--        <label for="scene-latitude-input" style="margin-right:30px; vertical-align: top">Geolocation latitude</label>-->
-<!--        <input type="text" name="scene-latitude-input" style="width: 10ch;height:1em"-->
-<!--               value="--><?php //echo get_post_meta($object->ID, "scene-latitude", true); ?><!--"</input>-->
-<!--    </div>-->
-<!---->
-<!---->
-<!--    <div>-->
-<!--        <label for="scene-longitude-input" style="margin-right:30px; vertical-align: top">Geolocation longitude</label>-->
-<!--        <input type="text" name="scene-longitude-input" style="width: 10ch;height:1em"-->
-<!--               value="--><?php //echo get_post_meta($object->ID, "scene-longitude", true); ?><!--"</input>-->
-<!--    </div>-->
-<!---->
-<!---->
-<!--    --><?php
-//
-//    // end of custom fields
-//}
+//==========================================================================================================================================
 
 ?>

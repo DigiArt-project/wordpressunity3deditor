@@ -112,8 +112,9 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.
 custom type : wpunity_scene
 custom taxonomy : wpunity_scene_pgame
 custom fields :
-        ? -> wpunity_game_lat
-        ? -> wpunity_game_lng
+        Scene Json -> wpunity_scene_json_input
+        Scene Latitude -> wpunity_scene_lat
+        Scene Longitude -> wpunity_scene_lng
 */
 
 //C1.01 Create Scene (custom type : wpunity_scene)
@@ -125,22 +126,13 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php')
 //C2.02 Save Data from Box
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
 
-
+//C3.01 Create metabox with Custom Fields ($wpunity_databox4)
+//C3.02 Add and Show this metabox
+//C3.03 Save data from this metabox
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
 
 
-
-
-
-
-
-
-
-//=====================================================
-
-//1.01 Overwrite Uploads
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
-
+//===================================== Assets ============================================
 
 //2.01 Create Assets
 //2.02 Create Asset Category
@@ -152,6 +144,17 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.p
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
+
+
+
+
+//=====================================================
+
+//1.01 Overwrite Uploads
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
+
+
+
 
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
