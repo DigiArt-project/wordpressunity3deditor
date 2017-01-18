@@ -208,12 +208,20 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
         <div class="breadcrumbs"></div>
 
-        <div class="nothingfound">
-            <div class="nofiles"></div>
-            <span>Nothing found</span>
-        </div>
 
-        <ul class="data" id="filesList" ></ul>
+<!--        <div id="filesListWrapper">-->
+<!---->
+<!--            <div class="nothingfound">-->
+<!--                <div class="nofiles"></div>-->
+<!--                <span>Nothing found</span>-->
+<!--            </div>-->
+<!--        -->
+<!--        </div>-->
+        <ul class="data" id="filesList" >
+
+
+
+        </ul>
 
         <div class="bt_close_file_toolbar">
             Close
