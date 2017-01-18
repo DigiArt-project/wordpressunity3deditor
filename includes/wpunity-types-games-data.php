@@ -1,10 +1,4 @@
 <?php
-/**
- * ?3.01
- * Create metabox with Custom Fields for Game
- *
- * ($wpunity_databox3)
- */
 
 $DS = DIRECTORY_SEPARATOR ;
 
@@ -13,18 +7,24 @@ $DS = DIRECTORY_SEPARATOR ;
 wp_enqueue_style('wpunity_backend');
 
 // load request_game.js script from js_libs
-wp_enqueue_script( 'wpunity_compiler_request',
-    plugins_url('wordpressunity3deditor/js_libs/compiler_commands/request_game.js'),
-    null, null, false);
+wp_enqueue_script( 'wpunity_compiler_request');
 
 // Some parameters to pass in the request_game.js  ajax
 wp_localize_script('wpunity_compiler_request', 'phpvars',
     array('pluginsUrl' => plugins_url(),
-          'PHP_OS'     => PHP_OS,
-          'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
-          'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
-));
-///=============================================
+        'PHP_OS'     => PHP_OS,
+        'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+        'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
+    ));
+
+//==========================================================================================================================================
+
+/**
+ * B3.01
+ * Create metabox with Custom Fields for Game
+ *
+ * ($wpunity_databox3)
+ */
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
@@ -57,7 +57,7 @@ $wpunity_databox3 = array(
 
 /**
  * B3.02
- * Add and Show the metabox with Custom Field for Game
+ * Add and Show the metabox with Custom Field for Game and the Compiler Box
  *
  * ($wpunity_databox3)
  */
@@ -65,16 +65,11 @@ $wpunity_databox3 = array(
 function wpunity_games_databox_add() {
     global $wpunity_databox3;
     add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
-
+    add_meta_box('wpunity-games-compiler-box', 'Game Compiler', 'wpunity_games_compilerbox_show', 'wpunity_game', 'side', 'low'); //Compiler Box
 }
-
-function wpunity_games_compilerbox_add(){
-    add_meta_box('wpunity-games-compiler-box', 'Game Compiler', 'wpunity_games_compiler_show', 'wpunity_game', 'side', 'low');
-}
-
 
 add_action('admin_menu', 'wpunity_games_databox_add');
-add_action('admin_menu', 'wpunity_games_compilerbox_add');
+
 
 
 function wpunity_games_databox_show(){
@@ -119,6 +114,8 @@ function wpunity_games_databox_show(){
 
 }
 
+
+
 //==========================================================================================================================================
 
 /**
@@ -160,8 +157,7 @@ function wpunity_games_databox_save($post_id) {
 add_action('save_post', 'wpunity_games_databox_save');
 
 //================================= Compiling related =================================================================
-
-function wpunity_games_compiler_show(){
+function wpunity_games_compilerbox_show(){
     echo '<div id="wpunity_compileButton" onclick="wpunity_compileAjax()">Compile</div>';
     echo '<div id="wpunity_compile_report1"></div>';
     echo '<div id="wpunity_compile_report2"></div>';
@@ -171,102 +167,14 @@ function wpunity_games_compiler_show(){
     echo '<div id="wpunity_compile_game_stdoutlog_report" style="font-size: x-small"></div>';
 
 }
-
+// the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
+// the ajax phps are on wpunity-core-functions.php
 add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
 add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
 add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
 
-// compile game, i.e. make a bat file and run it
-function wpunity_compile_action_callback() {
 
-    $DS = DIRECTORY_SEPARATOR;
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
-        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
-
-        // 1 : Generate bat
-        $myfile = fopen($game_dirpath.$DS."starter_artificial.bat", "w") or die("Unable to open file!");
-        $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
-        fwrite($myfile, $txt);
-        fclose($myfile);
-
-        // 2: run bat
-        $output = shell_exec('start /b starter_artificial.bat /c');
-
-    } else { // LINUX SERVER
-
-        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
-
-        // 1 : Generate sh
-        $myfile = fopen($game_dirpath.$DS."starter_artificial.sh", "w") or print("Unable to open file!");
-        $txt = "#/bin/bash"."\n".
-               "projectPath=`pwd`"."\n".
-               "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity -batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath ${projectPath} -buildWindowsPlayer 'builds/myg3.exe'";
-        fwrite($myfile, $txt);
-        fclose($myfile);
-
-        // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-        $output = shell_exec('nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &');
-    }
-
-    wp_die();
-}
-
-// read compile stdout.log file and return content.
-function wpunity_monitor_compiling_action_callback(){
-    $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
-    $fs = file_get_contents($game_dirpath.$DS."stdout.log");
-    echo $fs;
-
-    wp_die();
-}
-
-// Zip the builds folder
-function wpunity_game_zip_action_callback(){
-
-    $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
-
-    $rootPath = realpath($game_dirpath).'/builds';
-    $zip_file = realpath($game_dirpath).'/game.zip';
-
-    // Initialize archive object
-    $zip = new ZipArchive();
-    $resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-    if ($resZip===TRUE) {
-
-        // Create recursive directory iterator
-        /** @var SplFileInfo[] $files */
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file)
-        {
-            // Skip directories (they would be added automatically)
-            if (!$file->isDir())
-            {
-                // Get real and relative path for current file
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
-
-                // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
-            }
-        }
-
-        // Zip archive will be created only after closing object
-        $zip->close();
-        echo 'Zip successfully finished';
-        wp_die();
-    } else {
-        echo 'Failed to zip, code:'.$resZip;
-        wp_die();
-    }
-}
 
 
 ?>
