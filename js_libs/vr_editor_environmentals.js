@@ -297,7 +297,8 @@ class vr_editor_environmentals {
         this.stats = new Stats();
         this.stats.name = "myStats";
         this.stats.domElement.style.position = 'absolute';
-        this.stats.domElement.style.bottom = '10px';
+        this.stats.domElement.style.bottom = '35px';
+        this.stats.domElement.style.left = '10px';
         this.stats.domElement.style.zIndex = 100;
 
         this.container_3D_all.appendChild( this.stats.domElement );

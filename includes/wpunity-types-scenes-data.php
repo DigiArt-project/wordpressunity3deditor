@@ -63,7 +63,8 @@ function wpunity_scenes_databox_show(){
 
     echo '<label for="scene-vr-editor">VR Web Editor</label>';
     echo '<div name="scene-vr-editor" style="margin-bottom:30px;">';
-    require( 'vr_editor.php' );
+        require( 'vr_editor.php' );
+
     echo '</div>';
 
     echo '<table class="form-table" id="wpunity-custom-fields-table">';

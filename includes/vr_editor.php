@@ -24,6 +24,59 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 <link rel="import" href="<?php echo $PLUGIN_PATH_VR?>/includes/vr_editor_header_js.html">
 
 <script>
+
+
+
+
+    function makeFullScreen(){
+
+
+            console.log(envir.container_3D_all.style.width);
+
+            if (envir.container_3D_all.style.width!="100%") {
+                envir.container_3D_all.style.position = 'fixed';
+                envir.container_3D_all.style.width = '100%';
+                envir.container_3D_all.style.height = '100%';
+                envir.container_3D_all.style.top = '0';
+                envir.container_3D_all.style.left = '0';
+                envir.container_3D_all.style.right = '0';
+                envir.container_3D_all.style.bottom = '0';
+
+                document.getElementById('wpadminbar').style.zIndex = 0;
+                document.getElementById('adminmenuback').style.zIndex = 0;
+                document.getElementById('adminmenuwrap').style.zIndex = 0;
+                document.getElementById('wpfooter').style.display='none';
+                document.getElementById('postcustom').style.display='none';
+                document.getElementById('postdivrich').style.display='none';
+
+            }else {
+
+                envir.container_3D_all.style.position = 'relative';
+                envir.container_3D_all.style.width = '95%';
+                envir.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
+
+                document.getElementById('wpadminbar').style.zIndex = 9999;
+                document.getElementById('adminmenuback').style.zIndex = 9999;
+                document.getElementById('adminmenuwrap').style.zIndex = 9999;
+                document.getElementById('wpfooter').style.display='block';
+                document.getElementById('postcustom').style.display='block';
+                document.getElementById('postdivrich').style.display='';
+            }
+
+
+            envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
+            envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
+            envir.ASPECT = envir.SCREEN_WIDTH / envir.SCREEN_HEIGHT;
+            envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+
+            var handler = window.onresize;
+            handler();
+
+
+    }
+</script>
+
+<script>
     //  Save Button implemented with Ajax
     $(document).ready(function(){
 
@@ -168,6 +221,13 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
     </div>
 
+    <!-- Full screen bar button -->
+    <div id="scene-vr-editor-fullscreen-bar" name="scene-vr-editor-fullscreen-bar">
+        <div id="scene-vr-editor-fullscreen-bt" name="scene-vr-editor-fullscreen-bt" onclick="makeFullScreen()">
+            &boxVH;
+        </div>
+    </div>
+
     <!-- Interface for Picking two overlapping objects -->
     <div id="popUpDiv">
         <select id="popupSelect">
@@ -278,13 +338,22 @@ $formRes->init($sceneToLoad);
     // ANIMATE
     function animate()
     {
-        id_animation_frame = requestAnimationFrame( animate );
+        // 60fps
+        // id_animation_frame = requestAnimationFrame( animate );
+
+        // XX fps
+        setTimeout( function() {
+            id_animation_frame = requestAnimationFrame( animate );
+        }, 1000 / 25 );
+
 
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
 
         // Update it
         update();
+
+
     }
 
     // UPDATE
