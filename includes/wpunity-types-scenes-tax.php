@@ -1,13 +1,13 @@
 <?php
 
-add_action('add_meta_boxes','wpunity_scenes_taxgame_box');
-
 /**
- * 2.04
+ * C2.01
  * Create Scene's Game Box @ scene's backend
  *
  * (dropdown style)
  */
+
+add_action('add_meta_boxes','wpunity_scenes_taxgame_box');
 
 function wpunity_scenes_taxgame_box() {
 
@@ -59,11 +59,15 @@ function wpunity_scenes_taxgame_box_content($post){
     <?php
 }
 
+//==========================================================================================================================================
 
 /**
- * When the post is saved, also saves wpunity_asset3d_cat
- * @param $post_id
+ * C2.02
+ * When the post is saved, also saves wpunity_game_cat
+ *
+ *
  */
+
 function wpunity_scenes_taxgame_box_content_save( $post_id ) {
 
     global $wpdb;
@@ -103,5 +107,7 @@ function wpunity_scenes_taxgame_box_content_save( $post_id ) {
 
 }
 
-/* Do something with the data entered */
 add_action( 'save_post', 'wpunity_scenes_taxgame_box_content_save' );
+
+//==========================================================================================================================================
+?>
