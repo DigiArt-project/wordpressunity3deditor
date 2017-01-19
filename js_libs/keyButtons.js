@@ -73,7 +73,7 @@ window.addEventListener( 'keydown',
             //-------------------------------- PointerLock -----------------------
             case 38: // up arrow
             case 87: // w
-                
+
                 moveForward = true;
                 break;
 
