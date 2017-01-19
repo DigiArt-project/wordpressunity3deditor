@@ -141,7 +141,24 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             //Create a parent scene tax category for the assets3d
             wp_insert_term($post_title,'wpunity_asset3d_pscene',$post_slug,'Scene assignment of Asset 3D');
 
+            //Create Subfolders for assets to be uploaded
+            $newDir1 = $upload_dir . '/' . 'dynamic3dmodels';
+            $newDir2 = $upload_dir . '/' . 'doors';
+            $newDir3 = $upload_dir . '/' . 'pois';
+            $newDir4 = $upload_dir . '/' . 'static3dmodels';
 
+            if (!is_dir($newDir1)) {
+                mkdir($newDir1, 0755);
+            }
+            if (!is_dir($newDir2)) {
+                mkdir($newDir2, 0755);
+            }
+            if (!is_dir($newDir3)) {
+                mkdir($newDir3, 0755);
+            }
+            if (!is_dir($newDir4)) {
+                mkdir($newDir4, 0755);
+            }
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }
