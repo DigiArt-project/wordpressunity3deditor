@@ -33,31 +33,24 @@ echo '</script>';
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
         envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
-
-        // Set submit button functionality
-        $('#save-scene-button').click(function() {
-
-            // Export using a custom variant of deprecated class SceneExporter
-            var exporter = new THREE.SceneExporter();
-            var outputJSON = exporter.parse(envir.scene);
-
-            var fd = new FormData();
-
-            fd.append('data', new Blob([ outputJSON ], { type: "text/plain" }));
-
-            // TODO: Stathi replace this ajax with wordpress ajax because I get the error that ajax in main thread is deprecated
-            $.ajax({
-                type: 'POST',
-                url: PLUGIN_PATH_VR + '/includes/vr_editor_saveScene.php',
-                data: fd,
-                processData: false,
-                contentType: "text/plain"
-            }).done(function(data) {
-                console.log(data);
-            });
-        });
-
     });
+
+    // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
+    function textify_scene(){
+
+        document.getElementById('save-scene-button').style.backgroundColor = 'green';
+
+        // Export using a custom variant of the old deprecated class SceneExporter
+        var exporter = new THREE.SceneExporter();
+        var outputJSON = exporter.parse(envir.scene);
+
+        document.getElementById('wpunity_scene_json_input').value = outputJSON;
+
+        setInterval(function(){document.getElementById('save-scene-button').style.backgroundColor = 'black';},300);
+
+
+    };
+
 
     function removeSavedText(){
         $(".result").html("");
@@ -138,9 +131,7 @@ echo '</script>';
             </div>
         </div>
 
-        <div>
-            <button id="save-scene-button" class="btphp">Textify configuration</button>
-        </div>
+        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Textify configuration</div>
 
         <div class="result"></div>
         <div id="result_download"></div>
@@ -280,6 +271,8 @@ $formRes->init($sceneToLoad);
 <script>
 
     loaderMulti = new LoaderMulti();
+
+
     loaderMulti.load(manager, resources3D);
 
     //=================== End of loading ============================================

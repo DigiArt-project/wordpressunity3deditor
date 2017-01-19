@@ -42,6 +42,8 @@ class LoaderMulti {
                                 steveShieldMesh.name = 'SteveShieldMesh';
                                 //--------------------------
 
+
+
                                 object.add(steveShieldMesh);
 
                                 envir.scene.add(object);
@@ -51,6 +53,12 @@ class LoaderMulti {
                                                             resources3D[name]['trs']['translation'][2],
                                                             resources3D[name]['trs']['rotation'][1]
                                                             )
+
+                                if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
+                                    $("#message").get(0).innerHTML = "Loading completed";
+                                    $("#bar").get(0).style.width = 0 + "px";
+                                }
+
                             }
                         );
                     });
@@ -118,7 +126,7 @@ class LoaderMulti {
                                     // console.log(Math.round(percentComplete, 2) + '% downloaded');
 
                                     if (xhr.loaded == xhr.total) {
-                                        $("#message").get(0).innerHTML = "Completed";
+                                        $("#message").get(0).innerHTML = "Loading completed";
                                         $("#bar").get(0).style.width = 0 + "px";
                                         //$("#message").get(0).style.display = "none";
                                         //$("#progressbar").get(0).style.display = "none";

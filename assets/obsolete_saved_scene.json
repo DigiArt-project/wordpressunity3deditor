@@ -1,0 +1,38 @@
+{
+	"metadata": {
+		"formatVersion" : 4.0,
+		"type"		: "scene",
+		"generatedBy"	: "SceneExporter.js",
+		"objects"       : 2	},
+
+	"urlBaseType": "relativeToScene",
+
+	"objects" :
+	{
+		"avatarYawObject" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"visible"  : true,
+			"children" : {
+			}
+		},
+
+		"floor_1484813585" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"guid_fbx" : "sys15a",
+			"guid_mat" : "sys11a",
+			"fnPath" : "/scladina-game/forest-scladina/static3dmodels/floor/",
+			"fnObj" : "floor.obj",
+			"fnFbx" : "floor.fbx",
+			"fnMat" : "floor.mat",
+			"fnMtl" : "floor.mtl",
+			"children" : {
+			}
+		}
+
+	}
+
+}

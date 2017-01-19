@@ -22,7 +22,7 @@ $wpunity_databox4 = array(
             'desc' => 'Scene Json Input',
             'id' => $wpunity_prefix . 'json_input',
             'type' => 'textarea',
-            'std' => file_get_contents( plugins_url()."/WordpressUnity3DEditor/scenes/standard_scene.json")
+            'std' => file_get_contents( plugins_url()."/WordpressUnity3DEditor/assets/standard_scene.json")
         ),
         array(
             'name' => 'Scene Latitude',
@@ -62,7 +62,7 @@ function wpunity_scenes_databox_show(){
     echo '<input type="hidden" name="wpunity_scenes_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
 
     echo '<label for="scene-vr-editor">VR Web Editor</label>';
-    echo '<div name="scene-vr-editor" style="margin-bottom:30px;">';
+    echo '<div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">';
         $meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
 
         // do not put esc_attr, crashes the universe in 3D

@@ -88,15 +88,22 @@ function addOne(nameModel3D, path, objPath, mtlPath, fbxPath, matPath, guid_fbx,
 
 }
 
-
 /**
  *    ----------- Check for Recycle Bin Drag ----------------------------
  */
 function checkForRecycle(){
+
     var raycasterRecycleBin = new THREE.Raycaster();
     var mouseDrag = new THREE.Vector2();
-    mouseDrag.x =   ( (event.clientX - envir.container_3D_all.offsetLeft)  / envir.container_3D_all.clientWidth ) * 2 - 1;
-    mouseDrag.y = - ( (event.clientY - envir.container_3D_all.offsetTop) / envir.container_3D_all.clientHeight ) * 2 + 1;
+
+    // handle scrolling of window
+    var offtop = envir.container_3D_all.getBoundingClientRect().top;
+    var offleft =envir.container_3D_all.getBoundingClientRect().left;
+
+    // translate into -1 to 1 values
+    mouseDrag.x =   ( (event.clientX - offleft)  / envir.container_3D_all.clientWidth ) * 2 - 1;
+    mouseDrag.y = - ( (event.clientY - offtop) / envir.container_3D_all.clientHeight ) * 2 + 1;
+
 
     // calculate objects intersecting the picking ray
     raycasterRecycleBin.setFromCamera( mouseDrag, envir.cameraOrbit );

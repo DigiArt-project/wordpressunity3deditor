@@ -21,7 +21,7 @@
         opacity: 0.7;
 }
 
-.btphp {
+.bt_textify {
         font-size:0.8vw;
         max-font-size: 20pt;
         background:#000;
@@ -29,6 +29,7 @@
         opacity: 1;
         margin-top: 5px;
         padding: 2px;
+        cursor:pointer;
 }
 
 #formdiv{
