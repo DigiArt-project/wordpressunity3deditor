@@ -118,19 +118,20 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
     if ($post_type == 'wpunity_scene') {
         if ( ($new_status == 'publish') ) {
 
-            $post_slug = $post->post_name;
-            $post_title = $post->post_title;
-            $type_ID = intval($_POST['wpunity_scene_pgame'], 10);
-            $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_scene_pgame' )->slug : NULL;
-            //$post_tax_belongs = get_the_terms($post, 'wpunity_scene_pgame')[0]->slug;
-            $post_tax_belongs = $type;
+            //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
 
+            //slug Scene
+            $sceneSlug = $post->post_name;
+            $sceneTitle = $post->post_title;
 
-            $media_subfolder_to_generate = $post_slug;
+            //slug Game
+            $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
+            $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
+
             $upload = wp_upload_dir();
             $upload_dir = $upload['basedir'];
-            $upload_dir = $upload_dir . "/" . $post_tax_belongs;
-            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
+            $upload_dir .= "/" . $parentGameSlug;
+            $upload_dir .= "/" . $sceneSlug;
 
             $upload_dir = str_replace('\\','/',$upload_dir);
 
@@ -139,7 +140,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             }
 
             //Create a parent scene tax category for the assets3d
-            wp_insert_term($post_title,'wpunity_asset3d_pscene',$post_slug,'Scene assignment of Asset 3D');
+            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
 
             //Create Subfolders for assets to be uploaded
             $newDir1 = $upload_dir . '/' . 'dynamic3dmodels';
@@ -147,18 +148,10 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             $newDir3 = $upload_dir . '/' . 'pois';
             $newDir4 = $upload_dir . '/' . 'static3dmodels';
 
-            if (!is_dir($newDir1)) {
-                mkdir($newDir1, 0755);
-            }
-            if (!is_dir($newDir2)) {
-                mkdir($newDir2, 0755);
-            }
-            if (!is_dir($newDir3)) {
-                mkdir($newDir3, 0755);
-            }
-            if (!is_dir($newDir4)) {
-                mkdir($newDir4, 0755);
-            }
+            if (!is_dir($newDir1)) {mkdir($newDir1, 0755);}
+            if (!is_dir($newDir2)) {mkdir($newDir2, 0755);}
+            if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
+            if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }

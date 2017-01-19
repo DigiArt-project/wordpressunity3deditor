@@ -109,7 +109,7 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
 
     if ($post_type == 'wpunity_game') {
-        if ( ($new_status == 'publish') && ($old_status != 'publish') ) {
+        if ( $new_status == 'publish' ) {
 
             //FORMAT: uploads / slug Game
 
