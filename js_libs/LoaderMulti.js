@@ -55,8 +55,8 @@ class LoaderMulti {
                                                             )
 
                                 if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                    $("#message").get(0).innerHTML = "Loading completed";
-                                    $("#bar").get(0).style.width = 0 + "px";
+                                    $("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                    $("#scene_loading_bar").get(0).style.width = 0 + "px";
                                 }
 
                             }
@@ -106,7 +106,6 @@ class LoaderMulti {
                                 envir.scene.add(object);
                             },
 
-
                             //onObjProgressLoad
                             function (xhr) {
 
@@ -119,15 +118,20 @@ class LoaderMulti {
 
                                     bar = Math.floor(bar * xhr.loaded / xhr.total);
 
-                                    $("#bar").get(0).style.width = bar + "px";
+                                    $("#scene_loading_bar").get(0).style.width = bar + "px";
                                     var downloadedBytes = "Downloaded: " + xhr.loaded + " / " + xhr.total + ' bytes';
 
                                     $(".result").get(0).innerHTML = downloadedBytes;
                                     // console.log(Math.round(percentComplete, 2) + '% downloaded');
 
+                                    console.log(xhr.loaded, xhr.total);
+
                                     if (xhr.loaded == xhr.total) {
-                                        $("#message").get(0).innerHTML = "Loading completed";
-                                        $("#bar").get(0).style.width = 0 + "px";
+
+                                        //console.log("LLL", $("#message").get(0).innerHTML);
+
+                                        $("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                        $("#scene_loading_bar").get(0).style.width = 0 + "px";
                                         //$("#message").get(0).style.display = "none";
                                         //$("#progressbar").get(0).style.display = "none";
                                     }

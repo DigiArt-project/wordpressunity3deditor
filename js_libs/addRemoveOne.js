@@ -104,7 +104,6 @@ function checkForRecycle(){
     mouseDrag.x =   ( (event.clientX - offleft)  / envir.container_3D_all.clientWidth ) * 2 - 1;
     mouseDrag.y = - ( (event.clientY - offtop) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
-
     // calculate objects intersecting the picking ray
     raycasterRecycleBin.setFromCamera( mouseDrag, envir.cameraOrbit );
 
@@ -138,7 +137,26 @@ function putInRecyleBin(nameToRemove){
 
     envir.scene.remove(objectSelected);
     objectSelected.position.set(0,0,0);
-    objectSelected.scale.set(2,2,2);
+
+    var bbox = new THREE.Box3().setFromObject(objectSelected);
+
+    scale_factor_x = 2/(bbox.max.x - bbox.min.x);
+    scale_factor_y = 2/(bbox.max.y - bbox.min.y);
+    scale_factor_z = 2/(bbox.max.z - bbox.min.z);
+
+    if (scale_factor_x > 1000)
+        scale_factor_x = 1;
+
+    if (scale_factor_y > 1000)
+        scale_factor_y = 1;
+
+    if (scale_factor_z > 1000)
+        scale_factor_z = 1;
+
+
+    console.log(scale_factor_x, scale_factor_y, scale_factor_z);
+
+    objectSelected.scale.set(scale_factor_x, scale_factor_y, scale_factor_z);
     objectSelected.isInRecycleBin = true;
 
     // Removed items are added to the cameraOrbit ??? Find something better

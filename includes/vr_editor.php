@@ -125,9 +125,9 @@ echo '</script>';
     <!-- --------- Make form to submit user changes ----- -->
     <div id="infophp">
         <div id="progress">
-            <span id="message">Downloading ...</span>
+            <span id="scene_loading_message">Downloading ...</span>
             <div id="progressbar">
-                <div id="bar"></div>
+                <div id="scene_loading_bar"></div>
             </div>
         </div>
 
