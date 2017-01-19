@@ -47,8 +47,6 @@ echo '</script>';
         document.getElementById('wpunity_scene_json_input').value = outputJSON;
 
         setInterval(function(){document.getElementById('save-scene-button').style.backgroundColor = 'black';},300);
-
-
     };
 
 
