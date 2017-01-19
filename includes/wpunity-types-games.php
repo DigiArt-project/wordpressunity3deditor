@@ -111,13 +111,14 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     if ($post_type == 'wpunity_game') {
         if ( ($new_status == 'publish') && ($old_status != 'publish') ) {
 
-            $post_slug = $post->post_name;
-            $post_title = $post->post_title;
+            //FORMAT: uploads / slug Game
 
-            $media_subfolder_to_generate = $post_slug;
+            $gameSlug = $post->post_name;
+            $gameTitle = $post->post_title;
+
             $upload = wp_upload_dir();
             $upload_dir = $upload['basedir'];
-            $upload_dir = $upload_dir . "/" . $media_subfolder_to_generate;
+            $upload_dir .= "/" . $gameSlug;
 
             $upload_dir = str_replace('\\','/',$upload_dir);
 
@@ -126,7 +127,7 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             }
 
             //Create a parent game tax category for the scenes
-            wp_insert_term($post_title,'wpunity_scene_pgame',$post_slug,'Scene of a Game');
+            wp_insert_term($gameTitle,'wpunity_scene_pgame',$gameSlug,'Scene of a Game');
 
 
         }else{
