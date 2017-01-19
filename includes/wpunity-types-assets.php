@@ -158,7 +158,59 @@ class Asset3DClass{
  *
  */
 
+function wpunity_create_folder_asset( $new_status, $old_status, $post ){
 
+    $post_type = get_post_type($post);
+
+
+    if ($post_type == 'wpunity_asset3d') {
+        if ( ($new_status == 'publish') ) {
+
+            //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
+
+            //slug Asset
+            $assetSlug = $post->post_name;
+
+            //slug Scene
+            $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
+            $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pscene' )->slug : NULL;
+
+            //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
+            $custom_args = array(
+                'name'        => $parentSceneSlug,
+                'post_type'   => 'wpunity_scene',
+            );
+            $my_posts = get_posts($custom_args);
+            $sceneID = $my_posts[0]->ID;
+
+            //slug Game (first taxonomy item)
+            $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
+            $gameID = $terms[0]->slug;
+
+            //Category of Asset (standard)
+            $categoryAssetID = intval($_POST['wpunity_asset3d_cat'], 10);
+            $categoryAssetSlug = ( $categoryAssetID > 0 ) ? get_term( $categoryAssetID, 'wpunity_asset3d_cat' )->slug : NULL;
+
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'];
+            $upload_dir .= "/" . $gameID;
+            $upload_dir .= "/" . $parentSceneSlug;
+            $upload_dir .= "/" . $categoryAssetSlug;
+            $upload_dir .= "/" . $assetSlug;
+
+            $upload_dir = str_replace('\\','/',$upload_dir);
+
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755);
+            }
+        }else{
+            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
+        }
+
+    }
+}
+
+add_action('transition_post_status','wpunity_create_folder_asset',10,3);
 
 
 //==========================================================================================================================================
