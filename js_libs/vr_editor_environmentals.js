@@ -52,6 +52,43 @@ class vr_editor_environmentals {
     }
 
 
+    makeFullScreen(){
+
+        if (this.container_3D_all.style.width!="100%") {
+            this.container_3D_all.style.position = 'fixed';
+            this.container_3D_all.style.width = '100%';
+            this.container_3D_all.style.height = '100%';
+            this.container_3D_all.style.top = '0';
+            this.container_3D_all.style.left = '0';
+            this.container_3D_all.style.right = '0';
+            this.container_3D_all.style.bottom = '0';
+
+            document.getElementById('wpadminbar').style.zIndex = 0;
+            document.getElementById('adminmenuback').style.zIndex = 0;
+            document.getElementById('adminmenuwrap').style.zIndex = 0;
+            document.getElementById('wpfooter').style.display='none';
+            document.getElementById('postcustom').style.display='none';
+            document.getElementById('postdivrich').style.display='none';
+
+        }else {
+
+            this.container_3D_all.style.position = 'relative';
+            this.container_3D_all.style.width = '95%';
+            this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
+
+            document.getElementById('wpadminbar').style.zIndex = 9999;
+            document.getElementById('adminmenuback').style.zIndex = 9999;
+            document.getElementById('adminmenuwrap').style.zIndex = 9999;
+            document.getElementById('wpfooter').style.display='block';
+            document.getElementById('postcustom').style.display='block';
+            document.getElementById('postdivrich').style.display='';
+        }
+
+        envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
+        envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
+        envir.ASPECT = envir.SCREEN_WIDTH / envir.SCREEN_HEIGHT;
+        envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+    }
 
 
     addCubeToControls(transform_controls){

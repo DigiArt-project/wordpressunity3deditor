@@ -10,3 +10,7 @@
     margin: 4px 2px;
     cursor: pointer;
 }
+
+#wpunity_scene_json_input {
+    height: 25em;
+}

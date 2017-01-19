@@ -14,7 +14,7 @@ echo '<script>';
 echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'"';
 echo '</script>';
 
-$sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
+//$sceneToLoad = $PLUGIN_PATH_VR."/scenes/standard_scene.json";
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/vr_editor_style.css">
@@ -22,59 +22,6 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
 <!-- JS libraries -->
 <link rel="import" href="<?php echo $PLUGIN_PATH_VR?>/includes/vr_editor_header_js.html">
-
-<script>
-
-
-
-
-    function makeFullScreen(){
-
-
-            console.log(envir.container_3D_all.style.width);
-
-            if (envir.container_3D_all.style.width!="100%") {
-                envir.container_3D_all.style.position = 'fixed';
-                envir.container_3D_all.style.width = '100%';
-                envir.container_3D_all.style.height = '100%';
-                envir.container_3D_all.style.top = '0';
-                envir.container_3D_all.style.left = '0';
-                envir.container_3D_all.style.right = '0';
-                envir.container_3D_all.style.bottom = '0';
-
-                document.getElementById('wpadminbar').style.zIndex = 0;
-                document.getElementById('adminmenuback').style.zIndex = 0;
-                document.getElementById('adminmenuwrap').style.zIndex = 0;
-                document.getElementById('wpfooter').style.display='none';
-                document.getElementById('postcustom').style.display='none';
-                document.getElementById('postdivrich').style.display='none';
-
-            }else {
-
-                envir.container_3D_all.style.position = 'relative';
-                envir.container_3D_all.style.width = '95%';
-                envir.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
-
-                document.getElementById('wpadminbar').style.zIndex = 9999;
-                document.getElementById('adminmenuback').style.zIndex = 9999;
-                document.getElementById('adminmenuwrap').style.zIndex = 9999;
-                document.getElementById('wpfooter').style.display='block';
-                document.getElementById('postcustom').style.display='block';
-                document.getElementById('postdivrich').style.display='';
-            }
-
-
-            envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
-            envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
-            envir.ASPECT = envir.SCREEN_WIDTH / envir.SCREEN_HEIGHT;
-            envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
-
-            var handler = window.onresize;
-            handler();
-
-
-    }
-</script>
 
 <script>
     //  Save Button implemented with Ajax
@@ -98,7 +45,7 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
             fd.append('data', new Blob([ outputJSON ], { type: "text/plain" }));
 
-            // TODO: Stathi replace this ajax with wordpress ajax because I get the error that ajax in main thred is deprecated
+            // TODO: Stathi replace this ajax with wordpress ajax because I get the error that ajax in main thread is deprecated
             $.ajax({
                 type: 'POST',
                 url: PLUGIN_PATH_VR + '/includes/vr_editor_saveScene.php',
@@ -192,7 +139,7 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
         </div>
 
         <div>
-            <button id="save-scene-button" class="btphp">Save configuration</button>
+            <button id="save-scene-button" class="btphp">Textify configuration</button>
         </div>
 
         <div class="result"></div>
@@ -208,15 +155,12 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
         <div class="breadcrumbs"></div>
 
-
-<!--        <div id="filesListWrapper">-->
-<!---->
 <!--            <div class="nothingfound">-->
 <!--                <div class="nofiles"></div>-->
 <!--                <span>Nothing found</span>-->
 <!--            </div>-->
-<!--        -->
-<!--        </div>-->
+
+
         <ul class="data" id="filesList" >
 
 
@@ -231,7 +175,7 @@ $sceneToLoad = $PLUGIN_PATH_VR."/scenes/saved_scene.json";
 
     <!-- Full screen bar button -->
     <div id="scene-vr-editor-fullscreen-bar" name="scene-vr-editor-fullscreen-bar">
-        <div id="scene-vr-editor-fullscreen-bt" name="scene-vr-editor-fullscreen-bt" onclick="makeFullScreen()">
+        <div id="scene-vr-editor-fullscreen-bt" name="scene-vr-editor-fullscreen-bt" onclick="envir.makeFullScreen()">
             &boxVH;
         </div>
     </div>

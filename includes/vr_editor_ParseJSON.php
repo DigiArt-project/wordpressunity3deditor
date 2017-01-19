@@ -9,7 +9,7 @@ class ParseJSON {
 
     public function init($sceneToLoad)
     {
-        $content_JSON = json_decode(file_get_contents($sceneToLoad));
+        $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
 
         foreach ($json_objects as $key=>$value) {
