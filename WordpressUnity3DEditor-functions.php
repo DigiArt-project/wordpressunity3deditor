@@ -159,7 +159,7 @@ custom fields :
 //D1.01 Create Asset3D (custom type : wpunity_asset3d)
 //D1.02 Create Asset Category (custom taxonomy : wpunity_asset3d_cat)
 //D1.03 Create Asset Scene (custom taxonomy : wpunity_asset3d_pscene)
-//D1.04 TODO
+//D1.04 Generate folders for Asset
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
 
 //D2.01 Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
