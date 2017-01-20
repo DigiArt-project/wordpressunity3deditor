@@ -8,17 +8,9 @@ class Asset3DClass{
     public $asset_subdir = '';
 
     function __construct(){
-
         add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
         add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
-
-
-//        add_filter('get_sample_permalink', array($this, 'disable_permalink'));
-
-        // TODO: use wp_handle_upload() to overwrite uploaded files
-
-        // TODO: Stathis help me. DISABLE UPDATE BUTTON AND DISPLAY ADMIN NOTICES
     }
 
     /**
@@ -203,6 +195,9 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755);
             }
+
+
+
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }
@@ -212,6 +207,69 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
 
 add_action('transition_post_status','wpunity_create_folder_asset',10,3);
 
+
+/**
+ * D1.05
+ * Create PathData for each asset as custom field
+ *
+ *
+ *
+ */
+
+function wpunity_create_pathdata_asset( $post_id ){
+
+    $post_type = get_post_type($post_id);
+
+    if ($post_type == 'wpunity_asset3d') {
+            $post = get_post($post_id);
+            //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
+
+            //slug Asset
+            $assetSlug = $post->post_name;
+
+            //slug Scene
+            $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
+            $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pscene' )->slug : NULL;
+
+            //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
+            $custom_args = array(
+                'name'        => $parentSceneSlug,
+                'post_type'   => 'wpunity_scene',
+            );
+            $my_posts = get_posts($custom_args);
+            $sceneID = $my_posts[0]->ID;
+
+            //slug Game (first taxonomy item)
+            $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
+            $gameID = $terms[0]->slug;
+
+            //Category of Asset (standard)
+            $categoryAssetID = intval($_POST['wpunity_asset3d_cat'], 10);
+            $categoryAssetSlug = ( $categoryAssetID > 0 ) ? get_term( $categoryAssetID, 'wpunity_asset3d_cat' )->slug : NULL;
+
+//            $upload = wp_upload_dir();
+//            $upload_dir = $upload['basedir'];
+//            $upload_dir .= "/" . $gameID;
+//            $upload_dir .= "/" . $parentSceneSlug;
+//            $upload_dir .= "/" . $categoryAssetSlug;
+//            $upload_dir .= "/" . $assetSlug;
+        //$upload_dirpath = array('assetSlug'=>$assetSlug, 'categoryAssetSlug'=>$categoryAssetSlug, 'parentSceneSlug' => $parentSceneSlug, 'gameID' => $gameID);
+        $upload_dirpath = Array(
+            'assetSlug' => $assetSlug,
+            'categoryAssetSlug' => $categoryAssetSlug,
+            'parentSceneSlug' => $parentSceneSlug,
+            'gameID' => $gameID,
+        );
+//        $upload_dirpath[0]=$assetSlug;
+//        $upload_dirpath[1]=$categoryAssetSlug;
+//        $upload_dirpath[2]=$parentSceneSlug;
+//        $upload_dirpath[3]=$gameID;
+
+            update_post_meta($post_id,'wpunity_asset3d_pathData','3');
+    }
+}
+
+//add_action('save_post','wpunity_create_pathdata_asset',10,3);
 
 //==========================================================================================================================================
 
