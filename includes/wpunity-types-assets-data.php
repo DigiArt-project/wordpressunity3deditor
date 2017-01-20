@@ -115,8 +115,7 @@ function wpunity_assets_databox_show(){
     $textmtl = file_get_contents($curr_path."floor.mtl");
     $url_obj = $curr_path."floor.obj";
 
-    echo '<td><div name="vr-preview" id="vr-preview" style="width:100%; border: 1px solid #aaa; margin-left:5px">';
-    echo '<canvas id="canvas3d" style="width:100%;height:100%"></canvas>';
+    echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
         wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
     echo '</div></td></tr>';
 
