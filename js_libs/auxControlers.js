@@ -40,10 +40,8 @@ function onMouseDown( event ) {
                                                    (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
                              );
 
-    var myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}))
+    var myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
     myBulletLine.name = 'rayLine';
-
-
 
     envir.scene.add(myBulletLine);
 
@@ -240,9 +238,9 @@ var gui = new dat.GUI( {autoPlace: false} );
 var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
 var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
 var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');
-var dg_controller_tx = gui.add( gui_controls_funs, 'dg_tx', -10000, 10000, 0.001).name('Translate x');//.listen();
-var dg_controller_ty = gui.add( gui_controls_funs, 'dg_ty', -10000, 10000, 0.001).name('Translate y');//.listen();
-var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -10000, 10000, 0.001).name('Translate z');//.listen();
+var dg_controller_tx = gui.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Translate x');//.listen();
+var dg_controller_ty = gui.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Translate y');//.listen();
+var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Translate z');//.listen();
 var dg_controller_rx = gui.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
 var dg_controller_ry = gui.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
 var dg_controller_rz = gui.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
@@ -251,7 +249,8 @@ var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('
 var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');
 var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');
 
-gui.close();
+//gui.close();
+
 
 /**
  *  Update php, javascript and transform_controls when dat.gui changes
@@ -262,7 +261,7 @@ function controllerDatGuiOnChange(){
     dg_controller_tx.onChange(function(value) { 
         
         // Stop animating 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         
         // update object position
         transform_controls.object.position.x = gui_controls_funs.dg_tx;
@@ -273,35 +272,35 @@ function controllerDatGuiOnChange(){
     );
 
     dg_controller_ty.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         transform_controls.object.position.y = gui_controls_funs.dg_ty;
         animate();
         }
     );
 
     dg_controller_tz.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         transform_controls.object.position.z = gui_controls_funs.dg_tz;
         animate();
         }
     );
 
     dg_controller_rx.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         transform_controls.object.rotation.x = gui_controls_funs.dg_rx/180*Math.PI;
         animate();
         }
     );
 
     dg_controller_ry.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         transform_controls.object.rotation.y = gui_controls_funs.dg_ry / 180*Math.PI;
         animate();
         }
     );
 
     dg_controller_rz.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame ); 
+        cancelAnimationFrame( id_animation_frame );
         transform_controls.object.rotation.z = gui_controls_funs.dg_rz / 180*Math.PI;
         animate();
         }
@@ -344,17 +343,21 @@ function controllerDatGuiOnChange(){
  * @param element
  */
 function setKeyPressController(element){
+
     var div = element.domElement.children;
 
-    div[0].children[0].onclick = function(event){ cancelAnimationFrame( id_animation_frame ); };
+    div[0].children[0].onclick = function(event){
+        cancelAnimationFrame( id_animation_frame );
+    };
 
-    div[0].children[0].onkeydown= function(event){
-                                if(event.keyCode == 13){ // 13 is "Enter" button
-                                    animate();
-                                } else{ // other buttons
-                                    cancelAnimationFrame( id_animation_frame );
-                                }
-                          };
+    // div[0].children[0].onkeyup= function(event){
+    //                             if(event.keyCode == 13){ // 13 is "Enter" button
+    //                                 //requestAnimationFrame(animate);
+    //                             } else{ // other buttons
+    //                                 //requestAnimationFrame(animate);
+    //                                 //cancelAnimationFrame( id_animation_frame );
+    //                             }
+    //                       };
 }
 
 /**

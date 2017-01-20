@@ -98,9 +98,10 @@ function wpunity_assets_databox_show(){
     global $wpunity_databox1,$post;
     $post_title = $post->post_title;
     echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<table class="form-table" id="wpunity-custom-fields-table">';
+    echo '<table class="form-table" id="wpunity-custom-fields-table"><tbody>';
 
-    echo '<tr><th style="width:20%"><label for="">', 'Asset 3D Preview', '</label></th>';
+    echo '<tr><th style="width:20%">Asset 3D Preview</label></th>';
+
 //    $url_mtl_arr = get_post_meta($post->ID, "wpunity_asset3d_mtl", true);
 //    $url_mtl = $url_mtl_arr;
 //    $curr_path = 'http://localhost/wp-digiart/wp-content/uploads/2016/12/';
@@ -109,8 +110,14 @@ function wpunity_assets_databox_show(){
 //    $url_obj = $url_obj_arr;
 
     //echo '<td><div name="wpunity_asset3d_preview" id="asset3d-preview">' ;
-    //    wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
-    //echo '</div></td></tr>';
+
+    $curr_path = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
+    $textmtl = file_get_contents($curr_path."floor.mtl");
+    $url_obj = $curr_path."floor.obj";
+
+    echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
+        wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
+    echo '</div></td></tr>';
 
     foreach ($wpunity_databox1['fields'] as $field) {
         if ($field['id']!='wpunity_asset3d_next_scene') {
@@ -151,8 +158,7 @@ function wpunity_assets_databox_show(){
 
             }
 
-            echo '</td><td>',
-            '</td></tr>';
+            echo '</td></tr>';
         }else{
             $meta = get_post_meta($post->ID, $field['id'], true);
             echo '<tr>',
@@ -182,30 +188,34 @@ function wpunity_assets_databox_show(){
                     break;
 
             }
-            echo     '</td><td>',
-            '</td></tr>';
+            echo     '</td></tr>';
 
         }
     }
-    echo '</table>';
+    echo '</tbody></table>';
     ?>
     <script>
         jQuery(document).ready(function ($) {
             jQuery('#wpunity_asset3d_mtl_btn').click(function () {
+
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_mtl').val(imgurl);
                     //jQuery('#picsrc').attr("src",imgurl);
                     tb_remove();
                 }
+
                 formfield = jQuery('#wpunity_asset3d_mtl').attr('name');
+
                 tb_show('', 'media-upload.php?type=file&amp;TB_iframe=true');
+
+
                 return false;
             });
 
             jQuery('#wpunity_asset3d_obj_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_obj').val(imgurl);
                     //jQuery('#picsrc').attr("src",imgurl);
                     tb_remove();
@@ -217,7 +227,7 @@ function wpunity_assets_databox_show(){
 
             jQuery('#wpunity_asset3d_diffimage_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_diffimage').val(imgurl);
                     jQuery('#wpunity_asset3d_diffimage_preview').attr("src",imgurl);
                     tb_remove();
@@ -229,7 +239,7 @@ function wpunity_assets_databox_show(){
 
             jQuery('#wpunity_asset3d_screenimage_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_screenimage').val(imgurl);
                     jQuery('#wpunity_asset3d_screenimage_preview').attr("src",imgurl);
                     tb_remove();
@@ -241,7 +251,7 @@ function wpunity_assets_databox_show(){
 
             jQuery('#wpunity_asset3d_image1_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_image1').val(imgurl);
                     jQuery('#wpunity_asset3d_image1_preview').attr("src",imgurl);
                     tb_remove();
@@ -253,7 +263,7 @@ function wpunity_assets_databox_show(){
 
             jQuery('#wpunity_asset3d_image2_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_image2').val(imgurl);
                     jQuery('#wpunity_asset3d_image2_preview').attr("src",imgurl);
                     tb_remove();
@@ -265,7 +275,7 @@ function wpunity_assets_databox_show(){
 
             jQuery('#wpunity_asset3d_image3_btn').click(function () {
                 window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
+                    imgurl = jQuery(html).attr('src');
                     jQuery('#wpunity_asset3d_image3').val(imgurl);
                     jQuery('#wpunity_asset3d_image3_preview').attr("src",imgurl);
                     tb_remove();

@@ -216,8 +216,6 @@ echo '</script>';
 
     var resources3D  = [];// This holds all the resources to load. Generated in Parse JSON
 
-
-
     //====================== Load Manager =======================================================
     // Make progress bar visible
     $("#progress").get(0).style.display = "block";
@@ -282,12 +280,12 @@ $formRes->init($sceneToLoad);
     function animate()
     {
         // 60fps
-        // id_animation_frame = requestAnimationFrame( animate );
+        id_animation_frame = requestAnimationFrame( animate );
 
-        // XX fps
-        setTimeout( function() {
-            id_animation_frame = requestAnimationFrame( animate );
-        }, 1000 / 25 );
+        // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
+//        setTimeout( function() {
+//            id_animation_frame = requestAnimationFrame( animate );
+//        }, 1000 / 25 );
 
 
         // Render it

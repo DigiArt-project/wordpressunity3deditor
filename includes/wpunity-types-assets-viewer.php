@@ -2,8 +2,6 @@
 
 function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
     ?>
-    <div name="vr-preview" style="width:100%;height:auto;border: 1px solid #aaa">
-
         <!-- START 3D -->
         <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/three.js"></script>
         <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/OBJLoader.js"></script>
@@ -12,13 +10,13 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
         <script>
             function onWindowResize() {
-
-                windowW = document.getElementsByName("vr-preview")[0].clientWidth;
-                windowH = 512;
+                var windowW = container3d_previewer.clientWidth;
+                var windowH = windowW*2/3;
 
                 camera.aspect = windowW / windowH;
                 camera.updateProjectionMatrix();
-                renderer.setSize(windowW, windowH);
+
+                renderer.setSize(windowW, windowH, true);
             }
 
             function animate() {
@@ -33,18 +31,17 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
         </script>
 
         <script>
-            var container;
-            var camera, scene, renderer;
-            windowW = document.getElementsByName("vr-preview")[0].clientWidth;
-            windowH = 512;
+            container3d_previewer = document.getElementById('vr-preview');
+            windowW = container3d_previewer.clientWidth;
+            windowH = windowW * 2/3;
 
-            container = document.getElementsByName('vr-preview')[0];
-            camera = new THREE.PerspectiveCamera(45, windowW / windowH, 1, 2000);
+            var camera, scene, renderer;
+
+            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 1, 2000);
 
             camera.position.z = 10;
             camera.position.x = 0;
             camera.position.y = 10;
-
             camera.lookAt(new THREE.Vector3(0, 0, 0));
 
             // scene
@@ -54,6 +51,28 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
             var directionalLight = new THREE.DirectionalLight(0xffffff);
             directionalLight.position.set(0, 30, 0);
             scene.add(directionalLight);
+
+            renderer = new THREE.WebGLRenderer();
+
+            renderer.setSize(windowW-14, windowH);
+            container3d_previewer.appendChild(renderer.domElement);
+
+            console.log(renderer.domElement.height);
+
+//            container3d_previewer.style.width = renderer.domElement.width + "px";
+
+            // Orbit controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = true;
+
+            // Resize callback
+            window.addEventListener('resize', onWindowResize, false);
+
+            // start rendering
+            animate();
 
             // ------------ Total Manager -----------------
             var manager = new THREE.LoadingManager();
@@ -129,26 +148,10 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
             //
 
-            renderer = new THREE.WebGLRenderer();
-            //renderer.setPixelRatio( window.devicePixelRatio );
-            renderer.setSize(windowW, windowH);
-            container.appendChild(renderer.domElement);
 
-            //requestAnimationFrame( render );
-            //renderer.render( scene, camera );
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
-            controls.enableZoom = true;
 
-            window.addEventListener('resize', onWindowResize, false);
-
-            animate();
         </script>
-    </div>
-
 
     <?php
 }

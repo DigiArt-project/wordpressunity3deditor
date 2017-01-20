@@ -124,11 +124,8 @@ class LoaderMulti {
                                     $(".result").get(0).innerHTML = downloadedBytes;
                                     // console.log(Math.round(percentComplete, 2) + '% downloaded');
 
-                                    console.log(xhr.loaded, xhr.total);
 
                                     if (xhr.loaded == xhr.total) {
-
-                                        //console.log("LLL", $("#message").get(0).innerHTML);
 
                                         $("#scene_loading_message").get(0).innerHTML = "Loading completed";
                                         $("#scene_loading_bar").get(0).style.width = 0 + "px";
