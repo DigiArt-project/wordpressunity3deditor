@@ -14,3 +14,10 @@
 #wpunity_scene_json_input {
     height: 25em;
 }
+
+
+#wpunity-custom-fields-table, #wpunity-custom-fields-table td, #wpunity-custom-fields-table th{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+

@@ -2,8 +2,6 @@
 
 function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
     ?>
-    <div name="vr-preview" style="width:100%;height:auto;border: 1px solid #aaa">
-
         <!-- START 3D -->
         <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/three.js"></script>
         <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/OBJLoader.js"></script>
@@ -12,9 +10,11 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
         <script>
             function onWindowResize() {
+                windowW = document.getElementById("vr-preview").clientWidth;
 
-                windowW = document.getElementsByName("vr-preview")[0].clientWidth;
-                windowH = 512;
+                console.log(windowW);
+
+                windowH = windowW*2/3;
 
                 camera.aspect = windowW / windowH;
                 camera.updateProjectionMatrix();
@@ -35,10 +35,10 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
         <script>
             var container;
             var camera, scene, renderer;
-            windowW = document.getElementsByName("vr-preview")[0].clientWidth;
-            windowH = 512;
+            windowW = document.getElementById("vr-preview").clientWidth;
+            windowH = windowW*2/3;
 
-            container = document.getElementsByName('vr-preview')[0];
+            container = document.getElementById('vr-preview');
             camera = new THREE.PerspectiveCamera(45, windowW / windowH, 1, 2000);
 
             camera.position.z = 10;
@@ -147,8 +147,6 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
             animate();
         </script>
-    </div>
-
 
     <?php
 }
