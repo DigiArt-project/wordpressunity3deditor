@@ -98,7 +98,7 @@ function wpunity_assets_databox_show(){
     global $wpunity_databox1,$post;
     $post_title = $post->post_title;
     echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<table class="form-table" id="wpunity-custom-fields-table">';
+    echo '<table class="form-table" id="wpunity-custom-fields-table"><tbody>';
 
     echo '<tr><th style="width:20%">Asset 3D Preview</label></th>';
 
@@ -115,7 +115,8 @@ function wpunity_assets_databox_show(){
     $textmtl = file_get_contents($curr_path."floor.mtl");
     $url_obj = $curr_path."floor.obj";
 
-    echo '<td><div name="vr-preview" id="vr-preview" style="width:80%; border: 3px solid #aaa">';
+    echo '<td><div name="vr-preview" id="vr-preview" style="width:100%; border: 1px solid #aaa; margin-left:5px">';
+    echo '<canvas id="canvas3d" style="width:100%;height:100%"></canvas>';
         wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
     echo '</div></td></tr>';
 
@@ -192,7 +193,7 @@ function wpunity_assets_databox_show(){
 
         }
     }
-    echo '</table>';
+    echo '</tbody></table>';
     ?>
     <script>
         jQuery(document).ready(function ($) {

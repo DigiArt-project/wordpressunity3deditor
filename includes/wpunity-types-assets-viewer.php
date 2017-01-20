@@ -10,15 +10,15 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
         <script>
             function onWindowResize() {
-                windowW = document.getElementById("vr-preview").clientWidth;
-
-                console.log(windowW);
-
-                windowH = windowW*2/3;
+                windowW = container3d_previewer.clientWidth;
+                windowH = Math.round(windowW*2/3);
 
                 camera.aspect = windowW / windowH;
                 camera.updateProjectionMatrix();
                 renderer.setSize(windowW, windowH);
+
+                container3d_previewer.style.height = renderer.domElement.height + "px";
+                container3d_previewer.style.width = renderer.domElement.width + "px";
             }
 
             function animate() {
@@ -33,13 +33,13 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
         </script>
 
         <script>
-            var container;
-            var camera, scene, renderer;
-            windowW = document.getElementById("vr-preview").clientWidth;
-            windowH = windowW*2/3;
+            container3d_previewer = document.getElementById('vr-preview');
+            windowW = container3d_previewer.clientWidth; // Do not remove -14. I do not know why reduction is needed.
+            windowH = Math.round(windowW * 2/3);
 
-            container = document.getElementById('vr-preview');
-            camera = new THREE.PerspectiveCamera(45, windowW / windowH, 1, 2000);
+            var camera, scene, renderer;
+
+            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 1, 2000);
 
             camera.position.z = 10;
             camera.position.x = 0;
@@ -129,23 +129,38 @@ function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
 
             //
 
-            renderer = new THREE.WebGLRenderer();
+            var mycanvas3d = document.getElementById("canvas3d");
+            renderer = new THREE.WebGLRenderer({canvas: mycanvas3d});
+
+            //container3d_previewer.height = canvas.height - 10;
+
             //renderer.setPixelRatio( window.devicePixelRatio );
             renderer.setSize(windowW, windowH);
-            container.appendChild(renderer.domElement);
+            container3d_previewer.appendChild(renderer.domElement);
 
-            //requestAnimationFrame( render );
-            //renderer.render( scene, camera );
 
+            //container3d_previewer.clientHeight = renderer.domElement.height;
+
+            container3d_previewer.style.height = renderer.domElement.height + "px";
+            container3d_previewer.style.width = renderer.domElement.width + "px";
+
+            //console.log( renderer.domElement.height, container3d_previewer.clientHeight );
+
+
+            // Orbit controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
             controls.enableZoom = true;
 
+            // Resize callback
             window.addEventListener('resize', onWindowResize, false);
 
+            // start rendering
             animate();
+
+
         </script>
 
     <?php
