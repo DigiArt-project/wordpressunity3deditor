@@ -49,7 +49,7 @@ function wpunity_scenes_taxgame_box_content($post){
         $select  = preg_replace( '#<select([^>]*)>#', $replace, $select );
 
         $old_option = "<option value='-1'>";
-        $new_option = "<option disabled selected value='-1'>".'Select category'."</option>";
+        $new_option = "<option disabled selected value=''>".'Select category'."</option>";
         $select = str_replace($old_option, $new_option, $select);
 
         echo $select;
