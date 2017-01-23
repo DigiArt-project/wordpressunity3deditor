@@ -194,7 +194,7 @@ function wpunity_assets_databox_show(){
     }
     echo '</tbody></table>';
     ?>
-    
+
     <script>
         jQuery(document).ready(function ($) {
             jQuery('#wpunity_asset3d_mtl_btn').click(function () {
