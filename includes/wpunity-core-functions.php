@@ -1,5 +1,27 @@
 <?php
 
+function wpse_16722_type_upload_dir( $args ) {
+
+    // Get the current post_id
+    $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+
+    if( $id ) {
+
+
+        // Set the new path depends on current post_type
+        $newdir = '/' . get_post_type( $id );
+
+        $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+        $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+        $args['subdir']  = $newdir;
+        $args['path']   .= $newdir;
+        $args['url']    .= $newdir;
+    }
+    return $args;
+}
+//add_filter( 'upload_dir', 'wpse_16722_type_upload_dir' );
+
+
 /**
  * 1.01
  * Overwrite Uploads

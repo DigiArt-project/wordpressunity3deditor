@@ -311,7 +311,6 @@ function wpunity_assets_databox_show(){
  * ($wpunity_databox)
  */
 
-
 function wpunity_assets_databox_save($post_id) {
     global $wpunity_databox1;
     // verify nonce
