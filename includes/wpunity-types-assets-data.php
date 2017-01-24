@@ -22,6 +22,7 @@ function wpunity_assets_fetchDescription_box() {
 
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
+    add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
 }
 
 
@@ -96,23 +97,69 @@ function wpunity_assets_fetch_image_box_content($post){
     <br />
     <br />
 
+
+
     <div id="image_find_results">
-        <img id="image_res_1" class="image_fetch_img"/><br /><div id="image_res_1_url" class="image_fetch_div_url"></div><br /><div id="image_res_1_title" class="img_res_title_f"></div><br />
-        <img id="image_res_2" class="image_fetch_img"/><br /><div id="image_res_2_url" class="image_fetch_div_url"></div><br /><div id="image_res_2_title" class="img_res_title_f"></div><br />
-        <img id="image_res_3" class="image_fetch_img"/><br /><div id="image_res_3_url" class="image_fetch_div_url"></div><br /><div id="image_res_3_title" class="img_res_title_f"></div><br />
-        <img id="image_res_4" class="image_fetch_img"/><br /><div id="image_res_4_url" class="image_fetch_div_url"></div><br /><div id="image_res_4_title" class="img_res_title_f"></div><br />
-        <img id="image_res_5" class="image_fetch_img"/><br /><div id="image_res_5_url" class="image_fetch_div_url"></div><br /><div id="image_res_5_title" class="img_res_title_f"></div><br />
-        <img id="image_res_6" class="image_fetch_img"/><br /><div id="image_res_6_url" class="image_fetch_div_url"></div><br /><div id="image_res_6_title" class="img_res_title_f"></div><br />
-        <img id="image_res_7" class="image_fetch_img"/><br /><div id="image_res_7_url" class="image_fetch_div_url"></div><br /><div id="image_res_7_title" class="img_res_title_f"></div><br />
-        <img id="image_res_8" class="image_fetch_img"/><br /><div id="image_res_8_url" class="image_fetch_div_url"></div><br /><div id="image_res_8_title" class="img_res_title_f"></div><br />
-        <img id="image_res_9" class="image_fetch_img"/><br /><div id="image_res_9_url" class="image_fetch_div_url"></div><br /><div id="image_res_9_title" class="img_res_title_f"></div><br />
-        <img id="image_res_10" class="image_fetch_img"/><br /><div id="image_res_10_url" class="image_fetch_div_url"></div><br /><div id="image_res_10_title" class="img_res_title_f"></div><br />
+        <img id="image_res_1" class="image_fetch_img"/><br /><div id="image_res_1_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_1_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_2" class="image_fetch_img"/><br /><div id="image_res_2_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_2_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_3" class="image_fetch_img"/><br /><div id="image_res_3_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_3_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_4" class="image_fetch_img"/><br /><div id="image_res_4_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_4_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_5" class="image_fetch_img"/><br /><div id="image_res_5_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_5_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_6" class="image_fetch_img"/><br /><div id="image_res_6_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_6_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_7" class="image_fetch_img"/><br /><div id="image_res_7_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_7_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_8" class="image_fetch_img"/><br /><div id="image_res_8_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_8_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_9" class="image_fetch_img"/><br /><div id="image_res_9_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_9_title" class="img_res_title_f" target="_blank"></a><br />
+        <img id="image_res_10" class="image_fetch_img"/><br /><div id="image_res_10_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_10_title" class="img_res_title_f" target="_blank"></a><br />
     </div>
 
 
     <?php
 }
 
+
+function wpunity_assets_fetch_video_box_content($post){
+
+    echo '<div id="wpunity_fetchVideo_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchVideoAjax()">Fetch Video</div>';
+    ?>
+
+    <br /><br />
+
+    Source:<br />
+    <select name="fetch_source_video" id="fetch_source_video">
+        <option value="Wikipedia">Wikipedia</option>
+        <option value="Europeana">Europeana</option>
+    </select>
+
+    <br />
+    <br />
+
+    Language<br />
+    <select name="fetch_lang_video" id="fetch_lang_video">
+        <option value="en">English</option>
+        <option value="el">Greek</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+    </select>
+
+    <br />
+    <br />
+    Terms to search:<input type="text" size="30" name="wpunity_titles_video_search_video" id="wpunity_titles_video_search_video" value="<?php echo $post->post_title?>">
+    Wikipedia example:<br /> "Sarmientosaurus 3D skull"
+    <br />
+    <br />
+
+    <div id="video_find_results">
+
+        <video id="videoplayer1" width="240" height="160" autoplay controls>
+            <source id="video_res_1" src="" type="video/ogg">
+        </video>
+        <div id="video_res_1_url" class="video_fetch_div_url"></div><br />
+        <div id="video_res_1_title" class="video_res_title_f"></div><br />
+
+    </div>
+
+    <?php
+}
 
 
 /**
@@ -462,6 +509,7 @@ add_action('save_post', 'wpunity_assets_databox_save');
 // AJAXES for content interlinking
 add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
 add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
+add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
 
 //==========================================================================================================================================
 

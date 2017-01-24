@@ -217,3 +217,20 @@ function wpunity_fetch_image_action_callback(){
 
     wp_die();
 }
+
+
+function wpunity_fetch_video_action_callback(){
+
+    if ($_POST['externalSource_video']=='Wikipedia'){
+        $url = 'https://'.$_POST['lang_video'].'.wikipedia.org/w/api.php?action=query&format=json&prop=videoinfo&viprop=derivatives&titles=File:'.$_POST['titles_video'].'.ogv';
+    } else {
+        $url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles_image'];//.'&qf=LANGUAGE:'.$_POST['lang_image'];
+    }
+
+
+    $content = file_get_contents($url);
+    echo $content;
+
+    wp_die();
+}
+

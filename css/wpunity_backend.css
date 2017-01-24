@@ -55,6 +55,16 @@
 }
 
 .img_res_title_f{
+    /*width:200px;*/
+    /*word-break: break-all;*/
+}
+
+.video_res_title_f{
+    width:200px;
+    word-break: break-all;
+}
+
+.video_fetch_div_url{
     width:200px;
     word-break: break-all;
 }

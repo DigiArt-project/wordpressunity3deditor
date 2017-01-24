@@ -140,3 +140,96 @@ function wpunity_fetchImageAjax(){
 
 }
 
+
+//----------------------------------------------------------------------------------
+//  FETCH VIDEOS
+//----------------------------------------------------------------------------------
+function wpunity_fetchVideoAjax(){
+
+    document.getElementById('wpunity_fetchVideo_bt').innerHTML = "Fetching";
+
+    externalSourceVideo = document.getElementById("fetch_source_video").options[document.getElementById("fetch_source_video").selectedIndex].value;
+
+    document.getElementById("wpunity_titles_video_search_video").value = document.getElementById("wpunity_titles_video_search_video").value.replace(/ /g,"_");
+
+    jQuery.ajax({
+        url : 'admin-ajax.php',
+        type : 'POST',
+        data : {'action': 'wpunity_fetch_video_action',
+            'lang_video':           document.getElementById("fetch_lang_video").options[document.getElementById("fetch_lang_video").selectedIndex].value,
+            'externalSource_video': externalSourceVideo,
+            'titles_video':         document.getElementById("wpunity_titles_video_search_video").value
+        },
+
+        success : function(response) {
+
+            console.log(response);
+
+            var json_content = jQuery.parseJSON(response);
+
+            if (json_content) {
+                if (externalSourceVideo == 'Wikipedia') {
+                    if (json_content.query) {
+                        var j=0;
+                        for(key in json_content.query.pages) {
+                            j++;
+                            console.log(json_content.query.pages[key].videoinfo[0].derivatives);
+                            for(i=0; i<1; i++) {
+                                var fname = json_content.query.pages[key].videoinfo[0].derivatives[0].src;
+
+                                var whichvideo ='video_res_'+j;
+
+                                console.log(whichvideo, document.getElementById(whichvideo));
+
+                                document.getElementById(whichvideo).src = fname;
+                                document.getElementById("videoplayer1").load();
+
+                                document.getElementById(whichvideo + "_url").innerHTML = fname;
+
+                                document.getElementById(whichvideo + "_title").innerHTML = "----";
+
+                            }
+                        }
+                    } else {
+                        console.log("Nothing found 151");
+                    }
+                } else {
+
+
+                    if (json_content.itemsCount  > 0) {
+
+                        for(j=0; j<json_content.itemsCount; j++) {
+
+                            var fname = json_content.items[j].edmPreview;
+
+                            console.log(fname);
+
+                            var whichimage ='image_res_'+(j+1);
+
+                            document.getElementById(whichimage).src = fname;
+                            document.getElementById(whichimage + "_url").innerHTML = fname;
+                            document.getElementById(whichimage + "_title").innerHTML = json_content.items[j].title;
+
+                        }
+                    } else {
+                        console.log("Nothing found 151");
+                    }
+
+
+
+                }
+            }
+
+            document.getElementById('wpunity_fetchVideo_bt').innerHTML = "Fetch";
+        },
+        error : function(xhr, ajaxOptions, thrownError){
+            console.log("ERROR");
+            document.getElementById('wpunity_fetchVideo_bt').innerHTML = 'Error 23: Fetch again?' + thrownError;
+        }
+    });
+
+
+}
+
+
+
