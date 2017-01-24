@@ -11,8 +11,6 @@ class Asset3DClass{
         add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
         add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
-
-
     }
 
     /**
@@ -258,99 +256,5 @@ function wpunity_create_pathdata_asset( $post_id ){
 add_action('save_post','wpunity_create_pathdata_asset',10,3);
 
 //==========================================================================================================================================
-
-    function custom_modify_upload_dir( $param ){
-        $param['path'] = $this->asset_path; // $param['path'] . $mydir;
-        $param['url']  = $this->asset_path_url; //$param['url'] . $mydir;
-        $param['subdir'] = $this->asset_subdir;
-//        error_log("path={$param['path']}");
-//        error_log("url={$param['url']}");
-//        error_log("subdir={$param['subdir']}");
-//        error_log("basedir={$param['basedir']}");
-//        error_log("baseurl={$param['baseurl']}");
-//        error_log("error={$param['error']}");
-        return $param;
-    }
-
-    /**
-     * Upload each file internal code
-     *
-     * @param $post_id
-     * @param $file
-     * @param $supported_types
-     * @param $meta_name
-     */
-    function uploader_wrapper($post_id, $asset3d_category_slug, $post_slug, $file, $supported_types, $meta_name){
-
-        // Start uploading
-        if(!empty($file['name'])) {
-
-            // extension of the file
-            $ext = basename($file['name']);
-
-            // Get the file type of the upload
-            $arr_file_type = wp_check_filetype($ext);
-
-            //print_r($arr_file_type);
-            $uploaded_type = $arr_file_type['type'];
-
-            // Check if the type is supported. If not, throw an error.
-            if(in_array($uploaded_type, $supported_types) || empty($uploaded_type)) {
-
-                // set directory
-                add_filter('upload_dir', array(&$this,'custom_modify_upload_dir'));
-
-
-                //add_filter('upload_dir', array(&$this,'awesome_wallpaper_dir'));
-
-                // Use the WordPress API to upload the file
-                $upload = wp_upload_bits($file['name'], null, file_get_contents($file['tmp_name']));
-
-                if(isset($upload['error']) && $upload['error'] != 0) {
-                    wp_die('There was an error uploading your file. The error is: ' . $upload['error']);
-                } else {
-                    add_post_meta($post_id, $meta_name, $upload);
-                    update_post_meta($post_id, $meta_name, $upload);
-                } // end if/else
-
-            } else {
-                wp_die("The file type that you've uploaded is: ". $file['name'] . " " .$uploaded_type);
-            } // end if/else
-
-        } // end if
-
-    }
-
-
-
-
-
-    function generate_asset3d_folder($asset3d_category_Folder,$asset3d_Folder){
-        global $post;
-
-        // Get the scene that this asset3d belongs to
-        $scene_Folder = get_the_terms($post, 'asset3d_scene_assignment')[0]->slug;
-
-        // Get the game that the scene of the above scene
-        $post_scene = get_posts( array('post_type' => 'scene', 'post_slug' => $scene_Folder) )[0];
-        $game_Folder = get_the_terms($post_scene, 'scene_category')[0]->slug;
-
-        // Generate new folder for the new asset
-        $new_item_subfolder_path = $game_Folder.'/'.$scene_Folder.'/'.$asset3d_category_Folder.'/'.$asset3d_Folder;
-
-        $upload = wp_upload_dir();
-        $upload_dir = $upload['basedir'];
-        $upload_dir = str_replace('\\','/',$upload_dir) . "/" . $new_item_subfolder_path;
-
-        // Create dir
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-
-        // Set uploading dir (for temporary use)
-        $this->asset_path = $upload_dir;
-        $this->asset_path_url = get_site_url().'/wp-content/uploads/'.$new_item_subfolder_path;
-        $this->asset_subdir = '/'.$new_item_subfolder_path;
-    }
 
 ?>

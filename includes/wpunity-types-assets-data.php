@@ -312,106 +312,359 @@ function wpunity_assets_databox_show(){
 
     <script>
         jQuery(document).ready(function ($) {
-            jQuery('#wpunity_asset3d_mtl_btn').click(function () {
 
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_mtl').val(imgurl);
-                    //jQuery('#picsrc').attr("src",imgurl);
-                    tb_remove();
+            // Uploading files
+            var file_frame;
+            var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
+            var set_to_post_id = <?php echo $post->ID; ?>; // Set this
+
+            jQuery('#wpunity_asset3d_mtl_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
 
-                formfield = jQuery('#wpunity_asset3d_mtl').attr('name');
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select MTL file to upload',
+                    button: {
+                        text: 'Use this file',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
 
-                tb_show('', 'media-upload.php?type=file&amp;TB_iframe=true');
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
 
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_mtl').val(attachment.url);
+                    //jQuery('#wpunity_asset3d_mtl_preview').
 
-                return false;
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_obj_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_obj').val(imgurl);
-                    //jQuery('#picsrc').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_obj_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_obj').attr('name');
-                tb_show('', 'media-upload.php?type=file&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select OBJ file to upload',
+                    button: {
+                        text: 'Use this file',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_obj').val(attachment.url);
+                    //jQuery('#wpunity_asset3d_mtl_preview').
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_diffimage_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_diffimage').val(imgurl);
-                    jQuery('#wpunity_asset3d_diffimage_preview').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_diffimage_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_diffimage').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select photo to upload',
+                    button: {
+                        text: 'Use this photo',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_diffimage').val(attachment.url);
+                    jQuery('#wpunity_asset3d_diffimage_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_screenimage_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_screenimage').val(imgurl);
-                    jQuery('#wpunity_asset3d_screenimage_preview').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_screenimage_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_screenimage').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select photo to upload',
+                    button: {
+                        text: 'Use this photo',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_screenimage').val(attachment.url);
+                    jQuery('#wpunity_asset3d_screenimage_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_image1_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_image1').val(imgurl);
-                    jQuery('#wpunity_asset3d_image1_preview').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_image1_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_image1').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select photo to upload',
+                    button: {
+                        text: 'Use this photo',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_image1').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image1_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_image2_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_image2').val(imgurl);
-                    jQuery('#wpunity_asset3d_image2_preview').attr("src",imgurl);
-                    tb_remove();
+
+            jQuery('#wpunity_asset3d_image2_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_image2').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select photo to upload',
+                    button: {
+                        text: 'Use this photo',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_image2').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image2_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_image3_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src');
-                    jQuery('#wpunity_asset3d_image3').val(imgurl);
-                    jQuery('#wpunity_asset3d_image3_preview').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_image3_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_image3').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select photo to upload',
+                    button: {
+                        text: 'Use this photo',
+                    },
+                    multiple: false,	// Set to true to allow multiple files to be selected
+                    library: {
+                        type: 'image',
+                    }
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_image3').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image3_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
 
-            jQuery('#wpunity_asset3d_video_btn').click(function () {
-                window.send_to_editor = function (html) {
-                    imgurl = jQuery(html).attr('src')
-                    jQuery('#wpunity_asset3d_video').val(imgurl);
-                    //jQuery('#wpunity_asset3d_image3_preview').attr("src",imgurl);
-                    tb_remove();
+            jQuery('#wpunity_asset3d_video_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( file_frame ) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
                 }
-                formfield = jQuery('#wpunity_asset3d_video').attr('name');
-                tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                return false;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select video to upload',
+                    button: {
+                        text: 'Use this video',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_video').val(attachment.url);
+                    //jQuery('#wpunity_asset3d_image3_preview').attr( 'src', attachment.url );
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
             });
+
+
+            // Restore the main ID when the add media button is pressed
+            jQuery( 'a.add_media' ).on( 'click', function() {
+                wp.media.model.settings.post.id = wp_media_post_id;
+            });
+
+
         });
     </script>
     <?php
