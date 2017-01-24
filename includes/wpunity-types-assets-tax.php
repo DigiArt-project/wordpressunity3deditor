@@ -13,8 +13,8 @@ function wpunity_assets_taxcategory_box() {
     remove_meta_box( 'wpunity_asset3d_pscenediv', 'wpunity_asset3d', 'side' ); //Removes the default metabox at side
     remove_meta_box( 'wpunity_asset3d_catdiv', 'wpunity_asset3d', 'side' ); //Removes the default metabox at side
 
-    add_meta_box( 'tagsdiv-wpunity_asset3d_cat','Asset Category','wpunity_assets_taxcategory_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
     add_meta_box( 'tagsdiv-wpunity_assetpscene_cat','Asset\'s Scene','wpunity_assets_taxpscene_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
+    add_meta_box( 'tagsdiv-wpunity_asset3d_cat','Asset Category','wpunity_assets_taxcategory_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
 }
 
 

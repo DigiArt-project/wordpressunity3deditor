@@ -11,6 +11,28 @@
     cursor: pointer;
 }
 
+.wpunity_fetchContentButton {
+    background-color: #aba400;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: all ease 0.1s;
+}
+
+.wpunity_fetchContentButton:active {
+    box-shadow: 0 3px 0 #00823F;
+    background-color: #006ef5;
+    top: 3px;
+}
+
+
+
 #wpunity_scene_json_input {
     height: 25em;
 }
@@ -21,3 +43,18 @@
     border-collapse: collapse;
 }
 
+
+.image_fetch_div_url{
+    width:200px;
+    word-break: break-all;
+}
+
+.image_fetch_img{
+    width:200px;
+    width:100%;
+}
+
+.img_res_title_f{
+    width:200px;
+    word-break: break-all;
+}
