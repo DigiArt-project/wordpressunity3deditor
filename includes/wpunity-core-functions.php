@@ -7,7 +7,7 @@ function wpunity_upload_dir_forAssets( $args ) {
 
     if( $id ) {
 
-        $pathofPost = get_post_meta($id,wpunity_asset3d_pathData,true);
+        $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
         // Set the new path depends on current post_type
         $newdir = '/' . $pathofPost;
 
@@ -21,6 +21,47 @@ function wpunity_upload_dir_forAssets( $args ) {
 }
 
 add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
+
+
+
+function wpunity_aftertitle_info($post) {
+
+    $post_type = get_post_type($post->ID);
+    if($post_type == 'wpunity_game'){
+        $gameSlug = $post->post_name;
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $gameSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        echo '<b>Slug:</b> ' . $gameSlug;
+        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+    }
+    elseif($post_type == 'wpunity_scene'){
+        $sceneSlug = $post->post_name;
+        $terms = wp_get_post_terms( $post->ID, 'wpunity_scene_pgame');
+        $gameSlug = $terms[0]->slug;
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $gameSlug . "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        echo '<b>Slug:</b> ' . $sceneSlug;
+        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+    }
+    elseif($post_type == 'wpunity_asset3d'){
+        $assetSlug = $post->post_name;
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $pathofPost = get_post_meta($post->ID,'wpunity_asset3d_pathData',true);
+        $upload_dir .= "/" . $pathofPost;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        echo '<b>Slug:</b> ' . $assetSlug;
+        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+    }
+
+}
+
+
+add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
 
 
 /**
