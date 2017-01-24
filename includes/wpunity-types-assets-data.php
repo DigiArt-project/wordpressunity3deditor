@@ -1,5 +1,120 @@
 <?php
 
+// load css/wpunity_backend.css
+wp_enqueue_style('wpunity_backend');
+
+// load script from js_libs
+wp_enqueue_script( 'wpunity_content_interlinking_request');
+
+// Some parameters to pass in the request_game.js  ajax
+wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
+    array('lang' => 'en',
+          'externalSource' => 'Wikipedia',
+          'titles' => 'Scladina'  //'Albert%20Einstein'
+    )
+);
+
+
+add_action('add_meta_boxes','wpunity_assets_fetchDescription_box');
+
+function wpunity_assets_fetchDescription_box() {
+
+
+    add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
+    add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
+}
+
+
+
+
+function wpunity_assets_fetch_description_box_content($post){
+
+    echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
+    ?>
+
+    <br /><br />
+
+    Source:<br />
+    <select name="fetch_source" id="fetch_source">
+        <option value="Wikipedia">Wikipedia</option>
+        <option value="Europeana">Europeana</option>
+    </select>
+
+    <br />
+    <br />
+
+    Language<br />
+        <select name="fetch_lang" id="fetch_lang">
+            <option value="en">English</option>
+            <option value="el">Greek</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+        </select>
+
+    <br />
+    <br />
+    Terms to search:<input type="text" size="30" name="wpunity_titles_search" id="wpunity_titles_search" value="<?php echo $post->post_title?>">
+
+    <br />
+    <br />
+
+    Full text:<input type="checkbox" name="wpunity_fulltext_chkbox" id="wpunity_fulltext_chkbox" value="">
+
+
+      <?php
+}
+
+
+function wpunity_assets_fetch_image_box_content($post){
+
+    echo '<div id="wpunity_fetchImage_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchImageAjax()">Fetch Image</div>';
+    ?>
+
+    <br /><br />
+
+    Source:<br />
+    <select name="fetch_source_image" id="fetch_source_image">
+        <option value="Wikipedia">Wikipedia</option>
+        <option value="Europeana">Europeana</option>
+    </select>
+
+    <br />
+    <br />
+
+    Language<br />
+    <select name="fetch_lang_image" id="fetch_lang_image">
+        <option value="en">English</option>
+        <option value="el">Greek</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+    </select>
+
+    <br />
+    <br />
+    Terms to search:<input type="text" size="30" name="wpunity_titles_image_search_image" id="wpunity_titles_image_search_image" value="<?php echo $post->post_title?>">
+
+    <br />
+    <br />
+
+    <div id="image_find_results">
+        <img id="image_res_1" class="image_fetch_img"/><br /><div id="image_res_1_url" class="image_fetch_div_url"></div><br /><div id="image_res_1_title" class="img_res_title_f"></div><br />
+        <img id="image_res_2" class="image_fetch_img"/><br /><div id="image_res_2_url" class="image_fetch_div_url"></div><br /><div id="image_res_2_title" class="img_res_title_f"></div><br />
+        <img id="image_res_3" class="image_fetch_img"/><br /><div id="image_res_3_url" class="image_fetch_div_url"></div><br /><div id="image_res_3_title" class="img_res_title_f"></div><br />
+        <img id="image_res_4" class="image_fetch_img"/><br /><div id="image_res_4_url" class="image_fetch_div_url"></div><br /><div id="image_res_4_title" class="img_res_title_f"></div><br />
+        <img id="image_res_5" class="image_fetch_img"/><br /><div id="image_res_5_url" class="image_fetch_div_url"></div><br /><div id="image_res_5_title" class="img_res_title_f"></div><br />
+        <img id="image_res_6" class="image_fetch_img"/><br /><div id="image_res_6_url" class="image_fetch_div_url"></div><br /><div id="image_res_6_title" class="img_res_title_f"></div><br />
+        <img id="image_res_7" class="image_fetch_img"/><br /><div id="image_res_7_url" class="image_fetch_div_url"></div><br /><div id="image_res_7_title" class="img_res_title_f"></div><br />
+        <img id="image_res_8" class="image_fetch_img"/><br /><div id="image_res_8_url" class="image_fetch_div_url"></div><br /><div id="image_res_8_title" class="img_res_title_f"></div><br />
+        <img id="image_res_9" class="image_fetch_img"/><br /><div id="image_res_9_url" class="image_fetch_div_url"></div><br /><div id="image_res_9_title" class="img_res_title_f"></div><br />
+        <img id="image_res_10" class="image_fetch_img"/><br /><div id="image_res_10_url" class="image_fetch_div_url"></div><br /><div id="image_res_10_title" class="img_res_title_f"></div><br />
+    </div>
+
+
+    <?php
+}
+
+
+
 /**
  * D3.01
  * Create metabox with Custom Fields for Asset3D
@@ -194,7 +309,7 @@ function wpunity_assets_databox_show(){
     }
     echo '</tbody></table>';
     ?>
-    
+
     <script>
         jQuery(document).ready(function ($) {
             jQuery('#wpunity_asset3d_mtl_btn').click(function () {
@@ -343,6 +458,10 @@ function wpunity_assets_databox_save($post_id) {
 // Save data from infobox
 add_action('save_post', 'wpunity_assets_databox_save');
 
+
+// AJAXES for content interlinking
+add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
+add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
 
 //==========================================================================================================================================
 

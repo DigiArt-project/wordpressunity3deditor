@@ -41,6 +41,10 @@ wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_
 wp_register_script( 'wpunity_compiler_request', plugin_dir_url( __FILE__ ) . 'js_libs/compiler_commands/request_game.js',
     null, null, false);
 
+wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
+    null, null, false);
+
+
 //================================= Scene YAML Templates ===================================
 
 /*

@@ -187,3 +187,33 @@ function wpunity_game_zip_action_callback(){
         wp_die();
     }
 }
+
+function wpunity_fetch_description_action_callback(){
+
+    if ($_POST['externalSource']=='Wikipedia'){
+        $url = 'https://'.$_POST['lang'].'.wikipedia.org/w/api.php?action=query&format=json&exlimit=3&prop=extracts&'.$_POST['fulltext'].'titles='.$_POST['titles'];
+    } else {
+        $url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles'];//.'&qf=LANGUAGE:'.$_POST['lang'];
+    }
+
+    $content = file_get_contents($url);
+    echo $content;
+
+    wp_die();
+}
+
+
+function wpunity_fetch_image_action_callback(){
+
+    if ($_POST['externalSource_image']=='Wikipedia'){
+        $url = 'https://'.$_POST['lang_image'].'.wikipedia.org/w/api.php?action=query&prop=imageinfo&format=json&iiprop=url&generator=images&titles='.$_POST['titles_image'];
+    } else {
+        $url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles_image'];//.'&qf=LANGUAGE:'.$_POST['lang_image'];
+    }
+
+
+    $content = file_get_contents($url);
+    echo $content;
+
+    wp_die();
+}
