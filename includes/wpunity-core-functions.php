@@ -1,15 +1,15 @@
 <?php
 
-function wpse_16722_type_upload_dir( $args ) {
+function wpunity_upload_dir_forAssets( $args ) {
 
     // Get the current post_id
     $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
 
     if( $id ) {
 
-
+        $pathofPost = get_post_meta($id,wpunity_asset3d_pathData,true);
         // Set the new path depends on current post_type
-        $newdir = '/' . get_post_type( $id );
+        $newdir = '/' . $pathofPost;
 
         $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
         $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
@@ -19,7 +19,8 @@ function wpse_16722_type_upload_dir( $args ) {
     }
     return $args;
 }
-//add_filter( 'upload_dir', 'wpse_16722_type_upload_dir' );
+
+add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
 
 
 /**
