@@ -39,10 +39,18 @@
 
 
 #wpunity-custom-fields-table, #wpunity-custom-fields-table td, #wpunity-custom-fields-table th{
-    border: 1px solid black;
+    border: 1px solid #dddddd;
+    padding: 15px;
     border-collapse: collapse;
 }
 
+.imageresbin{
+    margin:1px;
+    margin-top:5px;
+    margin-bottom:5px;
+    padding:5px;
+    width:200px;
+}
 
 .image_fetch_div_url{
     width:200px;

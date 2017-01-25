@@ -14,12 +14,11 @@ wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
     )
 );
 
-
 add_action('add_meta_boxes','wpunity_assets_fetchDescription_box');
 
+
+
 function wpunity_assets_fetchDescription_box() {
-
-
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
@@ -100,16 +99,19 @@ function wpunity_assets_fetch_image_box_content($post){
 
 
     <div id="image_find_results">
-        <img id="image_res_1" class="image_fetch_img"/><br /><div id="image_res_1_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_1_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_2" class="image_fetch_img"/><br /><div id="image_res_2_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_2_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_3" class="image_fetch_img"/><br /><div id="image_res_3_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_3_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_4" class="image_fetch_img"/><br /><div id="image_res_4_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_4_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_5" class="image_fetch_img"/><br /><div id="image_res_5_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_5_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_6" class="image_fetch_img"/><br /><div id="image_res_6_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_6_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_7" class="image_fetch_img"/><br /><div id="image_res_7_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_7_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_8" class="image_fetch_img"/><br /><div id="image_res_8_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_8_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_9" class="image_fetch_img"/><br /><div id="image_res_9_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_9_title" class="img_res_title_f" target="_blank"></a><br />
-        <img id="image_res_10" class="image_fetch_img"/><br /><div id="image_res_10_url" class="image_fetch_div_url"></div><br /><a href="" id="image_res_10_title" class="img_res_title_f" target="_blank"></a><br />
+        <?php
+
+        echo '<div id="display_img_res" class="imageresbin" style="display:none">';
+        for ($i=0;$i<10;$i++) {
+
+            echo '<img id = "image_res_'.$i.'" class="image_fetch_img" />';
+            echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" ></div >';
+            echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" ></a >';
+
+        }
+
+        echo '</div>';
+        ?>
     </div>
 
 
@@ -256,8 +258,9 @@ function wpunity_assets_databox_add() {
 
 add_action('admin_menu', 'wpunity_assets_databox_add');
 
-function wpunity_assets_databox_show(){
-    global $wpunity_databox1,$post;
+function wpunity_assets_databox_show()
+{
+    global $wpunity_databox1, $post;
     $post_title = $post->post_title;
     echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table"><tbody>';
@@ -273,12 +276,29 @@ function wpunity_assets_databox_show(){
 
     //echo '<td><div name="wpunity_asset3d_preview" id="asset3d-preview">' ;
 
-    $curr_path = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
-    $textmtl = file_get_contents($curr_path."floor.mtl");
-    $url_obj = $curr_path."floor.obj";
+    $curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
+    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
+    $url_obj = ""; //$curr_path."floor.obj";
 
     echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
-        wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title);
+
+    if ($curr_path != "" && $textmtl != "" && $url_obj != "")
+        wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
+    else {
+
+            echo "Rendering is not possible because:<br />";
+
+            if ($curr_path == "")
+                echo "- Current path is not defined<br />";
+
+            if ($textmtl == "")
+                echo "- mtl is not defined<br />";
+
+            if ($url_obj == "")
+                echo "- obj url is not defined<br />";
+
+        }
+
     echo '</div></td></tr>';
 
     foreach ($wpunity_databox1['fields'] as $field) {
@@ -293,12 +313,37 @@ function wpunity_assets_databox_show(){
                    value="Upload <?php echo esc_html($field['name']); ?>"/>
 
             <?php if ($field['id'] == 'wpunity_asset3d_mtl') { ?>
+
+                <br /><br />
+                Preview mtl:<br />
                 <textarea id="wpunity_asset3d_mtl_preview" readonly
-                          style="width:100%;height:200px;"><?php readfile($meta); ?></textarea>
+                          style="width:100%;height:200px;"><?php
+
+                                if(!$meta)
+                                    echo "mtl is not defined";
+                                else
+                                    readfile($meta);
+
+
+                            ?>
+
+
+                </textarea>
+
+
                 <?php
             } elseif ($field['id'] == 'wpunity_asset3d_obj') { ?>
+                <br /><br />
+                Preview obj:
                 <textarea id="wpunity_asset3d_obj_preview" readonly
-                          style="width:100%;height:200px;"><?php readfile($meta); ?></textarea>
+                          style="width:100%;height:200px;"><?php
+
+                    if(!$meta)
+                        echo "obj is not defined";
+                    else
+                        readfile($meta);
+
+                    ?></textarea>
                 <?php
             } elseif ($field['id'] == 'wpunity_asset3d_diffimage') { ?>
                 <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>

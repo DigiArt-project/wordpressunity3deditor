@@ -84,19 +84,29 @@ function wpunity_fetchImageAjax(){
             var json_content = jQuery.parseJSON(response);
 
             if (json_content) {
+
+                document.getElementById('display_img_res').style.display ='';
+
                 if (externalSourceImage == 'Wikipedia') {
                     if (json_content.query) {
                         var j=0;
+
                         for(key in json_content.query.pages) {
-                            j++;
-                            for(i=0; i<json_content.query.pages[key].imageinfo.length; i++) {
+                            for(i=0; i<json_content.query.pages[key].imageinfo.length && j<10; i++) {
+
                                 var fname = json_content.query.pages[key].imageinfo[0].url;
-                                var whichimage ='image_res_'+(j+1);
+                                var whichimage ='image_res_'+j;
+
+                                console.log(whichimage);
+
                                 document.getElementById(whichimage).src = fname;
                                 document.getElementById(whichimage + "_url").innerHTML = fname;
 
-                                document.getElementById(whichimage + "_title").innerHTML = 'Description:<br />' + json_content.query.pages[key].imageinfo[0].descriptionurl;
+                                document.getElementById(whichimage + "_title").innerHTML = 'More info';
 
+                                document.getElementById(whichimage + "_title").href = json_content.query.pages[key].imageinfo[0].descriptionurl;
+
+                                j++;
                             }
                         }
                     } else {
