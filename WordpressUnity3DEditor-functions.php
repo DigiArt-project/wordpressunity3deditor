@@ -44,6 +44,11 @@ wp_register_script( 'wpunity_compiler_request', plugin_dir_url( __FILE__ ) . 'js
 wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
     null, null, false);
 
+wp_register_script( 'wpunity_semantics_request', plugin_dir_url( __FILE__ ) . 'js_libs/semantics_commands/semantics.js',
+    null, null, false);
+
+
+
 
 //================================= Scene YAML Templates ===================================
 

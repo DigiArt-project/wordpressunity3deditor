@@ -6,6 +6,9 @@ wp_enqueue_style('wpunity_backend');
 // load script from js_libs
 wp_enqueue_script( 'wpunity_content_interlinking_request');
 
+// load script from js_libs
+wp_enqueue_script( 'wpunity_semantics_request');
+
 // Some parameters to pass in the request_game.js  ajax
 wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
     array('lang' => 'en',
@@ -14,16 +17,16 @@ wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
     )
 );
 
-add_action('add_meta_boxes','wpunity_assets_fetchDescription_box');
+add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
 
 
-function wpunity_assets_fetchDescription_box() {
+function wpunity_assets_create_right_metaboxes() {
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
+    add_meta_box( 'autofnc-wpunity_asset3d_segment_obj','Segment obj','wpunity_assets_segment_obj_box_content', 'wpunity_asset3d', 'side' , 'low');
 }
-
 
 
 
@@ -162,6 +165,46 @@ function wpunity_assets_fetch_video_box_content($post){
 
     <?php
 }
+
+function wpunity_assets_segment_obj_box_content($post){
+
+    echo '<div id="wpunity_segmentObj_bt" class="wpunity_fetchContentButton" onclick="wpunity_segmentObjAjax()">Segment obj</div>';
+    ?>
+
+    <br />
+    Parameters<br />
+    <table>
+       <tbody>
+       <tr><td>Algorithm iterations</td><td><input type="text" size="5" name="wpunity_titles_segment_obj_iter" id="wpunity_titles_segment_obj_iter" value="100"></td></tr>
+       <tr><td>Min distance</td><td><input type="text" size="5" name="wpunity_titles_segment_obj_min_dist" id="wpunity_titles_segment_obj_min_dist" value="0.01"></td></tr>
+       <tr><td>Max distance</td><td><input type="text" size="5" name="wpunity_titles_segment_obj_max_dist" id="wpunity_titles_segment_obj_max_dist" value="0.2"></td></tr>
+       <tr><td>Min points</td><td><input type="text" size="5" name="wpunity_titles_segment_obj_min_points" id="wpunity_titles_segment_obj_min_points" value="100"></td></tr>
+       <tr><td>Max points</td><td><input type="text" size="5" name="wpunity_titles_segment_obj_max_points" id="wpunity_titles_segment_obj_max_points" value="25000"></td></tr>
+       </tbody>
+    </table>
+
+    <br />
+    <div id="wpunity-segmentation-report" name="wpunity-segmentation-report">Status</div><br />
+    <div id="wpunity-segmentation-status" name="wpunity-segmentation-status">Report</div><br />
+
+    <br />
+    Results<br />
+    <div id="wpunity-segmentation-results" name="wpunity-segmentation-results">
+        <a href="" id="wpunity-segmentation-res1"></a>
+        <a href="" id="wpunity-segmentation-res2"></a>
+        <a href="" id="wpunity-segmentation-res3"></a>
+        <a href="" id="wpunity-segmentation-res4"></a>
+        <a href="" id="wpunity-segmentation-res5"></a>
+        <a href="" id="wpunity-segmentation-res6"></a>
+
+    </div>
+
+    <br />
+    <div id="wpunity-segmentation-log" name="wpunity-segmentation-log">Log file</div>
+
+    <?php
+}
+
 
 
 /**
@@ -808,6 +851,9 @@ add_action('save_post', 'wpunity_assets_databox_save');
 add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
 add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
 add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
+
+// AJAXES for semantics
+add_action( 'wp_ajax_wpunity_segment_obj_action', 'wpunity_segment_obj_action_callback' );
 
 //==========================================================================================================================================
 

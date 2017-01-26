@@ -234,3 +234,76 @@ function wpunity_fetch_video_action_callback(){
     wp_die();
 }
 
+
+// ---- AJAX SEMANTICS 1: run segmentation
+function wpunity_segment_obj_action_callback() {
+
+    $DS = DIRECTORY_SEPARATOR;
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+
+        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D'; //$_GET['game_dirpath'];
+
+        // 1 : Generate bat
+//        $myfile = fopen($game_dirpath.$DS."test_segment.bat", "w") or die("Unable to open file!");
+//        $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
+//        fwrite($myfile, $txt);
+//        fclose($myfile);
+
+        // 2: run bat
+        $output = shell_exec($game_dirpath.$DS.'test'.$DS.'test_segment.bat');
+
+    } else { // LINUX SERVER // TODO
+
+//        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
+//
+//        // 1 : Generate sh
+//        $myfile = fopen($game_dirpath.$DS."starter_artificial.sh", "w") or print("Unable to open file!");
+//        $txt = "#/bin/bash"."\n".
+//            "projectPath=`pwd`"."\n".
+//            "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity -batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath ${projectPath} -buildWindowsPlayer 'builds/myg3.exe'";
+//        fwrite($myfile, $txt);
+//        fclose($myfile);
+//
+//        // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+//        $output = shell_exec('nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &');
+    }
+
+    wp_die();
+}
+
+//---- AJAX COMPILE 2: read compile stdout.log file and return content.
+function wpunity_monitor_segment_obj_action_callback(){
+
+    $DS = DIRECTORY_SEPARATOR;
+    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D';
+    $fs = file_get_contents($game_dirpath.$DS."test".$DS."logfile.log");
+    echo $fs;
+
+    wp_die();
+}
+
+
+//---- AJAX COMPILE 3: Zip the builds folder
+function wpunity_enlist_splitted_objs_action_callback(){
+
+    $DS = DIRECTORY_SEPARATOR;
+    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D'.$DS.'test';
+
+
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($game_dirpath),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+
+    foreach ($files as $name => $file)
+    {
+        // Skip directories (they would be added automatically)
+        if (!$file->isDir())
+        {
+            echo $name." ".$file;
+        }
+    }
+
+
+}
+
