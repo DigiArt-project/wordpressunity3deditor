@@ -97,12 +97,6 @@ class LoaderMulti {
                                 object.fnObj = resources3D[name]['obj'];
                                 object.fnMtl = resources3D[name]['mtl'];
 
-                                object.fnFbx = resources3D[name]['obj'].slice(0,-4) + '.fbx';
-                                object.fnMat = resources3D[name]['obj'].slice(0,-4) + '.mat';
-
-                                object.guid_fbx = resources3D[name]['guid_fbx'];
-                                object.guid_mat = resources3D[name]['guid_mat'];
-
                                 envir.scene.add(object);
                             },
 

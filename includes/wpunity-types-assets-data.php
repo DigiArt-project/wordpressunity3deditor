@@ -310,18 +310,15 @@ function wpunity_assets_databox_show()
 
     echo '<tr><th style="width:20%">Asset 3D Preview</label></th>';
 
-//    $url_mtl_arr = get_post_meta($post->ID, "wpunity_asset3d_mtl", true);
-//    $url_mtl = $url_mtl_arr;
-//    $curr_path = 'http://localhost/wp-digiart/wp-content/uploads/2016/12/';
-//    $textmtl = 'floor.mtl';
-//    $url_obj_arr = get_post_meta($post->ID, "wpunity_asset3d_obj", true);
-//    $url_obj = $url_obj_arr;
 
-    //echo '<td><div name="wpunity_asset3d_preview" id="asset3d-preview">' ;
+//    $curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
+//    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
+//    $url_obj = ""; //$curr_path."floor.obj";
 
-    $curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
-    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
-    $url_obj = ""; //$curr_path."floor.obj";
+    $curr_path = pathinfo(get_post_meta($post->ID, 'wpunity_asset3d_obj', true))['dirname'].'/';
+
+    $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
+    $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
 
     echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
 

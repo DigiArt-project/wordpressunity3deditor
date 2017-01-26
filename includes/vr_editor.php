@@ -82,12 +82,12 @@ echo '</script>';
         var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/")+1);
         var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/")+1);
 
-        var fbxFname = objFname.slice(0,-4) + '.fbx';
-        var matFname = objFname.slice(0,-4) + '.mat';
-        var guid_fbx = "sys15a";
-        var guid_mat = "sys11a";
+//        var fbxFname = objFname.slice(0,-4) + '.fbx';
+//        var matFname = objFname.slice(0,-4) + '.mat';
+//        var guid_fbx = "sys15a";
+//        var guid_mat = "sys11a";
 
-        addOne(dataDrag.title, path, objFname, mtlFname, fbxFname, matFname, guid_fbx, guid_mat,
+        addOne(dataDrag.title, path, objFname, mtlFname,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

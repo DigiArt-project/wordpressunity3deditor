@@ -20,19 +20,10 @@ class ParseJSON {
                 $path = '';
                 $obj = '';
                 $mtl = '';
-                $fbx = '';
-                $mat = '';
-                $guid_fbx = '';
-                $guid_mat = '';
             } else {
-
                 $path =$this->relativepath . $value->fnPath;
                 $obj = $value->fnObj;
                 $mtl = $value->fnMtl;
-                $fbx = $value->fnFbx;
-                $mat = $value->fnMat;
-                $guid_fbx = $value->guid_fbx;
-                $guid_mat = $value->guid_mat;
             }
 
 
@@ -53,10 +44,6 @@ class ParseJSON {
             echo 'resources3D["'.$name.'"]= {"path":"'.$path.
                                             '","obj":"'.$obj.
                                             '","mtl":"'.$mtl.
-                                            '","fbx":"'.$fbx.
-                                            '","mat":"'.$mat.
-                                            '","guid_fbx":"'.$guid_fbx.
-                                            '","guid_mat":"'.$guid_mat.
                 '","trs":selected_object_trs};'; // fpath_obj.push("'.end($resources3D)['obj'].'");';
 
             echo '</script>';

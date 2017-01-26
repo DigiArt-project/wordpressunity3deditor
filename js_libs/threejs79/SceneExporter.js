@@ -312,12 +312,8 @@ THREE.SceneExporter.prototype = {
                     '	"position" : ' + Vector3String(o.position) + ',',
                     '	"rotation" : ' + Vector3String(o.rotation) + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
-                    '	"guid_fbx" : ' + '"' + o.guid_fbx  + '"' + ',',
-                    '	"guid_mat" : ' + '"' + o.guid_mat  + '"' + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
-                    '	"fnFbx" : ' + '"' + o.fnFbx  + '"' + ',',
-                    '	"fnMat" : ' + '"' + o.fnMat  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ( o.children.length ? ',' : '' )
 
                     //+ ',',
@@ -694,11 +690,7 @@ THREE.SceneExporter.prototype = {
             '}'
         ].join( '\n' );
 
-
-
-
         return output; //JSON.parse( output );
-
     }
 
 }
