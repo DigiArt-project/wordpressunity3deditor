@@ -68,6 +68,14 @@ function wpunity_scenes_databox_show(){
         // do not put esc_attr, crashes the universe in 3D
         $sceneToLoad = $meta_json ? $meta_json : $wpunity_databox4['fields'][0]['std'];
 
+        //Find scene dir string
+        $sceneSlug = $post->post_name;
+        $parentGameSlug = wp_get_object_terms( $post->ID, 'wpunity_scene_pgame')[0]->slug;
+
+        $scenefolder = $sceneSlug;
+        $gamefolder = $parentGameSlug; //
+
+
         // vr_editor loads the $sceneToLoad
         require( 'vr_editor.php' );
 

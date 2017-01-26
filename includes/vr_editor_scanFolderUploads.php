@@ -1,7 +1,9 @@
 <?php
 
+    $DS = DIRECTORY_SEPARATOR;
+
     // if you change this, be sure to change line 440 in scriptFileBrowserToolbar.js
-	$dir = '..\..\..\uploads';
+	$dir = '..'.$DS.'..'.$DS.'..'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
 
     // Run the recursive function
     $response = scan($dir);

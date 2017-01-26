@@ -37,6 +37,10 @@ php_value max_input_time 300
 //===================================== Styles & Scripts ====================================
 
 wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
+wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
+wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
+
+
 
 wp_register_script( 'wpunity_compiler_request', plugin_dir_url( __FILE__ ) . 'js_libs/compiler_commands/request_game.js',
     null, null, false);

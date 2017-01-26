@@ -29,8 +29,10 @@ $(function(){
 
     });
 
+
+
     // Start by fetching the file data from scan.php with an AJAX request
-	$.get(PLUGIN_PATH_VR + '/includes/vr_editor_scanFolderUploads.php', function(data) {
+	$.get(PLUGIN_PATH_VR + '/includes/vr_editor_scanFolderUploads.php?gamefolder='+gamefolder+'&scenefolder='+scenefolder, function(data) {
 
 		var response = [data],
 			currentPath = '',
@@ -434,6 +436,8 @@ $(function(){
                     // remove referenced uploads path
                     f.path = f.path.replace('../../../uploads','');
 
+
+
                     // add actual uploads url
                     f.path = UPLOAD_DIR + f.path;
 
@@ -478,7 +482,7 @@ $(function(){
 
 					// rename first path to hide the full path
 					if (i==0) {
-                        name[0] = 'uploads';
+                        name[0] = scenefolder;
                     }
 
 					if (i !== breadcrumbsUrls.length - 1) {

@@ -1,5 +1,9 @@
 <!-- vr_editor.php -->
 <?php
+
+wp_enqueue_style('wpunity_vr_editor');
+wp_enqueue_style('wpunity_vr_editor_filebrowser');
+
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/WordpressUnity3DEditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
@@ -10,18 +14,32 @@ $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 echo '<script>';
 echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'"';
 echo '</script>';
+
 echo '<script>';
 echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'"';
+echo '</script>';
+
+echo '<script>';
+echo 'scenefolder="'.$scenefolder.'"';
+echo '</script>';
+
+echo '<script>';
+echo 'gamefolder="'.$gamefolder.'"';
 echo '</script>';
 
 //$sceneToLoad = $PLUGIN_PATH_VR."/scenes/standard_scene.json";
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/vr_editor_style.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/vr_editor_fileBrowserStyle.css" />
-
+<!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
 <link rel="import" href="<?php echo $PLUGIN_PATH_VR?>/includes/vr_editor_header_js.html">
+
+
+    <!-- script for scanning files toolbar -->
+    <script src="<?php echo $PLUGIN_PATH_VR?>/js_libs/scriptFileBrowserToolbar.js"></script>
+
+
+
 
 <script>
     //  Save Button implemented with Ajax

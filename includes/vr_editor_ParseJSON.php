@@ -3,7 +3,6 @@ class ParseJSON {
 
     function __construct($relativepath)
     {
-
         $this->relativepath = $relativepath;
     }
 
