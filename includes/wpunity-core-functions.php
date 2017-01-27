@@ -1,5 +1,19 @@
 <?php
 
+
+function wpunity_change_publish_button( $translation, $text ) {
+    global $post;
+    $post_type = get_post_type($post->ID);
+    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game' || $post_type == 'wpunity_yamltemp') {
+        if ($text == 'Publish')
+            return 'Create';
+    }
+
+    return $translation;
+}
+
+add_filter( 'gettext', 'wpunity_change_publish_button', 10, 2 );
+
 function wpunity_upload_dir_forAssets( $args ) {
 
     // Get the current post_id

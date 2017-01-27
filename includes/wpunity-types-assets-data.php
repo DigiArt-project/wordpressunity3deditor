@@ -315,7 +315,7 @@ function wpunity_assets_databox_show()
 //    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
 //    $url_obj = ""; //$curr_path."floor.obj";
 
-    $curr_path = pathinfo(get_post_meta($post->ID, 'wpunity_asset3d_obj', true))['dirname'].'/';
+    $curr_path = get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
 
     $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
     $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
