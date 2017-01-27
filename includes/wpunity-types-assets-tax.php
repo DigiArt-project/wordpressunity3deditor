@@ -41,12 +41,12 @@ function wpunity_assets_taxcategory_box_content($post){
             'taxonomy'           => 'wpunity_asset3d_cat',
             'echo'               => 0,
             'option_none_value'  => '-1',
-            'id' => 'wpunity-select-category-dropdown'
+            'id' => 'wpunity-select-asset3d-cat-dropdown',
         );
 
         $select = wp_dropdown_categories($args);
 
-        $replace = "<select$1 required>";
+        $replace = "<select$1 onchange='wpunity_hidecfields_asset3d();' required>";
         $select  = preg_replace( '#<select([^>]*)>#', $replace, $select );
 
         $old_option = "<option value='-1'>";

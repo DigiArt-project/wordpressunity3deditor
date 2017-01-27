@@ -38,6 +38,8 @@ function wpunity_change_publish_button( $translation, $text ) {
     if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game' || $post_type == 'wpunity_yamltemp') {
         if ($text == 'Publish')
             return 'Create';
+        if ($text == 'Update')
+            return 'Save';
     }
 
     return $translation;

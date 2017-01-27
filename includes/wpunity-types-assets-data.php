@@ -408,7 +408,7 @@ function wpunity_assets_databox_show()
             echo '</td></tr>';
         }else{
             $meta = get_post_meta($post->ID, $field['id'], true);
-            echo '<tr>',
+            echo '<tr  id="wpunity_asset3d_next_scene_field">',
             '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
             '<td>';
 
@@ -443,6 +443,24 @@ function wpunity_assets_databox_show()
     ?>
 
     <script>
+
+        function wpunity_hidecfields_asset3d() {
+            var e = document.getElementById("wpunity-select-asset3d-cat-dropdown");
+            var value = e.options[e.selectedIndex].value;
+            var text = e.options[e.selectedIndex].text;
+
+            alert(text);
+
+//            if(value == 'Doors'){
+//                //SHOW Next Scene Custom field - Hide others
+//                var link = document.getElementById('wpunity_asset3d_next_scene_field');
+//                link.style.visibility = 'inherit';
+//            }else{
+//                var link = document.getElementById('wpunity_asset3d_next_scene_field');
+//                link.style.visibility = 'hidden'; //or
+//            }
+        }
+
         jQuery(document).ready(function ($) {
 
             // Uploading files
@@ -781,6 +799,32 @@ function wpunity_assets_databox_save($post_id) {
 
 // Save data from infobox
 add_action('save_post', 'wpunity_assets_databox_save');
+
+
+
+function wpunity_lockcfields_untilpublish(){
+    global $post;
+    $post_type = get_post_type($post->ID);
+    $post_status = $post->post_status;
+    if($post_type == 'wpunity_asset3d'){
+       if($post_status == 'publish'){
+           echo '
+           <script>
+           function wpunity_hidecfields(){
+           var link = document.getElementById("wpunity-assets-databox");
+           link.style.visibility = "hidden";
+            }
+            wpunity_hidecfields();
+           </script>
+           ';
+       }
+    }
+}
+
+
+add_action( 'admin_init', 'wpunity_lockcfields_untilpublish' );
+
+
 
 
 // AJAXES for content interlinking
