@@ -1,6 +1,37 @@
 <?php
 
 
+function force_post_title_init(){
+    wp_enqueue_script('jquery');
+}
+
+function force_post_title(){
+    global $post;
+    $post_type = get_post_type($post->ID);
+    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game' || $post_type == 'wpunity_yamltemp') {
+        echo "<script type='text/javascript'>\n";
+        echo "
+            jQuery('#publish').click(function(){
+            var testervar = jQuery('[id^=\"titlediv\"]')
+            .find('#title');
+            if (testervar.val().length < 1)
+            {
+                jQuery('[id^=\"titlediv\"]').css('background', '#F96');
+                setTimeout(\"jQuery('#ajax-loading').css('visibility', 'hidden');\", 100);
+                alert('POST TITLE is required');
+                setTimeout(\"jQuery('#publish').removeClass('button-primary-disabled');\", 100);
+                return false;
+            }
+  	    });
+        ";
+        echo "</script>\n";
+    }
+}
+
+add_action('admin_init', 'force_post_title_init');
+add_action('edit_form_advanced', 'force_post_title');
+
+
 function wpunity_change_publish_button( $translation, $text ) {
     global $post;
     $post_type = get_post_type($post->ID);

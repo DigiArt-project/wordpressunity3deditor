@@ -454,17 +454,19 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+//                // If the media frame already exists, reopen it.
+//                if ( file_frame ) {
+//                    // Set the post ID to what we want
+//                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+//                    // Open frame
+//                    file_frame.open();
+//                    return;
+//                } else {
+//                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+//                    wp.media.model.settings.post.id = set_to_post_id;
+//                }
+
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -496,17 +498,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -538,17 +531,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -580,17 +564,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -622,17 +597,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -665,17 +631,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -707,17 +664,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
@@ -752,17 +700,8 @@ function wpunity_assets_databox_show()
 
                 event.preventDefault();
 
-                // If the media frame already exists, reopen it.
-                if ( file_frame ) {
-                    // Set the post ID to what we want
-                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-                    // Open frame
-                    file_frame.open();
-                    return;
-                } else {
-                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                    wp.media.model.settings.post.id = set_to_post_id;
-                }
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
 
                 // Create the media frame.
                 file_frame = wp.media.frames.file_frame = wp.media({
