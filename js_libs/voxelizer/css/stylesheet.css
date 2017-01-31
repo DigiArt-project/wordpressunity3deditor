@@ -1,0 +1,518 @@
+
+ html, body {
+  width:100%;
+  height:100%;
+  background: #FFF;
+ } 
+
+ body {
+  color: #444;
+  height: 100%;
+ }
+
+ * {
+  margin:0;
+  padding:0;
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ @keyframes orbit {
+
+  100% { 
+   -moz-transform   : rotate( 720deg); 
+   -webkit-transform: rotate( 720deg); 
+   -o-transform     : rotate( 720deg); 
+   -ms-transform    : rotate( 720deg); 
+   transform        : rotate( 720deg); 
+  }
+ }
+
+ .svg_preloader {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 0px;
+  left: 0px;
+  z-index: 1500;
+  -webkit-animation: orbit 1s linear infinite; /* Chrome, Safari 5 */
+          animation: orbit 1s linear infinite; /* Chrome, Firefox 16+, IE 10+, Safari 5 */
+
+  -webkit-transform-origin: 25px 25px;
+      -ms-transform-origin: 25px 25px;
+          transform-origin: 25px 25px;
+ }
+
+ .svg_preloader circle {
+  transition: stroke-dashoffset 0.1s linear;
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ .noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #webgl-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-bottom: 62.5%;
+  height: 0;
+  border: 0px;
+  overflow: hidden;
+  font: normal 16pt arial, tahoma, helvetica, sans-serif;
+  line-height: 1.3;
+  color: #444;
+  font-weight: bold;
+ }
+
+ #webgl-context {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border: none;
+  cursor: default;
+  background-color: #FFF;
+ } 
+
+ #slices {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 1500;
+  background-color: #FFF;
+ } 
+
+
+ #slice_content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 10px;
+  height: 10px;
+  display: block;
+ }
+
+ #slice_content svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+ }
+
+ #slice_close, #slice_close:hover {
+  position: absolute;
+  top: 5px;
+  right: 40px;
+  width: 60px;
+  height: 60px;
+  background: transparent url(../images/gui_icons.png) no-repeat left top;
+  background-position: -120px 0; 
+  cursor: pointer;
+  z-index: 2000;
+ }
+
+ #slice_close:hover {
+  background: transparent url(../images/gui_icons.png) no-repeat left top;
+  background-position: -180px 0; 
+ }
+
+
+ #slice_info {
+  position: absolute;
+  bottom: 5px;
+  right: 35px;
+  padding: 10px 15px 10px 30px;
+ }
+
+ #slider_container_layer {
+  display: block;
+  position: relative;
+  width: 36px;
+  height: 100%;
+  padding: 0;
+  margin: 0 0px 0 0;
+  background-color: #f2f2f2;
+  background-color: rgba(0, 0, 0, 0.05); 
+  border-radius: 2px;
+  float: right;
+ }
+
+ #slider_layer {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 50px;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+  border-radius: 2px; 
+  background-color: #444; 
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #error_message {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  line-height: 30px !important;
+  text-indent: 10px;
+  background: #F00;
+  font: normal 12pt arial, tahoma, helvetica, sans-serif;
+  font-weight: normal;
+  color: #FFF;
+  overflow: hidden;
+ }
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ .tooltipButton {
+  position: relative;
+  display: inline-block;
+ }
+
+ .tooltipButton .tooltipButtonContainer {
+  position: absolute;
+  top: -95px;
+  left: -20px;
+  background: transparent;
+  visibility: hidden;
+  width: 140px;
+  height: 80px;
+  pointer-events: none;
+  z-index: 1001;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+  box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+ }
+
+ #import .tooltipButtonContainer {
+  left: 0px;
+ }
+
+
+ .tooltipButton .tooltipButtonContainer .tooltipButtonText {
+  position: relative;
+  visibility: hidden;
+  width: 140px;
+  padding: 10px;
+  height: 60px;
+  font-size: 80%;
+  font-weight: normal;
+  line-height: 110%;
+  text-align: center;
+  display: table-cell; 
+  vertical-align: middle; 
+  text-align: center; 
+  color: #444;
+  text-indent: 0px;
+  background-color: #FFF;
+  border-radius: 3px;
+  z-index: 3;
+ }
+
+ .tooltipButton .tooltipButtonContainer .tooltipButtonCube {
+  visibility: hidden;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #FFF;
+  top: 40px;
+  left: 50px;
+  z-index: 1;
+  -ms-transform: rotate(45deg); /* IE 9 */
+  -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+  transform: rotate(45deg);
+  -webkit-box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+  box-shadow: 0px -1px 10px 2px rgba(0,0,0,0.25);
+ }
+
+ .tooltipButton:hover .tooltipButtonContainer,
+ .tooltipButton:hover .tooltipButtonContainer .tooltipButtonText,
+ .tooltipButton:hover .tooltipButtonContainer .tooltipButtonCube {
+  visibility: visible;
+ }
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #info_webgl {
+  z-index: 1999;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 120px;
+  height: 20px;
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 5px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+  border: 1px solid rgba(220,220,220,1.0);
+ }
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #voxel_info {
+  position: absolute;
+  bottom: 5px;
+  left: 0px;
+  padding: 10px 15px 10px 30px;
+  z-index: 999;
+ }
+
+ #voxel_info span {
+  display: block;
+  font-size: 70%;
+  margin: 0px;
+ }
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #view_import_export {
+  position: relative;
+  display: block;
+  margin: 10px 0px 0px 0px;
+  font: normal 13pt arial, tahoma, helvetica, sans-serif;
+  line-height: 1.3;
+  color: #444; 
+  font-weight: bold;
+ }
+
+ div.import, div.export {
+  position: relative;
+  display: block;
+  margin: 5px;
+  cursor: pointer; 
+  width: 140px;
+  height: 40px;
+  background: #04b5f8;
+  color: #FFF;
+  border: 1px solid #04b5f8;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 2px;
+  float: left;
+ } 
+
+ #import {
+  visibility: hidden;
+ }
+
+ div.export {
+  visibility: hidden;
+  width: 100px;
+  height: 40px;
+  color: #444;
+  border: 1px solid #DDD;
+  text-indent: 26px;
+  background: #FFF url("../images/download_icon.png") no-repeat 14px 8px;
+  background-size: auto 24px;
+ }
+
+ div.export #progress_obj,
+ div.export #progress_obj_foursided,
+ div.export #progress_vox,
+ div.export #progress_xml,
+ div.export #progress_json,
+ div.export #progress_json_II,
+ div.export #progress_stl,
+ div.export #progress_vbo {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #04b5f8;
+  width: 0%;
+  height: 100%;
+  border-radius: 2px;
+ }
+
+ div.import input#file_input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  display: block !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none;
+ }
+
+ div.import input#file_input + label {
+  cursor: pointer; 
+  width: 100%;
+  height: 40px;
+  display: inline-block;
+ }
+
+ div.import:hover {
+  background: #DDD;
+  color: #444;
+  border: 1px solid #DDD;
+ }
+
+ div.export:hover {
+  background: #DDD;
+  border: 1px solid white;
+ }
+
+div.export:hover {
+  text-indent: 26px;
+  background: #DDD url("../images/download_icon.png") no-repeat 14px 8px;
+  background-size: auto 24px;
+  border: 1px solid white;
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #reset_view, #toggle_dimension {
+  z-index: 998;
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer; 
+  background: transparent url(../images/gui_icons.png) no-repeat left top;
+  background-position: 0 0; 
+  cursor: pointer;  
+  visibility: hidden;
+ }
+
+ #toggle_dimension {
+  bottom: 0px;
+  cursor: pointer; 
+  background: transparent url(../images/gui_icons.png) no-repeat left top;
+  background-position: -60px 0; 
+ }
+
+
+ /****************************************************************************/
+ /*                                                                          */
+ /****************************************************************************/
+
+ #view_gui {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  padding: 10px 0px 10px 0px;
+  font: normal 16pt arial, tahoma, helvetica, sans-serif;
+  line-height: 1.3;
+  color: #444;
+  font-weight: bold;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: none;
+  overflow: hidden;
+ }
+
+ #gui_sliders {
+  position: relative;
+  width: 100%;
+  padding: 0px 80px 0px 20px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+ }
+
+ #gui_text {
+  position: relative;
+  float: right;
+  margin-right: 20px;
+ }
+
+ #slider_voxels_container, #slider_interval_container {
+  display: block;
+  position: relative;
+  height: 36px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 10px 0px;
+  background-color: #f2f2f2;
+  background-color: rgba(0, 0, 0, 0.05); 
+  border-radius: 2px;
+ }
+
+ #slider_voxels, #slider_interval {
+  position: relative;
+  display: block;
+  width: 10%;
+  height: 36px;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+  border-radius: 2px; 
+  background-color: #444; 
+ }
+
+ #voxels_number, #interval_number {
+  display: block;
+  position: absolute;
+  width: 60px;
+  top: 0px;
+  right: 0px;
+  height: 36px;
+  text-align: right;
+  line-height: 36px;
+ }
+
+ #interval_number {
+  top: 46px;
+ }
+
+
+
+
