@@ -282,22 +282,57 @@ function wpunity_fetch_video_action_callback(){
 }
 
 
-// ---- AJAX SEMANTICS 1: run segmentation
+// ---- AJAX SEMANTICS 1: run segmentation ----------
 function wpunity_segment_obj_action_callback() {
 
     $DS = DIRECTORY_SEPARATOR;
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
-        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D'; //$_GET['game_dirpath'];
+        $curr_folder = wp_upload_dir()['basedir'].$DS.$_POST['path'];
+        $curr_folder = str_replace('/','\\',$curr_folder); // full path
+
+        $batfile = wp_upload_dir()['basedir'].$DS.$_POST['path']."segment.bat";
+
+
+        $batfile = str_replace('/','\\',$batfile); // full path
+
+        $fnameobj = basename($_POST['obj']);
+
+        $fnameobj = $curr_folder.$fnameobj;
+
 
         // 1 : Generate bat
-//        $myfile = fopen($game_dirpath.$DS."test_segment.bat", "w") or die("Unable to open file!");
-//        $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
-//        fwrite($myfile, $txt);
-//        fclose($myfile);
+        $myfile = fopen($batfile, "w") or die("Unable to open file!");
+
+
+        $outputpath = wp_upload_dir()['basedir'].$DS.$_POST['path'];
+        $outputpath = str_replace('/','\\',$outputpath); // full path
+
+        $exefile = untrailingslashit(plugin_dir_path(__FILE__)).'\..\semantics\segment3D\pclTesting.exe';
+        $exefile = str_replace("/", "\\", $exefile);
+
+        $iter = $_POST['iter'];
+        $minDist = $_POST['minDist'];
+        $maxDist = $_POST['maxDist'];
+        $minPoints = $_POST['minPoints'];
+        $maxPoints = $_POST['maxPoints'];
+        //$exefile.' '.$fnameobj.' '.$iter.' 0.01 0.2 100 25000 1 '.$outputpath.PHP_EOL.
+
+        $txt = '@echo off'.PHP_EOL.
+                $exefile.' '.$fnameobj.' '.$iter.' '.$minDist.' '.$maxDist.' '.$minPoints.' '.$maxPoints.' 1 '.$outputpath.PHP_EOL.
+               'del "*.pcd"'.PHP_EOL.
+               'del "barycenters.txt"';
+
+        fwrite($myfile, $txt);
+        fclose($myfile);
+
+        shell_exec('del "'.$outputpath.'log.txt"');
+        shell_exec('del "'.$outputpath.'cloud_cluster*.obj"');
+        shell_exec('del "'.$outputpath.'cloud_plane*.obj"');
 
         // 2: run bat
-        $output = shell_exec($game_dirpath.$DS.'test'.$DS.'test_segment.bat');
+        $output = shell_exec($batfile);
+        echo $output;
 
     } else { // LINUX SERVER // TODO
 
@@ -322,35 +357,35 @@ function wpunity_segment_obj_action_callback() {
 function wpunity_monitor_segment_obj_action_callback(){
 
     $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D';
-    $fs = file_get_contents($game_dirpath.$DS."test".$DS."logfile.log");
+
+    $fs = file_get_contents(pathinfo($_POST['obj'], PATHINFO_DIRNAME ).'/log.txt');
     echo $fs;
 
     wp_die();
 }
 
 
-//---- AJAX COMPILE 3: Zip the builds folder
+//---- AJAX COMPILE 3: Enlist the split objs -------------
 function wpunity_enlist_splitted_objs_action_callback(){
 
     $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'semantics'.$DS.'segment3D'.$DS.'test';
-
+    $path = wp_upload_dir()['basedir'].$DS.$_POST['path'];
 
     $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($game_dirpath),
+        new RecursiveDirectoryIterator($path),
         RecursiveIteratorIterator::LEAVES_ONLY
     );
 
     foreach ($files as $name => $file)
     {
         // Skip directories (they would be added automatically)
-        if (!$file->isDir())
+        if (!$file->isDir() and pathinfo($file,PATHINFO_EXTENSION)=='obj')
         {
-            echo $name." ".$file;
+
+            echo "<a href='".wp_upload_dir()['baseurl']."/".$_POST['path'].basename($file)."' >".basename($file)."</a><br />";
         }
     }
 
-
+    wp_die();
 }
 

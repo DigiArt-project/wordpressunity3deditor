@@ -7,30 +7,52 @@ wp_enqueue_style('wpunity_backend');
 wp_enqueue_script( 'wpunity_content_interlinking_request');
 
 // load script from js_libs
-wp_enqueue_script( 'wpunity_semantics_request');
+wp_enqueue_script( 'wpunity_classification_request');
 
-// Some parameters to pass in the request_game.js  ajax
+wp_enqueue_script( 'wpunity_segmentation_request');
+
+
+// Some parameters to pass in the content_interlinking.js  ajax
 wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
     array('lang' => 'en',
-          'externalSource' => 'Wikipedia',
-          'titles' => 'Scladina'  //'Albert%20Einstein'
+        'externalSource' => 'Wikipedia',
+        'titles' => 'Scladina'  //'Albert%20Einstein'
     )
 );
 
+// Some parameters to pass in the segmentation.js  ajax
+wp_localize_script('wpunity_segmentation_request', 'phpvars',
+    array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
+        'obj'  => get_post_meta($_GET['post'], 'wpunity_asset3d_obj', true)
+    )
+);
+
+// Some parameters to pass in the classification.js  ajax
+wp_localize_script('wpunity_classification_request', 'phpvars',
+    array('path' => get_post_meta($post->ID, 'wpunity_asset3d_pathData', true).'/',
+        'obj' => get_post_meta($post->ID, 'wpunity_asset3d_obj', true)
+    )
+);
+
+
 add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
-
-
 function wpunity_assets_create_right_metaboxes() {
+
+
+
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_segment_obj','Segment obj','wpunity_assets_segment_obj_box_content', 'wpunity_asset3d', 'side' , 'low');
+    add_meta_box( 'autofnc-wpunity_asset3d_classify_obj','Classify obj','wpunity_assets_classify_obj_box_content', 'wpunity_asset3d', 'side' , 'low');
 }
 
 
 
 function wpunity_assets_fetch_description_box_content($post){
+
+
 
     echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
     ?>
@@ -106,11 +128,9 @@ function wpunity_assets_fetch_image_box_content($post){
 
         echo '<div id="display_img_res" class="imageresbin" style="display:none">';
         for ($i=0;$i<10;$i++) {
-
             echo '<img id = "image_res_'.$i.'" class="image_fetch_img" />';
             echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" ></div >';
             echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" ></a >';
-
         }
 
         echo '</div>';
@@ -168,8 +188,15 @@ function wpunity_assets_fetch_video_box_content($post){
 
 function wpunity_assets_segment_obj_box_content($post){
 
-    echo '<div id="wpunity_segmentObj_bt" class="wpunity_fetchContentButton" onclick="wpunity_segmentObjAjax()">Segment obj</div>';
     ?>
+
+    <div id="wpunity_segmentButton" class="wpunity_fetchContentButton"
+         onclick="wpunity_segmentObjAjax(document.getElementById('wpunity_titles_segment_obj_iter').value,
+                                         document.getElementById('wpunity_titles_segment_obj_min_dist').value,
+                                         document.getElementById('wpunity_titles_segment_obj_max_dist').value,
+                                         document.getElementById('wpunity_titles_segment_obj_min_points').value,
+                                         document.getElementById('wpunity_titles_segment_obj_max_points').value
+                                            )">Segment obj</div>;
 
     <br />
     Parameters<br />
@@ -204,6 +231,58 @@ function wpunity_assets_segment_obj_box_content($post){
 
     <?php
 }
+
+
+function wpunity_assets_classify_obj_box_content($post){
+
+    echo '<div id="wpunity_classifyObj_bt" class="wpunity_fetchContentButton" 
+                                onclick="wpunity_classifyObjAjax()">Classify obj</div>';
+    ?>
+
+    <br />
+    Results<br />
+    <table>
+        <tbody>
+            <tr>
+                <td>#</td>
+                <td>Tag</td>
+                <td>Probability</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><input type="text" size="5" name="wpunity_tag1_classification_obj"
+                                                  id="wpunity_tag1_classification_obj" value=""></td>
+                <td><input type="text" size="5" name="wpunity_prob1_classification_obj"
+                                                  id="wpunity_prob1_classification_obj" value=""></td>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" size="5" name="wpunity_tag2_classification_obj"
+                                                  id="wpunity_tag2_classification_obj" value=""></td>
+                <td><input type="text" size="5" name="wpunity_prob2_classification_obj"
+                                                  id="wpunity_prob2_classification_obj" value=""></td>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><input type="text" size="5" name="wpunity_tag3_classification_obj"
+                                                  id="wpunity_tag3_classification_obj" value=""></td>
+                <td><input type="text" size="5" name="wpunity_prob3_classification_obj"
+                                                  id="wpunity_prob3_classification_obj" value=""></td>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br />
+    <div id="wpunity-classification-report" name="wpunity-classification-report">Status</div><br />
+    <div id="wpunity-classification-status" name="wpunity-classification-status">Report</div><br />
+    <div id="wpunity-segmentation-log" name="wpunity-segmentation-log">Log file</div>
+
+    <?php
+}
+
 
 
 
@@ -325,19 +404,17 @@ function wpunity_assets_databox_show()
     if ($curr_path != "" && $textmtl != "" && $url_obj != "")
         wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
     else {
+        echo "Rendering is not possible because:<br />";
 
-            echo "Rendering is not possible because:<br />";
+        if ($curr_path == "")
+            echo "- Current path is not defined<br />";
 
-            if ($curr_path == "")
-                echo "- Current path is not defined<br />";
+        if ($textmtl == "")
+            echo "- mtl is not defined<br />";
 
-            if ($textmtl == "")
-                echo "- mtl is not defined<br />";
-
-            if ($url_obj == "")
-                echo "- obj url is not defined<br />";
-
-        }
+        if ($url_obj == "")
+            echo "- obj url is not defined<br />";
+    }
 
     echo '</div></td></tr>';
 
@@ -363,13 +440,8 @@ function wpunity_assets_databox_show()
                                     echo "mtl is not defined";
                                 else
                                     readfile($meta);
-
-
                             ?>
-
-
                 </textarea>
-
 
                 <?php
             } elseif ($field['id'] == 'wpunity_asset3d_obj') { ?>
@@ -800,8 +872,6 @@ function wpunity_assets_databox_save($post_id) {
 // Save data from infobox
 add_action('save_post', 'wpunity_assets_databox_save');
 
-
-
 function wpunity_lockcfields_untilpublish(){
     global $post;
     $post_type = get_post_type($post->ID);
@@ -834,6 +904,13 @@ add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_ca
 
 // AJAXES for semantics
 add_action( 'wp_ajax_wpunity_segment_obj_action', 'wpunity_segment_obj_action_callback' );
+add_action( 'wp_ajax_wpunity_monitor_segment_obj_action', 'wpunity_monitor_segment_obj_action_callback' );
+add_action( 'wp_ajax_wpunity_enlist_splitted_objs_action', 'wpunity_enlist_splitted_objs_action_callback' );
+
+
+
+
+add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_callback' );
 
 //==========================================================================================================================================
 

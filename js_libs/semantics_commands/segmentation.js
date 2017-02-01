@@ -2,7 +2,7 @@
 //var os_dependend_var = phpvars.PHP_OS.toUpperCase().substr(0, 3) === 'WIN'? 1:4;
 
 // handles the click event for link 1, sends the query
-function wpunity_segmentObjAjax() {
+function wpunity_segmentObjAjax(iter, minDist, maxDist, minPoints, maxPoints) {
 
     document.getElementById('wpunity_segmentButton').innerHTML = "Segmenting ...";
     document.getElementById("wpunity-segmentation-report").innerHTML = "...";
@@ -13,10 +13,17 @@ function wpunity_segmentObjAjax() {
     jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
-        data : {'action': 'wpunity_segment_obj_action'},
+        data : {'action':'wpunity_segment_obj_action',
+                'path':phpvars.path,
+                'obj':phpvars.obj,
+                'iter':iter,
+                'minDist':minDist,
+                'maxDist':maxDist,
+                'minPoints':minPoints,
+                'maxPoints':maxPoints
+               },
         success : function(response){
             document.getElementById('wpunity_segmentButton').innerHTML = "Success.";
-            enlistObjs();
         },
         error : function(xhr, ajaxOptions, thrownError){
             document.getElementById('wpunity_segmentButton').innerHTML = 'Error: Segment again?';
@@ -34,9 +41,11 @@ function wpunity_segmentObjAjax() {
             url : 'admin-ajax.php',
             type : 'POST',
             cache: false,
-            data: {'action': 'wpunity_monitor_segment_obj_action'},
+            data: {'action': 'wpunity_monitor_segment_obj_action',
+                   'path':phpvars.path,
+                   'obj':phpvars.obj},
             success : function(response){
-                console.log("onread log file: " + response.length);
+                console.log("onread log file SEGM: " + response.length);
 
                 var counterLines = response.split(/\r\n|\r|\n/).length;
 
@@ -50,14 +59,17 @@ function wpunity_segmentObjAjax() {
 
                     document.getElementById("wpunity-segmentation-report").innerHTML = "Segmentation completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
-                    if (response.indexOf("Completed successfully")>0){
+                    if (response.indexOf("Segmentation completed successfully")>0){
                         document.getElementById("wpunity-segmentation-status").innerHTML = "and the result is Success.";
+                        enlistFilesAjax();
                         clearInterval(interval);
+
                     } else {
                         document.getElementById("wpunity-segmentation-status").innerHTML = 'and the result is Error [125] : Segmentation error ' + response;
                     }
 
-                    document.getElementById("wpunity-segmentation-report").innerHTML = response;
+
+                     document.getElementById("wpunity-segmentation-report").innerHTML = response;
                 }
             },
             error : function(xhr, ajaxOptions, thrownError){
@@ -67,24 +79,26 @@ function wpunity_segmentObjAjax() {
                 document.getElementById("wpunity-segmentation-report").innerHTML = response;
             }
         });
-    }, 2000);
+    }, 1000);
 }
 
 
 // AJAX NO 3: ZIP all and provide link to download
-function myzipajax() {
+function enlistFilesAjax() {
 
+    console.log("enlist now");
 
     jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
-        data : {'action': 'wpunity_enlist_splitted_objs_action'},
+        data : {'action': 'wpunity_enlist_splitted_objs_action',
+                'path':phpvars.path,
+                'obj':phpvars.obj},
         success : function(response){
-
             document.getElementById('wpunity-segmentation-report').innerHTML = response;
         },
         error : function(xhr, ajaxOptions, thrownError){
-            document.getElementById('wpunity-segmentation-report').innerHTML = 'Zipping game: ERROR [171]! '+ thrownError;
+            document.getElementById('wpunity-segmentation-report').innerHTML = 'Enlist files: ERROR [171]! '+ thrownError;
         }
     });
 }
