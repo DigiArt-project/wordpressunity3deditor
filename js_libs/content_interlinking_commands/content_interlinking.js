@@ -100,7 +100,7 @@ function wpunity_fetchImageAjax(){
                                 console.log(whichimage);
 
                                 document.getElementById(whichimage).src = fname;
-                                document.getElementById(whichimage + "_url").innerHTML = fname;
+                                document.getElementById(whichimage + "_url").innerHTML = '<a href="'+fname+'" download="'+fname+'">'+fname+'</a>';
 
                                 document.getElementById(whichimage + "_title").innerHTML = 'More info';
 
@@ -194,7 +194,7 @@ function wpunity_fetchVideoAjax(){
                                 document.getElementById(whichvideo).src = fname;
                                 document.getElementById("videoplayer1").load();
 
-                                document.getElementById(whichvideo + "_url").innerHTML = fname;
+                                document.getElementById(whichvideo + "_url").innerHTML = '<a href="'+fname+'" download="'+fname+'">'+fname+'</a>';;
 
                                 document.getElementById(whichvideo + "_title").innerHTML = "----";
 

@@ -1,6 +1,6 @@
 <?php
 
-function wpunity_asset_viewer($curr_path,$textmtl,$url_obj,$post_title){
+function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
     ?>
         <!-- START 3D -->
         <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/three.js"></script>

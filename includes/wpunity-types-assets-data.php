@@ -129,8 +129,8 @@ function wpunity_assets_fetch_image_box_content($post){
         echo '<div id="display_img_res" class="imageresbin" style="display:none">';
         for ($i=0;$i<10;$i++) {
             echo '<img id = "image_res_'.$i.'" class="image_fetch_img" />';
-            echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" ></div >';
-            echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" ></a >';
+            echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" style="margin-bottom:5px"></div >';
+            echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" style="margin-bottom:10px"></a >';
         }
 
         echo '</div>';
@@ -176,7 +176,9 @@ function wpunity_assets_fetch_video_box_content($post){
     <div id="video_find_results">
 
         <video id="videoplayer1" width="240" height="160" autoplay controls>
+            <source id="video_res_1" src="" type="video/mp4">
             <source id="video_res_1" src="" type="video/ogg">
+            <source id="video_res_1" src="" type="video/ogv">
         </video>
         <div id="video_res_1_url" class="video_fetch_div_url"></div><br />
         <div id="video_res_1_title" class="video_res_title_f"></div><br />
@@ -394,9 +396,10 @@ function wpunity_assets_databox_show()
 //    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
 //    $url_obj = ""; //$curr_path."floor.obj";
 
-    $curr_path = get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
+    $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
 
     $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
+
     $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
 
     echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
