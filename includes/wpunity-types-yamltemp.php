@@ -91,6 +91,38 @@ class SceneYamlTemplateClass{
         register_taxonomy('wpunity_yamltemp_cat', 'wpunity_yamltemp', $args);
 
     }
-
 }
+
+//==========================================================================================================================================
+
+/**
+ * A1.03
+ * Generate Taxonomy (for Games) with Template's slug/name
+ *
+ *
+ * Generate taxonomy for Game usage (wpunity_game_cat)
+ */
+
+function wpunity_create_tax_forgames( $new_status, $old_status, $post ){
+
+    $post_type = get_post_type($post);
+
+    if ($post_type == 'wpunity_yamltemp') {
+        if ( ($new_status == 'publish') ) {
+
+            //slug Template
+            $tempSlug = $post->post_name;
+            $tempTitle = $post->post_title;
+
+            //Create a tax category for the games
+            wp_insert_term($tempTitle,'wpunity_game_cat',$tempSlug,'Template of Game');
+            
+        }else{
+            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
+        }
+
+    }
+}
+
+add_action('transition_post_status','wpunity_create_tax_forgames',10,3);
 ?>
