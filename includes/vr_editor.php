@@ -75,6 +75,14 @@ echo '</script>';
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
     var raycasterDrag = new THREE.Raycaster();
 
+    // find all indexes of the needle inside the str
+    function allIndexOf(needle, str){
+        var indices = [];
+        for(var i=0; i<str.length;i++)
+            if (str[i] === needle) indices.push(i);
+        return indices;
+    }
+
     function drop_handler(ev) {
         var dataDrag =JSON.parse( ev.dataTransfer.getData("text"));
 
@@ -82,12 +90,19 @@ echo '</script>';
         var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/")+1);
         var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/")+1);
 
+        // we take the behavior type from the path of the obj
+        var slashesArr = allIndexOf("/", path);
+
+        var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
+
+
 //        var fbxFname = objFname.slice(0,-4) + '.fbx';
 //        var matFname = objFname.slice(0,-4) + '.mat';
 //        var guid_fbx = "sys15a";
 //        var guid_mat = "sys11a";
 
         addOne(dataDrag.title, path, objFname, mtlFname,
+            type_behavior,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

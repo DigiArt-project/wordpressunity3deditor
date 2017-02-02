@@ -1,10 +1,11 @@
-function addOne(nameModel3D, path, objPath, mtlPath, x, y, z, r1=0, r2=0, r3=0, s=1){
+function addOne(nameModel3D, path, objPath, mtlPath, type_behavior, x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
     selected_object_trs={"translation":[x, y, z],"rotation":[r1,r2,r3],"scale":s};
     resources3D[nameModel3D]= { "path": path,
                                 "obj":objPath,
                                 "mtl":mtlPath,
+                                "type_behavior":type_behavior,
                                 "trs":selected_object_trs};
 
     // Load the extra item in 3D environment or get it from recycle bin ============================

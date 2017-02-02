@@ -97,6 +97,8 @@ class LoaderMulti {
                                 object.fnObj = resources3D[name]['obj'];
                                 object.fnMtl = resources3D[name]['mtl'];
 
+                                object.type_behavior = resources3D[name]['type_behavior'];
+
                                 envir.scene.add(object);
                             },
 

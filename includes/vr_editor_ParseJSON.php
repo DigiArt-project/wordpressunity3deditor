@@ -20,12 +20,13 @@ class ParseJSON {
                 $path = '';
                 $obj = '';
                 $mtl = '';
+                $type_behavior = 'avatar';
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $obj = $value->fnObj;
                 $mtl = $value->fnMtl;
+                $type_behavior = $value->type_behavior;
             }
-
 
             $t_x = $value->position[0];
             $t_y = $value->position[1];
@@ -44,6 +45,7 @@ class ParseJSON {
             echo 'resources3D["'.$name.'"]= {"path":"'.$path.
                                             '","obj":"'.$obj.
                                             '","mtl":"'.$mtl.
+                                            '","type_behavior":"'.$type_behavior.
                 '","trs":selected_object_trs};'; // fpath_obj.push("'.end($resources3D)['obj'].'");';
 
             echo '</script>';

@@ -312,6 +312,7 @@ THREE.SceneExporter.prototype = {
                     '	"position" : ' + Vector3String(o.position) + ',',
                     '	"rotation" : ' + Vector3String(o.rotation) + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
+                    '	"type_behavior" : ' + '"' + o.type_behavior + '"' + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ( o.children.length ? ',' : '' )
