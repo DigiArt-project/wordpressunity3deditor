@@ -1,5 +1,104 @@
 <?php
 
+function wpunity_replace_foldermeta($file_content,$folderID){
+    $unix_time = time();
+    $guid_id = 'f0000000000' . $folderID;
+
+    $file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_objmeta($file_content,$objID){
+    $unix_time = time();
+    $guid_id = 'b0000000000' . $objID;
+
+    $file_content_return = str_replace("___[obj_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+//==========================================================================================================================================
+
+
+function wpunity_create_uploadmetas($attachment_ID){
+
+    $attachment_post = get_post( $attachment_ID );
+
+    $type = get_post_mime_type($attachment_ID);
+    $attachment_url = wp_get_attachment_url( $attachment_ID );
+    $attachment_type = wp_check_filetype( $attachment_url );
+
+    $parentPost = get_post_ancestors( $attachment_ID );
+    $post_id = $parentPost[0];
+    $post = get_post($post_id);
+    $post_type = get_post_type($post);
+
+
+    if ($post_type == 'wpunity_asset3d') {
+        if (strpos($type, 'text/plain') === 0) {
+            if ($attachment_type['ext'] == 'obj') {
+                $attachment_title = $attachment_post->post_title;
+
+                $upload = wp_upload_dir();
+                $upload_dir = $upload['basedir'];
+                $upload_dir = str_replace('\\','/',$upload_dir);
+                $assetPath = get_post_meta($post_id,'wpunity_asset3d_pathData',true);
+
+                $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.obj.meta', "w") or die("Unable to open file!");
+
+                $yampl_temp_id = wpunity_getTemplateID_forAsset($post_id);
+                $templatePart = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_odp', true );
+                $fileData = wpunity_replace_objmeta($templatePart,$attachment_ID);
+                fwrite($create_file, $fileData);
+                fclose($create_file);
+
+            }
+        }
+    }
+}
+
+add_action("add_attachment", 'wpunity_create_uploadmetas');
+
+//==========================================================================================================================================
+
+function wpunity_getTemplateID_forAsset($asset_id){
+
+    $parentSceneterms = wp_get_post_terms( $asset_id, 'wpunity_asset3d_pscene');
+
+    $parentSceneSlug = $parentSceneterms[0]->slug;
+    $custom_args = array(
+        'name'        => $parentSceneSlug,
+        'post_type'   => 'wpunity_scene',
+    );
+    $my_posts = get_posts($custom_args);
+    $sceneID = $my_posts[0]->ID;
+
+
+    $parentGameterms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
+    $gameSlug = $parentGameterms[0]->slug;
+    $custom_args = array(
+        'name'        => $gameSlug,
+        'post_type'   => 'wpunity_game',
+    );
+    $my_posts = get_posts($custom_args);
+    $gameID = $my_posts[0]->ID;
+
+    $parentTempterms = wp_get_post_terms( $sceneID, 'wpunity_game_cat');
+    $tempSlug = $parentTempterms[0]->slug;
+    $custom_args = array(
+        'name'        => $tempSlug,
+        'post_type'   => 'wpunity_yamltemp',
+    );
+    $my_posts = get_posts($custom_args);
+    $tempID = $my_posts[0]->ID;
+
+    return $tempID;
+}
+
+//==========================================================================================================================================
 
 function force_post_title_init(){
     wp_enqueue_script('jquery');
@@ -31,6 +130,7 @@ function force_post_title(){
 add_action('admin_init', 'force_post_title_init');
 add_action('edit_form_advanced', 'force_post_title');
 
+//==========================================================================================================================================
 
 function wpunity_change_publish_button( $translation, $text ) {
     global $post;
@@ -46,6 +146,8 @@ function wpunity_change_publish_button( $translation, $text ) {
 }
 
 add_filter( 'gettext', 'wpunity_change_publish_button', 10, 2 );
+
+//==========================================================================================================================================
 
 function wpunity_upload_dir_forAssets( $args ) {
 
@@ -69,7 +171,7 @@ function wpunity_upload_dir_forAssets( $args ) {
 
 add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
 
-
+//==========================================================================================================================================
 
 function wpunity_aftertitle_info($post) {
 
@@ -110,6 +212,7 @@ function wpunity_aftertitle_info($post) {
 
 add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
 
+//==========================================================================================================================================
 
 /**
  * 1.01
@@ -141,7 +244,7 @@ function wpunity_overwrite_uploads( $name ){
 
 add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
 
-
+//==========================================================================================================================================
 
 // ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
 function wpunity_compile_action_callback() {

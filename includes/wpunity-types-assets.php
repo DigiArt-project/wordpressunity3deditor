@@ -162,6 +162,7 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
 
             //slug Asset
             $assetSlug = $post->post_name;
+            $assetID = $post->ID;
 
             //slug Scene
             $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
@@ -187,7 +188,7 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
             $upload_dir = $upload['basedir'];
             $upload_dir .= "/" . $gameID;
             $upload_dir .= "/" . $parentSceneSlug;
-            $upload_dir .= "/" . $categoryAssetSlug;
+            $upload_dir .= "/" . $categoryAssetSlug; $file_dir = $upload_dir;//save this for asset folder's meta
             $upload_dir .= "/" . $assetSlug;
 
             $upload_dir = str_replace('\\','/',$upload_dir);
@@ -196,7 +197,26 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
                 mkdir($upload_dir, 0755);
             }
 
+            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
+            $templateSlug = $parentGameTemplate[0]->slug;
+            $custom_args2 = array(
+                'name'        => $templateSlug,
+                'post_type'   => 'wpunity_yamltemp',
+            );
+            $my_posts2 = get_posts($custom_args2);
+            $templateID = $my_posts2[0]->ID;
 
+            $templatePart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_fdp', true );
+
+            //create folder.meta for Asset-folder (meta file has same path as folder)
+            $file_dir = str_replace('\\','/',$file_dir);
+            $file_dir .= '/' . $assetSlug .'.meta';//path and 'folder_name'.meta
+
+            $create_file = fopen($file_dir, "w") or die("Unable to open file!");
+
+            $myfile_text = wpunity_replace_foldermeta($templatePart,$assetID);
+            fwrite($create_file, $myfile_text);
+            fclose($create_file);
 
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)

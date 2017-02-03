@@ -382,10 +382,11 @@ function wpunity_assets_databox_add() {
 
 add_action('admin_menu', 'wpunity_assets_databox_add');
 
-function wpunity_assets_databox_show()
-{
+function wpunity_assets_databox_show(){
     global $wpunity_databox1, $post;
     $post_title = $post->post_title;
+    if($post->post_status == 'publish'){$hideshow = 'none';}else{$hideshow = 'block';}
+    echo '<div id="wpunity_assets_box_wrapper" style="display:'. $hideshow .'"><span class="dashicons dashicons-lock">You must create the Asset in order to fill data</span></div>';
     echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table"><tbody>';
 
