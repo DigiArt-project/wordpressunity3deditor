@@ -116,7 +116,7 @@ function wpunity_create_tax_forgames( $new_status, $old_status, $post ){
 
             //Create a tax category for the games
             wp_insert_term($tempTitle,'wpunity_game_cat',$tempSlug,'Template of Game');
-            
+
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }
