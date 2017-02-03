@@ -1,5 +1,15 @@
 <?php
 
+function wpunity_replace_foldermeta($file_content,$folderID){
+    $unix_time = time();
+    $guid_id = 'f0000000000' . $folderID;
+
+    $file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
 
 function force_post_title_init(){
     wp_enqueue_script('jquery');

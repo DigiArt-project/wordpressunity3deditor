@@ -123,6 +123,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             //slug Scene
             $sceneSlug = $post->post_name;
             $sceneTitle = $post->post_title;
+            $sceneID = $post->ID;
 
             //slug Game
             $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
@@ -160,14 +161,13 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
 
             $templatePart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_fdp', true );
             
-            //create folder.meta for Asset-folder (meta file has same path as folder)
+            //create folder.meta for Scene-folder (meta file has same path as folder)
             $file_dir = str_replace('\\','/',$file_dir);
             $file_dir .= '/' . $sceneSlug .'.meta';//path and 'folder_name'.meta
 
             $create_file = fopen($file_dir, "w") or die("Unable to open file!");
 
-            //TODO Replace variables
-            $myfile_text = $templatePart;
+            $myfile_text = wpunity_replace_foldermeta($templatePart,$sceneID);
             fwrite($create_file, $myfile_text);
             fclose($create_file);
 
@@ -185,10 +185,10 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
             if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
 
-            $file1_text = $templatePart; //TODO Replace variables
-            $file2_text = $templatePart;
-            $file3_text = $templatePart;
-            $file4_text = $templatePart;
+            $file1_text = wpunity_replace_foldermeta($templatePart,'a'. $sceneID);
+            $file2_text = wpunity_replace_foldermeta($templatePart,'b'. $sceneID);
+            $file3_text = wpunity_replace_foldermeta($templatePart,'c'. $sceneID);
+            $file4_text = wpunity_replace_foldermeta($templatePart,'d'. $sceneID);
             $create_file1 = fopen($upload_dir . '/dynamic3dmodels.meta', "w") or die("Unable to open file!");
             fwrite($create_file1, $file1_text);
             fclose($create_file1);

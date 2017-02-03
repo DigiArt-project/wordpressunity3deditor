@@ -162,6 +162,7 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
 
             //slug Asset
             $assetSlug = $post->post_name;
+            $assetID = $post->ID;
 
             //slug Scene
             $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
@@ -213,8 +214,7 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
 
             $create_file = fopen($file_dir, "w") or die("Unable to open file!");
 
-            //TODO Replace variables
-            $myfile_text = $templatePart;
+            $myfile_text = wpunity_replace_foldermeta($templatePart,$assetID);
             fwrite($create_file, $myfile_text);
             fclose($create_file);
 
