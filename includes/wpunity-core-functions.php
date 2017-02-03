@@ -100,6 +100,23 @@ function wpunity_getTemplateID_forAsset($asset_id){
 
 //==========================================================================================================================================
 
+function wpunity_disable_imgthumbs_assets( $image_sizes ){
+
+    // extra sizes
+    $slider_image_sizes = array(  );
+    // for ex: $slider_image_sizes = array( 'thumbnail', 'medium' );
+
+    // instead of unset sizes, return your custom size (nothing)
+    if( isset($_REQUEST['post_id']) && 'wpunity_asset3d' === get_post_type( $_REQUEST['post_id'] ) )
+        return $slider_image_sizes;
+
+    return $image_sizes;
+}
+
+add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
+//==========================================================================================================================================
+
 function force_post_title_init(){
     wp_enqueue_script('jquery');
 }
@@ -117,7 +134,7 @@ function force_post_title(){
             {
                 jQuery('[id^=\"titlediv\"]').css('background', '#F96');
                 setTimeout(\"jQuery('#ajax-loading').css('visibility', 'hidden');\", 100);
-                alert('POST TITLE is required');
+                alert('TITLE is required');
                 setTimeout(\"jQuery('#publish').removeClass('button-primary-disabled');\", 100);
                 return false;
             }
