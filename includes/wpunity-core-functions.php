@@ -20,6 +20,16 @@ function wpunity_replace_objmeta($file_content,$objID){
     return $file_content_return;
 }
 
+function wpunity_replace_jpgmeta($file_content,$objID){
+    $unix_time = time();
+    $guid_id = 'c0000000000' . $objID;
+
+    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
 //==========================================================================================================================================
 
 
@@ -56,6 +66,23 @@ function wpunity_create_uploadmetas($attachment_ID){
                 fclose($create_file);
 
             }
+        }elseif( (strpos($type, 'image/jpeg') === 0) ){
+
+            $attachment_title = $attachment_post->post_title;
+
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'];
+            $upload_dir = str_replace('\\','/',$upload_dir);
+            $assetPath = get_post_meta($post_id,'wpunity_asset3d_pathData',true);
+
+            $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
+
+            $yampl_temp_id = wpunity_getTemplateID_forAsset($post_id);
+            $templatePart = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_jdp', true );
+            $fileData = wpunity_replace_jpgmeta($templatePart,$attachment_ID);
+            fwrite($create_file, $fileData);
+            fclose($create_file);
+
         }
     }
 }
