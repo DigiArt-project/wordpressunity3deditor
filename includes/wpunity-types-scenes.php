@@ -184,7 +184,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             if (!is_dir($newDir2)) {mkdir($newDir2, 0755);}
             if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
             if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
-            
+
             $file1_text = $templatePart; //TODO Replace variables
             $file2_text = $templatePart;
             $file3_text = $templatePart;
