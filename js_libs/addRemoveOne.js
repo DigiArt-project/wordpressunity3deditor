@@ -8,7 +8,7 @@ function addOne(nameModel3D, path, objPath, mtlPath, type_behavior, x, y, z, r1=
                                 "type_behavior":type_behavior,
                                 "trs":selected_object_trs};
 
-    // Load the extra item in 3D environment or get it from recycle bin ============================
+    //   Load the extra item in 3D environment or get it from recycle bin ============================
 
     // envir.cameraOrbit.children[0] is the recycle bin
     var objInRecycleBin = envir.cameraOrbit.children[0].getObjectByName(nameModel3D);
