@@ -333,7 +333,7 @@ $wpunity_databox1 = array(
             'type' => 'text',
             'std' => ''
         ),array(
-            'name' => 'Next Scene',
+            'name' => 'Next Scene (Only for Doors)',
             'desc' => 'Next Scene',
             'id' => $wpunity_prefix . 'next_scene',
             'type' => 'text',
@@ -386,137 +386,166 @@ function wpunity_assets_databox_show(){
     global $wpunity_databox1, $post;
     $post_title = $post->post_title;
     if($post->post_status == 'publish'){$hideshow = 'none';}else{$hideshow = 'block';}
-    echo '<div id="wpunity_assets_box_wrapper" style="display:'. $hideshow .'"><span class="dashicons dashicons-lock">You must create the Asset in order to fill data</span></div>';
-    echo '<input type="hidden" name="wpunity_assets_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    echo '<table class="form-table" id="wpunity-custom-fields-table"><tbody>';
-
-    echo '<tr><th style="width:20%">Asset 3D Preview</label></th>';
-
-
-//    $curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
-//    $textmtl = ""; //file_get_contents($curr_path."floor.mtl");
-//    $url_obj = ""; //$curr_path."floor.obj";
-
-    $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
-
-    $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
-
-    $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
-
-    echo '<td><div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">';
-
-    if ($curr_path != "" && $textmtl != "" && $url_obj != "")
-        wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
-    else {
-        echo "Rendering is not possible because:<br />";
-
-        if ($curr_path == "")
-            echo "- Current path is not defined<br />";
-
-        if ($textmtl == "")
-            echo "- mtl is not defined<br />";
-
-        if ($url_obj == "")
-            echo "- obj url is not defined<br />";
-    }
-
-    echo '</div></td></tr>';
-
-    foreach ($wpunity_databox1['fields'] as $field) {
-        if ($field['id']!='wpunity_asset3d_next_scene') {
-            echo '<tr>',
-            '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
-            '<td>';
-            $meta = get_post_meta($post->ID, $field['id'], true); ?>
-            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
-                   value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
-            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button"
-                   value="Upload <?php echo esc_html($field['name']); ?>"/>
-
-            <?php if ($field['id'] == 'wpunity_asset3d_mtl') { ?>
-
-                <br /><br />
-                Preview mtl:<br />
-                <textarea id="wpunity_asset3d_mtl_preview" readonly
-                          style="width:100%;height:200px;"><?php
-
-                                if(!$meta)
-                                    echo "mtl is not defined";
-                                else
-                                    readfile($meta);
-                            ?>
-                </textarea>
-
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_obj') { ?>
-                <br /><br />
-                Preview obj:
-                <textarea id="wpunity_asset3d_obj_preview" readonly
-                          style="width:100%;height:200px;"><?php
-
-                    if(!$meta)
-                        echo "obj is not defined";
-                    else
-                        readfile($meta);
-
-                    ?></textarea>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_diffimage') { ?>
-                <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_screenimage') { ?>
-                <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_image1') { ?>
-                <img id="wpunity_asset3d_image1_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_image2') { ?>
-                <img id="wpunity_asset3d_image2_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_image3') { ?>
-                <img id="wpunity_asset3d_image3_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
-                <?php
-            } elseif ($field['id'] == 'wpunity_asset3d_video') {
-                //preview of the video
-
-            }
-
-            echo '</td></tr>';
-        }else{
-            $meta = get_post_meta($post->ID, $field['id'], true);
-            echo '<tr  id="wpunity_asset3d_next_scene_field">',
-            '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
-            '<td>';
-
-
-            switch ($field['type']) {
-                case 'text':
-                    echo '<input type="text" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                    break;
-                case 'numeric':
-                    echo '<input type="number" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="', esc_attr($meta ? $meta : $field['std']), '" size="30" style="width:97%" />', '<br />', esc_html($field['desc']);
-                    break;
-                case 'textarea':
-                    echo '<textarea name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" cols="60" rows="4" style="width:97%">', esc_attr($meta ? $meta : $field['std']), '</textarea>', '<br />', esc_html($field['desc']);
-                    break;
-                case 'select':
-                    echo '<select name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
-                    foreach ($field['options'] as $option) {
-                        echo '<option ', $meta == $option ? ' selected="selected"' : '', '>', esc_html($option), '</option>';
-                    }
-                    echo '</select>';
-                    break;
-                case 'checkbox':
-                    echo '<input type="checkbox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '"', $meta ? ' checked="checked"' : '', ' />';
-                    break;
-
-            }
-            echo     '</td></tr>';
-
-        }
-    }
-    echo '</tbody></table>';
     ?>
+    <div id="wpunity_assets_box_wrapper" style="display:<?php echo $hideshow; ?>;">
+        <span class="dashicons dashicons-lock">You must create the Asset in order to fill data</span>
+    </div>
+    <input type="hidden" name="wpunity_assets_databox_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>" />
+    <table class="form-table" id="wpunity-custom-fields-table">
+        <tbody>
+            <tr><th style="width:20%">Asset 3D Preview</label></th>
+            <?php
+
+            //$curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
+            //$textmtl = ""; //file_get_contents($curr_path."floor.mtl");
+            //$url_obj = ""; //$curr_path."floor.obj";
+            $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
+            $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
+            $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
+            ?>
+            <td>
+                <div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
+                <?php
+                if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
+                    wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
+                }else {
+                    echo "Rendering is not possible because:<br />";
+                    if ($curr_path == ""){echo "- Current path is not defined<br />";}
+                    if ($textmtl == ""){echo "- mtl is not defined<br />";}
+                    if ($url_obj == ""){echo "- obj url is not defined<br />";}
+                }
+                ?>
+                </div>
+            </td>
+            </tr>
+            <?php
+            //Hide-Show custom fields purpose
+            $categoryAsset = wp_get_post_terms($post->ID, 'wpunity_asset3d_cat');
+            $categoryAssetSlug = $categoryAsset[0]->name;
+            $doorhideshow = 'none';$mediahideshow = 'none';
+            if ($categoryAssetSlug == 'Doors') {$doorhideshow = 'block';$mediahideshow = 'none';}
+            if ($categoryAssetSlug != 'Doors') {$doorhideshow = 'none';$mediahideshow = 'block';}
+
+            foreach ($wpunity_databox1['fields'] as $field) {
+                if ($field['id']=='wpunity_asset3d_mtl'){
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+                            <br /><br />
+                            Preview mtl:<br />
+                            <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;">
+                                <?php if(!$meta){echo "mtl is not defined";}else{readfile($meta);} ?>
+                            </textarea>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_obj') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+                            <br /><br />
+                            Preview obj:<br />
+                            <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;">
+                                    <?php if(!$meta){echo "obj is not defined";}else{readfile($meta);} ?>
+                            </textarea>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_diffimage') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+                            <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_screenimage') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+                            <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_next_scene') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td id="wpunity_asset3d_next_scene_field" style="display:<?php echo $doorhideshow; ?>;margin-bottom:0;">
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_image1') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
+                            <img id="wpunity_asset3d_image1_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;" src="<?php echo $meta; ?>"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_image2') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
+                            <img id="wpunity_asset3d_image2_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;" src="<?php echo $meta; ?>"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_image3') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
+                            <img id="wpunity_asset3d_image3_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;" src="<?php echo $meta; ?>"/>
+                        </td>
+                    </tr>
+                    <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_video') {
+                    ?>
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"  style="display:<?php echo $mediahideshow; ?>;" />
+                            <?php //TODO preview of the video ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+            ?>
+        </tbody>
+    </table>
 
     <script>
 
@@ -525,16 +554,36 @@ function wpunity_assets_databox_show(){
             var value = e.options[e.selectedIndex].value;
             var text = e.options[e.selectedIndex].text;
 
-            alert(text);
 
-//            if(value == 'Doors'){
-//                //SHOW Next Scene Custom field - Hide others
-//                var link = document.getElementById('wpunity_asset3d_next_scene_field');
-//                link.style.visibility = 'inherit';
-//            }else{
-//                var link = document.getElementById('wpunity_asset3d_next_scene_field');
-//                link.style.visibility = 'hidden'; //or
-//            }
+            if(text == 'Doors'){
+                //SHOW Next Scene Custom field - Hide others
+                document.getElementById('wpunity_asset3d_next_scene_field').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image1').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image2').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image2_btn').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image2_preview').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image3').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image3_btn').style.display = 'none';
+                document.getElementById('wpunity_asset3d_image3_preview').style.display = 'none';
+                document.getElementById('wpunity_asset3d_video').style.display = 'none';
+                document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+            }else{
+                var link = document.getElementById('wpunity_asset3d_next_scene_field');
+                link.style.display = 'none';
+                document.getElementById('wpunity_asset3d_image1').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image2').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image2_btn').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image2_preview').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image3').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image3_btn').style.display = 'block';
+                document.getElementById('wpunity_asset3d_image3_preview').style.display = 'block';
+                document.getElementById('wpunity_asset3d_video').style.display = 'block';
+                document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+            }
         }
 
         jQuery(document).ready(function ($) {
@@ -875,30 +924,6 @@ function wpunity_assets_databox_save($post_id) {
 
 // Save data from infobox
 add_action('save_post', 'wpunity_assets_databox_save');
-
-function wpunity_lockcfields_untilpublish(){
-    global $post;
-    $post_type = get_post_type($post->ID);
-    $post_status = $post->post_status;
-    if($post_type == 'wpunity_asset3d'){
-       if($post_status == 'publish'){
-           echo '
-           <script>
-           function wpunity_hidecfields(){
-           var link = document.getElementById("wpunity-assets-databox");
-           link.style.visibility = "hidden";
-            }
-            wpunity_hidecfields();
-           </script>
-           ';
-       }
-    }
-}
-
-
-add_action( 'admin_init', 'wpunity_lockcfields_untilpublish' );
-
-
 
 
 // AJAXES for content interlinking
