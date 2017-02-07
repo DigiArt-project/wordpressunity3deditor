@@ -626,7 +626,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_mtl').val(attachment.url);
+                    jQuery('#wpunity_asset3d_mtl').val(attachment.id);
                     //jQuery('#wpunity_asset3d_mtl_preview').
 
                     // Restore the main post ID
@@ -659,7 +659,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_obj').val(attachment.url);
+                    jQuery('#wpunity_asset3d_obj').val(attachment.id);
                     //jQuery('#wpunity_asset3d_mtl_preview').
 
                     // Restore the main post ID
@@ -692,7 +692,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_diffimage').val(attachment.url);
+                    jQuery('#wpunity_asset3d_diffimage').val(attachment.id);
                     jQuery('#wpunity_asset3d_diffimage_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -725,7 +725,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_screenimage').val(attachment.url);
+                    jQuery('#wpunity_asset3d_screenimage').val(attachment.id);
                     jQuery('#wpunity_asset3d_screenimage_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -758,7 +758,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_image1').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image1').val(attachment.id);
                     jQuery('#wpunity_asset3d_image1_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -792,7 +792,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_image2').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image2').val(attachment.id);
                     jQuery('#wpunity_asset3d_image2_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -828,7 +828,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_image3').val(attachment.url);
+                    jQuery('#wpunity_asset3d_image3').val(attachment.id);
                     jQuery('#wpunity_asset3d_image3_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -861,7 +861,7 @@ function wpunity_assets_databox_show(){
                     attachment = file_frame.state().get('selection').first().toJSON();
 
                     // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_video').val(attachment.url);
+                    jQuery('#wpunity_asset3d_video').val(attachment.id);
                     //jQuery('#wpunity_asset3d_image3_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
@@ -911,6 +911,7 @@ function wpunity_assets_databox_save($post_id) {
     } elseif (!current_user_can('edit_post', $post_id)) {
         return $post_id;
     }
+
     foreach ($wpunity_databox1['fields'] as $field) {
         $old = get_post_meta($post_id, $field['id'], true);
         $new = $_POST[$field['id']];
@@ -920,6 +921,16 @@ function wpunity_assets_databox_save($post_id) {
             delete_post_meta($post_id, $field['id'], $old);
         }
     }
+
+    //After Save custom fields, delete all old meta and create the new ones
+    wpunity_assets_delete_allmetas($post_id);
+    foreach ($wpunity_databox1['fields'] as $field) {
+        $attachment_ID = get_post_meta($post_id, $field['id'], true);
+        if($attachment_ID){
+            wpunity_assets_create_metafile($post_id,$attachment_ID); //create meta file
+        }
+    }
+
 }
 
 // Save data from infobox

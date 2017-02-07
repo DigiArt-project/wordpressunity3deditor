@@ -190,6 +190,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.
 //D4.01 TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
 
+//D5.01
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-meta.php' );
 
 //===================================== Other ============================================
 
