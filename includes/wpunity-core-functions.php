@@ -1,6 +1,64 @@
 <?php
 
 
+function wpunity_getAllassets_byScene($sceneID){
+
+    $originalScene = get_post($sceneID);
+    $sceneSlug = $originalScene->post_name;
+    //Get 'Asset's Parent Scene' taxonomy with the same slug
+    $sceneTaxonomy = get_term_by('slug', $sceneSlug, 'wpunity_asset3d_pscene');
+    $sceneTaxonomyID = $sceneTaxonomy->term_id;
+
+    $queryargs = array(
+        'post_type' => 'wpunity_asset3d',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pscene',
+                'field' => 'id',
+                'terms' => $sceneTaxonomyID
+            )
+        )
+    );
+
+    $custom_query = new WP_Query( $queryargs );
+
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+
+            $custom_query->the_post();
+            $asset_id = get_the_ID();
+
+            //ALL DATA WE NEED
+            $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); //OBJ ID
+            if($objID){$objPath = wp_get_attachment_url( $objID );} //OBJ PATH
+            $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); //MTL ID
+            if($mtlID){$mtlPath = wp_get_attachment_url( $mtlID );} //MTL PATH
+            $difImageID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true); //Diffusion Image ID
+            if($difImageID){$difImagePath = wp_get_attachment_url( $difImageID );} //Diffusion Image PATH
+            $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); //Screenshot Image ID
+            if($screenImageID){$screenImagePath = wp_get_attachment_url( $screenImageID );} //Screenshot Image PATH
+
+
+            //DELETE THEM - TEMPORARY OUTPUT
+            echo 'objID:' . $objID . '<br/>';
+            echo 'objPath:' . $objPath . '<br/>';
+            echo 'mtlID:' . $mtlID . '<br/>';
+            echo 'mtlPath:' . $mtlPath . '<br/>';
+            echo 'difImageID:' . $difImageID . '<br/>';
+            echo 'difImagePath:' . $difImagePath . '<br/>';
+            echo 'screenImageID:' . $screenImageID . '<br/>';
+            echo 'screenImagePath:' . $screenImagePath . '<br/><br/>';
+
+        endwhile;
+    endif;
+
+    // Reset postdata
+    wp_reset_postdata();
+
+}
+
+
 
 
 function wpunity_getTemplateID_forAsset($asset_id){
