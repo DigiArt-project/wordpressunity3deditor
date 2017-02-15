@@ -1,7 +1,75 @@
 <?php
 
+function wpunity_fetch_scene_assets_action_callback(){ //$sceneID){
+
+//    $sceneAssetsFolderResources = wpunity_getAllassets_byScene($_GET['sceneID']);
+//    print_r($sceneAssetsFolderResources);
+//    wp_die();
+
+    $DS = DIRECTORY_SEPARATOR;
+
+    // if you change this, be sure to change line 440 in scriptFileBrowserToolbar.js
+    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
+
+    $response = scan($dir);
+
+    // Output the directory listing as JSON
+    header('Content-type: application/json');
+
+    $jsonResp =  json_encode(array(
+        "name" => $dir,
+        "type" => "folder",
+        "path" => $dir,
+        "items" => $response
+    ));
+
+    echo $jsonResp;
+
+    wp_die();
+}
+
+function scan($dir)
+{
+    $DS = '/'; // Do not change
+    $files = array();
+    // -- Dir method --
+    if (file_exists($dir)) {
+
+        foreach (scandir($dir) as $f) {
+
+            if (!$f || $f[0] == '.') {
+                continue; // Ignore hidden files
+            }
+
+            if (is_dir($dir . '/' . $f)) {
+                // The path is a folder
+                $files[] = array(
+                    "name" => $f,
+                    "type" => "folder",
+                    "path" => $dir . $DS . $f,
+                    "items" => scan($dir . $DS . $f) // Recursively get the contents of the folder
+                );
+            } else {
+                // It is a file
+                $files[] = array(
+                    "name" => $f,
+                    "type" => "file",
+                    "path" => $dir . $DS . $f,
+                    "size" => filesize($dir . $DS . $f) // Gets the size of this file
+                );
+            }
+        }
+
+    }
+
+    return $files;
+}
+
+
 
 function wpunity_getAllassets_byScene($sceneID){
+
+    $allAssets = [];
 
     $originalScene = get_post($sceneID);
     $sceneSlug = $originalScene->post_name;
@@ -28,6 +96,7 @@ function wpunity_getAllassets_byScene($sceneID){
 
             $custom_query->the_post();
             $asset_id = get_the_ID();
+            $asset_name = get_the_title();
 
             //ALL DATA WE NEED
             $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); //OBJ ID
@@ -41,20 +110,36 @@ function wpunity_getAllassets_byScene($sceneID){
 
 
             //DELETE THEM - TEMPORARY OUTPUT
-            echo 'objID:' . $objID . '<br/>';
-            echo 'objPath:' . $objPath . '<br/>';
-            echo 'mtlID:' . $mtlID . '<br/>';
-            echo 'mtlPath:' . $mtlPath . '<br/>';
-            echo 'difImageID:' . $difImageID . '<br/>';
-            echo 'difImagePath:' . $difImagePath . '<br/>';
-            echo 'screenImageID:' . $screenImageID . '<br/>';
-            echo 'screenImagePath:' . $screenImagePath . '<br/><br/>';
+//            echo 'objID:' . $objID . '<br/>';
+//            echo 'objPath:' . $objPath . '<br/>';
+//            echo 'mtlID:' . $mtlID . '<br/>';
+//            echo 'mtlPath:' . $mtlPath . '<br/>';
+//            echo 'difImageID:' . $difImageID . '<br/>';
+//            echo 'difImagePath:' . $difImagePath . '<br/>';
+//            echo 'screenImageID:' . $screenImageID . '<br/>';
+//            echo 'screenImagePath:' . $screenImagePath . '<br/><br/>';
+
+            $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
+//            $categoryAssetSlug = $categoryAsset[0]->name;
+
+
+            $allAssets[] = ['assetName'=>$asset_name,
+                            'assetID'=>$asset_id,
+                            'categoryName'=>$categoryAsset[0]->name,
+                            'categoryID'=>$categoryAsset[0]->term_id,
+                            'objID'=>$objID,
+                            'objPath'=>$objPath,
+                            'mtlID'=>$mtlID,
+                            'difImageID'=>$difImageID,
+                            'screenImageID'=>$screenImageID];
 
         endwhile;
     endif;
 
     // Reset postdata
     wp_reset_postdata();
+
+    return $allAssets;
 
 }
 
@@ -390,7 +475,6 @@ function wpunity_fetch_video_action_callback(){
     } else {
         $url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles_image'];//.'&qf=LANGUAGE:'.$_POST['lang_image'];
     }
-
 
     $content = file_get_contents($url);
     echo $content;

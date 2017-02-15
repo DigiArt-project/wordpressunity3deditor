@@ -4,7 +4,6 @@
 //----------------------------------------------------------------------------------
 function wpunity_fetchDescriptionAjax(){
 
-
     document.getElementById('wpunity_fetchDescription_bt').innerHTML = "Fetching";
 
     externalSource = document.getElementById("fetch_source").options[document.getElementById("fetch_source").selectedIndex].value;

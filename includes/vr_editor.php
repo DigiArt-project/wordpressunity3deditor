@@ -27,21 +27,20 @@ echo '<script>';
 echo 'gamefolder="'.$gamefolder.'"';
 echo '</script>';
 
-//$sceneToLoad = $PLUGIN_PATH_VR."/scenes/standard_scene.json";
+echo '<script>';
+echo 'sceneID="'.$sceneID.'"';
+echo '</script>';
+
+
+
 ?>
 
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
 <link rel="import" href="<?php echo $PLUGIN_PATH_VR?>/includes/vr_editor_header_js.html">
 
-
-    <!-- script for scanning files toolbar -->
-    <script src="<?php echo $PLUGIN_PATH_VR?>/js_libs/scriptFileBrowserToolbar.js"></script>
-
-
-
-
 <script>
+
     //  Save Button implemented with Ajax
     $(document).ready(function(){
 
@@ -51,6 +50,39 @@ echo '</script>';
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
         envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+
+
+        // make filebrowser draggable
+        var filemanager = $('.filemanager'),
+            breadcrumbs = $('.breadcrumbs'),
+            fileList = filemanager.find('.data');
+
+        // Make filemanager draggable
+        filemanager.draggable({cancel : 'ul'});
+
+        //------------- File Browser Toolbar close button -------------
+        var closeButton = $('.bt_close_file_toolbar');
+
+        closeButton.on('click', function(e){
+        // e.preventDefault();
+
+            if (fileList[0].style.display == "") {
+                fileList[0].style.display = 'none';
+                fileList[0].style.height = '0vw';
+                filemanager[0].style.height = '6vw';
+                closeButton[0].innerHTML = 'Open';
+            } else {
+                fileList[0].style.display = '';
+                fileList[0].style.height = '27vw';
+                filemanager[0].style.height = '33vw';
+                closeButton[0].innerHTML = 'Close';
+            }
+
+        });
+
+        wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID);
+
+
     });
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
@@ -293,15 +325,13 @@ echo '</script>';
 
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );
-$formRes = new ParseJSON($UPLOAD_DIR);
-$formRes->init($sceneToLoad);
+    $formRes = new ParseJSON($UPLOAD_DIR);
+    $formRes->init($sceneToLoad);
 ?>
 
 <script>
 
     loaderMulti = new LoaderMulti();
-
-
     loaderMulti.load(manager, resources3D);
 
     //=================== End of loading ============================================
@@ -368,4 +398,6 @@ $formRes->init($sceneToLoad);
 <!-- Change dat GUI style: Override the inside js style -->
 
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
+
+
 

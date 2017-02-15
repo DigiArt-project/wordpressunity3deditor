@@ -55,6 +55,10 @@ wp_register_script( 'wpunity_classification_request', plugin_dir_url( __FILE__ )
     null, null, false);
 
 
+wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE__ ) . 'js_libs/scriptFileBrowserToolbarWPway.js',
+    null, null, false);
+
+
 
 //================================= Scene YAML Templates ===================================
 
@@ -202,12 +206,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 
-
-
-
 // ===================== Obsolete ===================================
-
-
 
 /**
  * Allow JSON file type to be uploaded.

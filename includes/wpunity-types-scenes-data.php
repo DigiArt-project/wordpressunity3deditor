@@ -1,5 +1,10 @@
 <?php
 
+// load script from js_libs
+wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
+
+
+
 /**
  * C3.01
  * Create metabox with Custom Fields for Scene
@@ -61,6 +66,8 @@ function wpunity_scenes_databox_show(){
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_scenes_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
 
+
+
     echo '<label for="scene-vr-editor">VR Web Editor</label>';
     echo '<div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">';
         $meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
@@ -74,12 +81,20 @@ function wpunity_scenes_databox_show(){
 
         $scenefolder = $sceneSlug;
         $gamefolder = $parentGameSlug; //
-
+        $sceneID = $post->ID;
 
         // vr_editor loads the $sceneToLoad
         require( 'vr_editor.php' );
 
     echo '</div>';
+
+
+
+    //$categoryAsset = wp_get_post_terms($assetID, 'wpunity_asset3d_cat');
+    //echo $categoryAssetSlug = $categoryAsset[0]->name;
+
+
+
 
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
 
@@ -157,6 +172,9 @@ function wpunity_scenes_databox_save($post_id) {
 }
 
 add_action('save_post', 'wpunity_scenes_databox_save');
+
+// Ajax for fetching scene's assets within file browser widget at vr_editor
+add_action( 'wp_ajax_wpunity_fetch_scene_assets_action', 'wpunity_fetch_scene_assets_action_callback' );
 
 //==========================================================================================================================================
 
