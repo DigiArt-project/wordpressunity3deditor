@@ -400,8 +400,10 @@ function wpunity_assets_databox_show(){
             //$textmtl = ""; //file_get_contents($curr_path."floor.mtl");
             //$url_obj = ""; //$curr_path."floor.obj";
             $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
-            $textmtl = file_get_contents(get_post_meta($post->ID, 'wpunity_asset3d_mtl', true));
-            $url_obj = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
+            $mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
+            $textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
+            $obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
+            $url_obj = wp_get_attachment_url( $obj_id );
             ?>
             <td>
                 <div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
