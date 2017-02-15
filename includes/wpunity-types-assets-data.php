@@ -434,13 +434,24 @@ function wpunity_assets_databox_show(){
                     <tr>
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <?php $meta_mtl_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>"
+                                   id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_mtl_id ? wp_get_attachment_url($meta_mtl_id) : $field['std']); ?>" size="30" style="width:65%"/>
+
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+
+
                             <br /><br />
                             Preview mtl:<br />
-                            <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;">
-                                <?php if(!$meta){echo "mtl is not defined";}else{readfile($meta);} ?>
+                            <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;"><?php
+
+                                if(!$meta_mtl_id){
+                                    echo "mtl is not defined";
+                                }else{
+                                    readfile(wp_get_attachment_url($meta_mtl_id));
+                                }
+                                ?>
                             </textarea>
                         </td>
                     </tr>
@@ -450,13 +461,22 @@ function wpunity_assets_databox_show(){
                     <tr>
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <?php $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                                   value="<?php echo esc_attr($meta_obj_id ? wp_get_attachment_url($meta_obj_id) : $field['std']); ?>" size="30" style="width:65%"/>
+
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+
                             <br /><br />
                             Preview obj:<br />
-                            <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;">
-                                    <?php if(!$meta){echo "obj is not defined";}else{readfile($meta);} ?>
+                            <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;"><?php
+                                if(!$meta_obj_id){
+                                    echo "obj is not defined";
+                                }else{
+                                    readfile(wp_get_attachment_url($meta_obj_id));
+                                }
+                                ?>
                             </textarea>
                         </td>
                     </tr>
@@ -466,10 +486,15 @@ function wpunity_assets_databox_show(){
                     <tr>
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <?php $meta_diff_id = get_post_meta($post->ID, $field['id'], true); ?>
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                                   value="<?php
+                                   echo esc_attr($meta_diff_id ? wp_get_attachment_url($meta_diff_id) : $field['std']);
+                                   ?>" size="30" style="width:65%"/>
+
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
-                            <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
+
+                            <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_diff_id); ?>"/>
                         </td>
                     </tr>
                     <?php
@@ -478,10 +503,14 @@ function wpunity_assets_databox_show(){
                     <tr>
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                            <?php $meta_scr_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                                   value="<?php echo esc_attr($meta_scr_id ? wp_get_attachment_url($meta_scr_id) : $field['std']); ?>" size="30" style="width:65%"/>
+
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
-                            <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo $meta; ?>"/>
+
+                            <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_scr_id); ?>"/>
                         </td>
                     </tr>
                     <?php
