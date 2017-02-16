@@ -118,9 +118,19 @@ echo '</script>';
     function drop_handler(ev) {
         var dataDrag =JSON.parse( ev.dataTransfer.getData("text"));
 
-        var path = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
+        var path =     dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
+
         var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/")+1);
         var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/")+1);
+
+        var objID = dataDrag.objID;
+        var mtlID = dataDrag.mtlID;
+
+        var categoryName = dataDrag.categoryName;
+        var categoryID = dataDrag.categoryID;
+        var diffImage = dataDrag.diffImage;
+
+        var diffImageID = dataDrag.diffImageID;
 
         // we take the behavior type from the path of the obj
         var slashesArr = allIndexOf("/", path);
@@ -128,13 +138,8 @@ echo '</script>';
         var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
 
 
-//        var fbxFname = objFname.slice(0,-4) + '.fbx';
-//        var matFname = objFname.slice(0,-4) + '.mat';
-//        var guid_fbx = "sys15a";
-//        var guid_mat = "sys11a";
-
-        addOne(dataDrag.title, path, objFname, mtlFname,
-            type_behavior,
+        addOne(dataDrag.title, path, objFname, objID, mtlFname, mtlID,
+            categoryName, categoryID, diffImage, diffImageID,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

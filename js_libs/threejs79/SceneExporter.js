@@ -110,15 +110,10 @@ THREE.SceneExporter.prototype = {
                     continue;
 
                 } else if ( node instanceof THREE.Camera ) {
-
-
                     // Cameras are not modifiable
-
                     // linesArray.push( CameraString( node, pad ) );
                     // nobjects += 1;
-
                     continue;
-
                 } else if ( node instanceof THREE.Object3D ) {
 
                         // Everything is Object3D !
@@ -127,7 +122,6 @@ THREE.SceneExporter.prototype = {
 
                         linesArray.push(ObjectString(node, pad));
                         nobjects += 1;
-
                 }
 
 
@@ -312,10 +306,15 @@ THREE.SceneExporter.prototype = {
                     '	"position" : ' + Vector3String(o.position) + ',',
                     '	"rotation" : ' + Vector3String(o.rotation) + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
-                    '	"type_behavior" : ' + '"' + o.type_behavior + '"' + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
-                    '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ( o.children.length ? ',' : '' )
+                    '	"fnObjID" : ' + '"' + o.fnObjID  + '"' + ',',
+                    '	"categoryName" : ' + '"' + o.categoryName  + '"' + ',',
+                    '	"categoryID" : ' + '"' + o.categoryID  + '"' + ',',
+                    '	"diffImage" : ' + '"' + o.diffImage  + '"' + ',',
+                    '	"diffImageID" : ' + '"' + o.diffImageID  + '"' + ',',
+                    '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',
+                    '	"fnMtlID" : ' + '"' + o.fnMtlID + '"' + ( o.children.length ? ',' : '' )
 
                     //+ ',',
                     //'	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )

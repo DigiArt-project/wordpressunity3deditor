@@ -1,11 +1,19 @@
-function addOne(nameModel3D, path, objPath, mtlPath, type_behavior, x, y, z, r1=0, r2=0, r3=0, s=1){
+function addOne(nameModel3D, path, objPath, objID, mtlPath, mtlID,
+                categoryName, categoryID, diffImage, diffImageID,
+                x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
     selected_object_trs={"translation":[x, y, z],"rotation":[r1,r2,r3],"scale":s};
+
     resources3D[nameModel3D]= { "path": path,
                                 "obj":objPath,
+                                "objID":objID,
                                 "mtl":mtlPath,
-                                "type_behavior":type_behavior,
+                                "mtlID":mtlID,
+                                "categoryName":categoryName,
+                                "categoryID":categoryID,
+                                "diffImage":diffImage,
+                                "diffImageID":diffImageID,
                                 "trs":selected_object_trs};
 
     //   Load the extra item in 3D environment or get it from recycle bin ============================
@@ -51,10 +59,8 @@ function addOne(nameModel3D, path, objPath, mtlPath, type_behavior, x, y, z, r1=
         // When all are finished loading
         manager.onLoad = function () {
 
-            //var i_last = obj_ARR.length - 1;
-            //console.log(nameModel3D);
+            var insertedObject = envir.scene.getObjectByName(nameModel3D);
 
-            var insertedObject = envir.scene.getObjectByName(nameModel3D); //.substring(0,nameModel3D.lastIndexOf(("_"))));
             if(!insertedObject) {
                 $( "#dialog-message" ).dialog( "open" );
             }

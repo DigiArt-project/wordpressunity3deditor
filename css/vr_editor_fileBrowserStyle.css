@@ -379,6 +379,24 @@
 	right: -4px;
 }
 
+
+.icon.file.f-1{
+	box-shadow: 1.74em -2.1em 0 0 #7e70ee inset;
+}
+
+.icon.file.f-2{
+	box-shadow: 1.74em -2.1em 0 0 #0070ee inset;
+}
+
+.icon.file.f-3{
+	box-shadow: 1.74em -2.1em 0 0 #007000 inset;
+}
+
+.icon.file.f-4{
+	box-shadow: 1.74em -2.1em 0 0 #0000ee inset;
+}
+
+
 .icon.file.f-avi,
 .icon.file.f-flv,
 .icon.file.f-mkv,

@@ -1,27 +1,70 @@
 <?php
 
-function wpunity_fetch_scene_assets_action_callback(){ //$sceneID){
-
-//    $sceneAssetsFolderResources = wpunity_getAllassets_byScene($_GET['sceneID']);
-//    print_r($sceneAssetsFolderResources);
-//    wp_die();
-
-    $DS = DIRECTORY_SEPARATOR;
-
-    // if you change this, be sure to change line 440 in scriptFileBrowserToolbar.js
-    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
-
-    $response = scan($dir);
+// database method
+function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
 
     // Output the directory listing as JSON
     header('Content-type: application/json');
 
+    $DS = DIRECTORY_SEPARATOR;
+
+    // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
+    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
+
+    $response = wpunity_getAllassets_byScene($_GET['sceneID']);
+
+    for ($i=0; $i<count($response); $i++){
+        $response[$i][name] =$response[$i][assetName];
+        $response[$i][type] ='file';
+        $response[$i][path] =$response[$i][objPath];
+
+
+        $ch = curl_init($response[$i][objPath]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+        $dataCurl = curl_exec($ch);
+        $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+        curl_close($ch);
+
+        $response[$i][size] =$size;
+    }
+
+    $jsonResp =  json_encode(
+            array(
+                "name" => $dir,
+                "type" => "folder",
+                "path" => $dir,
+                "items" => $response
+            )
+    );
+
+    echo $jsonResp;
+
+    wp_die();
+}
+
+
+// OLD DIR METHOD
+function wpunity_fetch_scene_assets_by_dir_action_callback(){ //$sceneID){
+
+    // Output the directory listing as JSON
+    header('Content-type: application/json');
+
+    $DS = DIRECTORY_SEPARATOR;
+    // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
+    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
+
+    $response = scan($dir);
+
     $jsonResp =  json_encode(array(
-        "name" => $dir,
-        "type" => "folder",
-        "path" => $dir,
-        "items" => $response
-    ));
+                                    "name" => $dir,
+                                   "type" => "folder",
+                                    "path" => $dir,
+                                    "items" => $response
+                                   )
+                            );
 
     echo $jsonResp;
 
@@ -124,14 +167,18 @@ function wpunity_getAllassets_byScene($sceneID){
 
 
             $allAssets[] = ['assetName'=>$asset_name,
+                            'assetSlug'=>get_post()->post_name,
                             'assetID'=>$asset_id,
                             'categoryName'=>$categoryAsset[0]->name,
                             'categoryID'=>$categoryAsset[0]->term_id,
                             'objID'=>$objID,
                             'objPath'=>$objPath,
                             'mtlID'=>$mtlID,
-                            'difImageID'=>$difImageID,
-                            'screenImageID'=>$screenImageID];
+                            'diffImageID'=>$difImageID,
+                            'diffImage'=>$difImagePath,
+                            'screenImageID'=>$screenImageID,
+                            'screenImagePath'=>$screenImagePath,
+                            'mtlPath'=>$mtlPath];
 
         endwhile;
     endif;

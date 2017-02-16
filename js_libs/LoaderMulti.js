@@ -65,14 +65,17 @@ class LoaderMulti {
 
                 }else {
                     var mtlLoader = new THREE.MTLLoader();
+
                     mtlLoader.setPath(resources3D[name]['path']);
 
                     mtlLoader.load(resources3D[name]['mtl'], function (materials) {
+
                         materials.preload();
 
                         var objLoader = new THREE.OBJLoader(manager);
                         objLoader.setMaterials(materials);
                         objLoader.setPath( resources3D[name]['path']);
+
                         objLoader.load(resources3D[name]['obj'],
 
                             // OnObjLoad
@@ -95,7 +98,16 @@ class LoaderMulti {
                                 object.fnPath = object.fnPath.substring( object.fnPath.indexOf('uploads/') + 7);
 
                                 object.fnObj = resources3D[name]['obj'];
+                                object.fnObjID = resources3D[name]['objID'];
                                 object.fnMtl = resources3D[name]['mtl'];
+                                object.fnMtlID = resources3D[name]['mtlID'];
+
+
+                                object.categoryID = resources3D[name]['categoryID'];
+                                object.categoryName = resources3D[name]['categoryName'];
+                                object.diffImage = resources3D[name]['diffImage'];
+                                object.diffImageID = resources3D[name]['diffImageID'];
+
 
                                 object.type_behavior = resources3D[name]['type_behavior'];
 

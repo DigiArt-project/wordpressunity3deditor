@@ -24,8 +24,13 @@ class ParseJSON {
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $obj = $value->fnObj;
+                $objID = $value->fnObjID;
                 $mtl = $value->fnMtl;
-                $type_behavior = $value->type_behavior;
+                $mtlID = $value->fnMtlID;
+                $diffImage = $value->diffImage;
+                $diffImageID = $value->diffImageID;
+                $categoryName = $value->categoryName;
+                $categoryID = $value->categoryID;
             }
 
             $t_x = $value->position[0];
@@ -44,8 +49,13 @@ class ParseJSON {
 
             echo 'resources3D["'.$name.'"]= {"path":"'.$path.
                                             '","obj":"'.$obj.
+                                            '","objID":"'.$objID.
                                             '","mtl":"'.$mtl.
-                                            '","type_behavior":"'.$type_behavior.
+                                            '","mtlID":"'.$mtlID.
+                                            '","diffImage":"'.$diffImage.
+                                            '","diffImageID":"'.$diffImageID.
+                                            '","categoryName":"'.$categoryName.
+                                            '","categoryID":"'.$categoryID.
                 '","trs":selected_object_trs};'; // fpath_obj.push("'.end($resources3D)['obj'].'");';
 
             echo '</script>';
