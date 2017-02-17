@@ -398,7 +398,11 @@ function wpunity_compile_action_callback() {
     $DS = DIRECTORY_SEPARATOR;
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
-        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
+        // TEST PHASE
+        //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
+
+        // REAL
+        $game_dirpath = $_POST['dirpath']; //  realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
 
         // 1 : Generate bat
         $myfile = fopen($game_dirpath.$DS."starter_artificial.bat", "w") or die("Unable to open file!");
@@ -407,7 +411,10 @@ function wpunity_compile_action_callback() {
         fclose($myfile);
 
         // 2: run bat
-        $output = shell_exec('start /b starter_artificial.bat /c');
+        $output = shell_exec('start /b '.$game_dirpath.$DS.'starter_artificial.bat /c');
+
+
+
 
     } else { // LINUX SERVER
 
@@ -431,8 +438,15 @@ function wpunity_compile_action_callback() {
 //---- AJAX COMPILE 2: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
     $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+
+    // TEST
+    //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+
+    // Real
+    $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+
     $fs = file_get_contents($game_dirpath.$DS."stdout.log");
+
     echo $fs;
 
     wp_die();
@@ -442,7 +456,12 @@ function wpunity_monitor_compiling_action_callback(){
 function wpunity_game_zip_action_callback(){
 
     $DS = DIRECTORY_SEPARATOR;
-    $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+
+    // TEST
+    //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+
+    // Real
+    $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
 
     $rootPath = realpath($game_dirpath).'/builds';
     $zip_file = realpath($game_dirpath).'/game.zip';
@@ -637,3 +656,92 @@ function wpunity_enlist_splitted_objs_action_callback(){
     wp_die();
 }
 
+
+
+// ---- AJAX ASSEMBLE 1: Assemble game
+function wpunity_assemble_action_callback() {
+
+    $DS = DIRECTORY_SEPARATOR;
+
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+
+//        echo $_POST['source'];
+//        echo $_POST['target'];
+
+        // Check if target folder exist from a previous assemble
+        $target_exists = file_exists ( $_POST['target'] );
+        echo '1. Target Folder exists? '.($target_exists?'true':'false');
+
+        // if exists then remove the whole game target folder
+        if ($target_exists) {
+            $res_del = shell_exec('rmdir ' . $_POST['target'] . ' /s /q');
+            echo '<br />2. Delete target folder: '. (file_exists($_POST['target']) ? 'Error 4' : 'Success');
+        }
+
+        shell_exec('mkdir ' . $_POST['target']);
+        echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
+
+        // Copy the pre-written windows game libraries
+        $xcopy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'\windows '.$_POST['target'];
+        $res_copy = shell_exec($xcopy_command);
+
+        echo '<br />4. Copy unity3d libraries: '.$res_copy;
+
+        //------ Modify /ProjectSettings/EditorBuildSettings.asset to include all scenes ---
+        // replace
+        $needle_str ='  m_Scenes: []'.chr(10);
+        // with
+        $target_str= '  m_Scenes:'.chr(10).
+                     '  - enabled: 1'.chr(10).
+                     '    path: Assets/S4/S4.unity'.chr(10);
+
+        //  Possible bug is the LF character in the end of lines
+        echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';
+
+        $path_eba = $_POST['target']."/ProjectSettings/EditorBuildSettings.asset";
+
+        // first read
+        $fhandle = fopen($path_eba, "r");
+        $fcontents = fread($fhandle, filesize($path_eba));
+        fclose($fhandle);
+
+        // then write
+        $fhandle = fopen($path_eba, "w");
+        $fcontents = str_replace($needle_str, $target_str, $fcontents);
+        fwrite($fhandle, $fcontents);
+        fclose($fhandle);
+
+        echo '<pre style="font-size:8pt">'.$fcontents.'</pre>';
+
+
+        // Copy source assets to target assets
+        $xcopy_assets_command = 'xcopy /s /Q '.$_POST['source'].' '.$_POST['target'].$DS.'\Assets';
+        $res_copy_assets = shell_exec($xcopy_assets_command);
+
+        echo '<br />6. Copy Game Instance Assets to target Assets: '.$res_copy_assets;
+
+        // Game Scene not ready yet : take S4 from test_scene/
+
+
+
+
+    } else { // LINUX SERVER
+
+//        $game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
+//
+//        // 1 : Generate sh
+//        $myfile = fopen($game_dirpath.$DS."starter_artificial.sh", "w") or print("Unable to open file!");
+//        $txt = "#/bin/bash"."\n".
+//            "projectPath=`pwd`"."\n".
+//            "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity -batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath ${projectPath} -buildWindowsPlayer 'builds/myg3.exe'";
+//        fwrite($myfile, $txt);
+//        fclose($myfile);
+//
+//        // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+//        $output = shell_exec('nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &');
+    }
+
+    echo '<br /><br /> Finished assemble';
+
+    wp_die();
+}

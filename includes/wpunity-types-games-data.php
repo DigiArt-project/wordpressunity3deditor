@@ -7,15 +7,30 @@ $DS = DIRECTORY_SEPARATOR ;
 wp_enqueue_style('wpunity_backend');
 
 // load request_game.js script from js_libs
-wp_enqueue_script( 'wpunity_compiler_request');
+wp_enqueue_script( 'wpunity_compile_request');
 
-// Some parameters to pass in the request_game.js  ajax
-wp_localize_script('wpunity_compiler_request', 'phpvars',
+// Some parameters to pass in the request_game_compile.js  ajax
+wp_localize_script('wpunity_compile_request', 'phpvarsA',
     array('pluginsUrl' => plugins_url(),
         'PHP_OS'     => PHP_OS,
-        'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
-        'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/test_compiler/game_windows'
+        'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+        'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/games_assemble/dune'
     ));
+
+
+// load request_game.js script from js_libs
+wp_enqueue_script( 'wpunity_assemble_request');
+
+// Some parameters to pass in the request_game_assemble.js  ajax
+wp_localize_script('wpunity_assemble_request', 'phpvarsB',
+    array('pluginsUrl' => plugins_url(),
+        'PHP_OS'     => PHP_OS,
+        'source'=> realpath(dirname(__FILE__).'/../../..').$DS.'uploads'.$DS.'dune',
+        'target'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune',
+        'game_libraries_path'=> realpath(dirname(__FILE__).'/..').$DS.'unity_game_libraries',
+    ));
+
+// dune = $post->post_name;
 
 //==========================================================================================================================================
 
@@ -65,12 +80,15 @@ $wpunity_databox3 = array(
 function wpunity_games_databox_add() {
     global $wpunity_databox3;
     add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
+    add_meta_box('wpunity-games-assembler-box', 'Game Assembler', 'wpunity_games_assemblerbox_show', 'wpunity_game', 'side', 'low'); //Compiler Box
     add_meta_box('wpunity-games-compiler-box', 'Game Compiler', 'wpunity_games_compilerbox_show', 'wpunity_game', 'side', 'low'); //Compiler Box
 }
 
 add_action('admin_menu', 'wpunity_games_databox_add');
 
 
+
+//===========================================================================================================
 
 function wpunity_games_databox_show(){
     global $wpunity_databox3, $post;
@@ -167,14 +185,27 @@ function wpunity_games_compilerbox_show(){
     echo '<div id="wpunity_compile_game_stdoutlog_report" style="font-size: x-small"></div>';
 
 }
+
+
+//================================= Assemble related ===================================================================
+function wpunity_games_assemblerbox_show(){
+    echo '<div id="wpunity_assembleButton" onclick="wpunity_assembleAjax()">Assemble</div>';
+
+    echo '<br /><br />Analytic report of assemble:<br />';
+    echo '<div id="wpunity_assemble_report1"></div>';
+    echo '<div id="wpunity_assemble_report2"></div>';
+}
+//======================================================================================================================
+
+
 // the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
 // the ajax phps are on wpunity-core-functions.php
 add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
 add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
 add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
 
-
-
+// Assemble php from ajax call
+add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
 
 
 ?>

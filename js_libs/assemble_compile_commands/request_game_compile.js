@@ -12,7 +12,9 @@ function wpunity_compileAjax() {
     var reqCompile = jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
-        data : {'action': 'wpunity_compile_action'},
+        data : {'action': 'wpunity_compile_action',
+                'dirpath': phpvarsA.game_dirpath,
+                'urlpath': phpvarsA.game_urlpath},
         success : function(response){
             document.getElementById('wpunity_compileButton').innerHTML = "Success.";
         },
@@ -43,7 +45,9 @@ function wpunity_compileAjax() {
             url : 'admin-ajax.php',
             type : 'POST',
             cache: false,
-            data: {'action': 'wpunity_monitor_compiling_action'},
+            data: {'action': 'wpunity_monitor_compiling_action',
+                   'dirpath': phpvarsA.game_dirpath,
+                   'urlpath': phpvarsA.game_urlpath},
             success : function(response){
                 console.log("onread stdout" + response.length);
 
@@ -75,7 +79,7 @@ function wpunity_compileAjax() {
                 document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
             }
         });
-    }, 2000);
+    }, 10000);
 }
 
 //-------------------------------------------------------
@@ -87,10 +91,12 @@ function myzipajax() {
     var reqCompile = jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
-        data : {'action': 'wpunity_game_zip_action'},
+        data : {'action': 'wpunity_game_zip_action',
+                'dirpath': phpvarsA.game_dirpath,
+                'urlpath': phpvarsA.game_urlpath},
         success : function(response){
             document.getElementById('wpunity_zipgame_report').innerHTML = response;
-            document.getElementById('wpunity_zipgame_report').innerHTML = '<a href="'+ phpvars.game_urlpath + '/game.zip">Download game in a zip file </a>';
+            document.getElementById('wpunity_zipgame_report').innerHTML = '<a href="'+ phpvarsA.game_urlpath + '/game.zip">Download game in a zip file </a>';
         },
         error : function(xhr, ajaxOptions, thrownError){
             document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;

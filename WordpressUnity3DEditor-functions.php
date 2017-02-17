@@ -42,8 +42,12 @@ wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) .
 
 
 
-wp_register_script( 'wpunity_compiler_request', plugin_dir_url( __FILE__ ) . 'js_libs/compiler_commands/request_game.js',
+wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
     null, null, false);
+
+wp_register_script( 'wpunity_assemble_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_assemble.js',
+    null, null, false);
+
 
 wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
     null, null, false);

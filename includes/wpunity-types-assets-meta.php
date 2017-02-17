@@ -84,11 +84,13 @@ function wpunity_create_guids($objType,$objID){
     5 = Mat.Meta
      */
 
-    if($objType==1){return $guid_id = 'f0000000000' . $objID;}
-    if($objType==2){return $guid_id = 'b0000000000' . $objID;}
-    if($objType==3){return $guid_id = 'c0000000000' . $objID;}
-    if($objType==4){return $guid_id = '';}
-    if($objType==5){return $guid_id = '';}
+    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 8, "0", STR_PAD_LEFT);
+
+//    if($objType==1){return $guid_id = 'f0000000000' . $objID;}
+//    if($objType==2){return $guid_id = 'b0000000000' . $objID;}
+//    if($objType==3){return $guid_id = 'c0000000000' . $objID;}
+//    if($objType==4){return $guid_id = '';}
+//    if($objType==5){return $guid_id = '';}
 }
 
 function wpunity_replace_foldermeta($file_content,$folderID){
