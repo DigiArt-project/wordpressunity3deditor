@@ -199,25 +199,14 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
         )
     );
 
-
     $custom_query = new WP_Query( $queryargs );
 
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
-
             $custom_query->the_post();
             $scene_id = get_the_ID();
             $sceneSlug = get_post_field( 'post_name', $scene_id );
-
-            $sceneUnityFile = $sceneSlug . '.unity';
-            $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'];
-            $upload_dir .= "/" . $gameSlug . "/" . $sceneUnityFile;
-            $unityFile_dir = str_replace('\\','/',$upload_dir);
-
-            $allUnityScenes[] = ['sceneUnityPath'=>$unityFile_dir];
-
-
+            $allUnityScenes[] = ['sceneUnityPath'=>"Assets/".$sceneSlug."/".$sceneSlug.".unity"];
         endwhile;
     endif;
 
