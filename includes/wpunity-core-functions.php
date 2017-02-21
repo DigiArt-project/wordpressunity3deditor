@@ -184,7 +184,7 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
     $originalGame = get_post($gameID);
     $gameSlug = $originalGame->post_name;
     //Get 'Asset's Parent Scene' taxonomy with the same slug
-    $gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
+    $gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
     $gameTaxonomyID = $gameTaxonomy->term_id;
 
     $queryargs = array(
