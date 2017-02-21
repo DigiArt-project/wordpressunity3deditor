@@ -151,20 +151,7 @@ function wpunity_getAllassets_byScene($sceneID){
             $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); //Screenshot Image ID
             if($screenImageID){$screenImagePath = wp_get_attachment_url( $screenImageID );} //Screenshot Image PATH
 
-
-            //DELETE THEM - TEMPORARY OUTPUT
-//            echo 'objID:' . $objID . '<br/>';
-//            echo 'objPath:' . $objPath . '<br/>';
-//            echo 'mtlID:' . $mtlID . '<br/>';
-//            echo 'mtlPath:' . $mtlPath . '<br/>';
-//            echo 'difImageID:' . $difImageID . '<br/>';
-//            echo 'difImagePath:' . $difImagePath . '<br/>';
-//            echo 'screenImageID:' . $screenImageID . '<br/>';
-//            echo 'screenImagePath:' . $screenImagePath . '<br/><br/>';
-
             $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
-//            $categoryAssetSlug = $categoryAsset[0]->name;
-
 
             $allAssets[] = ['assetName'=>$asset_name,
                             'assetSlug'=>get_post()->post_name,
@@ -187,6 +174,57 @@ function wpunity_getAllassets_byScene($sceneID){
     wp_reset_postdata();
 
     return $allAssets;
+
+}
+
+function wpunity_getAllscenes_unityfiles_byGame($gameID){
+
+    $allUnityScenes = [];
+
+    $originalGame = get_post($gameID);
+    $gameSlug = $originalGame->post_name;
+    //Get 'Asset's Parent Scene' taxonomy with the same slug
+    $gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
+    $gameTaxonomyID = $gameTaxonomy->term_id;
+
+    $queryargs = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field' => 'id',
+                'terms' => $gameTaxonomyID
+            )
+        )
+    );
+
+    $custom_query = new WP_Query( $queryargs );
+
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+
+            $custom_query->the_post();
+            //$scene_id = get_the_ID();
+            //$scene_name = get_the_title();
+
+            $sceneSlug = the_post()->post_name;
+            $sceneUnityFile = $sceneSlug . '.unity';
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'];
+            $upload_dir .= "/" . $gameSlug . "/" . $sceneUnityFile;
+            $unityFile_dir = str_replace('\\','/',$upload_dir);
+
+            $allUnityScenes[] = ['sceneUnityPath'=>$unityFile_dir];
+
+
+        endwhile;
+    endif;
+
+    // Reset postdata
+    wp_reset_postdata();
+
+    return $allUnityScenes;
 
 }
 
