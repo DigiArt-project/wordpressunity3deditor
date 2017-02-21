@@ -28,6 +28,7 @@ wp_localize_script('wpunity_assemble_request', 'phpvarsB',
         'source'=> realpath(dirname(__FILE__).'/../../..').$DS.'uploads'.$DS.'dune',
         'target'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune',
         'game_libraries_path'=> realpath(dirname(__FILE__).'/..').$DS.'unity_game_libraries',
+        'game_id'=> 107
     ));
 
 // dune = $post->post_name;

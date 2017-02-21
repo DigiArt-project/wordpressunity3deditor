@@ -15,7 +15,8 @@ function wpunity_assembleAjax() {
         data: {'action': 'wpunity_assemble_action',
                'source': phpvarsB.source,
                'target': phpvarsB.target,
-               'game_libraries_path': phpvarsB.game_libraries_path
+               'game_libraries_path': phpvarsB.game_libraries_path,
+                'game_id': phpvarsB.game_id
                 },
         success: function (response) {
             document.getElementById('wpunity_assembleButton').innerHTML = "Success.";
