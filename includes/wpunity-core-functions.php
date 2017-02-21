@@ -183,7 +183,6 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
     $originalGame = get_post($gameID);
     $gameSlug = $originalGame->post_name;
-
     //Get 'Asset's Parent Scene' taxonomy with the same slug
     $gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
     $gameTaxonomyID = $gameTaxonomy->term_id;
@@ -200,22 +199,15 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
         )
     );
 
-    $custom_query = new WP_Query( $queryargs );
 
+    $custom_query = new WP_Query( $queryargs );
 
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
 
             $custom_query->the_post();
-
-            //$scene_id = get_the_ID();
-            //$scene_name = get_the_title();
-
-            //print_r(the_post());
-
-            $sceneSlug = the_post()->post_name;
-
-
+            $scene_id = get_the_ID();
+            $sceneSlug = get_post_field( 'post_name', $scene_id );
 
             $sceneUnityFile = $sceneSlug . '.unity';
             $upload = wp_upload_dir();
@@ -711,8 +703,6 @@ function wpunity_assemble_action_callback() {
 
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
-
-
 //        echo $_POST['source'];
 //        echo $_POST['target'];
 
@@ -736,23 +726,12 @@ function wpunity_assemble_action_callback() {
         echo '<br />4. Copy unity3d libraries: '.$res_copy;
 
         //------ Modify /ProjectSettings/EditorBuildSettings.asset to include all scenes ---
-
-        $scenesArr = print_r(wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']));
-
-
         // replace
         $needle_str ='  m_Scenes: []'.chr(10);
         // with
-
-        $target_str  = '  m_Scenes:'.chr(10);
-
-
-        foreach ($scenesArr as $cursc) {
-            $target_str .= '  - enabled: 1' . chr(10) .
-                           '    path: Assets/S4/S4.unity' . chr(10);
-        }
-
-
+        $target_str= '  m_Scenes:'.chr(10).
+                     '  - enabled: 1'.chr(10).
+                     '    path: Assets/S4/S4.unity'.chr(10);
 
         //  Possible bug is the LF character in the end of lines
         echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';
