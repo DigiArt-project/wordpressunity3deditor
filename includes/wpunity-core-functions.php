@@ -204,20 +204,10 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
-
             $custom_query->the_post();
             $scene_id = get_the_ID();
             $sceneSlug = get_post_field( 'post_name', $scene_id );
-
-            $sceneUnityFile = $sceneSlug . '.unity';
-            $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'];
-            $upload_dir .= "/" . $gameSlug . "/" . $sceneUnityFile;
-            $unityFile_dir = str_replace('\\','/',$upload_dir);
-
-            $allUnityScenes[] = ['sceneUnityPath'=>$unityFile_dir];
-
-
+            $allUnityScenes[] = ['sceneUnityPath'=>"Assets/".$sceneSlug.'/'.$sceneSlug.'.unity'];
         endwhile;
     endif;
 
@@ -726,12 +716,19 @@ function wpunity_assemble_action_callback() {
         echo '<br />4. Copy unity3d libraries: '.$res_copy;
 
         //------ Modify /ProjectSettings/EditorBuildSettings.asset to include all scenes ---
+
+        $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
+
         // replace
         $needle_str ='  m_Scenes: []'.chr(10);
+
         // with
-        $target_str= '  m_Scenes:'.chr(10).
-                     '  - enabled: 1'.chr(10).
-                     '    path: Assets/S4/S4.unity'.chr(10);
+        $target_str= '  m_Scenes:'.chr(10);
+
+        foreach ($scenes_Arr as $cs)
+            $target_str .= '  - enabled: 1' . chr(10) .
+                           '    path: '.$cs['sceneUnityPath']  . chr(10);
+
 
         //  Possible bug is the LF character in the end of lines
         echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';

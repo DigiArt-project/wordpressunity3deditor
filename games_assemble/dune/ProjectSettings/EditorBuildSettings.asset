@@ -6,4 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/S4/S4.unity
+    path: Assets/escapedeath/escapedeath.unity
+  - enabled: 1
+    path: Assets/battle1/battle1.unity
