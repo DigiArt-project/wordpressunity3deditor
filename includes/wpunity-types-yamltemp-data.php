@@ -4,7 +4,7 @@
  * A3.01
  * Initial Values for all Custom Fields (Scene YAML Template)
  *
- *
+ * Plus 5 box for Wonder template + 2 for Main Menu 
  */
 
 $ini_scene_sop = array('
