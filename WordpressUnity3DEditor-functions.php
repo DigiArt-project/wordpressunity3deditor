@@ -103,9 +103,10 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp.ph
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-tax.php');
 
 //A3.01 Initial Values for all Custom Fields
-//A3.02 Create 5 metaboxes with Custom Fields ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e)
-//A3.03 Add and Show those 5 metaboxes
-//A3.04 Save data from those 5 metaboxes
+//A3.02 Create 7 metaboxes with Custom Fields
+// ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e,$wpunity_databox2f,$wpunity_databox2g)
+//A3.03 Add and Show those 7 metaboxes
+//A3.04 Save data from those 7 metaboxes
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
 
 
