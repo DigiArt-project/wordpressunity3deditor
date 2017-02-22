@@ -96,7 +96,15 @@ function wpunity_create_guids($objType,$objID){
 
 function wpunity_replace_unityfile($templateID,$sceneID){
 
-    return $templateID . ' - ' . $sceneID;
+    $tempOcclusionPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_ocs', true );
+    $tempRenderPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_rs', true );
+    $tempLightMapPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_lms', true );
+    $tempNavMeshPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_nms', true );
+    $tempFirstPersonPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_fps', true );
+    $tempLightPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_light', true );
+
+    $unity_file_contents = $tempOcclusionPart . $tempRenderPart . $tempLightMapPart . $tempNavMeshPart . $tempFirstPersonPart . $tempLightPart;
+    return $unity_file_contents;
 
 }
 
