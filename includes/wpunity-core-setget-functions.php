@@ -232,26 +232,35 @@ function wpunity_getTemplateID_forAsset($asset_id){
     $my_posts = get_posts($custom_args);
     $sceneID = $my_posts[0]->ID;
 
-
-    $parentGameterms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
-    $gameSlug = $parentGameterms[0]->slug;
-    $custom_args = array(
-        'name'        => $gameSlug,
-        'post_type'   => 'wpunity_game',
-    );
-    $my_posts = get_posts($custom_args);
-    $gameID = $my_posts[0]->ID;
-
-    $parentTempterms = wp_get_post_terms( $sceneID, 'wpunity_game_cat');
-    $tempSlug = $parentTempterms[0]->slug;
-    $custom_args = array(
-        'name'        => $tempSlug,
+    $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
+    $templateSlug = $parentSceneYAML[0]->slug;
+    $custom_args2 = array(
+        'name'        => $templateSlug,
         'post_type'   => 'wpunity_yamltemp',
     );
-    $my_posts = get_posts($custom_args);
-    $tempID = $my_posts[0]->ID;
+    $my_posts2 = get_posts($custom_args2);
+    $templateID = $my_posts2[0]->ID;
 
-    return $tempID;
+
+//    $parentGameterms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
+//    $gameSlug = $parentGameterms[0]->slug;
+//    $custom_args = array(
+//        'name'        => $gameSlug,
+//        'post_type'   => 'wpunity_game',
+//    );
+//    $my_posts = get_posts($custom_args);
+//    $gameID = $my_posts[0]->ID;
+//
+//    $parentTempterms = wp_get_post_terms( $sceneID, 'wpunity_game_cat');
+//    $tempSlug = $parentTempterms[0]->slug;
+//    $custom_args = array(
+//        'name'        => $tempSlug,
+//        'post_type'   => 'wpunity_yamltemp',
+//    );
+//    $my_posts = get_posts($custom_args);
+//    $tempID = $my_posts[0]->ID;
+
+    return $templateID;
 }
 
 //==========================================================================================================================================

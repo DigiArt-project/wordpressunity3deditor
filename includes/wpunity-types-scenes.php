@@ -9,7 +9,7 @@ class SceneClass
     {
         add_action('init', array($this, 'wpunity_scenes_construct')); //wpunity_scene
         add_action('init', array($this, 'wpunity_scenes_taxpgame')); //wpunity_scene_pgame
-
+        add_action('init', array($this, 'wpunity_scenes_taxyaml')); //wpunity_scene_yaml
 //        add_filter('geodir_custom_field_input_textarea', array($this,'scene_json_textarea_prolong'), 10, 1);
     }
 
@@ -51,7 +51,7 @@ class SceneClass
             'show_in_nav_menus' => false,
             'menu_position' => 25,
             'menu_icon' => 'dashicons-media-default',
-            'taxonomies' => array('wpunity_scene_pgame'),
+            'taxonomies' => array('wpunity_scene_pgame','wpunity_scene_yaml'),
             'supports' => array('title', 'editor', 'custom-fields'),
             'hierarchical' => false,
             'has_archive' => false,
@@ -68,8 +68,7 @@ class SceneClass
      *
      * Game that the Scene belongs as custom taxonomy 'wpunity_scene_pgame'
      */
-    function wpunity_scenes_taxpgame()
-    {
+    function wpunity_scenes_taxpgame(){
 
         $labels = array(
             'name' => _x('Scene Game', 'taxonomy general name'),
@@ -98,12 +97,47 @@ class SceneClass
 
     }
 
+    /**
+     * C1.03
+     * Create Scene YAML Template
+     *
+     * YAML Template that the Scene belongs as custom taxonomy 'wpunity_scene_yaml'
+     */
+    function wpunity_scenes_taxyaml(){
+
+        $labels = array(
+            'name' => _x('Scene YAML', 'taxonomy general name'),
+            'singular_name' => _x('Scene YAML', 'taxonomy singular name'),
+            'menu_name' => _x('Scene YAMLs', 'admin menu'),
+            'search_items' => __('Search Scene YAMLs'),
+            'all_items' => __('All Scene YAMLs'),
+            'parent_item' => __('Parent Scene YAML'),
+            'parent_item_colon' => __('Parent Scene YAML:'),
+            'edit_item' => __('Edit Scene YAML'),
+            'update_item' => __('Update Scene YAML'),
+            'add_new_item' => __('Add New Scene YAML'),
+            'new_item_name' => __('New Scene YAML')
+        );
+
+        $args = array(
+            'description' => 'YAML Template that the Scene belongs',
+            'labels' => $labels,
+            'public' => false,
+            'show_ui' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true
+        );
+
+        register_taxonomy('wpunity_scene_yaml', 'wpunity_scene', $args);
+
+    }
+
 }
 
 //==========================================================================================================================================
 
 /**
- * C1.03
+ * C1.04
  * Generate folder and Taxonomy (for assets3d) with Scene's slug/name
  *
  * Generate a folder in media to store assets named as the permalink of the scene
@@ -113,7 +147,6 @@ class SceneClass
 function wpunity_create_folder_scene( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
-
 
     if ($post_type == 'wpunity_scene') {
         if ( ($new_status == 'publish') ) {
@@ -143,15 +176,24 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             //get template for folder.meta
             //get (all) the custom post type with Taxonomy's 'equal' slug (YAML template)
             //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
-            $custom_args = array(
-                'name'        => $parentGameSlug,
-                'post_type'   => 'wpunity_game',
-            );
-            $my_posts = get_posts($custom_args);
-            $gameID = $my_posts[0]->ID;
+//            $custom_args = array(
+//                'name'        => $parentGameSlug,
+//                'post_type'   => 'wpunity_game',
+//            );
+//            $my_posts = get_posts($custom_args);
+//            $gameID = $my_posts[0]->ID;
+//
+//            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
+//            $templateSlug = $parentGameTemplate[0]->slug;
+//            $custom_args2 = array(
+//                'name'        => $templateSlug,
+//                'post_type'   => 'wpunity_yamltemp',
+//            );
+//            $my_posts2 = get_posts($custom_args2);
 
-            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
-            $templateSlug = $parentGameTemplate[0]->slug;
+
+            $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
+            $templateSlug = $parentSceneYAML[0]->slug;
             $custom_args2 = array(
                 'name'        => $templateSlug,
                 'post_type'   => 'wpunity_yamltemp',

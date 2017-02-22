@@ -140,6 +140,7 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.
 /*
 custom type : wpunity_scene
 custom taxonomy : wpunity_scene_pgame
+                  wpunity_scene_yaml
 custom fields :
         Scene Json -> wpunity_scene_json_input
         Scene Latitude -> wpunity_scene_lat
@@ -148,7 +149,8 @@ custom fields :
 
 //C1.01 Create Scene (custom type : wpunity_scene)
 //C1.02 Create Scene Game (custom taxonomy : wpunity_scene_pgame)
-//C1.03 Generate folder and Taxonomy (for assets3d) with Scene's slug/name TODO
+//C1.03 Create Scene Game YAML (custom taxonomy : wpunity_scene_yaml)
+//C1.04 Generate folder and Taxonomy (for assets3d) with Scene's slug/name TODO
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
 
 //C2.01 Create Scene's Game Box @ scene's backend (dropdown style)

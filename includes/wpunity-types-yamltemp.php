@@ -114,8 +114,8 @@ function wpunity_create_tax_forgames( $new_status, $old_status, $post ){
             $tempSlug = $post->post_name;
             $tempTitle = $post->post_title;
 
-            //Create a tax category for the games
-            wp_insert_term($tempTitle,'wpunity_game_cat',$tempSlug,'Template of Game');
+            //Create a tax yamlscene for the scenes
+            wp_insert_term($tempTitle,'wpunity_scene_yaml',$tempSlug,'Template of Scene');
 
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)

@@ -197,8 +197,17 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
                 mkdir($upload_dir, 0755);
             }
 
-            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
-            $templateSlug = $parentGameTemplate[0]->slug;
+//            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
+//            $templateSlug = $parentGameTemplate[0]->slug;
+//            $custom_args2 = array(
+//                'name'        => $templateSlug,
+//                'post_type'   => 'wpunity_yamltemp',
+//            );
+//            $my_posts2 = get_posts($custom_args2);
+//            $templateID = $my_posts2[0]->ID;
+
+            $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
+            $templateSlug = $parentSceneYAML[0]->slug;
             $custom_args2 = array(
                 'name'        => $templateSlug,
                 'post_type'   => 'wpunity_yamltemp',
