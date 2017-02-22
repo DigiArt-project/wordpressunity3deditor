@@ -93,6 +93,13 @@ function wpunity_create_guids($objType,$objID){
 //    if($objType==5){return $guid_id = '';}
 }
 
+
+function wpunity_replace_unityfile($templateID,$sceneID){
+
+    return $templateID . ' - ' . $sceneID;
+
+}
+
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
     $guid_id = wpunity_create_guids(1,$folderID);
