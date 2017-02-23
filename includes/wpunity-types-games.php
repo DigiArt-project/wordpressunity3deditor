@@ -137,7 +137,55 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     }
 }
 
-add_action('transition_post_status','wpunity_create_folder_game',10,3);
+add_action('transition_post_status','wpunity_create_folder_game',9,3);
+
+
+function wpunity_create_defaultscenes_game( $new_status, $old_status, $post ){
+
+    $post_type = get_post_type($post);
+
+
+    if ($post_type == 'wpunity_game') {
+        if ( $new_status == 'publish' ) {
+
+            $gameSlug = $post->post_name;
+            $gameTitle = $post->post_title;
+
+            $mainmenuScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+            $mainmenuScenePGameID = $mainmenuScenePGame->term_id;
+            $mainmenuSceneYAML = get_term_by('slug', 'default-mainmenu-yaml', 'wpunity_scene_yaml');
+            $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+
+
+            $mainmenuSceneTitle = 'Main Menu for ' . $gameTitle;
+            $mainmenuSceneSlug = 's_mainmenu_' . $gameSlug;
+
+
+            // Create Main Menu Scene
+            $mainmenuSceneData = array(
+                'post_title'    => $mainmenuSceneTitle,
+                'post_name' => $mainmenuSceneSlug,
+                'post_type' => 'wpunity_scene',
+                'post_status'   => 'publish',
+                'tax_input'    => array(
+                    'wpunity_scene_pgame'     => array( $mainmenuScenePGameID ),
+                    'wpunity_scene_yaml'     => array( $mainmenuSceneYAMLID ),
+                ),
+            );
+
+            // Insert the post into the database
+            wp_insert_post( $mainmenuSceneData );
+
+            //TODO function that creates all meta and folders (for non-new scenes)
+
+        }else{
+            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
+        }
+
+    }
+}
+
+add_action('transition_post_status','wpunity_create_defaultscenes_game',10,3);
 
 
 ?>
