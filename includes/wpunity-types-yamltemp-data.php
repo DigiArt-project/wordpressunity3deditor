@@ -67,7 +67,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_TagString
-      value: ___[sop_tag]____
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -170,7 +170,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ___[dop_guid]___, type: 3}
       propertyPath: m_TagString
-      value: ___[dop_tag]____
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
       propertyPath: m_LocalScale.x
@@ -258,7 +258,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ___[door_guid]___, type: 3}
       propertyPath: m_TagString
-      value: ___[door_tag]___
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
@@ -307,7 +307,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ___[poi_guid]___, type: 3}
       propertyPath: m_TagString
-      value: ___[poi_tag]___
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[poi_guid]___, type: 3}
