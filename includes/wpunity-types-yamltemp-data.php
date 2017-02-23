@@ -314,7 +314,7 @@ Prefab:
   m_IsPrefabParent: 0
 ');
 
-$ini_scene_ocs = array('%YAML 1.1
+$ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
@@ -326,9 +326,6 @@ OcclusionCullingSettings:
     backfaceThreshold: 100
   m_SceneGUID: 00000000000000000000000000000000
   m_OcclusionCullingData: {fileID: 0}
-');
-
-$ini_scene_rs = array('
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -392,9 +389,6 @@ LightmapSettings:
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
   m_RuntimeCPUUsage: 25
-');
-
-$ini_scene_lms = array('
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -430,9 +424,6 @@ LightmapSettings:
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
   m_RuntimeCPUUsage: 25
-');
-
-$ini_scene_nms = array('
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -451,9 +442,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
-');
-
-$ini_scene_fps = array('
 --- !u!1001 &1351028531
 Prefab:
   m_ObjectHideFlags: 0
@@ -512,9 +500,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
   m_IsPrefabParent: 0
-');
-
-$ini_scene_light = array('
 --- !u!1 &5
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +744,7 @@ TextureImporter:
   assetBundleVariant:
 ');
 
-$ini_scene_jsdp = array('
+$ini_scene_allmenucs_meta = array('
 fileFormatVersion: 2
 guid: ___[js_guid]___
 timeCreated: ___[unx_time_created]___
@@ -904,26 +889,38 @@ Material:
       second: {r: 0, g: 0, b: 0, a: 1}
 ');
 
-$ini_scene_doorjsp = array('
-#pragma strict
+$ini_scene_allmenu_cs = array('
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-import UnityEngine.SceneManagement;
+public class all_menu_Script : MonoBehaviour {
 
-function OnTriggerEnter(col : Collider) {
+	public void onClick_StartGame(){
+		SceneManager.LoadScene("___[initialwonderaround_scene_basename]___");
+	}
 
-    Debug.Log(col.gameObject.name);
+	public void onClick_LoadCredsScene(){
+		SceneManager.LoadScene("___[credentials_scene_basename]___");
+	}
 
-    if(col.gameObject.name == "FPSController")
-    {
-        SceneManager.LoadScene("___[scene_filename.unity_to_load]___");
-    }
+
+	public void onClick_LoadMainMenuScene(){
+		SceneManager.LoadScene("___[mainmenu_scene_basename]___");
+
+	}
+
+	public void onClick_ExitGame(){
+		Application.Quit ();
+	}
 }
 ');
 
 
 
 //================================== Main Menu Scene ==================================
-
 $ini_scene_main_menu_unity_pattern = array('
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
@@ -2199,23 +2196,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: \'DigiArt-project.eu an EU H2020 project!
-
-
-    The young and brave are:
-
-
-    - Centre for Research and Technology Hellas - iti.gr
-
-    - Liverpool John Moore University - LJMU
-
-    - Scladina Cave Archeological Center
-
-    - Pix4D: Drone Mapping Software
-
-    - CNRS: Centre National Research Science (France)
-
-    - Vergina museum   \'
+  m_Text: ___[credentials_text]___
 --- !u!222 &145690278
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2949,7 +2930,7 @@ CanvasRenderer:
 $ini_scene_jpg_sprite_pattern = array('
 fileFormatVersion: 2
 guid: ___[sprite_guid]___
-timeCreated: 1487767559
+timeCreated: ___[unx_time_created]___
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -3028,7 +3009,7 @@ TextureImporter:
 $ini_scene_unity_meta_pattern = array('
 fileFormatVersion: 2
 guid: ___[scene_unity_guid]___
-timeCreated: 1486456669
+timeCreated: ___[unx_time_created]___
 licenseType: Free
 DefaultImporter:
   userData: 
@@ -3056,46 +3037,18 @@ $wpunity_databox2a = array(
     'priority' => 'high',
     'fields' => array(
         array(
-            'name' => 'Occlusion Culling Settings',
-            'desc' => 'scene-OCS',
-            'id' => $wpunity_prefix . 'scene_ocs',
+            'name' => 'The S_MainMenu.unity pattern',
+            'desc' => 'scene-main-menu-unity-pattern',
+            'id' => $wpunity_prefix . 'scene_main_menu_unity_pattern',
             'type' => 'textarea',
-            'std' => $ini_scene_ocs[0]
+            'std' => $ini_scene_main_menu_unity_pattern[0]
         ),
         array(
-            'name' => 'Render Settings',
-            'desc' => 'scene-RS',
-            'id' => $wpunity_prefix . 'scene_rs',
+            'name' => 'Main Menu c-sharp script (all_menu_Script.cs) Pattern',
+            'desc' => 'scene-all-menu-cs-pattern',
+            'id' => $wpunity_prefix . 'scene_allmenu_cs',
             'type' => 'textarea',
-            'std' => $ini_scene_rs[0]
-        ),
-        array(
-            'name' => 'LightMap Settings',
-            'desc' => 'scene-LMS',
-            'id' => $wpunity_prefix . 'scene_lms',
-            'type' => 'textarea',
-            'std' => $ini_scene_lms[0]
-        ),
-        array(
-            'name' => 'NavMesh Settings',
-            'desc' => 'scene-NMS',
-            'id' => $wpunity_prefix . 'scene_nms',
-            'type' => 'textarea',
-            'std' => $ini_scene_nms[0]
-        ),
-        array(
-            'name' => 'First Person Prefab',
-            'desc' => 'scene-FPS',
-            'id' => $wpunity_prefix . 'scene_fps',
-            'type' => 'textarea',
-            'std' => $ini_scene_fps[0]
-        ),
-        array(
-            'name' => 'Light Pattern',
-            'desc' => 'scene-light',
-            'id' => $wpunity_prefix . 'scene_light',
-            'type' => 'textarea',
-            'std' => $ini_scene_light[0]
+            'std' => $ini_scene_allmenu_cs[0]
         ),
     )
 );
@@ -3107,6 +3060,30 @@ $wpunity_databox2b = array(
     'context' => 'normal',
     'priority' => 'high',
     'fields' => array(
+        array(
+            'name' => 'The S_Credentials.unity pattern',
+            'desc' => 'scene-credentials-unity-pattern',
+            'id' => $wpunity_prefix . 'scene_credentials_unity_pattern',
+            'type' => 'textarea',
+            'std' => $ini_scene_credentials_unity_pattern[0]
+        ),
+    )
+);
+
+//All information about our meta box
+$wpunity_databox2c = array(
+    'id' => 'wpunity-yamltemp2c-databox',
+    'page' => 'wpunity_yamltemp',
+    'context' => 'normal',
+    'priority' => 'high',
+    'fields' => array(
+        array(
+            'name' => 'Wonder around .unity pattern',
+            'desc' => 'scene-wonder-around-unity-pattern',
+            'id' => $wpunity_prefix . 'scene_wonder_around_unity_pattern',
+            'type' => 'textarea',
+            'std' => $ini_scene_wonder_around_unity_pattern[0]
+        ),
         array(
             'name' => 'Static Object Pattern',
             'desc' => 'scene-static-object-pattern',
@@ -3139,12 +3116,19 @@ $wpunity_databox2b = array(
 );
 
 //All information about our meta box
-$wpunity_databox2c = array(
-    'id' => 'wpunity-yamltemp2c-databox',
+$wpunity_databox2d = array(
+    'id' => 'wpunity-yamltemp2d-databox',
     'page' => 'wpunity_yamltemp',
     'context' => 'normal',
     'priority' => 'high',
     'fields' => array(
+        array(
+            'name' => 'each_scene.unity meta pattern',
+            'desc' => 'scene-unity-meta-pattern',
+            'id' => $wpunity_prefix . 'scene_unity_meta_pattern',
+            'type' => 'textarea',
+            'std' => $ini_scene_unity_meta_pattern[0]
+        ),
         array(
             'name' => 'Folder.meta Pattern',
             'desc' => 'scene-folder-dotmeta-pattern',
@@ -3174,22 +3158,12 @@ $wpunity_databox2c = array(
             'std' => $ini_scene_jdp[0]
         ),
         array(
-            'name' => 'js.meta Pattern',
-            'desc' => 'scene-js-dotmeta-pattern',
-            'id' => $wpunity_prefix . 'scene_jsdp',
+            'name' => 'The jpg sprite meta pattern',
+            'desc' => 'scene-jpg-sprite-pattern',
+            'id' => $wpunity_prefix . 'scene_jpg_sprite_pattern',
             'type' => 'textarea',
-            'std' => $ini_scene_jsdp[0]
+            'std' => $ini_scene_jpg_sprite_pattern[0]
         ),
-    )
-);
-
-//All information about our meta box
-$wpunity_databox2d = array(
-    'id' => 'wpunity-yamltemp2d-databox',
-    'page' => 'wpunity_yamltemp',
-    'context' => 'normal',
-    'priority' => 'high',
-    'fields' => array(
         array(
             'name' => 'Material (.mat) Pattern',
             'desc' => 'scene-mat-pattern',
@@ -3207,13 +3181,7 @@ $wpunity_databox2e = array(
     'context' => 'normal',
     'priority' => 'high',
     'fields' => array(
-        array(
-            'name' => 'Door Javascript (.js) Pattern',
-            'desc' => 'scene-doorjs-pattern',
-            'id' => $wpunity_prefix . 'scene_doorjsp',
-            'type' => 'textarea',
-            'std' => $ini_scene_doorjsp[0]
-        ),
+
     )
 );
 
@@ -3224,20 +3192,7 @@ $wpunity_databox2f = array(
     'context' => 'normal',
     'priority' => 'high',
     'fields' => array(
-        array(
-            'name' => 'The S_MainMenu.unity pattern',
-            'desc' => 'scene-main-menu-unity-pattern',
-            'id' => $wpunity_prefix . 'scene_main_menu_unity_pattern',
-            'type' => 'textarea',
-            'std' => $ini_scene_main_menu_unity_pattern[0]
-        ),
-        array(
-            'name' => 'The S_Credentials.unity pattern',
-            'desc' => 'scene-credentials-unity-pattern',
-            'id' => $wpunity_prefix . 'scene_credentials_unity_pattern',
-            'type' => 'textarea',
-            'std' => $ini_scene_credentials_unity_pattern[0]
-        ),
+
     )
 );
 
@@ -3248,20 +3203,7 @@ $wpunity_databox2g = array(
     'context' => 'normal',
     'priority' => 'high',
     'fields' => array(
-        array(
-            'name' => 'The Main Menu jpg sprite meta pattern',
-            'desc' => 'scene-jpg-sprite-pattern',
-            'id' => $wpunity_prefix . 'scene_jpg_sprite_pattern',
-            'type' => 'textarea',
-            'std' => $ini_scene_jpg_sprite_pattern[0]
-        ),
-        array(
-            'name' => 'each_scene.unity meta pattern',
-            'desc' => 'scene-unity-meta-pattern',
-            'id' => $wpunity_prefix . 'scene_unity_meta_pattern',
-            'type' => 'textarea',
-            'std' => $ini_scene_unity_meta_pattern[0]
-        ),
+
     )
 );
 
@@ -3285,13 +3227,13 @@ function wpunity_yamltemp_databoxes_add() {
     global $wpunity_databox2e;
     global $wpunity_databox2f;
     global $wpunity_databox2g;
-    add_meta_box($wpunity_databox2a['id'], 'Fixed things of the Scene', 'wpunity_yamltemp_databox2a_show', $wpunity_databox2a['page'], $wpunity_databox2a['context'], $wpunity_databox2a['priority']);
-    add_meta_box($wpunity_databox2b['id'], 'Prefabricated objects in the scene', 'wpunity_yamltemp_databox2b_show', $wpunity_databox2b['page'], $wpunity_databox2b['context'], $wpunity_databox2b['priority']);
-    add_meta_box($wpunity_databox2c['id'], 'Pattern for the .meta files', 'wpunity_yamltemp_databox2c_show', $wpunity_databox2c['page'], $wpunity_databox2c['context'], $wpunity_databox2c['priority']);
-    add_meta_box($wpunity_databox2d['id'], 'Pattern for the .mat files', 'wpunity_yamltemp_databox2d_show', $wpunity_databox2d['page'], $wpunity_databox2d['context'], $wpunity_databox2d['priority']);
-    add_meta_box($wpunity_databox2e['id'], 'Pattern for the .js files for the doors', 'wpunity_yamltemp_databox2e_show', $wpunity_databox2e['page'], $wpunity_databox2e['context'], $wpunity_databox2e['priority']);
-    add_meta_box($wpunity_databox2f['id'], 'Pattern for the .unity of Main Menu Scene and .unity Credentials Scene of ', 'wpunity_yamltemp_databox2f_show', $wpunity_databox2f['page'], $wpunity_databox2f['context'], $wpunity_databox2f['priority']);
-    add_meta_box($wpunity_databox2g['id'], 'Pattern for the .jpg.meta sprite of Main Menu', 'wpunity_yamltemp_databox2g_show', $wpunity_databox2f['page'], $wpunity_databox2f['context'], $wpunity_databox2f['priority']);
+    add_meta_box($wpunity_databox2a['id'], '1. Main Menu scene', 'wpunity_yamltemp_databox2a_show', $wpunity_databox2a['page'], $wpunity_databox2a['context'], $wpunity_databox2a['priority']);
+    add_meta_box($wpunity_databox2b['id'], '2. Credentials scene', 'wpunity_yamltemp_databox2b_show', $wpunity_databox2b['page'], $wpunity_databox2b['context'], $wpunity_databox2b['priority']);
+    add_meta_box($wpunity_databox2c['id'], '3. Wonder around scene and available gameobjects', 'wpunity_yamltemp_databox2c_show', $wpunity_databox2c['page'], $wpunity_databox2c['context'], $wpunity_databox2c['priority']);
+    add_meta_box($wpunity_databox2d['id'], 'Global: Pattern for the .meta and .mat files', 'wpunity_yamltemp_databox2d_show', $wpunity_databox2d['page'], $wpunity_databox2d['context'], $wpunity_databox2d['priority']);
+    add_meta_box($wpunity_databox2e['id'], 'Empty', 'wpunity_yamltemp_databox2e_show', $wpunity_databox2e['page'], $wpunity_databox2e['context'], $wpunity_databox2e['priority']);
+    add_meta_box($wpunity_databox2f['id'], 'Empty', 'wpunity_yamltemp_databox2f_show', $wpunity_databox2f['page'], $wpunity_databox2f['context'], $wpunity_databox2f['priority']);
+    add_meta_box($wpunity_databox2g['id'], 'Empty', 'wpunity_yamltemp_databox2g_show', $wpunity_databox2f['page'], $wpunity_databox2f['context'], $wpunity_databox2f['priority']);
 }
 
 add_action('admin_menu', 'wpunity_yamltemp_databoxes_add');
@@ -3300,7 +3242,6 @@ function wpunity_yamltemp_databox2a_show(){
     global $wpunity_databox2a, $post;
     // Use nonce for verification
 
-    echo '<div>Write the fixed things of the Scene such as Occlussion, Render, LightMap and NavMesh settings</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2a['fields'] as $field) {
@@ -3338,11 +3279,19 @@ function wpunity_yamltemp_databox2a_show(){
     }
     echo '</table>';
 
-    echo '<div style="margin-top:30px">The guid of the FPS Fab can be found in:<br />
-            "Standard Assets\Characters\FirstPersonCharacter\Prefabs\FPSController.prefab.mat"</div>
 
+    echo 'S_MainMenu.unity variables:<br />';
+    echo '<div>___[main_menu_sprite_guid]___ : guid as written in the meta of the S_MainMenu/MainMenu_background.jpg.meta (it is a sprite meta)</div>';
+    echo '<br />';
+    echo '<br />';
 
-        <div style="margin-top:30px">fids up to 7 are used. First available fid is 8.</div>';
+    echo 'all_menu_Script.cs variables:<br />';
+    echo '___[initialwonderaround_scene_basename]___ : Example "S1" if the first wonder around scene is named as "S1.unity"<br />';
+    echo '___[credentials_scene_basename]___ : Example "S_Credentials" if the credentials scene is named as "S_Credentials.unity"<br />';
+    echo '___[mainmenu_scene_basename]___ : Example "S_MainMenu" if the credentials scene is named as "S_MainMenu.unity"<br />';
+    echo '<br />';
+    echo '<br />';
+
 
 }
 
@@ -3350,7 +3299,6 @@ function wpunity_yamltemp_databox2b_show(){
     global $wpunity_databox2b, $post;
     // Use nonce for verification
 
-    echo '<div>Write the patterns for the prefabricated objects, staticObjects (floor), dynamic objects, doors, and POIs</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2b['fields'] as $field) {
@@ -3386,15 +3334,20 @@ function wpunity_yamltemp_databox2b_show(){
         echo     '</td><td>',
         '</td></tr>';
     }
+
+
     echo '</table>';
 
+    echo "<div>___[credentials_text]____ : the text to show. It should start and end from-to single quote, e.g. 'blabla LF bla blue'. LF is for changing line.</div>";
+    echo "<div>___[credentials_photo_image_sprite]___ : The guid in the jpg.meta (sprite) for the banner photo, e.g. 'S_Credentials/credentials_photo_image.jpg.meta'</div>";
+    echo "<div>___[credentials_logo_image_sprite]___ : The guid in the jpg.meta (sprite) for the logo, e.g. 'S_Credentials/credentials_logo_image.jpg.meta'</div>";
+    echo "<br />";
 }
 
 function wpunity_yamltemp_databox2c_show(){
     global $wpunity_databox2c, $post;
     // Use nonce for verification
 
-    echo '<div>Write the pattern for the .meta files</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2c['fields'] as $field) {
@@ -3430,7 +3383,18 @@ function wpunity_yamltemp_databox2c_show(){
         echo     '</td><td>',
         '</td></tr>';
     }
+
+
+
     echo '</table>';
+
+
+
+
+    echo '<div style="margin-top:30px">The guid of the FPS Fab can be found in:<br />
+            "Standard Assets\Characters\FirstPersonCharacter\Prefabs\FPSController.prefab.mat"</div>
+
+        <div style="margin-top:30px">fids up to 7 are used. First available fid is 8.</div>';
 
 }
 
@@ -3438,8 +3402,7 @@ function wpunity_yamltemp_databox2d_show(){
     global $wpunity_databox2d, $post;
     // Use nonce for verification
 
-    echo '<div>Write the pattern for the .mat files.<br />- HINT 1: The .mat should take info from .mtl.<br />
-            - HINT 2: the name of the .mat should be "myobjname-defaultMat.mat</div>';
+
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2d['fields'] as $field) {
@@ -3477,13 +3440,17 @@ function wpunity_yamltemp_databox2d_show(){
     }
     echo '</table>';
 
+    echo '<div>Write the pattern for the .meta and .mat files.<br />
+            - HINT 1: The .mat should take info from .mtl.<br />
+            - HINT 2: the name of the .mat should be "myobjname-defaultMat.mat</div>';
+
 }
 
 function wpunity_yamltemp_databox2e_show(){
     global $wpunity_databox2e, $post;
     // Use nonce for verification
 
-    echo '<div>Write the pattern for the .js files for the doors.</div>';
+    echo '<div>Write the pattern for Main Menu and the cs script for loading first scene and others.</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2e['fields'] as $field) {
@@ -3528,7 +3495,6 @@ function wpunity_yamltemp_databox2f_show(){
     global $wpunity_databox2f, $post;
     // Use nonce for verification
 
-    echo '<div>Write the pattern for the Main Menu .unity file</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2f['fields'] as $field) {
@@ -3572,7 +3538,6 @@ function wpunity_yamltemp_databox2g_show(){
     global $wpunity_databox2g, $post;
     // Use nonce for verification
 
-    echo '<div>Write the pattern for the .unity.meta and jpg.meta sprite for Main Menu.</div>';
     echo '<input type="hidden" name="wpunity_yamltemp_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
     foreach ($wpunity_databox2g['fields'] as $field) {
