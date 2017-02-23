@@ -110,26 +110,4 @@ add_action( 'save_post', 'wpunity_yamltemp_taxcategory_box_content_save' );
 
 //==========================================================================================================================================
 
-/**
- * A2.03
- * Create Initial wpunity_yamltemp_cat (YAML Template Category) terms
- *
- *
- */
-
-function wpunity_yamltemp_taxcategory_fill(){
-    wp_insert_term(
-        'Wonder Around', // the term
-        'wpunity_yamltemp_cat', // the taxonomy
-        array(
-            'description'=> 'Explore a virtual place from a first person\'s view.',
-            'slug' => 'wonderaround',
-        )
-    );
-}
-
-add_action( 'init', 'wpunity_games_taxcategory_fill' );
-
-//==========================================================================================================================================
-
 ?>

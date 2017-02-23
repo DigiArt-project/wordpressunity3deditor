@@ -4,8 +4,9 @@ $sceneTemplateClass = new SceneYamlTemplateClass();
 
 class SceneYamlTemplateClass{
     function __construct(){
-        add_action('init', array($this, 'wpunity_yamltemp_construct'));//wpunity_yamltemp
-        add_action('init', array($this, 'wpunity_yamltemp_taxcategory'));//wpunity_yamltemp_cat
+        add_action('init', array($this, 'wpunity_yamltemp_construct') , 10);//wpunity_yamltemp
+        add_action('init', array($this, 'wpunity_yamltemp_taxcategory') , 9);//wpunity_yamltemp_cat
+        add_action('init', array($this, 'wpunity_yamltemp_default_items') , 8);//wpunity_yamltemp_cat
     }
 
     /**
@@ -53,6 +54,40 @@ class SceneYamlTemplateClass{
 
         register_post_type('wpunity_yamltemp', $args);
 
+
+        if( !term_exists( 'Main Menu', 'wpunity_yamltemp_cat' ) ) {
+            wp_insert_term(
+                'Main Menu', // the term
+                'wpunity_yamltemp_cat', // the taxonomy
+                array(
+                    'description' => 'YAML Template for Main Menu scenes',
+                    'slug' => 'mainmenu-yaml',
+                )
+            );
+        }
+
+        if( !term_exists( 'Credentials', 'wpunity_yamltemp_cat' ) ) {
+            wp_insert_term(
+                'Credentials', // the term
+                'wpunity_yamltemp_cat', // the taxonomy
+                array(
+                    'description' => 'YAML Template for Credentials scenes',
+                    'slug' => 'credentials-yaml',
+                )
+            );
+        }
+
+        if( !term_exists( 'Wonder Around', 'wpunity_yamltemp_cat' ) ) {
+            wp_insert_term(
+                'Wonder Around', // the term
+                'wpunity_yamltemp_cat', // the taxonomy
+                array(
+                    'description' => 'YAML Template for Wonder Around scenes',
+                    'slug' => 'wonderaround-yaml',
+                )
+            );
+        }
+
     }
 
     //==========================================================================================================================================
@@ -89,6 +124,58 @@ class SceneYamlTemplateClass{
         );
 
         register_taxonomy('wpunity_yamltemp_cat', 'wpunity_yamltemp', $args);
+
+    }
+
+    function wpunity_yamltemp_default_items(){
+
+        //get categories IDs
+        $mmenuCat = get_term_by('slug', 'mainmenu-yaml', 'wpunity_yamltemp_cat');
+        $mmenuCatID = $mmenuCat->term_id;
+        $credeCat = get_term_by('slug', 'credentials-yaml', 'wpunity_yamltemp_cat');
+        $credeCatID = $credeCat->term_id;
+        $waroundCat = get_term_by('slug', 'wonderaround-yaml', 'wpunity_yamltemp_cat');
+        $waroundCatID = $waroundCat->term_id;
+
+        $defMainMenuTitle = 'Default Main Menu YAML';
+        if (!get_page_by_title($defMainMenuTitle, 'OBJECT', 'wpunity_yamltemp')){
+            $defMainMenu = array(
+                'post_title'    => $defMainMenuTitle,
+                'post_name' => 'default-mainmenu-yaml',
+                'post_status'   => 'publish',
+                'post_type'     => 'wpunity_yamltemp',
+                'tax_input'    => array(
+                    'wpunity_yamltemp_cat'     => array( $mmenuCatID ),
+                ),
+            );
+            wp_insert_post($defMainMenu);
+        }
+
+        $defCredentialsTitle = 'Default Credentials YAML';
+        if (!get_page_by_title($defCredentialsTitle, 'OBJECT', 'wpunity_yamltemp')) {
+            $defCredentials = array(
+                'post_title' => $defCredentialsTitle,
+                'post_name' => 'default-credentials-yaml',
+                'post_status' => 'publish',
+                'post_type' => 'wpunity_yamltemp',
+                'tax_input' => array(
+                    'wpunity_yamltemp_cat' => array($credeCatID),
+                ),
+            );
+            wp_insert_post($defCredentials);
+        }
+
+        $defWAroundTitle = 'Default Wonder Around YAML';
+        if (!get_page_by_title($defWAroundTitle, 'OBJECT', 'wpunity_yamltemp')) {
+            $defWAround = array(
+                'post_title' => $defWAroundTitle,
+                'post_name' => 'default-wonderaround-yaml',
+                'post_status' => 'publish',
+                'post_type' => 'wpunity_yamltemp',
+            );
+            $defWAroundPost = wp_insert_post($defWAround);
+            wp_set_object_terms( $defWAroundPost, $waroundCatID, 'wpunity_yamltemp_cat' );
+        }
 
     }
 }
