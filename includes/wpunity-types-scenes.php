@@ -266,4 +266,70 @@ add_action('transition_post_status','wpunity_create_folder_scene',10,3);
 
 //==========================================================================================================================================
 
+
+/**
+ * C1.05
+ *
+ *
+ *
+ *
+ */
+
+function wpunity_create_unity_scene( $new_status, $old_status, $post ){
+
+    $post_type = get_post_type($post);
+
+    if ($post_type == 'wpunity_scene') {
+        if ( ($old_status == 'publish') && ($new_status != 'trash') ) {
+
+            //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
+
+            //slug Scene
+            $sceneSlug = $post->post_name;
+            $sceneID = $post->ID;
+
+            //slug Game
+            $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
+            $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
+
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'];
+            $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
+            $upload_dir .= "/" . $sceneSlug;
+
+            $upload_dir = str_replace('\\','/',$upload_dir);
+
+            //get yaml template
+            $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
+            $templateSlug = $parentSceneYAML[0]->slug;
+            $custom_args2 = array(
+                'name'        => $templateSlug,
+                'post_type'   => 'wpunity_yamltemp',
+            );
+            $my_posts2 = get_posts($custom_args2);
+            $templateID = $my_posts2[0]->ID;
+
+            $jsonScene = get_post_meta( $sceneID, 'wpunity_scene_json_input', true);
+
+            /******** .UNITY FILE CREATION WITH ASSETS ***********************/
+            $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
+            unlink($unityfile_dir);//DELETE old unity file
+            $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+            $unityfile_text = wpunity_replace_unityfile_withAssets($templateID,$sceneID,$jsonScene);
+            fwrite($unitycreate_file, $unityfile_text);
+            fclose($unitycreate_file);
+            /****************************************************************/
+
+
+
+        }
+
+    }
+}
+
+add_action('transition_post_status','wpunity_create_unity_scene',10,3);
+
+//==========================================================================================================================================
+
+
 ?>

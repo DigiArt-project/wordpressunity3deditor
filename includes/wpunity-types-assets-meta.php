@@ -108,6 +108,38 @@ function wpunity_replace_unityfile($templateID,$sceneID){
 
 }
 
+function wpunity_replace_unityfile_withAssets($templateID,$sceneID,$jsonScene){
+
+    $unity_file_contents = wpunity_replace_unityfile($templateID,$sceneID);
+    $templatePart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_sop', true );
+
+    $sceneJson = json_decode($jsonScene,TRUE);//->objects->floor_1487753970
+
+
+//    if ($sceneJson['objects']) {
+//        foreach ($sceneJson['objects'] as $item ) {
+//            if ($item == 'avatarYawObject') {
+//
+//            }else{
+//            }
+//            foreach ($item as $key => $value) {
+//                if ($value == 'avatarYawObject') {
+//                    print_r("NOOO");
+//                } else {
+//                    print_r($value);
+//                }
+//            }
+//        }
+//    }
+
+
+    //$unity_file_contents .= $jsonScene;
+
+    //$unity_file_contents .= $templatePart;
+
+    return $unity_file_contents;
+}
+
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
     $guid_id = wpunity_create_guids(1,$folderID);
