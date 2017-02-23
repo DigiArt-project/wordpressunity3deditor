@@ -79,9 +79,6 @@ echo '</script>';
 
 <script type="text/javascript">
 
-    console.log(THREE);
-
-
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
 
