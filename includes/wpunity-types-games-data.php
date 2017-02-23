@@ -1,35 +1,22 @@
 <?php
 
-$DS = DIRECTORY_SEPARATOR ;
-
-//============= Compile button resources ================
 // load css/wpunity_backend.css
 wp_enqueue_style('wpunity_backend');
 
-// load request_game.js script from js_libs
-wp_enqueue_script( 'wpunity_compile_request');
+// Add scripts and their localization. All in a hook to get the post id.
+add_action('plugins_loaded', 'wpunity_localize_game_scripts');
 
-// Some parameters to pass in the request_game_compile.js  ajax
-wp_localize_script('wpunity_compile_request', 'phpvarsA',
-    array('pluginsUrl' => plugins_url(),
-        'PHP_OS'     => PHP_OS,
-        'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune', //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
-        'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/games_assemble/dune'
-    ));
+function wpunity_localize_game_scripts() {
 
 
-// load request_game.js script from js_libs
-wp_enqueue_script( 'wpunity_assemble_request');
 
-// Some parameters to pass in the request_game_assemble.js  ajax
-wp_localize_script('wpunity_assemble_request', 'phpvarsB',
-    array('pluginsUrl' => plugins_url(),
-        'PHP_OS'     => PHP_OS,
-        'source'=> realpath(dirname(__FILE__).'/../../..').$DS.'uploads'.$DS.'dune',
-        'target'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune',
-        'game_libraries_path'=> realpath(dirname(__FILE__).'/..').$DS.'unity_game_libraries',
-        'game_id'=> 107
-    ));
+
+}
+
+
+//============= Compile button resources ================
+
+
 
 // dune = $post->post_name;
 
@@ -88,11 +75,44 @@ function wpunity_games_databox_add() {
 add_action('admin_menu', 'wpunity_games_databox_add');
 
 
-
 //===========================================================================================================
 
 function wpunity_games_databox_show(){
+
     global $wpunity_databox3, $post;
+    $DS = DIRECTORY_SEPARATOR ;
+
+    // load request_game.js script from js_libs
+    wp_enqueue_script( 'wpunity_compile_request');
+
+    $slug = $post->post_name;
+
+    // Some parameters to pass in the request_game_compile.js  ajax
+    wp_localize_script('wpunity_compile_request', 'phpvarsA',
+        array('pluginsUrl' => plugins_url(),
+            'PHP_OS'     => PHP_OS,
+            'game_dirpath'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.$slug, //'C:\xampp\htdocs\digiart-project_Jan17\wp-content\plugins\wordpressunity3deditor\test_compiler\game_windows'));
+            'game_urlpath'=> plugins_url( 'wordpressunity3deditor' ).'/games_assemble/'.$slug
+        ));
+
+    // load request_game.js script from js_libs
+    wp_enqueue_script( 'wpunity_assemble_request');
+
+
+
+    // Some parameters to pass in the request_game_assemble.js  ajax
+    wp_localize_script('wpunity_assemble_request', 'phpvarsB',
+        array('pluginsUrl' => plugins_url(),
+            'PHP_OS'     => PHP_OS,
+            'source'=> realpath(dirname(__FILE__).'/../../..').$DS.'uploads'.$DS.$slug,
+            'target'=> realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.$slug,
+            'game_libraries_path'=> realpath(dirname(__FILE__).'/..').$DS.'unity_game_libraries',
+            'game_id'=> $post->ID
+        ));
+
+
+
+
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_games_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
