@@ -62,6 +62,10 @@ wp_register_script( 'wpunity_classification_request', plugin_dir_url( __FILE__ )
 wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE__ ) . 'js_libs/scriptFileBrowserToolbarWPway.js',
     null, null, false);
 
+//=========================== THREE js scripts ============================================
+//wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js',
+//    null, null, false);
+
 
 
 //================================= Scene YAML Templates ===================================

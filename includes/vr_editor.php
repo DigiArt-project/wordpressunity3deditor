@@ -4,6 +4,7 @@
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
+
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/WordpressUnity3DEditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
@@ -37,15 +38,55 @@ echo '</script>';
 
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
-<link rel="import" href="<?php echo $PLUGIN_PATH_VR?>/includes/vr_editor_header_js.html">
+<!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
 
-<script>
+<!-- 3rd party libraries -->
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
+
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporterUtils.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporter.js"></script>
+
+<!-- 3rd Party with some customizations -->
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/THREEx.WindowResize.js'></script>
+
+<!--  My libraries  -->
+<!-- Scene Environmentals -->
+<script src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
+
+<!-- Handle keyboard buttons shortcuts -->
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/keyButtons.js'></script>
+
+<!-- Functions for controllers (axes, dat.gui, phpForm) -->
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/auxControlers.js'></script>
+
+<!-- Load multiple objs -->
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/LoaderMulti.js'></script>
+
+<!-- Controls for walking in the model -->
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/movePointerLocker.js"></script>
+
+<!-- Add one more item -->
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/addRemoveOne.js"></script>
+
+<script type="text/javascript">
+
+    console.log(THREE);
+
 
     //  Save Button implemented with Ajax
-    $(document).ready(function(){
+    jQuery(document).ready(function(){
 
-        var cw = $('#vr_editor_main_div').width();
-        $('#vr_editor_main_div').css({'height':cw*2/3+'px'});
+        var cw = jQuery('#vr_editor_main_div').width();
+        jQuery('#vr_editor_main_div').css({'height':cw*2/3+'px'});
 
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
@@ -105,7 +146,11 @@ echo '</script>';
     }
 
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
+
+
+
     var raycasterDrag = new THREE.Raycaster();
+
 
     // find all indexes of the needle inside the str
     function allIndexOf(needle, str){
@@ -190,7 +235,7 @@ echo '</script>';
         </div>
     </div>
 
-    <!-- --------- Make form to submit user changes ----- -->
+    <!--  Make form to submit user changes -->
     <div id="infophp">
         <div id="progress">
             <span id="scene_loading_message">Downloading ...</span>
