@@ -30,9 +30,9 @@ Then you download the whole repository as a zip and install it from plugins->add
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Writing tests: To appear
+* Code review: To appear
+* Other guidelines: To appear
 
 ### Who do I talk to? ###
 
