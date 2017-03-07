@@ -315,7 +315,9 @@ function wpunity_create_unity_scene( $new_status, $old_status, $post ){
             $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
             unlink($unityfile_dir);//DELETE old unity file
             $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+
             $unityfile_text = wpunity_replace_unityfile_withAssets($templateID,$sceneID,$jsonScene);
+
             fwrite($unitycreate_file, $unityfile_text);
             fclose($unitycreate_file);
             /****************************************************************/

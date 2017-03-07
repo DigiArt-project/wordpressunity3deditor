@@ -88,6 +88,9 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
             var textmtl = <?php echo json_encode($textmtl)?>;
             if (textmtl != '')
                 mtlLoader.loadfromtext(textmtl, function (materials) {
+
+                    console.log(materials);
+
                     materials.preload();
 
                     var objLoader = new THREE.OBJLoader(manager);

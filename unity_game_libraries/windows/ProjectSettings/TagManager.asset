@@ -3,7 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FPSController_MyScene
+  - floor
+  - android
+  - ptero
+  - doortoMyScene2
+  - doortoMyScene1
+  - Light
+  - android2
+  - FPSController
+  - Warp Pipe
+  - poi
   layers:
   - Default
   - TransparentFX

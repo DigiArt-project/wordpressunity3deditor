@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/MyScene_SceneFolder/MyScene_Scene.unity
+- path: Assets/S1/S1_poi_imagetype_only.unity
   isLoaded: 1
   isActive: 1
