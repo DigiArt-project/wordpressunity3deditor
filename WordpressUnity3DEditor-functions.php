@@ -219,6 +219,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functi
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
+
 // ===================== Obsolete ===================================
 
 /**
