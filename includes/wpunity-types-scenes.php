@@ -162,14 +162,14 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
 
             //Create a parent scene tax category for the assets3d
-            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
+            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene', $sceneSlug, 'Scene assignment of Asset 3D');
 
             /**************** .UNITY FILE CREATION **************************/
-            $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
-            $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
-            $unityfile_text = wpunity_replace_unityfile($templateID,$sceneID);
-            fwrite($unitycreate_file, $unityfile_text);
-            fclose($unitycreate_file);
+//            $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
+//            $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+//            $unityfile_text = wpunity_replace_unityfile($templateID, $sceneID);
+//            fwrite($unitycreate_file, $unityfile_text);
+//            fclose($unitycreate_file);
             /****************************************************************/
             //TODO
 
