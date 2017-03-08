@@ -3,7 +3,7 @@
 function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID){
 
     if($folderType == 'scene'){
-        //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
+        //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) + metas
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
         $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
@@ -28,6 +28,17 @@ function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentG
 
         wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart);
 
+    }elseif($folderType == 'game'){
+        //FORMAT: uploads / slug Game !without meta (only the folder)
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755);
+        }
     }
 
 
@@ -87,7 +98,6 @@ function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$pare
 
 }
 
-
 function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene){
 
     if($folderType == 'scene'){
@@ -111,6 +121,106 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
 
 }
 
+function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
+    //Get
+    $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    $allScenePGameID = $allScenePGame->term_id;
 
+    $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+    $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+    $firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
+    $firstSceneYAMLID = $firstSceneYAML->term_id;
+    $optionsSceneYAML = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Options Scene
+    $optionsSceneYAMLID = $optionsSceneYAML->term_id;
+    $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+    $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+
+
+    $mainmenuSceneTitle = 'Main Menu for ' . $gameTitle; //Title for Main Menu
+    $mainmenuSceneSlug = 's_mainmenu_' . $gameSlug; //Slug for Main Menu
+    $firstSceneTitle = 'First Scene for ' . $gameTitle; //Title for First Menu
+    $firstSceneSlug = 's1_' . $gameSlug; //Slug for First Menu
+    $optionsSceneTitle = 'Options Scene for ' . $gameTitle; //Title for Options Menu
+    $optionsSceneSlug = 's_options_' . $gameSlug; //Slug for Options Menu
+    $credentialsSceneTitle = 'Credentials Scene for ' . $gameTitle; //Title for Credentials Menu
+    $credentialsSceneSlug = 's_credentials_' . $gameSlug; //Slug for Credentials Menu
+
+    // Create Main Menu Scene Data
+    $mainmenuSceneData = array(
+        'post_title'    => $mainmenuSceneTitle,
+        'post_name' => $mainmenuSceneSlug,
+        'post_type' => 'wpunity_scene',
+        'post_status'   => 'publish',
+        'tax_input'    => array(
+            'wpunity_scene_pgame'     => array( $allScenePGameID ),
+            'wpunity_scene_yaml'     => array( $mainmenuSceneYAMLID ),
+        ),
+    );
+
+    // Create First Scene Data
+    $firstSceneData = array(
+        'post_title'    => $firstSceneTitle,
+        'post_name' => $firstSceneSlug,
+        'post_type' => 'wpunity_scene',
+        'post_status'   => 'publish',
+        'tax_input'    => array(
+            'wpunity_scene_pgame'     => array( $allScenePGameID ),
+            'wpunity_scene_yaml'     => array( $firstSceneYAMLID ),
+        ),
+    );
+
+    // Create Options Scene Data
+    $optionsSceneData = array(
+        'post_title'    => $optionsSceneTitle,
+        'post_name' => $optionsSceneSlug,
+        'post_type' => 'wpunity_scene',
+        'post_status'   => 'publish',
+        'tax_input'    => array(
+            'wpunity_scene_pgame'     => array( $allScenePGameID ),
+            'wpunity_scene_yaml'     => array( $optionsSceneYAMLID ),
+        ),
+    );
+
+    // Create Credentials Scene Data
+    $credentialsSceneData = array(
+        'post_title'    => $credentialsSceneTitle,
+        'post_name' => $credentialsSceneSlug,
+        'post_type' => 'wpunity_scene',
+        'post_status'   => 'publish',
+        'tax_input'    => array(
+            'wpunity_scene_pgame'     => array( $allScenePGameID ),
+            'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
+        ),
+    );
+
+    // Insert posts 1-1 into the database with subfolders and files needed
+    $mainmenuSceneID = wp_insert_post( $mainmenuSceneData );
+    wpunity_create_folder_withmeta('scene',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID);
+    //Create .unity file for the "Scene" (Main Menu)
+    wpunity_create_unityfile_noAssets('scene',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID);
+    //Create a parent scene tax category for the assets3d
+    wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',$mainmenuSceneSlug,'Scene assignment of Asset 3D');
+
+    $firstSceneID = wp_insert_post( $firstSceneData );
+    wpunity_create_folder_withmeta('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID);
+    //Create .unity file for the "Scene" (First Scene)
+    wpunity_create_unityfile_noAssets('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID,$firstSceneYAMLID);
+    //Create a parent scene tax category for the assets3d
+    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',$firstSceneSlug,'Scene assignment of Asset 3D');
+
+    $optionsSceneID = wp_insert_post( $optionsSceneData );
+    wpunity_create_folder_withmeta('scene',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID);
+    //Create .unity file for the "Scene" (Options Scene)
+    wpunity_create_unityfile_noAssets('scene',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID,$optionsSceneYAMLID);
+    //Create a parent scene tax category for the assets3d
+    wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',$optionsSceneSlug,'Scene assignment of Asset 3D');
+
+    $credentialsSceneID = wp_insert_post( $credentialsSceneData );
+    wpunity_create_folder_withmeta('scene',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID);
+    //Create .unity file for the "Scene" (Main Menu)
+    wpunity_create_unityfile_noAssets('scene',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID);
+    //Create a parent scene tax category for the assets3d
+    wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',$credentialsSceneSlug,'Scene assignment of Asset 3D');
+}
 
 ?>
