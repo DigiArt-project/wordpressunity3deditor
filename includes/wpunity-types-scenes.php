@@ -145,7 +145,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
     $post_type = get_post_type($post);
 
     if ($post_type == 'wpunity_scene') {
-        if ( ($new_status == 'publish') && ($old_status != 'new') ) {
+        if ( ($new_status == 'publish') && ($old_status != 'c') ) {
 
             //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
 
@@ -158,13 +158,24 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
             $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
 
-            //Create "Scene" folder inside "Game" (parentGame) with meta file
-            wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
-
-            //Create .unity file for the "Scene"
             $yamlTermID = intval($_POST['wpunity_scene_yaml'], 10);//get yaml temp ID
-            wpunity_create_unityfile_noAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID);
+            $yamlTermSlug = ( $yamlTermID > 0 ) ? get_term( $yamlTermID, 'wpunity_scene_yaml' )->slug : NULL;
 
+            if($yamlTermSlug == 'mainmenu-yaml'){
+                wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);//Create "Scene" folder inside "Game" (parentGame) with meta file
+                wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');//Create .unity file for the "Scene"
+            }elseif($yamlTermSlug == 'options-yaml'){
+                wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
+                wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+            }elseif($yamlTermSlug == 'credentials-yaml'){
+                wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
+                wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+            }else{
+                //Create "Scene" folder inside "Game" (parentGame) with meta file
+                wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
+                wpunity_create_unityfile_noAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID);
+            }
+            
             //Create a parent scene tax category for the assets3d
             wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
 
