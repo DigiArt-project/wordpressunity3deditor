@@ -3,6 +3,7 @@
 function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID){
 
     if($folderType == 'scene'){
+        //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
         $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
@@ -33,6 +34,8 @@ function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentG
 }
 
 function wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart){
+
+    //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
     //Create Subfolders for assets to be uploaded
     $newDir1 = $upload_dir . '/' . 'dynamic3dmodels';
     $newDir2 = $upload_dir . '/' . 'doors';
@@ -63,6 +66,49 @@ function wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart){
     $create_file4 = fopen($upload_dir . '/static3dmodels.meta', "w") or die("Unable to open file!");
     fwrite($create_file4, $file4_text);
     fclose($create_file4);
+}
+
+function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID){
+
+    if($folderType == 'scene'){
+        //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
+
+        $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+        $unityfile_text = wpunity_replace_unityfile($yamlTermID,$sceneID);
+        fwrite($unitycreate_file, $unityfile_text);
+        fclose($unitycreate_file);
+    }
+
+}
+
+
+function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene){
+
+    if($folderType == 'scene'){
+        //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
+
+
+        unlink($unityfile_dir);//DELETE old unity file
+
+        $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+        $unityfile_text = wpunity_replace_unityfile_withAssets($yamlTermID,$sceneID,$jsonScene);
+
+        fwrite($unitycreate_file, $unityfile_text);
+        fclose($unitycreate_file);
+    }
+
 }
 
 
