@@ -44,150 +44,14 @@ function wpunity_assets_create_metafile($post_id, $attachment_ID){
 
         if ($attachment_type['ext'] == 'obj') {
             $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.obj.meta', "w") or die("Unable to open file!");
-            $templatePart = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_odp', true );
+            $templatePart = wpunity_getYaml_obj_dotmeta_pattern($yampl_temp_id);//Get 'obj.meta Pattern' by Yaml ID
             $fileData = wpunity_replace_objmeta($templatePart, $attachment_ID);
             fwrite($create_file, $fileData);
             fclose($create_file);
         }elseif($attachment_type['ext'] == 'mtl') {
 
-            $mat_yaml_pattern = "%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!21 &2100000
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: ___[material_name]___
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _BumpMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailAlbedoMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailMask
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailNormalMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _EmissionMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0___[jpg_texture_guid]___}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MetallicGlossMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _OcclusionMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _ParallaxMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: _BumpScale
-      second: 1
-    - first:
-        name: _Cutoff
-      second: 0.5
-    - first:
-        name: _DetailNormalMapScale
-      second: 1
-    - first:
-        name: _DstBlend
-      second: 0
-    - first:
-        name: _GlossMapScale
-      second: 1
-    - first:
-        name: _Glossiness
-      second: 0.5
-    - first:
-        name: _GlossyReflections
-      second: 1
-    - first:
-        name: _Metallic
-      second: 0
-    - first:
-        name: _Mode
-      second: 0
-    - first:
-        name: _OcclusionStrength
-      second: 1
-    - first:
-        name: _Parallax
-      second: 0.02
-    - first:
-        name: _SmoothnessTextureChannel
-      second: 0
-    - first:
-        name: _SpecularHighlights
-      second: 1
-    - first:
-        name: _SrcBlend
-      second: 1
-    - first:
-        name: _UVSec
-      second: 0
-    - first:
-        name: _ZWrite
-      second: 1
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: ___[color_r]___, g: ___[color_g]___, b: ___[color_b]___, a: ___[color_a]___}
-    - first:
-        name: _EmissionColor
-      second: {r: 0, g: 0, b: 0, a: 1}
-";
-
-$meta_mat_pattern = "fileFormatVersion: 2
-guid: ___[meta_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-NativeFormatImporter:
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
-";
+            $mat_yaml_pattern = wpunity_getYaml_mat_pattern($yampl_temp_id);//Get 'Material (.mat) Pattern' by Yaml ID
+            $meta_mat_pattern = wpunity_getYaml_mat_dotmeta_pattern($yampl_temp_id);//Get 'mat.meta Pattern' by Yaml ID
 
             $mtl_content = file_get_contents($attachment_url);
 
@@ -233,7 +97,7 @@ NativeFormatImporter:
                 //$fileData2 = wpunity_replace_matmeta($templatePart2,$attachment_ID);
 
                 $meta_of_mat_filled = str_replace( [
-                                                    "___[meta_guid]___",
+                                                    "___[mat_guid]___",
                                                     "___[unx_time_created]___"
                                                    ],
                                                    [
@@ -248,7 +112,7 @@ NativeFormatImporter:
         }
     }elseif( (strpos($type, 'image/jpeg') === 0) ){
         $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
-        $templatePart = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_jdp', true );
+        $templatePart = wpunity_getYaml_jpg_dotmeta_pattern($yampl_temp_id);
         $fileData = wpunity_replace_jpgmeta($templatePart,$attachment_ID);
         fwrite($create_file, $fileData);
         fclose($create_file);
@@ -318,73 +182,7 @@ function wpunity_parse_mtl_php($txt_contents){
 
 //==========================================================================================================================================
 
-function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
 
-    switch ($objTypeSTR) {
-        case 'unity':  $objType = "1"; break;
-        case 'folder': $objType = "2"; break;
-        case 'obj': $objType = "3"; break;
-        case 'mat': $objType = "4".$extra_id_material; break; // an obj can have two or more mat
-        case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
-    }
-
-    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 8, "0", STR_PAD_LEFT);
-}
-
-
-function wpunity_replace_foldermeta($file_content,$folderID){
-    $unix_time = time();
-    $guid_id = wpunity_create_guids(1,$folderID);
-
-    $file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
-    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-
-    return $file_content_return;
-}
-
-function wpunity_replace_objmeta($file_content,$objID){
-    $unix_time = time();
-    $guid_id = wpunity_create_guids(2,$objID);
-
-    $file_content_return = str_replace("___[obj_guid]___",$guid_id,$file_content);
-    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-
-    return $file_content_return;
-}
-
-function wpunity_replace_jpgmeta($file_content,$objID){
-    $unix_time = time();
-    $guid_id = wpunity_create_guids(3,$objID);
-
-    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
-    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-
-    return $file_content_return;
-}
-
-function wpunity_replace_mat($file_content, $objID){
-//    $unix_time = time();
-//    $guid_id = 'c0000000000' . $objID;
-//
-//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
-//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-//
-//    return $file_content_return;
-    return $file_content;
-}
-
-function wpunity_replace_matmeta($file_content,$objID){
-//    $unix_time = time();
-//    $guid_id = 'c0000000000' . $objID;
-//
-//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
-//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-//
-//    return $file_content_return;
-    return $file_content;
-}
-
-//==========================================================================================================================================
 
 
 

@@ -1,13 +1,13 @@
 <?php
 
-function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID){
+function wpunity_create_folder_withmeta($folderType,$currentSlug,$currentID,$parentSlug,$parentID){
 
     if($folderType == 'scene'){
         //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) + metas
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
-        $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
-        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir .= "/" . $parentSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
+        $upload_dir .= "/" . $currentSlug;
 
         $upload_dir = str_replace('\\','/',$upload_dir);
 
@@ -18,22 +18,22 @@ function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentG
         $templatePart = wpunity_getFolderMetaPattern();
 
         $file_dir = str_replace('\\','/',$file_dir);
-        $file_dir .= '/' . $sceneSlug .'.meta';//path and 'folder_name'.meta
+        $file_dir .= '/' . $currentSlug .'.meta';//path and 'folder_name'.meta
 
         $create_file = fopen($file_dir, "w") or die("Unable to open file!");
 
-        $myfile_text = wpunity_replace_foldermeta($templatePart,$sceneID);
+        $myfile_text = wpunity_replace_foldermeta($templatePart,$currentID);
         fwrite($create_file, $myfile_text);
         fclose($create_file);
 
-        wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart);
+        wpunity_create_subfolders_withmeta($currentID,$upload_dir,$templatePart);
 
     }elseif($folderType == 'scene-nosub'){
         //FORMAT: uploads / slug Game / slug Scene + meta (no subfolders)
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
-        $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
-        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir .= "/" . $parentSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
+        $upload_dir .= "/" . $currentSlug;
 
         $upload_dir = str_replace('\\','/',$upload_dir);
 
@@ -44,24 +44,68 @@ function wpunity_create_folder_withmeta($folderType,$sceneSlug,$sceneID,$parentG
         $templatePart = wpunity_getFolderMetaPattern();
 
         $file_dir = str_replace('\\','/',$file_dir);
-        $file_dir .= '/' . $sceneSlug .'.meta';//path and 'folder_name'.meta
+        $file_dir .= '/' . $currentSlug .'.meta';//path and 'folder_name'.meta
 
         $create_file = fopen($file_dir, "w") or die("Unable to open file!");
 
-        $myfile_text = wpunity_replace_foldermeta($templatePart,$sceneID);
+        $myfile_text = wpunity_replace_foldermeta($templatePart,$currentID);
         fwrite($create_file, $myfile_text);
         fclose($create_file);
     }elseif($folderType == 'game'){
         //FORMAT: uploads / slug Game !without meta (only the folder)
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
-        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $parentSlug;
 
         $upload_dir = str_replace('\\','/',$upload_dir);
 
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755);
         }
+    }elseif($folderType == 'asset'){
+        //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
+        //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
+        $custom_args = array(
+            'name'        => $parentSlug,
+            'post_type'   => 'wpunity_scene',
+        );
+        $my_posts = get_posts($custom_args);
+        $sceneID = $my_posts[0]->ID;
+
+        //slug Game (first taxonomy item)
+        $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
+        $gameID = $terms[0]->slug;
+
+        //Category of Asset (standard)
+        $categoryAssetID = intval($_POST['wpunity_asset3d_cat'], 10);
+        $categoryAssetSlug = ( $categoryAssetID > 0 ) ? get_term( $categoryAssetID, 'wpunity_asset3d_cat' )->slug : NULL;
+
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $gameID;
+        $upload_dir .= "/" . $parentSlug;
+        $upload_dir .= "/" . $categoryAssetSlug; $file_dir = $upload_dir;//save this for asset folder's meta
+        $upload_dir .= "/" . $currentSlug;
+
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755);
+        }
+
+
+        $templatePart = wpunity_getFolderMetaPattern();
+
+        //create folder.meta for Asset-folder (meta file has same path as folder)
+        $file_dir = str_replace('\\','/',$file_dir);
+        $file_dir .= '/' . $currentSlug .'.meta';//path and 'folder_name'.meta
+
+        $create_file = fopen($file_dir, "w") or die("Unable to open file!");
+
+        $myfile_text = wpunity_replace_foldermeta($templatePart,$currentID);
+        fwrite($create_file, $myfile_text);
+        fclose($create_file);
+
     }
 
 
@@ -126,7 +170,6 @@ function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$pare
     }
 
 }
-
 
 function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene){
 
@@ -231,34 +274,37 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
     // Insert posts 1-1 into the database with subfolders and files needed
     $mainmenuSceneID = wp_insert_post( $mainmenuSceneData );
+    wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$mainmenuSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
     wpunity_create_unityfile_noAssets('scene',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID);
     //Create a parent scene tax category for the assets3d
-    wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',$mainmenuSceneSlug,'Scene assignment of Asset 3D');
+
 
     $firstSceneID = wp_insert_post( $firstSceneData );
+    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$firstSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (First Scene)
     wpunity_create_unityfile_noAssets('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID,$firstSceneYAMLID);
     //Create a parent scene tax category for the assets3d
-    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',$firstSceneSlug,'Scene assignment of Asset 3D');
+
 
     $optionsSceneID = wp_insert_post( $optionsSceneData );
+    wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$optionsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Options Scene)
     wpunity_create_unityfile_noAssets('scene',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID,$optionsSceneYAMLID);
     //Create a parent scene tax category for the assets3d
-    wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',$optionsSceneSlug,'Scene assignment of Asset 3D');
+
 
     $credentialsSceneID = wp_insert_post( $credentialsSceneData );
+    wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$credentialsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
     wpunity_create_unityfile_noAssets('scene',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID);
     //Create a parent scene tax category for the assets3d
-    wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',$credentialsSceneSlug,'Scene assignment of Asset 3D');
-}
 
+}
 
 function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
 
@@ -375,5 +421,76 @@ function wpunity_replace_unityMetafile($templateID,$sceneID){
 }
 
 function wpunity_replace_unityMetafile_withAssets( $templateID, $sceneID, $jsonScene ){ return '';}
+
+//==========================================================================================================================================
+
+function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
+
+    switch ($objTypeSTR) {
+        case 'unity':  $objType = "1"; break;
+        case 'folder': $objType = "2"; break;
+        case 'obj': $objType = "3"; break;
+        case 'mat': $objType = "4".$extra_id_material; break; // an obj can have two or more mat
+        case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
+    }
+
+    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 8, "0", STR_PAD_LEFT);
+}
+
+function wpunity_replace_foldermeta($file_content,$folderID){
+    $unix_time = time();
+    $guid_id = wpunity_create_guids(1,$folderID);
+
+    $file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_objmeta($file_content,$objID){
+    $unix_time = time();
+    $guid_id = wpunity_create_guids(2,$objID);
+
+    $file_content_return = str_replace("___[obj_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_jpgmeta($file_content,$objID){
+    $unix_time = time();
+    $guid_id = wpunity_create_guids(3,$objID);
+
+    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_mat($file_content, $objID){
+//    $unix_time = time();
+//    $guid_id = 'c0000000000' . $objID;
+//
+//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+//
+//    return $file_content_return;
+    return $file_content;
+}
+
+function wpunity_replace_matmeta($file_content,$objID){
+//    $unix_time = time();
+//    $guid_id = 'c0000000000' . $objID;
+//
+//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+//
+//    return $file_content_return;
+    return $file_content;
+}
+
+//==========================================================================================================================================
+
+
 
 ?>

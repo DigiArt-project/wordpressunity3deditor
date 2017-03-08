@@ -3,7 +3,7 @@
 global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poi;
 global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
 global $ini_scene_credentials_unity_pattern;
-global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_unity_meta_pattern;
+global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
 
 
 $ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
@@ -256,7 +256,6 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
-
 // Static 3D object pattern
 $ini_scene_sop = array('--- !u!1 &___[sop_fid]___ stripped
 GameObject:
@@ -350,9 +349,6 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: ___[sop_guid]___, type: 3}
   m_IsPrefabParent: 0
 ');
-
-
-
 $ini_scene_dop = array('--- !u!1 &___[dop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[dop_guid]___, type: 3}
@@ -2916,14 +2912,133 @@ TextureImporter:
   assetBundleName:
   assetBundleVariant:
 ');
-$ini_scene_unity_meta_pattern = array('fileFormatVersion: 2
-guid: ___[scene_unity_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-DefaultImporter:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+$ini_scene_mat_pattern = array('%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ___[material_name]___
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords:
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _BumpMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _DetailAlbedoMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _DetailMask
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _DetailNormalMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _EmissionMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0___[jpg_texture_guid]___}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MetallicGlossMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _OcclusionMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _ParallaxMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: _BumpScale
+      second: 1
+    - first:
+        name: _Cutoff
+      second: 0.5
+    - first:
+        name: _DetailNormalMapScale
+      second: 1
+    - first:
+        name: _DstBlend
+      second: 0
+    - first:
+        name: _GlossMapScale
+      second: 1
+    - first:
+        name: _Glossiness
+      second: 0.5
+    - first:
+        name: _GlossyReflections
+      second: 1
+    - first:
+        name: _Metallic
+      second: 0
+    - first:
+        name: _Mode
+      second: 0
+    - first:
+        name: _OcclusionStrength
+      second: 1
+    - first:
+        name: _Parallax
+      second: 0.02
+    - first:
+        name: _SmoothnessTextureChannel
+      second: 0
+    - first:
+        name: _SpecularHighlights
+      second: 1
+    - first:
+        name: _SrcBlend
+      second: 1
+    - first:
+        name: _UVSec
+      second: 0
+    - first:
+        name: _ZWrite
+      second: 1
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: ___[color_r]___, g: ___[color_g]___, b: ___[color_b]___, a: ___[color_a]___}
+    - first:
+        name: _EmissionColor
+      second: {r: 0, g: 0, b: 0, a: 1}
 ');
 $ini_scene_options_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
@@ -4891,7 +5006,7 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
     global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poip;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
-    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_unity_meta_pattern;
+    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
     global $ini_scene_options_unity_pattern;
 
     if ( isset( $_POST['wpunity_yamlmeta_wonderaround_pat'] ) ) {
@@ -5005,7 +5120,7 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
     if ( isset( $_POST['wpunity_yamlmeta_scene_matp'] ) ) {
         $term_meta_scene_scene_matp = $_POST['wpunity_yamlmeta_scene_matp'];
         if($term_meta_scene_scene_matp == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_unity_meta_pattern[0]);
+            update_term_meta($term_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
         }else{
             update_term_meta($term_id, 'wpunity_yamlmeta_scene_matp', $term_meta_scene_scene_matp);
         }
@@ -5085,7 +5200,7 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
     global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poip;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
-    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_unity_meta_pattern;
+    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
     global $ini_scene_options_unity_pattern;
 
     $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
@@ -5133,7 +5248,7 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', $ini_scene_mdp[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', $ini_scene_jdp[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', $ini_scene_jpg_sprite_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_unity_meta_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
     }elseif($term_insterted->slug == 'options-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
@@ -5163,7 +5278,7 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', $ini_scene_mdp[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', $ini_scene_jdp[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', $ini_scene_jpg_sprite_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_unity_meta_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', $ini_scene_options_unity_pattern[0]);
     }
 
