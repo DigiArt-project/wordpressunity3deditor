@@ -332,27 +332,6 @@ function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
 }
 
 
-function wpunity_replace_unityfile($templateID,$sceneID){
-
-    $tempOcclusionPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_ocs', true );
-    $tempRenderPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_rs', true );
-    $tempLightMapPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_lms', true );
-    $tempNavMeshPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_nms', true );
-    $tempLightPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_light', true );
-
-    $unity_file_contents = $tempOcclusionPart . $tempRenderPart . $tempLightMapPart . $tempNavMeshPart . $tempLightPart;
-    return $unity_file_contents;
-
-}
-
-function wpunity_replace_unityMetafile($templateID,$sceneID){
-
-    return '';
-
-}
-
-function wpunity_replace_unityMetafile_withAssets( $templateID, $sceneID, $jsonScene ){}
-
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
     $guid_id = wpunity_create_guids(1,$folderID);
