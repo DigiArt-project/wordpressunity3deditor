@@ -438,9 +438,6 @@ function wpunity_assemble_action_callback() {
 
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
-//        echo $_POST['source'];
-//        echo $_POST['target'];
-
         // Check if target folder exist from a previous assemble
         $target_exists = file_exists ( $_POST['target'] );
         echo '1. Target Folder exists? '.($target_exists?'true':'false');
