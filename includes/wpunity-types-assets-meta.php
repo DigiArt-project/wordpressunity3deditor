@@ -345,16 +345,13 @@ function wpunity_replace_unityfile($templateID,$sceneID){
 
 }
 
+function wpunity_replace_unityMetafile($templateID,$sceneID){
 
+    return '';
 
+}
 
-
-
-
-
-
-
-
+function wpunity_replace_unityMetafile_withAssets( $templateID, $sceneID, $jsonScene ){}
 
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
