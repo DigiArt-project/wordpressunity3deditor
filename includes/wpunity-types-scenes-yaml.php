@@ -342,10 +342,10 @@ Prefab:
       propertyPath: m_Name
       value: ___[sop_name]___
       objectReference: {fileID: 0}
-    - target: {fileID: 2300000, guid: ___[sop_guid]___, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value:
-      objectReference: {fileID: 2100000, guid: ___[sop_material_guid]___, type: 2}
+    - target: {fileID: 100002, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[sop_name]___default
+      objectReference: {fileID: 0}  
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[sop_guid]___, type: 3}
   m_IsPrefabParent: 0
