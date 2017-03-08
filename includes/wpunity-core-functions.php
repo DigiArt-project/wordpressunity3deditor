@@ -457,9 +457,41 @@ function wpunity_assemble_action_callback() {
 
         echo '<br />4. Copy unity3d libraries: '.$res_copy;
 
-        //------ Modify /ProjectSettings/EditorBuildSettings.asset to include all scenes ---
+        //------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
 
         $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
+
+        // === Assets/General_Scripts/Menu_Script.cs =====
+        $path_cs_MainMenu = $_POST['target']."/Assets//General_Scripts/Menu_Script.cs";
+
+        // first read
+        $fhandle = fopen($path_cs_MainMenu, "r");
+        $fcontents_cs_MainMenu = fread($fhandle, filesize($path_cs_MainMenu));
+        fclose($fhandle);
+
+        //echo htmlspecialchars($fcontents_cs_MainMenu);
+
+        // then write
+        $fhandle = fopen($path_cs_MainMenu, "w");
+        $fcontents_cs_MainMenu = str_replace(['___[mainmenu_scene_basename]___',
+                                              '___[initialwonderaround_scene_basename]___',
+                                              '___[options_scene_basename]___',
+                                              '___[credentials_scene_basename]___'],
+                                                [
+                                                basename($scenes_Arr[0][sceneUnityPath],".unity"),
+                                                basename($scenes_Arr[1][sceneUnityPath],".unity"),
+                                                basename($scenes_Arr[2][sceneUnityPath],".unity"),
+                                                basename($scenes_Arr[3][sceneUnityPath],".unity")
+                                                ],
+                                                $fcontents_cs_MainMenu);
+
+//        echo htmlspecialchars($fcontents_cs_MainMenu);
+
+        fwrite($fhandle, $fcontents_cs_MainMenu);
+        fclose($fhandle);
+
+
+        // === EditorBuildSettings.asset ===
 
         // replace
         $needle_str ='  m_Scenes: []'.chr(10);

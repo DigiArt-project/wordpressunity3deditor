@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Menu_Script : MonoBehaviour {
 
-	public bool ovrMode;
+    public bool ovrMode;
 	public bool occulusControllerUse;
 	public float occulusHeight;
 
@@ -25,27 +25,26 @@ public class Menu_Script : MonoBehaviour {
 
 	public void onClick_StartGame(){
 		gameObject.GetComponent<Canvas> ().enabled = false;
-		SceneManager.LoadScene("S1");
+		SceneManager.LoadScene("___[initialwonderaround_scene_basename]___");
 	}
 
 	public void onClick_LoadCredsScene(){
 		gameObject.GetComponent<Canvas> ().enabled = false;
-		SceneManager.LoadScene("S_Credentials");
+		SceneManager.LoadScene("___[credentials_scene_basename]___");
 	}
 
 	public void onClick_LoadMainMenuScene(){
-		SceneManager.LoadScene("S_MainMenu");
+		SceneManager.LoadScene("___[mainmenu_scene_basename]___");
 		gameObject.GetComponent<Canvas> ().enabled = true;
+	}
 
-		Debug.Log ("MM occulusHeight:" + occulusHeight);
+	public void onClick_Options(){
+		gameObject.GetComponent<Canvas> ().enabled = false;
+		SceneManager.LoadScene("___[options_scene_basename]___");
 	}
 
 	public void onClick_ExitGame(){
 		Application.Quit ();
 	}
 
-	public void onClick_Options(){
-		gameObject.GetComponent<Canvas> ().enabled = false;
-		SceneManager.LoadScene("S_Options");
-	}
 }
