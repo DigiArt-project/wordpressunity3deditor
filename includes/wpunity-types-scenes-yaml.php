@@ -4,6 +4,8 @@ global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini
 global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
 global $ini_scene_credentials_unity_pattern;
 global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_unity_meta_pattern;
+
+
 $ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
@@ -132,7 +134,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &1351028531
+--- !u!1001 &___[player_fid]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -141,27 +143,27 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 4.65
+      value: ___[player_position_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.6
+      value: ___[player_position_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -5.98
+      value: ___[player_position_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: ___[player_rotation_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: ___[player_rotation_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: ___[player_rotation_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.w
@@ -177,11 +179,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_Name
-      value: FPSController_MyScene
+      value: ___[player_name]___
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_TagString
-      value: FPSController_MyScene
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_IsKinematic
@@ -254,6 +256,7 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
+
 $ini_scene_sop = array('--- !u!1 &___[sop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
@@ -281,27 +284,27 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.x
-      value: ___[sop_pos_x]____
+      value: ___[sop_pos_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.y
-      value: ___[sop_pos_y]____
+      value: ___[sop_pos_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.z
-      value: ___[sop_pos_z]____
+      value: ___[sop_pos_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.x
-      value: ___[sop_rot_x]____
+      value: ___[sop_rot_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.y
-      value: ___[sop_rot_y]____
+      value: ___[sop_rot_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.z
-      value: ___[sop_rot_z]____
+      value: ___[sop_rot_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.w
@@ -318,7 +321,7 @@ Prefab:
     - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
-- target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
