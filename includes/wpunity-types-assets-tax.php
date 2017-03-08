@@ -195,50 +195,5 @@ add_action( 'save_post', 'wpunity_assets_taxpscence_box_content_save' );
 
 //==========================================================================================================================================
 
-/**
- * D2.03
- * Create Initial wpunity_asset3d_cat (Asset3D Category) terms
- *
- *
- */
-
-function wpunity_assets_taxcategory_fill(){
-    wp_insert_term(
-        'Dynamic 3D models', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.',
-            'slug' => 'dynamic3dmodels',
-        )
-    );
-    wp_insert_term(
-        'Points of Interest', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up.',
-            'slug' => 'pois',
-        )
-    );
-    wp_insert_term(
-        'Static 3D models', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
-            'slug' => 'static3dmodels',
-        )
-    );
-    wp_insert_term(
-        'Doors', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene.',
-            'slug' => 'doors',
-        )
-    );
-}
-
-add_action( 'init', 'wpunity_assets_taxcategory_fill' );
-
-//==========================================================================================================================================
 
 ?>
