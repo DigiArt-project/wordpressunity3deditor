@@ -367,7 +367,6 @@ function wpunity_replace_unityfile_withAssets( $templateID, $sceneID, $jsonScene
                 $curr_fid++;
 
                 // Change avatar position and rotation
-
                 $unity_file_contents .= str_replace([
                                                     '___[player_name]___',
                                                     '___[player_fid]___',
@@ -376,17 +375,21 @@ function wpunity_replace_unityfile_withAssets( $templateID, $sceneID, $jsonScene
                                                     '___[player_position_z]___',
                                                     '___[player_rotation_x]___',
                                                     '___[player_rotation_y]___',
-                                                    '___[player_rotation_z]___'],
-                                        [   'Player',
+                                                    '___[player_rotation_z]___'
+                                                    ],
+                                            [
+                                            'Player',
                                             $curr_fid,
                                             $value['position'][0],
                                             $value['position'][1],
                                             $value['position'][2],
                                             $value['rotation'][0],
                                             $value['rotation'][1],
-                                            $value['rotation'][2]],
+                                            $value['rotation'][2]
+                                            ],
                                 $tempFirstPersonPart);
             } else {
+
 
 
                     if ($value['categoryName'] == 'Static 3D models'){

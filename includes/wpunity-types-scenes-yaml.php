@@ -256,6 +256,7 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
+
 $ini_scene_sop = array('--- !u!1 &___[sop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
@@ -283,27 +284,27 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.x
-      value: ___[sop_pos_x]____
+      value: ___[sop_pos_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.y
-      value: ___[sop_pos_y]____
+      value: ___[sop_pos_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalPosition.z
-      value: ___[sop_pos_z]____
+      value: ___[sop_pos_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.x
-      value: ___[sop_rot_x]____
+      value: ___[sop_rot_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.y
-      value: ___[sop_rot_y]____
+      value: ___[sop_rot_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.z
-      value: ___[sop_rot_z]____
+      value: ___[sop_rot_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.w
@@ -320,7 +321,7 @@ Prefab:
     - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
-- target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
