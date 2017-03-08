@@ -265,6 +265,9 @@ function wpunity_getTemplateID_forAsset($asset_id){
 
 //==========================================================================================================================================
 
+//Get Methods for Every Yaml Pattern
+
+//Get 'Folder.meta Pattern'
 function wpunity_getFolderMetaPattern(){
     $yamloptions = get_option( 'yaml_settings' );
     $folderMetaPattern = $yamloptions["wpunity_folder_meta_pat"];
@@ -272,8 +275,84 @@ function wpunity_getFolderMetaPattern(){
     return $folderMetaPattern;
 }
 
+//Get 'each_scene.unity meta pattern'
+function wpunity_getSceneUnityMetaPattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    $sceneUnityMetaPattern = $yamloptions["wpunity_scene_meta_pat"];
 
+    return $sceneUnityMetaPattern;
+}
 
+//Get 'Wonder around .unity pattern' by Yaml ID
+function wpunity_getYaml_wonder_around_unity_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_wonderaround_pat',true);
+}
 
+//Get 'Static Object Pattern' by Yaml ID
+function wpunity_getYaml_static_object_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_sop',true);
+}
+
+//Get 'Dynamic Object Pattern' by Yaml ID
+function wpunity_getYaml_dynamic_object_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_dop',true);
+}
+
+//Get 'Door Pattern' by Yaml ID
+function wpunity_getYaml_door_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_doorp',true);
+}
+
+//Get 'POI Pattern' by Yaml ID
+function wpunity_getYaml_poi_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poip',true);
+}
+
+//Get 'The S_MainMenu.unity pattern' by Yaml ID
+function wpunity_getYaml_main_menu_unity_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_s_mainmenu',true);
+}
+
+//Get 'Main Menu c-sharp script (all_menu_Script.cs) Pattern' by Yaml ID
+function wpunity_getYaml_all_menu_cs_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_csharp_mainmenu',true);
+}
+
+//Get 'The S_Credentials.unity pattern' by Yaml ID
+function wpunity_getYaml_credentials_unity_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_s_credentials',true);
+}
+
+//Get 'obj.meta Pattern' by Yaml ID
+function wpunity_getYaml_obj_dotmeta_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_odp',true);
+}
+
+//Get 'mat.meta Pattern' by Yaml ID
+function wpunity_getYaml_mat_dotmeta_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_mdp',true);
+}
+
+//Get 'jpg.meta Pattern' by Yaml ID
+function wpunity_getYaml_jpg_dotmeta_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_jdp',true);
+}
+
+//Get 'The jpg sprite meta pattern' by Yaml ID
+function wpunity_getYaml_jpg_sprite_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_jspritep',true);
+}
+
+//Get 'Material (.mat) Pattern' by Yaml ID
+function wpunity_getYaml_mat_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_matp',true);
+}
+
+//Get 'The S_Options.unity pattern' by Yaml ID
+function wpunity_getYaml_options_unity_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_s_options',true);
+}
+
+//==========================================================================================================================================
 
 ?>

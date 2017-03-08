@@ -161,17 +161,12 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             //Create "Scene" folder inside "Game" (parentGame) with meta file
             wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
 
-            //Create a parent scene tax category for the assets3d
-            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene', $sceneSlug, 'Scene assignment of Asset 3D');
+            //Create .unity file for the "Scene"
+            $yamlTermID = intval($_POST['wpunity_scene_yaml'], 10);//get yaml temp ID
+            wpunity_create_unityfile_noAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID);
 
-            /**************** .UNITY FILE CREATION **************************/
-//            $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
-//            $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
-//            $unityfile_text = wpunity_replace_unityfile($templateID, $sceneID);
-//            fwrite($unitycreate_file, $unityfile_text);
-//            fclose($unitycreate_file);
-            /****************************************************************/
-            //TODO
+            //Create a parent scene tax category for the assets3d
+            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
 
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
@@ -210,37 +205,12 @@ function wpunity_create_unity_scene( $new_status, $old_status, $post ){
             $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
             $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
 
-            $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'];
-            $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
-            $upload_dir .= "/" . $sceneSlug;
-
-            $upload_dir = str_replace('\\','/',$upload_dir);
-
-            //get yaml template
-            $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
-            $templateSlug = $parentSceneYAML[0]->slug;
-            $custom_args2 = array(
-                'name'        => $templateSlug,
-                'post_type'   => 'wpunity_yamltemp',
-            );
-            $my_posts2 = get_posts($custom_args2);
-            $templateID = $my_posts2[0]->ID;
+            $yamlTermID = intval($_POST['wpunity_scene_yaml'], 10);//get yaml temp ID
 
             $jsonScene = get_post_meta( $sceneID, 'wpunity_scene_json_input', true);
 
-            /******** .UNITY FILE CREATION WITH ASSETS ***********************/
-            $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
-            unlink($unityfile_dir);//DELETE old unity file
-            $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
-
-            $unityfile_text = wpunity_replace_unityfile_withAssets($templateID,$sceneID,$jsonScene);
-
-            fwrite($unitycreate_file, $unityfile_text);
-            fclose($unitycreate_file);
-            /****************************************************************/
-
-
+            //UPDATE the Unity file with Assets added to json
+            wpunity_create_unityfile_withAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene);
 
         }
 
