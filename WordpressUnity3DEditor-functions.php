@@ -99,19 +99,19 @@ custom fields :
 
 //A1.01 Create Scene YAML Template (custom type : wpunity_yamltemp)
 //A1.02 Create Scene YAML Template Category (custom taxonomy : wpunity_yamltemp_cat)
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp.php');
+//require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp.php');
 
 //A2.01 Create YAML Template Category Box @ YAML Template's backend (dropdown style)
 //A2.02 Save Data from Box
-//A2.03 Initial Terms - TO BE REMOVED TODO
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-tax.php');
+//A2.03 Initial Terms
+//require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-tax.php');
 
 //A3.01 Initial Values for all Custom Fields
 //A3.02 Create 7 metaboxes with Custom Fields
 // ($wpunity_databox2a,$wpunity_databox2b,$wpunity_databox2c,$wpunity_databox2d,$wpunity_databox2e,$wpunity_databox2f,$wpunity_databox2g)
 //A3.03 Add and Show those 7 metaboxes
 //A3.04 Save data from those 7 metaboxes
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
+//require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-yamltemp-data.php');
 
 
 //===================================== Games ============================================
@@ -167,6 +167,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.p
 //C3.03 Save data from this metabox
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-yaml.php' );
+
 
 //===================================== Assets ============================================
 
@@ -215,9 +217,11 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
 
-
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-file-creations.php' );
 //3.01 Create Initial Asset Categories
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
 // ===================== Obsolete ===================================
 

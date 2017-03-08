@@ -265,7 +265,12 @@ function wpunity_getTemplateID_forAsset($asset_id){
 
 //==========================================================================================================================================
 
+function wpunity_getFolderMetaPattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    $folderMetaPattern = $yamloptions["wpunity_folder_meta_pat"];
 
+    return $folderMetaPattern;
+}
 
 
 

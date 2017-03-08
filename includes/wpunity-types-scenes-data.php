@@ -4,7 +4,6 @@
 wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
 
 
-
 /**
  * C3.01
  * Create metabox with Custom Fields for Scene
@@ -178,5 +177,7 @@ add_action( 'wp_ajax_wpunity_fetch_scene_assets_by_db_action', 'wpunity_fetch_sc
 add_action( 'wp_ajax_wpunity_fetch_scene_assets_by_dir_action', 'wpunity_fetch_scene_assets_by_dir_action_callback' );
 
 //==========================================================================================================================================
+
+
 
 ?>
