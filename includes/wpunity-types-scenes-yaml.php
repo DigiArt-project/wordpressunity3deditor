@@ -256,7 +256,6 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
-
 $ini_scene_sop = array('--- !u!1 &___[sop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
