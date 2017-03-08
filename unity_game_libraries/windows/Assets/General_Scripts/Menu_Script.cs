@@ -15,7 +15,7 @@ public class Menu_Script : MonoBehaviour {
 	void Awake(){
 		DontDestroyOnLoad(this);
 
-		ovrMode = true;
+		ovrMode = false;
 		occulusControllerUse = false;
 		occulusHeight = 1;
 
