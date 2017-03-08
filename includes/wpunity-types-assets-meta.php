@@ -345,6 +345,14 @@ function wpunity_replace_unityfile($templateID,$sceneID){
 
 }
 
+function wpunity_replace_unityMetafile($templateID,$sceneID){
+
+    return '';
+
+}
+
+function wpunity_replace_unityMetafile_withAssets( $templateID, $sceneID, $jsonScene ){}
+
 function wpunity_replace_unityfile_withAssets( $templateID, $sceneID, $jsonScene ){
 
     // How we get this variables : wp_get_tax() ?
