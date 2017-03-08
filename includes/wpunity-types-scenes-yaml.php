@@ -256,6 +256,8 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
+
+// Static 3D object pattern
 $ini_scene_sop = array('--- !u!1 &___[sop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
@@ -336,6 +338,10 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[sop_scale_z]___
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[sop_name]___
+      objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value:
@@ -344,6 +350,9 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: ___[sop_guid]___, type: 3}
   m_IsPrefabParent: 0
 ');
+
+
+
 $ini_scene_dop = array('--- !u!1 &___[dop_fid]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: ___[dop_guid]___, type: 3}

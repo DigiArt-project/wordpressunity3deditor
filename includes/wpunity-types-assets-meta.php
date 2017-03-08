@@ -345,105 +345,16 @@ function wpunity_replace_unityfile($templateID,$sceneID){
 
 }
 
-function wpunity_replace_unityfile_withAssets( $templateID, $sceneID, $jsonScene ){
-
-    // How we get this variables : wp_get_tax() ?
-    global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop;
-
-    $tempFirstPersonPart = $ini_scene_wonder_around_unity_pattern[0];
-    $templatePart_sop = $ini_scene_sop[0];
-
-    $unity_file_contents = "";
-
-    $sceneJsonARR = json_decode($jsonScene, TRUE);//->objects->floor_1487753970
-
-    $curr_fid = 30;
-
-    //if ($sceneJsonARR['objects']) {}
-        foreach ($sceneJsonARR['objects'] as $key => $value ) {
-
-            if ($key == 'avatarYawObject') {
-
-                $curr_fid++;
-
-                // Change avatar position and rotation
-                $unity_file_contents .= str_replace([
-                                                    '___[player_name]___',
-                                                    '___[player_fid]___',
-                                                    '___[player_position_x]___',
-                                                    '___[player_position_y]___',
-                                                    '___[player_position_z]___',
-                                                    '___[player_rotation_x]___',
-                                                    '___[player_rotation_y]___',
-                                                    '___[player_rotation_z]___'
-                                                    ],
-                                            [
-                                            'Player',
-                                            $curr_fid,
-                                            $value['position'][0],
-                                            $value['position'][1],
-                                            $value['position'][2],
-                                            $value['rotation'][0],
-                                            $value['rotation'][1],
-                                            $value['rotation'][2]
-                                            ],
-                                $tempFirstPersonPart);
-            } else {
 
 
 
-                    if ($value['categoryName'] == 'Static 3D models'){
-
-                        $unity_file_contents .= str_replace(
-                                           [
-                                            "___[sop_name]___",
-                                            "___[sop_fid]___", // +1
-                                            "___[sop_prefab_fid]___", // +1
-                                            "___[sop_meshcol_fid]___", // +1
-                                            "___[sop_guid]___", // from obj meta
-                                            "___[sop_material_guid]___", // from mat meta
-                                            "___[sop_pos_x]___",
-                                            "___[sop_pos_y]___",
-                                            "___[sop_pos_z]___",
-                                            "___[sop_rot_x]___",
-                                            "___[sop_rot_y]___",
-                                            "___[sop_rot_z]___",
-                                            "___[sop_scale_x]___",
-                                            "___[sop_scale_y]___",
-                                            "___[sop_scale_z]___"],
-                                           [
-                                            $key,
-                                            $curr_fid++,
-                                            $curr_fid++,
-                                            $curr_fid++,
-                                            wpunity_create_guids('obj', $value['fnObjID']),
-                                            wpunity_create_guids('mat', $value['fnMtlID']), // ToDO: here we need the fnMatID // ToDO: We need to support multiple mat
-                                            //rotation
-                                            $value['position'][0], $value['position'][1], $value['position'][2],
-                                            // position
-                                            $value['rotation'][0], $value['rotation'][1], $value['rotation'][2],
-                                            // scale
-                                            $value['scale'][0]   , $value['scale'][1]   , $value['scale'][2]
-                                           ]
-                                            , $templatePart_sop);
-
-                    } else if ($value['categoryName'] == 'Points of Interest'){
 
 
-                    } else if ($value['categoryName'] == 'Dynamic 3D models'){
 
 
-                    } else if ($value['categoryName'] == 'Doors'){
-
-                    }
 
 
-            }
-        }
 
-
-    return $unity_file_contents;
-}
 
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
