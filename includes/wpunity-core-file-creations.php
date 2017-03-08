@@ -197,7 +197,7 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
         $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
         fwrite($unityMetacreate_file, $unityMetafile_text);
         fclose($unityMetacreate_file);
-    }if($folderType == 'scene-mainmenu'){
+    }elseif($folderType == 'scene-mainmenu'){
         //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
@@ -222,7 +222,7 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
         $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
         fwrite($unityMetacreate_file, $unityMetafile_text);
         fclose($unityMetacreate_file);
-    }if($folderType == 'scene-options'){
+    }elseif($folderType == 'scene-options'){
         //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
@@ -247,7 +247,7 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
         $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
         fwrite($unityMetacreate_file, $unityMetafile_text);
         fclose($unityMetacreate_file);
-    }if($folderType == 'scene-credentials'){
+    }elseif($folderType == 'scene-credentials'){
         //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
@@ -498,7 +498,7 @@ function wpunity_replace_unityMetafile($templateID,$sceneID){
 
 function wpunity_replace_unityMetafile_withAssets( $sceneID,$unityMetaPattern ){
     $unix_time = time();
-    $guid_id = wpunity_create_guids(1,$sceneID);
+    $guid_id = wpunity_create_guids('unity',$sceneID);
 
     $file_content_return = str_replace("___[scene_unity_guid]___",$guid_id,$unityMetaPattern);
     $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);

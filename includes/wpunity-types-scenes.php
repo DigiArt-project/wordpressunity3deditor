@@ -206,11 +206,22 @@ function wpunity_create_unity_scene( $new_status, $old_status, $post ){
             $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
 
             $yamlTermID = intval($_POST['wpunity_scene_yaml'], 10);//get yaml temp ID
+            $yamlTermSlug = ( $yamlTermID > 0 ) ? get_term( $yamlTermID, 'wpunity_scene_yaml' )->slug : NULL;
 
             $jsonScene = get_post_meta( $sceneID, 'wpunity_scene_json_input', true);
 
             //UPDATE the Unity file with Assets added to json
-            wpunity_create_unityfile_withAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene);
+            if($yamlTermSlug == 'mainmenu-yaml'){
+                wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+            }elseif($yamlTermSlug == 'options-yaml'){
+                wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+            }elseif($yamlTermSlug == 'credentials-yaml'){
+                wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+            }else{
+                wpunity_create_unityfile_withAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene);
+            }
+
+
 
         }
 
