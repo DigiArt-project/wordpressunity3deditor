@@ -193,7 +193,83 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
         unlink($unityMetafile_dir);//DELETE old unity.meta file
 
         $unityMetacreate_file = fopen($unityMetafile_dir, "w") or die("Unable to open file!");
-        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($yamlTermID,$sceneID,$jsonScene);
+        $unityMetaPattern = wpunity_getSceneUnityMetaPattern();
+        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
+        fwrite($unityMetacreate_file, $unityMetafile_text);
+        fclose($unityMetacreate_file);
+    }if($folderType == 'scene-mainmenu'){
+        //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
+        unlink($unityfile_dir);//DELETE old unity file
+
+        $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+        $unityfile_text = wpunity_getYaml_main_menu_unity_pattern($yamlTermID);//Get 'The S_MainMenu.unity pattern' by Yaml ID
+        //$unityfile_text = wpunity_replace_unityfile_withAssets($yamlTermID,$sceneID,$jsonScene);
+        fwrite($unitycreate_file, $unityfile_text);
+        fclose($unitycreate_file);
+
+        $unityMetafile_dir = $upload_dir . '/' . $sceneSlug .'.unity.meta';//path and 'folder_name'.unity.meta
+        unlink($unityMetafile_dir);//DELETE old unity.meta file
+
+        $unityMetacreate_file = fopen($unityMetafile_dir, "w") or die("Unable to open file!");
+        $unityMetaPattern = wpunity_getSceneUnityMetaPattern();
+        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
+        fwrite($unityMetacreate_file, $unityMetafile_text);
+        fclose($unityMetacreate_file);
+    }if($folderType == 'scene-options'){
+        //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
+        unlink($unityfile_dir);//DELETE old unity file
+
+        $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+        $unityfile_text = wpunity_getYaml_options_unity_pattern($yamlTermID);//Get 'The S_Options.unity pattern' by Yaml ID
+        //$unityfile_text = wpunity_replace_unityfile_withAssets($yamlTermID,$sceneID,$jsonScene);
+        fwrite($unitycreate_file, $unityfile_text);
+        fclose($unitycreate_file);
+
+        $unityMetafile_dir = $upload_dir . '/' . $sceneSlug .'.unity.meta';//path and 'folder_name'.unity.meta
+        unlink($unityMetafile_dir);//DELETE old unity.meta file
+
+        $unityMetacreate_file = fopen($unityMetafile_dir, "w") or die("Unable to open file!");
+        $unityMetaPattern = wpunity_getSceneUnityMetaPattern();
+        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
+        fwrite($unityMetacreate_file, $unityMetafile_text);
+        fclose($unityMetacreate_file);
+    }if($folderType == 'scene-credentials'){
+        //FORMAT: uploads / slug Game / slug Scene / slug-Scene.unity
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir .= "/" . $parentGameSlug;
+        $upload_dir .= "/" . $sceneSlug;
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
+        unlink($unityfile_dir);//DELETE old unity file
+
+        $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
+        $unityfile_text = wpunity_getYaml_credentials_unity_pattern($yamlTermID);//Get 'The S_Credentials.unity pattern' by Yaml ID
+        //$unityfile_text = wpunity_replace_unityfile_withAssets($yamlTermID,$sceneID,$jsonScene);
+        fwrite($unitycreate_file, $unityfile_text);
+        fclose($unitycreate_file);
+
+        $unityMetafile_dir = $upload_dir . '/' . $sceneSlug .'.unity.meta';//path and 'folder_name'.unity.meta
+        unlink($unityMetafile_dir);//DELETE old unity.meta file
+
+        $unityMetacreate_file = fopen($unityMetafile_dir, "w") or die("Unable to open file!");
+        $unityMetaPattern = wpunity_getSceneUnityMetaPattern();
+        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
         fwrite($unityMetacreate_file, $unityMetafile_text);
         fclose($unityMetacreate_file);
     }
@@ -277,7 +353,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$mainmenuSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
-    wpunity_create_unityfile_noAssets('scene',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID);
+    wpunity_create_unityfile_withAssets('scene-mainmenu',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID,'');
     //Create a parent scene tax category for the assets3d
 
 
@@ -293,7 +369,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$optionsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Options Scene)
-    wpunity_create_unityfile_noAssets('scene',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID,$optionsSceneYAMLID);
+    wpunity_create_unityfile_withAssets('scene-options',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID,$optionsSceneYAMLID,'');
     //Create a parent scene tax category for the assets3d
 
 
@@ -301,7 +377,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$credentialsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
-    wpunity_create_unityfile_noAssets('scene',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID);
+    wpunity_create_unityfile_withAssets('scene-credentials',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID,'');
     //Create a parent scene tax category for the assets3d
 
 }
@@ -420,7 +496,15 @@ function wpunity_replace_unityMetafile($templateID,$sceneID){
 
 }
 
-function wpunity_replace_unityMetafile_withAssets( $templateID, $sceneID, $jsonScene ){ return '';}
+function wpunity_replace_unityMetafile_withAssets( $sceneID,$unityMetaPattern ){
+    $unix_time = time();
+    $guid_id = wpunity_create_guids(1,$sceneID);
+
+    $file_content_return = str_replace("___[scene_unity_guid]___",$guid_id,$unityMetaPattern);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
 
 //==========================================================================================================================================
 
