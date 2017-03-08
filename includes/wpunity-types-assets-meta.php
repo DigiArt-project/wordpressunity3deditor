@@ -193,7 +193,7 @@ NativeFormatImporter:
 
             $mtl_arr = wpunity_parse_mtl_php($mtl_content);
 
-            // for each material in the mtl file make a mat and a meta file
+            // MTL to several MAT and META: for each material in the mtl file make a mat and a meta file
             for ($iMaterial =0; $iMaterial < count($mtl_arr); $iMaterial ++ ){
 
                 // 1. open a .mat file named as the name of the material
@@ -204,6 +204,8 @@ NativeFormatImporter:
                 //$templatePart = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_matp', true );
                 //$fileData = wpunity_replace_mat($templatePart,$attachment_ID);
 
+
+                // Create .mat
                 $mat_file_content = str_replace([
                                                 "___[material_name]___",
                                                 "___[jpg_texture_guid]___",
@@ -211,7 +213,7 @@ NativeFormatImporter:
                                             [
                         $mtl_arr[$iMaterial]['materialName'],
                         // if textureFileName is empty then put empty else find the guid of e.g. floor.jpg texture
-                        $mtl_arr[$iMaterial]['textureFileName']==""?"": ", guid: " . wpunity_create_guids('jpg', $post_id) . ", type: 3", // find_guid_of( $mtl_arr[$iMaterial]['textureFileName'])
+                        $mtl_arr[$iMaterial]['textureFileName']==""?"": ", guid: " . wpunity_create_guids('jpg', $post_id, $iMaterial) . ", type: 3", // find_guid_of( $mtl_arr[$iMaterial]['textureFileName'])
                         $mtl_arr[$iMaterial]['color_r'],
                         $mtl_arr[$iMaterial]['color_g'],
                         $mtl_arr[$iMaterial]['color_b'],
@@ -223,7 +225,8 @@ NativeFormatImporter:
                 fwrite($file_mat, $mat_file_content);
                 fclose($file_mat);
 
-                // Create a .meta for each .mat
+
+                // Create .meta
                 $file_mat_meta = fopen($upload_dir . '/' . $assetPath . '/' . $mtl_arr[$iMaterial]['materialName'] . '.mat.meta', "w") or die("Unable to open file!");
 
                 //$templatePart2 = get_post_meta( $yampl_temp_id, 'wpunity_yamltemp_scene_mdp', true );
@@ -322,9 +325,8 @@ function wpunity_create_guids($objTypeSTR,$objID, $extra_id_material){
         case 'folder': $objType = "2"; break;
         case 'obj': $objType = "3"; break;
         case 'mat': $objType = "4".$extra_id_material; break; // an obj can have two or more mat
-        case 'jpg': $objType = "5"; break;
+        case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
     }
-
 
     return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 8, "0", STR_PAD_LEFT);
 }
