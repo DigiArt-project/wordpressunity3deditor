@@ -190,6 +190,8 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
     $queryargs = array(
         'post_type' => 'wpunity_scene',
         'posts_per_page' => -1,
+        'orderby'   => 'ID',
+        'order' => 'ASC',
         'tax_query' => array(
             array(
                 'taxonomy' => 'wpunity_scene_pgame',
