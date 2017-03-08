@@ -2,15 +2,12 @@
 
 $sceneClass = new SceneClass();
 
-class SceneClass
-{
+class SceneClass{
 
-    function __construct()
-    {
+    function __construct(){
         add_action('init', array($this, 'wpunity_scenes_construct')); //wpunity_scene
         add_action('init', array($this, 'wpunity_scenes_taxpgame')); //wpunity_scene_pgame
         add_action('init', array($this, 'wpunity_scenes_taxyaml')); //wpunity_scene_yaml
-//        add_filter('geodir_custom_field_input_textarea', array($this,'scene_json_textarea_prolong'), 10, 1);
     }
 
     /**
@@ -19,8 +16,7 @@ class SceneClass
      *
      * Scene as custom type 'wpunity_scene'
      */
-    function wpunity_scenes_construct()
-    {
+    function wpunity_scenes_construct(){
 
         $labels = array(
             'name' => _x('Scenes', 'post type general name'),
@@ -162,55 +158,11 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             $parentGameID = intval($_POST['wpunity_scene_pgame'], 10);
             $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_scene_pgame' )->slug : NULL;
 
-            $upload = wp_upload_dir();
-            $upload_dir = $upload['basedir'];
-            $upload_dir .= "/" . $parentGameSlug;   $file_dir = $upload_dir;//save this for asset folder's meta
-            $upload_dir .= "/" . $sceneSlug;
+            //Create "Scene" folder inside "Game" (parentGame) with meta file
+            wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
 
-            $upload_dir = str_replace('\\','/',$upload_dir);
-
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755);
-            }
-
-            //get template for folder.meta
-            //get (all) the custom post type with Taxonomy's 'equal' slug (YAML template)
-            //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
-//            $custom_args = array(
-//                'name'        => $parentGameSlug,
-//                'post_type'   => 'wpunity_game',
-//            );
-//            $my_posts = get_posts($custom_args);
-//            $gameID = $my_posts[0]->ID;
-//
-//            $parentGameTemplate = wp_get_post_terms( $gameID, 'wpunity_game_cat');
-//            $templateSlug = $parentGameTemplate[0]->slug;
-//            $custom_args2 = array(
-//                'name'        => $templateSlug,
-//                'post_type'   => 'wpunity_yamltemp',
-//            );
-//            $my_posts2 = get_posts($custom_args2);
-
-            $parentSceneYAML = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml');
-            $templateSlug = $parentSceneYAML[0]->slug;
-            $custom_args2 = array(
-                'name'        => $templateSlug,
-                'post_type'   => 'wpunity_yamltemp',
-            );
-            $my_posts2 = get_posts($custom_args2);
-            $templateID = $my_posts2[0]->ID;
-
-            $templatePart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_fdp', true );
-            
-            //create folder.meta for Scene-folder (meta file has same path as folder)
-            $file_dir = str_replace('\\','/',$file_dir);
-            $file_dir .= '/' . $sceneSlug .'.meta';//path and 'folder_name'.meta
-
-            $create_file = fopen($file_dir, "w") or die("Unable to open file!");
-
-            $myfile_text = wpunity_replace_foldermeta($templatePart,$sceneID);
-            fwrite($create_file, $myfile_text);
-            fclose($create_file);
+            //Create a parent scene tax category for the assets3d
+            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
 
             /**************** .UNITY FILE CREATION **************************/
             $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.meta
@@ -219,41 +171,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
             fwrite($unitycreate_file, $unityfile_text);
             fclose($unitycreate_file);
             /****************************************************************/
-
-
-            //Create a parent scene tax category for the assets3d
-            wp_insert_term($sceneTitle,'wpunity_asset3d_pscene',$sceneSlug,'Scene assignment of Asset 3D');
-
-            //Create Subfolders for assets to be uploaded
-            $newDir1 = $upload_dir . '/' . 'dynamic3dmodels';
-            $newDir2 = $upload_dir . '/' . 'doors';
-            $newDir3 = $upload_dir . '/' . 'pois';
-            $newDir4 = $upload_dir . '/' . 'static3dmodels';
-
-            if (!is_dir($newDir1)) {mkdir($newDir1, 0755);}
-            if (!is_dir($newDir2)) {mkdir($newDir2, 0755);}
-            if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
-            if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
-
-            $file1_text = wpunity_replace_foldermeta($templatePart,'a'. $sceneID);
-            $file2_text = wpunity_replace_foldermeta($templatePart,'b'. $sceneID);
-            $file3_text = wpunity_replace_foldermeta($templatePart,'c'. $sceneID);
-            $file4_text = wpunity_replace_foldermeta($templatePart,'d'. $sceneID);
-            $create_file1 = fopen($upload_dir . '/dynamic3dmodels.meta', "w") or die("Unable to open file!");
-            fwrite($create_file1, $file1_text);
-            fclose($create_file1);
-
-            $create_file2 = fopen($upload_dir . '/doors.meta', "w") or die("Unable to open file!");
-            fwrite($create_file2, $file2_text);
-            fclose($create_file2);
-
-            $create_file3 = fopen($upload_dir . '/pois.meta', "w") or die("Unable to open file!");
-            fwrite($create_file3, $file3_text);
-            fclose($create_file3);
-
-            $create_file4 = fopen($upload_dir . '/static3dmodels.meta', "w") or die("Unable to open file!");
-            fwrite($create_file4, $file4_text);
-            fclose($create_file4);
+            //TODO
 
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)

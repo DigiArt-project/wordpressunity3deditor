@@ -10,7 +10,7 @@ class ImcSettingsPage {
      * here as well as our tabs array which is populated
      * when registering settings
      */
-    private $yaml_settings_key = 'gmap_settings';
+    private $yaml_settings_key = 'yaml_settings';
     private $general_settings_key = 'general_settings';
     private $options_key = 'wpunity_options';
     private $settings_tabs = array();
