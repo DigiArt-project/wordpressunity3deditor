@@ -498,7 +498,7 @@ function wpunity_replace_unityMetafile($templateID,$sceneID){
 
 function wpunity_replace_unityMetafile_withAssets( $sceneID,$unityMetaPattern ){
     $unix_time = time();
-    $guid_id = wpunity_create_guids(1,$sceneID);
+    $guid_id = wpunity_create_guids("unity",$sceneID);
 
     $file_content_return = str_replace("___[scene_unity_guid]___",$guid_id,$unityMetaPattern);
     $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
@@ -523,7 +523,7 @@ function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
 
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
-    $guid_id = wpunity_create_guids(1,$folderID);
+    $guid_id = wpunity_create_guids('folder',$folderID);
 
     $file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
     $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
@@ -533,7 +533,7 @@ function wpunity_replace_foldermeta($file_content,$folderID){
 
 function wpunity_replace_objmeta($file_content,$objID){
     $unix_time = time();
-    $guid_id = wpunity_create_guids(2,$objID);
+    $guid_id = wpunity_create_guids('obj',$objID);
 
     $file_content_return = str_replace("___[obj_guid]___",$guid_id,$file_content);
     $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
@@ -543,7 +543,7 @@ function wpunity_replace_objmeta($file_content,$objID){
 
 function wpunity_replace_jpgmeta($file_content,$objID){
     $unix_time = time();
-    $guid_id = wpunity_create_guids(3,$objID);
+    $guid_id = wpunity_create_guids('jpg',$objID);
 
     $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
     $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
