@@ -1,6 +1,8 @@
 <?php
 
-global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poi;
+global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poi_imagetext_p,
+       $ini_scene_poi_video_p;
+
 global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
 global $ini_scene_credentials_unity_pattern;
 global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
@@ -513,53 +515,605 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
   m_IsPrefabParent: 0
 ');
-$ini_scene_poip = array('--- !u!1001 &___[poi_fid]___
+
+$ini_scene_poi_imagetext_p = array('--- !u!1 &43972845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 43972846}
+  - component: {fileID: 43972848}
+  - component: {fileID: 43972847}
+  m_Layer: 0
+  m_Name: android_121CloseBtText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &43972846
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43972845}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2017405467}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &43972847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43972845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Close
+--- !u!222 &43972848
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43972845}
+--- !u!1001 &674797472
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: ___[poi_pos_x]___
+      value: -2.93
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: ___[poi_pos_y]___
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: ___[poi_pos_z]___
+      value: 0.59
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: ___[poi_rotation_x]___
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: ___[poi_rotation_y]___
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: ___[poi_rotation_z]___
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[poi_guid]___, type: 3}
+    - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: ___[poi_guid]___, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
+    - target: {fileID: 100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+      propertyPath: m_Name
+      value: android_121
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+      propertyPath: m_Name
+      value: android_121default
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.21
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: ___[poi_guid]___, type: 3}
+  m_ParentPrefab: {fileID: 100100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &674797473 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+  m_PrefabInternal: {fileID: 674797472}
+--- !u!4 &674797474 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+  m_PrefabInternal: {fileID: 674797472}
+--- !u!1 &674797475 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
+  m_PrefabInternal: {fileID: 674797472}
+--- !u!114 &674797476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 674797473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c77eec757bf76d41879b85a44b84133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &674797477
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 674797475}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.61231303, y: 1.103676, z: 0.93248796}
+  m_Center: {x: 0.04983951, y: 0.551838, z: 0.018657997}
+--- !u!1 &1058685976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1058685977}
+  - component: {fileID: 1058685979}
+  - component: {fileID: 1058685978}
+  m_Layer: 0
+  m_Name: android_121TextContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1058685977
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1058685976}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1253481095}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -700, y: -550}
+  m_SizeDelta: {x: 400, y: 800}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1058685978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1058685976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: This is the android !!!
+--- !u!222 &1058685979
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1058685976}
+--- !u!1 &1253481094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1253481095}
+  - component: {fileID: 1253481097}
+  - component: {fileID: 1253481096}
+  m_Layer: 0
+  m_Name: android_121Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1253481095
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1253481094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1058685977}
+  - {fileID: 1408453714}
+  - {fileID: 2017405467}
+  m_Father: {fileID: 1264059953}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1253481096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1253481094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1253481097
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1253481094}
+--- !u!1 &1264059952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1264059953}
+  - component: {fileID: 1264059956}
+  - component: {fileID: 1264059955}
+  - component: {fileID: 1264059954}
+  m_Layer: 0
+  m_Name: android_121Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1264059953
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1264059952}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1253481095}
+  m_Father: {fileID: 674797474}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -7.86, y: -0.29}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &1264059954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1264059952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1264059955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1264059952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &1264059956
+Canvas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1264059952}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!1 &1408453713
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1408453714}
+  - component: {fileID: 1408453716}
+  - component: {fileID: 1408453715}
+  m_Layer: 0
+  m_Name: android_121ImageContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1408453714
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1408453713}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1253481095}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 156, y: 0}
+  m_SizeDelta: {x: 1200, y: 768}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1408453715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1408453713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: d250b7ff7954a8d4fa9da57b66a637c3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1408453716
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1408453713}
+--- !u!1 &2017405466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2017405467}
+  - component: {fileID: 2017405470}
+  - component: {fileID: 2017405469}
+  - component: {fileID: 2017405468}
+  m_Layer: 0
+  m_Name: android_121CloseBt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2017405467
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017405466}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 43972846}
+  m_Father: {fileID: 1253481095}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 504}
+  m_SizeDelta: {x: 160, y: 46}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2017405468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017405466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2017405469}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 674797476}
+        m_MethodName: onCloseBt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &2017405469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017405466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &2017405470
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017405466}
 ');
+
+$ini_scene_poi_video_p = array('Canvasion');
 
 
 $ini_scene_main_menu_unity_pattern = array('%YAML 1.1
@@ -4783,7 +5337,8 @@ function wpunity_scenes_taxyaml_customFields($tag) {
     $term_meta_scene_sop = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_sop', true );
     $term_meta_scene_dop = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_dop', true );
     $term_meta_scene_doorp = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_doorp', true );
-    $term_meta_scene_poip = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_poip', true );
+    $term_meta_scene_poi_imagetext_p = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', true );
+    $term_meta_scene_poi_video_p = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_poi_video_p', true );
     $term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
     $term_meta_csharp_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_csharp_mainmenu', true );
     $term_meta_s_credentials = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials', true );
@@ -4840,15 +5395,27 @@ function wpunity_scenes_taxyaml_customFields($tag) {
         </td>
     </tr>
 
-    <tr class="form-field term-scene_poip">
+    <tr class="form-field term-scene_poi_imagetext_p">
         <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_poip">POI Pattern</label>
+            <label for="wpunity_yamlmeta_scene_poi_imagetext_p">POI Pattern (Image-Text)</label>
         </th>
         <td>
-            <textarea name="wpunity_yamlmeta_scene_poip" id="wpunity_yamlmeta_scene_poip"><?php echo $term_meta_scene_poip ? $term_meta_scene_poip : ''; ?></textarea>
-            <p class="description">scene-POI-pattern</p>
+            <textarea name="wpunity_yamlmeta_scene_poi_imagetext_p" id="wpunity_yamlmeta_scene_poi_imagetext_p"><?php echo $term_meta_scene_poi_imagetext_p ? $term_meta_scene_poi_imagetext_p : '' ; ?></textarea>
+            <p class="description">scene-POI-imagetext-pattern</p>
         </td>
     </tr>
+
+
+    <tr class="form-field term-scene_poi_video_p">
+        <th scope="row" valign="top">
+            <label for="wpunity_yamlmeta_scene_poi_video_p">POI Pattern (Video)</label>
+        </th>
+        <td>
+            <textarea name="wpunity_yamlmeta_scene_poi_video_p" id="wpunity_yamlmeta_scene_poi_video_p"><?php echo $term_meta_scene_poi_video_p ? $term_meta_scene_poi_video_p : ''; ?></textarea>
+            <p class="description">scene-POI-video-pattern</p>
+        </td>
+    </tr>
+
 
     <tr class="form-field">
         <th scope="row" valign="top"></th>
@@ -5006,7 +5573,8 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 
 // A callback function to save our extra taxonomy field(s)
 function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
-    global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poip;
+    global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poi_imagetext_p,
+           $ini_scene_poi_video_p;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
     global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
@@ -5048,14 +5616,24 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
         }
     }
 
-    if ( isset( $_POST['wpunity_yamlmeta_scene_poip'] ) ) {
-        $term_meta_scene_poip = $_POST['wpunity_yamlmeta_scene_poip'];
-        if($term_meta_scene_poip == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poip', $ini_scene_poip[0]);
+    if ( isset( $_POST['wpunity_yamlmeta_scene_poi_imagetext_p'] ) ) {
+        $term_meta_scene_poi_imagetext_p = $_POST['wpunity_yamlmeta_scene_poi_imagetext_p'];
+        if($term_meta_scene_poi_imagetext_p == ''){
+            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', $ini_scene_poi_imagetext_p[0]);
         }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poip', $term_meta_scene_poip);
+            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', $term_meta_scene_poi_imagetext_p);
         }
     }
+
+    if ( isset( $_POST['wpunity_yamlmeta_scene_poi_video_p'] ) ) {
+        $term_meta_scene_poi_video_p = $_POST['wpunity_yamlmeta_scene_poi_video_p'];
+        if($term_meta_scene_poi_video_p == ''){
+            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poi_video_p', $ini_scene_poi_video_p[0]);
+        }else{
+            update_term_meta($term_id, 'wpunity_yamlmeta_scene_poi_video_p', $term_meta_scene_poi_video_p);
+        }
+    }
+
 
     if ( isset( $_POST['wpunity_yamlmeta_s_mainmenu'] ) ) {
         $term_meta_scene_s_mainmenu = $_POST['wpunity_yamlmeta_s_mainmenu'];
@@ -5200,7 +5778,8 @@ add_action( 'init', 'wpunity_scenes_taxyaml_standard_cre' );
 //==========================================================================================================================================
 
 function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
-    global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poip;
+    global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,
+           $ini_scene_poi_imagetext_p,$ini_scene_poi_video_p;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
     global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
@@ -5213,7 +5792,8 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_sop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_dop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_doorp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poip', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_video_p', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', $ini_scene_main_menu_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', $ini_scene_allmenu_cs[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
@@ -5228,7 +5808,8 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_sop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_dop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_doorp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poip', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_video_p', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', $ini_scene_credentials_unity_pattern[0]);
@@ -5243,7 +5824,8 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_sop', $ini_scene_sop[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_dop', $ini_scene_dop[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_doorp', $ini_scene_doorp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poip', $ini_scene_poip[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', $ini_scene_poi_imagetext_p[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_video_p', $ini_scene_poi_video_p[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
@@ -5258,7 +5840,8 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_sop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_dop', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_doorp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poip', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_video_p', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
@@ -5273,7 +5856,8 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_sop', $ini_scene_sop[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_dop', $ini_scene_dop[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_scene_doorp', $ini_scene_doorp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poip', $ini_scene_poip[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_imagetext_p', $ini_scene_poi_imagetext_p[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_poi_video_p', $ini_scene_poi_video_p[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', $ini_scene_main_menu_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', $ini_scene_allmenu_cs[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', $ini_scene_credentials_unity_pattern[0]);

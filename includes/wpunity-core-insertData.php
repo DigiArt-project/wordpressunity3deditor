@@ -48,11 +48,19 @@ function wpunity_assets_taxcategory_fill(){
         )
     );
     wp_insert_term(
-        'Points of Interest', // the term
+        'Points of Interest (Image-Text)', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up.',
-            'slug' => 'pois',
+            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Image with Text',
+            'slug' => 'pois_ImageText',
+        )
+    );
+    wp_insert_term(
+        'Points of Interest (Video)', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Video',
+            'slug' => 'pois_Video',
         )
     );
     wp_insert_term(

@@ -117,18 +117,23 @@ function wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart){
     //Create Subfolders for assets to be uploaded
     $newDir1 = $upload_dir . '/' . 'dynamic3dmodels';
     $newDir2 = $upload_dir . '/' . 'doors';
-    $newDir3 = $upload_dir . '/' . 'pois';
-    $newDir4 = $upload_dir . '/' . 'static3dmodels';
+    $newDir3 = $upload_dir . '/' . 'pois_ImageText';
+    $newDir4 = $upload_dir . '/' . 'pois_Video';
+    $newDir5 = $upload_dir . '/' . 'static3dmodels';
 
     if (!is_dir($newDir1)) {mkdir($newDir1, 0755);}
     if (!is_dir($newDir2)) {mkdir($newDir2, 0755);}
     if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
     if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
+    if (!is_dir($newDir5)) {mkdir($newDir5, 0755);}
 
     $file1_text = wpunity_replace_foldermeta($templatePart,'a'. $sceneID);
     $file2_text = wpunity_replace_foldermeta($templatePart,'b'. $sceneID);
     $file3_text = wpunity_replace_foldermeta($templatePart,'c'. $sceneID);
     $file4_text = wpunity_replace_foldermeta($templatePart,'d'. $sceneID);
+    $file5_text = wpunity_replace_foldermeta($templatePart,'e'. $sceneID);
+
+
     $create_file1 = fopen($upload_dir . '/dynamic3dmodels.meta', "w") or die("Unable to open file!");
     fwrite($create_file1, $file1_text);
     fclose($create_file1);
@@ -137,13 +142,18 @@ function wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart){
     fwrite($create_file2, $file2_text);
     fclose($create_file2);
 
-    $create_file3 = fopen($upload_dir . '/pois.meta', "w") or die("Unable to open file!");
+    $create_file3 = fopen($upload_dir . '/pois_ImageText.meta', "w") or die("Unable to open file!");
     fwrite($create_file3, $file3_text);
     fclose($create_file3);
 
-    $create_file4 = fopen($upload_dir . '/static3dmodels.meta', "w") or die("Unable to open file!");
+    $create_file4 = fopen($upload_dir . '/pois_Video.meta', "w") or die("Unable to open file!");
     fwrite($create_file4, $file4_text);
     fclose($create_file4);
+
+
+    $create_file5 = fopen($upload_dir . '/static3dmodels.meta', "w") or die("Unable to open file!");
+    fwrite($create_file5, $file5_text);
+    fclose($create_file5);
 }
 
 function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID){
@@ -460,7 +470,10 @@ function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
                     ]
                     , $templatePart_sop);
 
-            } else if ($value['categoryName'] == 'Points of Interest'){
+            } else if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
+
+
+            } else if ($value['categoryName'] == 'Points of Interest (Video)'){
 
 
             } else if ($value['categoryName'] == 'Dynamic 3D models'){
