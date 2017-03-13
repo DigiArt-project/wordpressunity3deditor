@@ -350,18 +350,6 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'image1',
             'type' => 'text',
             'std' => ''
-        ),array(
-            'name' => 'Image 2',
-            'desc' => 'Image 2',
-            'id' => $wpunity_prefix . 'image2',
-            'type' => 'text',
-            'std' => ''
-        ),array(
-            'name' => 'Image 3',
-            'desc' => 'Image 3',
-            'id' => $wpunity_prefix . 'image3',
-            'type' => 'text',
-            'std' => ''
         ),
     )
 );
@@ -536,30 +524,6 @@ function wpunity_assets_databox_show(){
                         </td>
                     </tr>
                     <?php
-                }elseif ($field['id'] == 'wpunity_asset3d_image2') {
-                    ?>
-                    <tr>
-                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
-                        <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
-                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
-                            <img id="wpunity_asset3d_image2_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;" src="<?php echo $meta; ?>"/>
-                        </td>
-                    </tr>
-                    <?php
-                }elseif ($field['id'] == 'wpunity_asset3d_image3') {
-                    ?>
-                    <tr>
-                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
-                        <td>
-                            <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
-                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
-                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
-                            <img id="wpunity_asset3d_image3_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;" src="<?php echo $meta; ?>"/>
-                        </td>
-                    </tr>
-                    <?php
                 }elseif ($field['id'] == 'wpunity_asset3d_video') {
                     ?>
                     <tr>
@@ -592,12 +556,6 @@ function wpunity_assets_databox_show(){
                 document.getElementById('wpunity_asset3d_image1').style.display = 'none';
                 document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
                 document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image2').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image2_btn').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image2_preview').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image3').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image3_btn').style.display = 'none';
-                document.getElementById('wpunity_asset3d_image3_preview').style.display = 'none';
                 document.getElementById('wpunity_asset3d_video').style.display = 'none';
                 document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
             }else{
@@ -606,12 +564,6 @@ function wpunity_assets_databox_show(){
                 document.getElementById('wpunity_asset3d_image1').style.display = 'block';
                 document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
                 document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image2').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image2_btn').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image2_preview').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image3').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image3_btn').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image3_preview').style.display = 'block';
                 document.getElementById('wpunity_asset3d_video').style.display = 'block';
                 document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
             }
@@ -791,76 +743,6 @@ function wpunity_assets_databox_show(){
                     // Do something with attachment.id and/or attachment.url here
                     jQuery('#wpunity_asset3d_image1').val(attachment.id);
                     jQuery('#wpunity_asset3d_image1_preview').attr( 'src', attachment.url );
-
-                    // Restore the main post ID
-                    wp.media.model.settings.post.id = wp_media_post_id;
-                });
-
-                // Finally, open the modal
-                file_frame.open();
-            });
-
-
-            jQuery('#wpunity_asset3d_image2_btn').on('click', function( event ){
-
-                event.preventDefault();
-
-                // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                wp.media.model.settings.post.id = set_to_post_id;
-
-                // Create the media frame.
-                file_frame = wp.media.frames.file_frame = wp.media({
-                    title: 'Select photo to upload',
-                    button: {
-                        text: 'Use this photo',
-                    },
-                    multiple: false	// Set to true to allow multiple files to be selected
-                });
-
-                // When an image is selected, run a callback.
-                file_frame.on( 'select', function(html) {
-                    // We set multiple to false so only get one image from the uploader
-                    attachment = file_frame.state().get('selection').first().toJSON();
-
-                    // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_image2').val(attachment.id);
-                    jQuery('#wpunity_asset3d_image2_preview').attr( 'src', attachment.url );
-
-                    // Restore the main post ID
-                    wp.media.model.settings.post.id = wp_media_post_id;
-                });
-
-                // Finally, open the modal
-                file_frame.open();
-            });
-
-            jQuery('#wpunity_asset3d_image3_btn').on('click', function( event ){
-
-                event.preventDefault();
-
-                // Set the wp.media post id so the uploader grabs the ID we want when initialised
-                wp.media.model.settings.post.id = set_to_post_id;
-
-                // Create the media frame.
-                file_frame = wp.media.frames.file_frame = wp.media({
-                    title: 'Select photo to upload',
-                    button: {
-                        text: 'Use this photo',
-                    },
-                    multiple: false,	// Set to true to allow multiple files to be selected
-                    library: {
-                        type: 'image',
-                    }
-                });
-
-                // When an image is selected, run a callback.
-                file_frame.on( 'select', function(html) {
-                    // We set multiple to false so only get one image from the uploader
-                    attachment = file_frame.state().get('selection').first().toJSON();
-
-                    // Do something with attachment.id and/or attachment.url here
-                    jQuery('#wpunity_asset3d_image3').val(attachment.id);
-                    jQuery('#wpunity_asset3d_image3_preview').attr( 'src', attachment.url );
 
                     // Restore the main post ID
                     wp.media.model.settings.post.id = wp_media_post_id;
