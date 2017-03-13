@@ -279,9 +279,14 @@ function wpunity_getYaml_door_pattern($yamlID){
     return get_term_meta($yamlID,'wpunity_yamlmeta_scene_doorp',true);
 }
 
-//Get 'POI Pattern' by Yaml ID
-function wpunity_getYaml_poi_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poip',true);
+//Get 'POI ImageText Pattern' by Yaml ID
+function wpunity_getYaml_poi_imagetext_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_imagetext_p',true);
+}
+
+//Get 'POI Video Pattern' by Yaml ID
+function wpunity_getYaml_poi_video_pattern($yamlID){
+    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_video_p',true);
 }
 
 //Get 'The S_MainMenu.unity pattern' by Yaml ID
