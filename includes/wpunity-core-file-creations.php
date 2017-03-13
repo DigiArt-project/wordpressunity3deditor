@@ -168,14 +168,16 @@ function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$pare
 
         $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
         $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
-        $unityfile_text = wpunity_replace_unityfile($yamlTermID,$sceneID);
+        $unityfile_text = wpunity_replace_unityfile_noAssets($yamlTermID,$sceneID);
 
         fwrite($unitycreate_file, $unityfile_text);
         fclose($unitycreate_file);
 
         $unityMetafile_dir = $upload_dir . '/' . $sceneSlug .'.unity.meta';//path and 'folder_name'.unity.meta
         $unityMetacreate_file = fopen($unityMetafile_dir, "w") or die("Unable to open file!");
-        $unityMetafile_text = wpunity_replace_unityMetafile($yamlTermID,$sceneID);
+
+        $unityMetaPattern = wpunity_getSceneUnityMetaPattern();
+        $unityMetafile_text = wpunity_replace_unityMetafile_withAssets($sceneID,$unityMetaPattern);
         fwrite($unityMetacreate_file, $unityMetafile_text);
         fclose($unityMetacreate_file);
     }
@@ -402,7 +404,7 @@ function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
 
     $sceneJsonARR = json_decode($jsonScene, TRUE);//->objects->floor_1487753970
 
-    $curr_fid = 30;
+    $curr_fid = 31;
 
     //if ($sceneJsonARR['objects']) {}
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
@@ -491,26 +493,41 @@ function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
     return $unity_file_contents;
 }
 
-function wpunity_replace_unityfile($templateID,$sceneID){
+function wpunity_replace_unityfile_noAssets($yamlID,$sceneID){
+    $unity_file_contents = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
+    $file_content_return ="";
+    $file_content_return .= str_replace(
+        [
+            "___[player_fid]___",
+            "___[player_position_x]___",
+            "___[player_position_y]___",
+            "___[player_position_z]___",
+            "___[player_rotation_x]___",
+            "___[player_rotation_y]___",
+            "___[player_rotation_z]___",
+            "___[player_name]___",
+        ],
+        [
+            '30',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            'Player',
+        ],$unity_file_contents);
 
-    echo "-------------------------------------->4";
-
-    $tempOcclusionPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_ocs', true );
-    $tempRenderPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_rs', true );
-    $tempLightMapPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_lms', true );
-    $tempNavMeshPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_nms', true );
-    $tempLightPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_light', true );
-
-    $unity_file_contents = $tempOcclusionPart . $tempRenderPart . $tempLightMapPart . $tempNavMeshPart . $tempLightPart;
-    return $unity_file_contents;
-
+    return $file_content_return;
 }
 
-function wpunity_replace_unityMetafile($templateID,$sceneID){
-
-    return '';
-
-}
+//function wpunity_replace_unityMetafile($sceneID,$unityMetaPattern){
+//
+//    $sceneID,$unityMetaPattern
+//
+//    return '';
+//
+//}
 
 function wpunity_replace_unityMetafile_withAssets( $sceneID,$unityMetaPattern ){
     $unix_time = time();
