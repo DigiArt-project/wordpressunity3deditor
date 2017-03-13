@@ -516,34 +516,34 @@ Prefab:
   m_IsPrefabParent: 0
 ');
 
-$ini_scene_poi_imagetext_p = array('--- !u!1 &43972845
+$ini_scene_poi_imagetext_p = array('--- !u!1 &___[fid_poi_imagetext_bt_text]___
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 43972846}
-  - component: {fileID: 43972848}
-  - component: {fileID: 43972847}
+  - component: {fileID: ___[fid_poi_imagetext]___43972846}
+  - component: {fileID: ___[fid_poi_imagetext]___43972848}
+  - component: {fileID: ___[fid_poi_imagetext]___43972847}
   m_Layer: 0
-  m_Name: android_121CloseBtText
+  m_Name: ___[name_poi_imagetext]___CloseBtText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &43972846
+--- !u!224 &___[fid_poi_imagetext]___43972846
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 43972845}
+  m_GameObject: {fileID: ___[fid_poi_imagetext_bt_text]___}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2017405467}
+  m_Father: {fileID: ___[fid_poi_imagetext]___2017405467}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -551,12 +551,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &43972847
+--- !u!114 &___[fid_poi_imagetext]___43972847
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 43972845}
+  m_GameObject: {fileID: ___[fid_poi_imagetext_bt_text]___}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -584,13 +584,13 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Close
---- !u!222 &43972848
+--- !u!222 &___[fid_poi_imagetext]___43972848
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 43972845}
---- !u!1001 &674797472
+  m_GameObject: {fileID: ___[fid_poi_imagetext_bt_text]___}
+--- !u!1001 &___[fid_poi_imagetext_prefab]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -599,27 +599,27 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.93
+      value: ___[fid_poi_imagetext_pos_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: ___[fid_poi_imagetext_pos_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.59
+      value: ___[fid_poi_imagetext_pos_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: ___[fid_poi_imagetext_rot_x]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: ___[fid_poi_imagetext_rot_y]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: ___[fid_poi_imagetext_rot_z]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -631,86 +631,86 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_Name
-      value: android_121
+      value: ___[fid_poi_imagetext_bt_text]___
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_Name
-      value: android_121default
+      value: ___[fid_poi_imagetext_bt_text]___default
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.21
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
   m_IsPrefabParent: 0
---- !u!1 &674797473 stripped
+--- !u!1 &___[fid_poi_imagetext_gameobject]___ stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
-  m_PrefabInternal: {fileID: 674797472}
---- !u!4 &674797474 stripped
+  m_PrefabInternal: {fileID: ___[fid_poi_imagetext_prefab]___}
+--- !u!4 &___[fid_poi_imagetext]___674797474 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
-  m_PrefabInternal: {fileID: 674797472}
---- !u!1 &674797475 stripped
+  m_PrefabInternal: {fileID: ___[fid_poi_imagetext_prefab]___}
+--- !u!1 &___[fid_poi_imagetext]___674797475 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 71ce9d1cfa5b0f64780e5aa69f3932f3, type: 3}
-  m_PrefabInternal: {fileID: 674797472}
---- !u!114 &674797476
+  m_PrefabInternal: {fileID: ___[fid_poi_imagetext_prefab]___}
+--- !u!114 &___[fid_poi_imagetext]___674797476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 674797473}
+  m_GameObject: {fileID: ___[fid_poi_imagetext_gameobject]___}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c77eec757bf76d41879b85a44b84133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &674797477
+--- !u!65 &___[fid_poi_imagetext]___674797477
 BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 674797475}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___674797475}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.61231303, y: 1.103676, z: 0.93248796}
-  m_Center: {x: 0.04983951, y: 0.551838, z: 0.018657997}
---- !u!1 &1058685976
+  m_Size: {x: ___[fid_poi_imagetext_boxcol_size_x]___, y: ___[fid_poi_imagetext_boxcol_size_y]___, z: ___[fid_poi_imagetext_boxcol_size_z]___}
+  m_Center: {x: ___[fid_poi_imagetext_boxcol_center_x]___, y: ___[fid_poi_imagetext_boxcol_center_y]___, z: ___[fid_poi_imagetext_boxcol_center_z]___}
+--- !u!1 &___[fid_poi_imagetext]___1058685976
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 1058685977}
-  - component: {fileID: 1058685979}
-  - component: {fileID: 1058685978}
+  - component: {fileID: ___[fid_poi_imagetext]___1058685977}
+  - component: {fileID: ___[fid_poi_imagetext]___1058685979}
+  - component: {fileID: ___[fid_poi_imagetext]___1058685978}
   m_Layer: 0
-  m_Name: android_121TextContainer
+  m_Name: ___[fid_poi_imagetext_bt_text]___TextContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1058685977
+--- !u!224 &___[fid_poi_imagetext]___1058685977
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058685976}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1058685976}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1253481095}
+  m_Father: {fileID: ___[fid_poi_imagetext]___1253481095}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -718,12 +718,12 @@ RectTransform:
   m_AnchoredPosition: {x: -700, y: -550}
   m_SizeDelta: {x: 400, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1058685978
+--- !u!114 &___[fid_poi_imagetext]___1058685978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058685976}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1058685976}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -750,44 +750,44 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This is the android !!!
---- !u!222 &1058685979
+  m_Text: ___[fid_poi_imagetext_text]___
+--- !u!222 &___[fid_poi_imagetext]___1058685979
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058685976}
---- !u!1 &1253481094
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1058685976}
+--- !u!1 &___[fid_poi_imagetext]___1253481094
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 1253481095}
-  - component: {fileID: 1253481097}
-  - component: {fileID: 1253481096}
+  - component: {fileID: ___[fid_poi_imagetext]___1253481095}
+  - component: {fileID: ___[fid_poi_imagetext]___1253481097}
+  - component: {fileID: ___[fid_poi_imagetext]___1253481096}
   m_Layer: 0
-  m_Name: android_121Panel
+  m_Name: ___[fid_poi_imagetext_bt_text]___Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1253481095
+--- !u!224 &___[fid_poi_imagetext]___1253481095
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1253481094}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1253481094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1058685977}
-  - {fileID: 1408453714}
-  - {fileID: 2017405467}
-  m_Father: {fileID: 1264059953}
+  - {fileID: ___[fid_poi_imagetext]___1058685977}
+  - {fileID: ___[fid_poi_imagetext]___1408453714}
+  - {fileID: ___[fid_poi_imagetext]___2017405467}
+  m_Father: {fileID: ___[fid_poi_imagetext]___1264059953}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -795,12 +795,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1253481096
+--- !u!114 &___[fid_poi_imagetext]___1253481096
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1253481094}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1253481094}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -822,42 +822,42 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &1253481097
+--- !u!222 &___[fid_poi_imagetext]___1253481097
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1253481094}
---- !u!1 &1264059952
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1253481094}
+--- !u!1 &___[fid_poi_imagetext]___1264059952
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 1264059953}
-  - component: {fileID: 1264059956}
-  - component: {fileID: 1264059955}
-  - component: {fileID: 1264059954}
+  - component: {fileID: ___[fid_poi_imagetext]___1264059953}
+  - component: {fileID: ___[fid_poi_imagetext]___1264059956}
+  - component: {fileID: ___[fid_poi_imagetext]___1264059955}
+  - component: {fileID: ___[fid_poi_imagetext]___1264059954}
   m_Layer: 0
-  m_Name: android_121Canvas
+  m_Name: ___[fid_poi_imagetext_bt_text]___Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1264059953
+--- !u!224 &___[fid_poi_imagetext]___1264059953
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1264059952}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1264059952}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.1}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1253481095}
-  m_Father: {fileID: 674797474}
+  - {fileID: ___[fid_poi_imagetext]___1253481095}
+  m_Father: {fileID: ___[fid_poi_imagetext]___674797474}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -865,12 +865,12 @@ RectTransform:
   m_AnchoredPosition: {x: -7.86, y: -0.29}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1264059954
+--- !u!114 &___[fid_poi_imagetext]___1264059954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1264059952}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1264059952}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -881,12 +881,12 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1264059955
+--- !u!114 &___[fid_poi_imagetext]___1264059955
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1264059952}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1264059952}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -902,12 +902,12 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!223 &1264059956
+--- !u!223 &___[fid_poi_imagetext]___1264059956
 Canvas:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1264059952}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1264059952}
   m_Enabled: 0
   serializedVersion: 2
   m_RenderMode: 0
@@ -921,34 +921,34 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1408453713
+--- !u!1 &___[fid_poi_imagetext]___1408453713
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 1408453714}
-  - component: {fileID: 1408453716}
-  - component: {fileID: 1408453715}
+  - component: {fileID: ___[fid_poi_imagetext]___1408453714}
+  - component: {fileID: ___[fid_poi_imagetext]___1408453716}
+  - component: {fileID: ___[fid_poi_imagetext]___1408453715}
   m_Layer: 0
-  m_Name: android_121ImageContainer
+  m_Name: ___[fid_poi_imagetext_bt_text]___ImageContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1408453714
+--- !u!224 &___[fid_poi_imagetext]___1408453714
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1408453713}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1408453713}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1253481095}
+  m_Father: {fileID: ___[fid_poi_imagetext]___1253481095}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -956,12 +956,12 @@ RectTransform:
   m_AnchoredPosition: {x: 156, y: 0}
   m_SizeDelta: {x: 1200, y: 768}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1408453715
+--- !u!114 &___[fid_poi_imagetext]___1408453715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1408453713}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1408453713}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -983,42 +983,42 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &1408453716
+--- !u!222 &___[fid_poi_imagetext]___1408453716
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1408453713}
---- !u!1 &2017405466
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___1408453713}
+--- !u!1 &___[fid_poi_imagetext]___2017405466
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 2017405467}
-  - component: {fileID: 2017405470}
-  - component: {fileID: 2017405469}
-  - component: {fileID: 2017405468}
+  - component: {fileID: ___[fid_poi_imagetext]___2017405467}
+  - component: {fileID: ___[fid_poi_imagetext]___2017405470}
+  - component: {fileID: ___[fid_poi_imagetext]___2017405469}
+  - component: {fileID: ___[fid_poi_imagetext]___2017405468}
   m_Layer: 0
-  m_Name: android_121CloseBt
+  m_Name: ___[fid_poi_imagetext_bt_text]___CloseBt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2017405467
+--- !u!224 &___[fid_poi_imagetext]___2017405467
 RectTransform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2017405466}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___2017405466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 43972846}
-  m_Father: {fileID: 1253481095}
+  - {fileID: ___[fid_poi_imagetext]___43972846}
+  m_Father: {fileID: ___[fid_poi_imagetext]___1253481095}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1026,12 +1026,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 504}
   m_SizeDelta: {x: 160, y: 46}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2017405468
+--- !u!114 &___[fid_poi_imagetext]___2017405468
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2017405466}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___2017405466}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -1061,11 +1061,11 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2017405469}
+  m_TargetGraphic: {fileID: ___[fid_poi_imagetext]___2017405469}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 674797476}
+      - m_Target: {fileID: ___[fid_poi_imagetext]___674797476}
         m_MethodName: onCloseBt
         m_Mode: 1
         m_Arguments:
@@ -1078,12 +1078,12 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &2017405469
+--- !u!114 &___[fid_poi_imagetext]___2017405469
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2017405466}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___2017405466}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -1105,12 +1105,12 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &2017405470
+--- !u!222 &___[fid_poi_imagetext]___2017405470
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2017405466}
+  m_GameObject: {fileID: ___[fid_poi_imagetext]___2017405466}
 ');
 
 $ini_scene_poi_video_p = array('Canvasion');
