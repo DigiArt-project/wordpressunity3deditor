@@ -508,6 +508,7 @@ function wpunity_replace_unityMetafile_withAssets( $sceneID,$unityMetaPattern ){
 
 //==========================================================================================================================================
 
+// 32 chars Hex (identifier for the resource)
 function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
 
     switch ($objTypeSTR) {
@@ -518,8 +519,16 @@ function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
         case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
     }
 
-    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 8, "0", STR_PAD_LEFT);
+    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 29, "0", STR_PAD_LEFT);
 }
+
+
+
+// 10 chars Decimal (identifier for the GameObject) (e.g. dino1, dino2 have different fid but share the same guid)
+function wpunity_create_fids($id){
+    return str_pad($id, 10, "0", STR_PAD_LEFT);
+}
+
 
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();
