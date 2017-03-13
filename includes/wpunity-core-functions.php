@@ -51,6 +51,19 @@ add_action('edit_form_advanced', 'force_post_title');
 
 //==========================================================================================================================================
 
+function wpunity_mediaLibrary_default() {
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function($){ wp.media.controller.Library.prototype.defaults.contentUserSetting=false; });
+    </script>
+    <?php
+}
+
+add_action( 'admin_footer-post-new.php', 'wpunity_mediaLibrary_default' );
+add_action( 'admin_footer-post.php', 'wpunity_mediaLibrary_default' );
+
+//==========================================================================================================================================
+
 function wpunity_change_publish_button( $translation, $text ) {
     global $post;
     $post_type = get_post_type($post->ID);
