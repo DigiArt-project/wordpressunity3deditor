@@ -449,6 +449,9 @@ function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
                 $tempFirstPersonPart);
         } else {
 
+            $curr_fid += 2;
+
+
             if ($value['categoryName'] == 'Static 3D models'){
 
                 $unity_file_contents .= str_replace(

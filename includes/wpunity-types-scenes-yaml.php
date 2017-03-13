@@ -339,11 +339,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[sop_scale_z]___
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+    - target: {fileID: 100002, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_Name
       value: ___[sop_name]___
       objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: ___[sop_guid]___, type: 3}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_Name
       value: ___[sop_name]___default
       objectReference: {fileID: 0}  
