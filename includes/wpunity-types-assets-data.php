@@ -561,11 +561,31 @@ function wpunity_assets_databox_show(){
             }else{
                 var link = document.getElementById('wpunity_asset3d_next_scene_field');
                 link.style.display = 'none';
-                document.getElementById('wpunity_asset3d_image1').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
-                document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
-                document.getElementById('wpunity_asset3d_video').style.display = 'block';
-                document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+                if(text == 'Points of Interest (Video)'){
+                    document.getElementById('wpunity_asset3d_image1').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_video').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+                }else if(text == 'Points of Interest (Image-Text)'){
+                    document.getElementById('wpunity_asset3d_image1').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_video').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                }else if(text == 'Points of Interest'){
+                    document.getElementById('wpunity_asset3d_image1').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_video').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+                }else{
+                    document.getElementById('wpunity_asset3d_image1').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_video').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                }
             }
         }
 
