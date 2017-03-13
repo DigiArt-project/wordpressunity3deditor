@@ -121,11 +121,23 @@ function wpunity_create_subfolders_withmeta($sceneID,$upload_dir,$templatePart){
     $newDir4 = $upload_dir . '/' . 'pois_Video';
     $newDir5 = $upload_dir . '/' . 'static3dmodels';
 
+    $file1 = $upload_dir . '/' . 'dynamic3dmodels/dynamic3dmodels.txt';
+    $file2 = $upload_dir . '/' . 'doors/doors.txt';
+    $file3 = $upload_dir . '/' . 'pois_ImageText/pois_ImageText.txt';
+    $file4 = $upload_dir . '/' . 'pois_Video/pois_Video.txt';
+    $file5 = $upload_dir . '/' . 'static3dmodels/static3dmodels.txt';
+
     if (!is_dir($newDir1)) {mkdir($newDir1, 0755);}
     if (!is_dir($newDir2)) {mkdir($newDir2, 0755);}
     if (!is_dir($newDir3)) {mkdir($newDir3, 0755);}
     if (!is_dir($newDir4)) {mkdir($newDir4, 0755);}
     if (!is_dir($newDir5)) {mkdir($newDir5, 0755);}
+
+    $cre_file1 = fopen($file1, "w") or die("Unable to open file!");fclose($cre_file1);
+    $cre_file2 = fopen($file2, "w") or die("Unable to open file!");fclose($cre_file2);
+    $cre_file3 = fopen($file3, "w") or die("Unable to open file!");fclose($cre_file3);
+    $cre_file4 = fopen($file4, "w") or die("Unable to open file!");fclose($cre_file4);
+    $cre_file5 = fopen($file5, "w") or die("Unable to open file!");fclose($cre_file5);
 
     $file1_text = wpunity_replace_foldermeta($templatePart,'a'. $sceneID);
     $file2_text = wpunity_replace_foldermeta($templatePart,'b'. $sceneID);

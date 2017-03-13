@@ -145,7 +145,7 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
     $post_type = get_post_type($post);
 
     if ($post_type == 'wpunity_scene') {
-        if ( ($new_status == 'publish') && ($old_status != 'c') ) {
+        if ( ($new_status == 'publish') && ($old_status != 'new') ) {
 
             //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard)
 
