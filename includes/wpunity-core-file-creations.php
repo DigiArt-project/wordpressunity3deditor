@@ -159,6 +159,7 @@ function wpunity_create_unityfile_noAssets($folderType,$sceneSlug,$sceneID,$pare
         $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
         $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
         $unityfile_text = wpunity_replace_unityfile($yamlTermID,$sceneID);
+
         fwrite($unitycreate_file, $unityfile_text);
         fclose($unitycreate_file);
 
@@ -478,6 +479,8 @@ function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
 }
 
 function wpunity_replace_unityfile($templateID,$sceneID){
+
+    echo "-------------------------------------->4";
 
     $tempOcclusionPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_ocs', true );
     $tempRenderPart = get_post_meta( $templateID, 'wpunity_yamltemp_scene_rs', true );
