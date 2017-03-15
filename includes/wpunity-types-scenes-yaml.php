@@ -438,6 +438,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
   m_IsPrefabParent: 0
+--- !u!20 &___[wa_player_camera_fid]___ stripped
+Camera:
+  m_PrefabParentObject: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+  m_PrefabInternal: {fileID: ___[wa_player_prefab_fid]___}  
 --- !u!1 &___[wa_exitBt_fid]___
 GameObject:
   m_ObjectHideFlags: 0

@@ -219,8 +219,8 @@ function wpunity_create_unity_scene( $new_status, $old_status, $post ){
             $yamlTermID = intval($_POST['wpunity_scene_yaml'], 10);//get yaml temp ID
             $yamlTermSlug = ( $yamlTermID > 0 ) ? get_term( $yamlTermID, 'wpunity_scene_yaml' )->slug : NULL;
 
-            //$jsonScene = get_post_meta( $sceneID, 'wpunity_scene_json_input', true);
-            $jsonScene = $_POST['wpunity_scene_json_input'];
+            $jsonScene = get_post_meta( $sceneID, 'wpunity_scene_json_input', true);
+            //$jsonScene = $_POST['wpunity_scene_json_input'];
 
             //UPDATE the Unity file with Assets added to json
             if($yamlTermSlug == 'mainmenu-yaml'){

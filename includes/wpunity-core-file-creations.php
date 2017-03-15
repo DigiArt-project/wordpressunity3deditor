@@ -533,7 +533,6 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
             // Change avatar position and rotation
             $tempFirstPersonPart = str_replace([  // 1. s1 init first : Player, DirectionalLight, camera2, camera2Anchor, scene1Manager
-                //'___[wa_player_fid]___',
                                                     '___[wa_player_prefab_fid]___',
                                                     '___[wa_player_position_x]___',
                                                     '___[wa_player_position_y]___',
@@ -541,7 +540,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                                                     '___[wa_player_rotation_x]___',
                                                     '___[wa_player_rotation_y]___',
                                                     '___[wa_player_rotation_z]___',
-                //'___[wa_player_camera_fid]___',
+                '___[wa_player_camera_fid]___',
                                                         '___[wa_scene_manager_fid]___',  //1
                                                         '___[wa_scene_manager_transform_fid]___',
                                                         '___[wa_scene_manager_script_fid]___',
@@ -565,6 +564,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $value['rotation'][0],
                     $value['rotation'][1],
                     $value['rotation'][2],
+                    $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++

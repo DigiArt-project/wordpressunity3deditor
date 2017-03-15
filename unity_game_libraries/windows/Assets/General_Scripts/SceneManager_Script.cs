@@ -10,24 +10,29 @@ public class SceneManager_Script : MonoBehaviour
 	Menu_Script ms;
 
 	// handle doors transition
-	void Start()
+	void Awake() // Awake is important for oculus to take changes
 	{
 		// Retrieve OVR mode setting ms.ovrMode
 		ms = GameObject.Find ("mainCanvas").GetComponent<Menu_Script> ();
 
-		// Zoom: find camera 
+		// Stand alone scene run only (for debugging)
+		//ms = new Menu_Script ();
+		//ms.ovrMode = false;
+
+		// Zoom: find camera
 		camera = ms.ovrMode ? GameObject.Find ("CenterEyeAnchor").GetComponent<Camera> () : GameObject.Find ("FirstPersonCharacter").GetComponent<Camera> ();
 
 		// set some settings
-		if (ms.ovrMode) {
+		if ( ms.ovrMode) {
 			GameObject.Find ("Player").SetActive (false);
 		} else {
 			// not many AudioListeners
-			GameObject.Find ("CenterEyeAnchor").GetComponent<AudioListener>().enabled = false;
+			GameObject.Find ("CenterEyeAnchor").SetActive(false);
+			//GameObject.Find ("CenterEyeAnchor").GetComponent<AudioListener>().enabled = false;
 		}
 
 
-		// Retrieve door coming in object 
+		// Retrieve door coming in object
 		GameObject doorComingIn = GameObject.Find(ms.doorID);
 
 		// executed when transports from one wonder scene to another (not from main menu to scene 1)
@@ -38,7 +43,7 @@ public class SceneManager_Script : MonoBehaviour
 			player.transform.rotation = doorComingIn_anchor.transform.rotation;
 		}
 
-		if (ms.ovrMode) 
+		if (ms.ovrMode)
 			GameObject.Find ("TrackingSpace").transform.Translate (0,ms.occulusHeight, 0);
 	}
 
@@ -51,10 +56,8 @@ public class SceneManager_Script : MonoBehaviour
 					camera.fieldOfView -= 10 * Input.GetAxis ("Mouse ScrollWheel");
 				else
 					camera.fieldOfView = 60;
-			} 
+			}
 		}
-
-
 	}
 
 	// Exit scene
