@@ -457,10 +457,14 @@ function wpunity_assemble_action_callback() {
 
         // if exists then remove the whole game target folder
         if ($target_exists) {
-            $res_del = shell_exec('rmdir ' . $_POST['target'] . ' /s /q');
-            echo '<br />2. Delete target folder: '. (file_exists($_POST['target']) ? 'Error 4' : 'Success');
-        }
+            //echo '<br /><span>Removing:' . $_POST['target'] . '</span><br />';
+            shell_exec('rmdir ' . $_POST['target'] . ' /s/q');
 
+            if (file_exists($_POST['target'])) {
+                echo '<span style="color:yellowgreen"><br />Delete: Can not delete. Used by another process? Skipping delete, I will overwrite.</span>';
+            }else
+                echo '<br />2. Deleted target folder: Success';
+        }
         shell_exec('mkdir ' . $_POST['target']);
         echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
 
@@ -471,7 +475,6 @@ function wpunity_assemble_action_callback() {
         echo '<br />4. Copy unity3d libraries: '.$res_copy;
 
         //------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
-
         $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
 
         // === Assets/General_Scripts/Menu_Script.cs =====
@@ -533,7 +536,7 @@ function wpunity_assemble_action_callback() {
         fwrite($fhandle, $fcontents);
         fclose($fhandle);
 
-        echo '<pre style="font-size:8pt">'.$fcontents.'</pre>';
+        echo '<span style="font-size:8pt"><pre>'.$fcontents.'</pre></span>';
 
 
         // Copy source assets to target assets

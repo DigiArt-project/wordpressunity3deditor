@@ -409,131 +409,14 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
 function wpunity_replace_unityfile_withAssets( $yamlID, $sceneID, $jsonScene ){
 
-    $tempFirstPersonPart = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
-    $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
-
-    $unity_file_contents = "";
-
-    $sceneJsonARR = json_decode($jsonScene, TRUE);//->objects->floor_1487753970
-
-    $curr_fid = 31;
-
-    //if ($sceneJsonARR['objects']) {}
-    foreach ($sceneJsonARR['objects'] as $key => $value ) {
-
-        if ($key == 'avatarYawObject') {
-
-            $curr_fid++;
-
-            // Change avatar position and rotation
-            $unity_file_contents .= str_replace([
-                '___[player_name]___',
-                '___[player_fid]___',
-                '___[player_position_x]___',
-                '___[player_position_y]___',
-                '___[player_position_z]___',
-                '___[player_rotation_x]___',
-                '___[player_rotation_y]___',
-                '___[player_rotation_z]___'
-            ],
-                [
-                    'Player',
-                    $curr_fid,
-                    $value['position'][0],
-                    $value['position'][1],
-                    $value['position'][2],
-                    $value['rotation'][0],
-                    $value['rotation'][1],
-                    $value['rotation'][2]
-                ],
-                $tempFirstPersonPart);
-        } else {
-
-            $curr_fid += 2;
-
-
-            if ($value['categoryName'] == 'Static 3D models'){
-
-                $unity_file_contents .= str_replace(
-                    [
-                        "___[sop_name]___",
-                        "___[sop_fid]___", // +1
-                        "___[sop_prefab_fid]___", // +1
-                        "___[sop_meshcol_fid]___", // +1
-                        "___[sop_guid]___", // from obj meta
-                        "___[sop_material_guid]___", // from mat meta
-                        "___[sop_pos_x]___",
-                        "___[sop_pos_y]___",
-                        "___[sop_pos_z]___",
-                        "___[sop_rot_x]___",
-                        "___[sop_rot_y]___",
-                        "___[sop_rot_z]___",
-                        "___[sop_scale_x]___",
-                        "___[sop_scale_y]___",
-                        "___[sop_scale_z]___"],
-                    [
-                        $key,
-                        $curr_fid++,
-                        $curr_fid++,
-                        $curr_fid++,
-                        wpunity_create_guids('obj', $value['fnObjID']),
-                        wpunity_create_guids('mat', $value['fnMtlID']), // ToDO: here we need the fnMatID // ToDO: We need to support multiple mat
-                        //rotation
-                        $value['position'][0], $value['position'][1], $value['position'][2],
-                        // position
-                        $value['rotation'][0], $value['rotation'][1], $value['rotation'][2],
-                        // scale
-                        $value['scale'][0]   , $value['scale'][1]   , $value['scale'][2]
-                    ]
-                    , $templatePart_sop);
-
-            } else if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
-
-
-            } else if ($value['categoryName'] == 'Points of Interest (Video)'){
-
-
-            } else if ($value['categoryName'] == 'Dynamic 3D models'){
-
-
-            } else if ($value['categoryName'] == 'Doors'){
-
-            }
-
-
-        }
-    }
-
-
-    return $unity_file_contents;
+    return wpunity_jsonArr_to_unity($yamlID, $jsonScene);
 }
 
-function wpunity_replace_unityfile_noAssets($yamlID,$sceneID){
-    $unity_file_contents = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
-    $file_content_return ="";
-    $file_content_return .= str_replace(
-        [
-            "___[player_fid]___",
-            "___[player_position_x]___",
-            "___[player_position_y]___",
-            "___[player_position_z]___",
-            "___[player_rotation_x]___",
-            "___[player_rotation_y]___",
-            "___[player_rotation_z]___",
-            "___[player_name]___",
-        ],
-        [
-            '30',
-            '1',
-            '1',
-            '1',
-            '1',
-            '1',
-            '1',
-            'Player',
-        ],$unity_file_contents);
+function wpunity_replace_unityfile_noAssets($yamlID, $sceneID){
 
-    return $file_content_return;
+    $jsonScene = '{"objects" : { "avatarYawObject" : { "position" : [0,0,0], "rotation" : [0,0,0]}}}';
+
+    return wpunity_jsonArr_to_unity($yamlID, $jsonScene);
 }
 
 //function wpunity_replace_unityMetafile($sceneID,$unityMetaPattern){
@@ -631,7 +514,183 @@ function wpunity_replace_matmeta($file_content,$objID){
 }
 
 //==========================================================================================================================================
+function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    $tempFirstPersonPart = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
+    $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
+
+
+    $unity_file_contents = "";
+
+    $curr_fid = 31;
+
+    //if ($sceneJsonARR['objects']) {}
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+
+        if ($key == 'avatarYawObject') {
+
+            // Change avatar position and rotation
+            $tempFirstPersonPart = str_replace([  // 1. s1 init first : Player, DirectionalLight, camera2, camera2Anchor, scene1Manager
+                //'___[wa_player_fid]___',
+                                                    '___[wa_player_prefab_fid]___',
+                                                    '___[wa_player_position_x]___',
+                                                    '___[wa_player_position_y]___',
+                                                    '___[wa_player_position_z]___',
+                                                    '___[wa_player_rotation_x]___',
+                                                    '___[wa_player_rotation_y]___',
+                                                    '___[wa_player_rotation_z]___',
+                //'___[wa_player_camera_fid]___',
+                                                        '___[wa_scene_manager_fid]___',  //1
+                                                        '___[wa_scene_manager_transform_fid]___',
+                                                        '___[wa_scene_manager_script_fid]___',
+                                                        '___[wa_camera2_fid]___',
+                                                        '___[wa_camera2_transform_fid]___', //5
+                                                        '___[wa_camera2_camera_fid]___',
+                                                        '___[wa_camera2_behaviour_fid]___',
+                                                        '___[wa_camera2_behaviour2_fid]___',
+                                                        '___[wa_camera2_audiolistener_fid]___',
+                                                          '___[wa_camera2_children_transform_fid]___', //10
+                                                            '___[wa_light_fid]___',
+                                                            '___[wa_light_transform_fid]___',
+                                                            '___[wa_light_light_fid]___',
+                                                            '___[wa_camera2anchor_fid]___',
+                                                            '___[wa_camera2_children_transform_fid]___'],
+                [
+                    $curr_fid++,
+                    $value['position'][0],
+                    $value['position'][1],
+                    $value['position'][2],
+                    $value['rotation'][0],
+                    $value['rotation'][1],
+                    $value['rotation'][2],
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++
+                ],
+                $tempFirstPersonPart);
+
+
+            $tempFirstPersonPart = str_replace([
+                                                                    '___[wa_exitBt_fid]___', // 2. s1 canvas related: sCanvas, EventSystem
+                                                                    '___[wa_exitBt_recttrans_fid]___',
+                                                                    '___[wa_exitBt_canvrenderer_fid]___',
+                                                                    '___[wa_exitBt_monobehaviour1_fid]___',
+                                                                    '___[wa_exitBt_monobehaviour2_fid]___', //5
+                                                                    '___[wa_exitBt_recttrans_child_fid]___',
+                                                                    '___[wa_exitBt_recttrans_father_fid]___',
+                                                                    '___[wa_exitBtText_fid]___',
+                //'___[wa_exitBt_recttrans_child_fid]___',
+                                                                    '___[wa_exitBtText_canvasrenderer_fid]___',
+                                                                    '___[wa_exitBtText_monobehaviour_fid]___', // 10
+                                                                    '___[wa_scenecanvas_fid]___',
+                //'___[wa_scenecanvas_recttrans_fid]___',
+                                                                    '___[wa_scenecanvas_canvas_fid]___',
+                                                                    '___[wa_scenecanvas_monob1_fid]___',
+                                                                    '___[wa_scenecanvas_monob2_fid]___',
+                //'___[wa_scenecanvas_recttrans2_fid]___',
+                                                                    '___[wa_eventsys_fid]___', // 15
+                                                                    '___[wa_eventsys_transform_fid]___',
+                                                                    '___[wa_eventsys_monob1_fid]___',
+                                                                    '___[wa_eventsys_monob2_fid]___'],
+                   [$curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++, $curr_fid++, $curr_fid++
+                ],
+                $tempFirstPersonPart);
+
+
+            $tempFirstPersonPart = str_replace(
+                                                            ['___[wa_ovrplayer_prefab_fid]___',             // 3. Ovr related
+                                                             '___[wa_ovrplayer_fid]___',
+                                                            '___[wa_ovrplayer_position_x]___',
+                                                            '___[wa_ovrplayer_position_y]___',
+                                                            '___[wa_ovrplayer_position_z]___',
+                                                            '___[wa_ovrplayer_rotation_x]___',
+                                                            '___[wa_ovrplayer_rotation_y]___',
+                                                            '___[wa_ovrplayer_rotation_z]___',
+
+                                                            '___[wa_ovrplayer_lefteyeanchor_fid]___',
+                                                            '___[wa_ovrplayer_righteyeanchor_fid]___',
+
+                    //'___[wa_ovrplayer_wrapper1_fid]___',
+                    //'___[wa_ovrplayer_wrapper2_fid]___',
+                                                            '___[wa_ovrplayer_rigidbody_fid]___',
+                                                            '___[wa_ovrplayer_leftcamera_fid]___',
+                                                            '___[wa_ovrplayer_rightcamera_fid]___',
+                                                            ],
+                [$curr_fid++, $curr_fid++,
+                    $value['position'][0],
+                    $value['position'][1],
+                    $value['position'][2],
+                    $value['rotation'][0],
+                    $value['rotation'][1],
+                    $value['rotation'][2],
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++],
+                $tempFirstPersonPart);
+
+
+            $unity_file_contents .= $tempFirstPersonPart;
+
+        } else {
+
+            if ($value['categoryName'] == 'Static 3D models'){
+
+                $unity_file_contents .= str_replace(
+                    [
+                        "___[sop_name]___",
+                        "___[sop_fid]___", // +1
+                        "___[sop_prefab_fid]___", // +1
+                        "___[sop_meshcol_fid]___", // +1
+                        "___[sop_guid]___", // from obj meta
+                        "___[sop_material_guid]___", // from mat meta
+                        "___[sop_pos_x]___",
+                        "___[sop_pos_y]___",
+                        "___[sop_pos_z]___",
+                        "___[sop_rot_x]___",
+                        "___[sop_rot_y]___",
+                        "___[sop_rot_z]___",
+                        "___[sop_scale_x]___",
+                        "___[sop_scale_y]___",
+                        "___[sop_scale_z]___"],
+                    [
+                        $key,
+                        $curr_fid++,
+                        $curr_fid++,
+                        $curr_fid++,
+                        wpunity_create_guids('obj', $value['fnObjID']),
+                        wpunity_create_guids('mat', $value['fnMtlID']), // ToDO: here we need the fnMatID // ToDO: We need to support multiple mat
+                        //rotation
+                        $value['position'][0], $value['position'][1], $value['position'][2],
+                        // position
+                        $value['rotation'][0], $value['rotation'][1], $value['rotation'][2],
+                        // scale
+                        $value['scale'][0]   , $value['scale'][1]   , $value['scale'][2]
+                    ]
+                    , $templatePart_sop);
+
+            } else if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
+
+
+            } else if ($value['categoryName'] == 'Points of Interest (Video)'){
+
+
+            } else if ($value['categoryName'] == 'Dynamic 3D models'){
+
+
+            } else if ($value['categoryName'] == 'Doors'){
+
+            }
+
+
+        }
+    }
+
+
+    return $unity_file_contents;
+}
 
 
 ?>
