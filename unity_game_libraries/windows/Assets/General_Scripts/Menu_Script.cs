@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Menu_Script : MonoBehaviour {
 
-    public bool ovrMode;
+	public bool ovrMode;
 	public bool occulusControllerUse;
 	public float occulusHeight;
 
@@ -46,5 +46,4 @@ public class Menu_Script : MonoBehaviour {
 	public void onClick_ExitGame(){
 		Application.Quit ();
 	}
-
 }

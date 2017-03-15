@@ -114,8 +114,8 @@ public class OVRSceneSampleController : MonoBehaviour
         // Make sure to hide cursor 
         if (Application.isEditor == false)
         {
-			Cursor.visible = false; 
-			Cursor.lockState = CursorLockMode.Locked;
+			//Cursor.visible = true; 
+			Cursor.lockState = CursorLockMode.None;
         }
 
         // CameraController updates
@@ -152,8 +152,12 @@ public class OVRSceneSampleController : MonoBehaviour
 
 #if !UNITY_ANDROID || UNITY_EDITOR
         // Escape Application
-        if (Input.GetKeyDown(quitKey))
-            Application.Quit();
+		if (Input.GetKeyDown (quitKey)) {
+			Debug.Log ("GRRRRR:");
+			//Application.Quit();
+		}
+
+        
 #endif
     }
     #endregion

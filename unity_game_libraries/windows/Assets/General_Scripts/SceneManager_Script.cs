@@ -42,9 +42,8 @@ public class SceneManager_Script : MonoBehaviour
 			GameObject.Find ("TrackingSpace").transform.Translate (0,ms.occulusHeight, 0);
 	}
 
-
 	void Update(){
-		
+
 		// Scroll wheel zoom
 		if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
 			if (camera != null) {
@@ -54,6 +53,8 @@ public class SceneManager_Script : MonoBehaviour
 					camera.fieldOfView = 60;
 			} 
 		}
+
+
 	}
 
 	// Exit scene

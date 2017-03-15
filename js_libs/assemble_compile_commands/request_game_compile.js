@@ -12,13 +12,21 @@ function wpunity_compileAjax() {
     var reqCompile = jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
+        timeout: 1200000, // 20 min
         data : {'action': 'wpunity_compile_action',
                 'dirpath': phpvarsA.game_dirpath,
                 'urlpath': phpvarsA.game_urlpath},
+
         success : function(response){
             document.getElementById('wpunity_compileButton').innerHTML = "Success.";
         },
+
         error : function(xhr, ajaxOptions, thrownError){
+
+
+
+            console.log("Error", thrownError, xhr);
+
             document.getElementById('wpunity_compileButton').innerHTML = 'Error: Compile again?';
         }
     }).done(function( msg ) {
@@ -45,6 +53,7 @@ function wpunity_compileAjax() {
             url : 'admin-ajax.php',
             type : 'POST',
             cache: false,
+            timeout: 1200000, // 20 min
             data: {'action': 'wpunity_monitor_compiling_action',
                    'dirpath': phpvarsA.game_dirpath,
                    'urlpath': phpvarsA.game_urlpath},
@@ -91,6 +100,7 @@ function myzipajax() {
     var reqCompile = jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'POST',
+        timeout: 1200000, // 20 min
         data : {'action': 'wpunity_game_zip_action',
                 'dirpath': phpvarsA.game_dirpath,
                 'urlpath': phpvarsA.game_urlpath},
