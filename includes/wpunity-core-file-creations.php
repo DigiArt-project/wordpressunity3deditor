@@ -90,7 +90,7 @@ function wpunity_create_folder_withmeta($folderType,$currentSlug,$currentID,$par
         $upload_dir = str_replace('\\','/',$upload_dir);
 
         if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755);
+            mkdir($upload_dir, 0755) or wp_die("Unable to make dir".$upload_dir);
         }
 
 
@@ -206,14 +206,24 @@ function wpunity_create_unityfile_withAssets($folderType,$sceneSlug,$sceneID,$pa
         $upload_dir .= "/" . $sceneSlug;
         $upload_dir = str_replace('\\','/',$upload_dir);
 
+        // === Unity file ===
         $unityfile_dir = $upload_dir . '/' . $sceneSlug .'.unity';//path and 'folder_name'.unity
         unlink($unityfile_dir);//DELETE old unity file
 
+
+//        echo "Json =  ".$jsonScene."<br /><br />";
+
         $unitycreate_file = fopen($unityfile_dir, "w") or die("Unable to open file!");
         $unityfile_text = wpunity_replace_unityfile_withAssets($yamlTermID,$sceneID,$jsonScene);
+
+//        echo "Unity =   ".$unityfile_text."<br /><br />";
+//        wp_die();
+
+
         fwrite($unitycreate_file, $unityfile_text);
         fclose($unitycreate_file);
 
+        // === Meta file ===
         $unityMetafile_dir = $upload_dir . '/' . $sceneSlug .'.unity.meta';//path and 'folder_name'.unity.meta
         unlink($unityMetafile_dir);//DELETE old unity.meta file
 
@@ -516,10 +526,25 @@ function wpunity_replace_matmeta($file_content,$objID){
 //==========================================================================================================================================
 function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
+//    echo "<br />New<br />";
+//
+//    echo "AAAAA=". $jsonScene;
+
+    $jsonScene = htmlspecialchars_decode ( $jsonScene );
+
     $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+//    echo "<br /><br />";
+//
+//    echo "BBBBBB=";
+//    print_r($sceneJsonARR);
+
+
+
 
     $tempFirstPersonPart = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
     $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
+    $templatePart_poipt = wpunity_getYaml_poi_imagetext_pattern($yamlID);
 
 
     $unity_file_contents = "";
@@ -528,6 +553,9 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
     //if ($sceneJsonARR['objects']) {}
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
+
+
+
 
         if ($key == 'avatarYawObject') {
 
@@ -634,10 +662,10 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $unity_file_contents .= str_replace(
                     [
                         "___[sop_name]___",
-                        "___[sop_fid]___", // +1
-                        "___[sop_prefab_fid]___", // +1
-                        "___[sop_meshcol_fid]___", // +1
-                        "___[sop_guid]___", // from obj meta
+                        "___[sop_fid]___",           // +1
+                        "___[sop_prefab_fid]___",     // +1
+                        "___[sop_meshcol_fid]___",   // +1
+                        "___[sop_guid]___",          // from obj meta
                         "___[sop_material_guid]___", // from mat meta
                         "___[sop_pos_x]___",
                         "___[sop_pos_y]___",
@@ -666,6 +694,96 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
             } else if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
 
+                $poit = "";
+
+                $textcontent    = "This is a historical monument";
+                $guid_of_sprite = wpunity_create_guids('jpg', $value['fnJpgID']);
+
+
+
+                $poit = str_replace( [
+                    '___[poit_text_container_fid]___',
+                    '___[poit_text_container_recttrans_fid]___',
+                    '___[poit_text_container_canvrender_fid]___',
+                    '___[poit_text_container_monob_fid]___', //4
+                    '___[poit_text_container_name]___',  // e.g. android_121TextContainer
+                    '___[poit_text_container_recttrans_father_fid]___',
+                    '___[poit_text_container_content]___',
+                    '___[poit_closeBt_fid]___',
+                    '___[poit_closeBt_recttrans_fid]___',
+                    '___[poit_closeBt_canvrender_fid]___',
+                    '___[poit_closeBt_monob_fid]___',
+                    '___[poit_closeBt_monob2_fid]___', //5
+                    '___[poit_closeBt_name]___', // e.g. android_121CloseBt
+                    '___[poit_closeBt_recttrans_father_fid]___',
+                    '___[poit_closeBt_recttrans_child_fid]___',
+                    '___[poit_closeBt_monob3_fid]___',
+                    '___[poit_closeBtText_fid]___',
+                    '___[poit_closeBtText_canvrender_fid]___',
+                    '___[poit_closeBtText_monob_fid]___', //6
+                    '___[poit_closeBtText_name]___', //e.g. android_121CloseBtText
+                    '___[poit_closeBtText_content]___'], //e.g. Close;
+                    [$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                     $key.'TextContainer',
+                     $curr_fid++,
+                     $textcontent,
+                     $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                     $key.'CloseBt',
+                     $curr_fid++, $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                     $key.'CloseBtText',
+                     'Close'
+                    ],
+                    $templatePart_poipt);
+
+
+                $poit = str_replace( [
+                    '___[poit_canvas_fid]___',
+                    '___[poit_canvas_canvas_fid]___',
+                    '___[poit_canvas_monob_fid]___',
+                    '___[poit_canvas_monob2_fid]___',
+                    '___[poit_canvas_name]___', // e.g. android_121Canvas
+                    '___[poit_closeBt_recttrans_father_father_fid]___',
+                    '___[poit_prefab_fid]___',
+                    '___[poit_position_x]___',
+                    '___[poit_position_y]___',
+                    '___[poit_position_z]___',
+                    '___[poit_rotation_x]___',
+                    '___[poit_rotation_y]___',
+                    '___[poit_rotation_z]___',
+                    '___[poit_prefab_name]___', // e.g. android_121
+                    '___[poit_fid]___',
+                    '___[poit_prefab_boxcol_fid]___',
+                    '___[poit_prefab_boxcol_boxcol_fid]___',
+                    '___[poit_imagecont_fid]___',
+                    '___[poit_imagecont_recttrans_fid]___',
+                    '___[poit_imagecont_canvasrend_fid]___',
+                    '___[poit_imagecont_monob_fid]___', //7
+                    '___[poit_imagecont_name]___', //android_121ImageContainer
+                    '___[poit_imagecont_sprite_guid]___', // the guid of the sprite image
+                    '___[poit_panel_fid]___',
+                    '___[poit_panel_canvrender_fid]___',
+                    '___[poit_panel_monob_fid]___',
+                    '___[poit_panel_name]___' // android_121Panel
+                    ],[
+                    $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                    $key."Canvas",
+                    $curr_fid++,$curr_fid++,
+                    $value['position'][0],
+                    $value['position'][1],
+                    $value['position'][2],
+                    $value['rotation'][0],
+                    $value['rotation'][1],
+                    $value['rotation'][2],
+                    $key,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $key."ImageContainer",
+                    $guid_of_sprite,
+                    $curr_fid++, $curr_fid++, $curr_fid++,
+                    $key."Panel"
+                    ],
+                    $poit);
+
+                $unity_file_contents .= $poit;
 
             } else if ($value['categoryName'] == 'Points of Interest (Video)'){
 
