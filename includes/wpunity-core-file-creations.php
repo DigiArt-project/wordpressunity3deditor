@@ -540,7 +540,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                                                     '___[wa_player_rotation_x]___',
                                                     '___[wa_player_rotation_y]___',
                                                     '___[wa_player_rotation_z]___',
-                '___[wa_player_camera_fid]___',
+                                                    '___[wa_player_camera_fid]___',
                                                         '___[wa_scene_manager_fid]___',  //1
                                                         '___[wa_scene_manager_transform_fid]___',
                                                         '___[wa_scene_manager_script_fid]___',
@@ -562,7 +562,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $value['position'][1],
                     $value['position'][2],
                     $value['rotation'][0],
-                    $value['rotation'][1],
+                    $value['rotation'][1] + 180,
                     $value['rotation'][2],
                     $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
@@ -581,15 +581,12 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                                                                     '___[wa_exitBt_recttrans_child_fid]___',
                                                                     '___[wa_exitBt_recttrans_father_fid]___',
                                                                     '___[wa_exitBtText_fid]___',
-                //'___[wa_exitBt_recttrans_child_fid]___',
                                                                     '___[wa_exitBtText_canvasrenderer_fid]___',
                                                                     '___[wa_exitBtText_monobehaviour_fid]___', // 10
                                                                     '___[wa_scenecanvas_fid]___',
-                //'___[wa_scenecanvas_recttrans_fid]___',
                                                                     '___[wa_scenecanvas_canvas_fid]___',
                                                                     '___[wa_scenecanvas_monob1_fid]___',
                                                                     '___[wa_scenecanvas_monob2_fid]___',
-                //'___[wa_scenecanvas_recttrans2_fid]___',
                                                                     '___[wa_eventsys_fid]___', // 15
                                                                     '___[wa_eventsys_transform_fid]___',
                                                                     '___[wa_eventsys_monob1_fid]___',
@@ -611,12 +608,8 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                                                             '___[wa_ovrplayer_rotation_x]___',
                                                             '___[wa_ovrplayer_rotation_y]___',
                                                             '___[wa_ovrplayer_rotation_z]___',
-
                                                             '___[wa_ovrplayer_lefteyeanchor_fid]___',
                                                             '___[wa_ovrplayer_righteyeanchor_fid]___',
-
-                    //'___[wa_ovrplayer_wrapper1_fid]___',
-                    //'___[wa_ovrplayer_wrapper2_fid]___',
                                                             '___[wa_ovrplayer_rigidbody_fid]___',
                                                             '___[wa_ovrplayer_leftcamera_fid]___',
                                                             '___[wa_ovrplayer_rightcamera_fid]___',
@@ -626,7 +619,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $value['position'][1],
                     $value['position'][2],
                     $value['rotation'][0],
-                    $value['rotation'][1],
+                    $value['rotation'][1]+180,
                     $value['rotation'][2],
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++],
                 $tempFirstPersonPart);
