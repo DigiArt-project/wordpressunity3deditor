@@ -701,7 +701,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
                 $textcontent = "'" . $textcontent . "'";
 
-                $textcontent = str_rep('\r\n','    \r\n',$textcontent);
+                $textcontent = str_replace('\r\n','\;\;\;\;\r\n', $textcontent);
 
 //                $textcontent     = apply_filters('the_content', $textcontent    );
 //                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
