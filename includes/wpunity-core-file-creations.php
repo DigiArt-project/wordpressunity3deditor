@@ -385,7 +385,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
     // Insert posts 1-1 into the database with subfolders and files needed
     $mainmenuSceneID = wp_insert_post( $mainmenuSceneData );
-    wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$mainmenuSceneSlug,'description'=>'Scene assignment of Asset 3D'));
+    //wp_insert_term($mainmenuSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$mainmenuSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
     wpunity_create_unityfile_withAssets('scene-mainmenu',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID,'');
@@ -401,7 +401,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
 
     $optionsSceneID = wp_insert_post( $optionsSceneData );
-    wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$optionsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
+    //wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$optionsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Options Scene)
     wpunity_create_unityfile_withAssets('scene-options',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID,$optionsSceneYAMLID,'');
@@ -409,7 +409,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
 
     $credentialsSceneID = wp_insert_post( $credentialsSceneData );
-    wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$credentialsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
+    //wp_insert_term($credentialsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$credentialsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     wpunity_create_folder_withmeta('scene-nosub',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
     wpunity_create_unityfile_withAssets('scene-credentials',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID,'');
