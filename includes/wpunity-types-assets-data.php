@@ -425,12 +425,13 @@ function wpunity_assets_databox_show(){
                             <?php $meta_mtl_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>"
-                                   id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_mtl_id ? wp_get_attachment_url($meta_mtl_id) : $field['std']); ?>" size="30" style="width:65%"/>
+                                   id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_mtl_id ? $meta_mtl_id : $field['std']); ?>" size="30" style="width:65%"/>
 
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
 
 
                             <br /><br />
+                            Pathfile: <?php echo wp_get_attachment_url($meta_mtl_id); ?><br />
                             Preview mtl:<br />
                             <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;"><?php
 
@@ -452,11 +453,12 @@ function wpunity_assets_databox_show(){
                             <?php $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
-                                   value="<?php echo esc_attr($meta_obj_id ? wp_get_attachment_url($meta_obj_id) : $field['std']); ?>" size="30" style="width:65%"/>
+                                   value="<?php echo esc_attr($meta_obj_id ? $meta_obj_id : $field['std']); ?>" size="30" style="width:65%"/>
 
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
 
                             <br /><br />
+                            Pathfile: <?php echo wp_get_attachment_url($meta_obj_id); ?><br />
                             Preview obj:<br />
                             <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;"><?php
                                 if(!$meta_obj_id){
@@ -477,11 +479,12 @@ function wpunity_assets_databox_show(){
                             <?php $meta_diff_id = get_post_meta($post->ID, $field['id'], true); ?>
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
                                    value="<?php
-                                   echo esc_attr($meta_diff_id ? wp_get_attachment_url($meta_diff_id) : $field['std']);
+                                   echo esc_attr($meta_diff_id ? $meta_diff_id : $field['std']);
                                    ?>" size="30" style="width:65%"/>
 
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
-
+                            <br />
+                            Pathfile: <?php echo wp_get_attachment_url($meta_diff_id); ?><br />
                             <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_diff_id); ?>"/>
                         </td>
                     </tr>
@@ -494,10 +497,11 @@ function wpunity_assets_databox_show(){
                             <?php $meta_scr_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
-                                   value="<?php echo esc_attr($meta_scr_id ? wp_get_attachment_url($meta_scr_id) : $field['std']); ?>" size="30" style="width:65%"/>
+                                   value="<?php echo esc_attr($meta_scr_id ? $meta_scr_id : $field['std']); ?>" size="30" style="width:65%"/>
 
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
-
+                            <br />
+                            Pathfile: <?php echo wp_get_attachment_url($meta_scr_id); ?><br />
                             <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_scr_id); ?>"/>
                         </td>
                     </tr>
@@ -520,6 +524,8 @@ function wpunity_assets_databox_show(){
                             <?php $meta_image1_id = get_post_meta($post->ID, $field['id'], true); ?>
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_image1_id ? $meta_image1_id : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
                             <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
+
+                            Pathfile: <?php echo wp_get_attachment_url($meta_image1_id); ?><br />
                             <img id="wpunity_asset3d_image1_preview" style="width:50%;height:auto;display:<?php echo $mediahideshow; ?>;"
                                  src="<?php echo wp_get_attachment_url($meta_image1_id); ?>"/>
                         </td>
@@ -849,6 +855,7 @@ function wpunity_assets_databox_save($post_id) {
     foreach ($wpunity_databox1['fields'] as $field) {
         $old = get_post_meta($post_id, $field['id'], true);
         $new = $_POST[$field['id']];
+        update_post_meta($post_id, $field['id'], $new);
         if ($new && $new != $old) {
             update_post_meta($post_id, $field['id'], $new);
         } elseif ('' == $new && $old) {
@@ -856,14 +863,14 @@ function wpunity_assets_databox_save($post_id) {
         }
     }
 
-    //After Save custom fields, delete all old meta and create the new ones
-    wpunity_assets_delete_allmetas($post_id);
-    foreach ($wpunity_databox1['fields'] as $field) {
-        $attachment_ID = get_post_meta($post_id, $field['id'], true);
-        if($attachment_ID){
-            wpunity_assets_create_metafile($post_id,$attachment_ID); //create meta file
-        }
-    }
+//    //After Save custom fields, delete all old meta and create the new ones
+//    wpunity_assets_delete_allmetas($post_id);
+//    foreach ($wpunity_databox1['fields'] as $field) {
+//        $attachment_ID = get_post_meta($post_id, $field['id'], true);
+//        if($attachment_ID){
+//            wpunity_assets_create_metafile($post_id,$attachment_ID); //create meta file
+//        }
+//    }
 
 }
 
