@@ -692,12 +692,22 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     ]
                     , $templatePart_sop);
 
-            } else if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
+            } else if ($value['categoryName'] == 'Points of Interest (Image - Text)'){
 
-                $poit = "";
 
-                $textcontent    = "This is a historical monument";
-                $guid_of_sprite = wpunity_create_guids('jpg', $value['fnJpgID']);
+                $my_postid       = $value['assetid']; //This is page id or post id
+                $content_post    = get_post($my_postid);
+                $textcontent     = $content_post->post_content;
+                $textcontent     = apply_filters('the_content', $textcontent    ); // ToDo: Rip html
+                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
+
+
+                $sprite_guid =  wpunity_create_guids('jpg', $value['image1id']); //"00500000000000000000000000000513";
+
+
+
+                $poi_prefab_guid = wpunity_create_guids('obj', $value['fnObjID']);     // "00300000000000000000000000000511";
+
 
 
 
@@ -752,6 +762,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[poit_rotation_z]___',
                     '___[poit_prefab_name]___', // e.g. android_121
                     '___[poit_fid]___',
+                    '___[poit_prefab_guid]___',
                     '___[poit_prefab_boxcol_fid]___',
                     '___[poit_prefab_boxcol_boxcol_fid]___',
                     '___[poit_imagecont_fid]___',
@@ -767,7 +778,8 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     ],[
                     $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
                     $key."Canvas",
-                    $curr_fid++,$curr_fid++,
+                    $curr_fid++,
+                    $curr_fid++,
                     $value['position'][0],
                     $value['position'][1],
                     $value['position'][2],
@@ -775,9 +787,11 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $value['rotation'][1],
                     $value['rotation'][2],
                     $key,
-                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                    $curr_fid++,
+                    $poi_prefab_guid,
+                    $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $key."ImageContainer",
-                    $guid_of_sprite,
+                    $sprite_guid,
                     $curr_fid++, $curr_fid++, $curr_fid++,
                     $key."Panel"
                     ],

@@ -1,11 +1,12 @@
-function addOne(nameModel3D, path, objPath, objID, mtlPath, mtlID,
-                categoryName, categoryID, diffImage, diffImageID,
+function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
+                categoryName, categoryID, diffImage, diffImageID, image1id,
                 x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
     selected_object_trs={"translation":[x, y, z],"rotation":[r1,r2,r3],"scale":s};
 
     resources3D[nameModel3D]= { "path": path,
+                                "assetid": assetid,
                                 "obj":objPath,
                                 "objID":objID,
                                 "mtl":mtlPath,
@@ -14,6 +15,7 @@ function addOne(nameModel3D, path, objPath, objID, mtlPath, mtlID,
                                 "categoryID":categoryID,
                                 "diffImage":diffImage,
                                 "diffImageID":diffImageID,
+                                "image1id":image1id,
                                 "trs":selected_object_trs};
 
     //   Load the extra item in 3D environment or get it from recycle bin ============================

@@ -102,6 +102,7 @@ function onMouseDown( event ) {
                 delArchive[nameToRestore]["mtl"], delArchive[nameToRestore]["mtlID"],
                 delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
                 delArchive[nameToRestore]["diffImage"], delArchive[nameToRestore]["diffImageID"],
+                delArchive[nameToRestore]["image1id"],
                 trs["translation"][0], trs["translation"][1], trs["translation"][2],
                 trs["rotation"][0], trs["rotation"][1], trs["rotation"][2],
                 trs["scale"]);

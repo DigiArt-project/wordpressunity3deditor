@@ -23,6 +23,7 @@ class ParseJSON {
                 $type_behavior = 'avatar';
             } else {
                 $path =$this->relativepath . $value->fnPath;
+                $assetid=$value->assetid;
                 $obj = $value->fnObj;
                 $objID = $value->fnObjID;
                 $mtl = $value->fnMtl;
@@ -31,6 +32,7 @@ class ParseJSON {
                 $diffImageID = $value->diffImageID;
                 $categoryName = $value->categoryName;
                 $categoryID = $value->categoryID;
+                $image1id = $value->image1id;
             }
 
             $t_x = $value->position[0];
@@ -48,6 +50,7 @@ class ParseJSON {
                 $r_x .','.$r_y .','.$r_z .'],'.'"scale":'.$scale.'};';
 
             echo 'resources3D["'.$name.'"]= {"path":"'.$path.
+                                            '","assetid":"'.$assetid.
                                             '","obj":"'.$obj.
                                             '","objID":"'.$objID.
                                             '","mtl":"'.$mtl.
@@ -56,6 +59,7 @@ class ParseJSON {
                                             '","diffImageID":"'.$diffImageID.
                                             '","categoryName":"'.$categoryName.
                                             '","categoryID":"'.$categoryID.
+                                            '","image1id":"'.$image1id.
                 '","trs":selected_object_trs};'; // fpath_obj.push("'.end($resources3D)['obj'].'");';
 
             echo '</script>';

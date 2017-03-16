@@ -91,6 +91,7 @@ class LoaderMulti {
 
                                 object.isDigiArt3DModel = true;
                                 object.name = name;
+                                object.assetid = resources3D[name]['assetid'];;
 
                                 object.fnPath = resources3D[name]['path'];
 
@@ -107,6 +108,8 @@ class LoaderMulti {
                                 object.categoryName = resources3D[name]['categoryName'];
                                 object.diffImage = resources3D[name]['diffImage'];
                                 object.diffImageID = resources3D[name]['diffImageID'];
+
+                                object.image1id = resources3D[name]['image1id'];
 
 
                                 object.type_behavior = resources3D[name]['type_behavior'];

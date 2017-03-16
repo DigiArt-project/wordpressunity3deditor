@@ -18,7 +18,7 @@ function wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID){
 
         success : function(data) {
 
-
+            //console.log("datatttt", data);
             file_Browsing_By_DB(data);
             //file_Browsing_By_Dirs(data);
 
@@ -42,6 +42,8 @@ function wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID){
 // The DB way is the correct one. The old dir way was vulnerable to bugs
 //======================================================================
 function file_Browsing_By_DB(data){
+
+
 
     var filemanager = $('.filemanager'),
         breadcrumbs = $('.breadcrumbs'),
@@ -141,6 +143,7 @@ function file_Browsing_By_DB(data){
         dragstart: function(e) {
 
             var dragData = {"title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
+                            "assetid": e.target.attributes.getNamedItem("data-assetid").value,
                               "obj": e.target.attributes.getNamedItem("data-objPath").value,
                               "objID": e.target.attributes.getNamedItem("data-objID").value,
                               "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,
@@ -148,7 +151,8 @@ function file_Browsing_By_DB(data){
                           "diffImage": e.target.attributes.getNamedItem("data-diffImage").value,
                           "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
                           "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
-                        "categoryName": e.target.attributes.getNamedItem("data-categoryName").value};
+                        "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
+                              "image1id":e.target.attributes.getNamedItem("data-image1id").value};
 
             var jsonDataDrag = JSON.stringify(dragData);
 
@@ -426,6 +430,8 @@ function file_Browsing_By_DB(data){
 
                 var name = escapeHTML(f.name);
 
+
+
                 var fileType = f.objPath.split('.').pop();
 
                 var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';
@@ -438,10 +444,12 @@ function file_Browsing_By_DB(data){
                 if (fileType.toUpperCase() == 'OBJ')
                     icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0px;margin-left:0px">';
 
+                console.log("f.image1id", f.image1id);
 
                 var file = $('<li class="files"><a href="'+ f.objPath +
                                                '" title="'+ f.name +
                                                '" data-assetslug="'+ f.assetSlug +
+                                               '" data-assetid="'+ f.assetid +
                                                '" data-objPath="'+ f.objPath +
                                                '" data-objID="'+ f.objID +
                                                '" data-mtlPath="'+ f.mtlPath +
@@ -450,6 +458,7 @@ function file_Browsing_By_DB(data){
                                                '" data-diffImageID="'+ f.diffImageID +
                                                '" data-categoryID="'+ f.categoryID +
                                                '" data-categoryName="'+ f.categoryName +
+                                               '" data-image1id="'+ f.image1id +
                                                '" class="files">'+icon+'<span class="name">'+
                     name +'</span> <span class="details">'+fileSize+'</span></a></li>');
                 file.appendTo(fileList);
