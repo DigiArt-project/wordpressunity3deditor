@@ -38,17 +38,12 @@ wp_localize_script('wpunity_classification_request', 'phpvars',
 add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
 function wpunity_assets_create_right_metaboxes() {
-
-
-
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_segment_obj','Segment obj','wpunity_assets_segment_obj_box_content', 'wpunity_asset3d', 'side' , 'low');
     add_meta_box( 'autofnc-wpunity_asset3d_classify_obj','Classify obj','wpunity_assets_classify_obj_box_content', 'wpunity_asset3d', 'side' , 'low');
 }
-
-
 
 function wpunity_assets_fetch_description_box_content($post){
 
@@ -88,7 +83,6 @@ function wpunity_assets_fetch_description_box_content($post){
 
       <?php
 }
-
 
 function wpunity_assets_fetch_image_box_content($post){
 
@@ -140,7 +134,6 @@ function wpunity_assets_fetch_image_box_content($post){
 
     <?php
 }
-
 
 function wpunity_assets_fetch_video_box_content($post){
 
@@ -233,7 +226,6 @@ function wpunity_assets_segment_obj_box_content($post){
 
     <?php
 }
-
 
 function wpunity_assets_classify_obj_box_content($post){
 
@@ -365,10 +357,20 @@ $wpunity_databox1 = array(
 
 function wpunity_assets_databox_add() {
     global $wpunity_databox1;
+    add_meta_box('wpunity-assets-infobox', 'Description Tips for Image-Text', 'wpunity_assets_infobox_show', 'wpunity_asset3d','normal','high' );
     add_meta_box($wpunity_databox1['id'], 'Asset Data', 'wpunity_assets_databox_show', $wpunity_databox1['page'], $wpunity_databox1['context'], $wpunity_databox1['priority']);
 }
 
 add_action('admin_menu', 'wpunity_assets_databox_add');
+
+function wpunity_assets_infobox_show(){
+    ?>
+    <style>#wpunity-assets-infobox{display:none;}</style>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pellentesque lorem quis sodales tempus. Maecenas consequat sem vitae velit convallis maximus et eu massa. Fusce aliquam elit vitae est lobortis, sed porta velit aliquet. Phasellus eleifend accumsan dui, eleifend auctor justo convallis vitae. In hac habitasse platea dictumst. In gravida scelerisque ligula, nec cursus nibh venenatis non. Maecenas sagittis ullamcorper dui, at auctor lorem mollis ac. Sed ornare sit amet eros vel feugiat. Praesent semper commodo nisi a pellentesque. Aenean porttitor nulla eget diam consectetur feugiat. Donec viverra, libero rhoncus suscipit eleifend, enim libero egestas velit, vitae commodo libero magna eu libero. Etiam semper, mauris id pellentesque elementum, felis orci placerat erat, nec pharetra odio mauris ut metus. Curabitur eleifend mollis efficitur. Donec non pellentesque lorem.
+
+    Cras efficitur lacinia risus. Donec id nulla tristique, rhoncus arcu sed, tincidunt tellus. Curabitur posuere, sem non vulputate maximus, ex risus tempor magna, quis tempor leo arcu sit amet sapien. Mauris semper eu justo eu mattis. Vivamus vel libero quis justo placerat consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis quam purus, non malesuada leo molestie vitae. Nulla posuere lectus quis suscipit eleifend. Nunc consectetur turpis ac feugiat lobortis. Aliquam ultricies, felis in consectetur molestie, lorem augue commodo metus, vitae dapibus nisi libero ut risus. Donec finibus purus eu tincidunt ullamcorper. Nulla facilisi. Vivamus efficitur a dolor sit amet elementum. Vestibulum finibus scelerisque tincidunt. Duis fermentum venenatis tellus, eu aliquet erat tempor in.
+    <?php
+}
 
 function wpunity_assets_databox_show(){
     global $wpunity_databox1, $post;
@@ -565,6 +567,7 @@ function wpunity_assets_databox_show(){
                 document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
                 document.getElementById('wpunity_asset3d_video').style.display = 'none';
                 document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                document.getElementById('wpunity-assets-infobox').style.display = 'none';
             }else{
                 var link = document.getElementById('wpunity_asset3d_next_scene_field');
                 link.style.display = 'none';
@@ -574,24 +577,28 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+                    document.getElementById('wpunity-assets-infobox').style.display = 'none';
                 }else if(text == 'Points of Interest (Image-Text)'){
                     document.getElementById('wpunity_asset3d_image1').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                    document.getElementById('wpunity-assets-infobox').style.display = 'block';
                 }else if(text == 'Points of Interest'){
                     document.getElementById('wpunity_asset3d_image1').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_preview').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
+                    document.getElementById('wpunity-assets-infobox').style.display = 'none';
                 }else{
                     document.getElementById('wpunity_asset3d_image1').style.display = 'none';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
                     document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                    document.getElementById('wpunity-assets-infobox').style.display = 'none';
                 }
             }
         }
