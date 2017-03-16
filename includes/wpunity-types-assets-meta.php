@@ -24,7 +24,7 @@ function wpunity_assets_delete_allmetas($post_id){
 
 //==========================================================================================================================================
 
-function wpunity_assets_create_metafile($post_id, $attachment_ID){
+function wpunity_assets_create_metafile($post_id, $attachment_ID, $fieldid){
 
     $attachment_post = get_post( $attachment_ID );
 
@@ -112,14 +112,12 @@ function wpunity_assets_create_metafile($post_id, $attachment_ID){
         }
     }elseif( (strpos($type, 'image/jpeg') === 0) ){
 
-//            print_r($attachment_post);
-//            wp_die();
-
+            
             $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
 
-            if ($field_name = 'diffusion-image') {
+            if ($fieldid == 'wpunity_asset3d_diffimage') {
                 $templatePart = wpunity_getYaml_jpg_dotmeta_pattern($yampl_temp_id);
-            } else if ($field_name == 'image1'){
+            } else if ($fieldid == 'wpunity_asset3d_image1'){
                 $templatePart = wpunity_getYaml_jpg_sprite_pattern($yampl_temp_id);
             }
 

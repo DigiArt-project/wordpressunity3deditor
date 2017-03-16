@@ -889,7 +889,7 @@ function wpunity_assets_databox_save($post_id) {
     foreach ($wpunity_databox1['fields'] as $field) {
         $attachment_ID = get_post_meta($post_id, $field['id'], true);
         if($attachment_ID){
-            wpunity_assets_create_metafile($post_id,$attachment_ID); //create meta file
+            wpunity_assets_create_metafile($post_id,$attachment_ID, $field['id']); //create meta file
         }
     }
 
