@@ -366,9 +366,18 @@ add_action('admin_menu', 'wpunity_assets_databox_add');
 function wpunity_assets_infobox_show(){
     ?>
     <style>#wpunity-assets-infobox{display:none;}</style>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pellentesque lorem quis sodales tempus. Maecenas consequat sem vitae velit convallis maximus et eu massa. Fusce aliquam elit vitae est lobortis, sed porta velit aliquet. Phasellus eleifend accumsan dui, eleifend auctor justo convallis vitae. In hac habitasse platea dictumst. In gravida scelerisque ligula, nec cursus nibh venenatis non. Maecenas sagittis ullamcorper dui, at auctor lorem mollis ac. Sed ornare sit amet eros vel feugiat. Praesent semper commodo nisi a pellentesque. Aenean porttitor nulla eget diam consectetur feugiat. Donec viverra, libero rhoncus suscipit eleifend, enim libero egestas velit, vitae commodo libero magna eu libero. Etiam semper, mauris id pellentesque elementum, felis orci placerat erat, nec pharetra odio mauris ut metus. Curabitur eleifend mollis efficitur. Donec non pellentesque lorem.
 
-    Cras efficitur lacinia risus. Donec id nulla tristique, rhoncus arcu sed, tincidunt tellus. Curabitur posuere, sem non vulputate maximus, ex risus tempor magna, quis tempor leo arcu sit amet sapien. Mauris semper eu justo eu mattis. Vivamus vel libero quis justo placerat consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis quam purus, non malesuada leo molestie vitae. Nulla posuere lectus quis suscipit eleifend. Nunc consectetur turpis ac feugiat lobortis. Aliquam ultricies, felis in consectetur molestie, lorem augue commodo metus, vitae dapibus nisi libero ut risus. Donec finibus purus eu tincidunt ullamcorper. Nulla facilisi. Vivamus efficitur a dolor sit amet elementum. Vestibulum finibus scelerisque tincidunt. Duis fermentum venenatis tellus, eu aliquet erat tempor in.
+    &lt;b&gt;&lt;size=40&gt;MyTitle&lt;/size&gt;&lt;/b&gt; <br/>
+
+    &lt;size=32&gt;&lt;color=green>My description goes here.&lt;/color&gt;&lt;/size&gt; <br/><br/>
+
+    Supported tags<br/>
+
+    &lt;b&gt;Renders the text in boldface.&lt;/b&gt;<br/>
+    &lt;i&gt;Renders the text in italics.&lt;/i&gt;<br/>
+    &lt;size=20&gt;Sets the size of the text according to the parameter value, given in pixels.&lt;/size&gt;<br/>
+    &lt;color=blue&gt;Sets the color of the text according to the parameter value.&lt;/color&gt;<br/>
+
     <?php
 }
 
