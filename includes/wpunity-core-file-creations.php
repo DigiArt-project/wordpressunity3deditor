@@ -698,6 +698,26 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $my_postid       = $value['assetid']; //This is page id or post id
                 $content_post    = get_post($my_postid);
                 $textcontent     = $content_post->post_content;
+
+                // Unity wants two line breaks to break one and
+                // Unity wants three line breaks to break twice: Weird isn't it?
+                $textcontent = str_replace(PHP_EOL.PHP_EOL, 'linebreak2to3   ', $textcontent);
+                $textcontent = str_replace(PHP_EOL, 'linebreak1to2    ', $textcontent);
+
+                $textcontent = str_replace('linebreak1to2', PHP_EOL.PHP_EOL, $textcontent);
+                $textcontent = str_replace('linebreak2to3', PHP_EOL.PHP_EOL.PHP_EOL, $textcontent);
+
+
+
+
+
+                //$textcontent = str_replace(PHP_EOL.'    '.PHP_EOL, PHP_EOL.PHP_EOL.PHP_EOL, $textcontent);
+
+
+
+
+                $textcontent = "'" . $textcontent . "'";
+
 //                $textcontent     = apply_filters('the_content', $textcontent    );
 //                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
 
