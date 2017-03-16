@@ -698,6 +698,11 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $my_postid       = $value['assetid']; //This is page id or post id
                 $content_post    = get_post($my_postid);
                 $textcontent     = $content_post->post_content;
+
+                $textcontent = "'" . $textcontent . "'";
+
+                $textcontent = str_rep('\r\n','    \r\n',$textcontent);
+
 //                $textcontent     = apply_filters('the_content', $textcontent    );
 //                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
 
