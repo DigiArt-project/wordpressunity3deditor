@@ -111,11 +111,22 @@ function wpunity_assets_create_metafile($post_id, $attachment_ID){
             }
         }
     }elseif( (strpos($type, 'image/jpeg') === 0) ){
-        $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
-        $templatePart = wpunity_getYaml_jpg_dotmeta_pattern($yampl_temp_id);
-        $fileData = wpunity_replace_jpgmeta($templatePart,$attachment_ID);
-        fwrite($create_file, $fileData);
-        fclose($create_file);
+
+//            print_r($attachment_post);
+//            wp_die();
+
+            $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
+
+            if ($field_name = 'diffusion-image') {
+                $templatePart = wpunity_getYaml_jpg_dotmeta_pattern($yampl_temp_id);
+            } else if ($field_name == 'image1'){
+                $templatePart = wpunity_getYaml_jpg_sprite_pattern($yampl_temp_id);
+            }
+
+            $fileData = wpunity_replace_jpgmeta($templatePart, $attachment_ID);
+            fwrite($create_file, $fileData);
+            fclose($create_file);
+
     }
 
     //TODO else if VIDEO

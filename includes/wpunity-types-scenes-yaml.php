@@ -4095,7 +4095,7 @@ TextureImporter:
 
 
 $ini_scene_jpg_sprite_pattern = array('fileFormatVersion: 2
-guid: ___[sprite_guid]___
+guid: ___[jpg_guid]___
 timeCreated: ___[unx_time_created]___
 licenseType: Free
 TextureImporter:
