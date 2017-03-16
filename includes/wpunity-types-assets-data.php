@@ -400,7 +400,12 @@ function wpunity_assets_databox_show(){
             //$url_obj = ""; //$curr_path."floor.obj";
             $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
             $mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
-            $textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
+
+            if (wp_get_attachment_url( $mtl_obj ))
+                $textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
+            else
+                $textmtl = '';
+
             $obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
             $url_obj = wp_get_attachment_url( $obj_id );
             ?>
