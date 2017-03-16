@@ -431,6 +431,8 @@ function file_Browsing_By_DB(data){
                 var name = escapeHTML(f.name);
 
 
+                if(!f.objPath)
+                    return;
 
                 var fileType = f.objPath.split('.').pop();
 

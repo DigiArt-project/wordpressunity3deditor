@@ -698,8 +698,8 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $my_postid       = $value['assetid']; //This is page id or post id
                 $content_post    = get_post($my_postid);
                 $textcontent     = $content_post->post_content;
-                $textcontent     = apply_filters('the_content', $textcontent    ); // ToDo: Rip html
-                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
+//                $textcontent     = apply_filters('the_content', $textcontent    );
+//                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
 
 
                 $sprite_guid =  wpunity_create_guids('jpg', $value['image1id']); //"00500000000000000000000000000513";
