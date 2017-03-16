@@ -1446,6 +1446,18 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[poit_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[poit_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[poit_scale_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
