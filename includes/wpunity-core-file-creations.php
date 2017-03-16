@@ -327,13 +327,13 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
 
     $mainmenuSceneTitle = $gameTitle  . ' - Main Menu'; //Title for Main Menu
-    $mainmenuSceneSlug = 's_mainmenu_' . $gameSlug; //Slug for Main Menu
+    $mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
     $firstSceneTitle = $gameTitle . ' - First Scene'; //Title for First Menu
-    $firstSceneSlug = 's1_' . $gameSlug; //Slug for First Menu
+    $firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
     $optionsSceneTitle = $gameTitle . ' - Options Scene'; //Title for Options Menu
-    $optionsSceneSlug = 's_options_' . $gameSlug; //Slug for Options Menu
+    $optionsSceneSlug = $gameSlug . '-options-scene'; //Slug for Options Menu
     $credentialsSceneTitle = $gameTitle . ' - Credentials Scene'; //Title for Credentials Menu
-    $credentialsSceneSlug = 's_credentials_' . $gameSlug; //Slug for Credentials Menu
+    $credentialsSceneSlug = $gameSlug . '-credentials-scene'; //Slug for Credentials Menu
 
     // Create Main Menu Scene Data
     $mainmenuSceneData = array(
