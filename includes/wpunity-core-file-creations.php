@@ -699,9 +699,12 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $content_post    = get_post($my_postid);
                 $textcontent     = $content_post->post_content;
 
-                $textcontent = "'" . $textcontent . "'";
 
-                $textcontent = str_replace('\r\n','\;\;\;\;\r\n', $textcontent);
+
+                $textcontent = str_replace(PHP_EOL,PHP_EOL.'    ', $textcontent);
+
+
+                $textcontent = "'" . $textcontent . "'";
 
 //                $textcontent     = apply_filters('the_content', $textcontent    );
 //                $textcontent     = str_replace(']]>', ']]&gt;', $textcontent    );
