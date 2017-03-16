@@ -307,12 +307,14 @@ THREE.SceneExporter.prototype = {
                     '	"rotation" : ' + Vector3String(o.rotation) + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
+                    '	"assetid" : ' + '"' + o.assetid  + '"' + ',',
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
                     '	"fnObjID" : ' + '"' + o.fnObjID  + '"' + ',',
                     '	"categoryName" : ' + '"' + o.categoryName  + '"' + ',',
                     '	"categoryID" : ' + '"' + o.categoryID  + '"' + ',',
                     '	"diffImage" : ' + '"' + o.diffImage  + '"' + ',',
                     '	"diffImageID" : ' + '"' + o.diffImageID  + '"' + ',',
+                    '	"image1id" : ' + '"' + o.image1id  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',
                     '	"fnMtlID" : ' + '"' + o.fnMtlID + '"' + ( o.children.length ? ',' : '' )
 

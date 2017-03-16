@@ -168,11 +168,15 @@ echo '</script>';
         var objID = dataDrag.objID;
         var mtlID = dataDrag.mtlID;
 
+        var assetid = dataDrag.assetid;
+
         var categoryName = dataDrag.categoryName;
         var categoryID = dataDrag.categoryID;
         var diffImage = dataDrag.diffImage;
 
         var diffImageID = dataDrag.diffImageID;
+
+        var image1id = dataDrag.image1id;
 
         // we take the behavior type from the path of the obj
         var slashesArr = allIndexOf("/", path);
@@ -180,8 +184,9 @@ echo '</script>';
         var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
 
 
-        addOne(dataDrag.title, path, objFname, objID, mtlFname, mtlID,
-            categoryName, categoryID, diffImage, diffImageID,
+
+        addOne(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
+            categoryName, categoryID, diffImage, diffImageID, image1id,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

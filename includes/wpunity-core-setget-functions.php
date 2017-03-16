@@ -13,21 +13,20 @@ function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
 
     $response = wpunity_getAllassets_byScene($_GET['sceneID']);
 
+
     for ($i=0; $i<count($response); $i++){
         $response[$i][name] =$response[$i][assetName];
         $response[$i][type] ='file';
         $response[$i][path] =$response[$i][objPath];
 
-
+        // Find kb size
         $ch = curl_init($response[$i][objPath]);
-
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
         curl_setopt($ch, CURLOPT_NOBODY, TRUE);
         $dataCurl = curl_exec($ch);
         $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
         curl_close($ch);
-
         $response[$i][size] =$size;
     }
 
@@ -151,11 +150,15 @@ function wpunity_getAllassets_byScene($sceneID){
             $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); //Screenshot Image ID
             if($screenImageID){$screenImagePath = wp_get_attachment_url( $screenImageID );} //Screenshot Image PATH
 
+
+            $image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true); //OBJ ID
+
+
             $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
 
             $allAssets[] = ['assetName'=>$asset_name,
                 'assetSlug'=>get_post()->post_name,
-                'assetID'=>$asset_id,
+                'assetid'=>$asset_id,
                 'categoryName'=>$categoryAsset[0]->name,
                 'categoryID'=>$categoryAsset[0]->term_id,
                 'objID'=>$objID,
@@ -165,7 +168,8 @@ function wpunity_getAllassets_byScene($sceneID){
                 'diffImage'=>$difImagePath,
                 'screenImageID'=>$screenImageID,
                 'screenImagePath'=>$screenImagePath,
-                'mtlPath'=>$mtlPath];
+                'mtlPath'=>$mtlPath,
+                'image1id'=>$image1id];
 
         endwhile;
     endif;
