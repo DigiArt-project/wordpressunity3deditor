@@ -171,10 +171,76 @@ function wpunity_overwrite_uploads( $name ){
     foreach( $attachments_to_remove as $attach )
         wp_delete_attachment( $attach->ID, true );
 
+//    $ext  = pathinfo( $name, PATHINFO_EXTENSION );
+//    $real_name = preg_replace('/\.[^.]+$/','',$name);
+//
+//    $duplicate_name = $real_name . '-a' . '.' . $ext;
     return $name;
 }
 
-add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+//add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
+
+//==========================================================================================================================================
+
+
+
+
+
+function get_post_by_title($page_title, $type = "post", $output = OBJECT) {
+    global $wpdb;
+    $post = $wpdb->get_var ( $wpdb->prepare ( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type='$type'", $page_title ) );
+    if ($post)
+        return get_post ( $post, $output );
+    return null;
+}
+
+
+
+function wp37989_fix_encoded_attachment_titles( $data ) {
+    if ( empty( $_FILES ) ) {
+        return $data;
+    }
+
+    $file = current( $_FILES );
+    $ext  = pathinfo( $file['name'], PATHINFO_EXTENSION );
+    $name = wp_basename( $file['name'], ".$ext" );
+
+//    $mypost = get_post_by_title($name, "attachment");
+//
+//    $hande = fopen('C:/xampp/htdocs/wp-digiart/stdout.log','w');
+//    fwrite ($hande,  $mypost);
+//    fclose($hande);
+
+    $data['post_name'] = '11-' . $name;
+    //$data['name'] = '11-' . $name;
+
+    return $data;
+}
+//add_filter( 'wp_insert_attachment_data', 'wp37989_fix_encoded_attachment_titles' );
+
+
+
+function wpy_rename_attacment($post_ID){
+
+    $post = get_post($post_ID);
+    $file = get_attached_file($post_ID);
+    $path = pathinfo($file, PATHINFO_EXTENSION);
+    //dirname   = File Path
+    //basename  = Filename.Extension
+    //extension = Extension
+    //filename  = Filename
+
+    $newfilename = "hi";
+    $newfile = $path['dirname']."/".$newfilename.".".$path;
+
+    rename($file, $newfile);
+    update_attached_file( $post_ID, $newfile );
+
+}
+
+//add_action('add_attachment', 'wpy_rename_attacment');
+
 
 //==========================================================================================================================================
 
