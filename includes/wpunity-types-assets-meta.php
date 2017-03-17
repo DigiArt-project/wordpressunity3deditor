@@ -112,7 +112,7 @@ function wpunity_assets_create_metafile($post_id, $attachment_ID, $fieldid){
         }
     }elseif( (strpos($type, 'image/jpeg') === 0) ){
 
-            
+
             $create_file = fopen($upload_dir . '/' . $assetPath . '/' . $attachment_title . '.jpg.meta', "w") or die("Unable to open file!");
 
             if ($fieldid == 'wpunity_asset3d_diffimage') {
