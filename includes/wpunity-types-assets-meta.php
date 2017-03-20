@@ -77,7 +77,7 @@ function wpunity_assets_create_metafile($post_id, $attachment_ID, $fieldid){
                                             [
                         $mtl_arr[$iMaterial]['materialName'],
                         // if textureFileName is empty then put empty else find the guid of e.g. floor.jpg texture
-                        $mtl_arr[$iMaterial]['textureFileName']==""?"": ", guid: " . wpunity_create_guids('jpg', $post_id, $iMaterial) . ", type: 3", // find_guid_of( $mtl_arr[$iMaterial]['textureFileName'])
+                        $mtl_arr[$iMaterial]['textureFileName']==""   ?    ""  : ", guid: " . wpunity_create_guids('jpg', $post_id, $iMaterial) . ", type: 3", // find_guid_of( $mtl_arr[$iMaterial]['textureFileName'])
                         $mtl_arr[$iMaterial]['color_r'],
                         $mtl_arr[$iMaterial]['color_g'],
                         $mtl_arr[$iMaterial]['color_b'],

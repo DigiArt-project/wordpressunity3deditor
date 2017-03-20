@@ -561,29 +561,29 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
             // Change avatar position and rotation
             $tempFirstPersonPart = str_replace([  // 1. s1 init first : Player, DirectionalLight, camera2, camera2Anchor, scene1Manager
-                                                    '___[wa_player_prefab_fid]___',
-                                                    '___[wa_player_position_x]___',
-                                                    '___[wa_player_position_y]___',
-                                                    '___[wa_player_position_z]___',
-                                                    '___[wa_player_rotation_x]___',
-                                                    '___[wa_player_rotation_y]___',
-                                                    '___[wa_player_rotation_z]___',
-                                                    '___[wa_player_camera_fid]___',
-                                                        '___[wa_scene_manager_fid]___',  //1
-                                                        '___[wa_scene_manager_transform_fid]___',
-                                                        '___[wa_scene_manager_script_fid]___',
-                                                        '___[wa_camera2_fid]___',
-                                                        '___[wa_camera2_transform_fid]___', //5
-                                                        '___[wa_camera2_camera_fid]___',
-                                                        '___[wa_camera2_behaviour_fid]___',
-                                                        '___[wa_camera2_behaviour2_fid]___',
-                                                        '___[wa_camera2_audiolistener_fid]___',
-                                                          '___[wa_camera2_children_transform_fid]___', //10
-                                                            '___[wa_light_fid]___',
-                                                            '___[wa_light_transform_fid]___',
-                                                            '___[wa_light_light_fid]___',
-                                                            '___[wa_camera2anchor_fid]___',
-                                                            '___[wa_camera2_children_transform_fid]___'],
+                '___[wa_player_prefab_fid]___',
+                '___[wa_player_position_x]___',
+                '___[wa_player_position_y]___',
+                '___[wa_player_position_z]___',
+                '___[wa_player_rotation_x]___',
+                '___[wa_player_rotation_y]___',
+                '___[wa_player_rotation_z]___',
+                '___[wa_player_camera_fid]___',
+                '___[wa_scene_manager_fid]___',  //1
+                '___[wa_scene_manager_transform_fid]___',
+                '___[wa_scene_manager_script_fid]___',
+                '___[wa_camera2_fid]___',
+                '___[wa_camera2_transform_fid]___', //5
+                '___[wa_camera2_camera_fid]___',
+                '___[wa_camera2_behaviour_fid]___',
+                '___[wa_camera2_behaviour2_fid]___',
+                '___[wa_camera2_audiolistener_fid]___',
+                '___[wa_camera2_children_transform_fid]___', //10
+                '___[wa_light_fid]___',
+                '___[wa_light_transform_fid]___',
+                '___[wa_light_light_fid]___',
+                '___[wa_camera2anchor_fid]___',
+                '___[wa_camera2_children_transform_fid]___'],
                 [
                     $curr_fid++,
                     $value['position'][0],
@@ -601,25 +601,25 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
 
             $tempFirstPersonPart = str_replace([
-                                                                    '___[wa_exitBt_fid]___', // 2. s1 canvas related: sCanvas, EventSystem
-                                                                    '___[wa_exitBt_recttrans_fid]___',
-                                                                    '___[wa_exitBt_canvrenderer_fid]___',
-                                                                    '___[wa_exitBt_monobehaviour1_fid]___',
-                                                                    '___[wa_exitBt_monobehaviour2_fid]___', //5
-                                                                    '___[wa_exitBt_recttrans_child_fid]___',
-                                                                    '___[wa_exitBt_recttrans_father_fid]___',
-                                                                    '___[wa_exitBtText_fid]___',
-                                                                    '___[wa_exitBtText_canvasrenderer_fid]___',
-                                                                    '___[wa_exitBtText_monobehaviour_fid]___', // 10
-                                                                    '___[wa_scenecanvas_fid]___',
-                                                                    '___[wa_scenecanvas_canvas_fid]___',
-                                                                    '___[wa_scenecanvas_monob1_fid]___',
-                                                                    '___[wa_scenecanvas_monob2_fid]___',
-                                                                    '___[wa_eventsys_fid]___', // 15
-                                                                    '___[wa_eventsys_transform_fid]___',
-                                                                    '___[wa_eventsys_monob1_fid]___',
-                                                                    '___[wa_eventsys_monob2_fid]___'],
-                   [$curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
+                '___[wa_exitBt_fid]___', // 2. s1 canvas related: sCanvas, EventSystem
+                '___[wa_exitBt_recttrans_fid]___',
+                '___[wa_exitBt_canvrenderer_fid]___',
+                '___[wa_exitBt_monobehaviour1_fid]___',
+                '___[wa_exitBt_monobehaviour2_fid]___', //5
+                '___[wa_exitBt_recttrans_child_fid]___',
+                '___[wa_exitBt_recttrans_father_fid]___',
+                '___[wa_exitBtText_fid]___',
+                '___[wa_exitBtText_canvasrenderer_fid]___',
+                '___[wa_exitBtText_monobehaviour_fid]___', // 10
+                '___[wa_scenecanvas_fid]___',
+                '___[wa_scenecanvas_canvas_fid]___',
+                '___[wa_scenecanvas_monob1_fid]___',
+                '___[wa_scenecanvas_monob2_fid]___',
+                '___[wa_eventsys_fid]___', // 15
+                '___[wa_eventsys_transform_fid]___',
+                '___[wa_eventsys_monob1_fid]___',
+                '___[wa_eventsys_monob2_fid]___'],
+                [$curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++
@@ -628,20 +628,20 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
 
             $tempFirstPersonPart = str_replace(
-                                                            ['___[wa_ovrplayer_prefab_fid]___',             // 3. Ovr related
-                                                             '___[wa_ovrplayer_fid]___',
-                                                            '___[wa_ovrplayer_position_x]___',
-                                                            '___[wa_ovrplayer_position_y]___',
-                                                            '___[wa_ovrplayer_position_z]___',
-                                                            '___[wa_ovrplayer_rotation_x]___',
-                                                            '___[wa_ovrplayer_rotation_y]___',
-                                                            '___[wa_ovrplayer_rotation_z]___',
-                                                            '___[wa_ovrplayer_lefteyeanchor_fid]___',
-                                                            '___[wa_ovrplayer_righteyeanchor_fid]___',
-                                                            '___[wa_ovrplayer_rigidbody_fid]___',
-                                                            '___[wa_ovrplayer_leftcamera_fid]___',
-                                                            '___[wa_ovrplayer_rightcamera_fid]___',
-                                                            ],
+                ['___[wa_ovrplayer_prefab_fid]___',             // 3. Ovr related
+                    '___[wa_ovrplayer_fid]___',
+                    '___[wa_ovrplayer_position_x]___',
+                    '___[wa_ovrplayer_position_y]___',
+                    '___[wa_ovrplayer_position_z]___',
+                    '___[wa_ovrplayer_rotation_x]___',
+                    '___[wa_ovrplayer_rotation_y]___',
+                    '___[wa_ovrplayer_rotation_z]___',
+                    '___[wa_ovrplayer_lefteyeanchor_fid]___',
+                    '___[wa_ovrplayer_righteyeanchor_fid]___',
+                    '___[wa_ovrplayer_rigidbody_fid]___',
+                    '___[wa_ovrplayer_leftcamera_fid]___',
+                    '___[wa_ovrplayer_rightcamera_fid]___',
+                ],
                 [$curr_fid++, $curr_fid++,
                     $value['position'][0],
                     $value['position'][1],
@@ -754,14 +754,14 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[poit_closeBtText_name]___', //e.g. android_121CloseBtText
                     '___[poit_closeBtText_content]___'], //e.g. Close;
                     [$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
-                     $key.'TextContainer',
-                     $curr_fid++,
-                     $textcontent,
-                     $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
-                     $key.'CloseBt',
-                     $curr_fid++, $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
-                     $key.'CloseBtText',
-                     'Close'
+                        $key.'TextContainer',
+                        $curr_fid++,
+                        $textcontent,
+                        $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                        $key.'CloseBt',
+                        $curr_fid++, $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
+                        $key.'CloseBtText',
+                        'Close'
                     ],
                     $templatePart_poipt);
 
@@ -798,7 +798,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[poit_panel_canvrender_fid]___',
                     '___[poit_panel_monob_fid]___',
                     '___[poit_panel_name]___' // android_121Panel
-                    ],[
+                ],[
                     $curr_fid++,$curr_fid++,$curr_fid++,$curr_fid++,
                     $key."Canvas",
                     $curr_fid++,
@@ -820,7 +820,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $sprite_guid,
                     $curr_fid++, $curr_fid++, $curr_fid++,
                     $key."Panel"
-                    ],
+                ],
                     $poit);
 
                 $unity_file_contents .= $poit;

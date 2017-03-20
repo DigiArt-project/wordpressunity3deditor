@@ -18,7 +18,7 @@ function wpunity_compileAjax() {
                 'urlpath': phpvarsA.game_urlpath},
 
         success : function(response){
-            document.getElementById('wpunity_compileButton').innerHTML = "Success.";
+            document.getElementById('wpunity_compileButton').innerHTML = "Compiling ...";
         },
 
         error : function(xhr, ajaxOptions, thrownError){
@@ -30,8 +30,7 @@ function wpunity_compileAjax() {
             document.getElementById('wpunity_compileButton').innerHTML = 'Error: Compile again?';
         }
     }).done(function( msg ) {
-        document.getElementById('wpunity_compileButton').innerHTML = "Compile again";
-        myzipajax();
+
     });
 
 
@@ -39,7 +38,7 @@ function wpunity_compileAjax() {
     // AJAX NO 2: Periodically check stdout.log file of Unity to see if we have finished
     //---------------------------------------------------------------------------------
     document.getElementById("wpunity_compile_report1").innerHTML = "-1";
-    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game ...";
+    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game ... <br />Check if completed every 20 secs.<br /> Maximum time 20 minutes";
 
     // Constantly monitor the stdout.log file
     var counterLinesPrevious = 0;
@@ -72,7 +71,9 @@ function wpunity_compileAjax() {
                     document.getElementById("wpunity_compile_report1").innerHTML = "Compiling completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
                     if (response.indexOf("Exiting batchmode successfully now")>0){
+                        document.getElementById('wpunity_compileButton').innerHTML = "Compile";
                         document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
+                        myzipajax();
                         clearInterval(interval);
                     } else {
                         document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + response;
@@ -88,7 +89,7 @@ function wpunity_compileAjax() {
                 document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
             }
         });
-    }, 10000);
+    }, 20000);
 }
 
 //-------------------------------------------------------

@@ -213,9 +213,9 @@ function wpunity_segment_obj_action_callback() {
         //$exefile.' '.$fnameobj.' '.$iter.' 0.01 0.2 100 25000 1 '.$outputpath.PHP_EOL.
 
         $txt = '@echo off'.PHP_EOL.
-                $exefile.' '.$fnameobj.' '.$iter.' '.$minDist.' '.$maxDist.' '.$minPoints.' '.$maxPoints.' 1 '.$outputpath.PHP_EOL.
-               'del "*.pcd"'.PHP_EOL.
-               'del "barycenters.txt"';
+            $exefile.' '.$fnameobj.' '.$iter.' '.$minDist.' '.$maxDist.' '.$minPoints.' '.$maxPoints.' 1 '.$outputpath.PHP_EOL.
+            'del "*.pcd"'.PHP_EOL.
+            'del "barycenters.txt"';
 
         fwrite($myfile, $txt);
         fclose($myfile);
@@ -345,18 +345,24 @@ function wpunity_assemble_action_callback() {
             echo '<br />2. Deleted target folder: Success';
     }
 
-    shell_exec('mkdir ' . $_POST['target']);
+
+    shell_exec('mkdir '. ($os==='lin'?'--parents':'')  . ' '.$_POST['target']);
+
+
+
+
+
     echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
 
     // Copy the pre-written windows game libraries // ToDo : check if windows libraries suit for linux. Probably yes. Delete linux libraries then.
     if ($os === 'win')
-        $copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'\windows '.$_POST['target'];
+        $copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
     else
-        $copy_command = 'cp -rf '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
+        $copy_command = 'cp --verbose -rf '.$_POST['game_libraries_path'].$DS.'windows'.$DS.'. '.$_POST['target'];
 
     $res_copy = shell_exec($copy_command);
 
-    echo '<br />4. Copy unity3d libraries: '.$res_copy;
+    echo '<br />4. Copy unity3d libraries: '. ($os==='win'?$res_copy: ($res_copy==0?'Success':'Failure 15'));
 
     //------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
     $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
@@ -425,11 +431,11 @@ function wpunity_assemble_action_callback() {
     if ($os === 'win')
         $copy_assets_command = 'xcopy /s /Q '.$_POST['source'].' '.$_POST['target'].$DS.'Assets';
     else
-        $copy_assets_command = 'cp -rf '.$_POST['source'].' '.$_POST['target'].$DS.'Assets';
+        $copy_assets_command = 'cp -rf '.$_POST['source'].$DS.'. '.$_POST['target'].$DS.'Assets';
 
     $res_copy_assets = shell_exec($copy_assets_command);
 
-    echo '<br />6. Copy Game Instance Assets to target Assets: '.$res_copy_assets;
+    echo '<br />6. Copy Game Instance Assets to target Assets: '. ($os==='win'?$res_copy_assets:($res_copy_assets==0?'Success':'Failure 16'));
     echo '<br /><br /> Finished assemble';
 
     wp_die();
@@ -458,7 +464,7 @@ function wpunity_compile_action_callback() {
         $txt = "#/bin/bash"."\n".
             "projectPath=`pwd`"."\n".
             "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-            "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath ${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
+            "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
 
         // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
         $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
@@ -468,9 +474,35 @@ function wpunity_compile_action_callback() {
     $myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
     fwrite($myfile, $txt);
     fclose($myfile);
+    chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
-    // 2: run bat or sh to compile the game
-    $output = shell_exec($compile_command);
+
+    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+
+
+    if ($os === 'lin'){
+        $init_workdir = getcwd();
+
+        chdir($game_dirpath);
+
+        //$handle = fopen($game_dirpath.$DS.'command.txt','w');
+
+
+        // 2: run bat or sh to compile the game
+        $output = shell_exec($compile_command);
+
+
+        chdir($init_workdir);
+
+        //fwrite($handle, getcwd() .PHP_EOL);
+
+        //fclose($handle);
+
+    } else {
+        // 2: run bat or sh to compile the game
+        $output = shell_exec($compile_command);
+    }
+
 
     wp_die();
 }
@@ -533,7 +565,7 @@ function wpunity_game_zip_action_callback(){
 
         // Zip archive will be created only after closing object
         $zip->close();
-        echo 'Zip successfully finished';
+        echo 'Zip successfully finished [2]';
         wp_die();
     } else {
         echo 'Failed to zip, code:'.$resZip;
