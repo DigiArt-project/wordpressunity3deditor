@@ -1,5 +1,28 @@
 <?php
 
+add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
+
+function wpunity_remove_menus() {
+
+// INSERT MENU ITEMS TO REMOVE FOR EVERYONE
+
+    $current_user_id = get_current_user_id();
+
+    //remove only for author and below
+    if ( current_user_can('administrator') && $current_user_id != 1 ) {
+        remove_menu_page('tools.php'); // Tools
+        remove_menu_page('upload.php'); // Media
+        remove_menu_page( 'edit-comments.php' ); // Comments
+        remove_menu_page( 'edit.php' ); //Posts
+        remove_menu_page( 'edit.php?post_type=page' ); //Pages
+        remove_menu_page( 'plugins.php' ); //Plugins
+        remove_menu_page( 'users.php' ); //Users
+        remove_menu_page( 'themes.php' ); //Appearance
+    }
+}
+
+
+
 //==========================================================================================================================================
 
 function wpunity_disable_imgthumbs_assets( $image_sizes ){
