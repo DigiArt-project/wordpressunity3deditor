@@ -1,5 +1,28 @@
 <?php
 
+add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
+
+function wpunity_remove_menus() {
+
+// INSERT MENU ITEMS TO REMOVE FOR EVERYONE
+
+    $current_user_id = get_current_user_id();
+
+    //remove only for author and below
+    if ( current_user_can('administrator') && $current_user_id != 1 ) {
+        remove_menu_page('tools.php'); // Tools
+        remove_menu_page('upload.php'); // Media
+        remove_menu_page( 'edit-comments.php' ); // Comments
+        remove_menu_page( 'edit.php' ); //Posts
+        remove_menu_page( 'edit.php?post_type=page' ); //Pages
+        remove_menu_page( 'plugins.php' ); //Plugins
+        remove_menu_page( 'users.php' ); //Users
+        remove_menu_page( 'themes.php' ); //Appearance
+    }
+}
+
+
+
 //==========================================================================================================================================
 
 function wpunity_disable_imgthumbs_assets( $image_sizes ){
@@ -155,6 +178,13 @@ add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
  */
 
 function wpunity_overwrite_uploads( $name ){
+
+    if( isset($_REQUEST['post_id']) ) {
+        $post_id =  (int)$_REQUEST['post_id'];
+    }else{
+        $post_id=0;
+    }
+
     $args = array(
         'numberposts'   => -1,
         'post_type'     => 'attachment',
@@ -168,13 +198,17 @@ function wpunity_overwrite_uploads( $name ){
     );
     $attachments_to_remove = get_posts( $args );
 
-    foreach( $attachments_to_remove as $attach )
-        wp_delete_attachment( $attach->ID, true );
+    foreach( $attachments_to_remove as $attach ){
+        if($attach->post_parent == $post_id) {
+            wp_delete_attachment($attach->ID, true);
+        }
+    }
 
     return $name;
 }
 
 add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
 
 // ================ SEMANTICS ON 3D ============================================================
 
