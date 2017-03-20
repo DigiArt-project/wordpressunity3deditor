@@ -345,16 +345,11 @@ function wpunity_assemble_action_callback() {
             echo '<br />2. Deleted target folder: Success';
     }
 
-
     shell_exec('mkdir '. ($os==='lin'?'--parents':'')  . ' '.$_POST['target']);
-
-
-
-
 
     echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
 
-    // Copy the pre-written windows game libraries // ToDo : check if windows libraries suit for linux. Probably yes. Delete linux libraries then.
+    // Copy the pre-written windows game libraries. The same are working for linux as well.
     if ($os === 'win')
         $copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
     else
