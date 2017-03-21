@@ -14,13 +14,20 @@
 /*
  * Change root .htaccess for uploading big data files
  *
- * php_value upload_max_filesize 64M
-php_value post_max_size 64M
-php_value max_execution_time 300
-php_value max_input_time 300
  *
- *
+php_value upload_max_filesize 256M
+php_value post_max_size 512M
+php_value max_input_time 2400
+
+// in php you can check their values with
+
+echo ini_get('post_max_size').chr(10);
+echo ini_get('max_input_time').chr(10);
+
  */
+// Only these variables can change with php
+// @ini_set( 'memory_limit', '512M');
+@ini_set( 'max_execution_time', '2400' );
 
 // TODO: The following necessary things to maintain folders structure
 

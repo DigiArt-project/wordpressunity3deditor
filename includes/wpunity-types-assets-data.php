@@ -462,10 +462,25 @@ function wpunity_assets_databox_show(){
                     </tr>
                     <?php
                 }elseif ($field['id'] == 'wpunity_asset3d_obj') {
+
                     ?>
                     <tr>
+
+
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
+
+                            <?php
+
+                            $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                            if ($valMaxUpload < 100){
+                                echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                                echo "Add to .htaccess the following two lines<br/>";
+                                echo "php_value upload_max_filesize 256M <br />";
+                                echo "php_value post_max_size 512M";
+                            }
+                            ?>
+
                             <?php $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
