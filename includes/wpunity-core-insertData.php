@@ -52,7 +52,7 @@ function wpunity_assets_taxcategory_fill(){
         'wpunity_asset3d_cat', // the taxonomy
         array(
             'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Image with Text',
-            'slug' => 'pois_ImageText',
+            'slug' => 'pois_imagetext',
         )
     );
     wp_insert_term(

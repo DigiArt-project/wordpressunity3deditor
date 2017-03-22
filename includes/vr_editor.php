@@ -6,7 +6,7 @@ wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
 
 // Define current path
-$PLUGIN_PATH_VR = plugins_url().'/WordpressUnity3DEditor';
+$PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
 $UPLOAD_DIR_C = wp_upload_dir()['basedir'];
 $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);

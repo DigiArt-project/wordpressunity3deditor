@@ -3,10 +3,10 @@
 function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
     ?>
         <!-- START 3D -->
-        <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/three.js"></script>
-        <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/OBJLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/MTLLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/WordpressUnity3DEditor/js_libs/threejs79/OrbitControls.js"></script>
+        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
+        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
+        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
+        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
         <script>
             function onWindowResize() {

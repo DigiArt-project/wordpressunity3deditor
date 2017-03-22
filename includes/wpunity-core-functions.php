@@ -22,6 +22,10 @@ function wpunity_remove_menus() {
         remove_menu_page( 'options-general.php' ); //Appearance
         remove_menu_page( 'index.php' ); //dashboard
 
+        remove_menu_page( 'duplicator' );
+        remove_menu_page( 'geodirectory' );
+        remove_menu_page( 'edit.php?post_type=gd_place' );
+
 
     }
 }
