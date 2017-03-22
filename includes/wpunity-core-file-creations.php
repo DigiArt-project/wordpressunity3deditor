@@ -460,7 +460,7 @@ function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
         case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
     }
 
-    return str_pad($objType, 3, "0", STR_PAD_LEFT) . str_pad($objID, 29, "0", STR_PAD_LEFT);
+    return str_pad($objType, 4, "0", STR_PAD_LEFT) . str_pad($objID, 28, "0", STR_PAD_LEFT);
 }
 
 
@@ -501,47 +501,33 @@ function wpunity_replace_jpgmeta($file_content,$objID){
     return $file_content_return;
 }
 
-function wpunity_replace_mat($file_content, $objID){
-//    $unix_time = time();
-//    $guid_id = 'c0000000000' . $objID;
+//function wpunity_replace_mat($file_content, $objID){
+////    $unix_time = time();
+////    $guid_id = 'c0000000000' . $objID;
+////
+////    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+////    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+////
+////    return $file_content_return;
+//    return $file_content;
+//}
 //
-//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
-//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-//
-//    return $file_content_return;
-    return $file_content;
-}
-
-function wpunity_replace_matmeta($file_content,$objID){
-//    $unix_time = time();
-//    $guid_id = 'c0000000000' . $objID;
-//
-//    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
-//    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
-//
-//    return $file_content_return;
-    return $file_content;
-}
+//function wpunity_replace_matmeta($file_content,$objID){
+////    $unix_time = time();
+////    $guid_id = 'c0000000000' . $objID;
+////
+////    $file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+////    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+////
+////    return $file_content_return;
+//    return $file_content;
+//}
 
 //==========================================================================================================================================
 function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
-
-//    echo "<br />New<br />";
-//
-//    echo "AAAAA=". $jsonScene;
-
     $jsonScene = htmlspecialchars_decode ( $jsonScene );
 
     $sceneJsonARR = json_decode($jsonScene, TRUE);
-
-//    echo "<br /><br />";
-//
-//    echo "BBBBBB=";
-//    print_r($sceneJsonARR);
-
-
-
-
     $tempFirstPersonPart = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
     $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
     $templatePart_poipt = wpunity_getYaml_poi_imagetext_pattern($yamlID);
@@ -556,7 +542,6 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
 
 
 
-
         if ($key == 'avatarYawObject') {
 
             // Change avatar position and rotation
@@ -568,6 +553,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 '___[wa_player_rotation_x]___',
                 '___[wa_player_rotation_y]___',
                 '___[wa_player_rotation_z]___',
+                '___[wa_player_rotation_w]___',
                 '___[wa_player_camera_fid]___',
                 '___[wa_scene_manager_fid]___',  //1
                 '___[wa_scene_manager_transform_fid]___',
@@ -586,12 +572,13 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 '___[wa_camera2_children_transform_fid]___'],
                 [
                     $curr_fid++,
-                    $value['position'][0],
+                   - $value['position'][0],
                     $value['position'][1],
                     $value['position'][2],
-                    $value['rotation'][0],
-                    $value['rotation'][1] + 180,
-                    $value['rotation'][2],
+                    $value['quaternion'][0],
+                    $value['quaternion'][1],
+                    $value['quaternion'][2],
+                    $value['quaternion'][3],
                     $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++,
@@ -636,6 +623,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[wa_ovrplayer_rotation_x]___',
                     '___[wa_ovrplayer_rotation_y]___',
                     '___[wa_ovrplayer_rotation_z]___',
+                    '___[wa_ovrplayer_rotation_w]___',
                     '___[wa_ovrplayer_lefteyeanchor_fid]___',
                     '___[wa_ovrplayer_righteyeanchor_fid]___',
                     '___[wa_ovrplayer_rigidbody_fid]___',
@@ -643,12 +631,13 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[wa_ovrplayer_rightcamera_fid]___',
                 ],
                 [$curr_fid++, $curr_fid++,
-                    $value['position'][0],
+                  -  $value['position'][0],
                     $value['position'][1],
                     $value['position'][2],
-                    $value['rotation'][0],
-                    $value['rotation'][1]+180,
-                    $value['rotation'][2],
+                    $value['quaternion'][0],
+                    $value['quaternion'][1],
+                    $value['quaternion'][2],
+                    $value['quaternion'][3],
                     $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++, $curr_fid++],
                 $tempFirstPersonPart);
 
@@ -673,6 +662,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                         "___[sop_rot_x]___",
                         "___[sop_rot_y]___",
                         "___[sop_rot_z]___",
+                        "___[sop_rot_w]___",
                         "___[sop_scale_x]___",
                         "___[sop_scale_y]___",
                         "___[sop_scale_z]___"],
@@ -683,10 +673,13 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                         $curr_fid++,
                         wpunity_create_guids('obj', $value['fnObjID']),
                         wpunity_create_guids('mat', $value['fnMtlID']), // ToDO: here we need the fnMatID // ToDO: We need to support multiple mat
-                        //rotation
-                        $value['position'][0], $value['position'][1], $value['position'][2],
                         // position
-                        $value['rotation'][0], $value['rotation'][1], $value['rotation'][2],
+                       - $value['position'][0], $value['position'][1], $value['position'][2],
+                        // rotation
+                        $value['quaternion'][0],
+                        $value['quaternion'][1],
+                        $value['quaternion'][2],
+                        $value['quaternion'][3],
                         // scale
                         $value['scale'][0]   , $value['scale'][1]   , $value['scale'][2]
                     ]
@@ -707,15 +700,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                 $textcontent = str_replace('linebreak1to2', PHP_EOL.PHP_EOL, $textcontent);
                 $textcontent = str_replace('linebreak2to3', PHP_EOL.PHP_EOL.PHP_EOL, $textcontent);
 
-
-
-
-
                 //$textcontent = str_replace(PHP_EOL.'    '.PHP_EOL, PHP_EOL.PHP_EOL.PHP_EOL, $textcontent);
-
-
-
-
                 $textcontent = "'" . $textcontent . "'";
 
 //                $textcontent     = apply_filters('the_content', $textcontent    );
@@ -780,6 +765,7 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     '___[poit_rotation_x]___',
                     '___[poit_rotation_y]___',
                     '___[poit_rotation_z]___',
+                    '___[poit_rotation_w]___',
                     '___[poit_scale_x]___',
                     '___[poit_scale_y]___',
                     '___[poit_scale_z]___',
@@ -803,12 +789,13 @@ function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
                     $key."Canvas",
                     $curr_fid++,
                     $curr_fid++,
-                    $value['position'][0],
+                  -  $value['position'][0],
                     $value['position'][1],
                     $value['position'][2],
-                    $value['rotation'][0],
-                    $value['rotation'][1],
-                    $value['rotation'][2],
+                    $value['quaternion'][0],
+                    $value['quaternion'][1],
+                    $value['quaternion'][2],
+                    $value['quaternion'][3],
                     $value['scale'][0],
                     $value['scale'][1],
                     $value['scale'][2],

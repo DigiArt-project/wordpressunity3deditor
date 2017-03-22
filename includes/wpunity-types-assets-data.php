@@ -495,7 +495,8 @@ function wpunity_assets_databox_show(){
                                 if(!$meta_obj_id){
                                     echo "obj is not defined";
                                 }else{
-                                    readfile(wp_get_attachment_url($meta_obj_id));
+                                    echo "obj text is too big to state here.";
+                                    //readfile(wp_get_attachment_url($meta_obj_id), "100");
                                 }
                                 ?>
                             </textarea>

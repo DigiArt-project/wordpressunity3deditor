@@ -340,7 +340,7 @@ echo '</script>';
     var manager = new THREE.LoadingManager();
 
     manager.onProgress = function ( item, loaded, total ) {
-        console.log( item, loaded, total );
+        //console.log( item, loaded, total );
     };
 
     // When all are finished loading place them in the correct position

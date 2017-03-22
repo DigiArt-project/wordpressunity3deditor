@@ -196,7 +196,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: ___[wa_ovrplayer_rotation_w]___
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
       propertyPath: m_RootOrder
@@ -397,7 +397,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: ___[wa_player_rotation_w]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_RootOrder
@@ -1005,7 +1005,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: ___[sop_rot_w]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
       propertyPath: m_RootOrder
@@ -1443,7 +1443,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: ___[poit_rotation_w]___
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
       propertyPath: m_LocalScale.x
@@ -3971,7 +3971,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0

@@ -38,10 +38,10 @@ function wpunity_compileAjax() {
     // AJAX NO 2: Periodically check stdout.log file of Unity to see if we have finished
     //---------------------------------------------------------------------------------
     document.getElementById("wpunity_compile_report1").innerHTML = "-1";
-    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game ... <br />Check if completed every 20 secs.<br /> Maximum time 20 minutes";
+    document.getElementById("wpunity_compile_report2").innerHTML = "Trying to compile the game ... <br />Check if completed every 5 secs.<br /> Maximum time 20 minutes";
 
     // Constantly monitor the stdout.log file
-    var counterLinesPrevious = 0;
+
     var interval = 0;
 
     var start_time = new Date().getTime();
@@ -57,30 +57,66 @@ function wpunity_compileAjax() {
                    'dirpath': phpvarsA.game_dirpath,
                    'urlpath': phpvarsA.game_urlpath},
             success : function(response){
-                console.log("onread stdout" + response.length);
 
-                var counterLines = response.split(/\r\n|\r|\n/).length;
+                var jsonArr = JSON.parse(response);
 
-                if (counterLines != counterLinesPrevious) {
-                    counterLinesPrevious = counterLines;
-                    document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLinesPrevious + " lines";
-                    document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+                var procMonitor = jsonArr.CSV;
+                var logfile = jsonArr.LOGFILE;
+
+                var completedFlag = false;
+                var successFlag = false;
+
+                if (procMonitor.length ==0 || procMonitor.indexOf("No tasks are running") > 0){
+                    completedFlag = true;
+                    successFlag = response.indexOf("Exiting batchmode successfully now")>0;
+                }
+
+                if (!completedFlag){
+
+                    var counterLines = logfile.split(/\r\n|\r|\n/).length;
+
+                    document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
+                        + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                    document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
+
                 } else {
-                    clearInterval(interval);
+                    document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
-                    document.getElementById("wpunity_compile_report1").innerHTML = "Compiling completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                    if (response.indexOf("Exiting batchmode successfully now")>0){
+                    if (successFlag) {
                         document.getElementById('wpunity_compileButton').innerHTML = "Compile";
                         document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
                         myzipajax();
                         clearInterval(interval);
                     } else {
-                        document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + response;
-                    }
 
-                    document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+                        document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+                    }
                 }
+
+
+                // var counterLines = response.split(/\r\n|\r|\n/).length;
+                //
+                // if (counterLines != counterLinesPrevious) {
+                //     counterLinesPrevious = counterLines;
+                //     document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLinesPrevious + " lines";
+                //     document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+                // } else {
+                //     clearInterval(interval);
+                //
+                //     document.getElementById("wpunity_compile_report1").innerHTML = "Compiling completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
+                //
+                //     if (response.indexOf("Exiting batchmode successfully now")>0){
+                //         document.getElementById('wpunity_compileButton').innerHTML = "Compile";
+                //         document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
+                //         myzipajax();
+                //         clearInterval(interval);
+                //     } else {
+                //         document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + response;
+                //     }
+                //
+                //     document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+                // }
             },
             error : function(xhr, ajaxOptions, thrownError){
                 document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
@@ -89,7 +125,7 @@ function wpunity_compileAjax() {
                 document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
             }
         });
-    }, 20000);
+    }, 5000);
 }
 
 //-------------------------------------------------------

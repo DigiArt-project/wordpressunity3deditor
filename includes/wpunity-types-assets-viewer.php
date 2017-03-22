@@ -86,10 +86,11 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
             mtlLoader.setPath(curr_path);
 
             var textmtl = <?php echo json_encode($textmtl)?>;
+
             if (textmtl != '')
                 mtlLoader.loadfromtext(textmtl, function (materials) {
 
-                    console.log(materials);
+                    //console.log("materials jimbea", materials['materials']);
 
                     materials.preload();
 

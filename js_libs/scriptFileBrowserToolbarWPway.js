@@ -446,7 +446,6 @@ function file_Browsing_By_DB(data){
                 if (fileType.toUpperCase() == 'OBJ')
                     icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0px;margin-left:0px">';
 
-                console.log("f.image1id", f.image1id);
 
                 var file = $('<li class="files"><a href="'+ f.objPath +
                                                '" title="'+ f.name +

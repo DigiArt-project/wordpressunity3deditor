@@ -545,13 +545,19 @@ function wpunity_compile_action_callback() {
 function wpunity_monitor_compiling_action_callback(){
     $DS = DIRECTORY_SEPARATOR;
 
-    // TEST
-    //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-    // Real
-    $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+    // Monitor stdout.log but it is not safe
+    $stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
+    //
 
-    echo file_get_contents($game_dirpath.$DS."stdout.log");
+    if ($os === 'lin'){
+        $processUnityCSV = exec('pgrep Unity');
+    } else {
+        $processUnityCSV = exec('TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV');
+    }
+
+    echo json_encode(array('CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 
     wp_die();
 }

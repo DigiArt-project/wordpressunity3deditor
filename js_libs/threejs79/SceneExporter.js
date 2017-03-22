@@ -298,13 +298,22 @@ THREE.SceneExporter.prototype = {
 
         function ObjectString( o, n ) {
 
+
+
+
             if (o.name != 'avatarYawObject'){
 
                 // ================ Ververidis Main =============: All objs
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
                     '	"position" : ' + Vector3String(o.position) + ',',
-                    '	"rotation" : ' + Vector3String(o.rotation) + ',',
+                    '	"rotation" : ' + "[" + o.rotation.x  + "," +
+                                               o.rotation.y  + "," +
+                                               o.rotation.z  + "]" + ',', //+ Vector3String(o.rotation) + ',',
+                    '	"quaternion" : ' + "[" + o.quaternion._x + "," +
+                                                 o.quaternion._y + "," +
+                                                 o.quaternion._z + "," +
+                                                 o.quaternion._w + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"assetid" : ' + '"' + o.assetid  + '"' + ',',
@@ -328,7 +337,13 @@ THREE.SceneExporter.prototype = {
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
                     '	"position" : ' + Vector3String(o.position) + ',',
-                    '	"rotation" : ' + Vector3String(o.rotation) + ',',
+                    '	"rotation" : ' + "[" + mradians2degrees(o.rotation.x) + "," +
+                                               mradians2degrees(o.rotation.y) + "," +
+                                               mradians2degrees(o.rotation.z)  + "]" + ',', //+ Vector3String(o.rotation) + ',',
+                    '	"quaternion" : ' + "[" + o.quaternion._x + "," +
+                                                 o.quaternion._y + "," +
+                                                 o.quaternion._z + "," +
+                                                 o.quaternion._w + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
@@ -336,6 +351,13 @@ THREE.SceneExporter.prototype = {
 
             return generateMultiLineString( output, '\n\t\t', n );
 
+        }
+
+        function mradians2degrees(x){
+
+            var out = x - (x/(2*Math.PI) >> 0) * 2 * Math.PI;
+
+            return out;
         }
 
         function MeshString( o, n ) {
