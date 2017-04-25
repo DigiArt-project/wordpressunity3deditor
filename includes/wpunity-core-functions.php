@@ -26,6 +26,7 @@ function wpunity_remove_menus() {
         remove_menu_page( 'geodirectory' );
         remove_menu_page( 'edit.php?post_type=gd_place' );
 
+        remove_menu_page('wpcf7');
 
     }
 }
