@@ -16,7 +16,7 @@ class wpUnityTemplate {
 
     //Returns an instance of this class.
     public static function get_instance() {
-        if ( null == self::$instance ) { self::$instance = new ImcTemplate();}
+        if ( null == self::$instance ) { self::$instance = new wpUnityTemplate();}
         return self::$instance;
     }
 
