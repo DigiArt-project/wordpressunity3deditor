@@ -230,6 +230,10 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.ph
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpnity-page-templates.php' );
+register_activation_hook(__FILE__,'wpunity_create_openGamePage');
+
 // ===================== Obsolete ===================================
 
 /**
