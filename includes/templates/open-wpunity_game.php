@@ -64,8 +64,57 @@ get_header(); ?>
             </ul>
         </div>
 
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+
             <h2 class="mdc-typography--display3 mdc-theme--text-primary-on-light mdc-theme--text">New game</h2>
+
+            <hr class="mdc-list-divider">
+
+            <div class="mdc-layout-grid">
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                    <div class="mdc-form-field">
+                        <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                            <input id="title" type="text" class="mdc-textfield__input mdc-typography--title mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
+                            <label for="title" class="mdc-textfield__label mdc-typography--headline mdc-theme--text-primary-on-light">
+                                Game Title
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <label class="mdc-typography--headline">Game Type</label>
+
+                    <div class="mdc-radio">
+                        <input class="mdc-radio__native-control" type="radio" id="radio-1" name="radios" checked>
+                        <div class="mdc-radio__background">
+                            <div class="mdc-radio__outer-circle"></div>
+                            <div class="mdc-radio__inner-circle"></div>
+                        </div>
+                    </div>
+                    <label id="radio-1-label" for="radio-1">Radio 1</label>
+
+                    <div class="mdc-radio">
+                        <input class="mdc-radio__native-control" type="radio" id="radio-2" name="radios">
+                        <div class="mdc-radio__background">
+                            <div class="mdc-radio__outer-circle"></div>
+                            <div class="mdc-radio__inner-circle"></div>
+                        </div>
+                    </div>
+                    <label id="radio-2-label" for="radio-2">Radio 2</label>
+
+
+                    <a style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary mdc-ripple-surface" data-mdc-auto-init="MDCRipple">
+                        Create
+                    </a>
+
+                </div>
+            </div>
+
         </div>
 
 

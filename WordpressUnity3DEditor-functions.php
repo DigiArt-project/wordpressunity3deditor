@@ -48,15 +48,13 @@ wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_
 wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
 wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
 
-// Material Design Components
-function loadMaterialStyles() {
-	// Frontend CSS
-	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/front.css' );
-	wp_enqueue_style('wpunity_frontend_stylesheet');
-	wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
-	wp_enqueue_style('wpunity_material_stylesheet');
-}
-add_action( 'wp_enqueue_scripts', 'loadMaterialStyles' );
+
+// Material & Frontend CSS
+wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/front.css' );
+wp_enqueue_style('wpunity_frontend_stylesheet');
+wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
+wp_enqueue_style('wpunity_material_stylesheet');
+
 
 wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
 wp_enqueue_script('wpunity_material_scripts');
@@ -284,8 +282,8 @@ function my_admin_scripts() {
 	wp_enqueue_script('thickbox');
 }
 
-	//wp_register_script('my-upload', WP_PLUGIN_URL.'/my-script.js', array('jquery','media-upload','thickbox'));
-	//  wp_enqueue_script('my-upload');
+//wp_register_script('my-upload', WP_PLUGIN_URL.'/my-script.js', array('jquery','media-upload','thickbox'));
+//  wp_enqueue_script('my-upload');
 function my_admin_styles()  {
 	wp_enqueue_style('thickbox');
 

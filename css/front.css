@@ -1,0 +1,19 @@
+input#title.mdc-textfield__input,
+input,
+input[type="text"],
+input[type="text"].mdc-textfield__input,
+.mdc-textfield__input
+{
+    background-color: transparent; !important
+    -webkit-box-shadow: none; !important
+    -moz-box-shadow: none; !important
+    -box-shadow: none; !important
+    box-shadow: none;  !important
+    -moz-border-radius: 0; !important
+    -webkit-border-radius: 0; !important
+    -border-radius: 0; !important
+    border-radius: 0; !important
+    border: 0; !important
+    background: transparent; !important
+    border-color: transparent; !important
+}
