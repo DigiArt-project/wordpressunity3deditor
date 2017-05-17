@@ -77,7 +77,7 @@ get_header(); ?>
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display3 mdc-theme--text-primary-on-light mdc-theme--text">New game</h2>
+            <h2 class="mdc-typography--display3 mdc-theme--text-primary-on-light mdc-theme--text">New game project</h2>
 
             <hr class="mdc-list-divider">
 
@@ -88,13 +88,13 @@ get_header(); ?>
                     <div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
                         <input id="title" type="text" class="mdc-textfield__input mdc-typography--title mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
                         <label for="title" class="mdc-textfield__label mdc-typography--headline mdc-theme--text-primary-on-light">
-                            Game Title
+                            Game Project Title
                         </label>
                     </div>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <label class="mdc-typography--headline mdc-theme--text-primary-on-light NewGameLabel">Game Type</label>
+                    <label class="mdc-typography--headline mdc-theme--text-primary-on-light NewGameLabel">Game Project Type</label>
                     <div class="mdc-form-field">
                         <div class="mdc-radio">
                             <input class="mdc-radio__native-control" type="radio" id="ex2-radio1" checked="" name="ex2">
@@ -144,7 +144,7 @@ get_header(); ?>
                     </h2>
                 </header>
                 <section id="my-mdc-dialog-description" class="mdc-dialog__body mdc-typography--body1">
-                    Are you sure you want to delete your game? There is no Undo functionality once you delete it.
+                    Are you sure you want to delete your game project? There is no Undo functionality once you delete it.
                 </section>
                 <footer class="mdc-dialog__footer">
                     <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>

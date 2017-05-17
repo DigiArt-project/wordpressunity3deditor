@@ -17,28 +17,28 @@ class GameClass{
     function wpunity_games_construct(){
 
         $labels = array(
-            'name'               => _x( 'Games', 'post type general name'),
-            'singular_name'      => _x( 'Game', 'post type singular name'),
-            'menu_name'          => _x( 'Games', 'admin menu'),
-            'name_admin_bar'     => _x( 'Game', 'add new on admin bar'),
+            'name'               => _x( 'Game Projects', 'post type general name'),
+            'singular_name'      => _x( 'Game Project', 'post type singular name'),
+            'menu_name'          => _x( 'Game Projects', 'admin menu'),
+            'name_admin_bar'     => _x( 'Game Project', 'add new on admin bar'),
             'add_new'            => _x( 'Add New', 'add new on menu'),
-            'add_new_item'       => __( 'Add New Game'),
-            'new_item'           => __( 'New Game'),
+            'add_new_item'       => __( 'Add New Game Project'),
+            'new_item'           => __( 'New Game Project'),
             'edit'               => __( 'Edit'),
-            'edit_item'          => __( 'Edit Game'),
+            'edit_item'          => __( 'Edit Game Project'),
             'view'               => __( 'View'),
-            'view_item'          => __( 'View Game'),
-            'all_items'          => __( 'All Games'),
-            'search_items'       => __( 'Search Games'),
-            'parent_item_colon'  => __( 'Parent Games:'),
-            'parent'             => __( 'Parent Game'),
-            'not_found'          => __( 'No Games found.'),
-            'not_found_in_trash' => __( 'No Games found in Trash.')
+            'view_item'          => __( 'View Game Project'),
+            'all_items'          => __( 'All Game Projects'),
+            'search_items'       => __( 'Search Game Projects'),
+            'parent_item_colon'  => __( 'Parent Game Projects:'),
+            'parent'             => __( 'Parent Game Project'),
+            'not_found'          => __( 'No Game Projects found.'),
+            'not_found_in_trash' => __( 'No Game Projects found in Trash.')
         );
 
         $args = array(
             'labels'                => $labels,
-            'description'           => 'A Game consists of several scenes',
+            'description'           => 'A Game Project consists of several scenes',
             'public'                => true,
             'exclude_from_search'   => true,
             'publicly_queryable'    => false,
