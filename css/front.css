@@ -17,3 +17,21 @@ input[type="text"].mdc-textfield__input,
     background: transparent; !important
     border-color: transparent; !important
 }
+
+.FrontPageStyle {
+    min-height: 500px;
+}
+
+label {
+    margin-bottom: 0;
+}
+
+.NewGameLabel {
+    display: block;
+}
+
+.WhiteSpaceSeparator {
+    margin-top:30px;
+    margin-bottom: 30px;
+    border:0;
+}
