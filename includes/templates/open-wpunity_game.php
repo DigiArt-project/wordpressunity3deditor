@@ -13,54 +13,62 @@ get_header(); ?>
             <hr class="mdc-list-divider">
 
             <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
-                <li class="mdc-list-item">
-                    <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
-                        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
-                            blur_on
-                        </i>
+
+                <?php
+                // Define custom query parameters
+                $custom_query_args = array(
+                    'post_type' => 'wpunity_game',
+                    'posts_per_page' => 10,
+                    /*'paged' => $paged,*/
+                );
+
+                // Get current page and append to custom query parameters array
+                //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+
+                // Instantiate custom query
+                $custom_query = new WP_Query( $custom_query_args );
+
+                // Pagination fix
+                $temp_query = $wp_query;
+                $wp_query   = NULL;
+                $wp_query   = $custom_query;
+
+                // Output custom query loop
+                if ( $custom_query->have_posts() ) :
+                    while ( $custom_query->have_posts() ) :
+                        $custom_query->the_post();
+                        $game_title = get_the_title();
+                        $game_date = get_the_date();
+                        $game_link = get_permalink();
+                    ?>
+                        <li class="mdc-list-item">
+                            <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
+                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
+                                    blur_on
+                                </i>
                         <span class="mdc-list-item__text mdc-typography--title">
-                            Put title from loop
-                            <span class="mdc-list-item__text__secondary mdc-typography--subheading2">Jan 10, 2014</span>
+                            <?php echo $game_title; ?>
+                            <span class="mdc-list-item__text__secondary mdc-typography--subheading2"><?php echo $game_date;?></span>
                         </span>
-                    </a>
-                    <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(1)">
-                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
-                            delete
-                        </i>
-                    </a>
-                </li>
-                <li class="mdc-list-item">
-                    <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
-                        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
-                            blur_on
-                        </i>
-                        <span class="mdc-list-item__text mdc-typography--title">
-                            Put title from loop
-                            <span class="mdc-list-item__text__secondary mdc-typography--subheading2">Jan 10, 2014</span>
-                        </span>
-                    </a>
-                    <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(2)">
-                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
-                            delete
-                        </i>
-                    </a>
-                </li>
-                <li class="mdc-list-item">
-                    <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
-                        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Archaeology">
-                            account_balance
-                        </i>
-                        <span class="mdc-list-item__text mdc-typography--title">
-                            Put title from loop
-                            <span class="mdc-list-item__text__secondary mdc-typography--subheading2">Jan 10, 2014</span>
-                        </span>
-                    </a>
-                    <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(3)">
-                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
-                            delete
-                        </i>
-                    </a>
-                </li>
+                            </a>
+                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(1)">
+                                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
+                                    delete
+                                </i>
+                            </a>
+                        </li>
+
+                    <?php
+                    endwhile;
+                else :
+                    echo "NO GAMES FOUND";
+                endif;
+
+                wp_reset_postdata();
+                $wp_query = NULL;
+                $wp_query = $temp_query;
+                ?>
+
             </ul>
 
         </div>
