@@ -19,6 +19,12 @@
 
 	<h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
 
+	<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>
+
+	<div class="mdc-layout-grid">
+		<!--LOAD SAVED SCENES HERE-->
+	</div>
+
 	<i></i>
 	<a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion">Add New Scene</a>
 
@@ -28,11 +34,14 @@
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
 				<div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
-					<input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
+					<input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
 					<label for="title" class="mdc-textfield__label">
 						Enter a scene title
 				</div>
-
+				<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+				   id="title-validation-msg">
+					Must be at least 6 characters long
+				</p>
 				<hr class="WhiteSpaceSeparator">
 
 				<div class="mdc-textfield mdc-textfield--multiline " data-mdc-auto-init="MDCTextfield">
@@ -101,9 +110,12 @@
 	</div>
 
 
+
+	<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Default Scenes</h3>
+
 	<div class="mdc-layout-grid">
 		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-			<h3 class="mdc-typography--title mdc-theme--text-primary-on-light">Required Scenes</h3>
+
 
 
 

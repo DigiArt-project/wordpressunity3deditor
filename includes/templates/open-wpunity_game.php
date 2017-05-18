@@ -98,10 +98,14 @@
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                     <div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
+                        <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
                         <label for="title" class="mdc-textfield__label">
                             Enter a title for your project
                     </div>
+                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                       id="title-validation-msg">
+                        Must be at least 6 characters long
+                    </p>
 
                     <hr class="WhiteSpaceSeparator">
 
