@@ -2,13 +2,13 @@
 
 get_header(); ?>
 
-    <h1 class="mdc-typography--display4 mdc-theme--text-primary-on-light mdc-theme--text">Game Authoring Tool</h1>
+    <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-light">Game Authoring Tool</h1>
     <hr class="WhiteSpaceSeparator">
     <div class="mdc-layout-grid FrontPageStyle">
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-            <h2 class="mdc-typography--display3 mdc-theme--text-primary-on-light mdc-theme--text">Library</h2>
+            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-light">Library</h2>
 
             <hr class="mdc-list-divider">
 
@@ -73,9 +73,9 @@ get_header(); ?>
                         games
                     </i>
 
-                    <h3 class="mdc-typography--title">No Game Projects available</h3>
+                    <h3 class="mdc-typography--headline">No Game Projects available</h3>
                     <hr class="WhiteSpaceSeparator">
-                    <h4 class="mdc-typography--headline mdc-theme--text-secondary-on-light">You can try creating a new one</h4>
+                    <h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new one</h4>
 
                 </div>
 			<?php endif;
@@ -85,15 +85,13 @@ get_header(); ?>
 			$wp_query = $temp_query;
 			?>
 
-
-
         </div>
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display3 mdc-theme--text-primary-on-light mdc-theme--text">New game project</h2>
+            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-light">New game project</h2>
 
             <hr class="mdc-list-divider">
 
@@ -103,14 +101,13 @@ get_header(); ?>
 
                     <div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
                         <input id="title" type="text" class="mdc-textfield__input mdc-typography--title mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
-                        <label for="title" class="mdc-textfield__label mdc-typography--headline mdc-theme--text-primary-on-light">
+                        <label for="title" class="mdc-textfield__label mdc-typography--subheading1 ">
                             Game Project Title
-                        </label>
                     </div>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <label class="mdc-typography--headline mdc-theme--text-primary-on-light NewGameLabel">Game Project Type</label>
+                    <label class="mdc-typography--title NewGameLabel">Game Project Type</label>
                     <div class="mdc-form-field">
                         <div class="mdc-radio">
                             <input class="mdc-radio__native-control" type="radio" id="ex2-radio1" checked="" name="ex2">
