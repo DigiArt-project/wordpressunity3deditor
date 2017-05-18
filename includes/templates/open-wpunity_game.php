@@ -110,27 +110,28 @@
                     <hr class="WhiteSpaceSeparator">
 
                     <label class="mdc-typography--subheading2 NewGameLabel">Game Project Type</label>
-                    <div class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
+                    <ul class="RadioButtonList">
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
                             </div>
-                        </div>
-                        <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
-                    </div>
-                    <div class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
+                            <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
+                        </li>
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
                             </div>
-                        </div>
-                        <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                    </div>
-
+                            <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
+                        </li>
+                    </ul>
                     <hr class="WhiteSpaceSeparator">
 
                     <a style="float: right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">

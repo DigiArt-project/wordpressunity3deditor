@@ -55,7 +55,7 @@
 
 				<label class="mdc-typography--subheading2">Scene Type</label>
 
-				<ul class="SceneTypeRadioButtons">
+				<ul class="RadioButtonList">
 					<li class="mdc-form-field">
 						<div class="mdc-radio">
 							<input class="mdc-radio__native-control" type="radio" id="sceneTypeEnergyRadio" checked="" name="sceneTypeRadio">

@@ -110,7 +110,7 @@ a.EditPageAccordion.active {
     transition: max-height 0.2s ease-out;
 }
 
-.SceneTypeRadioButtons li {
+.RadioButtonList li {
     display: flex;
 }
 
