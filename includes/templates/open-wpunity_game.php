@@ -1,12 +1,12 @@
 <?php get_header(); ?>
 
-    <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-light">Game Authoring Tool</h1>
+    <h1 class="mdc-typography--display3">Game Authoring Tool</h1>
     <hr class="WhiteSpaceSeparator">
     <div class="mdc-layout-grid FrontPageStyle">
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-light">Library</h2>
+            <h2 class="mdc-typography--display1">Library</h2>
 
             <hr class="mdc-list-divider">
 
@@ -89,7 +89,7 @@
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-light">New game project</h2>
+            <h2 class="mdc-typography--display1">New game project</h2>
 
             <hr class="mdc-list-divider">
 
@@ -149,7 +149,7 @@
                class="mdc-dialog"
                role="alertdialog"
                aria-labelledby="my-mdc-dialog-label"
-               aria-describedby="my-mdc-dialog-description">
+               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
             <div class="mdc-dialog__surface">
                 <header class="mdc-dialog__header">
                     <h2 id="my-mdc-dialog-label" class="mdc-dialog__header__title">
