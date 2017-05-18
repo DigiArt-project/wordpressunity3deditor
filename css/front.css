@@ -35,3 +35,11 @@ label {
     margin-bottom: 30px;
     border:0;
 }
+
+.CenterContents {
+    text-align: center;
+}
+
+.EmptyStateIcon {
+    font-size: 64px;
+}

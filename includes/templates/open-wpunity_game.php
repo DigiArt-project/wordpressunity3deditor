@@ -3,7 +3,7 @@
 get_header(); ?>
 
     <h1 class="mdc-typography--display4 mdc-theme--text-primary-on-light mdc-theme--text">Game Authoring Tool</h1>
-
+    <hr class="WhiteSpaceSeparator">
     <div class="mdc-layout-grid FrontPageStyle">
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -12,43 +12,44 @@ get_header(); ?>
 
             <hr class="mdc-list-divider">
 
-            <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+			<?php
+			// Define custom query parameters
+			$custom_query_args = array(
+				'post_type' => 'wpunity_game',
+				'posts_per_page' => 10,
+				/*'paged' => $paged,*/
+			);
 
-                <?php
-                // Define custom query parameters
-                $custom_query_args = array(
-                    'post_type' => 'wpunity_game',
-                    'posts_per_page' => 10,
-                    /*'paged' => $paged,*/
-                );
+			// Get current page and append to custom query parameters array
+			//$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-                // Get current page and append to custom query parameters array
-                //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+			// Instantiate custom query
+			$custom_query = new WP_Query( $custom_query_args );
 
-                // Instantiate custom query
-                $custom_query = new WP_Query( $custom_query_args );
+			// Pagination fix
+			$temp_query = $wp_query;
+			$wp_query   = NULL;
+			$wp_query   = $custom_query;
 
-                // Pagination fix
-                $temp_query = $wp_query;
-                $wp_query   = NULL;
-                $wp_query   = $custom_query;
+			// Output custom query loop
+			if ( $custom_query->have_posts() ) : ?>
 
-                // Output custom query loop
-                if ( $custom_query->have_posts() ) :
-                    while ( $custom_query->have_posts() ) :
-                        $custom_query->the_post();
-                        $game_title = get_the_title();
-                        $game_date = get_the_date();
-                        $game_link = get_permalink();
-                    ?>
+                <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+					<?php while ( $custom_query->have_posts() ) :
+						$custom_query->the_post();
+						$game_title = get_the_title();
+						$game_date = get_the_date();
+						$game_link = get_permalink();
+
+						?>
                         <li class="mdc-list-item">
                             <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
                                     blur_on
                                 </i>
-                        <span class="mdc-list-item__text mdc-typography--title">
+                                <span class="mdc-list-item__text mdc-typography--title">
                             <?php echo $game_title; ?>
-                            <span class="mdc-list-item__text__secondary mdc-typography--subheading2"><?php echo $game_date;?></span>
+                                    <span class="mdc-list-item__text__secondary mdc-typography--subheading2"><?php echo $game_date;?></span>
                         </span>
                             </a>
                             <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(1)">
@@ -58,18 +59,33 @@ get_header(); ?>
                             </a>
                         </li>
 
-                    <?php
-                    endwhile;
-                else :
-                    echo "NO GAMES FOUND";
-                endif;
+						<?php
+					endwhile;?>
+                </ul>
 
-                wp_reset_postdata();
-                $wp_query = NULL;
-                $wp_query = $temp_query;
-                ?>
+			<?php else : ?>
 
-            </ul>
+                <hr class="WhiteSpaceSeparator">
+
+                <div class="CenterContents">
+
+                    <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No game projects available">
+                        games
+                    </i>
+
+                    <h3 class="mdc-typography--title">No Game Projects available</h3>
+                    <hr class="WhiteSpaceSeparator">
+                    <h4 class="mdc-typography--headline mdc-theme--text-secondary-on-light">You can try creating a new one</h4>
+
+                </div>
+			<?php endif;
+
+			wp_reset_postdata();
+			$wp_query = NULL;
+			$wp_query = $temp_query;
+			?>
+
+
 
         </div>
 
@@ -123,10 +139,7 @@ get_header(); ?>
                     </a>
 
                 </div>
-
-
             </div>
-
         </div>
 
 
