@@ -1,6 +1,4 @@
-<?php
-
-get_header(); ?>
+<?php get_header(); ?>
 
     <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-light">Game Authoring Tool</h1>
     <hr class="WhiteSpaceSeparator">
@@ -100,33 +98,33 @@ get_header(); ?>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                     <div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="title" type="text" class="mdc-textfield__input mdc-typography--title mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
-                        <label for="title" class="mdc-textfield__label mdc-typography--subheading1 ">
-                            Game Project Title
+                        <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" style="box-shadow: none; border-color:transparent;">
+                        <label for="title" class="mdc-textfield__label">
+                            Enter a title for your project
                     </div>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <label class="mdc-typography--title NewGameLabel">Game Project Type</label>
+                    <label class="mdc-typography--subheading2 NewGameLabel">Game Project Type</label>
                     <div class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="ex2-radio1" checked="" name="ex2">
+                            <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
                             </div>
                         </div>
-                        <label id="ex2-radio1-label" for="ex2-radio1" style="margin-bottom: 0;">Energy</label>
+                        <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
                     </div>
                     <div class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="ex2-radio2" name="ex2">
+                            <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
                             </div>
                         </div>
-                        <label id="ex2-radio2-label" for="ex2-radio2" style="margin-bottom: 0;">Archaeology</label>
+                        <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
                     </div>
 
                     <hr class="WhiteSpaceSeparator">
@@ -183,7 +181,5 @@ get_header(); ?>
             dialog.show();
             console.log(id);
         }
-
     </script>
-<?php get_footer();
-?>
+<?php get_footer(); ?>

@@ -1,21 +1,26 @@
 input#title.mdc-textfield__input,
-input,
+input, textarea,
 input[type="text"],
 input[type="text"].mdc-textfield__input,
+textarea.mdc-textfield__input,
 .mdc-textfield__input
 {
     background-color: transparent; !important
-    -webkit-box-shadow: none; !important
-    -moz-box-shadow: none; !important
-    -box-shadow: none; !important
-    box-shadow: none;  !important
-    -moz-border-radius: 0; !important
-    -webkit-border-radius: 0; !important
-    -border-radius: 0; !important
-    border-radius: 0; !important
-    border: 0; !important
-    background: transparent; !important
-    border-color: transparent; !important
+-webkit-box-shadow: none; !important
+-moz-box-shadow: none; !important
+-box-shadow: none; !important
+box-shadow: none;  !important
+-moz-border-radius: 0; !important
+-webkit-border-radius: 0; !important
+-border-radius: 0; !important
+border-radius: 0; !important
+border: 0; !important
+background: transparent; !important
+border-color: transparent; !important
+}
+
+textarea.mdc-textfield__input {
+    resize: none;
 }
 
 .FrontPageStyle {
@@ -38,4 +43,73 @@ label {
 
 .CenterContents {
     text-align: center;
+}
+
+
+/* Breadcrumbs style */
+ul.EditPageBreadcrumb {
+    list-style: none;
+    margin: -12px 0 0 0;
+}
+
+/* Display list items side by side */
+ul.EditPageBreadcrumb li {
+    display: inline;
+}
+
+
+.EditPageBreadcrumbSelected {
+    font-weight: 700;
+}
+
+.EditPageBreadcrumbArr {
+    transform: rotate(90deg);
+    padding:0 0 0 16px;
+    margin:0 -14px 0 -14px;
+}
+
+.EditPageHeader {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.EditPageHeader h1 {
+    width: auto;
+    display: inline-block;
+}
+
+.EditPageHeader a {
+    float: right;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+
+
+/* Accordion */
+/* Style the buttons that are used to open and close the accordion panel */
+a.EditPageAccordion {
+    width: auto;
+    text-align: left;
+    font-weight: 500;
+    transition: 0.4s;
+    margin-bottom: 24px;
+}
+
+a.EditPageAccordion.active {
+    font-weight: 800;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.EditPageAccordionPanel {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.SceneTypeRadioButtons li {
+    display: flex;
 }

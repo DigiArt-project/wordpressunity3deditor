@@ -50,12 +50,11 @@ wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) .
 
 
 // Material & Frontend CSS
+// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & jss files to another folder.
 wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/front.css' );
 wp_enqueue_style('wpunity_frontend_stylesheet');
 wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
 wp_enqueue_style('wpunity_material_stylesheet');
-
-
 wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
 wp_enqueue_script('wpunity_material_scripts');
 
