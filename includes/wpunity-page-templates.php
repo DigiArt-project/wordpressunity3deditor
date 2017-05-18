@@ -56,6 +56,7 @@ class wpUnityTemplate {
         // Add your templates to this array.
         $this->templates = array(
             '/templates/open-wpunity_game.php'     => 'Open-Create Game',
+            '/templates/edit-wpunity_game.php'     => 'Edit Game',
             /*'/templates/open-wpunity_scene.php'     => 'Open-Create Scene',*/
         );
 
@@ -164,7 +165,27 @@ function wpunity_create_openGamePage() {
     }
 }
 
+function wpunity_create_editGamePage() {
 
+    if (! wpunity_get_page_by_slug('wpunity-edit-game')) {
+        $new_page_id = wp_insert_post(array(
+            'post_title' => 'Edit Game',
+            'post_type' => 'page',
+            'post_name' => 'wpunity-edit-game',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_content' => '',
+            'post_status' => 'publish',
+            'post_author' => get_user_by('id', 1)->user_id,
+            'menu_order' => 0,
+        ));
+        if ($new_page_id && !is_wp_error($new_page_id)) {
+            update_post_meta($new_page_id, '_wp_page_template', '/templates/edit-wpunity_game.php');
+        }
+
+        update_option('hclpage', $new_page_id);
+    }
+}
 
 /************************************************************************************************************************/
 
