@@ -33,8 +33,8 @@
 
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-				<div class="mdc-textfield mdc-textfield--fullwidth" data-mdc-auto-init="MDCTextfield">
-					<input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+				<div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+					<input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
 					<label for="title" class="mdc-textfield__label">
 						Enter a scene title
 				</div>
