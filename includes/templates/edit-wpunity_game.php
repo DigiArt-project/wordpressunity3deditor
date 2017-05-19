@@ -114,29 +114,25 @@
     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Default Scenes</h3>
 
     <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-            <!-- LOAD STANDARD SCENES HERE-->
+        <!-- LOAD STANDARD SCENES HERE-->
 
-            <div class="mdc-card">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+            <div class="mdc-card SceneCardContainer mdc-theme--background">
+                <div class="SceneThumbnail">
+                    <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
+                </div>
                 <section class="mdc-card__primary">
                     <h1 class="mdc-card__title mdc-card__title--large">Title goes here</h1>
-                    <h2 class="mdc-card__subtitle">Subtitle here</h2>
-                </section>
-                <section class="mdc-card__supporting-text">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat.
+                    <h2 class="mdc-card__subtitle">Description here</h2>
                 </section>
                 <section class="mdc-card__actions">
-                    <button class="mdc-button mdc-button--compact mdc-card__action">Action 1</button>
-                    <button class="mdc-button mdc-button--compact mdc-card__action">Action 2</button>
+                    <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
+                    <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
                 </section>
             </div>
-
-
         </div>
+
     </div>
 
     <script type="text/javascript">
