@@ -1,4 +1,18 @@
-<?php get_header(); ?>
+<?php get_header();
+
+$safe_inserted_id = intval( $_GET['wpunity_game'] );
+$safe_inserted_id = sanitize_text_field( $safe_inserted_id );
+$game_id = $safe_inserted_id;
+
+
+$game_post = get_post($game_id);
+$gameSlug = $game_post->post_name;
+
+//Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
+$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+$allScenePGameID = $allScenePGame->term_id;
+
+?>
 
     <div class="EditPageHeader">
 
@@ -113,27 +127,76 @@
 
     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Default Scenes</h3>
 
-    <div class="mdc-layout-grid">
+
 
         <!-- LOAD STANDARD SCENES HERE-->
 
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-            <div class="mdc-card SceneCardContainer mdc-theme--background">
-                <div class="SceneThumbnail">
-                    <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
-                </div>
-                <section class="mdc-card__primary">
-                    <h1 class="mdc-card__title mdc-card__title--large">Title goes here</h1>
-                    <h2 class="mdc-card__subtitle">Description here</h2>
-                </section>
-                <section class="mdc-card__actions">
-                    <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
-                    <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
-                </section>
-            </div>
-        </div>
+        <?php
+        // Define custom query parameters
+        $custom_query_args = array(
+            'post_type' => 'wpunity_scene',
+            'posts_per_page' => -1,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'wpunity_scene_pgame',
+                    'field'    => 'term_id',
+                    'terms'    => $allScenePGameID,
+                ),
+            ),
+            /*'paged' => $paged,*/
+        );
 
-    </div>
+        // Get current page and append to custom query parameters array
+        //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+
+        // Instantiate custom query
+        $custom_query = new WP_Query( $custom_query_args );
+
+        // Pagination fix
+        $temp_query = $wp_query;
+        $wp_query   = NULL;
+        $wp_query   = $custom_query;
+
+        // Output custom query loop
+        if ( $custom_query->have_posts() ) :
+            while ( $custom_query->have_posts() ) :
+                $custom_query->the_post();
+                $scene_id = get_the_ID();
+                $scene_title = get_the_title();
+                $scene_desc = get_the_content();
+            ?>
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                    <div class="mdc-card SceneCardContainer mdc-theme--background">
+                        <div class="SceneThumbnail">
+                            <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
+                        </div>
+                        <section class="mdc-card__primary">
+                            <h1 class="mdc-card__title mdc-card__title--large"><?php echo $scene_title; ?></h1>
+                            <h2 class="mdc-card__subtitle"><?php echo $scene_desc; ?></h2>
+                        </section>
+                        <section class="mdc-card__actions">
+                            <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
+                            <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        <?php
+
+
+            endwhile;
+        else :
+            echo 'NO SCENES FOUND';
+        endif;
+
+        wp_reset_postdata();
+        $wp_query = NULL;
+        $wp_query = $temp_query;
+        ?>
+
+
+
 
     <script type="text/javascript">
         window.mdc.autoInit();
