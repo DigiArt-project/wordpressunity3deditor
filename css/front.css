@@ -23,6 +23,10 @@ textarea.mdc-textfield__input {
     resize: none;
 }
 
+.DarkBackgroundColor {
+    background: rgba(0, 0, 0, .4);
+}
+
 .FrontPageStyle {
     min-height: 500px;
 }
@@ -116,4 +120,21 @@ a.EditPageAccordion.active {
 
 .FullWidth {
     width: 100%;
+}
+
+/*CARD STYLING*/
+.SceneThumbnail {
+    overflow: hidden;
+}
+
+
+.SceneThumbnail img {
+    min-height: 225px;
+    min-width: 100%;
+    left: 50%;
+    top: 50%;
+    height: 225px;
+    width: auto;
+    max-width: none;
+
 }
