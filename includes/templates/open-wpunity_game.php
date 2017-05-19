@@ -171,7 +171,7 @@ $editgamePage = wpunity_getEditpage();
                         Delete "title" ?
                     </h2>
                 </header>
-                <section id="dialog-description" class="mdc-dialog__body mdc-typography--body1">
+                <section id="delete-dialog-description" class="mdc-dialog__body mdc-typography--body1">
                     Are you sure you want to delete your game project? There is no Undo functionality once you delete it.
                 </section>
                 <footer class="mdc-dialog__footer">
@@ -201,10 +201,13 @@ $editgamePage = wpunity_getEditpage();
         function deleteGame(id) {
 
             var dialogTitle = document.getElementById("delete-dialog-title");
+            var dialogDescription = document.getElementById("delete-dialog-description");
             var gameTitle = document.getElementById(id+"-title").innerHTML;
             gameTitle = gameTitle.substring(0, gameTitle.indexOf('<'));
-            dialogTitle.innerHTML = "<b>Delete</b><i>" + gameTitle + "</i><b>?</b>";
+            gameTitle = gameTitle.trim();
 
+            dialogTitle.innerHTML = "<b>Delete " + gameTitle+"?</b>";
+            dialogDescription.innerHTML = "Are you sure you want to delete your project '" +gameTitle + "'? There is no Undo functionality once you delete it.";
             dialog.show();
             console.log(id);
         }
