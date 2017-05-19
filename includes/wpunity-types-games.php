@@ -6,6 +6,7 @@ class GameClass{
     function __construct(){
         add_action('init', array($this, 'wpunity_games_construct')); //wpunity_game
         add_action('init', array($this, 'wpunity_games_taxcategory')); //wpunity_game_cat
+        add_action('init', array($this, 'wpunity_games_taxtype')); //wpunity_game_type
     }
 
     /**
@@ -45,7 +46,7 @@ class GameClass{
             'show_in_nav_menus'     => false,
             'menu_position'     => 26,
             'menu_icon'         =>'dashicons-media-interactive',
-            'taxonomies'        => array('wpunity_game_cat'),
+            'taxonomies'        => array('wpunity_game_cat' , 'wpunity_game_type'),
             'supports'          => array('title','editor','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
@@ -89,6 +90,43 @@ class GameClass{
         );
 
         register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
+
+    }
+
+    //==========================================================================================================================================
+
+    /**
+     * B1.04
+     * Create Game Type
+     *
+     * Type of Games as custom taxonomy 'wpunity_game_type'
+     */
+    function wpunity_games_taxtype(){
+
+        $labels = array(
+            'name'              => _x( 'Game Type', 'taxonomy general name'),
+            'singular_name'     => _x( 'Game Type', 'taxonomy singular name'),
+            'menu_name'         => _x( 'Game Types', 'admin menu'),
+            'search_items'      => __( 'Search Game Types'),
+            'all_items'         => __( 'All Game Types'),
+            'parent_item'       => __( 'Parent Game Type'),
+            'parent_item_colon' => __( 'Parent Game Type:'),
+            'edit_item'         => __( 'Edit Game Type'),
+            'update_item'       => __( 'Update Game Type'),
+            'add_new_item'      => __( 'Add New Game Type'),
+            'new_item_name'     => __( 'New Game Type')
+        );
+
+        $args = array(
+            'description' => 'Type of Game Project',
+            'labels'    => $labels,
+            'public'    => false,
+            'show_ui'   => true,
+            'hierarchical' => true,
+            'show_admin_column' => true
+        );
+
+        register_taxonomy('wpunity_game_type', 'wpunity_game', $args);
 
     }
 }
