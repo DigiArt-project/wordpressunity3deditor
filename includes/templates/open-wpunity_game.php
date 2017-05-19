@@ -55,7 +55,7 @@ $editgamePage = wpunity_getEditpage();
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
                                     blur_on
                                 </i>
-                                <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text" value="<?php echo $game_title; ?>">
+                                <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text">
                                 <?php echo $game_title; ?>
                                     <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
                                 </span>

@@ -16,7 +16,7 @@ $allScenePGameID = $allScenePGame->term_id;
 
     <div class="EditPageHeader">
 
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">Game project title (auto-generated)</h1>
+        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
         <a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
             COMPILE GAME
