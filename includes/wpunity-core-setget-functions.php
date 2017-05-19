@@ -1,5 +1,17 @@
 <?php
 
+function wpunity_getEditpage(){
+    $edit_pages = get_pages(array(
+        'hierarchical' => 0,
+        'parent' => -1,
+        'meta_key' => '_wp_page_template',
+        'meta_value' => '/templates/edit-wpunity_game.php'
+    ));
+    return $edit_pages;
+}
+
+
+
 // database method
 function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
 

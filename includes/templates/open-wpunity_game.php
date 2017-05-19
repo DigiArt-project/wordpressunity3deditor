@@ -1,4 +1,11 @@
-<?php get_header(); ?>
+<?php get_header();
+
+if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
+if( $perma_structure){$parameter_pass = '/?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+
+$editgamePage = wpunity_getEditpage();
+
+?>
 
     <h1 class="mdc-typography--display3">Game Authoring Tool</h1>
     <hr class="WhiteSpaceSeparator">
@@ -35,13 +42,16 @@
                 <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
 					<?php while ( $custom_query->have_posts() ) :
 						$custom_query->the_post();
+                        $game_id = get_the_ID();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
-						$game_link = get_permalink();
+						//$game_link = get_permalink();
+
+
 
 						?>
                         <li class="mdc-list-item">
-                            <a href="javascript:void(0)" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
+                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ) ;; ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
                                     blur_on
                                 </i>
