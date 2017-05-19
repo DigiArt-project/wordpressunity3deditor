@@ -144,11 +144,12 @@ $editgamePage = wpunity_getEditpage();
                                 <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
                             </li>
                         </ul>
+
                         <hr class="WhiteSpaceSeparator">
 
-                        <button type="submit" style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                        <button type="submit" style="float: right;" class="mdc-form-field mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
                             CREATE
-                        </button
+                        </button>
 
                     </form>
                 </div>

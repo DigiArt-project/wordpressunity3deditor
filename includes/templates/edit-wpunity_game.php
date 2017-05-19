@@ -186,9 +186,23 @@ $allScenePGameID = $allScenePGame->term_id;
 
 
             endwhile;
-        else :
-            echo 'NO SCENES FOUND';
-        endif;
+        else : ?>
+
+            <hr class="WhiteSpaceSeparator">
+
+            <div class="CenterContents">
+
+                <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No scenes found">
+                    landscape
+                </i>
+
+                <h3 class="mdc-typography--headline">No Scenes found</h3>
+                <hr class="WhiteSpaceSeparator">
+
+            </div>
+
+
+        <?php endif;
 
         wp_reset_postdata();
         $wp_query = NULL;
