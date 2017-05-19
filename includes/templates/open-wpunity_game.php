@@ -134,9 +134,10 @@
                     </ul>
                     <hr class="WhiteSpaceSeparator">
 
-                    <a style="float: right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                    <a style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
                         Create
                     </a>
+
 
                 </div>
             </div>
