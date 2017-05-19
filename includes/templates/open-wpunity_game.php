@@ -42,25 +42,25 @@ $editgamePage = wpunity_getEditpage();
                 <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
 					<?php while ( $custom_query->have_posts() ) :
 						$custom_query->the_post();
-                        $game_id = get_the_ID();
+
+						$game_id = get_the_ID();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
+
 						//$game_link = get_permalink();
 
-
-
 						?>
-                        <li class="mdc-list-item">
+                        <li class="mdc-list-item" id="<?php echo $game_id; ?>">
                             <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ) ;; ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
                                     blur_on
                                 </i>
-                                <span class="mdc-list-item__text mdc-typography--title">
-                            <?php echo $game_title; ?>
-                                    <span class="mdc-list-item__text__secondary mdc-typography--subheading2"><?php echo $game_date;?></span>
-                        </span>
+                                <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text" value="<?php echo $game_title; ?>">
+                                <?php echo $game_title; ?>
+                                    <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
+                                </span>
                             </a>
-                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="showDialog(1)">
+                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="deleteGame(<?php echo $game_id; ?>)">
                                 <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
                                     delete
                                 </i>
@@ -68,6 +68,7 @@ $editgamePage = wpunity_getEditpage();
                         </li>
 
 						<?php
+
 					endwhile;?>
                 </ul>
 
@@ -166,11 +167,11 @@ $editgamePage = wpunity_getEditpage();
                aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
             <div class="mdc-dialog__surface">
                 <header class="mdc-dialog__header">
-                    <h2 id="my-mdc-dialog-label" class="mdc-dialog__header__title">
+                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
                         Delete "title" ?
                     </h2>
                 </header>
-                <section id="my-mdc-dialog-description" class="mdc-dialog__body mdc-typography--body1">
+                <section id="dialog-description" class="mdc-dialog__body mdc-typography--body1">
                     Are you sure you want to delete your game project? There is no Undo functionality once you delete it.
                 </section>
                 <footer class="mdc-dialog__footer">
@@ -196,7 +197,14 @@ $editgamePage = wpunity_getEditpage();
             console.log('canceled');
         });
 
-        function showDialog(id) {
+
+        function deleteGame(id) {
+
+            var dialogTitle = document.getElementById("delete-dialog-title");
+            var gameTitle = document.getElementById(id+"-title").innerHTML;
+            gameTitle = gameTitle.substring(0, gameTitle.indexOf('<'));
+            dialogTitle.innerHTML = "<b>Delete</b><i>" + gameTitle + "</i><b>?</b>";
+
             dialog.show();
             console.log(id);
         }

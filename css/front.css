@@ -6,17 +6,17 @@ textarea.mdc-textfield__input,
 .mdc-textfield__input
 {
     background-color: transparent; !important
-    -webkit-box-shadow: none; !important
-    -moz-box-shadow: none; !important
-    -box-shadow: none; !important
-    box-shadow: none;  !important
-    -moz-border-radius: 0; !important
-    -webkit-border-radius: 0; !important
-    -border-radius: 0; !important
-    border-radius: 0; !important
-    border: 0; !important
-    background: transparent; !important
-    border-color: transparent; !important
+-webkit-box-shadow: none; !important
+-moz-box-shadow: none; !important
+-box-shadow: none; !important
+box-shadow: none;  !important
+-moz-border-radius: 0; !important
+-webkit-border-radius: 0; !important
+-border-radius: 0; !important
+border-radius: 0; !important
+border: 0; !important
+background: transparent; !important
+border-color: transparent; !important
 }
 
 textarea.mdc-textfield__input {
@@ -105,6 +105,13 @@ a.EditPageAccordion {
 a.EditPageAccordion.active {
     font-weight: 800;
 }
+
+i.ButtonIcon {
+    vertical-align: text-bottom;
+    font-size:20px;
+}
+
+
 
 /* Style the accordion panel. Note: hidden by default */
 .EditPageAccordionPanel {

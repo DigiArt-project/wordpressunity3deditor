@@ -33,14 +33,16 @@ $allScenePGameID = $allScenePGame->term_id;
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
 
+
+
     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>
 
     <div class="mdc-layout-grid">
         <!--LOAD SAVED SCENES HERE-->
     </div>
 
-    <i></i>
-    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion">Add New Scene</a>
+
+    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
 
     <div class="EditPageAccordionPanel">
         <div class="mdc-layout-grid">
@@ -129,92 +131,92 @@ $allScenePGameID = $allScenePGame->term_id;
 
 
 
-        <!-- LOAD STANDARD SCENES HERE-->
+    <!-- LOAD STANDARD SCENES HERE-->
 
-        <?php
-        // Define custom query parameters
-        $custom_query_args = array(
-            'post_type' => 'wpunity_scene',
-            'posts_per_page' => -1,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'wpunity_scene_pgame',
-                    'field'    => 'term_id',
-                    'terms'    => $allScenePGameID,
-                ),
-            ),
-            /*'paged' => $paged,*/
-        );
+<?php
+// Define custom query parameters
+$custom_query_args = array(
+	'post_type' => 'wpunity_scene',
+	'posts_per_page' => -1,
+	'tax_query' => array(
+		array(
+			'taxonomy' => 'wpunity_scene_pgame',
+			'field'    => 'term_id',
+			'terms'    => $allScenePGameID,
+		),
+	),
+	/*'paged' => $paged,*/
+);
 
-        // Get current page and append to custom query parameters array
-        //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+// Get current page and append to custom query parameters array
+//$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-        // Instantiate custom query
-        $custom_query = new WP_Query( $custom_query_args );
+// Instantiate custom query
+$custom_query = new WP_Query( $custom_query_args );
 
-        // Pagination fix
-        $temp_query = $wp_query;
-        $wp_query   = NULL;
-        $wp_query   = $custom_query;
+// Pagination fix
+$temp_query = $wp_query;
+$wp_query   = NULL;
+$wp_query   = $custom_query;
 
-        // Output custom query loop
-        if ( $custom_query->have_posts() ) :
-            while ( $custom_query->have_posts() ) :
-                $custom_query->the_post();
-                $scene_id = get_the_ID();
-                $scene_title = get_the_title();
-                $scene_desc = get_the_content();
-            ?>
-            <div class="mdc-layout-grid">
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-                    <div class="mdc-card SceneCardContainer mdc-theme--background">
-                        <div class="SceneThumbnail">
-                            <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
-                        </div>
-                        <section class="mdc-card__primary">
-                            <h1 class="mdc-card__title mdc-card__title--large"><?php echo $scene_title; ?></h1>
-                            <h2 class="mdc-card__subtitle"><?php echo $scene_desc; ?></h2>
-                        </section>
-                        <section class="mdc-card__actions">
-                            <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
-                            <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
-                        </section>
+// Output custom query loop
+if ( $custom_query->have_posts() ) :?>
+
+    <div class="mdc-layout-grid">
+
+		<?php while ( $custom_query->have_posts() ) :
+			$custom_query->the_post();
+			$scene_id = get_the_ID();
+			$scene_title = get_the_title();
+			$scene_desc = get_the_content();
+			?>
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                <div class="mdc-card SceneCardContainer mdc-theme--background">
+                    <div class="SceneThumbnail">
+                        <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
                     </div>
+                    <section class="mdc-card__primary">
+                        <h1 class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><?php echo $scene_title; ?></h1>
+                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
+                    </section>
+                    <section class="mdc-card__actions">
+                        <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
+                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
+                    </section>
                 </div>
             </div>
-        <?php
+
+		<?php endwhile;?>
+
+    </div>
+
+<?php else : ?>
+
+    <hr class="WhiteSpaceSeparator">
+
+    <div class="CenterContents">
+
+        <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No scenes found">
+            landscape
+        </i>
+
+        <h3 class="mdc-typography--headline">No Scenes found</h3>
+        <hr class="WhiteSpaceSeparator">
+
+    </div>
 
 
-            endwhile;
-        else : ?>
+<?php endif;
 
-            <hr class="WhiteSpaceSeparator">
-
-            <div class="CenterContents">
-
-                <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No scenes found">
-                    landscape
-                </i>
-
-                <h3 class="mdc-typography--headline">No Scenes found</h3>
-                <hr class="WhiteSpaceSeparator">
-
-            </div>
-
-
-        <?php endif;
-
-        wp_reset_postdata();
-        $wp_query = NULL;
-        $wp_query = $temp_query;
-        ?>
-
-
+wp_reset_postdata();
+$wp_query = NULL;
+$wp_query = $temp_query;
+?>
 
 
     <script type="text/javascript">
         window.mdc.autoInit();
-
 
         var acc = document.getElementsByClassName("EditPageAccordion");
         var i;
