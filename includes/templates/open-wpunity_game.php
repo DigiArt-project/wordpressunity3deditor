@@ -47,6 +47,8 @@ $editgamePage = wpunity_getEditpage();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
 
+                        $all_game_category = get_the_terms( $game_id , 'wpunity_game_type' );
+                        $game_category = $all_game_category[0]->name;
 						//$game_link = get_permalink();
 
 						?>
