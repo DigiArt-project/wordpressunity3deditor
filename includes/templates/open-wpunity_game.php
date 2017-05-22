@@ -13,7 +13,7 @@ $editgamePage = wpunity_getEditpage();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-            <h2 class="mdc-typography--display1"><i class="material-icons mdc-theme--text-icon-on-background">chrome_reader_mode</i>&nbsp;Projects</h2>
+            <h2 class="mdc-typography--display1">Projects</h2>
 
             <hr class="mdc-list-divider">
 
@@ -47,19 +47,24 @@ $editgamePage = wpunity_getEditpage();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
 
-                        $all_game_category = get_the_terms( $game_id , 'wpunity_game_type' );
-                        $game_category = $all_game_category[0]->name;
+						$all_game_category = get_the_terms( $game_id , 'wpunity_game_type' );
+						$game_category = $all_game_category[0]->name;
 						//$game_link = get_permalink();
+
+						// Default is Archaeology
+						$game_type_icon = "account_balance"; // Archaeology
+						// Set game type icon
+						if ($game_category === 'Energy') {
+							$game_type_icon = "blur_on";
+						}
 
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ) ;; ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
-                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="Energy">
-                                    blur_on
-                                </i>
-                                <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text">
-                                <?php echo $game_title; ?>
-                                    <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
+                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
+
+                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_category;?>"><?php echo $game_type_icon;?></i>
+                                <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text"><?php echo $game_title;?>
+                                    <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date;?></span>
                                 </span>
                             </a>
                             <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="deleteGame(<?php echo $game_id; ?>)">
@@ -102,7 +107,7 @@ $editgamePage = wpunity_getEditpage();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1"><i class="material-icons mdc-theme--text-icon-on-background">add_circle_outline</i>&nbsp;New game project</h2>
+            <h2 class="mdc-typography--display1">New game project</h2>
 
             <hr class="mdc-list-divider">
 
@@ -144,7 +149,8 @@ $editgamePage = wpunity_getEditpage();
                                         <div class="mdc-radio__inner-circle"></div>
                                     </div>
                                 </div>
-                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
+                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">
+                                    <i class="material-icons"></i>Archaeology</label>
                             </li>
                         </ul>
 
