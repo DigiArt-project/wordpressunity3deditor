@@ -23,19 +23,22 @@ $allScenePGameID = $allScenePGame->term_id;
         </a>
     </div>
 
+    <span class="mdc-typography--caption">
+        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon">blur_on</i>&nbsp;Category</span>
+
+    <hr class="mdc-list-divider">
+
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--accent" href="#">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Game Editor</span></li>
     </ul>
 
-    <hr class="mdc-list-divider">
-
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
 
 
 
-    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>
+    <!--<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>-->
 
     <div class="mdc-layout-grid">
         <!--LOAD SAVED SCENES HERE-->

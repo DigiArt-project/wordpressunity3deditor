@@ -13,7 +13,7 @@ $editgamePage = wpunity_getEditpage();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-            <h2 class="mdc-typography--display1">Library</h2>
+            <h2 class="mdc-typography--display1"><i class="material-icons mdc-theme--text-icon-on-background">chrome_reader_mode</i>&nbsp;Projects</h2>
 
             <hr class="mdc-list-divider">
 
@@ -100,7 +100,7 @@ $editgamePage = wpunity_getEditpage();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1">New game project</h2>
+            <h2 class="mdc-typography--display1"><i class="material-icons mdc-theme--text-icon-on-background">add_circle_outline</i>&nbsp;New game project</h2>
 
             <hr class="mdc-list-divider">
 

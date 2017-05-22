@@ -53,7 +53,7 @@ label {
 /* Breadcrumbs style */
 ul.EditPageBreadcrumb {
     list-style: none;
-    margin: -12px 0 0 0;
+    margin: -6px 0 0 0;
 }
 
 /* Display list items side by side */
@@ -143,5 +143,8 @@ i.ButtonIcon {
     height: 225px;
     width: auto;
     max-width: none;
+}
 
+.AlignIconToBottom {
+    vertical-align: bottom;
 }
