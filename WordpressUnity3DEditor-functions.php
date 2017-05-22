@@ -55,7 +55,7 @@ wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 
 wp_enqueue_style('wpunity_material_stylesheet');
 wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
 wp_enqueue_script('wpunity_material_scripts');
-wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/front.css' );
+wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 wp_enqueue_style('wpunity_frontend_stylesheet');
 
 
@@ -246,6 +246,9 @@ register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 
 
+// Add helper functions file
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
+
 // ===================== Obsolete ===================================
 
 /**
@@ -288,5 +291,7 @@ function my_admin_styles()  {
 	wp_enqueue_style('thickbox');
 
 }
+
+
 
 ?>

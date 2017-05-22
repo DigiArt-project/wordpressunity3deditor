@@ -46,23 +46,15 @@ $editgamePage = wpunity_getEditpage();
 						$game_id = get_the_ID();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
-
-						$all_game_category = get_the_terms( $game_id , 'wpunity_game_type' );
-						$game_category = $all_game_category[0]->name;
 						//$game_link = get_permalink();
 
-						// Default is Archaeology
-						$game_type_icon = "account_balance"; // Archaeology
-						// Set game type icon
-						if ($game_category === 'Energy') {
-							$game_type_icon = "blur_on";
-						}
+						$game_type_obj = wpunity_return_game_type($id);
 
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
                             <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
 
-                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_category;?>"><?php echo $game_type_icon;?></i>
+                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_type_obj->string;?>"><?php echo $game_type_obj->icon;?></i>
                                 <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text"><?php echo $game_title;?>
                                     <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date;?></span>
                                 </span>
