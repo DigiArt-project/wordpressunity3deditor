@@ -12,7 +12,16 @@ $gameSlug = $game_post->post_name;
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
-?>
+$all_game_category = get_the_terms( $game_id , 'wpunity_game_type' );
+$game_category = $all_game_category[0]->name;
+//$game_link = get_permalink();
+
+// Default is Archaeology
+$game_type_icon = "account_balance"; // Archaeology
+// Set game type icon
+if ($game_category === 'Energy') {
+	$game_type_icon = "blur_on";
+} ?>
 
     <div class="EditPageHeader">
 
@@ -24,7 +33,7 @@ $allScenePGameID = $allScenePGame->term_id;
     </div>
 
     <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon">blur_on</i>&nbsp;Category</span>
+        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_icon; ?> </i>&nbsp;<?php echo $game_category; ?></span>
 
     <hr class="mdc-list-divider">
 
