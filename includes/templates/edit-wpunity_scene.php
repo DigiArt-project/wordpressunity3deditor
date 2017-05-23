@@ -6,9 +6,9 @@ get_header(); ?>
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-            COMPILE GAME
-        </a>
+        <!--<a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+            ???
+        </a>-->
     </div>
 
     <span class="mdc-typography--caption">
