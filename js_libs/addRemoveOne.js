@@ -50,7 +50,7 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
     } else {
 
         // Make progress bar visible
-        $("#progress").get(0).style.display = "block";
+        jQuery("#progress").get(0).style.display = "block";
 
         var manager = new THREE.LoadingManager();
 
@@ -64,7 +64,7 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
             var insertedObject = envir.scene.getObjectByName(nameModel3D);
 
             if(!insertedObject) {
-                $( "#dialog-message" ).dialog( "open" );
+                jQuery( "#dialog-message" ).dialog( "open" );
             }
             trs_tmp = resources3D[nameModel3D]['trs'];
 
@@ -82,7 +82,7 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
             transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
             selected_object_name = nameModel3D;
-        }
+        };
 
         var extraResource = {};
         extraResource[nameModel3D] = resources3D[nameModel3D];

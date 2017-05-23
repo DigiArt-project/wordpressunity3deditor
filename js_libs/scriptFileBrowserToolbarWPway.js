@@ -45,10 +45,10 @@ function file_Browsing_By_DB(data){
 
 
 
-    var filemanager = $('.filemanager'),
-        breadcrumbs = $('.breadcrumbs'),
+    var filemanager = jQuery('.filemanager'),
+        breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
-        closeButton = $('.bt_close_file_toolbar');
+        closeButton = jQuery('.bt_close_file_toolbar');
 
     var response = [data],
         currentPath = '',
@@ -60,7 +60,7 @@ function file_Browsing_By_DB(data){
     // This event listener monitors changes on the URL. We use it to
     // capture back/forward navigation in the browser.
 
-    $(window).on('hashchange', function(){
+    jQuery(window).on('hashchange', function(){
 
         goto(window.location.hash);
 
@@ -75,7 +75,7 @@ function file_Browsing_By_DB(data){
 
     filemanager.find('.search').click(function(){
 
-        var search = $(this);
+        var search = jQuery(this);
 
         search.find('span').hide();
         search.find('input[type=search]').show().focus();
@@ -110,7 +110,7 @@ function file_Browsing_By_DB(data){
 
         // Clicking 'ESC' button triggers focusout and cancels the search
 
-        var search = $(this);
+        var search = jQuery(this);
 
         if(e.keyCode == 27) {
             search.trigger('focusout');
@@ -120,7 +120,7 @@ function file_Browsing_By_DB(data){
 
         // Cancel the search
 
-        var search = $(this);
+        var search = jQuery(this);
 
         if(!search.val().trim().length) {
 
@@ -206,7 +206,7 @@ function file_Browsing_By_DB(data){
     fileList.on('click', 'li.folders', function(e){
         e.preventDefault();
 
-        var nextDir = $(this).find('a.folders').attr('href');
+        var nextDir = jQuery(this).find('a.folders').attr('href');
 
         if(filemanager.hasClass('searching')) {
 
@@ -230,7 +230,7 @@ function file_Browsing_By_DB(data){
     breadcrumbs.on('click', 'a', function(e){
         e.preventDefault();
 
-        var index = breadcrumbs.find('a').index($(this)),
+        var index = breadcrumbs.find('a').index(jQuery(this)),
             nextDir = breadcrumbsUrls[index];
 
         breadcrumbsUrls.length = Number(index);
@@ -414,7 +414,7 @@ function file_Browsing_By_DB(data){
                     itemsLength = 'Empty';
                 }
 
-                var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'<span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
+                var folder = jQuery('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'<span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
                 folder.appendTo(fileList);
             });
 
@@ -448,7 +448,7 @@ function file_Browsing_By_DB(data){
                     icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0px;margin-left:0px">';
 
 
-                var file = $('<li class="files"><a href="'+ f.objPath +
+                var file = jQuery('<li class="files"><a href="'+ f.objPath +
                                                '" title="'+ f.name +
                                                '" data-assetslug="'+ f.assetSlug +
                                                '" data-assetid="'+ f.assetid +

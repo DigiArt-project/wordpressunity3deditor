@@ -55,8 +55,8 @@ class LoaderMulti {
                                                             )
 
                                 if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                    $("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                    $("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                    jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                    jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
                                 }
 
                             }
@@ -122,26 +122,26 @@ class LoaderMulti {
 
                                 if (xhr.lengthComputable) {
 
-                                    var bar = $("#progressbar").get(0).offsetWidth;
+                                    var bar = jQuery("#progressbar").get(0).offsetWidth;
 
                                     //var total = progress.totalModels + progress.totalTextures,
                                     //var loaded = progress.loadedModels + progress.loadedTextures;
 
                                     bar = Math.floor(bar * xhr.loaded / xhr.total);
 
-                                    $("#scene_loading_bar").get(0).style.width = bar + "px";
+                                    jQuery("#scene_loading_bar").get(0).style.width = bar + "px";
                                     var downloadedBytes = "Downloaded: " + xhr.loaded + " / " + xhr.total + ' bytes';
 
-                                    $(".result").get(0).innerHTML = downloadedBytes;
+                                    jQuery(".result").get(0).innerHTML = downloadedBytes;
                                     // console.log(Math.round(percentComplete, 2) + '% downloaded');
 
 
                                     if (xhr.loaded == xhr.total) {
 
-                                        $("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                        $("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                        //$("#message").get(0).style.display = "none";
-                                        //$("#progressbar").get(0).style.display = "none";
+                                        jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                        jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                        //jQuery("#message").get(0).style.display = "none";
+                                        //jQuery("#progressbar").get(0).style.display = "none";
                                     }
                                 }
                             },

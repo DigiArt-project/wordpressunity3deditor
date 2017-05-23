@@ -21,11 +21,11 @@ function onMouseDown( event ) {
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
 
-    //console.log("EVA123", event.clientY, , $(window).scrollTop() );
+    //console.log("EVA123", event.clientY, , jQuery(window).scrollTop() );
 
     //mouse.x =   ( (event.clientX - envir.container_3D_all.offsetLeft) / envir.container_3D_all.clientWidth ) * 2 - 1;
-    mouse.x =   ( (event.clientX - $('#vr_editor_main_div').offset().left + $(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
-    mouse.y = - ( (event.clientY - $('#vr_editor_main_div').offset().top + $(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
+    mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
+    mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
     // calculate objects intersecting the picking ray
     raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
@@ -188,21 +188,21 @@ function onMouseDown( event ) {
         popupSelect.add(option);
 
         // Show Selection
-        $("#popUpDiv").show();
+        jQuery("#popUpDiv").show();
         var ppDiv = document.getElementById("popUpDiv");
 
-        ppDiv.style.left = event.clientX - $('#vr_editor_main_div').offset().left + $(window).scrollLeft() + 'px';
-        ppDiv.style.top = event.clientY - $('#vr_editor_main_div').offset().top + $(window).scrollTop() + 'px';
+        ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+        ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
         // On popup change
-        $("#popupSelect").change(function(e) {
-            var nameL = $("#popupSelect").val();
+        jQuery("#popupSelect").change(function(e) {
+            var nameL = jQuery("#popupSelect").val();
 
             if (nameL != "Cancel" || nameL != "Select") {
                 transform_controls.attach(arrNameObj[nameL]);
                 console.log("nameL", nameL);
 
-                $("#popUpDiv").hide();
+                jQuery("#popUpDiv").hide();
             }
         });
     }

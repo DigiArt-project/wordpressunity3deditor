@@ -41,8 +41,10 @@ echo '</script>';
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
 
 <!-- 3rd party libraries -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-3.1.1.min.js"></script>
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-3.1.1.min.js"></script>-->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
+
+
 
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
@@ -91,15 +93,15 @@ echo '</script>';
 
 
         // make filebrowser draggable
-        var filemanager = $('.filemanager'),
-            breadcrumbs = $('.breadcrumbs'),
+        var filemanager = jQuery('.filemanager'),
+            breadcrumbs = jQuery('.breadcrumbs'),
             fileList = filemanager.find('.data');
 
         // Make filemanager draggable
         filemanager.draggable({cancel : 'ul'});
 
         //------------- File Browser Toolbar close button -------------
-        var closeButton = $('.bt_close_file_toolbar');
+        var closeButton = jQuery('.bt_close_file_toolbar');
 
         closeButton.on('click', function(e){
         // e.preventDefault();
@@ -139,7 +141,7 @@ echo '</script>';
 
 
     function removeSavedText(){
-        $(".result").html("");
+        jQuery(".result").html("");
     }
 
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
@@ -205,8 +207,8 @@ echo '</script>';
      */
     function resize_handler(ev){
 
-        var cw = $('#vr_editor_main_div').width();
-        $('#vr_editor_main_div').css({'height':cw*2/3+'px'});
+        var cw = jQuery('#vr_editor_main_div').width();
+        jQuery('#vr_editor_main_div').css({'height':cw*2/3+'px'});
 
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
@@ -335,7 +337,7 @@ echo '</script>';
 
     //====================== Load Manager =======================================================
     // Make progress bar visible
-    $("#progress").get(0).style.display = "block";
+    jQuery("#progress").get(0).style.display = "block";
 
     var manager = new THREE.LoadingManager();
 
@@ -441,7 +443,7 @@ echo '</script>';
 
 
     // Select event listener
-    $("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );
+    jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );
 
     animate();
 
