@@ -1,5 +1,12 @@
 <?php
 
+$safe_inserted_id = intval( $_GET['wpunity_scene'] );
+$safe_inserted_id = sanitize_text_field( $safe_inserted_id );
+$scene_id = $safe_inserted_id;
+
+$scene_post = get_post($scene_id);
+$sceneSlug = $scene_post->post_title;
+
 
 get_header(); ?>
 
@@ -26,7 +33,7 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Scene Editor</span></li>
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scene name</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__cell--span-10">

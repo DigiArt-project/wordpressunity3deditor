@@ -1,5 +1,8 @@
 <?php get_header();
 
+if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
+if( $perma_structure){$parameter_Scenepass = '/?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+
 $safe_inserted_id = intval( $_GET['wpunity_game'] );
 $safe_inserted_id = sanitize_text_field( $safe_inserted_id );
 $game_id = $safe_inserted_id;
@@ -13,6 +16,8 @@ $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
 $game_type_obj = wpunity_return_game_type($game_id);
+
+$editscenePage = wpunity_getEditpage('scene');
 
 ?>
 
@@ -187,7 +192,7 @@ if ( $custom_query->have_posts() ) :?>
                     </section>
                     <section class="mdc-card__actions">
                         <a class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light">DELETE</a>
-                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary mdc-text">EDIT</a>
+                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
                     </section>
                 </div>
             </div>
