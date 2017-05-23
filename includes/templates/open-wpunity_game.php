@@ -3,7 +3,7 @@
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_pass = '/?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 
-$editgamePage = wpunity_getEditpage();
+$editgamePage = wpunity_getEditpage('game');
 
 ?>
 
