@@ -29,7 +29,7 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scene name</h2>
 
     <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__cell--span-12">
+        <div class="mdc-layout-grid__cell--span-10">
 
             <div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">
 				<?php
@@ -49,11 +49,12 @@ get_header(); ?>
 				// vr_editor loads the $sceneToLoad
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
             </div>
-
         </div>
 
-    </div>
 
+    <div class="mdc-layout-grid__cell--span-2">
+        <!-- THIS LOADS ONLY IF USER = ADMIN -->
+    </div>
 
     <script type="text/javascript">
         window.mdc.autoInit();

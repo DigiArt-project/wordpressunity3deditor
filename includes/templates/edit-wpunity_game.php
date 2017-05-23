@@ -31,7 +31,7 @@ $game_type_obj = wpunity_return_game_type($game_id);
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--accent" href="#">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="#">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Game Editor</span></li>
     </ul>
@@ -179,15 +179,15 @@ if ( $custom_query->have_posts() ) :?>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
-                        <img  src="http://160.40.50.238/envisage/wp-content/uploads/2017/02/1.jpg">
+                        <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
                     </div>
                     <section class="mdc-card__primary">
                         <h1 class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><?php echo $scene_title; ?></h1>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
                     </section>
                     <section class="mdc-card__actions">
-                        <a class="mdc-button mdc-button--compact mdc-card__action">DELETE</a>
-                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary">EDIT</a>
+                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light">DELETE</a>
+                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary mdc-text">EDIT</a>
                     </section>
                 </div>
             </div>
