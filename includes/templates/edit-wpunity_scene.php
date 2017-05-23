@@ -24,7 +24,7 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Scene Editor</span></li>
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scene name</h2>
 
 
     <script type="text/javascript">
