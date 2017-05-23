@@ -48,15 +48,11 @@ wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_
 wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
 wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
 
-// wp_enqueue_script( 'wpunity_jquery_scripts' );
-// wp_enqueue_script( 'jquery-ui');
-function my_add_frontend_scripts() {
+function wpunity_load_jquery_scripts() {
 	wp_enqueue_script('jquery');
-	wp_enqueue_script('jquery-ui-core');
+	// TODO: Add jquery-ui-core
 }
-add_action('wp_enqueue_scripts', 'my_add_frontend_scripts');
-
-
+add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
 
 // Material & Frontend CSS

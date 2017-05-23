@@ -41,10 +41,7 @@ echo '</script>';
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
 
 <!-- 3rd party libraries -->
-<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-3.1.1.min.js"></script>-->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
-
-
 
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
