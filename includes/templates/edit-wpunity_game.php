@@ -31,12 +31,13 @@ $editscenePage = wpunity_getEditpage('scene');
     </div>
 
     <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string; ?></span>
+        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Category"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string;?>
+    </span>
 
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="#">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Game Editor</span></li>
     </ul>
@@ -184,20 +185,47 @@ if ( $custom_query->have_posts() ) :?>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
-                        <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
+                        <a href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">
+                            <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
+                        </a>
                     </div>
                     <section class="mdc-card__primary">
-                        <h1 class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><?php echo $scene_title; ?></h1>
+                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><?php echo $scene_title; ?></h1>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
                     </section>
                     <section class="mdc-card__actions">
-                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light">DELETE</a>
+                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
                         <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
                     </section>
                 </div>
             </div>
 
 		<?php endwhile;?>
+
+        <!--Delete Game Dialog-->
+        <aside id="delete-dialog"
+               style="visibility:hidden"
+               class="mdc-dialog"
+               role="alertdialog"
+               aria-labelledby="my-mdc-dialog-label"
+               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+                <header class="mdc-dialog__header">
+                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                        Delete scene?
+                    </h2>
+                </header>
+                <section id="delete-dialog-description" class="mdc-dialog__body mdc-typography--body1">
+                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+                </section>
+                <footer class="mdc-dialog__footer">
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised">Delete</a>
+                </footer>
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+
 
     </div>
 
@@ -230,7 +258,6 @@ $wp_query = $temp_query;
 
         var acc = document.getElementsByClassName("EditPageAccordion");
         var i;
-
         for (i = 0; i < acc.length; i++) {
             acc[i].onclick = function() {
                 this.classList.toggle("active");
@@ -242,5 +269,28 @@ $wp_query = $temp_query;
                 }
             }
         }
+
+
+        var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
+        dialog.listen('MDCDialog:accept', function() {
+            console.log('accepted');
+        });
+
+        dialog.listen('MDCDialog:cancel', function() {
+            console.log('canceled');
+        });
+
+        function deleteScene(id) {
+
+            var dialogTitle = document.getElementById("delete-dialog-title");
+            var dialogDescription = document.getElementById("delete-dialog-description");
+            var sceneTitle = document.getElementById(id+"-title").innerHTML;
+
+            dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
+            dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
+            dialog.show();
+            console.log(id);
+        }
+
     </script>
 <?php get_footer(); ?>

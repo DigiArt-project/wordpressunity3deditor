@@ -52,15 +52,15 @@ $editgamePage = wpunity_getEditpage('game');
 
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
+                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple" title="Edit <?php echo $game_title;?>">
 
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_type_obj->string;?>"><?php echo $game_type_obj->icon;?></i>
                                 <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text"><?php echo $game_title;?>
                                     <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date;?></span>
                                 </span>
                             </a>
-                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete game" onclick="deleteGame(<?php echo $game_id; ?>)">
-                                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete game">
+                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete project" onclick="deleteGame(<?php echo $game_id; ?>)">
+                                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete project">
                                     delete
                                 </i>
                             </a>
@@ -168,7 +168,7 @@ $editgamePage = wpunity_getEditpage('game');
             <div class="mdc-dialog__surface">
                 <header class="mdc-dialog__header">
                     <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
-                        Delete "title" ?
+                        Delete project?
                     </h2>
                 </header>
                 <section id="delete-dialog-description" class="mdc-dialog__body mdc-typography--body1">
