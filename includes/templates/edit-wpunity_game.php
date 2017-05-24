@@ -25,7 +25,7 @@ $editscenePage = wpunity_getEditpage('scene');
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+        <a class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
             COMPILE GAME
         </a>
     </div>
@@ -51,7 +51,6 @@ $editscenePage = wpunity_getEditpage('scene');
     <div class="mdc-layout-grid">
         <!--LOAD SAVED SCENES HERE-->
     </div>
-
 
     <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
 

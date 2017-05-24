@@ -7,11 +7,15 @@ $scene_id = $safe_inserted_id;
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
+wp_enqueue_script('wpunity_dropzone');
+
+wp_enqueue_media($scene_post->ID);
+require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
 get_header(); ?>
 
     <!-- START PAGE -->
     <div class="EditPageHeader">
-
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
         <!--<a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
@@ -25,9 +29,9 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--accent" href="#">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Game Editor</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected" title="Go back to Project editor">Game Editor</span></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Scene Editor</span></li>
     </ul>
@@ -35,7 +39,52 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
     <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__cell--span-10">
+
+        <!-- ENABLE SECTION ONLY IF USER PRIVILEGES ALLOW -->
+        <div class="mdc-layout-grid__cell--span-12">
+
+            <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Assets</a>
+
+            <div class="EditPageAccordionPanel">
+
+
+
+            </div>
+
+            <div class="mdc-layout-grid">
+
+                <div class="mdc-layout-grid__cell--span-3"></div>
+                <div class="mdc-layout-grid__cell--span-6">
+
+
+                    <form name="newAssetForm" action="<?php echo plugin_dir_url( __FILE__ ); ?>/edit-wpunity_scene-file-upload.php"
+                          class="dropzone" enctype="multipart/form-data"
+                          id="fileUploaderDropzone">
+
+                        <div class="CenterContents">
+                            <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                            <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                        </div>
+                        <input type="hidden" name="media-ids" value="">
+
+                        <!--<input type="submit" id="submit" name="Upload" onclick="uploadFiles();return false;">-->
+
+
+                    </form>
+
+                </div>
+                <div class="mdc-layout-grid__cell--span-3"></div>
+            </div>
+
+
+        </div>
+
+
+        <hr class="WhiteSpaceSeparator">
+
+
+
+        <div class="mdc-layout-grid__cell--span-12">
 
             <div name="scene-vr-editor" id="scene-vr-editor">
 				<?php
@@ -56,19 +105,65 @@ get_header(); ?>
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
             </div>
         </div>
-
-
-        <div class="mdc-layout-grid__cell--span-2">
-            <!-- THIS LOADS ONLY IF USER = ADMIN -->
-        </div>
-
     </div>
 
-<hr class="WhiteSpaceSeparator">
+    <hr class="WhiteSpaceSeparator">
 
     <script type="text/javascript">
         window.mdc.autoInit();
+
+        var acc = document.getElementsByClassName("EditPageAccordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].onclick = function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            }
+        }
+
+        Dropzone.options.fileUploaderDropzone = {
+
+            init: function() {
+                this.on("addedfile", function(file) {
+                    console.log(file);
+
+                });
+
+                this.on("drop", function(data) {
+                    console.log(data);
+
+                });
+            }
+
+        };
+
+        function uploadFiles(){
+            var formData = new FormData();
+            formData.append("action", "upload-attachment");
+
+            var fileInputElement = document.getElementById("file");
+            formData.append("async-upload", fileInputElement.files[0]);
+            formData.append("name", fileInputElement.files[0].name);
+
+            //also available on page from _wpPluploadSettings.defaults.multipart_params._wpnonce
+			<?php $my_nonce = wp_create_nonce('media-form'); ?>
+            formData.append("_wpnonce", "<?php echo $my_nonce; ?>");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange=function(){
+                if (xhr.readyState==4 && xhr.status==200){
+                    console.log(xhr.responseText);
+                }
+            };
+            xhr.open("POST", '<?php echo ABSPATH;?>/wp-admin/async-upload.php',true);
+            xhr.send(formData);
+        }
+
+
+
     </script>
-
-
 <?php get_footer(); ?>

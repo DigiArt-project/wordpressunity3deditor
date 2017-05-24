@@ -55,7 +55,7 @@ function wpunity_load_jquery_scripts() {
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
 
-// Material & Frontend CSS
+// Material & Frontend CSS & Scripts
 // TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
 wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
 wp_enqueue_style('wpunity_material_stylesheet');
@@ -63,6 +63,7 @@ wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'no
 wp_enqueue_script('wpunity_material_scripts');
 wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 wp_enqueue_style('wpunity_frontend_stylesheet');
+wp_register_script( 'wpunity_dropzone', plugin_dir_url( __FILE__ ) . 'js_libs/dropzone.js');
 
 
 wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',

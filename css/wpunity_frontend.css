@@ -148,3 +148,27 @@ i.ButtonIcon {
 .AlignIconToBottom {
     vertical-align: bottom;
 }
+
+.dropzone i {
+    font-size: 48px;
+}
+
+.dropzone {
+    border: 2px dashed #3f51b5;
+    border-radius: 5px;
+    background: white;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.dropzone .dz-message {
+    padding-top: 24px;
+    text-align: center;
+}
+
+.dropzone .dz-message .note {
+    font-size: 0.8em;
+    font-weight: 200;
+    display: block;
+    margin-top: 1.4rem;
+}
