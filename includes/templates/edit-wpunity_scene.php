@@ -7,7 +7,6 @@ $scene_id = $safe_inserted_id;
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
-
 get_header(); ?>
 
     <!-- START PAGE -->
@@ -38,7 +37,7 @@ get_header(); ?>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__cell--span-10">
 
-            <div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">
+            <div name="scene-vr-editor" id="scene-vr-editor">
 				<?php
 				$meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
 
@@ -59,9 +58,13 @@ get_header(); ?>
         </div>
 
 
-    <div class="mdc-layout-grid__cell--span-2">
-        <!-- THIS LOADS ONLY IF USER = ADMIN -->
+        <div class="mdc-layout-grid__cell--span-2">
+            <!-- THIS LOADS ONLY IF USER = ADMIN -->
+        </div>
+
     </div>
+
+<hr class="WhiteSpaceSeparator">
 
     <script type="text/javascript">
         window.mdc.autoInit();
