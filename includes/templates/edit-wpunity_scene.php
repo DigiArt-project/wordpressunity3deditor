@@ -127,19 +127,29 @@ get_header(); ?>
         }
 
         Dropzone.options.fileUploaderDropzone = {
+            addRemoveLinks: true,
 
             init: function() {
                 this.on("addedfile", function(file) {
-                    console.log(file);
 
                 });
 
-                this.on("drop", function(data) {
-                    console.log(data);
+                this.on("queuecomplete", function (file) {
 
+                    if (this.files.length === 1) {
+
+                        console.log("single file!");
+
+                        if (((this.files[0].name).split('.').pop()).toLowerCase() === 'fbx') {
+
+                            // Autodesk fbx file!
+                            console.log("It's a fbx!");
+
+                        }
+
+                    }
                 });
             }
-
         };
 
         function uploadFiles(){

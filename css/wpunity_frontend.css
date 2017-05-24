@@ -172,3 +172,7 @@ i.ButtonIcon {
     display: block;
     margin-top: 1.4rem;
 }
+
+.dropzone .dz-preview {
+    display: inline-block;
+}
