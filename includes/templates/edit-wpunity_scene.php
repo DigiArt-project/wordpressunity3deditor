@@ -7,10 +7,16 @@ $scene_id = $safe_inserted_id;
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
-wp_enqueue_script('wpunity_dropzone');
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+}
+
+
 
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
+wp_enqueue_script('wpunity_dropzone');
 
 get_header(); ?>
 
@@ -47,36 +53,32 @@ get_header(); ?>
 
             <div class="EditPageAccordionPanel">
 
-
-
             </div>
 
             <div class="mdc-layout-grid">
 
-                <div class="mdc-layout-grid__cell--span-3"></div>
-                <div class="mdc-layout-grid__cell--span-6">
+                <div class="mdc-layout-grid__cell--span-2"></div>
+                <div class="mdc-layout-grid__cell--span-8">
 
 
-                    <form name="newAssetForm" action="<?php echo plugin_dir_url( __FILE__ ); ?>/edit-wpunity_scene-file-upload.php"
-                          class="dropzone" enctype="multipart/form-data"
-                          id="fileUploaderDropzone">
+                    <div class="dropzone" id="fileUploaderDropzone">
 
                         <div class="CenterContents">
                             <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
                             <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+
+                            <input type="hidden" name="file" />
+
+
+							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
                         </div>
-                        <input type="hidden" name="media-ids" value="">
 
-                        <!--<input type="submit" id="submit" name="Upload" onclick="uploadFiles();return false;">-->
-
-
-                    </form>
+                    </div>
 
                 </div>
-                <div class="mdc-layout-grid__cell--span-3"></div>
+                <div class="mdc-layout-grid__cell--span-2"></div>
             </div>
-
-
         </div>
 
 
@@ -127,28 +129,46 @@ get_header(); ?>
         }
 
         Dropzone.options.fileUploaderDropzone = {
+            url: '<?php echo get_permalink(); ?>',
             addRemoveLinks: true,
-
             init: function() {
+
+                this.on("sending", function(file, xhr, formData) {
+
+
+                });
+
                 this.on("addedfile", function(file) {
 
                 });
 
                 this.on("queuecomplete", function (file) {
 
-                    if (this.files.length === 1) {
+                    if (this.files.length === 1 && ((this.files[0].name).split('.').pop()).toLowerCase() === 'fbx') {
+                        console.log("single fbx file! It's a fbx!");
 
-                        console.log("single file!");
-
-                        if (((this.files[0].name).split('.').pop()).toLowerCase() === 'fbx') {
-
-                            // Autodesk fbx file!
-                            console.log("It's a fbx!");
-
-                        }
+                    } else {
+                        console.log("single (non-fbx) or multiple files");
+                        console.log(this.files[0].status);
 
                     }
+
+                    console.log("total files: ", this.files.length);
+
+                    jQuery( '#fileUploaderDropzone' ).append( '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Submit</a>' );
                 });
+
+
+                this.on("removedfile", function (file) {
+                    if (this.files.length === 0) {
+                        var btn = jQuery( '#submitBtn' );
+                        if (btn) {
+                            btn.remove();
+                        }
+                    }
+                });
+
+
             }
         };
 

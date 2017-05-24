@@ -298,7 +298,4 @@ function my_admin_styles()  {
 	wp_enqueue_style('thickbox');
 
 }
-
-
-
 ?>
