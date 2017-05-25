@@ -45,7 +45,6 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
     <div class="mdc-layout-grid">
-
         <div class="mdc-layout-grid__cell--span-9">
 
             <div id="scene-vr-editor">
@@ -73,8 +72,7 @@ get_header(); ?>
 
             <div class="CenterContents">
 
-                <div class="dropzone" id="fileUploaderDropzone">
-
+                <div class="DropzoneStyle" id="fileUploaderDropzone">
 
                     <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
                     <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
@@ -110,8 +108,6 @@ get_header(); ?>
     </div>
 
 
-
-
     <script type="text/javascript">
         window.mdc.autoInit();
 
@@ -129,10 +125,11 @@ get_header(); ?>
             }
         }
 
-        Dropzone.options.fileUploaderDropzone = {
+        var myDropzone = new Dropzone("div#fileUploaderDropzone", {
             url: '<?php echo get_permalink(); ?>',
             clickable: true,
             maxFiles: 3,
+            autoDiscover: false,
             previewTemplate: document.getElementById('preview-template').innerHTML,
             init: function() {
 
@@ -171,15 +168,12 @@ get_header(); ?>
                         if (btnContainer) {
                             btnContainer.remove();
                         }
-
                     }
-
                 });
 
                 this.on("removedfile", function (file) {
 
                     var flags = [];
-
                     var btnContainer = jQuery( '#submitBtnContainer' );
 
                     if (this.files.length === 0) {
@@ -200,8 +194,7 @@ get_header(); ?>
 
                         if (flags.mtl && flags.obj && flags.texture) {
                             console.log("Requirements for upload complete");
-
-
+                            appendSubmitBtnToDropzone(strings.three);
                         }
                     }
 
@@ -219,9 +212,8 @@ get_header(); ?>
                 this.on("sending", function(file, xhr, formData) {
 
                 });
-
             }
-        };
+        });
 
         function fileExtension(fn) {
             return fn.split('.').pop().toLowerCase();
@@ -244,7 +236,8 @@ get_header(); ?>
             jQuery( '#fileUploaderDropzone' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--accent" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
                 '</div>' );
         }
 
@@ -272,8 +265,5 @@ get_header(); ?>
         var strings = [];
         strings.fbx = 'You have selected an Autodesk FBX model';
         strings.three = 'You have selected a group of the three components describing your asset';
-
     </script>
-
-
 <?php get_footer(); ?>
