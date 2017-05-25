@@ -46,50 +46,9 @@ get_header(); ?>
 
     <div class="mdc-layout-grid">
 
-        <!-- ENABLE SECTION ONLY IF USER PRIVILEGES ALLOW -->
-        <div class="mdc-layout-grid__cell--span-12">
+        <div class="mdc-layout-grid__cell--span-8">
 
-            <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Assets</a>
-
-            <div class="EditPageAccordionPanel">
-
-            </div>
-
-            <div class="mdc-layout-grid">
-
-                <div class="mdc-layout-grid__cell--span-2"></div>
-                <div class="mdc-layout-grid__cell--span-8">
-
-
-                    <div class="dropzone" id="fileUploaderDropzone">
-
-                        <div class="CenterContents">
-                            <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-                            <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                            <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
-
-                            <input type="hidden" name="file" />
-
-
-							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="mdc-layout-grid__cell--span-2"></div>
-            </div>
-        </div>
-
-
-        <hr class="WhiteSpaceSeparator">
-
-
-
-        <div class="mdc-layout-grid__cell--span-12">
-
-            <div name="scene-vr-editor" id="scene-vr-editor">
+            <div id="scene-vr-editor">
 				<?php
 				$meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
 
@@ -108,9 +67,31 @@ get_header(); ?>
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
             </div>
         </div>
-    </div>
 
-    <hr class="WhiteSpaceSeparator">
+        <!-- ENABLE SECTION ONLY IF USER PRIVILEGES ALLOW -->
+        <div class="mdc-layout-grid__cell--span-4">
+
+            <div class="dropzone" id="fileUploaderDropzone">
+
+                <div class="CenterContents">
+                    <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                    <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                    <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
+
+                    <input type="hidden" name="file" />
+
+                    <input type="hidden" name="fbxFile" />
+                    <input type="hidden" name="mtlFile" />
+                    <input type="hidden" name="objFile" />
+                    <input type="hidden" name="textureFile" />
+
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <!-- Preview template for Dropzone -->
     <div id="preview-template" style="display: none;">
@@ -125,6 +106,8 @@ get_header(); ?>
             <a class="mdc-button mdc-button--primary" data-dz-remove>Remove</a>
         </div>
     </div>
+
+
 
 
     <script type="text/javascript">
@@ -151,18 +134,6 @@ get_header(); ?>
             previewTemplate: document.getElementById('preview-template').innerHTML,
             init: function() {
 
-
-
-                this.on("addedfile", function(file) {
-
-                    console.log("added file:", file.name);
-
-                    for (i=0; i < this.files.length; i++) {
-
-                    }
-
-                });
-
                 this.on("queuecomplete", function (file) {
 
                     var flags = [];
@@ -172,7 +143,7 @@ get_header(); ?>
 
                         jQuery( '#fileUploaderDropzone' ).append( '' +
                             '<div id="submitBtnContainer" class="mdc-layout-grid__cell CenterContents">' +
-                                '<h6 class="mdc-typography--caption">You have selected an Autodesk FBX model</h6> ' +
+                            '<h6 class="mdc-typography--caption">You have selected an Autodesk FBX model</h6> ' +
                             '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Upload</a>' +
                             '</div>' );
 
@@ -181,36 +152,93 @@ get_header(); ?>
                         console.log(this.files.length);
 
                         var i;
-                        for (i=0; i < this.files.length; i++) {
 
-                            if (!flags.mtl) {
-                                flags.mtl = fileExtension(this.files[i].name) === 'mtl';
-                            }
-                            if (!flags.obj) {
-                                flags.obj = fileExtension(this.files[i].name) === 'obj';
-                            }
-                            if (!flags.texture) {
-                                flags.texture = fileExtension(this.files[i].name) === ('png' || 'jpg');
+                        if (this.files.length === 3) {
+
+                            for (i=0; i < this.files.length; i++) {
+                                flags = checkFlags(flags, this.files[i].name);
                             }
 
+
+                            if (flags.mtl && flags.obj && flags.texture) {
+                                console.log("Requirements for upload complete");
+                                jQuery( '#fileUploaderDropzone' ).append( '' +
+                                    '<div id="submitBtnContainer" class="mdc-layout-grid__cell CenterContents">' +
+                                    '<h6 class="mdc-typography--caption">You have selected a group of the three components describing your asset</h6> ' +
+                                    '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                                    '</div>' );
+
+                            }
+                            console.log(flags);
                         }
-                        console.log(flags);
-
                     }
                     console.log("total files: ", this.files.length);
                 });
 
+                this.on("addedfile", function(file) {
+
+                    if (this.files.length > 3 || this.files.length === 2) {
+                        var btnContainer = jQuery( '#submitBtnContainer' );
+
+                        if (btnContainer) {
+                            btnContainer.remove();
+                        }
+
+                    }
+
+                });
 
                 this.on("removedfile", function (file) {
+
+                    var flags = [];
+
+                    var btnContainer = jQuery( '#submitBtnContainer' );
+
                     if (this.files.length === 0) {
-                        var btnContainer = jQuery( '#submitBtnContainer' );
+                        if (btnContainer) {
+                            btnContainer.remove();
+                        }
+                    } else if (this.files.length < 3) {
                         if (btnContainer) {
                             btnContainer.remove();
                         }
                     }
+
+                    if (this.files.length === 3) {
+
+                        for (i=0; i < this.files.length; i++) {
+                            flags = checkFlags(flags, this.files[i].name);
+                        }
+
+                        if (flags.mtl && flags.obj && flags.texture) {
+                            console.log("Requirements for upload complete");
+                            jQuery( '#fileUploaderDropzone' ).append( '' +
+                                '<div id="submitBtnContainer" class="mdc-layout-grid__cell CenterContents">' +
+                                '<h6 class="mdc-typography--caption">You have selected a group of the three components describing your asset</h6> ' +
+                                '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                                '</div>' );
+
+                        }
+                    }
+
+                    if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
+                        console.log("single fbx file! It's a fbx!");
+
+                        jQuery('#fileUploaderDropzone').append('' +
+                            '<div id="submitBtnContainer" class="mdc-layout-grid__cell CenterContents">' +
+                            '<h6 class="mdc-typography--caption">You have selected an Autodesk FBX model</h6> ' +
+                            '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" onclick="" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                            '</div>');
+                    }
+
+                });
+
+                this.on("canceled", function (file) {
+                    
                 });
 
                 this.on("sending", function(file, xhr, formData) {
+
                 });
 
             }
@@ -218,6 +246,19 @@ get_header(); ?>
 
         function fileExtension(fn) {
             return fn.split('.').pop().toLowerCase();
+        }
+
+        function checkFlags(flags, fn) {
+            if (!flags.mtl) {
+                flags.mtl = fileExtension(fn) === 'mtl';
+            }
+            if (!flags.obj) {
+                flags.obj = fileExtension(fn) === 'obj';
+            }
+            if (!flags.texture) {
+                flags.texture = fileExtension(fn) === ('png' || 'jpg');
+            }
+            return flags;
         }
 
         function uploadFiles(){

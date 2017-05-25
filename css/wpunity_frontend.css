@@ -117,7 +117,9 @@ i.ButtonIcon {
 .EditPageAccordionPanel {
     padding: 0 18px;
     max-height: 0;
+    height: 100%;
     overflow: hidden;
+    display: block;
     transition: max-height 0.2s ease-out;
 }
 
