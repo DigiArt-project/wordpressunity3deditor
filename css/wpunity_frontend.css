@@ -176,3 +176,11 @@ i.ButtonIcon {
 .dropzone .dz-preview {
     display: inline-block;
 }
+
+.CustomDropZoneAssetStyle {
+    padding: 12px;
+}
+
+.dropzone .dz-error {
+    background-color: rgba(255,0,0,0.23);
+}
