@@ -8,8 +8,6 @@
 
 function wpunity_return_game_type($id) {
 
-
-
 	$all_game_category = get_the_terms( $id, 'wpunity_game_type' );
 	$game_category     = $all_game_category[0]->name;
 

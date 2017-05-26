@@ -138,7 +138,7 @@ get_header(); ?>
                     var flags = [];
 
                     if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-                        console.log("single fbx file! It's a fbx!");
+
                         appendSubmitBtnToDropzone(strings.fbx);
 
                     } else {
@@ -151,7 +151,7 @@ get_header(); ?>
                             }
 
                             if (flags.mtl && flags.obj && flags.texture) {
-                                console.log("Requirements for upload complete");
+
                                 appendSubmitBtnToDropzone(strings.three);
                             }
                             console.log(flags);
@@ -193,13 +193,13 @@ get_header(); ?>
                         }
 
                         if (flags.mtl && flags.obj && flags.texture) {
-                            console.log("Requirements for upload complete");
+
                             appendSubmitBtnToDropzone(strings.three);
                         }
                     }
 
                     if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-                        console.log("single fbx file! It's a fbx!");
+
                         appendSubmitBtnToDropzone(strings.fbx);
                     }
 
@@ -236,7 +236,7 @@ get_header(); ?>
             jQuery( '#fileUploaderDropzone' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--accent" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
                 '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
                 '</div>' );
         }
@@ -254,7 +254,7 @@ get_header(); ?>
             formData.append("_wpnonce", "<?php echo $my_nonce; ?>");
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange=function(){
-                if (xhr.readyState==4 && xhr.status==200){
+                if (xhr.readyState===4 && xhr.status===200){
                     console.log(xhr.responseText);
                 }
             };
