@@ -52,7 +52,7 @@ $editgamePage = wpunity_getEditpage('game');
 
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple" title="Edit <?php echo $game_title;?>">
+                            <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple" title="Open <?php echo $game_title;?>">
 
                                 <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_type_obj->string;?>"><?php echo $game_type_obj->icon;?></i>
                                 <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text"><?php echo $game_title;?>

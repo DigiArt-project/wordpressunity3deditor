@@ -45,7 +45,38 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
     <div class="mdc-layout-grid">
+
+        <!-- ENABLE SECTION ONLY IF USER PRIVILEGES ALLOW -->
+        <div class="mdc-layout-grid__cell--span-3">
+
+            <h2 class="mdc-typography--title mdc-theme--text-primary-on-light">Asset Manager</h2>
+
+            <div class="CenterContents">
+
+                <div class="DropzoneStyle" id="fileUploaderDropzone">
+
+                    <div class="DropzoneDescriptivePlaceholder">
+                        <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                        <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
+                    </div>
+
+                    <input type="hidden" name="file" />
+
+                    <input type="hidden" name="fbxFile" />
+                    <input type="hidden" name="mtlFile" />
+                    <input type="hidden" name="objFile" />
+                    <input type="hidden" name="textureFile" />
+
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
+                </div>
+            </div>
+        </div>
+
         <div class="mdc-layout-grid__cell--span-9">
+
+            <h2 class="mdc-typography--title mdc-theme--text-primary-on-light">Editor</h2>
 
             <div id="scene-vr-editor">
 				<?php
@@ -64,30 +95,6 @@ get_header(); ?>
 
 				// vr_editor loads the $sceneToLoad
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
-            </div>
-        </div>
-
-        <!-- ENABLE SECTION ONLY IF USER PRIVILEGES ALLOW -->
-        <div class="mdc-layout-grid__cell--span-3">
-
-            <div class="CenterContents">
-
-                <div class="DropzoneStyle" id="fileUploaderDropzone">
-
-                    <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-                    <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                    <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
-
-                    <input type="hidden" name="file" />
-
-                    <input type="hidden" name="fbxFile" />
-                    <input type="hidden" name="mtlFile" />
-                    <input type="hidden" name="objFile" />
-                    <input type="hidden" name="textureFile" />
-
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-
-                </div>
             </div>
         </div>
 
@@ -138,7 +145,7 @@ get_header(); ?>
                     var flags = [];
 
                     if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-                        console.log("single fbx file! It's a fbx!");
+
                         appendSubmitBtnToDropzone(strings.fbx);
 
                     } else {
@@ -151,7 +158,7 @@ get_header(); ?>
                             }
 
                             if (flags.mtl && flags.obj && flags.texture) {
-                                console.log("Requirements for upload complete");
+
                                 appendSubmitBtnToDropzone(strings.three);
                             }
                             console.log(flags);
@@ -162,11 +169,14 @@ get_header(); ?>
 
                 this.on("addedfile", function(file) {
 
+                    jQuery( '.DropzoneDescriptivePlaceholder' ).hide();
+
                     if (this.files.length > 3 || this.files.length === 2) {
                         var btnContainer = jQuery( '#submitBtnContainer' );
 
                         if (btnContainer) {
                             btnContainer.remove();
+                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
                         }
                     }
                 });
@@ -179,10 +189,12 @@ get_header(); ?>
                     if (this.files.length === 0) {
                         if (btnContainer) {
                             btnContainer.remove();
+                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
                         }
                     } else if (this.files.length < 3) {
                         if (btnContainer) {
                             btnContainer.remove();
+
                         }
                     }
 
@@ -193,13 +205,13 @@ get_header(); ?>
                         }
 
                         if (flags.mtl && flags.obj && flags.texture) {
-                            console.log("Requirements for upload complete");
+
                             appendSubmitBtnToDropzone(strings.three);
                         }
                     }
 
                     if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-                        console.log("single fbx file! It's a fbx!");
+
                         appendSubmitBtnToDropzone(strings.fbx);
                     }
 
@@ -236,9 +248,10 @@ get_header(); ?>
             jQuery( '#fileUploaderDropzone' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--accent" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
                 '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
                 '</div>' );
+
         }
 
         function uploadFiles(){
@@ -254,7 +267,7 @@ get_header(); ?>
             formData.append("_wpnonce", "<?php echo $my_nonce; ?>");
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange=function(){
-                if (xhr.readyState==4 && xhr.status==200){
+                if (xhr.readyState===4 && xhr.status===200){
                     console.log(xhr.responseText);
                 }
             };

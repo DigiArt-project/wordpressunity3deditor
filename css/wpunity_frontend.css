@@ -92,6 +92,10 @@ ul.EditPageBreadcrumb li {
 }
 
 
+.InlineContainer {
+
+}
+
 /* Accordion */
 /* Style the buttons that are used to open and close the accordion panel */
 a.EditPageAccordion {
@@ -161,10 +165,10 @@ i.ButtonIcon {
     background: white;
     padding: 20px;
     cursor: pointer;
+    min-height: 538px;
 }
 
 .DropzoneStyle .dz-message {
-    padding-top: 24px;
     text-align: center;
 }
 

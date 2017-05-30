@@ -42,17 +42,15 @@ $editscenePage = wpunity_getEditpage('scene');
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Game Editor</span></li>
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
 
+
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
+    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
 
 
     <!--<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>-->
 
-    <div class="mdc-layout-grid">
-        <!--LOAD SAVED SCENES HERE-->
-    </div>
 
-    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
 
     <div class="EditPageAccordionPanel">
         <div class="mdc-layout-grid">

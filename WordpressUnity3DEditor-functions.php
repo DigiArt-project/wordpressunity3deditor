@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * Plugin Name: WordpressUnity3DEditor
  * Plugin URI: http://yoursite.com
