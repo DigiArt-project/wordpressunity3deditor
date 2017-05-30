@@ -47,7 +47,7 @@ $editscenePage = wpunity_getEditpage('scene');
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
     <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
 
-
+    
     <!--<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>-->
 
 
@@ -187,7 +187,7 @@ if ( $custom_query->have_posts() ) :?>
 
 							<?php if ($scene_thumb) { ?>
 
-                                <img src="<?php /*echo site_url();*/?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
+                                <img src="<?php echo site_url();?>">
 
 							<?php } else { ?>
 

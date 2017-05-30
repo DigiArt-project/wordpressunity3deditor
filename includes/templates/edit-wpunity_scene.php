@@ -24,9 +24,9 @@ get_header(); ?>
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <!--<a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-            ???
-        </a>-->
+        <a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+            Add a new asset
+        </a>
     </div>
 
     <span class="mdc-typography--caption">
@@ -37,7 +37,7 @@ get_header(); ?>
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected" title="Go back to Project editor">Game Editor</span></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project editor">Game Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Scene Editor</span></li>
     </ul>
