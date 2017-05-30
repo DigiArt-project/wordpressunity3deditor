@@ -252,6 +252,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-templates.php
 register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
+register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
+register_activation_hook(__FILE__,'wpunity_create_editAssetPage');
 
 // Add helper functions file
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
