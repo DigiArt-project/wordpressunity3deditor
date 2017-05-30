@@ -135,6 +135,12 @@ i.ButtonIcon {
     width: 100%;
 }
 
+.DisplayBlock {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 /*CARD STYLING*/
 .SceneThumbnail {
     overflow: hidden;

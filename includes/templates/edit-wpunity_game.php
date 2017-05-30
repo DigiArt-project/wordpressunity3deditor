@@ -177,22 +177,34 @@ if ( $custom_query->have_posts() ) :?>
 			$scene_id = get_the_ID();
 			$scene_title = get_the_title();
 			$scene_desc = get_the_content();
+
 			?>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
                         <a href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">
-                            <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
+
+							<?php if ($scene_thumb) { ?>
+
+                                <img src="<?php /*echo site_url();*/?>/wp-content/plugins/WordpressUnity3DEditor/images/thumb-scene.png">
+
+							<?php } else { ?>
+
+                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
+                                    <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
+                                </div>
+
+							<?php } ?>
                         </a>
                     </div>
                     <section class="mdc-card__primary">
-                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><?php echo $scene_title; ?></h1>
+                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>"><?php echo $scene_title; ?></h1>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
                     </section>
                     <section class="mdc-card__actions">
-                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                        <a class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
+                        <a title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+                        <a title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
                     </section>
                 </div>
             </div>
