@@ -137,8 +137,6 @@ $editscenePage = wpunity_getEditpage('scene');
 
     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Default Scenes</h3>
 
-
-
     <!-- LOAD STANDARD SCENES HERE-->
 
 <?php
@@ -260,6 +258,11 @@ wp_reset_postdata();
 $wp_query = NULL;
 $wp_query = $temp_query;
 ?>
+
+
+
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">3D Assets</h2>
+    <a class="mdc-button mdc-button--primary mdc-theme--primary" href="" target="_blank"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New 3D Asset</a>
 
 
     <script type="text/javascript">
