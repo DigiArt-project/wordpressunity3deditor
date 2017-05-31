@@ -58,9 +58,12 @@ wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 
 wp_enqueue_style('wpunity_material_stylesheet');
 wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
 wp_enqueue_script('wpunity_material_scripts');
+wp_enqueue_style( 'wpunity_material_icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
 wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 wp_enqueue_style('wpunity_frontend_stylesheet');
 wp_register_script( 'wpunity_dropzone', plugin_dir_url( __FILE__ ) . 'js_libs/dropzone.js');
+
+
 
 
 wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
