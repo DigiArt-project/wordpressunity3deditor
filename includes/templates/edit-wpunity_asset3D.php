@@ -30,7 +30,7 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">3D Asset Manager</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
 
 
     <form name="3dAssetForm">

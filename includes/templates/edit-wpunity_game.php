@@ -44,8 +44,11 @@ $editscenePage = wpunity_getEditpage('scene');
 
 
 
+    <a class="mdc-button mdc-button--primary mdc-theme--primary" style="float: right;" href="#" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+
+
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
-    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New Scene</a>
+    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons mdc-theme--primary ButtonIcon" >add</i> Add New Scene</a>
 
 
     <!--<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>-->
@@ -201,8 +204,8 @@ if ( $custom_query->have_posts() ) :?>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
                     </section>
                     <section class="mdc-card__actions">
-                        <a title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                        <a title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
                     </section>
                 </div>
             </div>
@@ -258,12 +261,6 @@ wp_reset_postdata();
 $wp_query = NULL;
 $wp_query = $temp_query;
 ?>
-
-
-
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">3D Assets</h2>
-    <a class="mdc-button mdc-button--primary mdc-theme--primary" href="" target="_blank"><i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add New 3D Asset</a>
-
 
     <script type="text/javascript">
         window.mdc.autoInit();
