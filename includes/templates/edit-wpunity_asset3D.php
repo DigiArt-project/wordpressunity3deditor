@@ -56,41 +56,71 @@ get_header(); ?>
                 </div>
 
             </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+                <hr class="WhiteSpaceSeparator">
 
-                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Add an icon</h2>
-
-
-
-            </div>
-        </div>
-
-
-        <div class="CenterContents">
-            <div class="DropzoneStyle" id="fileUploaderDropzone">
-
-                <div class="DropzoneDescriptivePlaceholder">
-                    <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-                    <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                    <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
+                <div id="js-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
+                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
+                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                            <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
+                                Select a category
+                            </li>
+                            <li class="mdc-list-item" role="option" id="grains" tabindex="0">
+                                Bread, Cereal, Rice, and Pasta
+                            </li>
+                            <li class="mdc-list-item" role="option" id="vegetables" tabindex="0">
+                                Vegetables
+                            </li>
+                            <li class="mdc-list-item" role="option" id="fruit" tabindex="0">
+                                Fruit
+                            </li>
+                            <li class="mdc-list-item" role="option" id="dairy" tabindex="0">
+                                Milk, Yogurt, and Cheese
+                            </li>
+                            <li class="mdc-list-item" role="option" id="meat" tabindex="0">
+                                Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts
+                            </li>
+                            <li class="mdc-list-item" role="option" id="fats" tabindex="0">
+                                Fats, Oils, and Sweets
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <input type="hidden" name="file" />
+                <hr class="WhiteSpaceSeparator">
 
-                <input type="hidden" name="fbxFile" />
-                <input type="hidden" name="mtlFile" />
-                <input type="hidden" name="objFile" />
-                <input type="hidden" name="textureFile" />
+                <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Actions</h3>
+                <h6> show them based on selected category</h6>
 
-			    <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
             </div>
         </div>
 
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__cell--span-12">
+                <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
 
+                    <div class="DropzoneDescriptivePlaceholder">
+                        <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                        <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL - model, .OBJ - object, .JPG/PNG - screenshot) that describe your asset.</h6>
+                    </div>
+
+                    <input type="hidden" name="file" />
+
+                    <input type="hidden" name="fbxFile" />
+                    <input type="hidden" name="mtlFile" />
+                    <input type="hidden" name="objFile" />
+                    <input type="hidden" name="textureFile" />
+
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
+                </div>
+            </div>
+        </div>
     </form>
-    </div>
 
 
     <!-- Preview template for Dropzone -->
@@ -108,9 +138,25 @@ get_header(); ?>
     </div>
 
     <script type="text/javascript">
-        window.mdc.autoInit();
 
-        var myDropzone = new Dropzone("div#fileUploaderDropzone", {
+        var mdc = window.mdc;
+        mdc.autoInit();
+
+        (function() {
+            var MDCSelect = mdc.select.MDCSelect;
+            var root = document.getElementById('js-select');
+
+            var select = MDCSelect.attachTo(root);
+            root.addEventListener('MDCSelect:change', function() {
+                var item = select.selectedOptions[0];
+                var index = select.selectedIndex;
+
+                console.log(item, index);
+            });
+        })();
+
+
+        var objectDropzone = new Dropzone("div#fileUploaderDropzone", {
             url: '<?php echo get_permalink(); ?>',
             clickable: true,
             maxFiles: 3,
@@ -226,7 +272,7 @@ get_header(); ?>
             jQuery( '#fileUploaderDropzone' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
                 '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
                 '</div>' );
 
