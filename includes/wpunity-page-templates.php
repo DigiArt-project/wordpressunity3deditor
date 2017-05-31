@@ -55,11 +55,11 @@ class wpUnityTemplate {
 
         // Add your templates to this array.
         $this->templates = array(
-            '/templates/open-wpunity_game.php'     => 'Open-Create Game',
-            '/templates/edit-wpunity_game.php'     => 'Edit Game',
-            '/templates/edit-wpunity_scene.php'     => 'Edit Scene',
-            '/templates/edit-wpunity_scene2D.php'     => 'Edit Scene 2D',
-            '/templates/edit-wpunity_asset3D.php'     => 'Edit Asset3D',
+            '/templates/open-wpunity_game.php'     => 'WPUnity-Main',
+            '/templates/edit-wpunity_game.php'     => 'WPUnity-Edit Project',
+            '/templates/edit-wpunity_scene.php'     => 'WPUnity-Edit 3D Scene',
+            '/templates/edit-wpunity_scene2D.php'     => 'WPUnity-Edit 2D Scene',
+            '/templates/edit-wpunity_asset3D.php'     => 'WPUnity-3D Asset Creator',
         );
 
     }
@@ -147,11 +147,11 @@ add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
 
 function wpunity_create_openGamePage() {
 
-    if (! wpunity_get_page_by_slug('wpunity-open-game')) {
+    if (! wpunity_get_page_by_slug('wpunity-main')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'Open-Create Game',
+            'post_title' => 'WPUnity-Main',
             'post_type' => 'page',
-            'post_name' => 'wpunity-open-game',
+            'post_name' => 'wpunity-main',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
@@ -169,11 +169,11 @@ function wpunity_create_openGamePage() {
 
 function wpunity_create_editGamePage() {
 
-    if (! wpunity_get_page_by_slug('wpunity-edit-game')) {
+    if (! wpunity_get_page_by_slug('wpunity-edit-project')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'Edit Game',
+            'post_title' => 'WPUnity-Edit Project',
             'post_type' => 'page',
-            'post_name' => 'wpunity-edit-game',
+            'post_name' => 'wpunity-edit-project',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
@@ -191,11 +191,11 @@ function wpunity_create_editGamePage() {
 
 function wpunity_create_editScenePage() {
 
-    if (! wpunity_get_page_by_slug('wpunity-edit-scene')) {
+    if (! wpunity_get_page_by_slug('wpunity-edit-3d-scene')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'Edit Scene',
+            'post_title' => 'WPUnity-Edit 3D Scene',
             'post_type' => 'page',
-            'post_name' => 'wpunity-edit-scene',
+            'post_name' => 'wpunity-edit-3d-scene',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
@@ -214,11 +214,11 @@ function wpunity_create_editScenePage() {
 
 function wpunity_create_editScene2DPage() {
 
-    if (! wpunity_get_page_by_slug('wpunity-edit-scene2d')) {
+    if (! wpunity_get_page_by_slug('wpunity-edit-2d-scene')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'Edit Scene 2D',
+            'post_title' => 'WPUnity-Edit 2D Scene',
             'post_type' => 'page',
-            'post_name' => 'wpunity-edit-scene2d',
+            'post_name' => 'wpunity-edit-2d-scene',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
@@ -237,11 +237,11 @@ function wpunity_create_editScene2DPage() {
 
 function wpunity_create_editAsset3D() {
 
-    if (! wpunity_get_page_by_slug('wpunity-edit-asset3d')) {
+    if (! wpunity_get_page_by_slug('wpunity-3d-asset-creator')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'Edit Asset 3D',
+            'post_title' => 'WPUnity-3D Asset Creator',
             'post_type' => 'page',
-            'post_name' => 'wpunity-edit-asset3d',
+            'post_name' => 'wpunity-3d-asset-creator',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
