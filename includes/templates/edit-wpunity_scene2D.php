@@ -47,7 +47,7 @@ get_header(); ?>
                 <div class="mdc-textfield mdc-form-field FullWidth" data-mdc-auto-init="MDCTextfield">
                     <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
                     <label for="title" class="mdc-textfield__label">
-                        Enter a title for your asset
+                        Enter a title
                 </div>
             </div>
             <div class="mdc-layout-grid__cell--span-2"></div>

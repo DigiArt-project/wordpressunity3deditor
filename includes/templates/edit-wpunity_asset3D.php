@@ -11,65 +11,103 @@ wp_enqueue_script('wpunity_dropzone');
 
 get_header(); ?>
 
-	<div class="EditPageHeader">
+    <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <h4 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Here you can upload a new 3D Asset to the project</h4>
-	</div>
+
+    </div>
 
     <span class="mdc-typography--caption">
         <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string; ?></span>
 
-	<hr class="mdc-list-divider">
+    <hr class="mdc-list-divider">
 
-	<ul class="EditPageBreadcrumb">
-		<li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
-		<li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
+    <ul class="EditPageBreadcrumb">
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
+        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-		<li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
-	</ul>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
+    </ul>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">3D Asset Manager</h2>
 
-	<div class="CenterContents">
 
-		<div class="DropzoneStyle" id="fileUploaderDropzone">
+    <form name="3dAssetForm">
 
-			<div class="DropzoneDescriptivePlaceholder">
-				<i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-				<h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-				<h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
-			</div>
+        <div class="mdc-layout-grid">
 
-			<input type="hidden" name="file" />
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-			<input type="hidden" name="fbxFile" />
-			<input type="hidden" name="mtlFile" />
-			<input type="hidden" name="objFile" />
-			<input type="hidden" name="textureFile" />
+                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+                    <label for="title" class="mdc-textfield__label">
+                        Enter a title for your asset
+                </div>
+                <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                   id="title-validation-msg">
+                    Must be at least 6 characters long
+                </p>
+                <hr class="WhiteSpaceSeparator">
 
-			<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                </div>
 
-		</div>
-	</div>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+
+                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Add an icon</h2>
 
 
-	<!-- Preview template for Dropzone -->
-	<div id="preview-template" style="display: none;">
-		<div class="dz-preview dz-file-preview CenterContents CustomDropZoneAssetStyle">
-			<div class="dz-details">
-				<img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/default-asset.png" data-dz-thumbnail>
-				<div class="dz-filename mdc-typography--body1"><span data-dz-name></span></div>
-				<div class="dz-size mdc-theme--text-secondary-on-background mdc-typography--caption">Size: <span data-dz-size></span></div>
-			</div>
-			<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-			<div class="dz-error-message"><span data-dz-errormessage></span></div>
-			<a class="mdc-button mdc-button--primary" data-dz-remove>Remove</a>
-		</div>
-	</div>
 
-	<script type="text/javascript">
+            </div>
+        </div>
+
+
+        <div class="CenterContents">
+            <div class="DropzoneStyle" id="fileUploaderDropzone">
+
+                <div class="DropzoneDescriptivePlaceholder">
+                    <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                    <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                    <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
+                </div>
+
+                <input type="hidden" name="file" />
+
+                <input type="hidden" name="fbxFile" />
+                <input type="hidden" name="mtlFile" />
+                <input type="hidden" name="objFile" />
+                <input type="hidden" name="textureFile" />
+
+			    <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
+            </div>
+        </div>
+
+
+    </form>
+    </div>
+
+
+    <!-- Preview template for Dropzone -->
+    <div id="preview-template" style="display: none;">
+        <div class="dz-preview dz-file-preview CenterContents CustomDropZoneAssetStyle">
+            <div class="dz-details">
+                <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/default-asset.png" data-dz-thumbnail>
+                <div class="dz-filename mdc-typography--body1"><span data-dz-name></span></div>
+                <div class="dz-size mdc-theme--text-secondary-on-background mdc-typography--caption">Size: <span data-dz-size></span></div>
+            </div>
+            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+            <div class="dz-error-message"><span data-dz-errormessage></span></div>
+            <a class="mdc-button mdc-button--primary" data-dz-remove>Remove</a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
         window.mdc.autoInit();
 
         var myDropzone = new Dropzone("div#fileUploaderDropzone", {
@@ -198,5 +236,5 @@ get_header(); ?>
         strings.fbx = 'You have selected an Autodesk FBX model';
         strings.three = 'You have selected a group of the three components describing your asset';
 
-	</script>
+    </script>
 <?php  get_footer(); ?>

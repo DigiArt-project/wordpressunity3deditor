@@ -7,7 +7,8 @@ $editgamePage = wpunity_getEditpage('game');
 
 ?>
 
-        <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Authoring Tool</h1>
+        <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
+        <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new game project or select an existing one</h2>
         <hr class="WhiteSpaceSeparator">
         <div class="mdc-layout-grid FrontPageStyle">
 
