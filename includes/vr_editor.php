@@ -105,13 +105,13 @@ echo '</script>';
 
             if (fileList[0].style.display === "") {
                 fileList[0].style.display = 'none';
-                fileList[0].style.height = '0vw';
-                filemanager[0].style.height = '6vw';
+                fileList[0].style.height = '0';
+                filemanager[0].style.height = '0';
                 closeButton[0].innerHTML = 'Open';
             } else {
                 fileList[0].style.display = '';
                 fileList[0].style.height = '27vw';
-                filemanager[0].style.height = '33vw';
+                filemanager[0].style.height = 'auto';
                 closeButton[0].innerHTML = 'Close';
             }
 
@@ -246,7 +246,7 @@ echo '</script>';
             </div>
         </div>
 
-        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Textify configuration</div>
+        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Save scene</div>
 
         <div class="result"></div>
         <div id="result_download"></div>
@@ -280,9 +280,9 @@ echo '</script>';
     </div>
 
     <!-- Full screen bar button -->
-    <div id="scene-vr-editor-fullscreen-bar" name="scene-vr-editor-fullscreen-bar">
-        <div id="scene-vr-editor-fullscreen-bt" name="scene-vr-editor-fullscreen-bt" onclick="envir.makeFullScreen()">
-            &boxVH;
+    <div id="scene-vr-editor-fullscreen-bar" class="VrEditorFullscreenBtnBGStyle">
+        <div id="scene-vr-editor-fullscreen-bt" class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen()">
+            <i class="material-icons">fullscreen</i>
         </div>
     </div>
 

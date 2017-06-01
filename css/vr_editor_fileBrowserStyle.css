@@ -38,12 +38,11 @@
 
 .filemanager .breadcrumbs {
 	color: #262626;
-	margin-left:4%;
+	padding-left: 4%;
 	font-size: 0.8vw;
 	max-font-size:14pt;
 	font-weight: 400;
 	line-height: 1.6vw;
-	margin-top:3%;
 }
 
 .filemanager .breadcrumbs a:link, .breadcrumbs a:visited {
@@ -153,7 +152,7 @@
 	z-index: -3;
 	height: 27vw;
 	overflow-y: scroll;
-	margin:0px;
+	margin:0;
 	-webkit-padding-start: 3%;
 
 }
@@ -164,7 +163,7 @@
 }
 
 .filemanager .data ul {
-	margin:0px;
+	margin:0;
 }
 
 .filemanager .data li {
@@ -196,7 +195,7 @@
 }
 
 .filemanager .data li  {
-	margin-bottom:0px;
+	margin-bottom:0;
 
 }
 
@@ -239,7 +238,7 @@
 	margin: 0 auto;
 	display: none;
 	position:absolute;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	-webkit-animation: showSlowlyElement 700ms; /* Chrome, Safari, Opera */
 	animation: showSlowlyElement 700ms; /* Standard syntax */
 }
