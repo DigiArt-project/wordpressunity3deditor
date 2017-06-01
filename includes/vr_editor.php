@@ -129,11 +129,11 @@ echo '</script>';
 
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
-        var outputJSON = exporter.parse(envir.scene);
+        document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
-        document.getElementById('wpunity_scene_json_input').value = outputJSON;
-
-        setInterval(function(){document.getElementById('save-scene-button').style.backgroundColor = 'black';} ,300);
+        setInterval(function() {
+            document.getElementById('save-scene-button').style.backgroundColor = 'black';
+        } , 300);
     }
 
 
@@ -227,19 +227,19 @@ echo '</script>';
     <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
 
     <!-- The button to start walking in the 3d environment -->
-    <div id="blocker">
-        <div id="instructions">
-            <div style="font-size: 1vw; display:block;">Walk in
-
-                <div style="font-size: 0.5vw;">(W,A,S,D,Q,E keys= Move, MOUSE = Look around)</div>
-            </div>
-
+    <div id="blocker" class="VrWalkInButtonStyle">
+        <div id="instructions" class="VrWalkInButtonTextStyle CenterContents">
+            <span class="mdc-typography--subheading2">Walk In</span>
+            <br>
+            <span class="mdc-typography--caption">Move: W,A,S,D,Q,E keys</span>
+            <br>
+            <span class="mdc-typography--caption">Orientation: Mouse</span>
         </div>
     </div>
 
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle">
-        <div id="progress" class="ProgressContainerStyle">
+        <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
             <span id="scene_loading_message">Downloading ...</span>
             <div id="progressbar">
                 <div id="scene_loading_bar"></div>

@@ -65,15 +65,12 @@
 
 /* Progress bar */
 .ProgressContainerStyle {
-    color: #64dee3;
-    top:7em;
+    top: 7em;
     width: auto;
-    font-size:1.4em;
-    font-variant:small-caps;
-    font-weight:bold;
-    z-index:100;
+    font-variant: small-caps;
+    z-index: 100;
     text-align: center;
-    display:none;
+    display: none;
 }
 
 #progressbar {
@@ -132,35 +129,18 @@ canvas { pointer-events:none; z-index:10; }
 
 /* ------------------------------------------ */
 
-#blocker {
+.VrWalkInButtonStyle {
     position: absolute;
     width: 20%;
-    height: 3vw;
     margin-left: 40%;
-    bottom: 10%;
-    background-color: rgba(0,0,0,0.5);
+    bottom: 12px;
+    background-color: rgba(0,0,0,.4);
+    border-radius: 6px;
 }
 
-#instructions {
+.VrWalkInButtonTextStyle {
     width: 100%;
     height: 100%;
-
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-
-    -webkit-box-orient: horizontal;
-    -moz-box-orient: horizontal;
-    box-orient: horizontal;
-
-    -webkit-box-pack: center;
-    -moz-box-pack: center;
-    box-pack: center;
-
-    -webkit-box-align: center;
-    -moz-box-align: center;
-    box-align: center;
-
     color: #ffffff;
     text-align: center;
     cursor: pointer;
@@ -174,7 +154,7 @@ canvas { pointer-events:none; z-index:10; }
     height: 44px;
     bottom: 12px;
     border-radius: 6px;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,.4);
 }
 
 
