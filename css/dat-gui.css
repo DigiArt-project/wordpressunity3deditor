@@ -6,6 +6,10 @@
     text-shadow: none !important;
 }
 
+.dg.main {
+    padding: 0;
+}
+
 .dg.main.taller-than-window .close-button {
     border-top: 1px solid #ddd;
 }

@@ -1,5 +1,5 @@
 /* Three js */
-#vr_editor_main_div {
+.VrEditorMainStyle {
     background-color: #eee;
     position:relative;
     width: 95%;
@@ -7,29 +7,28 @@
 }
 
 /* Php info top right */
-#infophp {
-        font-size:0.6vw;
-        max-font-size: 20pt;
-        background:rgba(255, 255, 255, 1);
-        color:#000;
-        position: absolute;
-        text-align: center;
-        top: 0px;
-        left: 40%;
-        width: 20%;
-        padding: 2px;
-        opacity: 0.7;
+.VrInfoPhpStyle {
+    font-size:0.6vw;
+    max-font-size: 20pt;
+    background:rgba(255, 255, 255, .7);
+    color:#000;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 40%;
+    width: 20%;
+    padding: 2px;
 }
 
 .bt_textify {
-        font-size:0.8vw;
-        max-font-size: 20pt;
-        background:#000;
-        color:#fff;
-        opacity: 1;
-        margin-top: 5px;
-        padding: 2px;
-        cursor:pointer;
+    font-size:0.8vw;
+    max-font-size: 20pt;
+    background:#000;
+    color:#fff;
+    opacity: 1;
+    margin-top: 5px;
+    padding: 2px;
+    cursor:pointer;
 }
 
 #formdiv{
@@ -43,36 +42,35 @@
 }
 
 #paramsform {
-        font-size: 0.6vw;
-        background:#eee;
-        color:#000;
-        padding: 10px;
-    }
+    font-size: 0.6vw;
+    background:#eee;
+    color:#000;
+    padding: 10px;
+}
 
 #paramsform input{
     font-size: 0.6vw;
 }
 
-#dat-gui-container {
-            position: absolute;
-            text-align: left;
-            top: 0px;
-            left: 2%;
-            width: 20%;
-            padding: 0px;
-        }
+.VrGuiContainerStyle {
+    position: absolute;
+    text-align: left;
+    top: 0;
+    left: 0;
+    width: 20%;
+    padding: 0;
+}
 
 /* Progress bar */
-#progress {
-    color:#64dee3;
+.ProgressContainerStyle {
+    color: #64dee3;
     top:7em;
     width: auto;
-    font-size:2em;
+    font-size:1.4em;
     font-variant:small-caps;
     font-weight:bold;
     z-index:100;
     text-align: center;
-    text-shadow: #000 0px 0px 0px;
     display:none;
 }
 
@@ -95,7 +93,7 @@
 }
 
 .enabled:hover {
-    text-shadow: #0f0 0px 0px 0px !important;
+    text-shadow: #0f0 0 0 0 !important;
 }
 
 .disabled {
@@ -171,7 +169,7 @@ canvas { pointer-events:none; z-index:10; }
     position: absolute;
     width: 100%;
     height: 30px;
-    bottom: 0%;
+    bottom: 0;
     background-color: rgba(0,0,0,0.5);
 }
 

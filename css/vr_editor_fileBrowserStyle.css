@@ -3,8 +3,7 @@
 .filemanager {
 	position: absolute;
 	width:20%;
-	height:33vw;
-	right:5%;
+	right: 0;
 	background-color: rgba(200, 200, 200, 0.7);
 }
 
