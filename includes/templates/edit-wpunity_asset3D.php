@@ -48,16 +48,7 @@ get_header(); ?>
                    id="title-validation-msg">
                     Must be at least 6 characters long
                 </p>
-                <hr class="WhiteSpaceSeparator">
 
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
-                </div>
-
-            </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
                 <hr class="WhiteSpaceSeparator">
 
                 <div id="js-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -89,23 +80,30 @@ get_header(); ?>
                     </div>
                 </div>
 
-                <hr class="WhiteSpaceSeparator">
 
                 <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Actions</h3>
                 <h6> show them based on selected category</h6>
 
 
-            </div>
-        </div>
+                <hr class="WhiteSpaceSeparator">
 
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__cell--span-12">
+                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                </div>
+
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
                 <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
 
                     <div class="DropzoneDescriptivePlaceholder">
                         <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
                         <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL - model, .OBJ - object, .JPG/PNG - screenshot) that describe your asset.</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">or</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Three files: .MTL - model, .OBJ - object, .JPG/PNG - screenshot, that describe your asset</h6>
                     </div>
 
                     <input type="hidden" name="file" />
@@ -115,9 +113,16 @@ get_header(); ?>
                     <input type="hidden" name="objFile" />
                     <input type="hidden" name="textureFile" />
 
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+		            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
                 </div>
+
+            </div>
+        </div>
+
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__cell--span-12">
+
             </div>
         </div>
     </form>
@@ -193,14 +198,16 @@ get_header(); ?>
 
                 this.on("addedfile", function(file) {
 
-                    jQuery( '.DropzoneDescriptivePlaceholder' ).hide();
+                    var placeholder = jQuery( '.DropzoneDescriptivePlaceholder' );
+
+                    placeholder.hide();
 
                     if (this.files.length > 3 || this.files.length === 2) {
                         var btnContainer = jQuery( '#submitBtnContainer' );
 
                         if (btnContainer) {
                             btnContainer.remove();
-                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
+                            placeholder.show();
                         }
                     }
                 });
@@ -223,6 +230,8 @@ get_header(); ?>
                     }
 
                     if (this.files.length === 3) {
+
+                        var i;
 
                         for (i=0; i < this.files.length; i++) {
                             flags = checkFlags(flags, this.files[i].name);
