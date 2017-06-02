@@ -226,8 +226,10 @@ get_header(); ?>
                     if (this.files.length > 3 || this.files.length === 2) {
                         var btnContainer = jQuery( '#submitBtnContainer' );
 
+
                         if (btnContainer) {
                             btnContainer.remove();
+                            jQuery( '#modelPreviewBtn' ).remove();
                             placeholder.show();
                         }
                     }
@@ -241,10 +243,12 @@ get_header(); ?>
                     if (this.files.length === 0) {
                         if (btnContainer) {
                             btnContainer.remove();
+                            jQuery( '#modelPreviewBtn' ).remove();
                             jQuery( '.DropzoneDescriptivePlaceholder' ).show();
                         }
                     } else if (this.files.length < 3) {
                         if (btnContainer) {
+                            jQuery( '#modelPreviewBtn' ).remove();
                             btnContainer.remove();
 
                         }
@@ -302,8 +306,13 @@ get_header(); ?>
             jQuery( '#fileUploadSubmitArea' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
-                '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                '</div>' );
+
+            jQuery( '#fileUploaderDropzone' ).append( '' +
+                '<div id="modelPreviewBtn" class="mdc-layout-grid__cell">' +
+                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>' +
                 '</div>' );
 
         }
