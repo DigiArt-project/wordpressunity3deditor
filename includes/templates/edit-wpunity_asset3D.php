@@ -80,6 +80,21 @@ get_header(); ?>
                     </div>
                 </div>
 
+                <!-- FALLBACK: Use this if you cannot validate the above on submit -->
+                <!--<select title="I am a title" class="mdc-select" required>
+                    <option value="" default selected>Pick a food</option>
+                    <option value="grains">Bread, Cereal, Rice, and Pasta</option>
+                    <option value="vegetables">Vegetables</option>
+                    <optgroup label="Fruits">
+                        <option value="apple">Apple</option>
+                        <option value="oranges">Orange</option>
+                        <option value="banana">Banana</option>
+                    </optgroup>
+                    <option value="dairy">Milk, Yogurt, and Cheese</option>
+                    <option value="meat">Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts</option>
+                    <option value="fats">Fats, Oils, and Sweets</option>
+                </select>-->
+
 
                 <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Actions</h3>
                 <h6> show them based on selected category</h6>
@@ -113,11 +128,17 @@ get_header(); ?>
                     <input type="hidden" name="objFile" />
                     <input type="hidden" name="textureFile" />
 
-		            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+
+                </div>
+
+                <div id="fileUploadSubmitArea" class="DisplayBlock CenterContents">
 
                 </div>
 
             </div>
+
+
         </div>
 
         <div class="mdc-layout-grid">
@@ -278,7 +299,7 @@ get_header(); ?>
         }
 
         function appendSubmitBtnToDropzone(string) {
-            jQuery( '#fileUploaderDropzone' ).append( '' +
+            jQuery( '#fileUploadSubmitArea' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
                 '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
