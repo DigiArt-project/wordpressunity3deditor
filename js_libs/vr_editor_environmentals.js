@@ -91,7 +91,7 @@ class vr_editor_environmentals {
         }else {
 
             this.container_3D_all.style.position = 'relative';
-            this.container_3D_all.style.width = '100%';
+            this.container_3D_all.style.width = '99%';
             this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
 
             if (document.getElementById('wpadminbar')) {

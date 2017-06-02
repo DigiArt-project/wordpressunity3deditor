@@ -138,6 +138,10 @@ canvas { pointer-events:none; z-index:10; }
     border-radius: 6px;
 }
 
+.VrWalkInButtonStyle:hover {
+    background-color: rgba(0,0,0,.6);
+}
+
 .VrWalkInButtonTextStyle {
     width: 100%;
     height: 100%;
@@ -157,6 +161,10 @@ canvas { pointer-events:none; z-index:10; }
     background-color: rgba(0,0,0,.4);
 }
 
+
+.VrEditorFullscreenBtnBGStyle:hover {
+    background-color: rgba(0,0,0,.6);
+}
 
 .VrEditorFullscreenBtnStyle {
     position: absolute;
