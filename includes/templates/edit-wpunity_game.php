@@ -19,6 +19,7 @@ $allScenePGameID = $allScenePGame->term_id;
 $game_type_obj = wpunity_return_game_type($game_id);
 
 $editscenePage = wpunity_getEditpage('scene');
+$editscene2DPage = wpunity_getEditpage('scene2D');
 $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
 $allGamesPage = wpunity_getEditpage('allgames');
@@ -223,7 +224,13 @@ if ( $custom_query->have_posts() ) :?>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
-                        <a href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id ); ?>">
+                        <?php
+                        //create permalink depending the scene yaml category
+                        $yaml_term = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
+                        if($yaml_term[0]->slug == 'wonderaround-yaml'){$myeditScenePage = esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id );}
+                        else{$myeditScenePage = esc_url( get_permalink($editscene2DPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id );}
+                        ?>
+                        <a href="<?php echo $myeditScenePage; ?>">
 
 							<?php if ($scene_thumb) { ?>
 
@@ -241,10 +248,11 @@ if ( $custom_query->have_posts() ) :?>
                     <section class="mdc-card__primary">
                         <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>"><?php echo $scene_title; ?></h1>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
+
                     </section>
                     <section class="mdc-card__actions">
                         <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id  ); ?>">EDIT</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $myeditScenePage; ?>">EDIT</a>
                     </section>
                 </div>
             </div>

@@ -17,6 +17,14 @@ function wpunity_getEditpage($type){
             'meta_value' => '/templates/edit-wpunity_scene.php'
         ));
         return $edit_pages;
+    }elseif($type=='scene2D'){
+        $edit_pages = get_pages(array(
+            'hierarchical' => 0,
+            'parent' => -1,
+            'meta_key' => '_wp_page_template',
+            'meta_value' => '/templates/edit-wpunity_scene2D.php'
+        ));
+        return $edit_pages;
     }elseif($type=='allgames'){
         $edit_pages = get_pages(array(
             'hierarchical' => 0,
