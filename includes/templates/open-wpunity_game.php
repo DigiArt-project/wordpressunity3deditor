@@ -1,9 +1,40 @@
-<?php get_header();
+<?php
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_pass = '/?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 
 $editgamePage = wpunity_getEditpage('game');
+
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+    $game_type = $_POST['gameTypeRadio'];
+
+    $game_taxonomies = array(
+        'wpunity_game_type' => array(
+            '408',
+        ),
+        'wpunity_game_cat' => array(
+            '254',
+        )
+    );
+
+    $game_information = array(
+        'post_title' => esc_attr(strip_tags($_POST['title'])),
+        'post_content' => $game_type,
+        'post_type' => 'wpunity_game',
+        'post_status' => 'publish',
+        'tax_input' => $game_taxonomies,
+    );
+
+    $game_id = wp_insert_post($game_information);
+
+    if($game_id){
+        wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ));
+        exit;
+    }
+}
+
+get_header();
 
 ?>
 
@@ -108,10 +139,11 @@ $editgamePage = wpunity_getEditpage('game');
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                        <form name="newProjectForm">
+
+                        <form name="newProjectForm" action="" id="newProjectForm" method="POST" enctype="multipart/form-data">
 
                             <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+                                <input id="title" name="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
                                 <label for="title" class="mdc-textfield__label">
                                     Enter a title for your project
                             </div>
@@ -149,9 +181,16 @@ $editgamePage = wpunity_getEditpage('game');
 
                             <hr class="WhiteSpaceSeparator">
 
-                            <button type="submit" style="float: right;" class="mdc-form-field mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-                                CREATE
-                            </button>
+
+                            <div class="submit-btn">
+                                <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                                <input type="hidden" name="submitted" id="submitted" value="true" />
+                                <input class="mdc-form-field mdc-button mdc-button--raised mdc-button--primary" style="float: right;" type="submit" data-mdc-auto-init="MDCRipple" value="<?php echo __('CREATE'); ?>" />
+                            </div>
+
+<!--                            <button type="submit" style="float: right;" class="mdc-form-field mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">-->
+<!--                                CREATE-->
+<!--                            </button>-->
 
                         </form>
                     </div>
