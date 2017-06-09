@@ -1,4 +1,4 @@
-<?php get_header();
+<?php
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '/?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
@@ -18,7 +18,10 @@ $allScenePGameID = $allScenePGame->term_id;
 $game_type_obj = wpunity_return_game_type($game_id);
 
 $editscenePage = wpunity_getEditpage('scene');
+$allGamesPage = wpunity_getEditpage('allgames');
 
+
+get_header();
 ?>
 
     <div class="EditPageHeader">
@@ -37,7 +40,7 @@ $editscenePage = wpunity_getEditpage('scene');
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
     </ul>
