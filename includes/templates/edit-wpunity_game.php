@@ -81,8 +81,6 @@ get_header();
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
     </ul>
 
-
-
     <a class="mdc-button mdc-button--primary mdc-theme--primary" style="float: right;" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $game_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
@@ -130,26 +128,6 @@ get_header();
                                 </div>
                             </div>
                             <label id="sceneTypeEnergyRadio-label" for="sceneTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
-                        </li>
-                        <li class="mdc-form-field">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
-                                </div>
-                            </div>
-                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                        </li>
-                        <li class="mdc-form-field">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
-                                </div>
-                            </div>
-                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
                         </li>
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
@@ -275,7 +253,7 @@ if ( $custom_query->have_posts() ) :?>
                     Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
                 </section>
                 <footer class="mdc-dialog__footer">
-                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" onclick="dismissDialog();">Cancel</a>
                     <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised">Delete</a>
                 </footer>
             </div>
@@ -327,13 +305,6 @@ $wp_query = $temp_query;
 
 
         var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
-        dialog.listen('MDCDialog:accept', function() {
-            console.log('accepted');
-        });
-
-        dialog.listen('MDCDialog:cancel', function() {
-            console.log('canceled');
-        });
 
         function deleteScene(id) {
 
@@ -343,8 +314,18 @@ $wp_query = $temp_query;
 
             dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
             dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
+            dialog.id = id;
             dialog.show();
-            console.log(id);
+        }
+
+        dialog.listen('MDCDialog:accept', function(evt) {
+
+            console.log("ID:", dialog.id);
+        });
+
+        function dismissDialog() {
+            dialog.close();
+            console.log("Dialog closed");
         }
 
     </script>

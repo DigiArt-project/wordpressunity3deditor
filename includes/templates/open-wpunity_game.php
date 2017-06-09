@@ -245,7 +245,6 @@ get_header();
 
         // Use dialog.id inside, to initiate the action to delete a project
         dialog.listen('MDCDialog:accept', function(evt) {
-            console.log('Dialog opened');
             console.log("ID:", dialog.id);
         });
 
