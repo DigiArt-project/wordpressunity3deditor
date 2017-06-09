@@ -158,17 +158,7 @@ get_header();
                             <ul class="RadioButtonList">
                                 <li class="mdc-form-field">
                                     <div class="mdc-radio">
-                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio">
-                                        <div class="mdc-radio__background">
-                                            <div class="mdc-radio__outer-circle"></div>
-                                            <div class="mdc-radio__inner-circle"></div>
-                                        </div>
-                                    </div>
-                                    <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
-                                </li>
-                                <li class="mdc-form-field">
-                                    <div class="mdc-radio">
-                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio">
+                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio" value="1">
                                         <div class="mdc-radio__background">
                                             <div class="mdc-radio__outer-circle"></div>
                                             <div class="mdc-radio__inner-circle"></div>
@@ -177,6 +167,17 @@ get_header();
                                     <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">
                                         <i class="material-icons"></i>Archaeology</label>
                                 </li>
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
+                                    </div>
+                                    <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
+                                </li>
+
                             </ul>
 
                             <hr class="WhiteSpaceSeparator">
