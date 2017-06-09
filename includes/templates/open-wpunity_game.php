@@ -7,20 +7,27 @@ $editgamePage = wpunity_getEditpage('game');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    $game_type = $_POST['gameTypeRadio'];
+    $game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
+    $archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+    $energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
+    $game_type_chosen_id = '';
+    if($game_type_radioButton == 1){$game_type_chosen_id = $archaeology_tax->term_id;}else{$game_type_chosen_id = $energy_tax->term_id;}
+
+    $realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
+    $virtualplace_tax = get_term_by('slug', 'virtual_place', 'wpunity_game_cat');
 
     $game_taxonomies = array(
         'wpunity_game_type' => array(
-            '408',
+            $game_type_chosen_id,
         ),
         'wpunity_game_cat' => array(
-            '254',
+            $realplace_tax->term_id,
         )
     );
 
     $game_information = array(
         'post_title' => esc_attr(strip_tags($_POST['title'])),
-        'post_content' => $game_type,
+        'post_content' => '',
         'post_type' => 'wpunity_game',
         'post_status' => 'publish',
         'tax_input' => $game_taxonomies,
