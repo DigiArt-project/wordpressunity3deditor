@@ -24,12 +24,6 @@ $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-//    $game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
-//    $archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
-//    $energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
-//    $game_type_chosen_id = '';
-//    if($game_type_radioButton == 1){$game_type_chosen_id = $archaeology_tax->term_id;}else{$game_type_chosen_id = $energy_tax->term_id;}
-
     $credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
     $menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
