@@ -25,6 +25,14 @@ function wpunity_getEditpage($type){
             'meta_value' => '/templates/open-wpunity_game.php'
         ));
         return $edit_pages;
+    }elseif($type=='asset'){
+        $edit_pages = get_pages(array(
+            'hierarchical' => 0,
+            'parent' => -1,
+            'meta_key' => '_wp_page_template',
+            'meta_value' => '/templates/edit-wpunity_asset3D.php'
+        ));
+        return $edit_pages;
     }else{
         return false;
     }

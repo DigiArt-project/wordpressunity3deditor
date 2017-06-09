@@ -20,6 +20,7 @@ $game_type_obj = wpunity_return_game_type($game_id);
 
 $editscenePage = wpunity_getEditpage('scene');
 $editgamePage = wpunity_getEditpage('game');
+$newAssetPage = wpunity_getEditpage('asset');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -81,7 +82,7 @@ get_header();
 
 
 
-    <a class="mdc-button mdc-button--primary mdc-theme--primary" style="float: right;" href="#" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+    <a class="mdc-button mdc-button--primary mdc-theme--primary" style="float: right;" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $game_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
@@ -222,7 +223,7 @@ if ( $custom_query->have_posts() ) :?>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
-                        <a href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">
+                        <a href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id ); ?>">
 
 							<?php if ($scene_thumb) { ?>
 
@@ -243,7 +244,7 @@ if ( $custom_query->have_posts() ) :?>
                     </section>
                     <section class="mdc-card__actions">
                         <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id ); ?>">EDIT</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id  ); ?>">EDIT</a>
                     </section>
                 </div>
             </div>
