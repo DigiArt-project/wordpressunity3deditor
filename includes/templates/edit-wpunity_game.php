@@ -2,6 +2,7 @@
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '/?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+if( $perma_structure){$parameter_pass = '/?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 
 $safe_inserted_id = intval( $_GET['wpunity_game'] );
 $safe_inserted_id = sanitize_text_field( $safe_inserted_id );
@@ -18,7 +19,46 @@ $allScenePGameID = $allScenePGame->term_id;
 $game_type_obj = wpunity_return_game_type($game_id);
 
 $editscenePage = wpunity_getEditpage('scene');
+$editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
+
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+//    $game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
+//    $archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+//    $energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
+//    $game_type_chosen_id = '';
+//    if($game_type_radioButton == 1){$game_type_chosen_id = $archaeology_tax->term_id;}else{$game_type_chosen_id = $energy_tax->term_id;}
+
+    $credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
+    $menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
+    $options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
+    $wonderaround_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
+
+    $scene_taxonomies = array(
+        'wpunity_scene_pgame' => array(
+            $allScenePGameID,
+        ),
+        'wpunity_scene_yaml' => array(
+            $wonderaround_yaml_tax->term_id,
+        )
+    );
+
+    $scene_information = array(
+        'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
+        'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
+        'post_type' => 'wpunity_scene',
+        'post_status' => 'publish',
+        'tax_input' => $scene_taxonomies,
+    );
+
+    $scene_id = wp_insert_post($scene_information);
+
+    if($scene_id){
+        wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ));
+        exit;
+    }
+}
 
 
 get_header();
@@ -60,82 +100,83 @@ get_header();
 
     <div class="EditPageAccordionPanel">
         <div class="mdc-layout-grid">
+            <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5"><form name="report_an_issue_form" action="" id="primaryPostForm" method="POST" enctype="multipart/form-data">
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+                        <label for="title" class="mdc-textfield__label">
+                            Enter a scene title
+                    </div>
+                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                       id="title-validation-msg">
+                        Must be at least 6 characters long
+                    </p>
+                    <hr class="WhiteSpaceSeparator">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+                    <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                        <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                        <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                    </div>
 
-                <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
-                    <label for="title" class="mdc-textfield__label">
-                        Enter a scene title
                 </div>
-                <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                   id="title-validation-msg">
-                    Must be at least 6 characters long
-                </p>
-                <hr class="WhiteSpaceSeparator">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                    <label class="mdc-typography--subheading2">Scene Type</label>
+
+                    <ul class="RadioButtonList">
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeEnergyRadio" checked="" name="sceneTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
+                            </div>
+                            <label id="sceneTypeEnergyRadio-label" for="sceneTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
+                        </li>
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
+                            </div>
+                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
+                        </li>
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
+                            </div>
+                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
+                        </li>
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
+                            </div>
+                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
+                        </li>
+
+                    </ul>
+
+                    <div class="submit-btn">
+                        <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                        <input type="hidden" name="submitted" id="submitted" value="true" />
+                        <input class="mdc-button mdc-button mdc-button--raised mdc-button--primary" style="float: right;" type="submit" data-mdc-auto-init="MDCRipple" value="<?php echo __('ADD SCENE'); ?>" />
+                    </div>
+
+
                 </div>
-
-            </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
-                <label class="mdc-typography--subheading2">Scene Type</label>
-
-                <ul class="RadioButtonList">
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="sceneTypeEnergyRadio" checked="" name="sceneTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
-                            </div>
-                        </div>
-                        <label id="sceneTypeEnergyRadio-label" for="sceneTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
-                    </li>
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
-                            </div>
-                        </div>
-                        <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                    </li>
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
-                            </div>
-                        </div>
-                        <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                    </li>
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
-                            </div>
-                        </div>
-                        <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                    </li>
-
-                </ul>
-
-
-                <a style="float: right" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-                    ADD SCENE
-                </a>
-
-
-            </div>
+            </form>
         </div>
     </div>
 
