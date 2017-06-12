@@ -441,11 +441,11 @@ function file_Browsing_By_DB(data){
 
 
                 if (fileType.toUpperCase() == 'JPG' || fileType.toUpperCase()=='PNG')
-                    icon += '<img src=' + f.path + ' width="42" class="icon file" style="padding-left:0px;margin-left:0px">';
+                    icon += '<img src=' + f.path + ' width="42" class="icon file" style="padding-left:0;margin-left:0">';
 
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
                 if (fileType.toUpperCase() == 'OBJ')
-                    icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0px;margin-left:0px">';
+                    icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0;margin-left:0">';
 
 
                 var file = jQuery('<li class="files"><a href="'+ f.objPath +

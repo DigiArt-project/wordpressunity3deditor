@@ -1,5 +1,13 @@
 <?php
 
+function wpunity_delete_gameproject_frontend($game_id){
+
+    wp_delete_post( $game_id, false );
+
+}
+
+
+
 add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
 
 function wpunity_remove_menus() {

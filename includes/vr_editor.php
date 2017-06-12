@@ -81,13 +81,13 @@ echo '</script>';
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
 
-        var cw = jQuery('#vr_editor_main_div').width();
-        jQuery('#vr_editor_main_div').css({'height':cw*2/3+'px'});
+        var vr_editor = jQuery('#vr_editor_main_div');
+        var cw = vr_editor.width();
+        vr_editor.css({'height':cw*2/3+'px'});
 
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
         envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
-
 
         // make filebrowser draggable
         var filemanager = jQuery('.filemanager'),
@@ -101,17 +101,17 @@ echo '</script>';
         var closeButton = jQuery('.bt_close_file_toolbar');
 
         closeButton.on('click', function(e){
-        // e.preventDefault();
+            // e.preventDefault();
 
-            if (fileList[0].style.display == "") {
+            if (fileList[0].style.display === "") {
                 fileList[0].style.display = 'none';
-                fileList[0].style.height = '0vw';
-                filemanager[0].style.height = '6vw';
+                fileList[0].style.height = '0';
+                filemanager[0].style.height = '0';
                 closeButton[0].innerHTML = 'Open';
             } else {
                 fileList[0].style.display = '';
                 fileList[0].style.height = '27vw';
-                filemanager[0].style.height = '33vw';
+                filemanager[0].style.height = 'auto';
                 closeButton[0].innerHTML = 'Close';
             }
 
@@ -129,11 +129,11 @@ echo '</script>';
 
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
-        var outputJSON = exporter.parse(envir.scene);
+        document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
-        document.getElementById('wpunity_scene_json_input').value = outputJSON;
-
-        setInterval(function(){document.getElementById('save-scene-button').style.backgroundColor = 'black';} ,300);
+        setInterval(function() {
+            document.getElementById('save-scene-button').style.backgroundColor = 'black';
+        } , 300);
     }
 
 
@@ -204,8 +204,9 @@ echo '</script>';
      */
     function resize_handler(ev){
 
-        var cw = jQuery('#vr_editor_main_div').width();
-        jQuery('#vr_editor_main_div').css({'height':cw*2/3+'px'});
+        var vr_editor = jQuery('#vr_editor_main_div');
+        var cw = vr_editor.width();
+        vr_editor.css({'height':cw*2/3+'px'});
 
         envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
         envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
@@ -220,32 +221,32 @@ echo '</script>';
 </script>
 
 <!-- All go here -->
-<div id="vr_editor_main_div" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
+<div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
-    <div id="dat-gui-container"></div>
+    <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
 
     <!-- The button to start walking in the 3d environment -->
-    <div id="blocker">
-        <div id="instructions">
-            <div style="font-size: 1vw; display:block;">Walk in
-
-                <div style="font-size: 0.5vw;">(W,A,S,D,Q,E keys= Move, MOUSE = Look around)</div>
-            </div>
-
+    <div id="blocker" class="VrWalkInButtonStyle">
+        <div id="instructions" class="VrWalkInButtonTextStyle CenterContents">
+            <span class="mdc-typography--subheading2">Walk In</span>
+            <br>
+            <span class="mdc-typography--caption">Move: W,A,S,D,Q,E keys</span>
+            <br>
+            <span class="mdc-typography--caption">Orientation: Mouse</span>
         </div>
     </div>
 
     <!--  Make form to submit user changes -->
-    <div id="infophp">
-        <div id="progress">
+    <div id="infophp" class="VrInfoPhpStyle">
+        <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
             <span id="scene_loading_message">Downloading ...</span>
             <div id="progressbar">
                 <div id="scene_loading_bar"></div>
             </div>
         </div>
 
-        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Textify configuration</div>
+        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Save scene</div>
 
         <div class="result"></div>
         <div id="result_download"></div>
@@ -260,10 +261,10 @@ echo '</script>';
 
         <div class="breadcrumbs"></div>
 
-<!--            <div class="nothingfound">-->
-<!--                <div class="nofiles"></div>-->
-<!--                <span>Nothing found</span>-->
-<!--            </div>-->
+        <!--            <div class="nothingfound">-->
+        <!--                <div class="nofiles"></div>-->
+        <!--                <span>Nothing found</span>-->
+        <!--            </div>-->
 
 
         <ul class="data" id="filesList" >
@@ -279,9 +280,9 @@ echo '</script>';
     </div>
 
     <!-- Full screen bar button -->
-    <div id="scene-vr-editor-fullscreen-bar" name="scene-vr-editor-fullscreen-bar">
-        <div id="scene-vr-editor-fullscreen-bt" name="scene-vr-editor-fullscreen-bt" onclick="envir.makeFullScreen()">
-            &boxVH;
+    <div id="scene-vr-editor-fullscreen-bar" class="VrEditorFullscreenBtnBGStyle">
+        <div id="scene-vr-editor-fullscreen-bt" class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen()">
+            <i class="material-icons">fullscreen</i>
         </div>
     </div>
 
@@ -376,8 +377,8 @@ echo '</script>';
 
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );
-    $formRes = new ParseJSON($UPLOAD_DIR);
-    $formRes->init($sceneToLoad);
+$formRes = new ParseJSON($UPLOAD_DIR);
+$formRes->init($sceneToLoad);
 ?>
 
 <script>
@@ -449,6 +450,3 @@ echo '</script>';
 <!-- Change dat GUI style: Override the inside js style -->
 
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
-
-
-

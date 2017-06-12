@@ -1,13 +1,22 @@
 <?php
 
-$safe_inserted_id = intval( $_GET['wpunity_scene'] );
+if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
+if( $perma_structure){$parameter_Scenepass = '/?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+if( $perma_structure){$parameter_pass = '/?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+
+$safe_inserted_id = intval( $_GET['wpunity_game'] );
 $safe_inserted_id = sanitize_text_field( $safe_inserted_id );
-$scene_id = $safe_inserted_id;
+$game_id = $safe_inserted_id;
 
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
 wp_enqueue_script('wpunity_dropzone');
+
+
+$editgamePage = wpunity_getEditpage('game');
+$allGamesPage = wpunity_getEditpage('allgames');
+
 
 get_header(); ?>
 
@@ -23,14 +32,14 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="#" title="Go back to Project editor">Project Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">3D Asset Manager</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
 
 
     <form name="3dAssetForm">
@@ -48,6 +57,58 @@ get_header(); ?>
                    id="title-validation-msg">
                     Must be at least 6 characters long
                 </p>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <div id="js-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
+                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
+                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                            <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
+                                Select a category
+                            </li>
+                            <li class="mdc-list-item" role="option" id="grains" tabindex="0">
+                                Bread, Cereal, Rice, and Pasta
+                            </li>
+                            <li class="mdc-list-item" role="option" id="vegetables" tabindex="0">
+                                Vegetables
+                            </li>
+                            <li class="mdc-list-item" role="option" id="fruit" tabindex="0">
+                                Fruit
+                            </li>
+                            <li class="mdc-list-item" role="option" id="dairy" tabindex="0">
+                                Milk, Yogurt, and Cheese
+                            </li>
+                            <li class="mdc-list-item" role="option" id="meat" tabindex="0">
+                                Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts
+                            </li>
+                            <li class="mdc-list-item" role="option" id="fats" tabindex="0">
+                                Fats, Oils, and Sweets
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FALLBACK: Use this if you cannot validate the above on submit -->
+                <!--<select title="I am a title" class="mdc-select" required>
+                    <option value="" default selected>Pick a food</option>
+                    <option value="grains">Bread, Cereal, Rice, and Pasta</option>
+                    <option value="vegetables">Vegetables</option>
+                    <optgroup label="Fruits">
+                        <option value="apple">Apple</option>
+                        <option value="oranges">Orange</option>
+                        <option value="banana">Banana</option>
+                    </optgroup>
+                    <option value="dairy">Milk, Yogurt, and Cheese</option>
+                    <option value="meat">Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts</option>
+                    <option value="fats">Fats, Oils, and Sweets</option>
+                </select>-->
+
+
+                <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Actions</h3>
+                <h6> show them based on selected category</h6>
+
+
                 <hr class="WhiteSpaceSeparator">
 
                 <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
@@ -57,40 +118,44 @@ get_header(); ?>
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Add an icon</h2>
+                <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
 
+                    <div class="DropzoneDescriptivePlaceholder">
+                        <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
+                        <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">or</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Three files: .MTL - model, .OBJ - object, .JPG/PNG - screenshot, that describe your asset</h6>
+                    </div>
 
+                    <input type="hidden" name="file" />
 
-            </div>
-        </div>
+                    <input type="hidden" name="fbxFile" />
+                    <input type="hidden" name="mtlFile" />
+                    <input type="hidden" name="objFile" />
+                    <input type="hidden" name="textureFile" />
 
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
-        <div class="CenterContents">
-            <div class="DropzoneStyle" id="fileUploaderDropzone">
-
-                <div class="DropzoneDescriptivePlaceholder">
-                    <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-                    <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                    <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file or a group of three files (.MTL, .OBJ, .JPG/PNG) that describe your asset</h6>
                 </div>
 
-                <input type="hidden" name="file" />
+                <div id="fileUploadSubmitArea" class="DisplayBlock CenterContents">
 
-                <input type="hidden" name="fbxFile" />
-                <input type="hidden" name="mtlFile" />
-                <input type="hidden" name="objFile" />
-                <input type="hidden" name="textureFile" />
+                </div>
 
-			    <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+            </div>
+
+
+        </div>
+
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__cell--span-12">
 
             </div>
         </div>
-
-
     </form>
-    </div>
 
 
     <!-- Preview template for Dropzone -->
@@ -108,9 +173,25 @@ get_header(); ?>
     </div>
 
     <script type="text/javascript">
-        window.mdc.autoInit();
 
-        var myDropzone = new Dropzone("div#fileUploaderDropzone", {
+        var mdc = window.mdc;
+        mdc.autoInit();
+
+        (function() {
+            var MDCSelect = mdc.select.MDCSelect;
+            var root = document.getElementById('js-select');
+
+            var select = MDCSelect.attachTo(root);
+            root.addEventListener('MDCSelect:change', function() {
+                var item = select.selectedOptions[0];
+                var index = select.selectedIndex;
+
+                console.log(item, index);
+            });
+        })();
+
+
+        var objectDropzone = new Dropzone("div#fileUploaderDropzone", {
             url: '<?php echo get_permalink(); ?>',
             clickable: true,
             maxFiles: 3,
@@ -147,14 +228,18 @@ get_header(); ?>
 
                 this.on("addedfile", function(file) {
 
-                    jQuery( '.DropzoneDescriptivePlaceholder' ).hide();
+                    var placeholder = jQuery( '.DropzoneDescriptivePlaceholder' );
+
+                    placeholder.hide();
 
                     if (this.files.length > 3 || this.files.length === 2) {
                         var btnContainer = jQuery( '#submitBtnContainer' );
 
+
                         if (btnContainer) {
                             btnContainer.remove();
-                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
+                            jQuery( '#modelPreviewBtn' ).remove();
+                            placeholder.show();
                         }
                     }
                 });
@@ -167,16 +252,20 @@ get_header(); ?>
                     if (this.files.length === 0) {
                         if (btnContainer) {
                             btnContainer.remove();
+                            jQuery( '#modelPreviewBtn' ).remove();
                             jQuery( '.DropzoneDescriptivePlaceholder' ).show();
                         }
                     } else if (this.files.length < 3) {
                         if (btnContainer) {
+                            jQuery( '#modelPreviewBtn' ).remove();
                             btnContainer.remove();
 
                         }
                     }
 
                     if (this.files.length === 3) {
+
+                        var i;
 
                         for (i=0; i < this.files.length; i++) {
                             flags = checkFlags(flags, this.files[i].name);
@@ -223,11 +312,16 @@ get_header(); ?>
         }
 
         function appendSubmitBtnToDropzone(string) {
-            jQuery( '#fileUploaderDropzone' ).append( '' +
+            jQuery( '#fileUploadSubmitArea' ).append( '' +
                 '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
                 '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button mdc-button--primary" onclick="myDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
-                '<a id="submitBtn" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                '<a id="deleteAllBtn" class="mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
+                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
+                '</div>' );
+
+            jQuery( '#fileUploaderDropzone' ).append( '' +
+                '<div id="modelPreviewBtn" class="mdc-layout-grid__cell">' +
+                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>' +
                 '</div>' );
 
         }
