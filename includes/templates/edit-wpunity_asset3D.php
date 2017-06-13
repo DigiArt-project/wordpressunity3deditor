@@ -127,7 +127,7 @@ get_header(); ?>
                         <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file</h6>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">or</h6>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Three files: .MTL - model, .OBJ - object, .JPG/PNG - screenshot, that describe your asset</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Three files:<br>.MTL - model<br>.OBJ - object<br>.JPG/PNG - screenshot that describe your asset</h6>
                     </div>
 
                     <input type="hidden" name="file" />
