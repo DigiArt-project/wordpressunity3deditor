@@ -155,7 +155,7 @@ get_header();
 
 
 
-    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Default Scenes</h3>
+    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">All Scenes</h3>
 
     <!-- LOAD STANDARD SCENES HERE-->
 
@@ -228,7 +228,7 @@ if ( $custom_query->have_posts() ) :?>
 
                     </section>
                     <section class="mdc-card__actions">
-                        <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--text-secondary-on-light" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
                         <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $myeditScenePage; ?>">EDIT</a>
                     </section>
                 </div>
