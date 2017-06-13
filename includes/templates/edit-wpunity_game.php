@@ -223,7 +223,7 @@ if ( $custom_query->have_posts() ) :?>
                         </a>
                     </div>
                     <section class="mdc-card__primary">
-                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>"><?php echo $scene_title; ?></h1>
+                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>"><?php echo $scene_title; ?></h1>
                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
 
                     </section>
