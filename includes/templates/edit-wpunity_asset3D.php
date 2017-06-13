@@ -67,24 +67,18 @@ get_header(); ?>
                             <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
                                 Select a category
                             </li>
-                            <li class="mdc-list-item" role="option" id="grains" tabindex="0">
-                                Bread, Cereal, Rice, and Pasta
+                            <?php
+                            $args = array('hide_empty' => false);
+                            $cat_terms = get_terms('wpunity_asset3d_cat', $args);
+
+                            foreach ( $cat_terms as $term ) {
+                            ?>
+                            <li class="mdc-list-item" role="option" id="<?php echo $term->term_id?>" tabindex="0">
+                                <?php echo $term->name; ?>
                             </li>
-                            <li class="mdc-list-item" role="option" id="vegetables" tabindex="0">
-                                Vegetables
-                            </li>
-                            <li class="mdc-list-item" role="option" id="fruit" tabindex="0">
-                                Fruit
-                            </li>
-                            <li class="mdc-list-item" role="option" id="dairy" tabindex="0">
-                                Milk, Yogurt, and Cheese
-                            </li>
-                            <li class="mdc-list-item" role="option" id="meat" tabindex="0">
-                                Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts
-                            </li>
-                            <li class="mdc-list-item" role="option" id="fats" tabindex="0">
-                                Fats, Oils, and Sweets
-                            </li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                     </div>
                 </div>
