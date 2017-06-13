@@ -72,7 +72,7 @@ get_header(); ?>
 
 				$scenefolder = $sceneSlug;
 				$gamefolder = $parentGameSlug;
-				$sceneID = $post->ID;
+				$sceneID = $scene_id;
 
 				// vr_editor loads the $sceneToLoad
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>

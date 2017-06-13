@@ -203,11 +203,11 @@ if ( $custom_query->have_posts() ) :?>
                     <div class="SceneThumbnail">
 						<?php
 						//create permalink depending the scene yaml category
-						$yaml_term = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
-						if($yaml_term[0]->slug == 'wonderaround-yaml'){$myeditScenePage = esc_url( get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id );}
-						else{$myeditScenePage = esc_url( get_permalink($editscene2DPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id );}
+						$yaml_term          = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
+						$edit_scene_page_id = ($yaml_term[0]->slug == 'wonderaround-yaml' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $game_id );
 						?>
-                        <a href="<?php echo $myeditScenePage; ?>">
+                        <a href="<?php echo $edit_page_link; ?>">
 
 							<?php if ($scene_thumb) { ?>
 
@@ -230,7 +230,7 @@ if ( $custom_query->have_posts() ) :?>
                     </section>
                     <section class="mdc-card__actions">
                         <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $myeditScenePage; ?>">EDIT</a>
+                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
                     </section>
                 </div>
             </div>

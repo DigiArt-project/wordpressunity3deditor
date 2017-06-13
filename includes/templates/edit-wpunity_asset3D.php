@@ -67,18 +67,18 @@ get_header(); ?>
                             <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
                                 Select a category
                             </li>
-                            <?php
-                            $args = array('hide_empty' => false);
-                            $cat_terms = get_terms('wpunity_asset3d_cat', $args);
+							<?php
+							$args = array('hide_empty' => false);
+							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 
-                            foreach ( $cat_terms as $term ) {
-                            ?>
-                            <li class="mdc-list-item" role="option" id="<?php echo $term->term_id?>" tabindex="0">
-                                <?php echo $term->name; ?>
-                            </li>
-                            <?php
-                            }
-                            ?>
+							foreach ( $cat_terms as $term ) {
+								?>
+                                <li class="mdc-list-item" role="option" id="<?php echo $term->term_id?>" tabindex="0">
+									<?php echo $term->name; ?>
+                                </li>
+								<?php
+							}
+							?>
                         </ul>
                     </div>
                 </div>
