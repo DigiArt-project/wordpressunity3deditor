@@ -71,14 +71,14 @@ get_header(); ?>
 							$args = array('hide_empty' => false);
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 
-							foreach ( $cat_terms as $term ) {
-								?>
+							foreach ( $cat_terms as $term ) { ?>
+
                                 <li class="mdc-list-item" role="option" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
                                 </li>
-								<?php
-							}
-							?>
+
+							<?php } ?>
+
                         </ul>
                     </div>
                 </div>

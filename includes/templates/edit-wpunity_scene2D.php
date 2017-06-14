@@ -21,8 +21,8 @@ get_header(); ?>
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <!--<a class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-            Add a new 3D asset
+        <!--<a class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+            Save
         </a>-->
     </div>
 
@@ -40,21 +40,76 @@ get_header(); ?>
     </ul>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
-    <form name="2dSceneForm">
+    <form name="edit_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell--span-5">
+            <div class="mdc-layout-grid__cell--span-6">
+
+                <h2 class="mdc-typography--title">Title</h2>
                 <div class="mdc-textfield mdc-form-field FullWidth" data-mdc-auto-init="MDCTextfield">
                     <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
                     <label for="title" class="mdc-textfield__label">
                         Enter a title
                 </div>
+                <hr class="WhiteSpaceSeparator">
+
+                <h2 class="mdc-typography--title">Credits</h2>
+                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add text for Credits</label>
+                </div>
+
             </div>
-            <div class="mdc-layout-grid__cell--span-2"></div>
+
+            <div class="mdc-layout-grid__cell--span-1"></div>
+
 
             <div class="mdc-layout-grid__cell--span-5">
 
                 <!-- ADD MORE DEPENDING ON THE SCENE -->
+
+                <h2 class="mdc-typography--title">Featured image</h2>
+                <input type="file" title="Featured image">
+
+                <hr class="WhiteSpaceSeparator">
+
+                <h2 class="mdc-typography--title">Enable sections</h2>
+
+                <div class="mdc-switch">
+                    <input type="checkbox" id="options-switch" class="mdc-switch__native-control" />
+                    <div class="mdc-switch__background">
+                        <div class="mdc-switch__knob"></div>
+                    </div>
+                </div>
+                <label for="options-switch" class="mdc-switch-label">Options</label>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <div class="mdc-switch">
+                    <input type="checkbox" id="login-switch" class="mdc-switch__native-control" />
+                    <div class="mdc-switch__background">
+                        <div class="mdc-switch__knob"></div>
+                    </div>
+                </div>
+                <label for="login-switch" class="mdc-switch-label">Login</label>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <div class="mdc-switch">
+                    <input type="checkbox" id="help-switch" class="mdc-switch__native-control" />
+                    <div class="mdc-switch__background">
+                        <div class="mdc-switch__knob"></div>
+                    </div>
+                </div>
+                <label for="help-switch" class="mdc-switch-label">Help</label>
+
+                <hr class="WhiteSpaceSeparator">
+
+	            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                <input type="hidden" name="submitted" id="submitted" value="true" />
+                <button style="float: right" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                    Save changes
+                </button>
 
             </div>
         </div>
