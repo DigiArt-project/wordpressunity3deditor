@@ -1,8 +1,13 @@
 <?php
 
-$safe_inserted_id = intval( $_GET['wpunity_scene'] );
-$safe_inserted_id = sanitize_text_field( $safe_inserted_id );
-$scene_id = $safe_inserted_id;
+$scene_id = intval( $_GET['wpunity_scene'] );
+$scene_id = sanitize_text_field( $scene_id );
+
+$project_id = intval( $_GET['wpunity_game'] );
+$project_id = sanitize_text_field( $project_id );
+
+$game_post = get_post($project_id);
+$game_type_obj = wpunity_return_game_type($project_id);
 
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
