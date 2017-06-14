@@ -11,9 +11,12 @@ $scene_id = $safe_inserted_id;
 $safe_inserted_id2 = intval( $_GET['wpunity_game'] );
 $safe_inserted_id2 = sanitize_text_field( $safe_inserted_id2 );
 $game_id = $safe_inserted_id2;
+$game_post = get_post($game_id);
+$game_type_obj = wpunity_return_game_type($game_id);
 
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
+
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
