@@ -201,6 +201,8 @@ if ( $custom_query->have_posts() ) :?>
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
 						<?php
+
+                        $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=1 Default scene
 						//create permalink depending the scene yaml category
 						$yaml_term          = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
 						$edit_scene_page_id = ($yaml_term[0]->slug == 'wonderaround-yaml' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
