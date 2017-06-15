@@ -31,13 +31,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$wonderaround_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
 
 	$scene_taxonomies = array(
-		'wpunity_scene_pgame' => array(
-			$allScenePGameID,
-		),
-		'wpunity_scene_yaml' => array(
-			$wonderaround_yaml_tax->term_id,
-		)
-	);
+        'wpunity_scene_pgame' => array(
+            $allScenePGameID,
+        ),
+        'wpunity_scene_yaml' => array(
+            $wonderaround_yaml_tax->term_id,
+        )
+    );
+
+    $scene_metas = array(
+        'wpunity_scene_default' => 'false',
+        'wpunity_scene_metatype' => 'scene',
+    );
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
@@ -45,6 +50,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'post_type' => 'wpunity_scene',
 		'post_status' => 'publish',
 		'tax_input' => $scene_taxonomies,
+        'meta_input' => $scene_metas,
 	);
 
 	$scene_id = wp_insert_post($scene_information);
