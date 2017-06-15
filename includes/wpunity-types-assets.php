@@ -10,7 +10,7 @@ class Asset3DClass{
     function __construct(){
         add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
-        add_action('init', array($this, 'wpunity_assets_taxpscene')); //wpunity_asset3d_pscene
+        add_action('init', array($this, 'wpunity_assets_taxpgame')); //wpunity_asset3d_pgame
     }
 
     /**
@@ -51,7 +51,7 @@ class Asset3DClass{
             'show_in_nav_menus' => false,
             'menu_position' => 25,
             'menu_icon' => 'dashicons-editor-textcolor',
-            'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pscene'),
+            'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pgame'),
             'supports' => array('title', 'editor', 'custom-fields'),
             'hierarchical' => false,
             'has_archive' => false,
@@ -102,30 +102,30 @@ class Asset3DClass{
 
     /**
      * D1.03
-     * Create Asset Scene
+     * Create Asset Game
      *
-     * Select To Which Scenes it belongs to (as custom taxonomy)
+     * Select To Which Game it belongs to (as custom taxonomy)
      */
-    function wpunity_assets_taxpscene()
+    function wpunity_assets_taxpgame()
     {
 
         // 2. Select To Which Scenes it belongs to
         $labels = array(
-            'name' => _x('Asset Scene', 'taxonomy general name'),
-            'singular_name' => _x('Asset Scene', 'taxonomy singular name'),
-            'menu_name' => _x('Asset Scenes', 'admin menu'),
-            'search_items' => __('Search Asset Scenes'),
-            'all_items' => __('All Asset Scenes'),
-            'parent_item' => __('Parent Asset Scene'),
-            'parent_item_colon' => __('Parent Asset Scene:'),
-            'edit_item' => __('Edit Asset Scene'),
-            'update_item' => __('Update Asset Scene'),
-            'add_new_item' => __('Add New Asset Scene'),
-            'new_item_name' => __('New Asset Scene')
+            'name' => _x('Asset Game', 'taxonomy general name'),
+            'singular_name' => _x('Asset Game', 'taxonomy singular name'),
+            'menu_name' => _x('Asset Games', 'admin menu'),
+            'search_items' => __('Search Asset Games'),
+            'all_items' => __('All Asset Games'),
+            'parent_item' => __('Parent Asset Game'),
+            'parent_item_colon' => __('Parent Asset Game:'),
+            'edit_item' => __('Edit Asset Game'),
+            'update_item' => __('Update Asset Game'),
+            'add_new_item' => __('Add New Asset Game'),
+            'new_item_name' => __('New Asset Game')
         );
 
         $args = array(
-            'description' => 'Scene assignment of Asset 3D',
+            'description' => 'Game assignment of Asset 3D',
             'labels' => $labels,
             'public' => false,
             'show_ui' => true,
@@ -133,7 +133,7 @@ class Asset3DClass{
             'show_admin_column' => true
         );
 
-        register_taxonomy('wpunity_asset3d_pscene', 'wpunity_asset3d', $args);
+        register_taxonomy('wpunity_asset3d_pgame', 'wpunity_asset3d', $args);
     }
 
     //==========================================================================================================================================
@@ -165,10 +165,10 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
             $assetID = $post->ID;
 
             //slug Scene
-            $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
-            $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pscene' )->slug : NULL;
+            $parentSceneID = intval($_POST['wpunity_asset3d_pgame'], 10);
+            $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
-            wpunity_create_folder_withmeta('asset',$assetSlug,$assetID,$parentSceneSlug,$parentSceneID);
+            //wpunity_create_folder_withmeta('asset',$assetSlug,$assetID,$parentSceneSlug,$parentSceneID);
 
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
@@ -200,8 +200,8 @@ function wpunity_create_pathdata_asset( $post_id ){
         $assetSlug = $post->post_name;
 
         //slug Scene
-        $parentSceneID = intval($_POST['wpunity_asset3d_pscene'], 10);
-        $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pscene' )->slug : NULL;
+        $parentSceneID = intval($_POST['wpunity_asset3d_pgame'], 10);
+        $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
         //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
         $custom_args = array(

@@ -160,6 +160,9 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             //Create a parent game tax category for the scenes
             wp_insert_term($gameTitle,'wpunity_scene_pgame',$gameSlug,'Scene of a Game');
 
+            //Create a parent game tax category for the assets
+            wp_insert_term($gameTitle,'wpunity_asset3d_pgame',$gameSlug,'Asset of a Game');
+
             //Create Default Scenes for this "Game"
             wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID);
 

@@ -10,10 +10,10 @@
 add_action('add_meta_boxes','wpunity_assets_taxcategory_box');
 
 function wpunity_assets_taxcategory_box() {
-    remove_meta_box( 'wpunity_asset3d_pscenediv', 'wpunity_asset3d', 'side' ); //Removes the default metabox at side
+    remove_meta_box( 'wpunity_asset3d_pgamediv', 'wpunity_asset3d', 'side' ); //Removes the default metabox at side
     remove_meta_box( 'wpunity_asset3d_catdiv', 'wpunity_asset3d', 'side' ); //Removes the default metabox at side
 
-    add_meta_box( 'tagsdiv-wpunity_assetpscene_cat','Asset\'s Scene','wpunity_assets_taxpscene_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
+    add_meta_box( 'tagsdiv-wpunity_assetpgame_cat','Asset\'s Game','wpunity_assets_taxpgame_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
     add_meta_box( 'tagsdiv-wpunity_asset3d_cat','Asset Category','wpunity_assets_taxcategory_box_content', 'wpunity_asset3d', 'side' , 'high'); //Adds the custom metabox with select box
 }
 
@@ -60,8 +60,8 @@ function wpunity_assets_taxcategory_box_content($post){
     <?php
 }
 
-function wpunity_assets_taxpscene_box_content($post){
-    $tax_name = 'wpunity_asset3d_pscene';
+function wpunity_assets_taxpgame_box_content($post){
+    $tax_name = 'wpunity_asset3d_pgame';
 
     ?>
 
@@ -71,16 +71,16 @@ function wpunity_assets_taxpscene_box_content($post){
 
         <?php
         // Use nonce for verification
-        wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_asset3d_pscene_noncename' );
-        $type_IDs = wp_get_object_terms( $post->ID, 'wpunity_asset3d_pscene', array('fields' => 'ids') );
+        wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_asset3d_pgame_noncename' );
+        $type_IDs = wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame', array('fields' => 'ids') );
 
         $args = array(
             'show_option_none'   => 'Select Category',
             'orderby'            => 'name',
             'hide_empty'         => 0,
             'selected'           => $type_IDs[0],
-            'name'               => 'wpunity_asset3d_pscene',
-            'taxonomy'           => 'wpunity_asset3d_pscene',
+            'name'               => 'wpunity_asset3d_pgame',
+            'taxonomy'           => 'wpunity_asset3d_pgame',
             'echo'               => 0,
             'option_none_value'  => '-1',
             'id' => 'wpunity-select-category-dropdown'
@@ -92,7 +92,7 @@ function wpunity_assets_taxpscene_box_content($post){
         $select  = preg_replace( '#<select([^>]*)>#', $replace, $select );
 
         $old_option = "<option value='-1'>";
-        $new_option = "<option disabled selected value=''>".'Select Scene'."</option>";
+        $new_option = "<option disabled selected value=''>".'Select Game'."</option>";
         $select = str_replace($old_option, $new_option, $select);
 
         echo $select;
@@ -106,7 +106,7 @@ function wpunity_assets_taxpscene_box_content($post){
 
 /**
  * D2.02
- * When the post is saved, also saves wpunity_asset3d_cat & wpunity_asset3d_pscene
+ * When the post is saved, also saves wpunity_asset3d_cat & wpunity_asset3d_pgame
  *
  *
  */
@@ -152,7 +152,7 @@ function wpunity_assets_taxcategory_box_content_save( $post_id ) {
 
 add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
 
-function wpunity_assets_taxpscence_box_content_save( $post_id ) {
+function wpunity_assets_taxpgame_box_content_save( $post_id ) {
 
     global $wpdb;
 
@@ -164,7 +164,7 @@ function wpunity_assets_taxpscence_box_content_save( $post_id ) {
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
 
-    if ( !wp_verify_nonce( $_POST['wpunity_asset3d_pscene_noncename'], plugin_basename( __FILE__ ) ) )
+    if ( !wp_verify_nonce( $_POST['wpunity_asset3d_pgame_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
 
@@ -183,15 +183,15 @@ function wpunity_assets_taxpscence_box_content_save( $post_id ) {
 
 
     // OK, we're authenticated: we need to find and save the data
-    $type_ID = intval($_POST['wpunity_asset3d_pscene'], 10);
+    $type_ID = intval($_POST['wpunity_asset3d_pgame'], 10);
 
-    $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_asset3d_pscene' )->slug : NULL;
+    $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
-    wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_pscene' );
+    wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_pgame' );
 
 }
 
-add_action( 'save_post', 'wpunity_assets_taxpscence_box_content_save' );
+add_action( 'save_post', 'wpunity_assets_taxpgame_box_content_save' );
 
 //==========================================================================================================================================
 
