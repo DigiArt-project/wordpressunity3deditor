@@ -56,6 +56,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$scene_id = wp_insert_post($scene_information);
 
 	if($scene_id){
+        $newpost = get_post($scene_id);
+        wpunity_create_unityfile_noAssets('scene',$newpost->post_name,$scene_id,$gameSlug,$allScenePGameID,$yamlTermID);
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
 		exit;
 	}
