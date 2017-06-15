@@ -23,11 +23,9 @@
 }
 
 .bt_textify {
-    font-size:0.8vw;
-    max-font-size: 20pt;
+    font-size: 14px;
     background:#000;
-    color:#fff;
-    opacity: 1;
+    color: #fff;
     margin-top: 5px;
     padding: 2px;
     cursor:pointer;
