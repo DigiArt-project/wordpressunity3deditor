@@ -60,9 +60,14 @@ get_header(); ?>
                     Must be at least 6 characters long
                 </p>
 
+                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                </div>
+
                 <hr class="WhiteSpaceSeparator">
 
-                <div id="js-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
@@ -101,16 +106,43 @@ get_header(); ?>
                 </select>-->
 
 
-                <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Actions</h3>
-                <h6> show them based on selected category</h6>
-
+                <h3 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Options</h3>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
+                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
+                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                            <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
+                                Next scene
+                            </li>
+
+                            <li class="mdc-list-item" role="option" id="" tabindex="0">
+                                Dummy
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="screenshotImageInput"> Select a Screenshot</label>
+                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput"  accept="image/jpeg">
+
+                <label for="diffusionImageInput"> Select a Diffusion image</label>
+                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput">
+
+
+
+                <label for="staticImageInput"> Select a Static image</label>
+                <input type="file" name="staticImageInput" value="" id="staticImageInput">
+
+                <label for="videoInput"> Select a Video file</label>
+                <input type="file" name="videoInput" value="" id="videoInput">
+
+
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
@@ -123,7 +155,7 @@ get_header(); ?>
                         <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file</h6>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">or</h6>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Three files:<br>.MTL - model<br>.OBJ - object<br>.JPG/PNG - screenshot that describe your asset</h6>
+                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Two files:<br>.MTL - model<br>.OBJ - object</h6>
                     </div>
 
                     <input type="hidden" name="file" />
@@ -131,7 +163,6 @@ get_header(); ?>
                     <input type="hidden" name="fbxFile" />
                     <input type="hidden" name="mtlFile" />
                     <input type="hidden" name="objFile" />
-                    <input type="hidden" name="textureFile" />
 
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
@@ -175,12 +206,15 @@ get_header(); ?>
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
-            var root = document.getElementById('js-select');
+            var categoryDropdown = document.getElementById('category-select');
+            var nextSceneDropdown = document.getElementById('next-scene-select');
 
-            var select = MDCSelect.attachTo(root);
-            root.addEventListener('MDCSelect:change', function() {
-                var item = select.selectedOptions[0];
-                var index = select.selectedIndex;
+            var categorySelect = MDCSelect.attachTo(categoryDropdown);
+            var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
+
+            categoryDropdown.addEventListener('MDCSelect:change', function() {
+                var item = categorySelect.selectedOptions[0];
+                var index = categorySelect.selectedIndex;
 
                 console.log(item, index);
             });
@@ -206,15 +240,15 @@ get_header(); ?>
                     } else {
 
                         var i;
-                        if (this.files.length === 3) {
+                        if (this.files.length === 2) {
 
                             for (i=0; i < this.files.length; i++) {
                                 flags = checkFlags(flags, this.files[i].name);
                             }
 
-                            if (flags.mtl && flags.obj && flags.texture) {
+                            if (flags.mtl && flags.obj /*&& flags.texture*/) {
 
-                                appendSubmitBtnToDropzone(strings.three);
+                                appendSubmitBtnToDropzone(strings.two);
                             }
                             console.log(flags);
                         }
@@ -228,14 +262,14 @@ get_header(); ?>
 
                     placeholder.hide();
 
-                    if (this.files.length > 3 || this.files.length === 2) {
+                    if (this.files.length > 2 ) {
                         var btnContainer = jQuery( '#submitBtnContainer' );
 
 
                         if (btnContainer) {
                             btnContainer.remove();
                             jQuery( '#modelPreviewBtn' ).remove();
-                            placeholder.show();
+                            /*placeholder.show();*/
                         }
                     }
                 });
@@ -251,7 +285,7 @@ get_header(); ?>
                             jQuery( '#modelPreviewBtn' ).remove();
                             jQuery( '.DropzoneDescriptivePlaceholder' ).show();
                         }
-                    } else if (this.files.length < 3) {
+                    } else if (this.files.length < 2) {
                         if (btnContainer) {
                             jQuery( '#modelPreviewBtn' ).remove();
                             btnContainer.remove();
@@ -259,7 +293,7 @@ get_header(); ?>
                         }
                     }
 
-                    if (this.files.length === 3) {
+                    if (this.files.length === 2) {
 
                         var i;
 
@@ -267,9 +301,9 @@ get_header(); ?>
                             flags = checkFlags(flags, this.files[i].name);
                         }
 
-                        if (flags.mtl && flags.obj && flags.texture) {
+                        if (flags.mtl && flags.obj /*&& flags.texture*/) {
 
-                            appendSubmitBtnToDropzone(strings.three);
+                            appendSubmitBtnToDropzone(strings.two);
                         }
                     }
 
@@ -301,9 +335,9 @@ get_header(); ?>
             if (!flags.obj) {
                 flags.obj = fileExtension(fn) === 'obj';
             }
-            if (!flags.texture) {
-                flags.texture = fileExtension(fn) === ('png' || 'jpg');
-            }
+            /*if (!flags.texture) {
+             flags.texture = fileExtension(fn) === ('png' || 'jpg');
+             }*/
             return flags;
         }
 
@@ -324,7 +358,7 @@ get_header(); ?>
 
         var strings = [];
         strings.fbx = 'You have selected an Autodesk FBX model';
-        strings.three = 'You have selected a group of the three components describing your asset';
+        strings.two = 'You have selected a group of the two components describing your asset';
 
     </script>
 <?php  get_footer(); ?>
