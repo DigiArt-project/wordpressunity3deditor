@@ -195,5 +195,43 @@ add_action( 'save_post', 'wpunity_assets_taxpgame_box_content_save' );
 
 //==========================================================================================================================================
 
+//Yaml for each category
+
+// A callback function to add a custom field to our taxonomy
+function wpunity_assets_category_yamlFields($tag) {
+    // Check for existing taxonomy meta for the term you're editing
+    $term_meta_yaml_assetcat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_assetcat_pat', true );
+    ?>
+
+    <tr class="form-field term-assetcat_pat">
+        <th scope="row" valign="top">
+            <label for="wpunity_yamlmeta_wonderaround_pat">Asset's YAML</label>
+        </th>
+        <td>
+            <textarea name="wpunity_yamlmeta_assetcat_pat" id="wpunity_yamlmeta_assetcat_pat"><?php echo $term_meta_yaml_assetcat ? $term_meta_yaml_assetcat : ''; ?></textarea>
+            <p class="description">wpunity_yamlmeta_assetcat_pat</p>
+        </td>
+    </tr>
+
+    <?php
+}
+
+// A callback function to save our extra taxonomy field(s)
+function wpunity_assets_category_yamlFields_save( $term_id ) {
+
+    if ( isset( $_POST['wpunity_yamlmeta_assetcat_pat'] ) ) {
+        $term_meta_wonderaround_pat = $_POST['wpunity_yamlmeta_assetcat_pat'];
+        update_term_meta($term_id, 'wpunity_yamlmeta_assetcat_pat', $term_meta_wonderaround_pat);
+    }
+
+}
+
+
+// Add the fields to the taxonomy, using our callback function
+add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yamlFields', 10, 2 );
+// Save the changes made on the taxonomy, using our callback function
+add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
+
+
 
 ?>

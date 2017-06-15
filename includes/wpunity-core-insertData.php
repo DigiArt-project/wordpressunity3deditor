@@ -65,6 +65,872 @@ add_action( 'init', 'wpunity_games_taxtype_fill' );
  */
 
 function wpunity_assets_taxcategory_fill(){
+
+    global $ini_asset_sop,$ini_asset_dop,$ini_asset_doorp,$ini_asset_poi,$ini_asset_poi_video;
+
+    //Static 3D models YAML
+    $ini_asset_sop = array('--- !u!1 &___[sop_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[sop_prefab_fid]___}
+--- !u!64 &___[sop_meshcol_fid]___
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[sop_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: ___[sop_guid]___, type: 3}
+--- !u!1001 &___[sop_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[sop_pos_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[sop_pos_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[sop_pos_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[sop_rot_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: ___[sop_rot_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: ___[sop_rot_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: ___[sop_rot_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[sop_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[sop_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[sop_scale_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[sop_name]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[sop_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[sop_name]___default
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[sop_guid]___, type: 3}
+  m_IsPrefabParent: 0
+');
+    //Dynamic 3D models YAML
+    $ini_asset_dop = array('--- !u!1 &___[dop_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: ___[dop_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[dop_prefab_fid]___}
+--- !u!54 &___[dop_rigibody_fid]___
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[dop_fid]___}
+  serializedVersion: 2
+  m_Mass: 0.1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &___[dop_boxcol_fid]___
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[dop_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: ___[dop_boxcol_size_x]___, y: ___[dop_boxcol_size_y]___, z: ___[dop_boxcol_size_z]___}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &___[dop_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[dop_pos_x]____
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[dop_pos_y]____
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[dop_pos_z]____
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[dop_rot_x]____
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[dop_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[dop_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[dop_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[dop_scale_z]___
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[dop_guid]___, type: 3}
+  m_IsPrefabParent: 0
+');
+    //Doors YAML
+    $ini_asset_doorp = array('--- !u!1 &___[door_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: ___[door_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[door_prefab_fid]___}
+--- !u!114 &___[door_script_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[door_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ___[door_script_guid]___, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!65 &___[door_boxcol_fid]___
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[door_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: ___[door_boxcol_size_x]___, y: ___[door_boxcol_size_y]___, z: ___[door_boxcol_size_z]___}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &___[door_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[door_pos_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[door_pos_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[door_pos_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[door_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: ___[door_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: ___[door_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[door_guid]___, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
+  m_IsPrefabParent: 0
+');
+    //Points of Interest (Image-Text) YAML
+    $ini_asset_poi = array('--- !u!1 &___[poit_text_container_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_text_container_recttrans_fid]___}
+  - component: {fileID: ___[poit_text_container_canvrender_fid]___}
+  - component: {fileID: ___[poit_text_container_monob_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_text_container_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_text_container_recttrans_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_text_container_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: ___[poit_text_container_recttrans_father_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -700, y: -550}
+  m_SizeDelta: {x: 400, y: 800}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[poit_text_container_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_text_container_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ___[poit_text_container_content]___
+--- !u!222 &___[poit_text_container_canvrender_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_text_container_fid]___}
+--- !u!1 &___[poit_closeBt_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_closeBt_recttrans_fid]___}
+  - component: {fileID: ___[poit_closeBt_canvrender_fid]___}
+  - component: {fileID: ___[poit_closeBt_monob_fid]___}
+  - component: {fileID: ___[poit_closeBt_monob2_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_closeBt_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_closeBt_recttrans_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBt_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: ___[poit_closeBt_recttrans_child_fid]___}
+  m_Father: {fileID: ___[poit_text_container_recttrans_father_fid]___}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 504}
+  m_SizeDelta: {x: 160, y: 46}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[poit_closeBt_monob2_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBt_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: ___[poit_closeBt_monob_fid]___}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: ___[poit_closeBt_monob3_fid]___}
+        m_MethodName: onCloseBt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &___[poit_closeBt_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBt_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &___[poit_closeBt_canvrender_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBt_fid]___}
+--- !u!1 &___[poit_closeBtText_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_closeBt_recttrans_child_fid]___}
+  - component: {fileID: ___[poit_closeBtText_canvrender_fid]___}
+  - component: {fileID: ___[poit_closeBtText_monob_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_closeBtText_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_closeBt_recttrans_child_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBtText_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: ___[poit_closeBt_recttrans_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[poit_closeBtText_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBtText_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ___[poit_closeBtText_content]___
+--- !u!222 &___[poit_closeBtText_canvrender_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_closeBtText_fid]___}
+--- !u!1 &___[poit_canvas_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_closeBt_recttrans_father_fid]___}
+  - component: {fileID: ___[poit_canvas_canvas_fid]___}
+  - component: {fileID: ___[poit_canvas_monob_fid]___}
+  - component: {fileID: ___[poit_canvas_monob2_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_canvas_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_closeBt_recttrans_father_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_canvas_fid]___}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: ___[poit_text_container_recttrans_father_fid]___}
+  m_Father: {fileID: ___[poit_closeBt_recttrans_father_father_fid]___}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -7.86, y: -0.29}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &___[poit_canvas_monob2_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_canvas_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &___[poit_canvas_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_canvas_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &___[poit_canvas_canvas_fid]___
+Canvas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_canvas_fid]___}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!1001 &___[poit_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[poit_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[poit_position_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[poit_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[poit_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: ___[poit_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: ___[poit_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: ___[poit_rotation_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[poit_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[poit_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[poit_scale_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[poit_prefab_name]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[poit_prefab_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[poit_prefab_name]___default
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[poit_prefab_guid]___, type: 3}
+  m_IsPrefabParent: 0
+--- !u!1 &___[poit_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: ___[poit_prefab_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[poit_prefab_fid]___}
+--- !u!4 &___[poit_closeBt_recttrans_father_father_fid]___ stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400000, guid: ___[poit_prefab_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[poit_prefab_fid]___}
+--- !u!1 &___[poit_prefab_boxcol_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: ___[poit_prefab_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[poit_prefab_fid]___}
+--- !u!114 &___[poit_closeBt_monob3_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c77eec757bf76d41879b85a44b84133, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!65 &___[poit_prefab_boxcol_boxcol_fid]___
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_prefab_boxcol_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.61231303, y: 1.103676, z: 0.93248796}
+  m_Center: {x: 0.04983951, y: 0.551838, z: 0.018657997}
+--- !u!1 &___[poit_imagecont_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_imagecont_recttrans_fid]___}
+  - component: {fileID: ___[poit_imagecont_canvasrend_fid]___}
+  - component: {fileID: ___[poit_imagecont_monob_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_imagecont_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_imagecont_recttrans_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_imagecont_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: ___[poit_text_container_recttrans_father_fid]___}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 156, y: 0}
+  m_SizeDelta: {x: 1200, y: 768}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[poit_imagecont_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_imagecont_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: ___[poit_imagecont_sprite_guid]___, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &___[poit_imagecont_canvasrend_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_imagecont_fid]___}
+--- !u!1 &___[poit_panel_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[poit_text_container_recttrans_father_fid]___}
+  - component: {fileID: ___[poit_panel_canvrender_fid]___}
+  - component: {fileID: ___[poit_panel_monob_fid]___}
+  m_Layer: 0
+  m_Name: ___[poit_panel_name]___
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[poit_text_container_recttrans_father_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_panel_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: ___[poit_text_container_recttrans_fid]___}
+  - {fileID: ___[poit_imagecont_recttrans_fid]___}
+  - {fileID: ___[poit_closeBt_recttrans_fid]___}
+  m_Father: {fileID: ___[poit_closeBt_recttrans_father_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[poit_panel_monob_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_panel_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &___[poit_panel_canvrender_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[poit_panel_fid]___}
+');
+    //Points of Interest (Video) YAML
+    $ini_asset_poi_video = array('Canvasion');
+
     wp_insert_term(
         'Dynamic 3D models', // the term
         'wpunity_asset3d_cat', // the taxonomy
@@ -73,6 +939,9 @@ function wpunity_assets_taxcategory_fill(){
             'slug' => 'dynamic3dmodels',
         )
     );
+    $inserted_term1 = get_term_by('slug', 'dynamic3dmodels', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_dop[0], true);
+
     wp_insert_term(
         'Points of Interest (Image-Text)', // the term
         'wpunity_asset3d_cat', // the taxonomy
@@ -81,6 +950,9 @@ function wpunity_assets_taxcategory_fill(){
             'slug' => 'pois_imagetext',
         )
     );
+    $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi[0], true);
+
     wp_insert_term(
         'Points of Interest (Video)', // the term
         'wpunity_asset3d_cat', // the taxonomy
@@ -89,6 +961,9 @@ function wpunity_assets_taxcategory_fill(){
             'slug' => 'pois_Video',
         )
     );
+    $inserted_term3 = get_term_by('slug', 'pois_Video', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi_video[0], true);
+
     wp_insert_term(
         'Static 3D models', // the term
         'wpunity_asset3d_cat', // the taxonomy
@@ -97,6 +972,9 @@ function wpunity_assets_taxcategory_fill(){
             'slug' => 'static3dmodels',
         )
     );
+    $inserted_term4 = get_term_by('slug', 'static3dmodels', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_sop[0], true);
+
     wp_insert_term(
         'Doors', // the term
         'wpunity_asset3d_cat', // the taxonomy
@@ -105,6 +983,8 @@ function wpunity_assets_taxcategory_fill(){
             'slug' => 'doors',
         )
     );
+    $inserted_term5 = get_term_by('slug', 'doors', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_doorp[0], true);
 }
 
 add_action( 'init', 'wpunity_assets_taxcategory_fill' );
