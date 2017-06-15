@@ -170,7 +170,9 @@ $custom_query_args = array(
 			'terms'    => $allScenePGameID,
 		),
 	),
-	/*'paged' => $paged,*/
+    'orderby' => 'ID',
+    'order' => 'DESC',
+    /*'paged' => $paged,*/
 );
 
 // Get current page and append to custom query parameters array
@@ -207,9 +209,8 @@ if ( $custom_query->have_posts() ) :?>
 
 
 						//create permalink depending the scene yaml category
-						$yaml_term          = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
-						$edit_scene_page_id = ($yaml_term[0]->slug == 'wonderaround-yaml' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id );
+						$edit_scene_page_id = ($typeof_scene == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $typeof_scene );
 						?>
                         <a href="<?php echo $edit_page_link; ?>">
 

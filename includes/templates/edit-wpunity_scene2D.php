@@ -3,6 +3,8 @@
 $scene_id = intval( $_GET['wpunity_scene'] );
 $scene_id = sanitize_text_field( $scene_id );
 
+$scene_type = sanitize_text_field( $_GET['scene_type'] );
+
 $project_id = intval( $_GET['wpunity_game'] );
 $project_id = sanitize_text_field( $project_id );
 
