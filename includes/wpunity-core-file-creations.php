@@ -403,15 +403,6 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wpunity_create_unityfile_withAssets('scene-mainmenu',$mainmenuSceneSlug,$mainmenuSceneID,$gameSlug,$gameID,$mainmenuSceneYAMLID,'');
     //Create a parent scene tax category for the assets3d
 
-
-    $firstSceneID = wp_insert_post( $firstSceneData );
-    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$firstSceneSlug,'description'=>'Scene assignment of Asset 3D'));
-    wpunity_create_folder_withmeta('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID);
-    //Create .unity file for the "Scene" (First Scene)
-    wpunity_create_unityfile_noAssets('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID,$firstSceneYAMLID);
-    //Create a parent scene tax category for the assets3d
-
-
     //$optionsSceneID = wp_insert_post( $optionsSceneData );
     //wp_insert_term($optionsSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$optionsSceneSlug,'description'=>'Scene assignment of Asset 3D'));
     //wpunity_create_folder_withmeta('scene-nosub',$optionsSceneSlug,$optionsSceneID,$gameSlug,$gameID);
@@ -425,6 +416,13 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wpunity_create_folder_withmeta('scene-nosub',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID);
     //Create .unity file for the "Scene" (Main Menu)
     wpunity_create_unityfile_withAssets('scene-credentials',$credentialsSceneSlug,$credentialsSceneID,$gameSlug,$gameID,$credentialsSceneYAMLID,'');
+    //Create a parent scene tax category for the assets3d
+
+    $firstSceneID = wp_insert_post( $firstSceneData );
+    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$firstSceneSlug,'description'=>'Scene assignment of Asset 3D'));
+    wpunity_create_folder_withmeta('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID);
+    //Create .unity file for the "Scene" (First Scene)
+    wpunity_create_unityfile_noAssets('scene',$firstSceneSlug,$firstSceneID,$gameSlug,$gameID,$firstSceneYAMLID);
     //Create a parent scene tax category for the assets3d
 
 }
