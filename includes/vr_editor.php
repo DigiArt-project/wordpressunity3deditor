@@ -123,7 +123,7 @@ echo '</script>';
     });
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
-    function textify_scene(){
+    function save_scene(){
 
         document.getElementById('save-scene-button').style.backgroundColor = 'green';
 
@@ -246,7 +246,7 @@ echo '</script>';
             </div>
         </div>
 
-        <div id="save-scene-button" class="bt_textify" onclick="textify_scene()">Save scene</div>
+        <div id="save-scene-button" class="bt_textify mdc-typography--caption" onclick="save_scene();">Save scene</div>
 
         <div class="result"></div>
         <div id="result_download"></div>

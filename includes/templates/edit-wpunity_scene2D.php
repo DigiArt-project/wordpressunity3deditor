@@ -115,7 +115,7 @@ get_header(); ?>
 	            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
                 <button style="float: right" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                    Save changes
+                    Submit changes
                 </button>
 
             </div>

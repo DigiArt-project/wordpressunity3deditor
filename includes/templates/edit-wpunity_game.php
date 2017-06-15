@@ -176,9 +176,9 @@ $custom_query_args = array(
 			'terms'    => $allScenePGameID,
 		),
 	),
-    'orderby' => 'ID',
-    'order' => 'DESC',
-    /*'paged' => $paged,*/
+	'orderby' => 'ID',
+	'order' => 'DESC',
+	/*'paged' => $paged,*/
 );
 
 // Get current page and append to custom query parameters array
@@ -210,13 +210,12 @@ if ( $custom_query->have_posts() ) :?>
                     <div class="SceneThumbnail">
 						<?php
 
-                        $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-                        $typeof_scene = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
-
+						$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
+						$scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
 
 						//create permalink depending the scene yaml category
-						$edit_scene_page_id = ($typeof_scene == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $typeof_scene );
+						$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
 						?>
                         <a href="<?php echo $edit_page_link; ?>">
 
@@ -240,7 +239,9 @@ if ( $custom_query->have_posts() ) :?>
 
                     </section>
                     <section class="mdc-card__actions">
-                        <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+						<?php if (!$default_scene) { ?>
+                            <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+						<?php } ?>
                         <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
                     </section>
                 </div>
