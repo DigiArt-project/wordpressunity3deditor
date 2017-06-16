@@ -321,7 +321,6 @@ $wp_query = $temp_query;
             }
         }
 
-
         var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
 
         function deleteScene(id) {

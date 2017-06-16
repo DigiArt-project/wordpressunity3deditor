@@ -141,10 +141,47 @@ get_header(); ?>
                 <input type="file" name="videoInput" value="" id="videoInput" accept="video/mp4">
 
 
-
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h2 class="mdc-typography--subheading2">Object type</h2>
+
+                <ul class="RadioButtonList">
+                    <li class="mdc-form-field">
+                        <div class="mdc-radio">
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio" checked="" name="objectTypeRadio" value="fbx">
+                            <div class="mdc-radio__background">
+                                <div class="mdc-radio__outer-circle"></div>
+                                <div class="mdc-radio__inner-circle"></div>
+                            </div>
+                        </div>
+                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+                    </li>
+                    <li class="mdc-form-field">
+                        <div class="mdc-radio">
+                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                            <div class="mdc-radio__background">
+                                <div class="mdc-radio__outer-circle"></div>
+                                <div class="mdc-radio__inner-circle"></div>
+                            </div>
+                        </div>
+                        <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
+                    </li>
+                </ul>
+
+                <label id="fbxFileInputLabel" for="fbxFileInput"> Select an FBX file</label>
+                <input type="file" name="fbxFileInput" value="" id="fbxFileInput" />
+
+                <label id="mtlFileInputLabel" for="mtlFileInput" style="display: none"> Select an MTL file</label>
+                <input style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label id="objFileInputLabel" for="objFileInput" style="display: none"> Select an OBJ file</label>
+                <input style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+
+                <hr class="WhiteSpaceSeparator">
 
                 <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
 
@@ -156,11 +193,9 @@ get_header(); ?>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Two files:<br>.MTL - model<br>.OBJ - object</h6>
                     </div>
 
+
                     <input type="hidden" name="file" />
 
-                    <input type="hidden" name="fbxFile" />
-                    <input type="hidden" name="mtlFile" />
-                    <input type="hidden" name="objFile" />
 
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
@@ -218,11 +253,42 @@ get_header(); ?>
             });
         })();
 
+        jQuery( ".RadioButtonList" ).click(function() {
+            var objectType = jQuery('input[name=objectTypeRadio]:checked', '.RadioButtonList').val();
+
+            var fbxInput = jQuery('#fbxFileInput');
+            var fbxInputLabel = jQuery('#fbxFileInputLabel');
+            var mtlInput = jQuery('#mtlFileInput');
+            var mtlInputLabel = jQuery('#mtlFileInputLabel');
+            var objInput = jQuery('#objFileInput');
+            var objInputLabel = jQuery('#objFileInputLabel');
+
+            if (objectType === 'fbx') {
+                console.log("FBX");
+
+                fbxInput.show();
+                fbxInputLabel.show();
+                mtlInput.hide();
+                mtlInputLabel.hide();
+                objInput.hide();
+                objInputLabel.hide();
+            }
+            else if (objectType === 'mtl') {
+                console.log("MTL");
+
+                fbxInput.hide();
+                fbxInputLabel.hide();
+                mtlInput.show();
+                mtlInputLabel.show();
+                objInput.show();
+                objInputLabel.show();
+            }
+        });
 
         var objectDropzone = new Dropzone("div#fileUploaderDropzone", {
             url: '<?php echo get_permalink(); ?>',
             clickable: true,
-            maxFiles: 3,
+            maxFiles: 2,
             autoDiscover: false,
             previewTemplate: document.getElementById('preview-template').innerHTML,
             init: function() {
