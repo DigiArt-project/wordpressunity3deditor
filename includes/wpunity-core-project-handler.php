@@ -1,0 +1,104 @@
+<?php
+
+
+//DELETE GAME PROJECT with files
+function wpunity_delete_gameproject_frontend($game_id){
+
+    //wp_delete_post( $game_id, false );
+
+}
+
+
+
+
+
+
+
+//==========================================================================================================================================
+//ABOUT MEDIA HANDLE
+
+
+function wpunity_upload_dir_forAssets( $args ) {
+
+    // Get the current post_id
+    $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+
+    if( $id ) {
+
+        $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+        // Set the new path depends on current post_type
+        $newdir = '/' . $pathofPost;
+
+        $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+        $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+        $args['subdir']  = $newdir;
+        $args['path']   .= $newdir;
+        $args['url']    .= $newdir;
+    }
+    return $args;
+}
+
+add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
+
+
+
+
+/**
+ * 1.01
+ * Overwrite Uploads
+ *
+ * Upload files with the same namew, without uploading copy with unique filename
+ *
+ */
+
+function wpunity_overwrite_uploads( $name ){
+
+    if( isset($_REQUEST['post_id']) ) {
+        $post_id =  (int)$_REQUEST['post_id'];
+    }else{
+        $post_id=0;
+    }
+
+    $args = array(
+        'numberposts'   => -1,
+        'post_type'     => 'attachment',
+        'meta_query' => array(
+            array(
+                'key' => '_wp_attached_file',
+                'value' => $name,
+                'compare' => 'LIKE'
+            )
+        )
+    );
+    $attachments_to_remove = get_posts( $args );
+
+    foreach( $attachments_to_remove as $attach ){
+        if($attach->post_parent == $post_id) {
+            wp_delete_attachment($attach->ID, true);
+        }
+    }
+
+    return $name;
+}
+
+add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
+
+
+//DISABLE ALL AUTO-CREATED THUMBS for Assets3D
+function wpunity_disable_imgthumbs_assets( $image_sizes ){
+
+    // extra sizes
+    $slider_image_sizes = array(  );
+    // for ex: $slider_image_sizes = array( 'thumbnail', 'medium' );
+
+    // instead of unset sizes, return your custom size (nothing)
+    if( isset($_REQUEST['post_id']) && 'wpunity_asset3d' === get_post_type( $_REQUEST['post_id'] ) )
+        return $slider_image_sizes;
+
+    return $image_sizes;
+}
+
+add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
+?>

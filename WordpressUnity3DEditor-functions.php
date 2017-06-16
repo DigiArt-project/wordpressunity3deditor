@@ -258,6 +258,9 @@ register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
 // Add helper functions file
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
 
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
+
 // ===================== Obsolete ===================================
 
 /**

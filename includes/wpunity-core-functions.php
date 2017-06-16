@@ -1,13 +1,5 @@
 <?php
 
-function wpunity_delete_gameproject_frontend($game_id){
-
-    wp_delete_post( $game_id, false );
-
-}
-
-
-
 add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
 
 function wpunity_remove_menus() {
@@ -43,23 +35,8 @@ function wpunity_remove_menus() {
 
 //==========================================================================================================================================
 
-function wpunity_disable_imgthumbs_assets( $image_sizes ){
 
-    // extra sizes
-    $slider_image_sizes = array(  );
-    // for ex: $slider_image_sizes = array( 'thumbnail', 'medium' );
-
-    // instead of unset sizes, return your custom size (nothing)
-    if( isset($_REQUEST['post_id']) && 'wpunity_asset3d' === get_post_type( $_REQUEST['post_id'] ) )
-        return $slider_image_sizes;
-
-    return $image_sizes;
-}
-
-add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
-
-//==========================================================================================================================================
-
+//FORCE TITLE ON OUR CUSTOM POST TYPES
 function force_post_title_init(){
     wp_enqueue_script('jquery');
 }
@@ -67,7 +44,7 @@ function force_post_title_init(){
 function force_post_title(){
     global $post;
     $post_type = get_post_type($post->ID);
-    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game' || $post_type == 'wpunity_yamltemp') {
+    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game') {
         echo "<script type='text/javascript'>\n";
         echo "
             jQuery('#publish').click(function(){
@@ -108,7 +85,7 @@ add_action( 'admin_footer-post.php', 'wpunity_mediaLibrary_default' );
 function wpunity_change_publish_button( $translation, $text ) {
     global $post;
     $post_type = get_post_type($post->ID);
-    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game' || $post_type == 'wpunity_yamltemp') {
+    if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game') {
         if ($text == 'Publish')
             return 'Create';
         if ($text == 'Update')
@@ -120,29 +97,6 @@ function wpunity_change_publish_button( $translation, $text ) {
 
 add_filter( 'gettext', 'wpunity_change_publish_button', 10, 2 );
 
-//==========================================================================================================================================
-
-function wpunity_upload_dir_forAssets( $args ) {
-
-    // Get the current post_id
-    $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
-
-    if( $id ) {
-
-        $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
-        // Set the new path depends on current post_type
-        $newdir = '/' . $pathofPost;
-
-        $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-        $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-        $args['subdir']  = $newdir;
-        $args['path']   .= $newdir;
-        $args['url']    .= $newdir;
-    }
-    return $args;
-}
-
-add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
 
 //==========================================================================================================================================
 
@@ -151,33 +105,33 @@ function wpunity_aftertitle_info($post) {
     $post_type = get_post_type($post->ID);
     if($post_type == 'wpunity_game'){
         $gameSlug = $post->post_name;
-        $upload = wp_upload_dir();
-        $upload_dir = $upload['basedir'];
-        $upload_dir .= "/" . $gameSlug;
-        $upload_dir = str_replace('\\','/',$upload_dir);
+//        $upload = wp_upload_dir();
+//        $upload_dir = $upload['basedir'];
+//        $upload_dir .= "/" . $gameSlug;
+//        $upload_dir = str_replace('\\','/',$upload_dir);
         echo '<b>Slug:</b> ' . $gameSlug;
-        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
     }
     elseif($post_type == 'wpunity_scene'){
         $sceneSlug = $post->post_name;
-        $terms = wp_get_post_terms( $post->ID, 'wpunity_scene_pgame');
-        $gameSlug = $terms[0]->slug;
-        $upload = wp_upload_dir();
-        $upload_dir = $upload['basedir'];
-        $upload_dir .= "/" . $gameSlug . "/" . $sceneSlug;
-        $upload_dir = str_replace('\\','/',$upload_dir);
+//        $terms = wp_get_post_terms( $post->ID, 'wpunity_scene_pgame');
+//        $gameSlug = $terms[0]->slug;
+//        $upload = wp_upload_dir();
+//        $upload_dir = $upload['basedir'];
+//        $upload_dir .= "/" . $gameSlug . "/" . $sceneSlug;
+//        $upload_dir = str_replace('\\','/',$upload_dir);
         echo '<b>Slug:</b> ' . $sceneSlug;
-        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
     }
     elseif($post_type == 'wpunity_asset3d'){
         $assetSlug = $post->post_name;
-        $upload = wp_upload_dir();
-        $upload_dir = $upload['basedir'];
-        $pathofPost = get_post_meta($post->ID,'wpunity_asset3d_pathData',true);
-        $upload_dir .= "/" . $pathofPost;
-        $upload_dir = str_replace('\\','/',$upload_dir);
+//        $upload = wp_upload_dir();
+//        $upload_dir = $upload['basedir'];
+//        $pathofPost = get_post_meta($post->ID,'wpunity_asset3d_pathData',true);
+//        $upload_dir .= "/" . $pathofPost;
+//        $upload_dir = str_replace('\\','/',$upload_dir);
         echo '<b>Slug:</b> ' . $assetSlug;
-        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
+//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
     }
 
 }
@@ -187,45 +141,7 @@ add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
 
 //==========================================================================================================================================
 
-/**
- * 1.01
- * Overwrite Uploads
- *
- * Upload files with the same namew, without uploading copy with unique filename
- *
- */
 
-function wpunity_overwrite_uploads( $name ){
-
-    if( isset($_REQUEST['post_id']) ) {
-        $post_id =  (int)$_REQUEST['post_id'];
-    }else{
-        $post_id=0;
-    }
-
-    $args = array(
-        'numberposts'   => -1,
-        'post_type'     => 'attachment',
-        'meta_query' => array(
-            array(
-                'key' => '_wp_attached_file',
-                'value' => $name,
-                'compare' => 'LIKE'
-            )
-        )
-    );
-    $attachments_to_remove = get_posts( $args );
-
-    foreach( $attachments_to_remove as $attach ){
-        if($attach->post_parent == $post_id) {
-            wp_delete_attachment($attach->ID, true);
-        }
-    }
-
-    return $name;
-}
-
-add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
 
 
 // ================ SEMANTICS ON 3D ============================================================
