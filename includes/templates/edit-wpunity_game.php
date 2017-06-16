@@ -31,18 +31,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$wonderaround_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
 
 	$scene_taxonomies = array(
-        'wpunity_scene_pgame' => array(
-            $allScenePGameID,
-        ),
-        'wpunity_scene_yaml' => array(
-            $wonderaround_yaml_tax->term_id,
-        )
-    );
+		'wpunity_scene_pgame' => array(
+			$allScenePGameID,
+		),
+		'wpunity_scene_yaml' => array(
+			$wonderaround_yaml_tax->term_id,
+		)
+	);
 
-    $scene_metas = array(
-        'wpunity_scene_default' => 'false',
-        'wpunity_scene_metatype' => 'scene',
-    );
+	$scene_metas = array(
+		'wpunity_scene_default' => 'false',
+		'wpunity_scene_metatype' => 'scene',
+	);
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
@@ -50,14 +50,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'post_type' => 'wpunity_scene',
 		'post_status' => 'publish',
 		'tax_input' => $scene_taxonomies,
-        'meta_input' => $scene_metas,
+		'meta_input' => $scene_metas,
 	);
 
 	$scene_id = wp_insert_post($scene_information);
 
 	if($scene_id){
-        $newpost = get_post($scene_id);
-        wpunity_create_unityfile_noAssets('scene',$newpost->post_name,$scene_id,$gameSlug,$allScenePGameID,$yamlTermID);
+		$newpost = get_post($scene_id);
+		wpunity_create_unityfile_noAssets('scene',$newpost->post_name,$scene_id,$gameSlug,$allScenePGameID,$yamlTermID);
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
 		exit;
 	}
@@ -112,18 +112,28 @@ get_header();
                        id="title-validation-msg">
                         Must be at least 6 characters long
                     </p>
-                    <hr class="WhiteSpaceSeparator">
 
-                    <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                        <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                        <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
-                    </div>
 
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                    <label class="mdc-typography--subheading2">Scene Type</label>
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                        <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" style="box-shadow: none; border-color:transparent;">
+                        <label for="desc" class="mdc-textfield__label">
+                            Enter a scene description
+                    </div>
+                    
+
+                    <hr class="WhiteSpaceSeparator">
+
+	                <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                    <input type="hidden" name="submitted" id="submitted" value="true" />
+                    <button style="float:right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                        ADD SCENE
+                    </button>
+
+                    <!--<label class="mdc-typography--subheading2">Scene Type</label>
 
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field">
@@ -146,14 +156,7 @@ get_header();
                             </div>
                             <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
                         </li>
-
-                    </ul>
-
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                    <input type="hidden" name="submitted" id="submitted" value="true" />
-                    <button style="float: right" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                        ADD SCENE
-                    </button>
+                    </ul>-->
 
                 </div>
             </div>
