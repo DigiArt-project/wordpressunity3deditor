@@ -171,15 +171,21 @@ get_header(); ?>
                 </ul>
 
                 <label id="fbxFileInputLabel" for="fbxFileInput"> Select an FBX file</label>
-                <input type="file" name="fbxFileInput" value="" id="fbxFileInput" />
+                <input size="100" class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput" />
 
                 <label id="mtlFileInputLabel" for="mtlFileInput" style="display: none"> Select an MTL file</label>
-                <input style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                <input class="FullWidth" style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label id="objFileInputLabel" for="objFileInput" style="display: none"> Select an OBJ file</label>
-                <input style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+                <input class="FullWidth" style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+
+                <hr class="WhiteSpaceSeparator">
+
+                <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
+                    <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
+                </div>
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -237,6 +243,15 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var fbxInput = jQuery('#fbxFileInput');
+        var fbxInputLabel = jQuery('#fbxFileInputLabel');
+        var mtlInput = jQuery('#mtlFileInput');
+        var mtlInputLabel = jQuery('#mtlFileInputLabel');
+        var objInput = jQuery('#objFileInput');
+        var objInputLabel = jQuery('#objFileInputLabel');
+        var modelPreviewButton = jQuery('#modelPreviewBtn');
+
+
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
             var categoryDropdown = document.getElementById('category-select');
@@ -253,19 +268,14 @@ get_header(); ?>
             });
         })();
 
-        jQuery( ".RadioButtonList" ).click(function() {
-            var objectType = jQuery('input[name=objectTypeRadio]:checked', '.RadioButtonList').val();
+        jQuery( "input[name=objectTypeRadio]" ).click(function() {
 
-            var fbxInput = jQuery('#fbxFileInput');
-            var fbxInputLabel = jQuery('#fbxFileInputLabel');
-            var mtlInput = jQuery('#mtlFileInput');
-            var mtlInputLabel = jQuery('#mtlFileInputLabel');
-            var objInput = jQuery('#objFileInput');
-            var objInputLabel = jQuery('#objFileInputLabel');
+            var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
             if (objectType === 'fbx') {
                 console.log("FBX");
 
+                clearFiles();
                 fbxInput.show();
                 fbxInputLabel.show();
                 mtlInput.hide();
@@ -276,6 +286,7 @@ get_header(); ?>
             else if (objectType === 'mtl') {
                 console.log("MTL");
 
+                clearFiles();
                 fbxInput.hide();
                 fbxInputLabel.hide();
                 mtlInput.show();
@@ -285,124 +296,67 @@ get_header(); ?>
             }
         });
 
-        var objectDropzone = new Dropzone("div#fileUploaderDropzone", {
-            url: '<?php echo get_permalink(); ?>',
-            clickable: true,
-            maxFiles: 2,
-            autoDiscover: false,
-            previewTemplate: document.getElementById('preview-template').innerHTML,
-            init: function() {
 
-                this.on("queuecomplete", function (file) {
+        fbxInput.change(function() {
+            console.log(fbxInput.val());
 
-                    var flags = [];
+            if (fileExtension(fbxInput.val()) === 'fbx') {
 
-                    if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-
-                        appendSubmitBtnToDropzone(strings.fbx);
-
-                    } else {
-
-                        var i;
-                        if (this.files.length === 2) {
-
-                            for (i=0; i < this.files.length; i++) {
-                                flags = checkFlags(flags, this.files[i].name);
-                            }
-
-                            if (flags.mtl && flags.obj /*&& flags.texture*/) {
-
-                                appendSubmitBtnToDropzone(strings.two);
-                            }
-                            console.log(flags);
-                        }
-                    }
-                    console.log("total files: ", this.files.length);
-                });
-
-                this.on("addedfile", function(file) {
-
-                    var placeholder = jQuery( '.DropzoneDescriptivePlaceholder' );
-
-                    placeholder.hide();
-
-                    if (this.files.length > 2 ) {
-                        var btnContainer = jQuery( '#submitBtnContainer' );
-
-
-                        if (btnContainer) {
-                            btnContainer.remove();
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            /*placeholder.show();*/
-                        }
-                    }
-                });
-
-                this.on("removedfile", function (file) {
-
-                    var flags = [];
-                    var btnContainer = jQuery( '#submitBtnContainer' );
-
-                    if (this.files.length === 0) {
-                        if (btnContainer) {
-                            btnContainer.remove();
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
-                        }
-                    } else if (this.files.length < 2) {
-                        if (btnContainer) {
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            btnContainer.remove();
-
-                        }
-                    }
-
-                    if (this.files.length === 2) {
-
-                        var i;
-
-                        for (i=0; i < this.files.length; i++) {
-                            flags = checkFlags(flags, this.files[i].name);
-                        }
-
-                        if (flags.mtl && flags.obj /*&& flags.texture*/) {
-
-                            appendSubmitBtnToDropzone(strings.two);
-                        }
-                    }
-
-                    if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-
-                        appendSubmitBtnToDropzone(strings.fbx);
-                    }
-
-                });
-
-                this.on("canceled", function (file) {
-
-                });
-
-                this.on("sending", function(file, xhr, formData) {
-
-                });
+                modelPreviewButton.show();
+            } else {
+                document.getElementById("fbxFileInput").value = "";
+                modelPreviewButton.hide();
             }
         });
 
-        function fileExtension(fn) {
-            return fn.split('.').pop().toLowerCase();
+
+        mtlInput.change(function() {
+            console.log(mtlInput.val(), objInput.val());
+
+            if (fileExtension(mtlInput.val()) === 'mtl') {
+                console.log('mtl');
+            } else {
+                document.getElementById("mtlFileInput").value = "";
+                modelPreviewButton.hide();
+            }
+
+
+            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+                modelPreviewButton.show();
+            }
+
+        });
+
+        objInput.change(function() {
+            console.log(mtlInput.val(), objInput.val());
+
+            if (fileExtension(objInput.val()) === 'obj') {
+                console.log('obj');
+            } else {
+                document.getElementById("objFileInput").value = "";
+                modelPreviewButton.hide();
+            }
+
+            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+                modelPreviewButton.show();
+            }
+        });
+
+
+        function clearFiles() {
+            document.getElementById("fbxFileInput").value = "";
+            document.getElementById("mtlFileInput").value = "";
+            document.getElementById("objFileInput").value = "";
+            modelPreviewButton.hide();
         }
 
-        function checkFlags(flags, fn) {
-            if (!flags.mtl) {
-                flags.mtl = fileExtension(fn) === 'mtl';
+        function fileExtension(fn) {
+            if (fn) {
+                return fn.split('.').pop().toLowerCase();
+            } else {
+                return '';
             }
-            if (!flags.obj) {
-                flags.obj = fileExtension(fn) === 'obj';
-            }
-            /*if (!flags.texture) {
-             flags.texture = fileExtension(fn) === ('png' || 'jpg');
-             }*/
-            return flags;
+
         }
 
         function appendSubmitBtnToDropzone(string) {
