@@ -129,18 +129,16 @@ get_header(); ?>
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="screenshotImageInput"> Select a Screenshot</label>
-                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput"  accept="image/jpeg">
+                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput" accept="image/jpeg">
 
                 <label for="diffusionImageInput"> Select a Diffusion image</label>
-                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput">
-
-
+                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput" accept="image/jpeg">
 
                 <label for="staticImageInput"> Select a Static image</label>
-                <input type="file" name="staticImageInput" value="" id="staticImageInput">
+                <input type="file" name="staticImageInput" value="" id="staticImageInput" accept="image/jpeg">
 
                 <label for="videoInput"> Select a Video file</label>
-                <input type="file" name="videoInput" value="" id="videoInput">
+                <input type="file" name="videoInput" value="" id="videoInput" accept="video/mp4">
 
 
 
