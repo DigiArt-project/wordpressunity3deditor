@@ -177,7 +177,7 @@ function wpunity_create_folder_asset( $new_status, $old_status, $post ){
     }
 }
 
-add_action('transition_post_status','wpunity_create_folder_asset',10,3);
+//add_action('transition_post_status','wpunity_create_folder_asset',10,3);
 
 
 /**
@@ -225,7 +225,7 @@ function wpunity_create_pathdata_asset( $post_id ){
     }
 }
 
-add_action('save_post','wpunity_create_pathdata_asset',10,3);
+//add_action('save_post','wpunity_create_pathdata_asset',10,3);
 
 //==========================================================================================================================================
 
