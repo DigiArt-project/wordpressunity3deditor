@@ -123,7 +123,7 @@ get_header();
                         <label for="desc" class="mdc-textfield__label">
                             Enter a scene description
                     </div>
-                    
+
 
                     <hr class="WhiteSpaceSeparator">
 
