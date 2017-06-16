@@ -187,57 +187,16 @@ get_header(); ?>
                     <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
 
-                <hr class="WhiteSpaceSeparator">
 
-                <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
-
-                    <div class="DropzoneDescriptivePlaceholder">
-                        <i class="material-icons mdc-theme--text-icon-on-background">insert_drive_file</i>
-                        <h4 class="dz-message mdc-theme--text-primary-on-background">Drop your asset file(s) here to upload them</h4>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">You can drop a single .FBX file</h6>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">or</h6>
-                        <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Two files:<br>.MTL - model<br>.OBJ - object</h6>
-                    </div>
-
-
-                    <input type="hidden" name="file" />
-
-
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-
-                </div>
-
-                <div id="fileUploadSubmitArea" class="DisplayBlock CenterContents">
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__cell--span-12">
+	            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                <input type="hidden" name="submitted" id="submitted" value="true" />
+                <button class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                    Create
+                </button>
 
             </div>
         </div>
     </form>
-
-
-    <!-- Preview template for Dropzone -->
-    <div id="preview-template" style="display: none;">
-        <div class="dz-preview dz-file-preview CenterContents CustomDropZoneAssetStyle">
-            <div class="dz-details">
-                <img src="<?php echo site_url();?>/wp-content/plugins/WordpressUnity3DEditor/images/default-asset.png" data-dz-thumbnail>
-                <div class="dz-filename mdc-typography--body1"><span data-dz-name></span></div>
-                <div class="dz-size mdc-theme--text-secondary-on-background mdc-typography--caption">Size: <span data-dz-size></span></div>
-            </div>
-            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-            <div class="dz-error-message"><span data-dz-errormessage></span></div>
-            <a class="mdc-button mdc-button--primary" data-dz-remove>Remove</a>
-        </div>
-    </div>
-
     <script type="text/javascript">
 
         var mdc = window.mdc;
@@ -250,7 +209,6 @@ get_header(); ?>
         var objInput = jQuery('#objFileInput');
         var objInputLabel = jQuery('#objFileInputLabel');
         var modelPreviewButton = jQuery('#modelPreviewBtn');
-
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
