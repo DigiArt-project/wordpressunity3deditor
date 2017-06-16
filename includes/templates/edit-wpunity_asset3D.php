@@ -129,24 +129,65 @@ get_header(); ?>
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="screenshotImageInput"> Select a Screenshot</label>
-                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput"  accept="image/jpeg">
+                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput" accept="image/jpeg">
 
                 <label for="diffusionImageInput"> Select a Diffusion image</label>
-                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput">
-
-
+                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput" accept="image/jpeg">
 
                 <label for="staticImageInput"> Select a Static image</label>
-                <input type="file" name="staticImageInput" value="" id="staticImageInput">
+                <input type="file" name="staticImageInput" value="" id="staticImageInput" accept="image/jpeg">
 
                 <label for="videoInput"> Select a Video file</label>
-                <input type="file" name="videoInput" value="" id="videoInput">
-
+                <input type="file" name="videoInput" value="" id="videoInput" accept="video/mp4">
 
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h2 class="mdc-typography--subheading2">Object type</h2>
+
+                <ul class="RadioButtonList">
+                    <li class="mdc-form-field">
+                        <div class="mdc-radio">
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio" checked="" name="objectTypeRadio" value="fbx">
+                            <div class="mdc-radio__background">
+                                <div class="mdc-radio__outer-circle"></div>
+                                <div class="mdc-radio__inner-circle"></div>
+                            </div>
+                        </div>
+                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+                    </li>
+                    <li class="mdc-form-field">
+                        <div class="mdc-radio">
+                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                            <div class="mdc-radio__background">
+                                <div class="mdc-radio__outer-circle"></div>
+                                <div class="mdc-radio__inner-circle"></div>
+                            </div>
+                        </div>
+                        <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
+                    </li>
+                </ul>
+
+                <label id="fbxFileInputLabel" for="fbxFileInput"> Select an FBX file</label>
+                <input size="100" class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput" />
+
+                <label id="mtlFileInputLabel" for="mtlFileInput" style="display: none"> Select an MTL file</label>
+                <input class="FullWidth" style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label id="objFileInputLabel" for="objFileInput" style="display: none"> Select an OBJ file</label>
+                <input class="FullWidth" style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+
+                <hr class="WhiteSpaceSeparator">
+
+                <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
+                    <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
+                </div>
+
+                <hr class="WhiteSpaceSeparator">
 
                 <div class="DropzoneStyle CenterContents" id="fileUploaderDropzone">
 
@@ -158,11 +199,9 @@ get_header(); ?>
                         <h6 class="dz-message mdc-typography--subheading1 mdc-theme--text-secondary-on-background">Two files:<br>.MTL - model<br>.OBJ - object</h6>
                     </div>
 
+
                     <input type="hidden" name="file" />
 
-                    <input type="hidden" name="fbxFile" />
-                    <input type="hidden" name="mtlFile" />
-                    <input type="hidden" name="objFile" />
 
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 
@@ -204,6 +243,15 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var fbxInput = jQuery('#fbxFileInput');
+        var fbxInputLabel = jQuery('#fbxFileInputLabel');
+        var mtlInput = jQuery('#mtlFileInput');
+        var mtlInputLabel = jQuery('#mtlFileInputLabel');
+        var objInput = jQuery('#objFileInput');
+        var objInputLabel = jQuery('#objFileInputLabel');
+        var modelPreviewButton = jQuery('#modelPreviewBtn');
+
+
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
             var categoryDropdown = document.getElementById('category-select');
@@ -220,125 +268,95 @@ get_header(); ?>
             });
         })();
 
+        jQuery( "input[name=objectTypeRadio]" ).click(function() {
 
-        var objectDropzone = new Dropzone("div#fileUploaderDropzone", {
-            url: '<?php echo get_permalink(); ?>',
-            clickable: true,
-            maxFiles: 3,
-            autoDiscover: false,
-            previewTemplate: document.getElementById('preview-template').innerHTML,
-            init: function() {
+            var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
-                this.on("queuecomplete", function (file) {
+            if (objectType === 'fbx') {
+                console.log("FBX");
 
-                    var flags = [];
+                clearFiles();
+                fbxInput.show();
+                fbxInputLabel.show();
+                mtlInput.hide();
+                mtlInputLabel.hide();
+                objInput.hide();
+                objInputLabel.hide();
+            }
+            else if (objectType === 'mtl') {
+                console.log("MTL");
 
-                    if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-
-                        appendSubmitBtnToDropzone(strings.fbx);
-
-                    } else {
-
-                        var i;
-                        if (this.files.length === 2) {
-
-                            for (i=0; i < this.files.length; i++) {
-                                flags = checkFlags(flags, this.files[i].name);
-                            }
-
-                            if (flags.mtl && flags.obj /*&& flags.texture*/) {
-
-                                appendSubmitBtnToDropzone(strings.two);
-                            }
-                            console.log(flags);
-                        }
-                    }
-                    console.log("total files: ", this.files.length);
-                });
-
-                this.on("addedfile", function(file) {
-
-                    var placeholder = jQuery( '.DropzoneDescriptivePlaceholder' );
-
-                    placeholder.hide();
-
-                    if (this.files.length > 2 ) {
-                        var btnContainer = jQuery( '#submitBtnContainer' );
-
-
-                        if (btnContainer) {
-                            btnContainer.remove();
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            /*placeholder.show();*/
-                        }
-                    }
-                });
-
-                this.on("removedfile", function (file) {
-
-                    var flags = [];
-                    var btnContainer = jQuery( '#submitBtnContainer' );
-
-                    if (this.files.length === 0) {
-                        if (btnContainer) {
-                            btnContainer.remove();
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            jQuery( '.DropzoneDescriptivePlaceholder' ).show();
-                        }
-                    } else if (this.files.length < 2) {
-                        if (btnContainer) {
-                            jQuery( '#modelPreviewBtn' ).remove();
-                            btnContainer.remove();
-
-                        }
-                    }
-
-                    if (this.files.length === 2) {
-
-                        var i;
-
-                        for (i=0; i < this.files.length; i++) {
-                            flags = checkFlags(flags, this.files[i].name);
-                        }
-
-                        if (flags.mtl && flags.obj /*&& flags.texture*/) {
-
-                            appendSubmitBtnToDropzone(strings.two);
-                        }
-                    }
-
-                    if (this.files.length === 1 && (fileExtension(this.files[0].name) === 'fbx') && this.files[0].status === 'success') {
-
-                        appendSubmitBtnToDropzone(strings.fbx);
-                    }
-
-                });
-
-                this.on("canceled", function (file) {
-
-                });
-
-                this.on("sending", function(file, xhr, formData) {
-
-                });
+                clearFiles();
+                fbxInput.hide();
+                fbxInputLabel.hide();
+                mtlInput.show();
+                mtlInputLabel.show();
+                objInput.show();
+                objInputLabel.show();
             }
         });
 
-        function fileExtension(fn) {
-            return fn.split('.').pop().toLowerCase();
+
+        fbxInput.change(function() {
+            console.log(fbxInput.val());
+
+            if (fileExtension(fbxInput.val()) === 'fbx') {
+
+                modelPreviewButton.show();
+            } else {
+                document.getElementById("fbxFileInput").value = "";
+                modelPreviewButton.hide();
+            }
+        });
+
+
+        mtlInput.change(function() {
+            console.log(mtlInput.val(), objInput.val());
+
+            if (fileExtension(mtlInput.val()) === 'mtl') {
+                console.log('mtl');
+            } else {
+                document.getElementById("mtlFileInput").value = "";
+                modelPreviewButton.hide();
+            }
+
+
+            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+                modelPreviewButton.show();
+            }
+
+        });
+
+        objInput.change(function() {
+            console.log(mtlInput.val(), objInput.val());
+
+            if (fileExtension(objInput.val()) === 'obj') {
+                console.log('obj');
+            } else {
+                document.getElementById("objFileInput").value = "";
+                modelPreviewButton.hide();
+            }
+
+            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+                modelPreviewButton.show();
+            }
+        });
+
+
+        function clearFiles() {
+            document.getElementById("fbxFileInput").value = "";
+            document.getElementById("mtlFileInput").value = "";
+            document.getElementById("objFileInput").value = "";
+            modelPreviewButton.hide();
         }
 
-        function checkFlags(flags, fn) {
-            if (!flags.mtl) {
-                flags.mtl = fileExtension(fn) === 'mtl';
+        function fileExtension(fn) {
+            if (fn) {
+                return fn.split('.').pop().toLowerCase();
+            } else {
+                return '';
             }
-            if (!flags.obj) {
-                flags.obj = fileExtension(fn) === 'obj';
-            }
-            /*if (!flags.texture) {
-             flags.texture = fileExtension(fn) === ('png' || 'jpg');
-             }*/
-            return flags;
+
         }
 
         function appendSubmitBtnToDropzone(string) {
