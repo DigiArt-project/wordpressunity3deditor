@@ -61,7 +61,6 @@ wp_enqueue_script('wpunity_material_scripts');
 wp_enqueue_style( 'wpunity_material_icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
 wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 wp_enqueue_style('wpunity_frontend_stylesheet');
-wp_register_script( 'wpunity_dropzone', plugin_dir_url( __FILE__ ) . 'js_libs/dropzone.js');
 
 
 
