@@ -5,18 +5,24 @@
 //----------------------------------------------------------------------------------
 //  AJAX: FETCH DIR CONTENT
 //----------------------------------------------------------------------------------
-function wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID){
+function wpunity_fetchSceneAssetsAjax(gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID){
 
     jQuery.ajax({
         url : 'admin-ajax.php',
         type : 'GET',
-        data : {'action': 'wpunity_fetch_scene_assets_by_db_action',
+        data : {'action': 'wpunity_fetch_game_assets_action',
                 //'action': 'wpunity_fetch_scene_assets_by_dir_action',
                 'gamefolder':gamefolder,
                 'scenefolder':scenefolder,
-                'sceneID':sceneID},
+                'sceneID':sceneID,
+                'gameProjectID': gameProjectID,
+                'gameProjectSlug': gameProjectSlug},
 
         success : function(data) {
+
+
+            console.log("DAD:");
+            console.log(data);
 
             //console.log("datatttt", data);
             file_Browsing_By_DB(data);
@@ -43,8 +49,6 @@ function wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID){
 //======================================================================
 function file_Browsing_By_DB(data){
 
-
-
     var filemanager = jQuery('.filemanager'),
         breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
@@ -63,7 +67,6 @@ function file_Browsing_By_DB(data){
     jQuery(window).on('hashchange', function(){
 
         goto(window.location.hash);
-
 
         // We are triggering the event. This will execute
         // this function on page load, so that we show the correct folder:

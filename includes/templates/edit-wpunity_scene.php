@@ -1,5 +1,7 @@
 <?php
 
+
+
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
@@ -26,6 +28,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
 
 
 
@@ -74,6 +77,19 @@ get_header(); ?>
 				$scenefolder = $sceneSlug;
 				$gamefolder = $parentGameSlug;
 				$sceneID = $scene_id;
+
+
+				echo "meta_json: ".$meta_json;
+                echo "sceneToLoad: ".$sceneToLoad;
+                echo "sceneSlug: ". $sceneSlug;
+                echo "parentGameSlug: ". $parentGameSlug;
+                echo "scenefolder: ". $scenefolder;
+                echo "gamefolder: ". $gamefolder;
+                echo "sceneID: ". $sceneID;
+                echo "gameID: ". $project_id;
+                echo "gameProjectSlug: ". $parentGameSlug;
+
+
 
 				// vr_editor loads the $sceneToLoad
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>

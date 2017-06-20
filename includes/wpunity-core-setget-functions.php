@@ -50,7 +50,7 @@ function wpunity_getEditpage($type){
 
 
 // database method
-function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
+function wpunity_fetch_game_assets_action_callback(){
 
     // Output the directory listing as JSON
     header('Content-type: application/json');
@@ -60,8 +60,7 @@ function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
     // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
     $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
 
-    $response = wpunity_getAllassets_byScene($_GET['sceneID']);
-
+    $response = wpunity_getAllassets_byGameProject($_GET['gameProjectSlug']);
 
     for ($i=0; $i<count($response); $i++){
         $response[$i][name] =$response[$i][assetName];
@@ -94,93 +93,24 @@ function wpunity_fetch_scene_assets_by_db_action_callback(){ //$sceneID){
 }
 
 
-// OLD DIR METHOD
-function wpunity_fetch_scene_assets_by_dir_action_callback(){ //$sceneID){
-
-    // Output the directory listing as JSON
-    header('Content-type: application/json');
-
-    $DS = DIRECTORY_SEPARATOR;
-    // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
-    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
-
-    $response = scan($dir);
-
-    $jsonResp =  json_encode(array(
-            "name" => $dir,
-            "type" => "folder",
-            "path" => $dir,
-            "items" => $response
-        )
-    );
-
-    echo $jsonResp;
-
-    wp_die();
-}
-
-function scan($dir)
-{
-    $DS = '/'; // Do not change
-    $files = array();
-    // -- Dir method --
-    if (file_exists($dir)) {
-
-        foreach (scandir($dir) as $f) {
-
-            if (!$f || $f[0] == '.') {
-                continue; // Ignore hidden files
-            }
-
-            if (is_dir($dir . '/' . $f)) {
-                // The path is a folder
-                $files[] = array(
-                    "name" => $f,
-                    "type" => "folder",
-                    "path" => $dir . $DS . $f,
-                    "items" => scan($dir . $DS . $f) // Recursively get the contents of the folder
-                );
-            } else {
-                // It is a file
-                $files[] = array(
-                    "name" => $f,
-                    "type" => "file",
-                    "path" => $dir . $DS . $f,
-                    "size" => filesize($dir . $DS . $f) // Gets the size of this file
-                );
-            }
-        }
-
-    }
-
-    return $files;
-}
-
-
-
-function wpunity_getAllassets_byScene($sceneID){
+function wpunity_getAllassets_byGameProject($gameProjectSlug){
 
     $allAssets = [];
-
-    $originalScene = get_post($sceneID);
-    $sceneSlug = $originalScene->post_name;
-    //Get 'Asset's Parent Scene' taxonomy with the same slug
-    $sceneTaxonomy = get_term_by('slug', $sceneSlug, 'wpunity_asset3d_pscene');
-    $sceneTaxonomyID = $sceneTaxonomy->term_id;
 
     $queryargs = array(
         'post_type' => 'wpunity_asset3d',
         'posts_per_page' => -1,
         'tax_query' => array(
             array(
-                'taxonomy' => 'wpunity_asset3d_pscene',
-                'field' => 'id',
-                'terms' => $sceneTaxonomyID
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field' => 'slug',
+                'terms' => $gameProjectSlug
             )
         )
     );
 
     $custom_query = new WP_Query( $queryargs );
+
 
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
@@ -199,9 +129,7 @@ function wpunity_getAllassets_byScene($sceneID){
             $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); //Screenshot Image ID
             if($screenImageID){$screenImagePath = wp_get_attachment_url( $screenImageID );} //Screenshot Image PATH
 
-
             $image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true); //OBJ ID
-
 
             $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
 
@@ -227,9 +155,10 @@ function wpunity_getAllassets_byScene($sceneID){
     wp_reset_postdata();
 
     return $allAssets;
-
 }
 
+
+// jimver : check this
 function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
     $allUnityScenes = [];
@@ -273,13 +202,12 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 }
 
 
-
-
 function wpunity_getTemplateID_forAsset($asset_id){
 
     $parentSceneterms = wp_get_post_terms( $asset_id, 'wpunity_asset3d_pscene');
 
     $parentSceneSlug = $parentSceneterms[0]->slug;
+
     $custom_args = array(
         'name'        => $parentSceneSlug,
         'post_type'   => 'wpunity_scene',

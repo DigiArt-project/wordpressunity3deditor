@@ -82,6 +82,9 @@ function wpunity_scenes_databox_show(){
         $gamefolder = $parentGameSlug;
         $sceneID = $post->ID;
 
+        $project_id =   get_page_by_path( $parentGameSlug, OBJECT, 'wpunity_game')->ID;
+        $projectGameSlug = $parentGameSlug;
+
         // vr_editor loads the $sceneToLoad
         require( 'vr_editor.php' );
 
@@ -172,12 +175,7 @@ function wpunity_scenes_databox_save($post_id) {
 
 add_action('save_post', 'wpunity_scenes_databox_save');
 
-// Ajax for fetching scene's assets within file browser widget at vr_editor
-add_action( 'wp_ajax_wpunity_fetch_scene_assets_by_db_action', 'wpunity_fetch_scene_assets_by_db_action_callback' );
-add_action( 'wp_ajax_wpunity_fetch_scene_assets_by_dir_action', 'wpunity_fetch_scene_assets_by_dir_action_callback' );
-
-//==========================================================================================================================================
-
-
+// Ajax for fetching game's assets within asset browser widget at vr_editor
+add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
 
 ?>

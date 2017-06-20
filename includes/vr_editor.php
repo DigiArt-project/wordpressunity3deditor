@@ -32,6 +32,13 @@ echo '<script>';
 echo 'sceneID="'.$sceneID.'"';
 echo '</script>';
 
+echo '<script>';
+echo 'gameProjectID="'.$project_id.'"';
+echo '</script>';
+
+echo '<script>';
+echo 'gameProjectSlug="'.$projectGameSlug.'"';
+echo '</script>';
 
 
 ?>
@@ -117,7 +124,10 @@ echo '</script>';
 
         });
 
-        wpunity_fetchSceneAssetsAjax(gamefolder, scenefolder, sceneID);
+
+        console.log("AAAAA:" + gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);
+
+        wpunity_fetchSceneAssetsAjax(gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
 
 
     });
