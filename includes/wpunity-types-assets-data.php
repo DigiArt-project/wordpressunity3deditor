@@ -383,6 +383,7 @@ function wpunity_assets_infobox_show(){
 
 function wpunity_assets_databox_show(){
     global $wpunity_databox1, $post;
+
     $post_title = $post->post_title;
     if($post->post_status == 'publish'){$hideshow = 'none';}else{$hideshow = 'block';}
     ?>

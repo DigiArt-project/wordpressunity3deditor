@@ -27,16 +27,20 @@ function wpunity_upload_dir_forAssets( $args ) {
 
         if ( get_post_type( $id ) == 'wpunity_asset3d' ) {
 
-            $gameterms = get_the_terms( $id , 'wpunity_asset3d_pgame' );
-            $projectSlug = $gameterms[0]->slug;
+            global $post;
+            $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
+            $projectSlug = $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
+
             // Set the new path depends on current post_type
-            $newdir = '/' . $projectSlug . '/Models';
+            $newdir =  '/' . $projectSlug . '/Models';
 
             $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
             $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
             $args['subdir']  = $newdir;
             $args['path']   .= $newdir;
             $args['url']    .= $newdir;
+
+
         }elseif(get_post_type( $id ) == 'wpunity_scene'){
 
             $gameterms = get_the_terms( $id , 'wpunity_scene_pgame' );
@@ -57,6 +61,7 @@ function wpunity_upload_dir_forAssets( $args ) {
 }
 
 add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
+
 
 
 

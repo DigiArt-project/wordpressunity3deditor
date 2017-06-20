@@ -204,20 +204,20 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
 function wpunity_getTemplateID_forAsset($asset_id){
 
-    $parentSceneterms = wp_get_post_terms( $asset_id, 'wpunity_asset3d_pscene');
-
-    $parentSceneSlug = $parentSceneterms[0]->slug;
-
-    $custom_args = array(
-        'name'        => $parentSceneSlug,
-        'post_type'   => 'wpunity_scene',
-    );
-    $my_posts = get_posts($custom_args);
-    $sceneID = $my_posts[0]->ID;
-
-    $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml', array("fields" => "ids") );
-
-    return $terms[0];
+//    $parentSceneterms = wp_get_post_terms( $asset_id, 'wpunity_asset3d_pscene');
+//
+//    $parentSceneSlug = $parentSceneterms[0]->slug;
+//
+//    $custom_args = array(
+//        'name'        => $parentSceneSlug,
+//        'post_type'   => 'wpunity_scene',
+//    );
+//    $my_posts = get_posts($custom_args);
+//    $sceneID = $my_posts[0]->ID;
+//
+//    $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml', array("fields" => "ids") );
+//
+//    return $terms[0];
 }
 
 //==========================================================================================================================================

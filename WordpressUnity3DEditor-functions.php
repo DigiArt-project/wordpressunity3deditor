@@ -273,6 +273,7 @@ function my_myme_types($mime_types){
 	$mime_types['json'] = 'text/json';
 	$mime_types['obj'] = 'text/plain';
 	$mime_types['mp4'] = 'video/mp4';
+    $mime_types['ogv'] = 'video/ogv';
 	$mime_types['mtl'] = 'text/plain';
 	$mime_types['mat'] = 'text/plain';
 	return $mime_types;
