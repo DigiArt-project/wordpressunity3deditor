@@ -30,9 +30,10 @@ function wpunity_upload_dir_forAssets( $args ) {
 //            global $post;
 //            $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
 //            $projectSlug = $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
-            $type_IDs = wp_get_object_terms( $id, 'wpunity_asset3d_pgame', array('fields' => 'ids') );
-            $gameProject = get_term_by('id', $type_IDs[0], 'wpunity_asset3d_pgame');
-            $newdir =  '/' . $gameProject->slug . '/Models';
+
+            $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+
+            $newdir =  '/' . $pathofPost . '/Models';
 
             $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
             $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
