@@ -30,7 +30,7 @@ function wpunity_upload_dir_forAssets( $args ) {
             $gameterms = get_the_terms( $id , 'wpunity_asset3d_pgame' );
             $projectSlug = $gameterms[0]->slug;
             // Set the new path depends on current post_type
-            $newdir = '/' . $projectSlug . '/Models/';
+            $newdir = '/' . $projectSlug . '/Models';
 
             $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
             $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
@@ -42,7 +42,7 @@ function wpunity_upload_dir_forAssets( $args ) {
             $gameterms = get_the_terms( $id , 'wpunity_scene_pgame' );
             $projectSlug = $gameterms[0]->slug;
             // Set the new path depends on current post_type
-            $newdir = '/' . $projectSlug . '/Scenes/';
+            $newdir = '/' . $projectSlug . '/Scenes';
 
             $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
             $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
