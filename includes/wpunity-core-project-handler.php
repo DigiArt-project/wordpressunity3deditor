@@ -29,7 +29,7 @@ function wpunity_upload_dir_forAssets( $args ) {
 
             global $post;
             $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
-            $projectSlug = $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
+            $projectSlug = 'bgamel';// $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
 
             // Set the new path depends on current post_type
             $newdir =  '/' . $projectSlug . '/Models';

@@ -83,6 +83,9 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
             var mtlLoader = new THREE.MTLLoader();
 
             var curr_path = '<?php echo $curr_path?>';
+
+
+
             mtlLoader.setPath(curr_path);
 
             var textmtl = <?php echo json_encode($textmtl)?>;
