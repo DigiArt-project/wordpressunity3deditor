@@ -25,15 +25,33 @@ function wpunity_upload_dir_forAssets( $args ) {
 
     if( $id ) {
 
-        $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
-        // Set the new path depends on current post_type
-        $newdir = '/' . $pathofPost;
+        if ( get_post_type( $id ) == 'wpunity_asset3d' ) {
 
-        $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-        $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-        $args['subdir']  = $newdir;
-        $args['path']   .= $newdir;
-        $args['url']    .= $newdir;
+            $gameterms = get_the_terms( $id , 'wpunity_asset3d_pgame' );
+            $projectSlug = $gameterms[0]->slug;
+            // Set the new path depends on current post_type
+            $newdir = '/' . $projectSlug . '/Models/';
+
+            $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+            $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+            $args['subdir']  = $newdir;
+            $args['path']   .= $newdir;
+            $args['url']    .= $newdir;
+        }elseif(get_post_type( $id ) == 'wpunity_scene'){
+
+            $gameterms = get_the_terms( $id , 'wpunity_scene_pgame' );
+            $projectSlug = $gameterms[0]->slug;
+            // Set the new path depends on current post_type
+            $newdir = '/' . $projectSlug . '/Scenes/';
+
+            $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+            $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+            $args['subdir']  = $newdir;
+            $args['path']   .= $newdir;
+            $args['url']    .= $newdir;
+        }
+
+
     }
     return $args;
 }
