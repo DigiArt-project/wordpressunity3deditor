@@ -142,27 +142,31 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
+                <div class="PhysicsPanel">
 
-                <h4 class="mdc-typography--subheading2">Wind Speed</h4>
+                    <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
 
-                <div class="mdc-textfield mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="minWindSpeed" type="number" min="0" max="50" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                           style="box-shadow: none; border-color:transparent; width: 100px;">
-                    <label for="minWindSpeed" class="mdc-textfield__label">
-                        Minimum
+                    <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-speed-range"></div>
+                    <input type="hidden" id="physicsWindMinVal" value="">
+                    <input type="hidden" id="physicsWindMaxVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-mean-slider"></div>
+                    <input type="hidden" id="physicsWindMeanVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-variance-slider"></div>
+                    <input type="hidden" id="physicsWindVarianceVal" value="">
+
                 </div>
-
-                <div class="mdc-textfield mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="maxWindSpeed" type="number" min="0" max="50" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                           style="box-shadow: none; border-color:transparent; width: 100px;">
-                    <label for="maxWindSpeed" class="mdc-textfield__label">
-                        Maximum
-                </div>
-
-
-                <div id="slider-range"></div>
-
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
@@ -401,17 +405,46 @@ get_header(); ?>
         strings.two = 'You have selected a group of the two components describing your asset';
 
         jQuery( function() {
-            jQuery( "#slider-range" ).slider({
+
+            jQuery( "#wind-speed-range" ).slider({
                 range: true,
                 min: 0,
-                max: 500,
-                values: [ 75, 300 ],
+                max: 40,
+                values: [ 0, 40 ],
                 slide: function( event, ui ) {
-                    jQuery( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                    jQuery( "#wind-speed-range-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " m/sec" );
+                    jQuery( "#physicsWindMinVal" ).val(ui.values[ 0 ]);
+                    jQuery( "#physicsWindMaxVal" ).val(ui.values[ 1 ]);
                 }
             });
-            jQuery( "#amount" ).val( "$" + jQuery( "#slider-range" ).slider( "values", 0 ) +
-                " - $" + jQuery( "#slider-range" ).slider( "values", 1 ) );
+            jQuery( "#wind-speed-range-label" ).val( jQuery( "#wind-speed-range" ).slider( "values", 0 ) +
+                " - " + jQuery( "#wind-speed-range" ).slider( "values", 1 ) + " m/sec" );
+
+
+            jQuery( "#wind-mean-slider" ).slider({
+                min: 0,
+                max: 40,
+                value: 14,
+                slide: function( event, ui ) {
+                    jQuery( "#wind-mean-slider-label" ).val( ui.value + " m/sec" );
+                    jQuery( "#physicsWindMeanVal" ).val(ui.value);
+
+                }
+            });
+            jQuery( "#wind-mean-slider-label" ).val( jQuery( "#wind-mean-slider" ).slider( "option", "value" ) + " m/sec" );
+
+            jQuery( "#wind-variance-slider" ).slider({
+                min: 1,
+                max: 100,
+                value: 30,
+                slide: function( event, ui ) {
+                    jQuery( "#wind-variance-slider-label" ).val( ui.value + " " );
+                    jQuery( "#physicsWindVarianceVal" ).val(ui.value);
+
+                }
+            });
+            jQuery( "#wind-variance-slider-label" ).val( jQuery( "#wind-variance-slider" ).slider( "option", "value" ) + " " );
+
         } );
 
     </script>

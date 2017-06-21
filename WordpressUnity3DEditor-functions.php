@@ -50,7 +50,7 @@ function wpunity_load_jquery_scripts() {
 	/*wp_enqueue_script('jquery-ui-core');*/
 	if( !wp_script_is('jquery-ui') ) {
 		// you don't have to use googleapi's, but I think it helps. It saves the user's browser from loading the same script again if it has already been loade>
-		wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css' );
+		wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
 		wp_enqueue_script( 'jquery-ui' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' );
 	}
 	// TODO: Add jquery-ui-core
