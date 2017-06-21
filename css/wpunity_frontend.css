@@ -157,6 +157,10 @@ i.ButtonIcon {
     max-width: none;
 }
 
+.SceneCardContainer {
+    min-height: 360px;
+}
+
 .AlignIconToBottom {
     vertical-align: bottom;
 }

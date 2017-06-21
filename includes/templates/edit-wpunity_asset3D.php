@@ -48,24 +48,7 @@ get_header(); ?>
 
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-
-                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
-                    <label for="title" class="mdc-textfield__label">
-                        Enter a title for your asset
-                </div>
-                <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                   id="title-validation-msg">
-                    Must be at least 6 characters long
-                </p>
-
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
-                </div>
-
-                <hr class="WhiteSpaceSeparator">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
@@ -77,10 +60,9 @@ get_header(); ?>
 							<?php
 							$args = array('hide_empty' => false);
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-
 							foreach ( $cat_terms as $term ) { ?>
 
-                                <li class="mdc-list-item" role="option" id="<?php echo $term->term_id?>" tabindex="0">
+                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
                                 </li>
 
@@ -89,6 +71,38 @@ get_header(); ?>
                         </ul>
                     </div>
                 </div>
+
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <span class="mdc-typography--subheading2" id="categoryDescription"></span>
+            </div>
+        </div>
+
+
+
+        <div class="mdc-layout-grid">
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+
+                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                           aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
+                    <label for="title" class="mdc-textfield__label">
+                        Enter a title for your asset
+                </div>
+                <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                   id="title-validation-msg">
+                    Between 6 - 25 characters
+                </p>
+
+                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                </div>
+
+                <hr class="WhiteSpaceSeparator">
+
+
 
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
                 <!--<select title="I am a title" class="mdc-select" required>
@@ -106,7 +120,7 @@ get_header(); ?>
                 </select>-->
 
 
-                <h3 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Options</h3>
+                <h3 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Actions</h3>
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -188,7 +202,7 @@ get_header(); ?>
                 </div>
 
 
-	            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
                 <button class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                     Create
@@ -221,6 +235,9 @@ get_header(); ?>
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
+
+                var descText = document.getElementById('categoryDescription');
+                descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
                 console.log(item, index);
             });
