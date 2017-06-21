@@ -399,7 +399,7 @@ function wpunity_assets_databox_show(){
             //$curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
             //$textmtl = ""; //file_get_contents($curr_path."floor.mtl");
             //$url_obj = ""; //$curr_path."floor.obj";
-            $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/';
+            $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
             $mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
 
             if (wp_get_attachment_url( $mtl_obj ))
