@@ -104,59 +104,40 @@ get_header();
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                               aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
                         <label for="title" class="mdc-textfield__label">
                             Enter a scene title
                     </div>
                     <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
-                        Must be at least 6 characters long
+                        Between 6 - 25 characters
                     </p>
 
+                    <hr class="WhiteSpaceSeparator">
+
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                        <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                               maxlength="50" aria-controls="desc-validation-msg" style="box-shadow: none; border-color:transparent;">
+                        <label for="desc" class="mdc-textfield__label">
+                            Enter a scene description
+                    </div>
 
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" style="box-shadow: none; border-color:transparent;">
-                        <label for="desc" class="mdc-textfield__label">
-                            Enter a scene description
-                    </div>
 
+                    <h2 class="mdc-typography--title">Screenshot image</h2>
+                    <input type="file" title="Scene screenshot image" accept="image/png, image/jpeg">
 
                     <hr class="WhiteSpaceSeparator">
 
-	                <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                     <input type="hidden" name="submitted" id="submitted" value="true" />
                     <button style="float:right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                         ADD SCENE
                     </button>
-
-                    <!--<label class="mdc-typography--subheading2">Scene Type</label>
-
-                    <ul class="RadioButtonList">
-                        <li class="mdc-form-field">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeEnergyRadio" checked="" name="sceneTypeRadio">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
-                                </div>
-                            </div>
-                            <label id="sceneTypeEnergyRadio-label" for="sceneTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
-                        </li>
-                        <li class="mdc-form-field">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="sceneTypeArchRadio" name="sceneTypeRadio">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
-                                </div>
-                            </div>
-                            <label id="sceneTypeArchRadio-label" for="sceneTypeArchRadio" style="margin-bottom: 0;">Archaeology</label>
-                        </li>
-                    </ul>-->
 
                 </div>
             </div>
@@ -238,9 +219,13 @@ if ( $custom_query->have_posts() ) :?>
                         </a>
                     </div>
                     <section class="mdc-card__primary">
-                        <!--<h1 id="<?php /*echo $scene_id;*/?>-title" class="mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php /*echo $scene_title; */?>"><?php /*echo $scene_title; */?></h1>-->
-                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title" style="overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>"><?php echo $scene_title; ?></h1>
-                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light"><?php echo $scene_desc; ?></h2>
+                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
+                            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
+							<?php echo $scene_title; ?>
+                        </h1>
+                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            &#8203;<?php echo $scene_desc; ?>
+                        </h2>
 
                     </section>
                     <section class="mdc-card__actions">
