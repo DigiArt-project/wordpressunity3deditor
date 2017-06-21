@@ -48,12 +48,14 @@ get_header(); ?>
 
         <div class="mdc-layout-grid">
 
+
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
+                    <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+
                             <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
                                 Select a category
                             </li>
@@ -62,7 +64,7 @@ get_header(); ?>
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 							foreach ( $cat_terms as $term ) { ?>
 
-                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
                                 </li>
 
@@ -77,8 +79,6 @@ get_header(); ?>
                 <span class="mdc-typography--subheading2" id="categoryDescription"></span>
             </div>
         </div>
-
-
 
         <div class="mdc-layout-grid">
 
@@ -97,7 +97,7 @@ get_header(); ?>
 
                 <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
                     <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                    <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
                 <hr class="WhiteSpaceSeparator">
@@ -120,11 +120,11 @@ get_header(); ?>
                 </select>-->
 
 
-                <h3 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Actions</h3>
+                <h3 id="actionsTitle" class="mdc-typography--subheading1 mdc-theme--text-primary-on-light" style="display: none;">Additional settings</h3>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%; display: none;" >
                     <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
@@ -142,17 +142,26 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <label for="screenshotImageInput"> Select a Screenshot</label>
-                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput" accept="image/jpeg">
+                <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
 
-                <label for="diffusionImageInput"> Select a Diffusion image</label>
-                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput" accept="image/jpeg">
+                <h4 class="mdc-typography--subheading2">Wind Speed</h4>
 
-                <label for="staticImageInput"> Select a Static image</label>
-                <input type="file" name="staticImageInput" value="" id="staticImageInput" accept="image/jpeg">
+                <div class="mdc-textfield mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                    <input id="minWindSpeed" type="number" min="0" max="50" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                           style="box-shadow: none; border-color:transparent; width: 100px;">
+                    <label for="minWindSpeed" class="mdc-textfield__label">
+                        Minimum
+                </div>
 
-                <label for="videoInput"> Select a Video file</label>
-                <input type="file" name="videoInput" value="" id="videoInput" accept="video/mp4">
+                <div class="mdc-textfield mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                    <input id="maxWindSpeed" type="number" min="0" max="50" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                           style="box-shadow: none; border-color:transparent; width: 100px;">
+                    <label for="maxWindSpeed" class="mdc-textfield__label">
+                        Maximum
+                </div>
+
+
+                <div id="slider-range"></div>
 
 
             </div>
@@ -164,7 +173,7 @@ get_header(); ?>
                 <ul class="RadioButtonList">
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio" checked="" name="objectTypeRadio" value="fbx">
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
@@ -174,7 +183,7 @@ get_header(); ?>
                     </li>
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
@@ -184,16 +193,24 @@ get_header(); ?>
                     </li>
                 </ul>
 
-                <label id="fbxFileInputLabel" for="fbxFileInput"> Select an FBX file</label>
-                <input size="100" class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput" />
+                <div class="mdc-layout-grid">
 
-                <label id="mtlFileInputLabel" for="mtlFileInput" style="display: none"> Select an MTL file</label>
-                <input class="FullWidth" style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                    <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
+                        <label for="fbxFileInput"> Select an FBX file</label>
+                        <input class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput"/>
+                    </div>
 
-                <hr class="WhiteSpaceSeparator">
+                    <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="mtlFileInput"> Select an MTL file</label>
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                    </div>
 
-                <label id="objFileInputLabel" for="objFileInput" style="display: none"> Select an OBJ file</label>
-                <input class="FullWidth" style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+
+                    <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label  for="objFileInput" > Select an OBJ file</label>
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" />
+                    </div>
+                </div>
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -201,6 +218,19 @@ get_header(); ?>
                     <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
 
+                <div class="mdc-layout-grid">
+
+                    <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="textureFileInput"> Select a texture</label>
+                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" />
+                    </div>
+
+                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label  for="sshotFileInput" > Select a screenshot (or auto generate)</label>
+                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" />
+                    </div>
+
+                </div>
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
@@ -209,6 +239,7 @@ get_header(); ?>
                 </button>
 
             </div>
+
         </div>
     </form>
     <script type="text/javascript">
@@ -216,12 +247,12 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
-        var fbxInputLabel = jQuery('#fbxFileInputLabel');
+        var mtlInputContainer = jQuery('#mtlFileInputContainer');
         var mtlInput = jQuery('#mtlFileInput');
-        var mtlInputLabel = jQuery('#mtlFileInputLabel');
+        var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
-        var objInputLabel = jQuery('#objFileInputLabel');
         var modelPreviewButton = jQuery('#modelPreviewBtn');
 
         (function() {
@@ -239,7 +270,29 @@ get_header(); ?>
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
-                console.log(item, index);
+                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
+                switch(cat) {
+                    case 'doors':
+
+                        break;
+                    case 'dynamic3dmodels':
+
+                        break;
+                    case 'pois_imagetext':
+
+                        break;
+                    case 'pois_video':
+
+                        break;
+                    case 'static3dmodels':
+
+                        break;
+                    default:
+
+                }
+
+                console.log(cat, index);
             });
         })();
 
@@ -251,23 +304,17 @@ get_header(); ?>
                 console.log("FBX");
 
                 clearFiles();
-                fbxInput.show();
-                fbxInputLabel.show();
-                mtlInput.hide();
-                mtlInputLabel.hide();
-                objInput.hide();
-                objInputLabel.hide();
+                fbxInputContainer.show();
+                mtlInputContainer.hide();
+                objInputContainer.hide();
             }
             else if (objectType === 'mtl') {
                 console.log("MTL");
 
                 clearFiles();
-                fbxInput.hide();
-                fbxInputLabel.hide();
-                mtlInput.show();
-                mtlInputLabel.show();
-                objInput.show();
-                objInputLabel.show();
+                fbxInputContainer.hide();
+                mtlInputContainer.show();
+                objInputContainer.show();
             }
         });
 
@@ -302,7 +349,7 @@ get_header(); ?>
 
         });
 
-        objInput.change(function() {
+        objInputContainer.change(function() {
             console.log(mtlInput.val(), objInput.val());
 
             if (fileExtension(objInput.val()) === 'obj') {
@@ -352,6 +399,20 @@ get_header(); ?>
         var strings = [];
         strings.fbx = 'You have selected an Autodesk FBX model';
         strings.two = 'You have selected a group of the two components describing your asset';
+
+        jQuery( function() {
+            jQuery( "#slider-range" ).slider({
+                range: true,
+                min: 0,
+                max: 500,
+                values: [ 75, 300 ],
+                slide: function( event, ui ) {
+                    jQuery( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                }
+            });
+            jQuery( "#amount" ).val( "$" + jQuery( "#slider-range" ).slider( "values", 0 ) +
+                " - $" + jQuery( "#slider-range" ).slider( "values", 1 ) );
+        } );
 
     </script>
 <?php  get_footer(); ?>
