@@ -27,12 +27,13 @@ function wpunity_upload_dir_forAssets( $args ) {
 
         if ( get_post_type( $id ) == 'wpunity_asset3d' ) {
 
-            global $post;
-            $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
-            $projectSlug = 'bgamel';// $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
+//            global $post;
+//            $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
+//            $projectSlug = $gameterms[0]->slug; // wp_get_object_terms( $post->ID, 'wpunity_asset3d_pgame')[0]->slug; //
 
-            // Set the new path depends on current post_type
-            $newdir =  '/' . $projectSlug . '/Models';
+            $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+
+            $newdir =  '/' . $pathofPost . '/Models';
 
             $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
             $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
