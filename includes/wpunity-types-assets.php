@@ -196,9 +196,11 @@ function wpunity_create_pathdata_asset( $post_id ){
         $post = get_post($post_id);
         //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
 
+        $parentGameID = intval($_POST['wpunity_asset3d_pgame'], 10);
+        $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
-        $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
-        $projectSlug = $gameterms[0]->slug;
+//        $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
+//        $projectSlug = $gameterms[0]->slug;
 
 //        //slug Asset
 //        $assetSlug = $post->post_name;
@@ -223,7 +225,7 @@ function wpunity_create_pathdata_asset( $post_id ){
 //        $categoryAssetID = intval($_POST['wpunity_asset3d_cat'], 10);
 //        $categoryAssetSlug = ( $categoryAssetID > 0 ) ? get_term( $categoryAssetID, 'wpunity_asset3d_cat' )->slug : NULL;
 
-        $upload_dirpath = $projectSlug;
+        $upload_dirpath = $parentGameSlug;
 
         update_post_meta($post_id,'wpunity_asset3d_pathData',$upload_dirpath);
     }
