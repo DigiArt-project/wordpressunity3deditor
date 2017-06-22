@@ -116,7 +116,6 @@ i.ButtonIcon {
 }
 
 
-
 /* Style the accordion panel. Note: hidden by default */
 .EditPageAccordionPanel {
     padding: 0 18px;
@@ -163,40 +162,4 @@ i.ButtonIcon {
 
 .AlignIconToBottom {
     vertical-align: bottom;
-}
-
-.DropzoneStyle i {
-    font-size: 64px;
-}
-
-.DropzoneStyle {
-    border: 2px dashed #3f51b5;
-    border-radius: 5px;
-    background: white;
-    padding: 24px;
-    cursor: pointer;
-    min-height: 300px;
-}
-
-.DropzoneStyle .dz-message {
-    text-align: center;
-}
-
-.DropzoneStyle .dz-message .note {
-    font-size: 0.8em;
-    font-weight: 200;
-    display: block;
-    margin-top: 1.4rem;
-}
-
-.DropzoneStyle .dz-preview {
-    display: inline-block;
-}
-
-.CustomDropZoneAssetStyle {
-    padding: 12px;
-}
-
-.DropzoneStyle .dz-error {
-    background-color: rgba(255,0,0,0.23);
 }

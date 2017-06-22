@@ -103,7 +103,6 @@ get_header(); ?>
                     <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
-                <hr class="WhiteSpaceSeparator">
 
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
                 <!--<select title="I am a title" class="mdc-select" required>
@@ -120,11 +119,8 @@ get_header(); ?>
                     <option value="fats">Fats, Oils, and Sweets</option>
                 </select>-->
 
-
                 <h3 id="actionsTitle" class="mdc-typography--subheading1 mdc-theme--text-primary-on-light" style="display: none;">Additional settings</h3>
-
                 <hr class="WhiteSpaceSeparator">
-
                 <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%; display: none;" >
                     <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
@@ -140,6 +136,8 @@ get_header(); ?>
                         </ul>
                     </div>
                 </div>
+
+
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -168,10 +166,10 @@ get_header(); ?>
 
                 </div>
 
-                <div id="poiDetailsPanel" style="display: none;">
-                    <h3 class="mdc-typography--title">Point of Interest Details</h3>
+                <div id="poiImgDetailsPanel" style="display: none;">
+                    <h3 class="mdc-typography--title">Image POI Details</h3>
 
-                    <div id="poiDetailsWrapper">
+                    <div id="poiImgDetailsWrapper">
                         <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">
                             <i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Field
                         </a>
@@ -179,6 +177,18 @@ get_header(); ?>
                         <hr class="WhiteSpaceSeparator">
                     </div>
                 </div>
+
+                <div id="poiVideoDetailsPanel" style="display: none;">
+                    <h3 class="mdc-typography--title">Video POI Details</h3>
+
+                    <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="videoFileInput"> Select a video</label>
+                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
+                    </div>
+
+
+                </div>
+
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
@@ -246,7 +256,7 @@ get_header(); ?>
                 <hr class="WhiteSpaceSeparator">
 
                 <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
-                    <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
+                    <a id="previewBtn"  class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
@@ -313,11 +323,13 @@ get_header(); ?>
                     case 'pois_imagetext':
 
                         jQuery("#assetDescription").hide();
-                        jQuery("#poiDetailsPanel").show();
+                        jQuery("#poiImgDetailsPanel").show();
 
                         break;
                     case 'pois_video':
 
+                        jQuery("#poiVideoDetailsPanel").show();
+                        jQuery("#videoFileInput").removeAttr("disabled");
 
 
                         break;
@@ -396,39 +408,22 @@ get_header(); ?>
             jQuery("#assetDescription").show();
 
             jQuery("#physicsPanel").hide();
-
             jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
             jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
             jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
             jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
 
-            jQuery("#poiDetailsPanel").hide();
+            jQuery("#poiImgDetailsPanel").hide();
 
+            jQuery("#poiVideoDetailsPanel").hide();
+            jQuery("#videoFileInput").attr('disabled', 'disabled');
         }
 
         function fileExtension(fn) {
-            if (fn) {
-                return fn.split('.').pop().toLowerCase();
-            } else {
-                return '';
-            }
-
+            return fn ? fn.split('.').pop().toLowerCase() : '';
         }
 
-        function appendSubmitBtnToDropzone(string) {
-            jQuery( '#fileUploadSubmitArea' ).append( '' +
-                '<div id="submitBtnContainer" class="mdc-layout-grid__cell">' +
-                '<h6 class="mdc-typography--caption">'+ string +'</h6> ' +
-                '<a id="deleteAllBtn" class="mdc-button mdc-button--primary" onclick="objectDropzone.removeAllFiles();" data-mdc-auto-init="MDCRipple"> Remove all</a>' +
-                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Upload</a>' +
-                '</div>' );
 
-            jQuery( '#fileUploaderDropzone' ).append( '' +
-                '<div id="modelPreviewBtn" class="mdc-layout-grid__cell">' +
-                '<a id="submitBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>' +
-                '</div>' );
-
-        }
 
         jQuery( function() {
 
@@ -498,7 +493,7 @@ get_header(); ?>
 
             // POI Image panels - Add/remove POI inputs
             var poiMaxFields      = 3; // max input boxes allowed
-            var poiDetailsWrapper         = jQuery("#poiDetailsWrapper"); // Fields wrapper
+            var poiImgDetailsWrapper         = jQuery("#poiImgDetailsWrapper"); // Fields wrapper
             var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
             var i = 0; // Initial text box count
 
@@ -506,27 +501,27 @@ get_header(); ?>
                 e.preventDefault();
                 if(i < poiMaxFields) { // Max input box allowed
                     i++; // Text box increment
-                    poiDetailsWrapper.append('<div>' +
+                    poiImgDetailsWrapper.append(
                         '<div class="mdc-layout-grid">'+
                         '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
-                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value=""/>' +
+                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
                         'aria-controls="title-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
                         '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p></div>' +
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>' +
-                        '</div>'); // Add input box
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>'
+                    ); // Add input box
                 }
                 // Run autoInit with noop to suppress warnings.
                 mdc.autoInit(document, () => {});
             });
 
 
-            poiDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
+            poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
                 e.preventDefault();
-                jQuery(this).parent('div').parent('div').parent('div').remove(); i--;
+                jQuery(this).parent('div').parent('div').remove(); i--;
             })
 
         } );
