@@ -199,4 +199,305 @@ add_action( 'save_post', 'wpunity_games_taxtype_box_content_save' );
 
 //==========================================================================================================================================
 
+//Settings for each Game Type as term_meta
+
+// A callback function to add a custom field to our taxonomy
+function wpunity_games_projectSettings_fields($tag) {
+    ?>
+    <tr class="form-field">
+        <th scope="row" valign="top"></th>
+        <td><h2>Project Settings</h2></td>
+    </tr>
+
+    <?php $term_audio_manager = get_term_meta( $tag->term_id, 'wpunity_audio_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-audio_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_audio_manager_term">Audio Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_audio_manager_term" id="wpunity_audio_manager_term"><?php echo $term_audio_manager ? $term_audio_manager : ''; ?></textarea>
+            <p class="description">AudioManager.asset (wpunity_audio_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_cluster_input_manager = get_term_meta( $tag->term_id, 'wpunity_cluster_input_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-cluster_input_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_cluster_input_manager_term">Cluster Input Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_cluster_input_manager_term" id="wpunity_cluster_input_manager_term"><?php echo $term_cluster_input_manager ? $term_cluster_input_manager : ''; ?></textarea>
+            <p class="description">ClusterInputManager.asset (wpunity_cluster_input_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_dynamics_manager = get_term_meta( $tag->term_id, 'wpunity_dynamics_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-dynamics_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_dynamics_manager_term">Dynamics Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_dynamics_manager_term" id="wpunity_dynamics_manager_term"><?php echo $term_dynamics_manager ? $term_dynamics_manager : ''; ?></textarea>
+            <p class="description">DynamicsManager.asset (wpunity_dynamics_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_editor_build_settings = get_term_meta( $tag->term_id, 'wpunity_editor_build_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-editor_build_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_editor_build_settings_term">Editor Build Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_editor_build_settings_term" id="wpunity_editor_build_settings_term"><?php echo $term_editor_build_settings ? $term_editor_build_settings : ''; ?></textarea>
+            <p class="description">EditorBuildSettings.asset (wpunity_editor_build_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_editor_settings = get_term_meta( $tag->term_id, 'wpunity_editor_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-editor_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_editor_settings_term">Editor Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_editor_settings_term" id="wpunity_editor_settings_term"><?php echo $term_editor_settings ? $term_editor_settings : ''; ?></textarea>
+            <p class="description">EditorSettings.asset (wpunity_editor_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_graphics_settings = get_term_meta( $tag->term_id, 'wpunity_graphics_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-graphics_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_graphics_settings_term">Graphics Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_graphics_settings_term" id="wpunity_graphics_settings_term"><?php echo $term_graphics_settings ? $term_graphics_settings : ''; ?></textarea>
+            <p class="description">GraphicsSettings.asset (wpunity_graphics_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_input_manager = get_term_meta( $tag->term_id, 'wpunity_input_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-input_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_input_manager_term">Input Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_input_manager_term" id="wpunity_input_manager_term"><?php echo $term_input_manager ? $term_input_manager : ''; ?></textarea>
+            <p class="description">InputManager.asset (wpunity_input_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_nav_mesh_areas = get_term_meta( $tag->term_id, 'wpunity_nav_mesh_areas_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-nav_mesh_areas">
+        <th scope="row" valign="top">
+            <label for="wpunity_nav_mesh_areas_term">Nav Mesh Areas</label>
+        </th>
+        <td>
+            <textarea name="wpunity_nav_mesh_areas_term" id="wpunity_nav_mesh_areas_term"><?php echo $term_nav_mesh_areas ? $term_nav_mesh_areas : ''; ?></textarea>
+            <p class="description">NavMeshAreas.asset (wpunity_nav_mesh_areas_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_network_manager = get_term_meta( $tag->term_id, 'wpunity_network_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-network_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_network_manager_term">Network Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_network_manager_term" id="wpunity_network_manager_term"><?php echo $term_network_manager ? $term_network_manager : ''; ?></textarea>
+            <p class="description">NetworkManager.asset (wpunity_network_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_physics2d_settings = get_term_meta( $tag->term_id, 'wpunity_physics2d_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-physics2d_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_physics2d_settings_term">Physics2D Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_physics2d_settings_term" id="wpunity_physics2d_settings_term"><?php echo $term_physics2d_settings ? $term_physics2d_settings : ''; ?></textarea>
+            <p class="description">Physics2DSettings.asset (wpunity_physics2d_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $project_settings = get_term_meta( $tag->term_id, 'wpunity_project_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-project_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_project_settings_term">Project Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_project_settings_term" id="wpunity_project_settings_term"><?php echo $project_settings ? $project_settings : ''; ?></textarea>
+            <p class="description">ProjectSettings.asset (wpunity_project_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $project_version = get_term_meta( $tag->term_id, 'wpunity_project_version_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-project_version">
+        <th scope="row" valign="top">
+            <label for="wpunity_project_version_term">Project Version</label>
+        </th>
+        <td>
+            <textarea name="wpunity_project_version_term" id="wpunity_project_version_term"><?php echo $project_version ? $project_version : ''; ?></textarea>
+            <p class="description">ProjectVersion.asset (wpunity_project_version_term)</p>
+        </td>
+    </tr>
+
+    <?php $quality_settings = get_term_meta( $tag->term_id, 'wpunity_quality_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-quality_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_quality_settings_term">Quality Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_quality_settings_term" id="wpunity_quality_settings_term"><?php echo $quality_settings ? $quality_settings : ''; ?></textarea>
+            <p class="description">QualitySettings.asset (wpunity_quality_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_tag_manager = get_term_meta( $tag->term_id, 'wpunity_tag_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-tag_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_tag_manager_term">Tag Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_tag_manager_term" id="wpunity_tag_manager_term"><?php echo $term_tag_manager ? $term_tag_manager : ''; ?></textarea>
+            <p class="description">TagManager.asset (wpunity_tag_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $term_time_manager = get_term_meta( $tag->term_id, 'wpunity_time_manager_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-time_manager">
+        <th scope="row" valign="top">
+            <label for="wpunity_time_manager_term">Time Manager</label>
+        </th>
+        <td>
+            <textarea name="wpunity_time_manager_term" id="wpunity_time_manager_term"><?php echo $term_time_manager ? $term_time_manager : ''; ?></textarea>
+            <p class="description">TimeManager.asset (wpunity_time_manager_term)</p>
+        </td>
+    </tr>
+
+    <?php $unity_connect_settings = get_term_meta( $tag->term_id, 'wpunity_unity_connect_settings_term', true );// Check for existing taxonomy meta for the term you're editing ?>
+
+    <tr class="form-field term-unity_connect_settings">
+        <th scope="row" valign="top">
+            <label for="wpunity_unity_connect_settings_term">Unity Connect Settings</label>
+        </th>
+        <td>
+            <textarea name="wpunity_unity_connect_settings_term" id="wpunity_unity_connect_settings_term"><?php echo $unity_connect_settings ? $unity_connect_settings : ''; ?></textarea>
+            <p class="description">UnityConnectSettings.asset (wpunity_unity_connect_settings_term)</p>
+        </td>
+    </tr>
+
+    <?php
+}
+
+// A callback function to save our extra taxonomy field(s)
+function wpunity_games_projectSettings_fields_save( $term_id ) {
+
+    if ( isset( $_POST['wpunity_audio_manager_term'] ) ) {
+        $term_audio_manager = $_POST['wpunity_audio_manager_term'];
+        update_term_meta($term_id, 'wpunity_audio_manager_term', $term_audio_manager);
+    }
+
+    if ( isset( $_POST['wpunity_cluster_input_manager_term'] ) ) {
+        $term_cluster_input_manager = $_POST['wpunity_cluster_input_manager_term'];
+        update_term_meta($term_id, 'wpunity_cluster_input_manager_term', $term_cluster_input_manager);
+    }
+
+    if ( isset( $_POST['wpunity_dynamics_manager_term'] ) ) {
+        $term_dynamics_manager = $_POST['wpunity_dynamics_manager_term'];
+        update_term_meta($term_id, 'wpunity_dynamics_manager_term', $term_dynamics_manager);
+    }
+
+    if ( isset( $_POST['wpunity_editor_build_settings_term'] ) ) {
+        $term_editor_build_settings = $_POST['wpunity_editor_build_settings_term'];
+        update_term_meta($term_id, 'wpunity_editor_build_settings_term', $term_editor_build_settings);
+    }
+
+    if ( isset( $_POST['wpunity_editor_settings_term'] ) ) {
+        $term_editor_settings = $_POST['wpunity_editor_settings_term'];
+        update_term_meta($term_id, 'wpunity_editor_settings_term', $term_editor_settings);
+    }
+
+    if ( isset( $_POST['wpunity_graphics_settings_term'] ) ) {
+        $term_graphics_settings = $_POST['wpunity_graphics_settings_term'];
+        update_term_meta($term_id, 'wpunity_graphics_settings_term', $term_graphics_settings);
+    }
+
+    if ( isset( $_POST['wpunity_input_manager_term'] ) ) {
+        $term_input_manager = $_POST['wpunity_input_manager_term'];
+        update_term_meta($term_id, 'wpunity_input_manager_term', $term_input_manager);
+    }
+
+    if ( isset( $_POST['wpunity_nav_mesh_areas_term'] ) ) {
+        $term_nav_mesh_areas = $_POST['wpunity_nav_mesh_areas_term'];
+        update_term_meta($term_id, 'wpunity_nav_mesh_areas_term', $term_nav_mesh_areas);
+    }
+
+    if ( isset( $_POST['wpunity_network_manager_term'] ) ) {
+        $term_network_manager = $_POST['wpunity_network_manager_term'];
+        update_term_meta($term_id, 'wpunity_network_manager_term', $term_network_manager);
+    }
+
+    if ( isset( $_POST['wpunity_physics2d_settings_term'] ) ) {
+        $term_physics2d_settings = $_POST['wpunity_physics2d_settings_term'];
+        update_term_meta($term_id, 'wpunity_physics2d_settings_term', $term_physics2d_settings);
+    }
+
+    if ( isset( $_POST['wpunity_project_settings_term'] ) ) {
+        $term_project_settings = $_POST['wpunity_project_settings_term'];
+        update_term_meta($term_id, 'wpunity_project_settings_term', $term_project_settings);
+    }
+
+    if ( isset( $_POST['wpunity_project_version_term'] ) ) {
+        $term_project_version = $_POST['wpunity_project_version_term'];
+        update_term_meta($term_id, 'wpunity_project_version_term', $term_project_version);
+    }
+
+    if ( isset( $_POST['wpunity_quality_settings_term'] ) ) {
+        $term_quality_settings = $_POST['wpunity_quality_settings_term'];
+        update_term_meta($term_id, 'wpunity_quality_settings_term', $term_quality_settings);
+    }
+
+    if ( isset( $_POST['wpunity_tag_manager_term'] ) ) {
+        $term_tag_manager = $_POST['wpunity_tag_manager_term'];
+        update_term_meta($term_id, 'wpunity_tag_manager_term', $term_tag_manager);
+    }
+
+    if ( isset( $_POST['wpunity_time_manager_term'] ) ) {
+        $term_time_manager = $_POST['wpunity_time_manager_term'];
+        update_term_meta($term_id, 'wpunity_time_manager_term', $term_time_manager);
+    }
+
+    if ( isset( $_POST['wpunity_unity_connect_settings_term'] ) ) {
+        $term_unity_connect_settings = $_POST['wpunity_unity_connect_settings_term'];
+        update_term_meta($term_id, 'wpunity_unity_connect_settings_term', $term_unity_connect_settings);
+    }
+}
+
+
+
+add_action( 'wpunity_game_type_edit_form_fields', 'wpunity_games_projectSettings_fields', 10, 2 );
+
+add_action( 'edited_wpunity_game_type', 'wpunity_games_projectSettings_fields_save', 10, 2 );
+
+
+
+//==========================================================================================================================================
+
+
+
 ?>
