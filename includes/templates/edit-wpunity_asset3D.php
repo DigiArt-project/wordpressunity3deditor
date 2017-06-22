@@ -48,8 +48,7 @@ get_header(); ?>
 
         <div class="mdc-layout-grid">
 
-
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
@@ -83,6 +82,8 @@ get_header(); ?>
         <div class="mdc-layout-grid">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+
+                <h3 id="physicsTitle" class="mdc-typography--title">Details</h3>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
@@ -142,7 +143,7 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <div class="PhysicsPanel">
+                <div id="physicsPanel" class="PhysicsPanel" style="display: none;">
 
                     <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
 
@@ -172,7 +173,7 @@ get_header(); ?>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h2 class="mdc-typography--subheading2">Object type</h2>
+                <h2 class="mdc-typography--title">Object type</h2>
 
                 <ul class="RadioButtonList">
                     <li class="mdc-form-field">
@@ -216,29 +217,31 @@ get_header(); ?>
                     </div>
                 </div>
 
+
+                <div class="mdc-layout-grid">
+
+                    <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="textureFileInput"> Select a texture</label>
+                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg" />
+                    </div>
+
+                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label  for="sshotFileInput" > Select a screenshot</label>
+                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+                    </div>
+
+                </div>
+
                 <hr class="WhiteSpaceSeparator">
 
                 <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
                     <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
 
-                <div class="mdc-layout-grid">
-
-                    <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="textureFileInput"> Select a texture</label>
-                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" />
-                    </div>
-
-                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label  for="sshotFileInput" > Select a screenshot (or auto generate)</label>
-                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" />
-                    </div>
-
-                </div>
-
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
-                <button class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+
+                <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                     Create
                 </button>
 
@@ -251,12 +254,19 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        resetPanels();
+
+        var strings = [];
+        strings.fbx = 'You have selected an Autodesk FBX model';
+        strings.two = 'You have selected a group of the two components describing your asset';
+
         var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
         var mtlInputContainer = jQuery('#mtlFileInputContainer');
         var mtlInput = jQuery('#mtlFileInput');
         var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
+
         var modelPreviewButton = jQuery('#modelPreviewBtn');
 
         (function() {
@@ -271,10 +281,14 @@ get_header(); ?>
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
 
+                resetPanels();
+
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
+
 
                 switch(cat) {
                     case 'doors':
@@ -291,6 +305,8 @@ get_header(); ?>
                         break;
                     case 'static3dmodels':
 
+                        jQuery("#physicsPanel").show();
+
                         break;
                     default:
 
@@ -299,28 +315,6 @@ get_header(); ?>
                 console.log(cat, index);
             });
         })();
-
-        jQuery( "input[name=objectTypeRadio]" ).click(function() {
-
-            var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-
-            if (objectType === 'fbx') {
-                console.log("FBX");
-
-                clearFiles();
-                fbxInputContainer.show();
-                mtlInputContainer.hide();
-                objInputContainer.hide();
-            }
-            else if (objectType === 'mtl') {
-                console.log("MTL");
-
-                clearFiles();
-                fbxInputContainer.hide();
-                mtlInputContainer.show();
-                objInputContainer.show();
-            }
-        });
 
 
         fbxInput.change(function() {
@@ -347,13 +341,13 @@ get_header(); ?>
             }
 
 
-            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
                 modelPreviewButton.show();
             }
 
         });
 
-        objInputContainer.change(function() {
+        objInput.change(function() {
             console.log(mtlInput.val(), objInput.val());
 
             if (fileExtension(objInput.val()) === 'obj') {
@@ -363,7 +357,7 @@ get_header(); ?>
                 modelPreviewButton.hide();
             }
 
-            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
                 modelPreviewButton.show();
             }
         });
@@ -376,6 +370,11 @@ get_header(); ?>
             modelPreviewButton.hide();
         }
 
+        function resetPanels() {
+            jQuery("#physicsPanel").hide();
+
+        }
+        
         function fileExtension(fn) {
             if (fn) {
                 return fn.split('.').pop().toLowerCase();
@@ -400,12 +399,30 @@ get_header(); ?>
 
         }
 
-        var strings = [];
-        strings.fbx = 'You have selected an Autodesk FBX model';
-        strings.two = 'You have selected a group of the two components describing your asset';
+
 
         jQuery( function() {
 
+            // FBX / MTL Toggles
+            jQuery( "input[name=objectTypeRadio]" ).click(function() {
+
+                var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
+
+                if (objectType === 'fbx') {
+                    clearFiles();
+                    fbxInputContainer.show();
+                    mtlInputContainer.hide();
+                    objInputContainer.hide();
+                }
+                else if (objectType === 'mtl') {
+                    clearFiles();
+                    fbxInputContainer.hide();
+                    mtlInputContainer.show();
+                    objInputContainer.show();
+                }
+            });
+
+            // Physics Sliders
             jQuery( "#wind-speed-range" ).slider({
                 range: true,
                 min: 0,
