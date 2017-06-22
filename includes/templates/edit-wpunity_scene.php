@@ -75,8 +75,8 @@ get_header(); ?>
 
 				$meta_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 
-				// do not put esc_attr, crashes the universe in 3D
-				$sceneToLoad = $meta_json;
+				// Do not put esc_attr, crashes the universe in 3D
+				$sceneToLoad = $meta_json ? $meta_json : file_get_contents( plugins_url()."/wordpressunity3deditor/assets/standard_scene.json");
 
 				// Find scene dir string
 				$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
