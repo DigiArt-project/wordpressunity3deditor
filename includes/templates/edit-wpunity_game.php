@@ -40,7 +40,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	);
 
 	$scene_metas = array(
-		'wpunity_scene_default' => 'false',
+		'wpunity_scene_default' => 0,
 		'wpunity_scene_metatype' => 'scene',
 	);
 

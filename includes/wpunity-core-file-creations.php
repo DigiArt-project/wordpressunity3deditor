@@ -323,7 +323,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $mainmenuSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'menu',
         ),
     );
@@ -338,7 +338,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $firstSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'scene',
         ),
     );
@@ -353,7 +353,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'credits',
         ),
     );
