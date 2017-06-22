@@ -168,7 +168,7 @@ get_header(); ?>
 
                 </div>
 
-                <div id="poiDetailsPanel">
+                <div id="poiDetailsPanel" style="display: none;">
                     <h3 class="mdc-typography--title">Point of Interest Details</h3>
 
                     <div id="poiDetailsWrapper">
@@ -313,6 +313,7 @@ get_header(); ?>
                     case 'pois_imagetext':
 
                         jQuery("#assetDescription").hide();
+                        jQuery("#poiDetailsPanel").show();
 
                         break;
                     case 'pois_video':
@@ -401,7 +402,7 @@ get_header(); ?>
             jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
             jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
 
-
+            jQuery("#poiDetailsPanel").hide();
 
         }
 
@@ -506,14 +507,16 @@ get_header(); ?>
                 if(i < poiMaxFields) { // Max input box allowed
                     i++; // Text box increment
                     poiDetailsWrapper.append('<div>' +
-                        '<input type="file" name="myFile[]"/>' +
+                        '<div class="mdc-layout-grid">'+
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
+                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value=""/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
-                        '<input id="poi-input-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-'+i+'" ' +
+                        '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
                         'aria-controls="title-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
-                        '<label for="poi-input-'+i+'" class="mdc-textfield__label">Enter an image description' +
+                        '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
-                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p>' +
-                        '<a href="#" class="remove_field">Remove</a>' +
+                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p></div>' +
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>' +
                         '</div>'); // Add input box
                 }
                 // Run autoInit with noop to suppress warnings.
@@ -523,7 +526,7 @@ get_header(); ?>
 
             poiDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
                 e.preventDefault();
-                jQuery(this).parent('div').remove(); i--;
+                jQuery(this).parent('div').parent('div').parent('div').remove(); i--;
             })
 
         } );
