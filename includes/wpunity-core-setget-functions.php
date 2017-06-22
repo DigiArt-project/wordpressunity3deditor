@@ -58,7 +58,7 @@ function wpunity_fetch_game_assets_action_callback(){
     $DS = DIRECTORY_SEPARATOR;
 
     // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
-    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder'].$DS.$_GET['scenefolder'];
+    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder']; //.$DS.$_GET['scenefolder'];
 
     $response = wpunity_getAllassets_byGameProject($_GET['gameProjectSlug']);
 

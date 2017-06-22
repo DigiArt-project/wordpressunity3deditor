@@ -5,13 +5,12 @@
 //----------------------------------------------------------------------------------
 //  AJAX: FETCH DIR CONTENT
 //----------------------------------------------------------------------------------
-function wpunity_fetchSceneAssetsAjax(gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID){
+function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID){
 
     jQuery.ajax({
-        url : 'admin-ajax.php',
+        url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
         type : 'GET',
         data : {'action': 'wpunity_fetch_game_assets_action',
-                //'action': 'wpunity_fetch_scene_assets_by_dir_action',
                 'gamefolder':gamefolder,
                 'scenefolder':scenefolder,
                 'sceneID':sceneID,
@@ -19,19 +18,10 @@ function wpunity_fetchSceneAssetsAjax(gameProjectSlug, gameProjectID, gamefolder
                 'gameProjectSlug': gameProjectSlug},
 
         success : function(data) {
-
-
-            console.log("DAD:");
-            console.log(data);
-
-            //console.log("datatttt", data);
             file_Browsing_By_DB(data);
-            //file_Browsing_By_Dirs(data);
-
         },
         error : function(xhr, ajaxOptions, thrownError){
-            console.log("ERROR 51" + thrownError);
-
+            console.log("ERROR 51:" + thrownError);
         }
     });
 }
@@ -144,6 +134,9 @@ function file_Browsing_By_DB(data){
         },
 
         dragstart: function(e) {
+
+
+            console.log(e.target.attributes);
 
             var dragData = {"title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                             "assetid": e.target.attributes.getNamedItem("data-assetid").value,
@@ -430,10 +423,11 @@ function file_Browsing_By_DB(data){
 
             scannedFiles.forEach(function(f) {
 
+                
+
                 var fileSize = bytesToSize(f.size);
 
                 var name = escapeHTML(f.name);
-
 
                 if(!f.objPath)
                     return;
@@ -449,7 +443,6 @@ function file_Browsing_By_DB(data){
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
                 if (fileType.toUpperCase() == 'OBJ')
                     icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0;margin-left:0">';
-
 
                 var file = jQuery('<li class="files"><a href="'+ f.objPath +
                                                '" title="'+ f.name +
@@ -494,9 +487,9 @@ function file_Browsing_By_DB(data){
                 var name = u.split('/');
 
                 // rename first path to hide the full path
-                if (i==0) {
-                    name[0] = scenefolder;
-                }
+                if (i==0)
+                    name[0] = gamefolder + " available assets";
+
 
                 if (i !== breadcrumbsUrls.length - 1) {
                     url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a> <span class="vr_editor_arrow"> > </span> ';

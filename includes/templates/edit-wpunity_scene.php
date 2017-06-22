@@ -1,6 +1,13 @@
 <?php
 
-
+// Ajax for fetching game's assets within asset browser widget at vr_editor
+function my_enqueue_front_end_ajax() {
+    $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/scriptFileBrowserToolbarWPway.js';
+    wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+    wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+}
+add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_ajax' );
+//---------------------------------------------------------------------
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
@@ -15,7 +22,7 @@ $game_post     = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
 
 $scene_post = get_post($scene_id);
-$sceneSlug = $scene_post->post_title;
+$sceneSlug = $scene_post->post_name;
 
 
 $editgamePage = wpunity_getEditpage('game');
@@ -65,33 +72,24 @@ get_header(); ?>
 
             <div id="scene-vr-editor">
 				<?php
-				$meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
+
+				$meta_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 
 				// do not put esc_attr, crashes the universe in 3D
-				$sceneToLoad = $meta_json ? $meta_json : $wpunity_databox4['fields'][0]['std'];
+				$sceneToLoad = $meta_json;
 
 				// Find scene dir string
-				$sceneSlug = $post->post_name;
-				$parentGameSlug = wp_get_object_terms( $post->ID, 'wpunity_scene_pgame')[0]->slug;
+				$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
+
+                $projectGameSlug = $parentGameSlug;
 
 				$scenefolder = $sceneSlug;
 				$gamefolder = $parentGameSlug;
 				$sceneID = $scene_id;
 
+                $isAdmin = is_admin() ? 'back' : 'front';
 
-				echo "meta_json: ".$meta_json;
-                echo "sceneToLoad: ".$sceneToLoad;
-                echo "sceneSlug: ". $sceneSlug;
-                echo "parentGameSlug: ". $parentGameSlug;
-                echo "scenefolder: ". $scenefolder;
-                echo "gamefolder: ". $gamefolder;
-                echo "sceneID: ". $sceneID;
-                echo "gameID: ". $project_id;
-                echo "gameProjectSlug: ". $parentGameSlug;
-
-
-
-				// vr_editor loads the $sceneToLoad
+                // vr_editor loads the $sceneToLoad
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
             </div>
         </div>
@@ -101,3 +99,5 @@ get_header(); ?>
         window.mdc.autoInit();
     </script>
 <?php get_footer(); ?>
+
+

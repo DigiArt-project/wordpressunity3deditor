@@ -40,9 +40,11 @@ echo '<script>';
 echo 'gameProjectSlug="'.$projectGameSlug.'"';
 echo '</script>';
 
+echo '<script>';
+echo 'isAdmin="'.$isAdmin.'"';
+echo '</script>';
 
 ?>
-
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
@@ -125,9 +127,9 @@ echo '</script>';
         });
 
 
-        console.log("AAAAA:" + gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);
+        //console.log("VR_editor.php:" + isAdmin + " | " +  gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);
 
-        wpunity_fetchSceneAssetsAjax(gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
+        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
 
 
     });
