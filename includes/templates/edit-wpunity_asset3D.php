@@ -44,7 +44,7 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
 
 
-    <form name="3dAssetForm">
+    <form name="3dAssetForm" id="3dAssetForm">
 
         <div class="mdc-layout-grid">
 
@@ -74,6 +74,8 @@ get_header(); ?>
                 </div>
 
             </div>
+            <input id="termIdInput" type="hidden" name="term_id" value="">
+
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                 <span class="mdc-typography--subheading2" id="categoryDescription"></span>
             </div>
@@ -86,7 +88,7 @@ get_header(); ?>
                 <h3 id="physicsTitle" class="mdc-typography--title">Details</h3>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
                     <label for="title" class="mdc-textfield__label">
                         Enter a title for your asset
@@ -96,8 +98,8 @@ get_header(); ?>
                     Between 6 - 25 characters
                 </p>
 
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" form="3dAssetForm"></textarea>
                     <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
@@ -150,22 +152,22 @@ get_header(); ?>
                     <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                     <div id="wind-speed-range"></div>
-                    <input type="hidden" id="physicsWindMinVal" value="">
-                    <input type="hidden" id="physicsWindMaxVal" value="">
+                    <input type="hidden" id="physicsWindMinVal" value="" disabled>
+                    <input type="hidden" id="physicsWindMaxVal" value="" disabled>
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                     <div id="wind-mean-slider"></div>
-                    <input type="hidden" id="physicsWindMeanVal" value="">
+                    <input type="hidden" id="physicsWindMeanVal" value="" disabled>
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                     <div id="wind-variance-slider"></div>
-                    <input type="hidden" id="physicsWindVarianceVal" value="">
+                    <input type="hidden" id="physicsWindVarianceVal" value="" disabled="">
 
                 </div>
 
@@ -288,6 +290,7 @@ get_header(); ?>
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
+                jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
 
                 switch(cat) {
@@ -296,16 +299,25 @@ get_header(); ?>
                         break;
                     case 'dynamic3dmodels':
 
+
                         break;
                     case 'pois_imagetext':
 
+                        jQuery("#assetDescription").hide();
+
                         break;
                     case 'pois_video':
+
+
 
                         break;
                     case 'static3dmodels':
 
                         jQuery("#physicsPanel").show();
+                        jQuery("#physicsWindMinVal").removeAttr("disabled");
+                        jQuery("#physicsWindMaxVal").removeAttr("disabled");
+                        jQuery("#physicsWindMeanVal").removeAttr("disabled");
+                        jQuery("#physicsWindVarianceVal").removeAttr("disabled");
 
                         break;
                     default:
@@ -371,7 +383,16 @@ get_header(); ?>
         }
 
         function resetPanels() {
+            jQuery("#assetDescription").show();
+
             jQuery("#physicsPanel").hide();
+
+            jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
+
+
 
         }
         
