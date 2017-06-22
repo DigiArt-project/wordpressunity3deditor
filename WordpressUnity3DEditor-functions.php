@@ -47,6 +47,12 @@ wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) .
 
 function wpunity_load_jquery_scripts() {
 	wp_enqueue_script('jquery');
+	/*wp_enqueue_script('jquery-ui-core');*/
+	if( !wp_script_is('jquery-ui') ) {
+		// you don't have to use googleapi's, but I think it helps. It saves the user's browser from loading the same script again if it has already been loade>
+		wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
+		wp_enqueue_script( 'jquery-ui' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' );
+	}
 	// TODO: Add jquery-ui-core
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );

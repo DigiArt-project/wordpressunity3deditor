@@ -44,16 +44,17 @@ get_header(); ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
 
 
-    <form name="3dAssetForm">
+    <form name="3dAssetForm" id="3dAssetForm">
 
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
+                    <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+
                             <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
                                 Select a category
                             </li>
@@ -62,7 +63,7 @@ get_header(); ?>
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 							foreach ( $cat_terms as $term ) { ?>
 
-                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
                                 </li>
 
@@ -73,19 +74,21 @@ get_header(); ?>
                 </div>
 
             </div>
+            <input id="termIdInput" type="hidden" name="term_id" value="">
+
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                 <span class="mdc-typography--subheading2" id="categoryDescription"></span>
             </div>
         </div>
 
-
-
         <div class="mdc-layout-grid">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
+                <h3 id="physicsTitle" class="mdc-typography--title">Details</h3>
+
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
                     <label for="title" class="mdc-textfield__label">
                         Enter a title for your asset
@@ -95,9 +98,9 @@ get_header(); ?>
                     Between 6 - 25 characters
                 </p>
 
-                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a scene description</label>
+                <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" form="3dAssetForm"></textarea>
+                    <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
                 <hr class="WhiteSpaceSeparator">
@@ -120,11 +123,11 @@ get_header(); ?>
                 </select>-->
 
 
-                <h3 class="mdc-typography--subheading1 mdc-theme--text-primary-on-light">Actions</h3>
+                <h3 id="actionsTitle" class="mdc-typography--subheading1 mdc-theme--text-primary-on-light" style="display: none;">Additional settings</h3>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%; display: none;" >
                     <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
@@ -142,29 +145,42 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <label for="screenshotImageInput"> Select a Screenshot</label>
-                <input type="file" name="screenshotImageInput" value="" id="screenshotImageInput" accept="image/jpeg">
+                <div id="physicsPanel" class="PhysicsPanel" style="display: none;">
 
-                <label for="diffusionImageInput"> Select a Diffusion image</label>
-                <input type="file" name="diffusionImageInput" value="" id="diffusionImageInput" accept="image/jpeg">
+                    <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
 
-                <label for="staticImageInput"> Select a Static image</label>
-                <input type="file" name="staticImageInput" value="" id="staticImageInput" accept="image/jpeg">
+                    <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-speed-range"></div>
+                    <input type="hidden" id="physicsWindMinVal" value="" disabled>
+                    <input type="hidden" id="physicsWindMaxVal" value="" disabled>
 
-                <label for="videoInput"> Select a Video file</label>
-                <input type="file" name="videoInput" value="" id="videoInput" accept="video/mp4">
+                    <hr class="WhiteSpaceSeparator">
 
+                    <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-mean-slider"></div>
+                    <input type="hidden" id="physicsWindMeanVal" value="" disabled>
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-variance-slider"></div>
+                    <input type="hidden" id="physicsWindVarianceVal" value="" disabled="">
+
+                </div>
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h2 class="mdc-typography--subheading2">Object type</h2>
+                <h2 class="mdc-typography--title">Object type</h2>
 
                 <ul class="RadioButtonList">
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio" checked="" name="objectTypeRadio" value="fbx">
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
@@ -174,7 +190,7 @@ get_header(); ?>
                     </li>
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
@@ -184,16 +200,39 @@ get_header(); ?>
                     </li>
                 </ul>
 
-                <label id="fbxFileInputLabel" for="fbxFileInput"> Select an FBX file</label>
-                <input size="100" class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput" />
+                <div class="mdc-layout-grid">
 
-                <label id="mtlFileInputLabel" for="mtlFileInput" style="display: none"> Select an MTL file</label>
-                <input class="FullWidth" style="display: none" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                    <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
+                        <label for="fbxFileInput"> Select an FBX file</label>
+                        <input class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput"/>
+                    </div>
 
-                <hr class="WhiteSpaceSeparator">
+                    <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="mtlFileInput"> Select an MTL file</label>
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                    </div>
 
-                <label id="objFileInputLabel" for="objFileInput" style="display: none"> Select an OBJ file</label>
-                <input class="FullWidth" style="display: none" type="file" name="objFileInput" value="" id="objFileInput" />
+
+                    <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label  for="objFileInput" > Select an OBJ file</label>
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" />
+                    </div>
+                </div>
+
+
+                <div class="mdc-layout-grid">
+
+                    <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="textureFileInput"> Select a texture</label>
+                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg" />
+                    </div>
+
+                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label  for="sshotFileInput" > Select a screenshot</label>
+                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+                    </div>
+
+                </div>
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -201,14 +240,15 @@ get_header(); ?>
                     <a id="previewBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
 
-
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
-                <button class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+
+                <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                     Create
                 </button>
 
             </div>
+
         </div>
     </form>
     <script type="text/javascript">
@@ -216,12 +256,19 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        resetPanels();
+
+        var strings = [];
+        strings.fbx = 'You have selected an Autodesk FBX model';
+        strings.two = 'You have selected a group of the two components describing your asset';
+
+        var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
-        var fbxInputLabel = jQuery('#fbxFileInputLabel');
+        var mtlInputContainer = jQuery('#mtlFileInputContainer');
         var mtlInput = jQuery('#mtlFileInput');
-        var mtlInputLabel = jQuery('#mtlFileInputLabel');
+        var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
-        var objInputLabel = jQuery('#objFileInputLabel');
+
         var modelPreviewButton = jQuery('#modelPreviewBtn');
 
         (function() {
@@ -236,40 +283,50 @@ get_header(); ?>
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
 
+                resetPanels();
+
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
-                console.log(item, index);
+                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
+                jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
+
+                switch(cat) {
+                    case 'doors':
+
+                        break;
+                    case 'dynamic3dmodels':
+
+
+                        break;
+                    case 'pois_imagetext':
+
+                        jQuery("#assetDescription").hide();
+
+                        break;
+                    case 'pois_video':
+
+
+
+                        break;
+                    case 'static3dmodels':
+
+                        jQuery("#physicsPanel").show();
+                        jQuery("#physicsWindMinVal").removeAttr("disabled");
+                        jQuery("#physicsWindMaxVal").removeAttr("disabled");
+                        jQuery("#physicsWindMeanVal").removeAttr("disabled");
+                        jQuery("#physicsWindVarianceVal").removeAttr("disabled");
+
+                        break;
+                    default:
+
+                }
+
+                console.log(cat, index);
             });
         })();
-
-        jQuery( "input[name=objectTypeRadio]" ).click(function() {
-
-            var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-
-            if (objectType === 'fbx') {
-                console.log("FBX");
-
-                clearFiles();
-                fbxInput.show();
-                fbxInputLabel.show();
-                mtlInput.hide();
-                mtlInputLabel.hide();
-                objInput.hide();
-                objInputLabel.hide();
-            }
-            else if (objectType === 'mtl') {
-                console.log("MTL");
-
-                clearFiles();
-                fbxInput.hide();
-                fbxInputLabel.hide();
-                mtlInput.show();
-                mtlInputLabel.show();
-                objInput.show();
-                objInputLabel.show();
-            }
-        });
 
 
         fbxInput.change(function() {
@@ -296,7 +353,7 @@ get_header(); ?>
             }
 
 
-            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
                 modelPreviewButton.show();
             }
 
@@ -312,7 +369,7 @@ get_header(); ?>
                 modelPreviewButton.hide();
             }
 
-            if (fileExtension(mtlInput.val()) === 'mtl' && objInput.val()==='obj') {
+            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
                 modelPreviewButton.show();
             }
         });
@@ -325,6 +382,20 @@ get_header(); ?>
             modelPreviewButton.hide();
         }
 
+        function resetPanels() {
+            jQuery("#assetDescription").show();
+
+            jQuery("#physicsPanel").hide();
+
+            jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
+            jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
+
+
+
+        }
+        
         function fileExtension(fn) {
             if (fn) {
                 return fn.split('.').pop().toLowerCase();
@@ -349,9 +420,70 @@ get_header(); ?>
 
         }
 
-        var strings = [];
-        strings.fbx = 'You have selected an Autodesk FBX model';
-        strings.two = 'You have selected a group of the two components describing your asset';
+
+
+        jQuery( function() {
+
+            // FBX / MTL Toggles
+            jQuery( "input[name=objectTypeRadio]" ).click(function() {
+
+                var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
+
+                if (objectType === 'fbx') {
+                    clearFiles();
+                    fbxInputContainer.show();
+                    mtlInputContainer.hide();
+                    objInputContainer.hide();
+                }
+                else if (objectType === 'mtl') {
+                    clearFiles();
+                    fbxInputContainer.hide();
+                    mtlInputContainer.show();
+                    objInputContainer.show();
+                }
+            });
+
+            // Physics Sliders
+            jQuery( "#wind-speed-range" ).slider({
+                range: true,
+                min: 0,
+                max: 40,
+                values: [ 0, 40 ],
+                slide: function( event, ui ) {
+                    jQuery( "#wind-speed-range-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " m/sec" );
+                    jQuery( "#physicsWindMinVal" ).val(ui.values[ 0 ]);
+                    jQuery( "#physicsWindMaxVal" ).val(ui.values[ 1 ]);
+                }
+            });
+            jQuery( "#wind-speed-range-label" ).val( jQuery( "#wind-speed-range" ).slider( "values", 0 ) +
+                " - " + jQuery( "#wind-speed-range" ).slider( "values", 1 ) + " m/sec" );
+
+
+            jQuery( "#wind-mean-slider" ).slider({
+                min: 0,
+                max: 40,
+                value: 14,
+                slide: function( event, ui ) {
+                    jQuery( "#wind-mean-slider-label" ).val( ui.value + " m/sec" );
+                    jQuery( "#physicsWindMeanVal" ).val(ui.value);
+
+                }
+            });
+            jQuery( "#wind-mean-slider-label" ).val( jQuery( "#wind-mean-slider" ).slider( "option", "value" ) + " m/sec" );
+
+            jQuery( "#wind-variance-slider" ).slider({
+                min: 1,
+                max: 100,
+                value: 30,
+                slide: function( event, ui ) {
+                    jQuery( "#wind-variance-slider-label" ).val( ui.value + " " );
+                    jQuery( "#physicsWindVarianceVal" ).val(ui.value);
+
+                }
+            });
+            jQuery( "#wind-variance-slider-label" ).val( jQuery( "#wind-variance-slider" ).slider( "option", "value" ) + " " );
+
+        } );
 
     </script>
 <?php  get_footer(); ?>
