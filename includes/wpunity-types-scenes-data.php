@@ -85,6 +85,8 @@ function wpunity_scenes_databox_show(){
         $project_id =   get_page_by_path( $parentGameSlug, OBJECT, 'wpunity_game')->ID;
         $projectGameSlug = $parentGameSlug;
 
+        $isAdmin = is_admin() ? 'back' : 'front';
+
         // vr_editor loads the $sceneToLoad
         require( 'vr_editor.php' );
 
