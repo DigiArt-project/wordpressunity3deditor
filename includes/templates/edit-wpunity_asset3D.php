@@ -85,7 +85,7 @@ get_header(); ?>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-                <h3 id="physicsTitle" class="mdc-typography--title">Details</h3>
+                <h3 id="physicsTitle" class="mdc-typography--title">Information</h3>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
@@ -104,8 +104,6 @@ get_header(); ?>
                 </div>
 
                 <hr class="WhiteSpaceSeparator">
-
-
 
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
                 <!--<select title="I am a title" class="mdc-select" required>
@@ -146,8 +144,7 @@ get_header(); ?>
                 <hr class="WhiteSpaceSeparator">
 
                 <div id="physicsPanel" class="PhysicsPanel" style="display: none;">
-
-                    <h3 id="physicsTitle" class="mdc-typography--title">Physics</h3>
+                    <h3 class="mdc-typography--title">Physics</h3>
 
                     <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
@@ -171,11 +168,23 @@ get_header(); ?>
 
                 </div>
 
+                <div id="poiDetailsPanel">
+                    <h3 class="mdc-typography--title">Point of Interest Details</h3>
+
+                    <div id="poiDetailsWrapper">
+                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">
+                            <i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Field
+                        </a>
+
+                        <hr class="WhiteSpaceSeparator">
+                    </div>
+                </div>
+
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h2 class="mdc-typography--title">Object type</h2>
+                <h3 class="mdc-typography--title">Object Properties</h3>
 
                 <ul class="RadioButtonList">
                     <li class="mdc-form-field">
@@ -395,7 +404,7 @@ get_header(); ?>
 
 
         }
-        
+
         function fileExtension(fn) {
             if (fn) {
                 return fn.split('.').pop().toLowerCase();
@@ -420,8 +429,6 @@ get_header(); ?>
 
         }
 
-
-
         jQuery( function() {
 
             // FBX / MTL Toggles
@@ -443,8 +450,13 @@ get_header(); ?>
                 }
             });
 
+
             // Physics Sliders
-            jQuery( "#wind-speed-range" ).slider({
+            var speedRangeSlider = jQuery( "#wind-speed-range" );
+            var windMeanSlider = jQuery( "#wind-mean-slider" );
+            var windVarianceSlider =  jQuery( "#wind-variance-slider" );
+
+            speedRangeSlider.slider({
                 range: true,
                 min: 0,
                 max: 40,
@@ -455,11 +467,10 @@ get_header(); ?>
                     jQuery( "#physicsWindMaxVal" ).val(ui.values[ 1 ]);
                 }
             });
-            jQuery( "#wind-speed-range-label" ).val( jQuery( "#wind-speed-range" ).slider( "values", 0 ) +
-                " - " + jQuery( "#wind-speed-range" ).slider( "values", 1 ) + " m/sec" );
+            jQuery( "#wind-speed-range-label" ).val( speedRangeSlider.slider( "values", 0 ) +
+                " - " + speedRangeSlider.slider( "values", 1 ) + " m/sec" );
 
-
-            jQuery( "#wind-mean-slider" ).slider({
+            windMeanSlider.slider({
                 min: 0,
                 max: 40,
                 value: 14,
@@ -469,9 +480,9 @@ get_header(); ?>
 
                 }
             });
-            jQuery( "#wind-mean-slider-label" ).val( jQuery( "#wind-mean-slider" ).slider( "option", "value" ) + " m/sec" );
+            jQuery( "#wind-mean-slider-label" ).val( windMeanSlider.slider( "option", "value" ) + " m/sec" );
 
-            jQuery( "#wind-variance-slider" ).slider({
+            windVarianceSlider.slider({
                 min: 1,
                 max: 100,
                 value: 30,
@@ -481,7 +492,39 @@ get_header(); ?>
 
                 }
             });
-            jQuery( "#wind-variance-slider-label" ).val( jQuery( "#wind-variance-slider" ).slider( "option", "value" ) + " " );
+            jQuery( "#wind-variance-slider-label" ).val( windVarianceSlider.slider( "option", "value" ) + " " );
+
+
+            // POI Image panels - Add/remove POI inputs
+            var poiMaxFields      = 3; // max input boxes allowed
+            var poiDetailsWrapper         = jQuery("#poiDetailsWrapper"); // Fields wrapper
+            var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
+            var i = 0; // Initial text box count
+
+            addPoiFieldBtn.click(function(e){ // On add input button click
+                e.preventDefault();
+                if(i < poiMaxFields) { // Max input box allowed
+                    i++; // Text box increment
+                    poiDetailsWrapper.append('<div>' +
+                        '<input type="file" name="myFile[]"/>' +
+                        '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
+                        '<input id="poi-input-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-'+i+'" ' +
+                        'aria-controls="title-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
+                        '<label for="poi-input-'+i+'" class="mdc-textfield__label">Enter an image description' +
+                        '</div>' +
+                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p>' +
+                        '<a href="#" class="remove_field">Remove</a>' +
+                        '</div>'); // Add input box
+                }
+                // Run autoInit with noop to suppress warnings.
+                mdc.autoInit(document, () => {});
+            });
+
+
+            poiDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
+                e.preventDefault();
+                jQuery(this).parent('div').remove(); i--;
+            })
 
         } );
 

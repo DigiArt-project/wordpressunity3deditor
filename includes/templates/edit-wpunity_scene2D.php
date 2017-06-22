@@ -111,7 +111,6 @@ get_header(); ?>
                 <h2 class="mdc-typography--title">Featured image</h2>
                 <input type="file" title="Featured image">
 
-
                 <hr class="WhiteSpaceSeparator">
 
                 <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
