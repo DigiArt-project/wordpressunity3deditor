@@ -103,7 +103,6 @@ get_header(); ?>
                     <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
-
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
                 <!--<select title="I am a title" class="mdc-select" required>
                     <option value="" default selected>Pick a food</option>
@@ -119,27 +118,76 @@ get_header(); ?>
                     <option value="fats">Fats, Oils, and Sweets</option>
                 </select>-->
 
-                <h3 id="actionsTitle" class="mdc-typography--subheading1 mdc-theme--text-primary-on-light" style="display: none;">Additional settings</h3>
                 <hr class="WhiteSpaceSeparator">
-                <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%; display: none;" >
-                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
-                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
-                            <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
-                                Next scene
-                            </li>
 
-                            <li class="mdc-list-item" role="option" id="" tabindex="0">
-                                Dummy
-                            </li>
+                <div id="doorDetailsPanel">
+                    <h3 class="mdc-typography--title">Door options</h3>
 
-                        </ul>
+                    <div class="mdc-layout-grid">
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                            <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                                <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
+                                <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
+                                    <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                                        <li class="mdc-list-item" role="option" id="scenes" aria-disabled="true">
+                                            Next scene
+                                        </li>
+
+                                        <li class="mdc-list-item" role="option" id="" tabindex="0">
+                                            Dummy
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div id="entry-point-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                                <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Entry point</span>
+                                <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
+                                    <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                                        <li class="mdc-list-item" role="option" id="entryPoints" aria-disabled="true">
+                                            Entry point
+                                        </li>
+
+                                        <li class="mdc-list-item" role="option" id="" tabindex="0">
+                                            Dummy
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input id="nextSceneInput" type="hidden" name="term_id" value="" disabled>
+                        <input id="entryPointInput" type="hidden" name="term_id" value="" disabled>
+
                     </div>
                 </div>
 
+                <div id="poiImgDetailsPanel" style="display: none;">
+                    <h3 class="mdc-typography--title">Image POI Details</h3>
 
+                    <div id="poiImgDetailsWrapper">
+                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">
+                            <i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Field
+                        </a>
 
-                <hr class="WhiteSpaceSeparator">
+                        <hr class="WhiteSpaceSeparator">
+                    </div>
+                </div>
+
+                <div id="poiVideoDetailsPanel" style="display: none;">
+                    <h3 class="mdc-typography--title">Video POI Details</h3>
+
+                    <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <label for="videoFileInput"> Select a video</label>
+                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4" disabled=""/>
+                    </div>
+                </div>
 
                 <div id="physicsPanel" class="PhysicsPanel" style="display: none;">
                     <h3 class="mdc-typography--title">Physics</h3>
@@ -163,32 +211,7 @@ get_header(); ?>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                     <div id="wind-variance-slider"></div>
                     <input type="hidden" id="physicsWindVarianceVal" value="" disabled="">
-
                 </div>
-
-                <div id="poiImgDetailsPanel" style="display: none;">
-                    <h3 class="mdc-typography--title">Image POI Details</h3>
-
-                    <div id="poiImgDetailsWrapper">
-                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">
-                            <i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Field
-                        </a>
-
-                        <hr class="WhiteSpaceSeparator">
-                    </div>
-                </div>
-
-                <div id="poiVideoDetailsPanel" style="display: none;">
-                    <h3 class="mdc-typography--title">Video POI Details</h3>
-
-                    <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="videoFileInput"> Select a video</label>
-                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
-                    </div>
-
-
-                </div>
-
 
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
@@ -294,9 +317,20 @@ get_header(); ?>
             var MDCSelect = mdc.select.MDCSelect;
             var categoryDropdown = document.getElementById('category-select');
             var nextSceneDropdown = document.getElementById('next-scene-select');
+            var entryPointDropdown = document.getElementById('entry-point-select');
 
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
             var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
+            var entryPointSelect = MDCSelect.attachTo(entryPointDropdown);
+
+
+            nextSceneDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery("#nextSceneInput").attr( "value", nextSceneSelect.selectedOptions[0].getAttribute("id") );
+            });
+
+            entryPointDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery("#entryPointInput").attr( "value", entryPointSelect.selectedOptions[0].getAttribute("id") );
+            });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 var item = categorySelect.selectedOptions[0];
@@ -307,13 +341,17 @@ get_header(); ?>
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
-                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
-
                 jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
+                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
                 switch(cat) {
                     case 'doors':
+
+                        jQuery("#doorDetailsPanel").show();
+
+                        jQuery("#nextSceneInput").removeAttr("disabled");
+                        jQuery("#entryPointInput").removeAttr("disabled");
 
                         break;
                     case 'dynamic3dmodels':
@@ -406,6 +444,11 @@ get_header(); ?>
 
         function resetPanels() {
             jQuery("#assetDescription").show();
+
+            jQuery("#doorDetailsPanel").hide();
+            jQuery("#nextSceneInput").attr('disabled', 'disabled');
+            jQuery("#entryPointInput").attr('disabled', 'disabled');
+
 
             jQuery("#physicsPanel").hide();
             jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
