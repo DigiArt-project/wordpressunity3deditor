@@ -26,13 +26,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     if($scene_type == 'credits'){
         $post_content = esc_attr(strip_tags($_POST['scene-description']));
         $post_image =  $_FILES['scene-featured-image'];
-        //UPDATE THE ISSUE TO DB
+
         $scene_information = array(
             'ID' => $scene_id,
             'post_content' => $post_content,
         );
 
         $post_id = wp_update_post( $scene_information, true );
+
         if (is_wp_error($post_id)) {
             $errors = $post_id->get_error_messages();
             foreach ($errors as $error) {
@@ -43,28 +44,32 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         $attachment_id = wpunity_upload_img( $post_image, $scene_id);
         set_post_thumbnail( $scene_id, $attachment_id );
 
+        if($post_id){
+            wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+            exit;
+        }
+
     }elseif($scene_type == 'menu'){
-        //$post_content = esc_attr(strip_tags($_POST['scene-description']));
-        //UPDATE THE ISSUE TO DB
-        $scene_information = array(
-            'ID' => $scene_id,
-            'post_content' => $post_content,
-        );
 
-        //wpunity_upload_img()
+        $post_image =  $_FILES['scene-featured-image'];
 
-        update_post_meta($scene_id, 'wpunity_menu_has_options', 1);
-        update_post_meta($scene_id, 'wpunity_menu_has_login', 1);
-        update_post_meta($scene_id, 'wpunity_menu_has_help', 1);
-    }
+        $post_options_choice =  esc_attr(strip_tags($_POST['options']));
+        $post_login_choice =  esc_attr(strip_tags($_POST['login']));
+        $post_help_choice =  esc_attr(strip_tags($_POST['help']));
 
+        if($post_options_choice){update_post_meta($scene_id, 'wpunity_menu_has_options', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_options', 0);}
+        if($post_login_choice){update_post_meta($scene_id, 'wpunity_menu_has_login', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_login', 0);}
+        if($post_help_choice){update_post_meta($scene_id, 'wpunity_menu_has_help', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_help', 0);}
 
+        $attachment_id = wpunity_upload_img( $post_image, $scene_id);
+        set_post_thumbnail( $scene_id, $attachment_id );
 
-
-    if($post_id){
         wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
         exit;
     }
+
+
+
 
 }
 
@@ -114,9 +119,14 @@ get_header(); ?>
                 <?php } else { ?>
 
                     <h2 class="mdc-typography--title">Enable sections</h2>
+                    <?php
 
+                    $has_options_pre = get_post_meta($scene_id,'wpunity_menu_has_options',true);
+                    $has_login_pre = get_post_meta($scene_id,'wpunity_menu_has_login',true);
+                    $has_help_pre = get_post_meta($scene_id,'wpunity_menu_has_help',true);
+                    ?>
                     <div class="mdc-switch">
-                        <input type="checkbox" name="options" value="true" id="options-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="options" value="<?php if($has_options_pre == 1){echo 'true';}else{echo 'false';} ?>" id="options-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -126,7 +136,7 @@ get_header(); ?>
                     <hr class="WhiteSpaceSeparator">
 
                     <div class="mdc-switch">
-                        <input type="checkbox" name="login" value="true" id="login-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="login" value="<?php if($has_login_pre == 1){echo 'true';}else{echo 'false';} ?>" id="login-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -136,7 +146,7 @@ get_header(); ?>
                     <hr class="WhiteSpaceSeparator">
 
                     <div class="mdc-switch">
-                        <input type="checkbox" name="help" value="true" id="help-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="help" value="<?php if($has_help_pre == 1){echo 'true';}else{echo 'false';} ?>" id="help-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -153,6 +163,8 @@ get_header(); ?>
 
                 <h2 class="mdc-typography--title">Featured image</h2>
                 <input type="file" name="scene-featured-image" title="Featured image">
+
+                <?php echo get_the_post_thumbnail( $scene_id ); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
