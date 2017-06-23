@@ -217,7 +217,11 @@ if ( $custom_query->have_posts() ) :?>
 							<?php } else { ?>
 
                                 <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
+                                    <?php if(has_post_thumbnail($scene_id)){
+                                        echo get_the_post_thumbnail( $scene_id );
+                                    } else {?>
                                     <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
+                                    <?php } ?>
                                 </div>
 
 							<?php } ?>
