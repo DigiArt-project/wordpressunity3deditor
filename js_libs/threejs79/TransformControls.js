@@ -979,11 +979,15 @@
 				point.sub( offset );
 				point.multiply( parentScale );
 
+
+
 				if ( scope.space === "local" ) {
 
 					if ( scope.axis === "XYZ" ) {
 
 						scale = 1 + ( ( point.y ) / Math.max( oldScale.x, oldScale.y, oldScale.z ) );
+
+                        console.log("scale1", scale);
 
 						scope.object.scale.x = oldScale.x * scale;
 						scope.object.scale.y = oldScale.y * scale;
@@ -991,11 +995,20 @@
 
 					} else {
 
+						var newScaleX = oldScale.x * ( 1 + point.x / oldScale.x );
+                        var newScaleY = oldScale.y * ( 1 + point.y / oldScale.y );
+                        var newScaleZ = oldScale.z * ( 1 + point.z / oldScale.z );
+
 						point.applyMatrix4( tempMatrix.getInverse( worldRotationMatrix ) );
 
-						if ( scope.axis === "X" ) scope.object.scale.x = oldScale.x * ( 1 + point.x / oldScale.x );
-						if ( scope.axis === "Y" ) scope.object.scale.y = oldScale.y * ( 1 + point.y / oldScale.y );
-						if ( scope.axis === "Z" ) scope.object.scale.z = oldScale.z * ( 1 + point.z / oldScale.z );
+						if (newScaleX>0)
+							if ( scope.axis === "X" ) scope.object.scale.x = newScaleX;
+
+						if (newScaleY>0)
+							if ( scope.axis === "Y" ) scope.object.scale.y = newScaleY;
+
+                        if (newScaleZ>0)
+							if ( scope.axis === "Z" ) scope.object.scale.z = newScaleZ;
 
 					}
 
