@@ -249,7 +249,7 @@ var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).na
 var dg_controller_rx = gui.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
 var dg_controller_ry = gui.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
 var dg_controller_rz = gui.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
-var dg_controller_sc = gui.add( gui_controls_funs, 'dg_scale', 0.001, 1000, 0.001).name('Scale');//.listen();
+var dg_controller_sc = gui.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
 var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
 var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');
 var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');
@@ -402,6 +402,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
 
     //---------scale by TransformTools-------------------------------
     var val = 0;
+
     if (transform_controls.object.scale.x != gui_controls_funs.dg_scale){
         var val = transform_controls.object.scale.x;
     } else if (transform_controls.object.scale.y != gui_controls_funs.dg_scale){
@@ -411,8 +412,8 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
     }
 
     if (val > 0){
+
         gui_controls_funs.dg_scale = val;
-        //sc_container.value = val;
         transform_controls.object.scale.set( val, val, val);
     }
     //--------- end of scale ------------------------
