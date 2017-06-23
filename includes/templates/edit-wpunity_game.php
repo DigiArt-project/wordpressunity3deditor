@@ -55,11 +55,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_id = wp_insert_post($scene_information);
 
-    $scene_image = $_FILES['scene-featured-image'];
+	$scene_image = $_FILES['scene-featured-image'];
 
 	if($scene_id){
-        $attachment_id = wpunity_upload_img( $scene_image, $scene_id);
-        set_post_thumbnail( $scene_id, $attachment_id );
+		$attachment_id = wpunity_upload_img( $scene_image, $scene_id);
+		set_post_thumbnail( $scene_id, $attachment_id );
 
 		$newpost = get_post($scene_id);
 		wpunity_create_unityfile_noAssets('scene',$newpost->post_name,$scene_id,$gameSlug,$allScenePGameID,$yamlTermID);
@@ -210,18 +210,18 @@ if ( $custom_query->have_posts() ) :?>
 						?>
                         <a href="<?php echo $edit_page_link; ?>">
 
-							<?php if ($scene_thumb) { ?>
+							<?php if(has_post_thumbnail($scene_id)) { ?>
 
-                                <img src="<?php echo site_url();?>">
+                                <div style="min-height: 226px;" class="DisplayBlock CenterContents">
+
+									<?php echo get_the_post_thumbnail( $scene_id ); ?>
+                                </div>
+
 
 							<?php } else { ?>
 
                                 <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                    <?php if(has_post_thumbnail($scene_id)){
-                                        echo get_the_post_thumbnail( $scene_id );
-                                    } else {?>
                                     <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                    <?php } ?>
                                 </div>
 
 							<?php } ?>
