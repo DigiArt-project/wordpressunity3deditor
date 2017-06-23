@@ -116,7 +116,7 @@ get_header(); ?>
                     <h2 class="mdc-typography--title">Enable sections</h2>
 
                     <div class="mdc-switch">
-                        <input type="checkbox" id="options-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="options" value="true" id="options-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -126,7 +126,7 @@ get_header(); ?>
                     <hr class="WhiteSpaceSeparator">
 
                     <div class="mdc-switch">
-                        <input type="checkbox" id="login-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="login" value="true" id="login-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -136,7 +136,7 @@ get_header(); ?>
                     <hr class="WhiteSpaceSeparator">
 
                     <div class="mdc-switch">
-                        <input type="checkbox" id="help-switch" class="mdc-switch__native-control" />
+                        <input type="checkbox" name="help" value="true" id="help-switch" class="mdc-switch__native-control" />
                         <div class="mdc-switch__background">
                             <div class="mdc-switch__knob"></div>
                         </div>
@@ -167,6 +167,22 @@ get_header(); ?>
     </form>
     <script type="text/javascript">
         window.mdc.autoInit();
+
+        function handleCheckbox(id) {
+            var checkbox = jQuery("#"+id);
+
+            console.log(checkbox);
+
+            if (checkbox.is(':checked')) {
+                console.log("checked!");
+                /*checkbox.prop('checked', true);*/
+                document.getElementById('options-switch').checked = true;
+            } else {
+                checkbox.prop('checked', false);
+                document.getElementById('options-switch').checked = false;
+            }
+        }
+
     </script>
 
 <?php get_footer(); ?>
