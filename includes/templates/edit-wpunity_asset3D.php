@@ -278,6 +278,39 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
+
+                <div id="assetPreviewContainer">
+
+					<?php
+
+					$curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
+					$mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
+
+					if (wp_get_attachment_url( $mtl_obj ))
+						$textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
+					else
+						$textmtl = '';
+
+					$obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
+					$url_obj = wp_get_attachment_url( $obj_id );
+					?>
+
+                    <div id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
+						<?php
+						if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
+							wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
+						}else {
+							echo "Rendering is not possible because:<br />";
+							if ($curr_path == ""){echo "- Current path is not defined<br />";}
+							if ($textmtl == ""){echo "- mtl is not defined<br />";}
+							if ($url_obj == ""){echo "- obj url is not defined<br />";}
+						}
+						?>
+                    </div>
+
+
+                </div>
+
                 <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
                     <a id="previewBtn"  class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
                 </div>
