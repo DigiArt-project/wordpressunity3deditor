@@ -409,6 +409,9 @@ function wpunity_assets_databox_show(){
             else
                 $textmtl = '';
 
+            //    '    characters because they cause conflict
+            $textmtl = str_replace("\'", "", $textmtl);
+
             $obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
             $url_obj = wp_get_attachment_url( $obj_id );
             ?>

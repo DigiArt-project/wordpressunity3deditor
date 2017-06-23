@@ -1,146 +1,152 @@
 <?php
-
 function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
+
+    echo '<script>';
+    echo 'url_obj="'.$url_obj.'";';
+    echo 'curr_path="'.$curr_path.'";';
+    echo 'post_title="'.$post_title.'";';
+    echo 'textmtl='. json_encode($textmtl).';';
+    echo '</script>';
+
     ?>
-        <!-- START 3D -->
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
-        <script>
-            container3d_previewer = document.getElementById('vr-preview');
-            windowW = container3d_previewer.clientWidth;
-            windowH = windowW * 2/3;
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
-            var camera, scene, renderer;
 
-            // Camera position and view
-            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 0.5, 20000);
+    <script>
+        container3d_previewer = document.getElementById('vr-preview');
+        windowW = container3d_previewer.clientWidth;
+        windowH = windowW * 2/3;
 
-            camera.position.z = 10;
-            camera.position.x = 0;
-            camera.position.y = 10;
-            camera.lookAt(new THREE.Vector3(0, 0, 0));
+        var camera, scene, renderer;
 
-            // scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff);
+        // Camera position and view
+        camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 0.5, 20000);
 
-            // Light
-            var directionalLight = new THREE.DirectionalLight(0xffffff);
-            directionalLight.position.set(0, 30, 0);
-            scene.add(directionalLight);
+        camera.position.z = 10;
+        camera.position.x = 0;
+        camera.position.y = 10;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-            // Add Grid
-            this.gridHelper = new THREE.GridHelper(2000, 40);
-            this.gridHelper.name = "myGridHelper";
-            this.scene.add(this.gridHelper);
+        // scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
 
-            // Add Axes helper
-            this.axisHelper = new THREE.AxisHelper( 100 );
-            this.axisHelper.name = "myAxisHelper";
-            this.scene.add(this.axisHelper);
+        // Light
+        var directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, 30, 0);
+        scene.add(directionalLight);
 
-            renderer = new THREE.WebGLRenderer();
+        // Add Grid
+        this.gridHelper = new THREE.GridHelper(2000, 40);
+        this.gridHelper.name = "myGridHelper";
+        this.scene.add(this.gridHelper);
 
-            renderer.setSize(windowW-14, windowH);
-            container3d_previewer.appendChild(renderer.domElement);
+        // Add Axes helper
+        this.axisHelper = new THREE.AxisHelper( 100 );
+        this.axisHelper.name = "myAxisHelper";
+        this.scene.add(this.axisHelper);
 
-            // Orbit controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
-            controls.enableZoom = true;
+        renderer = new THREE.WebGLRenderer();
 
-            // Resize callback
-            window.addEventListener('resize', onWindowResize, false);
+        renderer.setSize(windowW-14, windowH);
+        container3d_previewer.appendChild(renderer.domElement);
 
-            // start rendering
-            animate();
+        // Orbit controls
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true;
 
-            // ------------ Total Manager -----------------
-            var manager = new THREE.LoadingManager();
-            manager.onProgress = function (item, loaded, total) {
-                //console.log( item, loaded, total );
-            };
+        // Resize callback
+        window.addEventListener('resize', onWindowResize, false);
 
-            var mtlLoader = new THREE.MTLLoader();
-            var curr_path = '<?php echo $curr_path?>';
+        // start rendering
+        animate();
 
-            mtlLoader.setPath(curr_path);
+        // ------------ Total Manager -----------------
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function (item, loaded, total) {
+            //console.log( item, loaded, total );
+        };
 
-            var textmtl = <?php echo json_encode($textmtl)?>;
+        var mtlLoader = new THREE.MTLLoader();
 
-            if (textmtl != '')
-                mtlLoader.loadfromtext(textmtl, function (materials) {
 
-                    materials.preload();
+        mtlLoader.setPath(curr_path);
 
-                    var objLoader = new THREE.OBJLoader(manager);
-                    objLoader.setMaterials(materials);
 
-                    objLoader.load('<?php echo $url_obj?>',
 
-                        // OnObjLoad
-                        function (object) {
-                            // This makes the obj double sided (put it in a dat.gui button better)
-                            object.traverse(function (node) {
+        if (textmtl != '')
+            mtlLoader.loadfromtext(textmtl, function (materials) {
 
-                                //if (node.material)
-                                //    node.material.side = THREE.DoubleSide;
+                materials.preload();
 
-                                if (node instanceof THREE.Mesh)
-                                    node.isDigiArt3DMesh = true;
-                            });
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials(materials);
 
-                            object.name = '<?php echo $post_title ?>';
+                objLoader.load( url_obj,
 
-                            scene.add(object);
-                        },
+                    // OnObjLoad
+                    function (object) {
+                        // This makes the obj double sided (put it in a dat.gui button better)
+                        object.traverse(function (node) {
 
-                        //onObjProgressLoad
-                        function (xhr) {
+                            //if (node.material)
+                            //    node.material.side = THREE.DoubleSide;
 
-                            if (xhr.lengthComputable) {
-                                var percentComplete = Math.round(xhr.loaded / xhr.total * 100);
-                                var pctDOM = jQuery("#vr-preview-progress-content")[0];
-                                pctDOM.innerHTML = percentComplete + "%";
-                                if (xhr.loaded == xhr.total) // in bytes
-                                    pctDOM.hidden = true;
-                            }
-                        },
+                            if (node instanceof THREE.Mesh)
+                                node.isDigiArt3DMesh = true;
+                        });
 
-                        //onObjErrorLoad
-                        function (xhr) {
+                        object.name = post_title;
+
+                        scene.add(object);
+                    },
+
+                    //onObjProgressLoad
+                    function (xhr) {
+
+                        if (xhr.lengthComputable) {
+                            var percentComplete = Math.round(xhr.loaded / xhr.total * 100);
+                            var pctDOM = jQuery("#vr-preview-progress-content")[0];
+                            pctDOM.innerHTML = percentComplete + "%";
+                            if (xhr.loaded == xhr.total) // in bytes
+                                pctDOM.hidden = true;
                         }
-                    );
+                    },
 
-                });
+                    //onObjErrorLoad
+                    function (xhr) {
+                    }
+                );
+
+            });
 
 
-            function onWindowResize() {
-                var windowW = container3d_previewer.clientWidth;
-                var windowH = windowW*2/3;
+        function onWindowResize() {
+            var windowW = container3d_previewer.clientWidth;
+            var windowH = windowW*2/3;
 
-                camera.aspect = windowW / windowH;
-                camera.updateProjectionMatrix();
+            camera.aspect = windowW / windowH;
+            camera.updateProjectionMatrix();
 
-                renderer.setSize(windowW, windowH, true);
-            }
+            renderer.setSize(windowW, windowH, true);
+        }
 
-            function animate() {
-                requestAnimationFrame(animate);
-                //scene.rotation.y += 0.01;
-                // No need to render continuously because there are no changes. Render only when OrbitControls change
-                render();
-            }
-            function render() {
-                renderer.render(scene, camera);
-            }
-        </script>
+        function animate() {
+            requestAnimationFrame(animate);
+            //scene.rotation.y += 0.01;
+            // No need to render continuously because there are no changes. Render only when OrbitControls change
+            render();
+        }
+        function render() {
+            renderer.render(scene, camera);
+        }
+    </script>
 
-    <?php
-}
-?>
+<?php } ?>

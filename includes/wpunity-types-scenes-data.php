@@ -71,8 +71,6 @@ function wpunity_scenes_databox_show(){
     echo '<div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">';
         $meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
 
-        echo '$meta_json'. $meta_json;
-
         // do not put esc_attr, crashes the universe in 3D
         $sceneToLoad = $meta_json ? $meta_json : $wpunity_databox4['fields'][0]['std'];
 

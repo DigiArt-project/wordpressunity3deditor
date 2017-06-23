@@ -4,7 +4,6 @@
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
-
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
@@ -13,35 +12,14 @@ $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 
 // Also available in Javascript side
 echo '<script>';
-echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'"';
-echo '</script>';
-
-echo '<script>';
-echo 'scenefolder="'.$scenefolder.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'gamefolder="'.$gamefolder.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'sceneID="'.$sceneID.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'gameProjectID="'.$project_id.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'gameProjectSlug="'.$projectGameSlug.'"';
-echo '</script>';
-
-echo '<script>';
-echo 'isAdmin="'.$isAdmin.'"';
+    echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
+    echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
+    echo 'scenefolder="'.$scenefolder.'";';
+    echo 'gamefolder="'.$gamefolder.'";';
+    echo 'sceneID="'.$sceneID.'";';
+    echo 'gameProjectID="'.$project_id.'";';
+    echo 'gameProjectSlug="'.$projectGameSlug.'";';
+    echo 'isAdmin="'.$isAdmin.'";';
 echo '</script>';
 
 ?>
