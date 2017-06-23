@@ -125,21 +125,6 @@ get_header(); ?>
     <script type="text/javascript">
         window.mdc.autoInit();
 
-        function handleCheckbox(id) {
-            var checkbox = jQuery("#"+id);
-
-            console.log(checkbox);
-
-            if (checkbox.is(':checked')) {
-                console.log("checked!");
-                /*checkbox.prop('checked', true);*/
-                document.getElementById('options-switch').checked = true;
-            } else {
-                checkbox.prop('checked', false);
-                document.getElementById('options-switch').checked = false;
-            }
-        }
-
     </script>
 
 <?php get_footer(); ?>
