@@ -48,7 +48,7 @@ class SceneClass{
             'menu_position' => 25,
             'menu_icon' => 'dashicons-media-default',
             'taxonomies' => array('wpunity_scene_pgame','wpunity_scene_yaml'),
-            'supports' => array('title', 'editor', 'custom-fields'),
+            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
             'hierarchical' => false,
             'has_archive' => false,
         );
@@ -163,17 +163,17 @@ function wpunity_create_folder_scene( $new_status, $old_status, $post ){
 
             if($yamlTermSlug == 'mainmenu-yaml'){
                 //wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);//Create "Scene" folder inside "Game" (parentGame) with meta file
-                wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');//Create .unity file for the "Scene"
+                //wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');//Create .unity file for the "Scene"
             }elseif($yamlTermSlug == 'options-yaml'){
                 //wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
-                wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+                //wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
             }elseif($yamlTermSlug == 'credentials-yaml'){
                 //wpunity_create_folder_withmeta('scene-nosub',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
-                wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+                //wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
             }else{
                 //Create "Scene" folder inside "Game" (parentGame) with meta file
                 //wpunity_create_folder_withmeta('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID);
-                wpunity_create_unityfile_noAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID);
+                //wpunity_create_unityfile_noAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID);
             }
         }else{
             //TODO It's not a new Game so DELETE everything (folder & taxonomy)
@@ -224,13 +224,13 @@ function wpunity_create_unity_scene( $new_status, $old_status, $post ){
 
             //UPDATE the Unity file with Assets added to json
             if($yamlTermSlug == 'mainmenu-yaml'){
-                wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+                //wpunity_create_unityfile_withAssets('scene-mainmenu',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
             }elseif($yamlTermSlug == 'options-yaml'){
-                wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+                //wpunity_create_unityfile_withAssets('scene-options',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
             }elseif($yamlTermSlug == 'credentials-yaml'){
-                wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
+                //wpunity_create_unityfile_withAssets('scene-credentials',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,'');
             }else{
-                wpunity_create_unityfile_withAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene);
+                //wpunity_create_unityfile_withAssets('scene',$sceneSlug,$sceneID,$parentGameSlug,$parentGameID,$yamlTermID,$jsonScene);
             }
 
 //            wp_die();
