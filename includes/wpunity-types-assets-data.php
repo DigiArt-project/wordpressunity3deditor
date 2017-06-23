@@ -394,6 +394,8 @@ function wpunity_assets_databox_show(){
     <table class="form-table" id="wpunity-custom-fields-table">
         <tbody>
             <tr><th style="width:20%">Asset 3D Preview</label></th>
+
+
             <?php
 
             //$curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
@@ -411,10 +413,19 @@ function wpunity_assets_databox_show(){
             $url_obj = wp_get_attachment_url( $obj_id );
             ?>
             <td>
-                <div name="vr-preview" id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
+                   <div name="vr-preview-progress-content" id="vr-preview-progress-content"
+                         style="position: absolute; top:10%; background: #af0; color: #fff; margin-left: auto; margin-right: auto;  width:100px; left:50%; text-align:center; z-index:1">
+                        0%
+                    </div>
+
+
+                <div name="vr-preview" id="vr-preview" style="position:relative; width:95%; border: 1px solid #aaa; margin-left:5px">
+
                 <?php
                 if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
+
                     wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
+
                 }else {
                     echo "Rendering is not possible because:<br />";
                     if ($curr_path == ""){echo "- Current path is not defined<br />";}

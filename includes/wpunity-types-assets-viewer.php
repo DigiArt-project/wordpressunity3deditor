@@ -9,35 +9,14 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
         <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
         <script>
-            function onWindowResize() {
-                var windowW = container3d_previewer.clientWidth;
-                var windowH = windowW*2/3;
-
-                camera.aspect = windowW / windowH;
-                camera.updateProjectionMatrix();
-
-                renderer.setSize(windowW, windowH, true);
-            }
-
-            function animate() {
-                requestAnimationFrame(animate);
-                //scene.rotation.y += 0.01;
-                // No need to render continuously because there are no changes. Render only when OrbitControls change
-                render();
-            }
-            function render() {
-                renderer.render(scene, camera);
-            }
-        </script>
-
-        <script>
             container3d_previewer = document.getElementById('vr-preview');
             windowW = container3d_previewer.clientWidth;
             windowH = windowW * 2/3;
 
             var camera, scene, renderer;
 
-            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 1, 2000);
+            // Camera position and view
+            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 0.5, 20000);
 
             camera.position.z = 10;
             camera.position.x = 0;
@@ -48,18 +27,25 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xffffff);
 
+            // Light
             var directionalLight = new THREE.DirectionalLight(0xffffff);
             directionalLight.position.set(0, 30, 0);
             scene.add(directionalLight);
+
+            // Add Grid
+            this.gridHelper = new THREE.GridHelper(2000, 40);
+            this.gridHelper.name = "myGridHelper";
+            this.scene.add(this.gridHelper);
+
+            // Add Axes helper
+            this.axisHelper = new THREE.AxisHelper( 100 );
+            this.axisHelper.name = "myAxisHelper";
+            this.scene.add(this.axisHelper);
 
             renderer = new THREE.WebGLRenderer();
 
             renderer.setSize(windowW-14, windowH);
             container3d_previewer.appendChild(renderer.domElement);
-
-            console.log(renderer.domElement.height);
-
-//            container3d_previewer.style.width = renderer.domElement.width + "px";
 
             // Orbit controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -81,10 +67,7 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
             };
 
             var mtlLoader = new THREE.MTLLoader();
-
             var curr_path = '<?php echo $curr_path?>';
-
-
 
             mtlLoader.setPath(curr_path);
 
@@ -92,8 +75,6 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
 
             if (textmtl != '')
                 mtlLoader.loadfromtext(textmtl, function (materials) {
-
-                    //console.log("materials jimbea", materials['materials']);
 
                     materials.preload();
 
@@ -114,7 +95,6 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
                                     node.isDigiArt3DMesh = true;
                             });
 
-
                             object.name = '<?php echo $post_title ?>';
 
                             scene.add(object);
@@ -124,25 +104,11 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
                         function (xhr) {
 
                             if (xhr.lengthComputable) {
-
-                                var percentComplete = xhr.loaded / xhr.total * 100;
-
-//                                        var bar = $("#progressbar").get(0).offsetWidth;
-//                                        bar = Math.floor(bar * xhr.loaded / xhr.total);
-//
-//                                        $("#bar").get(0).style.width = bar + "px";
-//                                        var downloadedBytes = "Downloaded: " + xhr.loaded + " / " + xhr.total + ' bytes';
-//
-//                                        $(".result").get(0).innerHTML = downloadedBytes;
-//                                        //            console.log(Math.round(percentComplete, 2) + '% downloaded');
-
-//                                        if (xhr.loaded == xhr.total) {
-//                                            $("#message").get(0).innerHTML = "Completed";
-//                                            //$("#message").get(0).style.display = "none";
-//                                            //$("#progressbar").get(0).style.display = "none";
-//                                        }
-
-
+                                var percentComplete = Math.round(xhr.loaded / xhr.total * 100);
+                                var pctDOM = jQuery("#vr-preview-progress-content")[0];
+                                pctDOM.innerHTML = percentComplete + "%";
+                                if (xhr.loaded == xhr.total) // in bytes
+                                    pctDOM.hidden = true;
                             }
                         },
 
@@ -153,11 +119,26 @@ function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
 
                 });
 
-            //
 
+            function onWindowResize() {
+                var windowW = container3d_previewer.clientWidth;
+                var windowH = windowW*2/3;
 
+                camera.aspect = windowW / windowH;
+                camera.updateProjectionMatrix();
 
+                renderer.setSize(windowW, windowH, true);
+            }
 
+            function animate() {
+                requestAnimationFrame(animate);
+                //scene.rotation.y += 0.01;
+                // No need to render continuously because there are no changes. Render only when OrbitControls change
+                render();
+            }
+            function render() {
+                renderer.render(scene, camera);
+            }
         </script>
 
     <?php
