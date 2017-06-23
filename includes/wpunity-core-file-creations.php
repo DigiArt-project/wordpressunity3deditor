@@ -299,12 +299,12 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
     $allScenePGameID = $allScenePGame->term_id;
 
-    $mainmenuSceneTitle = $gameTitle  . ' - Main Menu'; //Title for Main Menu
+    $mainmenuSceneTitle = 'Main Menu'; //Title for Main Menu
     $mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
-    $firstSceneTitle = $gameTitle . ' - First Scene'; //Title for First Menu
+    $firstSceneTitle = 'First Scene'; //Title for First Menu
     $firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
-    $credentialsSceneTitle = $gameTitle . ' - Credentials Scene'; //Title for Credentials Menu
-    $credentialsSceneSlug = $gameSlug . '-credentials-scene'; //Slug for Credentials Menu
+    $credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
+    $credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 
     $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
     $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
@@ -323,7 +323,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $mainmenuSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'menu',
         ),
     );
@@ -338,7 +338,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $firstSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'scene',
         ),
     );
@@ -353,7 +353,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
             'wpunity_scene_pgame'     => array( $allScenePGameID ),
             'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
         ),'meta_input'   => array(
-            'wpunity_scene_default' => 'true',
+            'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'credits',
         ),
     );
