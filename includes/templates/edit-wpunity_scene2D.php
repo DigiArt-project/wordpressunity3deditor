@@ -23,6 +23,49 @@ $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
+    if($scene_type == 'credits'){
+        $post_content = esc_attr(strip_tags($_POST['scene-description']));
+        $post_image =  $_FILES['scene-featured-image'];
+        //UPDATE THE ISSUE TO DB
+        $scene_information = array(
+            'ID' => $scene_id,
+            'post_content' => $post_content,
+        );
+
+        $post_id = wp_update_post( $scene_information, true );
+        if (is_wp_error($post_id)) {
+            $errors = $post_id->get_error_messages();
+            foreach ($errors as $error) {
+                echo $error;
+            }
+        }
+
+        $attachment_id = wpunity_upload_img( $post_image, $scene_id);
+        set_post_thumbnail( $scene_id, $attachment_id );
+
+    }elseif($scene_type == 'menu'){
+        //$post_content = esc_attr(strip_tags($_POST['scene-description']));
+        //UPDATE THE ISSUE TO DB
+        $scene_information = array(
+            'ID' => $scene_id,
+            'post_content' => $post_content,
+        );
+
+        //wpunity_upload_img()
+
+        update_post_meta($scene_id, 'wpunity_menu_has_options', 1);
+        update_post_meta($scene_id, 'wpunity_menu_has_login', 1);
+        update_post_meta($scene_id, 'wpunity_menu_has_help', 1);
+    }
+
+
+
+
+    if($post_id){
+        wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+        exit;
+    }
+
 }
 
 wp_enqueue_media($scene_post->ID);
@@ -64,7 +107,7 @@ get_header(); ?>
 
                     <h2 class="mdc-typography--title">Credits</h2>
                     <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                        <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"></textarea>
+                        <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label">Edit Credits text</label>
                     </div>
 
@@ -109,7 +152,7 @@ get_header(); ?>
                 <!-- ADD MORE DEPENDING ON THE SCENE -->
 
                 <h2 class="mdc-typography--title">Featured image</h2>
-                <input type="file" title="Featured image">
+                <input type="file" name="scene-featured-image" title="Featured image">
 
                 <hr class="WhiteSpaceSeparator">
 
