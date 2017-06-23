@@ -55,7 +55,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_id = wp_insert_post($scene_information);
 
+    $scene_image = $_FILES['scene-featured-image'];
+
 	if($scene_id){
+        $attachment_id = wpunity_upload_img( $scene_image, $scene_id);
+        set_post_thumbnail( $scene_id, $attachment_id );
+
 		$newpost = get_post($scene_id);
 		wpunity_create_unityfile_noAssets('scene',$newpost->post_name,$scene_id,$gameSlug,$allScenePGameID,$yamlTermID);
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
@@ -129,7 +134,7 @@ get_header();
 
 
                     <h2 class="mdc-typography--title">Screenshot image</h2>
-                    <input type="file" title="Scene screenshot image" accept="image/png, image/jpeg">
+                    <input type="file" title="Scene screenshot image" name="scene-featured-image" accept="image/png, image/jpeg">
 
                     <hr class="WhiteSpaceSeparator">
 
