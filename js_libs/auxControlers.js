@@ -221,8 +221,8 @@ var gui_controls_funs = new function(){
     this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
     this.bt_scale = function(){ transform_controls.setMode( "scale" ); };
 
-    this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );}
-    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );}
+    this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
+    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};
 
     this.dg_tx = 0;
     this.dg_ty = 0;
