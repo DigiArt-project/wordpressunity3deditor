@@ -330,8 +330,14 @@ get_header(); ?>
             // After save
             // wu_3d_view_main('After', path, textMtl, text_of_objfile, title, 'assetPreviewContainer');
 
-            wu_3d_view_main(path, textMtl, url, title, 'assetPreviewContainer');
+            var mtlFile = JSON.stringify(document.getElementById('mtlFileInput').files[0]);
+            var objFile = document.getElementById('objFileInput').files[0];
 
+            if (mtlFile && objFile) {
+                wu_3d_view_main('After', '', mtlFile, objFile, 'test title', 'assetPreviewContainer');
+            } else {
+                alert("no files");
+            }
         });
 
 
