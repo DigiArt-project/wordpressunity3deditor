@@ -13,9 +13,6 @@ $game_type_obj = wpunity_return_game_type($project_id);
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
-wp_enqueue_script('wpunity_dropzone');
-
-
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
@@ -28,54 +25,8 @@ wp_enqueue_script("wu_3d_view");
 
 get_header(); ?>
 
-
-<script>
-   function readMtlAtClient(){
-
-       mtlFileContent = '';
-
-       var mtlFile = document.getElementById('mtlFileInput').files[0];
-       var readerMTL = new FileReader();
-
-       // Closure to capture the file information.
-       readerMTL.onload = (function(reader) {
-           return function() {
-               mtlFileContent = reader.result;
-               mtlFileContent = mtlFileContent.replace('data:;base64,', '');
-               mtlFileContent = window.atob(mtlFileContent);
-
-           };
-       })(readerMTL);
-
-       readerMTL.readAsDataURL(mtlFile);
-   }
-
-
-   function readObjAtClient(){
-
-       objFileContent = '';
-       var objFile = document.getElementById('objFileInput').files[0];
-
-       var readerOBJ = new FileReader();
-
-       // Closure to capture the file information.
-       readerOBJ.onload = (function(reader) {
-           return function() {
-               objFileContent = reader.result;
-               objFileContent = objFileContent.replace('data:;base64,', '');
-               objFileContent = window.atob(objFileContent);
-           };
-       })(readerOBJ);
-
-       readerOBJ.readAsDataURL(objFile);
-   }
-</script>
-
-
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
-
-
     </div>
 
     <span class="mdc-typography--caption">
@@ -301,13 +252,13 @@ get_header(); ?>
 
                     <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="mtlFileInput"> Select an MTL file</label>
-                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" onchange="readMtlAtClient()" accept=".mtl"/>
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl"/>
                     </div>
 
 
                     <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label  for="objFileInput" > Select an OBJ file</label>
-                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" onchange="readObjAtClient()" accept=".obj"/>
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj"/>
                     </div>
                 </div>
 
@@ -365,26 +316,24 @@ get_header(); ?>
         var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
 
-        var modelPreviewButton = jQuery('#modelPreviewBtn');
-        modelPreviewButton.click(function() {
+        var mtlFileContent = '';
+        var objFileContent = '';
 
-            // @Tasos
-            // Before save
-            // wu_3d_view_main('Before', path, textMtl, url_of_obj, title, 'assetPreviewContainer');
-            // After save
-            // wu_3d_view_main('After', path, textMtl, text_of_objfile, title, 'assetPreviewContainer');
-
-
-
-            if (mtlFileContent && objFileContent) {
-                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
-            } else {
-                alert("no files");
+        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
+        // We can expand this for 'fbx' files too.
+        function loadFileCallback(content, type) {
+            if(type === 'mtl') {
+                mtlFileContent = content;
             }
 
+            if(type === 'obj') {
+                objFileContent = content;
+            }
 
-        });
-
+            if (objFileContent && mtlFileContent) {
+                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
+            }
+        }
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -395,7 +344,6 @@ get_header(); ?>
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
             var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
             var entryPointSelect = MDCSelect.attachTo(entryPointDropdown);
-
 
             nextSceneDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#nextSceneInput").attr( "value", nextSceneSelect.selectedOptions[0].getAttribute("id") );
@@ -467,10 +415,10 @@ get_header(); ?>
 
             if (fileExtension(fbxInput.val()) === 'fbx') {
 
-                modelPreviewButton.show();
+
             } else {
                 document.getElementById("fbxFileInput").value = "";
-                modelPreviewButton.hide();
+
             }
         });
 
@@ -480,14 +428,18 @@ get_header(); ?>
 
             if (fileExtension(mtlInput.val()) === 'mtl') {
                 console.log('mtl');
+
+                readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
+
+
             } else {
                 document.getElementById("mtlFileInput").value = "";
-                modelPreviewButton.hide();
+
             }
 
 
             if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-                modelPreviewButton.show();
+
             }
 
         });
@@ -497,13 +449,16 @@ get_header(); ?>
 
             if (fileExtension(objInput.val()) === 'obj') {
                 console.log('obj');
+
+                readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
+
             } else {
                 document.getElementById("objFileInput").value = "";
-                modelPreviewButton.hide();
+
             }
 
             if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-                modelPreviewButton.show();
+
             }
         });
 
@@ -512,7 +467,7 @@ get_header(); ?>
             document.getElementById("fbxFileInput").value = "";
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
-            modelPreviewButton.hide();
+
         }
 
         function resetPanels() {
@@ -639,6 +594,23 @@ get_header(); ?>
             })
 
         } );
+
+        function readFile(file, type, callback) {
+            var content = '';
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            // Closure to capture the file information.
+            reader.onload = (function(reader) {
+                return function() {
+                    content = reader.result;
+                    content = content.replace('data:;base64,', '');
+                    content = window.atob(content);
+
+                    callback(content, type);
+                };
+            })(reader);
+        }
 
     </script>
 <?php  get_footer(); ?>
