@@ -19,6 +19,12 @@ wp_enqueue_script('wpunity_dropzone');
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
+// Three js : for simple rendering
+wp_enqueue_script('wpunity_load_threejs');
+wp_enqueue_script('wpunity_load_objloader');
+wp_enqueue_script('wpunity_load_mtlloader');
+wp_enqueue_script('wpunity_load_orbitcontrols');
+
 
 get_header(); ?>
 
@@ -298,8 +304,19 @@ get_header(); ?>
                     <div id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
 						<?php
 						if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
-							wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
-						}else {
+
+                            wp_enqueue_script("wu_3d_view");
+                            ?>
+
+                            <script>
+                                jQuery('document').ready(function(){
+                                    wu_3d_view_main("<?php echo $curr_path;?>", <?php echo json_encode($textmtl);?>, "<?php echo $url_obj;?>", "<?php echo $post_title;?>" );
+                                });
+                            </script>
+
+                            <?php
+
+                        }else {
 							echo "Rendering is not possible because:<br />";
 							if ($curr_path == ""){echo "- Current path is not defined<br />";}
 							if ($textmtl == ""){echo "- mtl is not defined<br />";}
