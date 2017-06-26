@@ -28,6 +28,50 @@ wp_enqueue_script("wu_3d_view");
 
 get_header(); ?>
 
+
+<script>
+   function readMtlAtClient(){
+
+       mtlFileContent = '';
+
+       var mtlFile = document.getElementById('mtlFileInput').files[0];
+       var readerMTL = new FileReader();
+
+       // Closure to capture the file information.
+       readerMTL.onload = (function(reader) {
+           return function() {
+               mtlFileContent = reader.result;
+               mtlFileContent = mtlFileContent.replace('data:;base64,', '');
+               mtlFileContent = window.atob(mtlFileContent);
+
+           };
+       })(readerMTL);
+
+       readerMTL.readAsDataURL(mtlFile);
+   }
+
+
+   function readObjAtClient(){
+
+       objFileContent = '';
+       var objFile = document.getElementById('objFileInput').files[0];
+
+       var readerOBJ = new FileReader();
+
+       // Closure to capture the file information.
+       readerOBJ.onload = (function(reader) {
+           return function() {
+               objFileContent = reader.result;
+               objFileContent = objFileContent.replace('data:;base64,', '');
+               objFileContent = window.atob(objFileContent);
+           };
+       })(readerOBJ);
+
+       readerOBJ.readAsDataURL(objFile);
+   }
+</script>
+
+
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
@@ -257,13 +301,13 @@ get_header(); ?>
 
                     <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="mtlFileInput"> Select an MTL file</label>
-                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" onchange="readMtlAtClient()" accept=".mtl"/>
                     </div>
 
 
                     <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label  for="objFileInput" > Select an OBJ file</label>
-                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" />
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" onchange="readObjAtClient()" accept=".obj"/>
                     </div>
                 </div>
 
@@ -330,14 +374,15 @@ get_header(); ?>
             // After save
             // wu_3d_view_main('After', path, textMtl, text_of_objfile, title, 'assetPreviewContainer');
 
-            var mtlFile = JSON.stringify(document.getElementById('mtlFileInput').files[0]);
-            var objFile = document.getElementById('objFileInput').files[0];
 
-            if (mtlFile && objFile) {
-                wu_3d_view_main('After', '', mtlFile, objFile, 'test title', 'assetPreviewContainer');
+
+            if (mtlFileContent && objFileContent) {
+                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
             } else {
                 alert("no files");
             }
+
+
         });
 
 
