@@ -1,165 +1,152 @@
 <?php
-
 function wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title){
+
+    echo '<script>';
+    echo 'url_obj="'.$url_obj.'";';
+    echo 'curr_path="'.$curr_path.'";';
+    echo 'post_title="'.$post_title.'";';
+    echo 'textmtl='. json_encode($textmtl).';';
+    echo '</script>';
+
     ?>
-        <!-- START 3D -->
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
-        <script src="<?php echo plugins_url() ?>/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
-        <script>
-            function onWindowResize() {
-                var windowW = container3d_previewer.clientWidth;
-                var windowH = windowW*2/3;
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
+    <script src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 
-                camera.aspect = windowW / windowH;
-                camera.updateProjectionMatrix();
 
-                renderer.setSize(windowW, windowH, true);
-            }
+    <script>
+        container3d_previewer = document.getElementById('vr-preview');
+        windowW = container3d_previewer.clientWidth;
+        windowH = windowW * 2/3;
 
-            function animate() {
-                requestAnimationFrame(animate);
-                //scene.rotation.y += 0.01;
-                // No need to render continuously because there are no changes. Render only when OrbitControls change
-                render();
-            }
-            function render() {
-                renderer.render(scene, camera);
-            }
-        </script>
+        var camera, scene, renderer;
 
-        <script>
-            container3d_previewer = document.getElementById('vr-preview');
-            windowW = container3d_previewer.clientWidth;
-            windowH = windowW * 2/3;
+        // Camera position and view
+        camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 0.5, 20000);
 
-            var camera, scene, renderer;
+        camera.position.z = 10;
+        camera.position.x = 0;
+        camera.position.y = 10;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-            camera = new THREE.PerspectiveCamera( 45, windowW / windowH, 1, 2000);
+        // scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
 
-            camera.position.z = 10;
-            camera.position.x = 0;
-            camera.position.y = 10;
-            camera.lookAt(new THREE.Vector3(0, 0, 0));
+        // Light
+        var directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, 30, 0);
+        scene.add(directionalLight);
 
-            // scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff);
+        // Add Grid
+        this.gridHelper = new THREE.GridHelper(2000, 40);
+        this.gridHelper.name = "myGridHelper";
+        this.scene.add(this.gridHelper);
 
-            var directionalLight = new THREE.DirectionalLight(0xffffff);
-            directionalLight.position.set(0, 30, 0);
-            scene.add(directionalLight);
+        // Add Axes helper
+        this.axisHelper = new THREE.AxisHelper( 100 );
+        this.axisHelper.name = "myAxisHelper";
+        this.scene.add(this.axisHelper);
 
-            renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer();
 
-            renderer.setSize(windowW-14, windowH);
-            container3d_previewer.appendChild(renderer.domElement);
+        renderer.setSize(windowW-14, windowH);
+        container3d_previewer.appendChild(renderer.domElement);
 
-            console.log(renderer.domElement.height);
+        // Orbit controls
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true;
 
-//            container3d_previewer.style.width = renderer.domElement.width + "px";
+        // Resize callback
+        window.addEventListener('resize', onWindowResize, false);
 
-            // Orbit controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
-            controls.enableZoom = true;
+        // start rendering
+        animate();
 
-            // Resize callback
-            window.addEventListener('resize', onWindowResize, false);
+        // ------------ Total Manager -----------------
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function (item, loaded, total) {
+            //console.log( item, loaded, total );
+        };
 
-            // start rendering
-            animate();
+        var mtlLoader = new THREE.MTLLoader();
 
-            // ------------ Total Manager -----------------
-            var manager = new THREE.LoadingManager();
-            manager.onProgress = function (item, loaded, total) {
-                //console.log( item, loaded, total );
-            };
 
-            var mtlLoader = new THREE.MTLLoader();
-
-            var curr_path = '<?php echo $curr_path?>';
+        mtlLoader.setPath(curr_path);
 
 
 
-            mtlLoader.setPath(curr_path);
+        if (textmtl != '')
+            mtlLoader.loadfromtext(textmtl, function (materials) {
 
-            var textmtl = <?php echo json_encode($textmtl)?>;
+                materials.preload();
 
-            if (textmtl != '')
-                mtlLoader.loadfromtext(textmtl, function (materials) {
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials(materials);
 
-                    //console.log("materials jimbea", materials['materials']);
+                objLoader.load( url_obj,
 
-                    materials.preload();
+                    // OnObjLoad
+                    function (object) {
+                        // This makes the obj double sided (put it in a dat.gui button better)
+                        object.traverse(function (node) {
 
-                    var objLoader = new THREE.OBJLoader(manager);
-                    objLoader.setMaterials(materials);
+                            //if (node.material)
+                            //    node.material.side = THREE.DoubleSide;
 
-                    objLoader.load('<?php echo $url_obj?>',
+                            if (node instanceof THREE.Mesh)
+                                node.isDigiArt3DMesh = true;
+                        });
 
-                        // OnObjLoad
-                        function (object) {
-                            // This makes the obj double sided (put it in a dat.gui button better)
-                            object.traverse(function (node) {
+                        object.name = post_title;
 
-                                //if (node.material)
-                                //    node.material.side = THREE.DoubleSide;
+                        scene.add(object);
+                    },
 
-                                if (node instanceof THREE.Mesh)
-                                    node.isDigiArt3DMesh = true;
-                            });
+                    //onObjProgressLoad
+                    function (xhr) {
 
-
-                            object.name = '<?php echo $post_title ?>';
-
-                            scene.add(object);
-                        },
-
-                        //onObjProgressLoad
-                        function (xhr) {
-
-                            if (xhr.lengthComputable) {
-
-                                var percentComplete = xhr.loaded / xhr.total * 100;
-
-//                                        var bar = $("#progressbar").get(0).offsetWidth;
-//                                        bar = Math.floor(bar * xhr.loaded / xhr.total);
-//
-//                                        $("#bar").get(0).style.width = bar + "px";
-//                                        var downloadedBytes = "Downloaded: " + xhr.loaded + " / " + xhr.total + ' bytes';
-//
-//                                        $(".result").get(0).innerHTML = downloadedBytes;
-//                                        //            console.log(Math.round(percentComplete, 2) + '% downloaded');
-
-//                                        if (xhr.loaded == xhr.total) {
-//                                            $("#message").get(0).innerHTML = "Completed";
-//                                            //$("#message").get(0).style.display = "none";
-//                                            //$("#progressbar").get(0).style.display = "none";
-//                                        }
-
-
-                            }
-                        },
-
-                        //onObjErrorLoad
-                        function (xhr) {
+                        if (xhr.lengthComputable) {
+                            var percentComplete = Math.round(xhr.loaded / xhr.total * 100);
+                            var pctDOM = jQuery("#vr-preview-progress-content")[0];
+                            pctDOM.innerHTML = percentComplete + "%";
+                            if (xhr.loaded == xhr.total) // in bytes
+                                pctDOM.hidden = true;
                         }
-                    );
+                    },
 
-                });
+                    //onObjErrorLoad
+                    function (xhr) {
+                    }
+                );
 
-            //
+            });
 
 
+        function onWindowResize() {
+            var windowW = container3d_previewer.clientWidth;
+            var windowH = windowW*2/3;
 
+            camera.aspect = windowW / windowH;
+            camera.updateProjectionMatrix();
 
-        </script>
+            renderer.setSize(windowW, windowH, true);
+        }
 
-    <?php
-}
-?>
+        function animate() {
+            requestAnimationFrame(animate);
+            //scene.rotation.y += 0.01;
+            // No need to render continuously because there are no changes. Render only when OrbitControls change
+            render();
+        }
+        function render() {
+            renderer.render(scene, camera);
+        }
+    </script>
+
+<?php } ?>
