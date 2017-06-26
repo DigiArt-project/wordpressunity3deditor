@@ -285,24 +285,7 @@ get_header(); ?>
                 <hr class="WhiteSpaceSeparator">
 
 
-                <div id="assetPreviewContainer">
-
-					<?php
-
-					$curr_path = wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
-					$mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
-
-					if (wp_get_attachment_url( $mtl_obj ))
-						$textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
-					else
-						$textmtl = '';
-
-					$obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
-					$url_obj = wp_get_attachment_url( $obj_id );
-					?>
-
-
-                </div>
+                <div id="assetPreviewContainer"></div>
 
                 <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
                     <a id="previewBtn"  class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
@@ -319,6 +302,7 @@ get_header(); ?>
 
         </div>
     </form>
+
     <script type="text/javascript">
 
         var mdc = window.mdc;
