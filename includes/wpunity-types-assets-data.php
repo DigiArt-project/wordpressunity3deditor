@@ -9,8 +9,13 @@ wp_enqueue_script( 'wpunity_content_interlinking_request');
 // load script from js_libs
 wp_enqueue_script( 'wpunity_classification_request');
 
-wp_enqueue_script( 'wpunity_segmentation_request');
+wp_enqueue_script('wpunity_segmentation_request');
 
+// Three js : for simple rendering
+wp_enqueue_script('wpunity_load_threejs');
+wp_enqueue_script('wpunity_load_objloader');
+wp_enqueue_script('wpunity_load_mtlloader');
+wp_enqueue_script('wpunity_load_orbitcontrols');
 
 // Some parameters to pass in the content_interlinking.js  ajax
 wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
@@ -410,6 +415,7 @@ function wpunity_assets_databox_show(){
                 $textmtl = '';
 
             //    '    characters because they cause conflict
+            $textmtl = str_replace("'", "", $textmtl);
             $textmtl = str_replace("\'", "", $textmtl);
 
             $obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
@@ -427,7 +433,16 @@ function wpunity_assets_databox_show(){
                 <?php
                 if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
 
-                    wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
+                    wp_enqueue_script("wu_3d_view");
+                    ?>
+
+                        <script>
+                            jQuery('document').ready(function(){
+                                wu_3d_view_main("<?php echo $curr_path;?>", <?php echo json_encode($textmtl);?>, "<?php echo $url_obj;?>", "<?php echo $post_title;?>" );
+                            });
+                        </script>
+
+                    <?php
 
                 }else {
                     echo "Rendering is not possible because:<br />";
