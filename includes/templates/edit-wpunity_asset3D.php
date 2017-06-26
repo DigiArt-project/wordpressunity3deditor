@@ -324,6 +324,12 @@ get_header(); ?>
         var modelPreviewButton = jQuery('#modelPreviewBtn');
         modelPreviewButton.click(function() {
 
+            // @Tasos
+            // Before save
+            // wu_3d_view_main('Before', path, textMtl, url_of_obj, title, 'assetPreviewContainer');
+            // After save
+            // wu_3d_view_main('After', path, textMtl, text_of_objfile, title, 'assetPreviewContainer');
+
             wu_3d_view_main(path, textMtl, url, title, 'assetPreviewContainer');
 
         });

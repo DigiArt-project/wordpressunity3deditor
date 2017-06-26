@@ -1,4 +1,4 @@
-function wu_3d_view_main(curr_path, textmtl, url_obj, post_title, canvas_id){
+function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_obj, post_title, canvas_id){
 
     // get the dom
     var container3d_previewer = document.getElementById(canvas_id);
@@ -70,7 +70,7 @@ function wu_3d_view_main(curr_path, textmtl, url_obj, post_title, canvas_id){
             var objLoader = new THREE.OBJLoader(manager);
             objLoader.setMaterials(materials);
 
-            objLoader.load(url_obj,
+            objLoader.load(url_or_text_obj, modeBeforeOrAfterSave,
 
                 // OnObjLoad
                 function (object) {
