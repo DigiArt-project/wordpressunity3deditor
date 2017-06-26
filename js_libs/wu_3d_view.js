@@ -1,11 +1,11 @@
-function wu_3d_view_main(curr_path, textmtl, url_obj, post_title){
+function wu_3d_view_main(curr_path, textmtl, url_obj, post_title, canvas_id){
 
     // get the dom
-    container3d_previewer = document.getElementById('vr-preview');
+    var container3d_previewer = document.getElementById(canvas_id);
 
     // sizes
-    windowW = container3d_previewer.clientWidth;
-    windowH = windowW * 2 / 3;
+    var windowW = container3d_previewer.clientWidth;
+    var windowH = windowW * 2 / 3;
 
     // Camera position and view
     var camera = new THREE.PerspectiveCamera(45, windowW / windowH, 0.5, 20000);

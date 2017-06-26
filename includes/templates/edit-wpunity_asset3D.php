@@ -24,7 +24,7 @@ wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
-
+wp_enqueue_script("wu_3d_view");
 
 get_header(); ?>
 
@@ -289,7 +289,7 @@ get_header(); ?>
 
 					<?php
 
-					$curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
+					$curr_path = wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
 					$mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
 
 					if (wp_get_attachment_url( $mtl_obj ))
@@ -300,30 +300,6 @@ get_header(); ?>
 					$obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
 					$url_obj = wp_get_attachment_url( $obj_id );
 					?>
-
-                    <div id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
-						<?php
-						if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
-
-                            wp_enqueue_script("wu_3d_view");
-                            ?>
-
-                            <script>
-                                jQuery('document').ready(function(){
-                                    wu_3d_view_main("<?php echo $curr_path;?>", <?php echo json_encode($textmtl);?>, "<?php echo $url_obj;?>", "<?php echo $post_title;?>" );
-                                });
-                            </script>
-
-                            <?php
-
-                        }else {
-							echo "Rendering is not possible because:<br />";
-							if ($curr_path == ""){echo "- Current path is not defined<br />";}
-							if ($textmtl == ""){echo "- mtl is not defined<br />";}
-							if ($url_obj == ""){echo "- obj url is not defined<br />";}
-						}
-						?>
-                    </div>
 
 
                 </div>
@@ -362,6 +338,12 @@ get_header(); ?>
         var objInput = jQuery('#objFileInput');
 
         var modelPreviewButton = jQuery('#modelPreviewBtn');
+        modelPreviewButton.click(function() {
+
+            wu_3d_view_main(path, textMtl, url, title, 'assetPreviewContainer');
+
+        });
+
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -515,8 +497,6 @@ get_header(); ?>
         function fileExtension(fn) {
             return fn ? fn.split('.').pop().toLowerCase() : '';
         }
-
-
 
         jQuery( function() {
 
