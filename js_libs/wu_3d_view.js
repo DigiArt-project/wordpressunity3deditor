@@ -1,4 +1,15 @@
-function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_obj, post_title, canvas_id){
+/**
+ *
+ * @param modeBeforeOrAfterSave    'before'  for client side load (before upload), 'after' for server side load (after upload)
+ * @param curr_path                url path (only for after)
+ * @param textmtl
+ * @param url_or_text_obj         url for after, text for before
+ * @param textureFileContent      text for before, '-1' for after
+ * @param post_title
+ * @param canvas_id
+ */
+
+function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_obj, textureFileContent, post_title, canvas_id){
 
     // get the dom
     var container3d_previewer = document.getElementById(canvas_id);
@@ -21,7 +32,7 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
 
     // Light
     var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(0, 30, 0);
+    directionalLight.position.set(0, 120, 0);
     scene.add(directionalLight);
 
     // Add Grid
@@ -62,8 +73,9 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     mtlLoader.setPath(curr_path);
 
 
+
     if (textmtl != '')
-        mtlLoader.loadfromtext(textmtl, function (materials) {
+        mtlLoader.loadfromtext(textmtl, textureFileContent, function (materials) {
 
             materials.preload();
 

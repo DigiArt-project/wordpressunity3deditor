@@ -97,16 +97,17 @@ wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_l
 wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
 wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
 
-wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
 
-wp_register_script( 'wpunity_load_transformcontrols', plugin_dir_url( __FILE__ ) . '/js_libs/threejs79/TransformControls.js', null, null, false);
-wp_register_script( 'wpunity_load_pointerlockcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/PointerLockControls.js', null, null, false);
-wp_register_script( 'wpunity_load_datgui'            , plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/dat.gui.js', null, null, false);
-wp_register_script( 'wpunity_load_statsmin', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/stats.min.js', null, null, false);
 wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporterUtils.js', null, null, false);
 wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporter.js', null, null, false);
 
+// ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
+//wp_register_script( 'wpunity_load_pointerlockcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/PointerLockControls.js', null, null, false);
+//wp_register_script( 'wpunity_load_transformcontrols', plugin_dir_url( __FILE__ ) . '/js_libs/threejs79/TransformControls.js', null, null, false);
+//wp_register_script( 'wpunity_load_datgui'            , plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/dat.gui.js', null, null, false);
+//wp_register_script( 'wpunity_load_statsmin', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/stats.min.js', null, null, false);
 
+wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
 //================================= Scene YAML Templates ===================================
 
 /*
