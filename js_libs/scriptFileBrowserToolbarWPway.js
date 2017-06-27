@@ -11,11 +11,11 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
         type : 'GET',
         data : {'action': 'wpunity_fetch_game_assets_action',
-                'gamefolder':gamefolder,
-                'scenefolder':scenefolder,
-                'sceneID':sceneID,
-                'gameProjectID': gameProjectID,
-                'gameProjectSlug': gameProjectSlug},
+            'gamefolder':gamefolder,
+            'scenefolder':scenefolder,
+            'sceneID':sceneID,
+            'gameProjectID': gameProjectID,
+            'gameProjectSlug': gameProjectSlug},
 
         success : function(data) {
             file_Browsing_By_DB(data);
@@ -139,16 +139,16 @@ function file_Browsing_By_DB(data){
             console.log(e.target.attributes);
 
             var dragData = {"title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
-                            "assetid": e.target.attributes.getNamedItem("data-assetid").value,
-                              "obj": e.target.attributes.getNamedItem("data-objPath").value,
-                              "objID": e.target.attributes.getNamedItem("data-objID").value,
-                              "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,
-                              "mtlID": e.target.attributes.getNamedItem("data-mtlID").value,
-                          "diffImage": e.target.attributes.getNamedItem("data-diffImage").value,
-                          "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
-                          "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
-                        "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
-                              "image1id":e.target.attributes.getNamedItem("data-image1id").value};
+                "assetid": e.target.attributes.getNamedItem("data-assetid").value,
+                "obj": e.target.attributes.getNamedItem("data-objPath").value,
+                "objID": e.target.attributes.getNamedItem("data-objID").value,
+                "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,
+                "mtlID": e.target.attributes.getNamedItem("data-mtlID").value,
+                "diffImage": e.target.attributes.getNamedItem("data-diffImage").value,
+                "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
+                "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
+                "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
+                "image1id":e.target.attributes.getNamedItem("data-image1id").value};
 
             var jsonDataDrag = JSON.stringify(dragData);
 
@@ -410,7 +410,11 @@ function file_Browsing_By_DB(data){
                     itemsLength = 'Empty';
                 }
 
-                var folder = jQuery('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'<span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
+                var folder = jQuery('<li class="folders">' +
+                    '<a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'' +
+                    '<span class="name">' + name + '</span>' +
+                    '<span class="details">' + itemsLength + '</span>' +
+                    '</a></li>');
                 folder.appendTo(fileList);
             });
 
@@ -423,8 +427,6 @@ function file_Browsing_By_DB(data){
 
             scannedFiles.forEach(function(f) {
 
-                
-
                 var fileSize = bytesToSize(f.size);
 
                 var name = escapeHTML(f.name);
@@ -432,37 +434,45 @@ function file_Browsing_By_DB(data){
                 if(!f.objPath)
                     return;
 
-
-
                 var fileType = f.objPath.split('.').pop();
 
-                var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';
-
-
-                if (fileType.toUpperCase() == 'JPG' || fileType.toUpperCase()=='PNG')
-                    icon += '<img src=' + f.path + ' width="42" class="icon file" style="padding-left:0;margin-left:0">';
-
+                /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
+                var img;
+                if (fileType.toUpperCase() === 'JPG' || fileType.toUpperCase()==='PNG') {
+                    img = '<img class="mdc-list-item__start-detail" width="40" src=' + f.path + '></i>';
+                }
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
-                if (fileType.toUpperCase() == 'OBJ')
-                    icon += '<img src=' + f.path + '.jpg' + ' width="42" class="icon file" style="padding-left:0;margin-left:0">';
+                else if (fileType.toUpperCase() === 'OBJ') {
+                    img = '<img class="mdc-list-item__start-detail" width="40" src=' + f.path + '.jpg' + '></i>';
+                }
 
-                var file = jQuery('<li class="files"><a href="'+ f.objPath +
-                                               '" title="'+ f.name +
-                                               '" data-assetslug="'+ f.assetSlug +
-                                               '" data-assetid="'+ f.assetid +
-                                               '" data-objPath="'+ f.objPath +
-                                               '" data-objID="'+ f.objID +
-                                               '" data-mtlPath="'+ f.mtlPath +
-                                               '" data-mtlID="'+ f.mtlID +
-                                               '" data-diffImage="'+ f.diffImage +
-                                               '" data-diffImageID="'+ f.diffImageID +
-                                               '" data-categoryID="'+ f.categoryID +
-                                               '" data-categoryName="'+ f.categoryName +
-                                               '" data-image1id="'+ f.image1id +
-                                               '" class="files">'+icon+'<span class="name">'+
-                    name +'</span> <span class="details">'+fileSize+'</span></a></li>');
+                var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" href="'+ f.objPath +
+                    '" title="'+ f.name +
+                    '" data-assetslug="'+ f.assetSlug +
+                    '" data-assetid="'+ f.assetid +
+                    '" data-objPath="'+ f.objPath +
+                    '" data-objID="'+ f.objID +
+                    '" data-mtlPath="'+ f.mtlPath +
+                    '" data-mtlID="'+ f.mtlID +
+                    '" data-diffImage="'+ f.diffImage +
+                    '" data-diffImageID="'+ f.diffImageID +
+                    '" data-categoryID="'+ f.categoryID +
+                    '" data-categoryName="'+ f.categoryName +
+                    '" data-image1id="'+ f.image1id +
+                    '" data-mdc-auto-init="MDCRipple">' + img +
+                    '<span class="FileListItemName mdc-list-item__text">'+ name +
+                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span>' +
+                    '<span class="CenterContents mdc-list-item__end-detail mdc-typography--caption" style="float: right;">'+ fileSize +'</span>'+
+
+                    '</a></li>');
+
+                mdc.autoInit(document, () => {});
+
                 file.appendTo(fileList);
             });
+
+
+
 
 
 
@@ -485,8 +495,6 @@ function file_Browsing_By_DB(data){
             fileList.addClass('animated');
 
             breadcrumbsUrls.forEach(function (u, i) {
-
-
 
                 var name = u.split('/');
 
