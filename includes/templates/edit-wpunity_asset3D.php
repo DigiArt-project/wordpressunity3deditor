@@ -318,22 +318,7 @@ get_header(); ?>
 
         var mtlFileContent = '';
         var objFileContent = '';
-
-        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
-        // We can expand this for 'fbx' files too.
-        function loadFileCallback(content, type) {
-            if(type === 'mtl') {
-                mtlFileContent = content;
-            }
-
-            if(type === 'obj') {
-                objFileContent = content;
-            }
-
-            if (objFileContent && mtlFileContent) {
-                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
-            }
-        }
+        var fbxFileContent = '';
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -409,56 +394,53 @@ get_header(); ?>
             });
         })();
 
+        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
+        // We can expand this for 'fbx' files too.
+        function loadFileCallback(content, type) {
+            if(type === 'mtl') {
+                mtlFileContent = content;
+            }
+
+            if(type === 'obj') {
+                objFileContent = content;
+            }
+
+            if(type === 'fbx') {
+                fbxFileContent = content;
+            }
+
+            if (objFileContent && mtlFileContent) {
+                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
+            }
+        }
 
         fbxInput.change(function() {
-            console.log(fbxInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(fbxInput.val()) === 'fbx') {
 
-
             } else {
                 document.getElementById("fbxFileInput").value = "";
-
             }
         });
 
-
         mtlInput.change(function() {
-            console.log(mtlInput.val(), objInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(mtlInput.val()) === 'mtl') {
-                console.log('mtl');
-
                 readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
-
-
             } else {
                 document.getElementById("mtlFileInput").value = "";
-
             }
-
-
-            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-
-            }
-
         });
 
         objInput.change(function() {
-            console.log(mtlInput.val(), objInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(objInput.val()) === 'obj') {
-                console.log('obj');
-
                 readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
-
             } else {
                 document.getElementById("objFileInput").value = "";
-
-            }
-
-            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-
             }
         });
 
@@ -467,7 +449,7 @@ get_header(); ?>
             document.getElementById("fbxFileInput").value = "";
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
-
+            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function resetPanels() {
@@ -488,6 +470,8 @@ get_header(); ?>
 
             jQuery("#poiVideoDetailsPanel").hide();
             jQuery("#videoFileInput").attr('disabled', 'disabled');
+            
+            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function fileExtension(fn) {
