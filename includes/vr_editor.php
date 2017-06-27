@@ -4,6 +4,12 @@
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
+wp_enqueue_script('wpunity_load_threejs');
+wp_enqueue_script('wpunity_load_objloader');
+wp_enqueue_script('wpunity_load_mtlloader');
+wp_enqueue_script('wpunity_load_orbitcontrols');
+
+
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
@@ -30,14 +36,10 @@ echo '</script>';
 <!-- 3rd party libraries -->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
 
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/three.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OrbitControls.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/MTLLoader.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OBJLoader.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporterUtils.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporter.js"></script>
 

@@ -1,14 +1,16 @@
 <?php
 
-// Ajax for fetching game's assets within asset browser widget at vr_editor
+
+
+// Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 function my_enqueue_front_end_ajax() {
     $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/scriptFileBrowserToolbarWPway.js';
     wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
     wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 }
 add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_ajax' );
-//---------------------------------------------------------------------
 
+//---------------------------------------------------------------------
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
@@ -87,6 +89,7 @@ get_header(); ?>
 				$gamefolder = $parentGameSlug;
 				$sceneID = $scene_id;
 
+
                 $isAdmin = is_admin() ? 'back' : 'front';
 
                 // vr_editor loads the $sceneToLoad
@@ -94,6 +97,8 @@ get_header(); ?>
             </div>
         </div>
     </div>
+
+
 
     <script type="text/javascript">
         window.mdc.autoInit();

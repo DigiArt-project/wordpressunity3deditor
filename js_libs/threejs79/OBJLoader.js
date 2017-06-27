@@ -46,11 +46,8 @@ THREE.OBJLoader.prototype = {
 		var loader = new THREE.XHRLoader( scope.manager );
 		loader.setPath( this.path );
 
-		if(modeBeforeOrAfterSave=='After') { // get from url_or_text: available after obj is uploaded
+		if(modeBeforeOrAfterSave=='after') { // get from url_or_text: available after obj is uploaded
             loader.load(url_or_text, function (text) {
-
-            	console.log("AFTER", text);
-
                 onLoad(scope.parse(text));
             }, onProgress, onError);
         } else { // it is already given as text

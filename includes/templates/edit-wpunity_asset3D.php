@@ -403,7 +403,7 @@ get_header(); ?>
             }
 
             if (objFileContent && mtlFileContent) {
-                wu_3d_view_main('Before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
+                wu_3d_view_main('before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
             }
         }
 

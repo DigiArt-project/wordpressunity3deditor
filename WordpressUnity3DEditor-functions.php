@@ -98,9 +98,10 @@ wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_l
 wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
 
 
-
-
 wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
+
+
+
 
 
 //================================= Scene YAML Templates ===================================
