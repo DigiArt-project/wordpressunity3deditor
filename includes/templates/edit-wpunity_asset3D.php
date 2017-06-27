@@ -1,11 +1,11 @@
 <?php
 
-if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
-if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
-if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+$perma_structure = get_option('permalink_structure') ? true : false;
 
-$project_id = intval( $_GET['wpunity_game'] );
-$project_id = sanitize_text_field( $project_id );
+$parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
+$parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
+
+$project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 
 $game_post = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
@@ -21,7 +21,7 @@ wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
-wp_enqueue_script("wu_3d_view");
+wp_enqueue_script('wu_3d_view');
 
 get_header(); ?>
 
@@ -39,11 +39,10 @@ get_header(); ?>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Creator</span></li>
     </ul>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
-
 
     <form name="3dAssetForm" id="3dAssetForm">
 
@@ -165,7 +164,6 @@ get_header(); ?>
 
                         <input id="nextSceneInput" type="hidden" name="term_id" value="" disabled>
                         <input id="entryPointInput" type="hidden" name="term_id" value="" disabled>
-
                     </div>
                 </div>
 
@@ -279,12 +277,7 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-
                 <div id="assetPreviewContainer"></div>
-
-                <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
-                    <a id="previewBtn"  class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
-                </div>
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
@@ -470,7 +463,7 @@ get_header(); ?>
 
             jQuery("#poiVideoDetailsPanel").hide();
             jQuery("#videoFileInput").attr('disabled', 'disabled');
-            
+
             document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
