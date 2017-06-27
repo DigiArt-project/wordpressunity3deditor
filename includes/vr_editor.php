@@ -1,3 +1,11 @@
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporterUtils.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporter.js"></script>
+
+
 <!-- vr_editor.php -->
 <?php
 
@@ -8,6 +16,10 @@ wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
+
+
+
+
 
 
 // Define current path
@@ -36,12 +48,6 @@ echo '</script>';
 <!-- 3rd party libraries -->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
 
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporterUtils.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporter.js"></script>
 
 <!-- 3rd Party with some customizations -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/THREEx.WindowResize.js'></script>
