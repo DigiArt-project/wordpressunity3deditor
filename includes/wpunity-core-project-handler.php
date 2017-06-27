@@ -9,9 +9,29 @@ function wpunity_delete_gameproject_frontend($game_id){
 }
 
 
+//DELETE GAME PROJECT with files
+function wpunity_delete_asset3d_frontend($asset_id){
+
+    wpunity_delete_asset3d_post_media( $asset_id );
+    wp_delete_post( $asset_id, true );
+
+}
 
 
+function wpunity_delete_asset3d_post_media( $asset_id ) {
+    $attachments = get_posts(
+        array(
+            'post_type'      => 'attachment',
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'post_parent'    => $asset_id,
+        )
+    );
 
+    foreach ( $attachments as $attachment ) {
+        wp_delete_attachment( $attachment->ID );
+    }
+}
 
 
 //==========================================================================================================================================
