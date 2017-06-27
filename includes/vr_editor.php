@@ -260,12 +260,7 @@ echo '</script>';
         <!--                <span>Nothing found</span>-->
         <!--            </div>-->
 
-
-        <ul class="data" id="filesList" >
-
-
-
-        </ul>
+        <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
 
         <div class="bt_close_file_toolbar">
             Close
