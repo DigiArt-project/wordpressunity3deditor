@@ -432,6 +432,8 @@ function file_Browsing_By_DB(data){
                 if(!f.objPath)
                     return;
 
+
+
                 var fileType = f.objPath.split('.').pop();
 
                 var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';
@@ -483,6 +485,8 @@ function file_Browsing_By_DB(data){
             fileList.addClass('animated');
 
             breadcrumbsUrls.forEach(function (u, i) {
+
+
 
                 var name = u.split('/');
 

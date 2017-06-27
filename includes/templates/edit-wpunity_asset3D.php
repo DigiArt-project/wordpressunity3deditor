@@ -1,11 +1,11 @@
 <?php
 
-if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
-if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
-if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+$perma_structure = get_option('permalink_structure') ? true : false;
 
-$project_id = intval( $_GET['wpunity_game'] );
-$project_id = sanitize_text_field( $project_id );
+$parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
+$parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
+
+$project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 
 $game_post = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
@@ -13,19 +13,20 @@ $game_type_obj = wpunity_return_game_type($project_id);
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
 
-wp_enqueue_script('wpunity_dropzone');
-
-
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
+// Three js : for simple rendering
+wp_enqueue_script('wpunity_load_threejs');
+wp_enqueue_script('wpunity_load_objloader');
+wp_enqueue_script('wpunity_load_mtlloader');
+wp_enqueue_script('wpunity_load_orbitcontrols');
+wp_enqueue_script('wu_3d_view');
 
 get_header(); ?>
 
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
-
-
     </div>
 
     <span class="mdc-typography--caption">
@@ -38,11 +39,10 @@ get_header(); ?>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Manager</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Creator</span></li>
     </ul>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
-
 
     <form name="3dAssetForm" id="3dAssetForm">
 
@@ -164,7 +164,6 @@ get_header(); ?>
 
                         <input id="nextSceneInput" type="hidden" name="term_id" value="" disabled>
                         <input id="entryPointInput" type="hidden" name="term_id" value="" disabled>
-
                     </div>
                 </div>
 
@@ -251,13 +250,13 @@ get_header(); ?>
 
                     <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="mtlFileInput"> Select an MTL file</label>
-                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" />
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl"/>
                     </div>
 
 
                     <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label  for="objFileInput" > Select an OBJ file</label>
-                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" />
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj"/>
                     </div>
                 </div>
 
@@ -278,42 +277,7 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-
-                <div id="assetPreviewContainer">
-
-					<?php
-
-					$curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
-					$mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
-
-					if (wp_get_attachment_url( $mtl_obj ))
-						$textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
-					else
-						$textmtl = '';
-
-					$obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
-					$url_obj = wp_get_attachment_url( $obj_id );
-					?>
-
-                    <div id="vr-preview" style="width:95%; border: 1px solid #aaa; margin-left:5px">
-						<?php
-						if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
-							wpunity_asset_viewer($curr_path, $textmtl, $url_obj, $post_title);
-						}else {
-							echo "Rendering is not possible because:<br />";
-							if ($curr_path == ""){echo "- Current path is not defined<br />";}
-							if ($textmtl == ""){echo "- mtl is not defined<br />";}
-							if ($url_obj == ""){echo "- obj url is not defined<br />";}
-						}
-						?>
-                    </div>
-
-
-                </div>
-
-                <div id="modelPreviewBtn" class="mdc-layout-grid__cell CenterContents" style="display: none;">
-                    <a id="previewBtn"  class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple"> Preview model</a>
-                </div>
+                <div id="assetPreviewContainer"></div>
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
@@ -326,6 +290,7 @@ get_header(); ?>
 
         </div>
     </form>
+
     <script type="text/javascript">
 
         var mdc = window.mdc;
@@ -344,7 +309,9 @@ get_header(); ?>
         var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
 
-        var modelPreviewButton = jQuery('#modelPreviewBtn');
+        var mtlFileContent = '';
+        var objFileContent = '';
+        var fbxFileContent = '';
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -355,7 +322,6 @@ get_header(); ?>
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
             var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
             var entryPointSelect = MDCSelect.attachTo(entryPointDropdown);
-
 
             nextSceneDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#nextSceneInput").attr( "value", nextSceneSelect.selectedOptions[0].getAttribute("id") );
@@ -421,49 +387,53 @@ get_header(); ?>
             });
         })();
 
+        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
+        // We can expand this for 'fbx' files too.
+        function loadFileCallback(content, type) {
+            if(type === 'mtl') {
+                mtlFileContent = content;
+            }
+
+            if(type === 'obj') {
+                objFileContent = content;
+            }
+
+            if(type === 'fbx') {
+                fbxFileContent = content;
+            }
+
+            if (objFileContent && mtlFileContent) {
+                wu_3d_view_main('before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
+            }
+        }
 
         fbxInput.change(function() {
-            console.log(fbxInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(fbxInput.val()) === 'fbx') {
 
-                modelPreviewButton.show();
             } else {
                 document.getElementById("fbxFileInput").value = "";
-                modelPreviewButton.hide();
             }
         });
 
-
         mtlInput.change(function() {
-            console.log(mtlInput.val(), objInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(mtlInput.val()) === 'mtl') {
-                console.log('mtl');
+                readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
             } else {
                 document.getElementById("mtlFileInput").value = "";
-                modelPreviewButton.hide();
             }
-
-
-            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-                modelPreviewButton.show();
-            }
-
         });
 
         objInput.change(function() {
-            console.log(mtlInput.val(), objInput.val());
+            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(objInput.val()) === 'obj') {
-                console.log('obj');
+                readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
             } else {
                 document.getElementById("objFileInput").value = "";
-                modelPreviewButton.hide();
-            }
-
-            if (fileExtension(mtlInput.val()) === 'mtl' && fileExtension(objInput.val())==='obj') {
-                modelPreviewButton.show();
             }
         });
 
@@ -472,7 +442,7 @@ get_header(); ?>
             document.getElementById("fbxFileInput").value = "";
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
-            modelPreviewButton.hide();
+            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function resetPanels() {
@@ -493,13 +463,13 @@ get_header(); ?>
 
             jQuery("#poiVideoDetailsPanel").hide();
             jQuery("#videoFileInput").attr('disabled', 'disabled');
+
+            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function fileExtension(fn) {
             return fn ? fn.split('.').pop().toLowerCase() : '';
         }
-
-
 
         jQuery( function() {
 
@@ -601,6 +571,23 @@ get_header(); ?>
             })
 
         } );
+
+        function readFile(file, type, callback) {
+            var content = '';
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            // Closure to capture the file information.
+            reader.onload = (function(reader) {
+                return function() {
+                    content = reader.result;
+                    content = content.replace('data:;base64,', '');
+                    content = window.atob(content);
+
+                    callback(content, type);
+                };
+            })(reader);
+        }
 
     </script>
 <?php  get_footer(); ?>

@@ -213,10 +213,8 @@ if ( $custom_query->have_posts() ) :?>
 							<?php if(has_post_thumbnail($scene_id)) { ?>
 
                                 <div style="min-height: 226px;" class="DisplayBlock CenterContents">
-
 									<?php echo get_the_post_thumbnail( $scene_id ); ?>
                                 </div>
-
 
 							<?php } else { ?>
 

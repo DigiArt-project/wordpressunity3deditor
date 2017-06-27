@@ -22,7 +22,7 @@ class LoaderMulti {
                         var objloader = new THREE.OBJLoader();
                         objloader.setMaterials(materials);
 
-                        objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinal.obj',
+                        objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinal.obj', 'after',
                             function (object) {
 
                                 //object.traverse(function (node) {
@@ -76,7 +76,7 @@ class LoaderMulti {
                         objLoader.setMaterials(materials);
                         objLoader.setPath( resources3D[name]['path']);
 
-                        objLoader.load(resources3D[name]['obj'],
+                        objLoader.load(resources3D[name]['obj'], 'after',
 
                             // OnObjLoad
                             function (object) {

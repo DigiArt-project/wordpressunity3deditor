@@ -92,8 +92,15 @@ wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE
 	null, null, false);
 
 //=========================== THREE js scripts ============================================
-//wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js',
-//    null, null, false);
+wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
+wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
+wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
+wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
+
+
+wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
+
+
 
 
 
@@ -233,8 +240,9 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.p
 //D3.03 Save data from this metabox
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
 
-//D4.01 TODO
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
+//D4.01
+// jimver: deleted, now it is a js function called inside the php
+//include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-viewer.php' );
 
 //D5.01
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-meta.php' );
