@@ -1,12 +1,9 @@
 <?php
 
-global $ini_scene_wonder_around_unity_pattern,$ini_scene_sop,$ini_scene_dop,$ini_scene_doorp,$ini_scene_poi_imagetext_p,
-       $ini_scene_poi_video_p;
-
+global $ini_scene_wonder_around_unity_pattern;
 global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
 global $ini_scene_credentials_unity_pattern;
-global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
-
+global $ini_scene_options_unity_pattern;
 
 $ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
@@ -2225,7 +2222,6 @@ CanvasRenderer:
   m_GameObject: {fileID: 2137109185}
 ');
 
-
 $ini_scene_allmenu_cs = array('using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -2276,8 +2272,6 @@ public class Menu_Script : MonoBehaviour {
 	}
 	
 }');
-
-
 
 $ini_scene_credentials_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
@@ -3064,376 +3058,6 @@ CanvasRenderer:
   m_GameObject: {fileID: 1669187670}
 ');
 
-$ini_scene_odp = array('fileFormatVersion: 2
-guid: ___[obj_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-ModelImporter:
-  serializedVersion: 19
-  fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
-  materials:
-    importMaterials: 1
-    materialName: 2
-    materialSearch: 2
-  animations:
-    legacyGenerateAnimations: 4
-    bakeSimulation: 0
-    resampleCurves: 1
-    optimizeGameObjects: 0
-    motionNodeName:
-    animationImportErrors:
-    animationImportWarnings:
-    animationRetargetingWarnings:
-    animationDoRetargetingWarnings: 0
-    animationCompression: 1
-    animationRotationError: 0.5
-    animationPositionError: 0.5
-    animationScaleError: 0.5
-    animationWrapMode: 0
-    extraExposedTransformPaths: []
-    clipAnimations: []
-    isReadable: 1
-  meshes:
-    lODScreenPercentages: []
-    globalScale: 1
-    meshCompression: 0
-    addColliders: 1
-    importBlendShapes: 1
-    swapUVChannels: 0
-    generateSecondaryUV: 0
-    useFileUnits: 1
-    optimizeMeshForGPU: 1
-    keepQuads: 0
-    weldVertices: 1
-    secondaryUVAngleDistortion: 8
-    secondaryUVAreaDistortion: 15.000001
-    secondaryUVHardAngle: 88
-    secondaryUVPackMargin: 4
-    useFileScale: 1
-  tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
-    tangentImportMode: 3
-  importAnimation: 1
-  copyAvatar: 0
-  humanDescription:
-    serializedVersion: 2
-    human: []
-    skeleton: []
-    armTwist: 0.5
-    foreArmTwist: 0.5
-    upperLegTwist: 0.5
-    legTwist: 0.5
-    armStretch: 0.05
-    legStretch: 0.05
-    feetSpacing: 0
-    rootMotionBoneName:
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
-    hasTranslationDoF: 0
-    hasExtraRoot: 0
-    skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
-  humanoidOversampling: 1
-  additionalBone: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
-');
-$ini_scene_mdp = array('fileFormatVersion: 2
-guid: ___[mat_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-NativeFormatImporter:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
-');
-$ini_scene_jdp = array('fileFormatVersion: 2
-guid: ___[jpg_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-TextureImporter:
-  fileIDToRecycleName: {}
-  serializedVersion: 4
-  mipmaps:
-    mipMapMode: 0
-    enableMipMap: 1
-    sRGBTexture: 1
-    linearTexture: 0
-    fadeOut: 0
-    borderMipMap: 0
-    mipMapFadeDistanceStart: 1
-    mipMapFadeDistanceEnd: 3
-  bumpmap:
-    convertToNormalMap: 0
-    externalNormalMap: 0
-    heightScale: 0.25
-    normalMapFilter: 0
-  isReadable: 0
-  grayScaleToAlpha: 0
-  generateCubemap: 6
-  cubemapConvolution: 0
-  seamlessCubemap: 0
-  textureFormat: 1
-  maxTextureSize: 2048
-  textureSettings:
-    filterMode: -1
-    aniso: -1
-    mipBias: -1
-    wrapMode: -1
-  nPOTScale: 1
-  lightmap: 0
-  compressionQuality: 50
-  spriteMode: 0
-  spriteExtrude: 1
-  spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
-  alphaUsage: 1
-  alphaIsTransparency: 0
-  spriteTessellationDetail: -1
-  textureType: 0
-  textureShape: 1
-  maxTextureSizeSet: 0
-  compressionQualitySet: 0
-  textureFormatSet: 0
-  platformSettings:
-  - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-  spriteSheet:
-    serializedVersion: 2
-    sprites: []
-    outline: []
-  spritePackingTag:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
-');
-
-
-$ini_scene_jpg_sprite_pattern = array('fileFormatVersion: 2
-guid: ___[jpg_guid]___
-timeCreated: ___[unx_time_created]___
-licenseType: Free
-TextureImporter:
-  fileIDToRecycleName: {}
-  serializedVersion: 4
-  mipmaps:
-    mipMapMode: 0
-    enableMipMap: 0
-    sRGBTexture: 1
-    linearTexture: 0
-    fadeOut: 0
-    borderMipMap: 0
-    mipMapFadeDistanceStart: 1
-    mipMapFadeDistanceEnd: 3
-  bumpmap:
-    convertToNormalMap: 0
-    externalNormalMap: 0
-    heightScale: 0.25
-    normalMapFilter: 0
-  isReadable: 0
-  grayScaleToAlpha: 0
-  generateCubemap: 6
-  cubemapConvolution: 0
-  seamlessCubemap: 0
-  textureFormat: 1
-  maxTextureSize: 2048
-  textureSettings:
-    filterMode: -1
-    aniso: -1
-    mipBias: -1
-    wrapMode: 1
-  nPOTScale: 0
-  lightmap: 0
-  compressionQuality: 50
-  spriteMode: 1
-  spriteExtrude: 1
-  spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
-  alphaUsage: 1
-  alphaIsTransparency: 1
-  spriteTessellationDetail: -1
-  textureType: 8
-  textureShape: 1
-  maxTextureSizeSet: 0
-  compressionQualitySet: 0
-  textureFormatSet: 0
-  platformSettings:
-  - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-  - buildTarget: Standalone
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-  spriteSheet:
-    serializedVersion: 2
-    sprites: []
-    outline: []
-  spritePackingTag:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
-');
-
-
-$ini_scene_mat_pattern = array('%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!21 &2100000
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: ___[material_name]___
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords:
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _BumpMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailAlbedoMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailMask
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DetailNormalMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _EmissionMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0___[jpg_texture_guid]___}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MetallicGlossMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _OcclusionMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
-        name: _ParallaxMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: _BumpScale
-      second: 1
-    - first:
-        name: _Cutoff
-      second: 0.5
-    - first:
-        name: _DetailNormalMapScale
-      second: 1
-    - first:
-        name: _DstBlend
-      second: 0
-    - first:
-        name: _GlossMapScale
-      second: 1
-    - first:
-        name: _Glossiness
-      second: 0.5
-    - first:
-        name: _GlossyReflections
-      second: 1
-    - first:
-        name: _Metallic
-      second: 0
-    - first:
-        name: _Mode
-      second: 0
-    - first:
-        name: _OcclusionStrength
-      second: 1
-    - first:
-        name: _Parallax
-      second: 0.02
-    - first:
-        name: _SmoothnessTextureChannel
-      second: 0
-    - first:
-        name: _SpecularHighlights
-      second: 1
-    - first:
-        name: _SrcBlend
-      second: 1
-    - first:
-        name: _UVSec
-      second: 0
-    - first:
-        name: _ZWrite
-      second: 1
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: ___[color_r]___, g: ___[color_g]___, b: ___[color_b]___, a: ___[color_a]___}
-    - first:
-        name: _EmissionColor
-      second: {r: 0, g: 0, b: 0, a: 1}
-');
 $ini_scene_options_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
@@ -5173,11 +4797,6 @@ function wpunity_scenes_taxyaml_customFields($tag) {
     $term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
     $term_meta_csharp_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_csharp_mainmenu', true );
     $term_meta_s_credentials = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials', true );
-    $term_meta_scene_odp = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_odp', true );
-    $term_meta_scene_mdp = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_mdp', true );
-    $term_meta_scene_jdp = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_jdp', true );
-    $term_meta_scene_jspritep = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_jspritep', true );
-    $term_meta_scene_matp = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_scene_matp', true );
     $term_meta_s_options = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options', true );
 
     ?>
@@ -5269,71 +4888,6 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 
     <tr class="form-field">
         <th scope="row" valign="top"></th>
-        <td><h3>Global: Pattern for the .meta and .mat files</h3></td>
-    </tr>
-
-    <tr class="form-field term-scene_odp">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_odp">obj.meta Pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_scene_odp" id="wpunity_yamlmeta_scene_odp"><?php echo $term_meta_scene_odp ? $term_meta_scene_odp : ''; ?></textarea>
-            <p class="description">scene-obj-dotmeta-pattern</p>
-        </td>
-    </tr>
-
-    <tr class="form-field term-scene_mdp">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_mdp">mat.meta Pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_scene_mdp" id="wpunity_yamlmeta_scene_mdp"><?php echo $term_meta_scene_mdp ? $term_meta_scene_mdp : ''; ?></textarea>
-            <p class="description">scene-mat-dotmeta-pattern</p>
-        </td>
-    </tr>
-
-    <tr class="form-field term-scene_jdp">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_jdp">jpg.meta Pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_scene_jdp" id="wpunity_yamlmeta_scene_jdp"><?php echo $term_meta_scene_jdp ? $term_meta_scene_jdp : ''; ?></textarea>
-            <p class="description">scene-jpg-dotmeta-pattern</p>
-        </td>
-    </tr>
-
-    <tr class="form-field term-scene_jspritep">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_jspritep">The jpg sprite meta pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_scene_jspritep" id="wpunity_yamlmeta_scene_jspritep"><?php echo $term_meta_scene_jspritep ? $term_meta_scene_jspritep : ''; ?></textarea>
-            <p class="description">scene-jpg-sprite-pattern</p>
-        </td>
-    </tr>
-
-    <tr class="form-field term-scene_matp">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_scene_matp">Material (.mat) Pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_scene_matp" id="wpunity_yamlmeta_scene_matp"><?php echo $term_meta_scene_matp ? $term_meta_scene_matp : ''; ?></textarea>
-            <p class="description">scene-mat-pattern</p>
-        </td>
-    </tr>
-
-    <tr class="form-field">
-        <th scope="row" valign="top"></th>
-        <td><em>
-                Write the pattern for the .meta and .mat files. <br/>
-                - HINT 1: The .mat should take info from .mtl.<br/>
-                - HINT 2: the name of the .mat should be "myobjname-defaultMat.mat
-
-            </em></td>
-    </tr>
-
-    <tr class="form-field">
-        <th scope="row" valign="top"></th>
         <td><h3>Options Scene</h3></td>
     </tr>
 
@@ -5356,7 +4910,6 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
     global $ini_scene_wonder_around_unity_pattern;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
-    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
     global $ini_scene_options_unity_pattern;
 
     if ( isset( $_POST['wpunity_yamlmeta_wonderaround_pat'] ) ) {
@@ -5392,51 +4945,6 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
             update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials', $ini_scene_credentials_unity_pattern[0]);
         }else{
             update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials', $term_meta_scene_s_credentials);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_scene_odp'] ) ) {
-        $term_meta_scene_scene_odp = $_POST['wpunity_yamlmeta_scene_odp'];
-        if($term_meta_scene_scene_odp == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_odp', $ini_scene_odp[0]);
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_odp', $term_meta_scene_scene_odp);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_scene_mdp'] ) ) {
-        $term_meta_scene_scene_mdp = $_POST['wpunity_yamlmeta_scene_mdp'];
-        if($term_meta_scene_scene_mdp == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_mdp', $ini_scene_mdp[0]);
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_mdp', $term_meta_scene_scene_mdp);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_scene_jdp'] ) ) {
-        $term_meta_scene_scene_jdp = $_POST['wpunity_yamlmeta_scene_jdp'];
-        if($term_meta_scene_scene_jdp == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_jdp', $ini_scene_jdp[0]);
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_jdp', $term_meta_scene_scene_jdp);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_scene_jspritep'] ) ) {
-        $term_meta_scene_scene_jspritep = $_POST['wpunity_yamlmeta_scene_jspritep'];
-        if($term_meta_scene_scene_jspritep == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_jspritep', $ini_scene_jpg_sprite_pattern[0]);
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_jspritep', $term_meta_scene_scene_jspritep);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_scene_matp'] ) ) {
-        $term_meta_scene_scene_matp = $_POST['wpunity_yamlmeta_scene_matp'];
-        if($term_meta_scene_scene_matp == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_scene_matp', $term_meta_scene_scene_matp);
         }
     }
 
@@ -5514,7 +5022,6 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
     global $ini_scene_wonder_around_unity_pattern;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
     global $ini_scene_credentials_unity_pattern;
-    global $ini_scene_odp,$ini_scene_mdp,$ini_scene_jdp,$ini_scene_jpg_sprite_pattern,$ini_scene_mat_pattern;
     global $ini_scene_options_unity_pattern;
 
     $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
@@ -5524,55 +5031,30 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', $ini_scene_main_menu_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', $ini_scene_allmenu_cs[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_odp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
     }elseif($term_insterted->slug == 'credentials-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', $ini_scene_credentials_unity_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_odp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
     }elseif($term_insterted->slug == 'wonderaround-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_odp', $ini_scene_odp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', $ini_scene_mdp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', $ini_scene_jdp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', $ini_scene_jpg_sprite_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
     }elseif($term_insterted->slug == 'options-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_odp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', $ini_scene_options_unity_pattern[0]);
     }else{
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', $ini_scene_main_menu_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_csharp_mainmenu', $ini_scene_allmenu_cs[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', $ini_scene_credentials_unity_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_odp', $ini_scene_odp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_mdp', $ini_scene_mdp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jdp', $ini_scene_jdp[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_jspritep', $ini_scene_jpg_sprite_pattern[0]);
-        update_term_meta($tt_id, 'wpunity_yamlmeta_scene_matp', $ini_scene_mat_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', $ini_scene_options_unity_pattern[0]);
     }
 
