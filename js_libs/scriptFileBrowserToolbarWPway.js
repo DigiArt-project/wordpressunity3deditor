@@ -438,13 +438,16 @@ function file_Browsing_By_DB(data){
 
                 /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
                 var img;
+                var imgFileExtension;
                 if (fileType.toUpperCase() === 'JPG' || fileType.toUpperCase()==='PNG') {
-                    img = '<img class="mdc-list-item__start-detail" width="40" src=' + f.path + '></i>';
+                    imgFileExtension = '';
                 }
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
                 else if (fileType.toUpperCase() === 'OBJ') {
-                    img = '<img class="mdc-list-item__start-detail" width="40" src=' + f.path + '.jpg' + '></i>';
+                    imgFileExtension = '.jpg';
                 }
+
+                img = '<img class="mdc-list-item__start-detail" style="height: auto; border-radius: 0;"  src=' + f.path + imgFileExtension +'></i>';
 
                 var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" href="'+ f.objPath +
                     '" title="'+ f.name +
@@ -466,17 +469,10 @@ function file_Browsing_By_DB(data){
 
                     '</a></li>');
 
-                mdc.autoInit(document, () => {});
-
                 file.appendTo(fileList);
             });
 
-
-
-
-
-
-
+            mdc.autoInit(document, () => {});
         }
 
 
