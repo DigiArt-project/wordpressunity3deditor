@@ -25,10 +25,6 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 
-
-
-
-
 get_header(); ?>
 
     <div class="EditPageHeader">
@@ -61,7 +57,7 @@ get_header(); ?>
                     <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
                         <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
 
-                            <li class="mdc-list-item" role="option" id="grains" aria-disabled="true">
+                            <li class="mdc-list-item" role="option" id="categories" aria-disabled="true">
                                 Select a category
                             </li>
 							<?php
@@ -94,9 +90,9 @@ get_header(); ?>
                 <h3 id="physicsTitle" class="mdc-typography--title">Information</h3>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
+                    <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
-                    <label for="title" class="mdc-textfield__label">
+                    <label for="assetTitle" class="mdc-textfield__label">
                         Enter a title for your asset
                 </div>
                 <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
@@ -259,24 +255,26 @@ get_header(); ?>
                         <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl"/>
                     </div>
 
-
                     <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label  for="objFileInput" > Select an OBJ file</label>
                         <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj"/>
                     </div>
                 </div>
 
+                <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
+                <div id="assetPreviewContainer"></div>
 
                 <div class="mdc-layout-grid">
 
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="textureFileInput"> Select a texture</label>
-                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg" />
-                        <img id="texture-preview" name="texture-preview" style="width:100px; height:100px">
+                        <label for="textureFileInput"> Select a texture</label><br>
+                        <img id="texturePreviewImg" style="width:100px; height:100px">
+                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg"/>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label  for="sshotFileInput" > Select a screenshot</label>
+                        <label for="sshotFileInput" > Select a screenshot</label><br>
+                        <img id="sshotPreviewImg" style="width:100px; height:100px">
                         <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
                     </div>
 
@@ -284,7 +282,7 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <div id="assetPreviewContainer"></div>
+
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
@@ -317,7 +315,6 @@ get_header(); ?>
         var objInput = jQuery('#objFileInput');
         var textureInputContainer = jQuery('#textureFileInputContainer');
         var textureInput = jQuery('#textureFileInput');
-
 
         var mtlFileContent = '';
         var objFileContent = '';
@@ -398,30 +395,6 @@ get_header(); ?>
             });
         })();
 
-        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
-        // We can expand this for 'fbx' files too.
-        function loadFileCallback(content, type) {
-            if(type === 'mtl') {
-                mtlFileContent = content;
-            }
-
-            if(type === 'obj') {
-                objFileContent = content;
-            }
-
-            if(type === 'jpg') {
-                textureFileContent = content;
-            }
-
-            if(type === 'fbx') {
-                fbxFileContent = content;
-            }
-
-            if (objFileContent && mtlFileContent) {
-                wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, 'test title', 'assetPreviewContainer');
-            }
-        }
-
         fbxInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
@@ -457,17 +430,57 @@ get_header(); ?>
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(textureInput.val()) === 'jpg') {
-                readFile(document.getElementById('textureFileInput').files[0], 'jpg', loadFileCallback);
+                readFile(document.getElementById('textureFileInput').files[0], 'texture', loadFileCallback);
             } else {
                 document.getElementById("textureFileInput").value = "";
             }
         });
 
+        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
+        // We can expand this for 'fbx' files too.
+        function loadFileCallback(content, type) {
+
+            if(type === 'fbx') {
+                fbxFileContent = content;
+            }
+
+            if(type === 'mtl') {
+                mtlFileContent = content;
+            }
+
+            if(type === 'obj') {
+                objFileContent = content;
+            }
+
+            if(type === 'texture') {
+                jQuery("#texturePreviewImg").attr('src', content);
+                textureFileContent = content;
+            }
+
+            if (objFileContent && mtlFileContent) {
+                jQuery("#objectPreviewTitle").show();
+
+                wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+            } else {
+
+                jQuery("#objectPreviewTitle").hide();
+            }
+        }
 
         function clearFiles() {
             document.getElementById("fbxFileInput").value = "";
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
+            document.getElementById("textureFileInput").value = "";
+            document.getElementById("texturePreviewImg").src = "#";
+
+            objFileContent = '';
+            textureFileContent = '';
+            fbxFileContent = '';
+            mtlFileContent = '';
+
+            jQuery("#objectPreviewTitle").hide();
+
             document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
@@ -489,6 +502,8 @@ get_header(); ?>
 
             jQuery("#poiVideoDetailsPanel").hide();
             jQuery("#videoFileInput").attr('disabled', 'disabled');
+
+            jQuery("#objectPreviewTitle").hide();
 
             document.getElementById("assetPreviewContainer").innerHTML = "";
         }
@@ -606,12 +621,10 @@ get_header(); ?>
             // Closure to capture the file information.
             reader.onload = (function(reader) {
                 return function() {
+
                     content = reader.result;
-                    if (type == 'jpg') {
 
-                        jQuery('#texture-preview').attr('src', content);
-
-                    }else{
+                    if (type !== 'texture') {
                         content = content.replace('data:;base64,', '');
                         content = window.atob(content);
                     }
