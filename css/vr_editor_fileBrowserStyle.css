@@ -1,14 +1,14 @@
 @charset "utf-8";
 
-.filemanager {
-	position: absolute;
-	width:20%;
-	right: 0;
-	background-color: rgba(200, 200, 200, 0.7);
-}
-
 [draggable=true] {
 	cursor: move;
+}
+
+.filemanager {
+	position: absolute;
+	width: 20%;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.12);
 }
 
 /*  For Mobiles
@@ -33,7 +33,7 @@
 }
 
 /*-------------------------
-	Breadcrumps
+	Breadcrumbs
 -------------------------*/
 
 .filemanager .breadcrumbs {
@@ -70,53 +70,23 @@
 	position: relative;
 	cursor: pointer;
 	font-size: 1.5vw;
-	color: #000;
-	background-color:#ccc;
+	/*color: #000;*/
+	/*background-color:#ccc;*/
+	background-color:transparent;
 	display: block;
 	width: 100%;
 	height: 2.2vw;
-	max-lines: 1;
 }
 
-/* The circle of the magnifier */
-.filemanager .search:before {
-	content: '';
-	position: absolute;
-	display: block;
-	right: 0.8vw;
-	margin-top: 0.2vw;
-	width: 1vw;
-	height: 1vw;
-	border-radius: 50%;
-	border: 0.2vw solid #ffffff;
-}
-
-/* The handle of the maginfying lens */
-.filemanager .search:after {
-	content: '';
-	position: absolute;
-	right:0px;
-	display: block;
-	width: 0.15vw;
-	height: 0.9vw;
-	background-color: #fff;
-	border-radius: 0.1vw;
-	top: 1.2vw;
-	right: 0.8vw;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-}
-/* TEXT INPUT */
+/* Search input */
 .filemanager .search input[type=search] {
-	border-radius: 2px;
-	color: #4D535E;
-	background-color: #FFF;
+	/*border: 2px;
+	background-color: #FFF;*/
 	width: 80%;
 	height: 2vw;
 	padding-left: 0.2vw;
 	padding-right: 0.2vw;
-	text-decoration-color: #4d535e;
-	font-size: 1.4vw;
+	/*font-size: 1.4vw;*/
 	font-weight: 400;
 	line-height: 2vw;
 	display: none;
@@ -126,20 +96,20 @@
 	-webkit-appearance: none;
 }
 
-::-webkit-input-placeholder { /* WebKit browsers */
+/*::-webkit-input-placeholder { !* WebKit browsers *!
 	color:    #4d535e;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-	color:    #4d535e;
-	opacity:  1;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
+:-moz-placeholder { !* Mozilla Firefox 4 to 18 *!
 	color:    #4d535e;
 	opacity:  1;
 }
-:-ms-input-placeholder { /* Internet Explorer 10+ */
+::-moz-placeholder { !* Mozilla Firefox 19+ *!
 	color:    #4d535e;
+	opacity:  1;
 }
+:-ms-input-placeholder { !* Internet Explorer 10+ *!
+	color:    #4d535e;
+}*/
 
 
 /*-------------------------
@@ -182,20 +152,7 @@
 }
 
 .filemanager .data li:hover {
-	background-color: #DADDE1;
-}
-
-.filemanager .data li a {
-	/*position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;*/
-}
-
-.filemanager .data li  {
-	/*margin-bottom:0;*/
-
+	background-color: #E8E7E6;
 }
 
 .FileListItemName {
@@ -256,10 +213,6 @@
 	position: relative;
 	top: 0.2vw;
 }
-
-
-
-
 
 
 /*@media all and (max-width:250px) {*/

@@ -81,7 +81,7 @@ echo '</script>';
         envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
 
         // make filebrowser draggable
-        var filemanager = jQuery('.filemanager'),
+        var filemanager = jQuery('#fileBrowserToolbar'),
             breadcrumbs = jQuery('.breadcrumbs'),
             fileList = filemanager.find('.data');
 
@@ -247,10 +247,11 @@ echo '</script>';
     </div>
 
     <!--  FileBrowserToolbar  -->
-    <div class="filemanager" id="fileBrowserToolbar" >
+    <div class="filemanager" id="fileBrowserToolbar">
 
-        <div class="search">
-            <input type="search" placeholder="Find a file.." />
+        <div class="mdc-textfield search">
+            <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
+            <i class="material-icons mdc-theme--text-primary-on-background">search</i>
         </div>
 
         <div class="breadcrumbs"></div>

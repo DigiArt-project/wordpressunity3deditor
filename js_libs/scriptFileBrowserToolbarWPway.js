@@ -39,7 +39,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
 //======================================================================
 function file_Browsing_By_DB(data){
 
-    var filemanager = jQuery('.filemanager'),
+    var filemanager = jQuery('#fileBrowserToolbar'),
         breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
@@ -449,7 +449,7 @@ function file_Browsing_By_DB(data){
 
                 img = '<img class="mdc-list-item__start-detail" style="height: auto; border-radius: 0;"  src=' + f.path + imgFileExtension +'></i>';
 
-                var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" href="'+ f.objPath +
+                var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" style="left:0; padding: 0;" href="'+ f.objPath +
                     '" title="'+ f.name +
                     '" data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
@@ -465,7 +465,7 @@ function file_Browsing_By_DB(data){
                     '" data-mdc-auto-init="MDCRipple">' + img +
                     '<span class="FileListItemName mdc-list-item__text">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span>' +
-                    '<span class="CenterContents mdc-list-item__end-detail mdc-typography--caption" style="float: right;">'+ fileSize +'</span>'+
+                    '<span class="CenterContents mdc-list-item__end-detail mdc-typography--caption mdc-theme--text-secondary-on-light" style="float: right;">'+ fileSize +'</span>'+
 
                     '</a></li>');
 
@@ -475,14 +475,11 @@ function file_Browsing_By_DB(data){
             mdc.autoInit(document, () => {});
         }
 
-
         // Generate the breadcrumbs
-
         var url = '';
+        if(filemanager.hasClass('searching')) {
 
-        if(filemanager.hasClass('searching')){
-
-            url = '<span>Search results: </span>';
+            url = '<span class="mdc-typography--subheading2">Search results </span>';
             fileList.removeClass('animated');
 
         }
@@ -495,15 +492,17 @@ function file_Browsing_By_DB(data){
                 var name = u.split('/');
 
                 // rename first path to hide the full path
-                if (i==0)
-                    name[0] = gamefolder + " available assets";
+                if (i===0)
+                    name[0] = " All assets";
+                /*name[0] = gamefolder + " All assets";*/
 
 
                 if (i !== breadcrumbsUrls.length - 1) {
-                    url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a> <span class="vr_editor_arrow"> > </span> ';
+                    url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a>' +
+                        ' <span class="vr_editor_arrow"> > </span> ';
                 }
                 else {
-                    url += '<span class="folderName">' + name[name.length-1] + '</span>';
+                    url += '<span class="folderName mdc-typography--subheading2">' + name[name.length-1] + '</span>';
                 }
 
             });
