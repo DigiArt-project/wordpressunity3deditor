@@ -268,21 +268,19 @@ get_header(); ?>
 
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="textureFileInput"> Select a texture</label><br>
-                        <img id="texturePreviewImg" style="width:100px; height:100px">
+                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); ?>">
                         <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg"/>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="sshotFileInput" > Select a screenshot</label><br>
-                        <img id="sshotPreviewImg" style="width:100px; height:100px">
+                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
                         <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
                     </div>
 
                 </div>
 
                 <hr class="WhiteSpaceSeparator">
-
-
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
@@ -297,6 +295,8 @@ get_header(); ?>
     </form>
 
     <script type="text/javascript">
+
+        'use strict';
 
         var mdc = window.mdc;
         mdc.autoInit();
@@ -315,6 +315,8 @@ get_header(); ?>
         var objInput = jQuery('#objFileInput');
         var textureInputContainer = jQuery('#textureFileInputContainer');
         var textureInput = jQuery('#textureFileInput');
+        var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;
+        var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
 
         var mtlFileContent = '';
         var objFileContent = '';
@@ -472,7 +474,7 @@ get_header(); ?>
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
             document.getElementById("textureFileInput").value = "";
-            document.getElementById("texturePreviewImg").src = "#";
+            document.getElementById("texturePreviewImg").src = texturePreviewDefaultImg;
 
             objFileContent = '';
             textureFileContent = '';
