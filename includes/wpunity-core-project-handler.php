@@ -11,14 +11,14 @@ function wpunity_delete_gameproject_frontend($game_id){
 
 //DELETE GAME PROJECT with files
 function wpunity_delete_asset3d_frontend($asset_id){
-
-    wpunity_delete_asset3d_post_media( $asset_id );
+    $pathofPost = get_post_meta($asset_id,'wpunity_asset3d_pathData',true);
+    wpunity_delete_asset3d_post_media( $asset_id , $pathofPost );
     wp_delete_post( $asset_id, true );
 
 }
 
 
-function wpunity_delete_asset3d_post_media( $asset_id ) {
+function wpunity_delete_asset3d_post_media( $asset_id ,$pathofPost ) {
     $attachments = get_posts(
         array(
             'post_type'      => 'attachment',
@@ -29,6 +29,9 @@ function wpunity_delete_asset3d_post_media( $asset_id ) {
     );
 
     foreach ( $attachments as $attachment ) {
+        //1.get attachment name/slug
+        $attachment_name = $attachment->post_name;
+        //2.delete (unlink) meta with the same name
         wp_delete_attachment( $attachment->ID );
     }
 }
