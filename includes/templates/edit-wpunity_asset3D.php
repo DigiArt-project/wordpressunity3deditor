@@ -282,8 +282,6 @@ get_header(); ?>
 
                 <hr class="WhiteSpaceSeparator">
 
-
-
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
 
@@ -297,6 +295,8 @@ get_header(); ?>
     </form>
 
     <script type="text/javascript">
+
+        'use strict';
 
         var mdc = window.mdc;
         mdc.autoInit();
