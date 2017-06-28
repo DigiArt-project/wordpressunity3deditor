@@ -1,5 +1,13 @@
 <?php
 
+// Three js : for simple rendering
+wp_enqueue_script('wpunity_load_threejs');
+wp_enqueue_script('wpunity_load_objloader');
+wp_enqueue_script('wpunity_load_mtlloader');
+wp_enqueue_script('wpunity_load_orbitcontrols');
+wp_enqueue_script('wu_3d_view');
+
+
 $perma_structure = get_option('permalink_structure') ? true : false;
 
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
@@ -16,12 +24,10 @@ $sceneSlug = $scene_post->post_title;
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
-// Three js : for simple rendering
-wp_enqueue_script('wpunity_load_threejs');
-wp_enqueue_script('wpunity_load_objloader');
-wp_enqueue_script('wpunity_load_mtlloader');
-wp_enqueue_script('wpunity_load_orbitcontrols');
-wp_enqueue_script('wu_3d_view');
+
+
+
+
 
 get_header(); ?>
 
@@ -266,6 +272,7 @@ get_header(); ?>
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="textureFileInput"> Select a texture</label>
                         <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg" />
+                        <img id="texture-preview" name="texture-preview" style="width:100px; height:100px">
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -308,9 +315,13 @@ get_header(); ?>
         var mtlInput = jQuery('#mtlFileInput');
         var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
+        var textureInputContainer = jQuery('#textureFileInputContainer');
+        var textureInput = jQuery('#textureFileInput');
+
 
         var mtlFileContent = '';
         var objFileContent = '';
+        var textureFileContent = '';
         var fbxFileContent = '';
 
         (function() {
@@ -398,12 +409,16 @@ get_header(); ?>
                 objFileContent = content;
             }
 
+            if(type === 'jpg') {
+                textureFileContent = content;
+            }
+
             if(type === 'fbx') {
                 fbxFileContent = content;
             }
 
             if (objFileContent && mtlFileContent) {
-                wu_3d_view_main('before', '', mtlFileContent, objFileContent, 'test title', 'assetPreviewContainer');
+                wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, 'test title', 'assetPreviewContainer');
             }
         }
 
@@ -434,6 +449,17 @@ get_header(); ?>
                 readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
             } else {
                 document.getElementById("objFileInput").value = "";
+            }
+        });
+
+
+        textureInput.change(function() {
+            document.getElementById("assetPreviewContainer").innerHTML = "";
+
+            if (fileExtension(textureInput.val()) === 'jpg') {
+                readFile(document.getElementById('textureFileInput').files[0], 'jpg', loadFileCallback);
+            } else {
+                document.getElementById("textureFileInput").value = "";
             }
         });
 
@@ -581,8 +607,14 @@ get_header(); ?>
             reader.onload = (function(reader) {
                 return function() {
                     content = reader.result;
-                    content = content.replace('data:;base64,', '');
-                    content = window.atob(content);
+                    if (type == 'jpg') {
+
+                        jQuery('#texture-preview').attr('src', content);
+
+                    }else{
+                        content = content.replace('data:;base64,', '');
+                        content = window.atob(content);
+                    }
 
                     callback(content, type);
                 };

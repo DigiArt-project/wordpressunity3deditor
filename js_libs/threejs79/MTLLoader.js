@@ -41,9 +41,11 @@ Object.assign( THREE.MTLLoader.prototype, THREE.EventDispatcher.prototype, {
 
 
 	  // VERVERIDIS
-    loadfromtext: function (text, onLoad, onProgress, onError){
+    loadfromtext: function (text, textureFileContent, onLoad, onProgress, onError){
 
         var scope = this;
+
+        this.textureFileContent = textureFileContent;
 
         onLoad( scope.parse( text ) );
 
@@ -376,7 +378,14 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 			if ( params[ mapType ] ) return; // Keep the first encountered texture
 
 			var texParams = scope.getTextureParams( value, params );
-			var map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
+
+
+
+			if (typeof this.textureFileContent !== 'undefined' ) {
+                var map = scope.loadTexture(this.textureFileContent);
+            } else {
+                var map = scope.loadTexture(resolveURL(scope.baseUrl, texParams.url));
+            }
 			
 			map.repeat.copy( texParams.scale );
 			map.offset.copy( texParams.offset );
@@ -520,25 +529,46 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 	},
 
-	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
+	loadTexture: function ( url_or_text, mapping, onLoad, onProgress, onError ) {
 
 		var texture;
-		var loader = THREE.Loader.Handlers.get( url );
-		var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 
-		if ( loader === null ) {
+		// image before upload is textual
+		if (url_or_text.indexOf('base64')>0) {
+            texture = this.rawtextimageToTexture(url_or_text);
+        } else { // after upload load from url
+            var loader = THREE.Loader.Handlers.get( url_or_text );
+            var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 
-			loader = new THREE.TextureLoader( manager );
+            if ( loader === null )
+            	loader = new THREE.TextureLoader( manager );
 
-		}
+            if ( loader.setCrossOrigin )
+            	loader.setCrossOrigin( this.crossOrigin );
 
-		if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
-		texture = loader.load( url, onLoad, onProgress, onError );
+            texture = loader.load( url_or_text,  onLoad, onProgress, onError );
+        }
 
-		if ( mapping !== undefined ) texture.mapping = mapping;
+		if ( mapping !== undefined )
+			texture.mapping = mapping;
+
 
 		return texture;
 
+	},
+
+	rawtextimageToTexture: function (imageTextual){
+
+        var texture = new THREE.Texture();
+        var image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
+        image.src = imageTextual;
+        image.complete = true;
+
+        texture.format = THREE.RGBFormat;
+        texture.image = image;
+        texture.needsUpdate = true;
+
+		return texture;
 	}
 
 };

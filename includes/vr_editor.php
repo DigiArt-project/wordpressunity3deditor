@@ -1,6 +1,11 @@
+<!-- For some reason these scripts can not be enqued : Try again when php -> js -->
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
+
 <!-- vr_editor.php -->
 <?php
-
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
@@ -9,6 +14,8 @@ wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
 
+wp_enqueue_script('wpunity_load_sceneexporterutils');
+wp_enqueue_script('wpunity_load_sceneexporter');
 
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
@@ -29,6 +36,7 @@ echo '<script>';
 echo '</script>';
 
 ?>
+
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
@@ -36,12 +44,6 @@ echo '</script>';
 <!-- 3rd party libraries -->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
 
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporterUtils.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/SceneExporter.js"></script>
 
 <!-- 3rd Party with some customizations -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/THREEx.WindowResize.js'></script>
@@ -425,15 +427,11 @@ $formRes->init($sceneToLoad);
             updatePositionsPhpAndJavsFromControlsAxes();
         }
     }
-
-
     // Select event listener
     jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );
 
     animate();
-
 </script>
 
 <!-- Change dat GUI style: Override the inside js style -->
-
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
