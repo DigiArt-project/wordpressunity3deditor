@@ -151,9 +151,6 @@
 	transition: 0.3s background-color;*/
 }
 
-.filemanager .data li:hover {
-	background-color: #E8E7E6;
-}
 
 .FileListItemName {
 	width: 100%;
@@ -169,6 +166,16 @@
 	line-height: 130%;
 }
 
+.FileListItemImg {
+	border-radius: 0;
+	top:0;
+}
+
+.FileListItemFooter {
+	position: absolute;
+	bottom: 0;
+	right:0;
+}
 
 /* --------- Nothing FOUND -------------*/
 .filemanager .nothingfound {

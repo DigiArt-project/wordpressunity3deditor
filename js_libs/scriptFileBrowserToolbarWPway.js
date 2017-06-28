@@ -447,9 +447,9 @@ function file_Browsing_By_DB(data){
                     imgFileExtension = '.jpg';
                 }
 
-                img = '<img class="mdc-list-item__start-detail" style="height: auto; border-radius: 0;"  src=' + f.path + imgFileExtension +'></i>';
+                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.path + imgFileExtension +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
-                var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" style="left:0; padding: 0;" href="'+ f.objPath +
+                var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;"><a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;" href="'+ f.objPath +
                     '" title="'+ f.name +
                     '" data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
@@ -463,11 +463,12 @@ function file_Browsing_By_DB(data){
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +
                     '" data-mdc-auto-init="MDCRipple">' + img +
-                    '<span class="FileListItemName mdc-list-item__text">'+ name +
-                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span>' +
-                    '<span class="CenterContents mdc-list-item__end-detail mdc-typography--caption mdc-theme--text-secondary-on-light" style="float: right;">'+ fileSize +'</span>'+
-
-                    '</a></li>');
+                    '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
+                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
+                    '<span class="FileListItemFooter">' +
+                    '<a title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '</span></li>' );
 
                 file.appendTo(fileList);
             });
