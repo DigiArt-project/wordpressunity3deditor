@@ -438,7 +438,7 @@ function wpunity_assets_databox_show(){
 
                         <script>
                             jQuery('document').ready(function(){
-                                wu_3d_view_main("After","<?php echo $curr_path;?>", <?php echo json_encode($textmtl);?>, "<?php echo $url_obj;?>", "<?php echo $post_title;?>", "vr-preview" );
+                                wu_3d_view_main("after","<?php echo $curr_path;?>", <?php echo json_encode($textmtl);?>, "<?php echo $url_obj;?>", "-1", "<?php echo $post_title;?>", "vr-preview" );
                             });
                         </script>
 
