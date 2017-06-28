@@ -222,7 +222,7 @@ function wpunity_getTemplateID_forAsset($asset_id){
 
 //==========================================================================================================================================
 
-//Get Methods for Every Yaml Pattern
+//Get Methods for Every Yaml Pattern  -- UPDATED
 
 //Get 'Folder.meta Pattern'
 function wpunity_getFolderMetaPattern(){
@@ -239,6 +239,44 @@ function wpunity_getSceneUnityMetaPattern(){
 
     return $sceneUnityMetaPattern;
 }
+
+//Get 'obj.meta Pattern'
+function wpunity_getYaml_obj_dotmeta_pattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    return $yamloptions["wpunity_obj_meta_pat"];
+}
+
+//Get 'jpg.meta Pattern'
+function wpunity_getYaml_jpg_dotmeta_pattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    return $yamloptions["wpunity_jpg_meta_pat"];
+}
+
+//Get 'The jpg sprite meta pattern'
+function wpunity_getYaml_jpg_sprite_pattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    return $yamloptions["wpunity_jpgsprite_meta_pat"];
+}
+
+//Get 'Material (.mat) Pattern'
+function wpunity_getYaml_mat_pattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    return $yamloptions["wpunity_mat_pat"];
+}
+
+//Get 'mat.meta Pattern'
+function wpunity_getYaml_mat_dotmeta_pattern(){
+    $yamloptions = get_option( 'yaml_settings' );
+    return $yamloptions["wpunity_mat_meta_pat"];
+}
+
+
+
+
+//==========================================================================================================================================
+
+//Get Methods for Every Yaml Pattern  -- NOT UPDATED
+
 
 //Get 'Wonder around .unity pattern' by Yaml ID
 function wpunity_getYaml_wonder_around_unity_pattern($yamlID){
@@ -283,31 +321,6 @@ function wpunity_getYaml_all_menu_cs_pattern($yamlID){
 //Get 'The S_Credentials.unity pattern' by Yaml ID
 function wpunity_getYaml_credentials_unity_pattern($yamlID){
     return get_term_meta($yamlID,'wpunity_yamlmeta_s_credentials',true);
-}
-
-//Get 'obj.meta Pattern' by Yaml ID
-function wpunity_getYaml_obj_dotmeta_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_odp',true);
-}
-
-//Get 'mat.meta Pattern' by Yaml ID
-function wpunity_getYaml_mat_dotmeta_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_mdp',true);
-}
-
-//Get 'jpg.meta Pattern' by Yaml ID
-function wpunity_getYaml_jpg_dotmeta_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_jdp',true);
-}
-
-//Get 'The jpg sprite meta pattern' by Yaml ID
-function wpunity_getYaml_jpg_sprite_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_jspritep',true);
-}
-
-//Get 'Material (.mat) Pattern' by Yaml ID
-function wpunity_getYaml_mat_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_matp',true);
 }
 
 //Get 'The S_Options.unity pattern' by Yaml ID
