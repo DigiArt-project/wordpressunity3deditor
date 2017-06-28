@@ -144,44 +144,6 @@ class Asset3DClass{
 
 /**
  * D1.04
- * Generate folders for Asset
- *
- *
- *
- */
-
-function wpunity_create_folder_asset( $new_status, $old_status, $post ){
-
-    $post_type = get_post_type($post);
-
-
-    if ($post_type == 'wpunity_asset3d') {
-        if ( ($new_status == 'publish') ) {
-
-            //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
-
-            //slug Asset
-            $assetSlug = $post->post_name;
-            $assetID = $post->ID;
-
-            //slug Scene
-            $parentSceneID = intval($_POST['wpunity_asset3d_pgame'], 10);
-            $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pgame' )->slug : NULL;
-
-            //wpunity_create_folder_withmeta('asset',$assetSlug,$assetID,$parentSceneSlug,$parentSceneID);
-
-        }else{
-            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
-        }
-
-    }
-}
-
-//add_action('transition_post_status','wpunity_create_folder_asset',10,3);
-
-
-/**
- * D1.05
  * Create PathData for each asset as custom field
  *
  *
@@ -194,36 +156,10 @@ function wpunity_create_pathdata_asset( $post_id ){
 
     if ($post_type == 'wpunity_asset3d') {
         $post = get_post($post_id);
-        //FORMAT: uploads / slug Game / slug Scene / slug Category of Asset (standard) / slug Asset
+        //FORMAT: uploads / slug Game / Models / ...
 
         $parentGameID = intval($_POST['wpunity_asset3d_pgame'], 10);
         $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_asset3d_pgame' )->slug : NULL;
-
-//        $gameterms = get_the_terms( $post->ID , 'wpunity_asset3d_pgame' );
-//        $projectSlug = $gameterms[0]->slug;
-
-//        //slug Asset
-//        $assetSlug = $post->post_name;
-//
-//        //slug Scene
-//        $parentSceneID = intval($_POST['wpunity_asset3d_pgame'], 10);
-//        $parentSceneSlug = ( $parentSceneID > 0 ) ? get_term( $parentSceneID, 'wpunity_asset3d_pgame' )->slug : NULL;
-//
-//        //get (all) the custom post type with Taxonomy's 'equal' slug (Scene)
-//        $custom_args = array(
-//            'name'        => $parentSceneSlug,
-//            'post_type'   => 'wpunity_scene',
-//        );
-//        $my_posts = get_posts($custom_args);
-//        $sceneID = $my_posts[0]->ID;
-//
-//        //slug Game (first taxonomy item)
-//        $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_pgame');
-//        $gameID = $terms[0]->slug;
-//
-//        //Category of Asset (standard)
-//        $categoryAssetID = intval($_POST['wpunity_asset3d_cat'], 10);
-//        $categoryAssetSlug = ( $categoryAssetID > 0 ) ? get_term( $categoryAssetID, 'wpunity_asset3d_cat' )->slug : NULL;
 
         $upload_dirpath = $parentGameSlug;
 
