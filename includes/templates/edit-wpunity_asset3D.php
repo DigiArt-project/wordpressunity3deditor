@@ -273,7 +273,7 @@ get_header(); ?>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="sshotFileInput" > Screenshot</label><br>
+                        <label for="sshotFileInput"> Screenshot</label><br>
                         <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
                         <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
@@ -331,7 +331,6 @@ get_header(); ?>
         var objFileContent = '';
         var textureFileContent = '';
         var fbxFileContent = '';
-
         var previewRenderer;
 
         (function() {
@@ -514,19 +513,22 @@ get_header(); ?>
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
             document.getElementById("textureFileInput").value = "";
-            document.getElementById("texturePreviewImg").src = texturePreviewDefaultImg;
+            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+            jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
+            jQuery("#objectPreviewTitle").hide();
 
             objFileContent = '';
             textureFileContent = '';
             fbxFileContent = '';
             mtlFileContent = '';
-
-            jQuery("#objectPreviewTitle").hide();
+            previewRenderer = '';
 
             document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function resetPanels() {
+            clearFiles();
+
             jQuery("#assetDescription").show();
 
             jQuery("#doorDetailsPanel").hide();
@@ -546,8 +548,6 @@ get_header(); ?>
             jQuery("#videoFileInput").attr('disabled', 'disabled');
 
             jQuery("#objectPreviewTitle").hide();
-
-            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function fileExtension(fn) {
