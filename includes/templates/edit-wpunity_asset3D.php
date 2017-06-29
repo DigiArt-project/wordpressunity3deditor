@@ -273,9 +273,11 @@ get_header(); ?>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="sshotFileInput" > Select a screenshot</label><br>
+                        <label for="sshotFileInput" > Screenshot</label><br>
                         <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                        <a style="display: none;" id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
 
                 </div>
@@ -286,7 +288,7 @@ get_header(); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
 
                 <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                    Create
+                    Create asset
                 </button>
 
             </div>
@@ -316,12 +318,21 @@ get_header(); ?>
         var textureInputContainer = jQuery('#textureFileInputContainer');
         var textureInput = jQuery('#textureFileInput');
         var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;
+        var sshotInput = jQuery('#sshotFileInput');
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
+        var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
+
+
+        createScreenshotBtn.click(function() {
+            createModelScreenshot(previewRenderer);
+        });
 
         var mtlFileContent = '';
         var objFileContent = '';
         var textureFileContent = '';
         var fbxFileContent = '';
+
+        var previewRenderer = '';
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -407,6 +418,9 @@ get_header(); ?>
             }
         });
 
+        mtlInput.click(function() {
+            document.getElementById("mtlFileInput").value = "";
+        });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
@@ -417,6 +431,9 @@ get_header(); ?>
             }
         });
 
+        objInput.click(function() {
+            document.getElementById("objFileInput").value = "";
+        });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
@@ -427,7 +444,9 @@ get_header(); ?>
             }
         });
 
-
+        textureInput.click(function() {
+            document.getElementById("textureFileInput").value = "";
+        });
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
@@ -435,6 +454,7 @@ get_header(); ?>
                 readFile(document.getElementById('textureFileInput').files[0], 'texture', loadFileCallback);
             } else {
                 document.getElementById("textureFileInput").value = "";
+
             }
         });
 
@@ -455,18 +475,25 @@ get_header(); ?>
             }
 
             if(type === 'texture') {
-                jQuery("#texturePreviewImg").attr('src', content);
+                jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
                 textureFileContent = content;
             }
 
             if (objFileContent && mtlFileContent) {
                 jQuery("#objectPreviewTitle").show();
+                createScreenshotBtn.show();
+                previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
 
-                wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
             } else {
-
+                createScreenshotBtn.hide();
                 jQuery("#objectPreviewTitle").hide();
             }
+        }
+
+        function createModelScreenshot(renderer) {
+            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
+            
+
         }
 
         function clearFiles() {

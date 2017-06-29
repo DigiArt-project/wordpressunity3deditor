@@ -45,7 +45,9 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     axisHelper.name = "myAxisHelper";
     scene.add(axisHelper);
 
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({
+        preserveDrawingBuffer: true
+    });
 
     renderer.setSize(windowW - 14, windowH);
     container3d_previewer.appendChild(renderer.domElement);
@@ -66,15 +68,13 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     // ------------ Total Manager -----------------
     var manager = new THREE.LoadingManager();
     manager.onProgress = function (item, loaded, total) {
-        //console.log( item, loaded, total );
+        console.log( item, loaded, total );
     };
 
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.setPath(curr_path);
 
-
-
-    if (textmtl != '')
+    if (textmtl !== '')
         mtlLoader.loadfromtext(textmtl, textureFileContent, function (materials) {
 
             materials.preload();
@@ -99,6 +99,7 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
                     object.name = post_title;
 
                     scene.add(object);
+                    render();
                 },
 
                 //onObjProgressLoad
@@ -141,6 +142,8 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     function render() {
         renderer.render(scene, camera);
     }
+
+    return renderer;
 }
 
 
