@@ -332,7 +332,7 @@ get_header(); ?>
         var textureFileContent = '';
         var fbxFileContent = '';
 
-        var previewRenderer = '';
+        var previewRenderer;
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -420,41 +420,40 @@ get_header(); ?>
 
         mtlInput.click(function() {
             document.getElementById("mtlFileInput").value = "";
+            readFile('', 'mtl', loadFileCallback);
         });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(mtlInput.val()) === 'mtl') {
                 readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
-            } else {
-                document.getElementById("mtlFileInput").value = "";
             }
         });
 
         objInput.click(function() {
             document.getElementById("objFileInput").value = "";
+            readFile('', 'obj', loadFileCallback);
         });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(objInput.val()) === 'obj') {
                 readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
-            } else {
-                document.getElementById("objFileInput").value = "";
             }
         });
 
         textureInput.click(function() {
             document.getElementById("textureFileInput").value = "";
+            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+            textureFileContent = '';
+            document.getElementById("assetPreviewContainer").innerHTML = "";
+            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
         });
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(textureInput.val()) === 'jpg') {
                 readFile(document.getElementById('textureFileInput').files[0], 'texture', loadFileCallback);
-            } else {
-                document.getElementById("textureFileInput").value = "";
-
             }
         });
 
@@ -463,36 +462,43 @@ get_header(); ?>
         function loadFileCallback(content, type) {
 
             if(type === 'fbx') {
-                fbxFileContent = content;
+                fbxFileContent = content ? content : '';
             }
 
             if(type === 'mtl') {
-                mtlFileContent = content;
+                mtlFileContent = content ? content : '';
             }
 
             if(type === 'obj') {
-                objFileContent = content;
+                objFileContent = content ? content : '';
             }
 
-            if(type === 'texture') {
-                jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
-                textureFileContent = content;
-            }
+            if (content) {
 
-            if (objFileContent && mtlFileContent) {
-                jQuery("#objectPreviewTitle").show();
-                createScreenshotBtn.show();
-                previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+                if(type === 'texture') {
+                    jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
+                    textureFileContent = content;
+                }
+
+                if (objFileContent && mtlFileContent) {
+                    jQuery("#objectPreviewTitle").show();
+
+                    createScreenshotBtn.show();
+
+                    previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+
+                } else {
+                    createScreenshotBtn.hide();
+                    jQuery("#objectPreviewTitle").hide();
+                }
 
             } else {
-                createScreenshotBtn.hide();
-                jQuery("#objectPreviewTitle").hide();
+                document.getElementById("assetPreviewContainer").innerHTML = "";
             }
         }
 
         function createModelScreenshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
-            
 
         }
 
@@ -634,33 +640,36 @@ get_header(); ?>
                 mdc.autoInit(document, () => {});
             });
 
-
             poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
                 e.preventDefault();
                 jQuery(this).parent('div').parent('div').remove(); i--;
             })
-
         } );
 
         function readFile(file, type, callback) {
             var content = '';
             var reader = new FileReader();
-            reader.readAsDataURL(file);
 
-            // Closure to capture the file information.
-            reader.onload = (function(reader) {
-                return function() {
+            if (file) {
+                reader.readAsDataURL(file);
 
-                    content = reader.result;
+                // Closure to capture the file information.
+                reader.onload = (function(reader) {
+                    return function() {
 
-                    if (type !== 'texture') {
-                        content = content.replace('data:;base64,', '');
-                        content = window.atob(content);
-                    }
+                        content = reader.result;
 
-                    callback(content, type);
-                };
-            })(reader);
+                        if (type !== 'texture') {
+                            content = content.replace('data:;base64,', '');
+                            content = window.atob(content);
+                        }
+
+                        callback(content, type);
+                    };
+                })(reader);
+            } else {
+                callback(content, type);
+            }
         }
 
     </script>
