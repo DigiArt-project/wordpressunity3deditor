@@ -421,6 +421,7 @@ get_header(); ?>
         mtlInput.click(function() {
             document.getElementById("mtlFileInput").value = "";
             readFile('', 'mtl', loadFileCallback);
+            resetModelScreenshotField();
         });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
@@ -433,6 +434,7 @@ get_header(); ?>
         objInput.click(function() {
             document.getElementById("objFileInput").value = "";
             readFile('', 'obj', loadFileCallback);
+            resetModelScreenshotField();
         });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
@@ -488,18 +490,23 @@ get_header(); ?>
                     previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
 
                 } else {
-                    createScreenshotBtn.hide();
-                    jQuery("#objectPreviewTitle").hide();
+                    resetModelScreenshotField();
                 }
 
             } else {
                 document.getElementById("assetPreviewContainer").innerHTML = "";
+
             }
         }
 
         function createModelScreenshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
+        }
 
+        function resetModelScreenshotField(){
+            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+            createScreenshotBtn.hide();
+            jQuery("#objectPreviewTitle").hide();
         }
 
         function clearFiles() {
