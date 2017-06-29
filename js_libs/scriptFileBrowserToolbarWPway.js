@@ -410,17 +410,18 @@ function file_Browsing_By_DB(data){
                     itemsLength = 'Empty';
                 }
 
-                var folder = jQuery('<li class="folders">' +
-                    '<a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'' +
-                    '<span class="name">' + name + '</span>' +
-                    '<span class="details">' + itemsLength + '</span>' +
+                var folder = jQuery('<li class="folders mdc-list-item" style="height: 96px;">' +
+                    '<a href="'+ f.path +'" title="'+ f.path +'" class="folders mdc-list-item" data-mdc-auto-init="MDCRipple" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;">'+
+                    '<span class="mdc-list-item__start-detail CenterContents"><i class="material-icons">folder</i><br>' +
+                    '<span class="mdc-typography--caption mdc-theme--text-secondary-on-light">folder</span></span>'+
+                    '<span class="FileListItemName mdc-list-item__text" >'+ itemsLength +
+                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ name +'</span></span></a>' +
+
                     '</a></li>');
                 folder.appendTo(fileList);
             });
 
         }
-
-
 
 
         if(scannedFiles.length) {
