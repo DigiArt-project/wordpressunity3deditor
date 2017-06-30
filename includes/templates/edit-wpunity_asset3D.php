@@ -54,10 +54,10 @@ get_header(); ?>
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
-                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                    <div class="mdc-simple-menu mdc-select__menu">
+                        <ul class="mdc-list mdc-simple-menu__items">
 
-                            <li class="mdc-list-item" role="option" id="categories" aria-disabled="true">
+                            <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="categories" aria-disabled="true" style="pointer-events: none;">
                                 Select a category
                             </li>
 							<?php
@@ -149,8 +149,8 @@ get_header(); ?>
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div id="entry-point-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                                 <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Entry point</span>
-                                <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                                    <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                                <div class="mdc-simple-menu mdc-select__menu">
+                                    <ul class="mdc-list mdc-simple-menu__items">
                                         <li class="mdc-list-item" role="option" id="entryPoints" aria-disabled="true">
                                             Entry point
                                         </li>
