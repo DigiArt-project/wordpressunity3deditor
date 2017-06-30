@@ -297,17 +297,12 @@ get_header(); ?>
     </form>
 
     <script type="text/javascript">
-
         'use strict';
 
         var mdc = window.mdc;
         mdc.autoInit();
 
         resetPanels();
-
-        var strings = [];
-        strings.fbx = 'You have selected an Autodesk FBX model';
-        strings.two = 'You have selected a group of the two components describing your asset';
 
         var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
@@ -322,16 +317,15 @@ get_header(); ?>
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
 
-
-        createScreenshotBtn.click(function() {
-            createModelScreenshot(previewRenderer);
-        });
-
         var mtlFileContent = '';
         var objFileContent = '';
         var textureFileContent = '';
         var fbxFileContent = '';
         var previewRenderer;
+
+        createScreenshotBtn.click(function() {
+            createModelScreenshot(previewRenderer);
+        });
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
