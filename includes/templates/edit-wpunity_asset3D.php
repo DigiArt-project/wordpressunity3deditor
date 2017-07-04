@@ -65,10 +65,10 @@ get_header(); ?>
 
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
-                    <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                        <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                    <div class="mdc-simple-menu mdc-select__menu">
+                        <ul class="mdc-list mdc-simple-menu__items">
 
-                            <li class="mdc-list-item" role="option" id="categories" aria-disabled="true">
+                            <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="categories" aria-disabled="true" style="pointer-events: none;">
                                 Select a category
                             </li>
 							<?php
@@ -160,8 +160,8 @@ get_header(); ?>
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div id="entry-point-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                                 <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Entry point</span>
-                                <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                                    <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
+                                <div class="mdc-simple-menu mdc-select__menu">
+                                    <ul class="mdc-list mdc-simple-menu__items">
                                         <li class="mdc-list-item" role="option" id="entryPoints" aria-disabled="true">
                                             Entry point
                                         </li>
@@ -284,9 +284,11 @@ get_header(); ?>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="sshotFileInput" > Select a screenshot</label><br>
+                        <label for="sshotFileInput"> Screenshot</label><br>
                         <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                        <input class="FullWidth" type="file" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                        <a style="display: none;" id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
 
                 </div>
@@ -297,7 +299,7 @@ get_header(); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
 
                 <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                    Create
+                    Create asset
                 </button>
 
             </div>
@@ -306,17 +308,12 @@ get_header(); ?>
     </form>
 
     <script type="text/javascript">
-
         'use strict';
 
         var mdc = window.mdc;
         mdc.autoInit();
 
         resetPanels();
-
-        var strings = [];
-        strings.fbx = 'You have selected an Autodesk FBX model';
-        strings.two = 'You have selected a group of the two components describing your asset';
 
         var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
@@ -327,12 +324,19 @@ get_header(); ?>
         var textureInputContainer = jQuery('#textureFileInputContainer');
         var textureInput = jQuery('#textureFileInput');
         var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;
+        var sshotInput = jQuery('#sshotFileInput');
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
+        var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
 
         var mtlFileContent = '';
         var objFileContent = '';
         var textureFileContent = '';
         var fbxFileContent = '';
+        var previewRenderer;
+
+        createScreenshotBtn.click(function() {
+            createModelScreenshot(previewRenderer);
+        });
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -418,34 +422,44 @@ get_header(); ?>
             }
         });
 
+        mtlInput.click(function() {
+            document.getElementById("mtlFileInput").value = "";
+            readFile('', 'mtl', loadFileCallback);
+            resetModelScreenshotField();
+        });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(mtlInput.val()) === 'mtl') {
                 readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
-            } else {
-                document.getElementById("mtlFileInput").value = "";
             }
         });
 
+        objInput.click(function() {
+            document.getElementById("objFileInput").value = "";
+            readFile('', 'obj', loadFileCallback);
+            resetModelScreenshotField();
+        });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(objInput.val()) === 'obj') {
                 readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
-            } else {
-                document.getElementById("objFileInput").value = "";
             }
         });
 
-
+        textureInput.click(function() {
+            document.getElementById("textureFileInput").value = "";
+            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+            textureFileContent = '';
+            document.getElementById("assetPreviewContainer").innerHTML = "";
+            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
+        });
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (fileExtension(textureInput.val()) === 'jpg') {
                 readFile(document.getElementById('textureFileInput').files[0], 'texture', loadFileCallback);
-            } else {
-                document.getElementById("textureFileInput").value = "";
             }
         });
 
@@ -454,30 +468,49 @@ get_header(); ?>
         function loadFileCallback(content, type) {
 
             if(type === 'fbx') {
-                fbxFileContent = content;
+                fbxFileContent = content ? content : '';
             }
 
             if(type === 'mtl') {
-                mtlFileContent = content;
+                mtlFileContent = content ? content : '';
             }
 
             if(type === 'obj') {
-                objFileContent = content;
+                objFileContent = content ? content : '';
             }
 
-            if(type === 'texture') {
-                jQuery("#texturePreviewImg").attr('src', content);
-                textureFileContent = content;
-            }
+            if (content) {
 
-            if (objFileContent && mtlFileContent) {
-                jQuery("#objectPreviewTitle").show();
+                if(type === 'texture') {
+                    jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
+                    textureFileContent = content;
+                }
 
-                wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+                if (objFileContent && mtlFileContent) {
+                    jQuery("#objectPreviewTitle").show();
+
+                    createScreenshotBtn.show();
+
+                    previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+
+                } else {
+                    resetModelScreenshotField();
+                }
+
             } else {
+                document.getElementById("assetPreviewContainer").innerHTML = "";
 
-                jQuery("#objectPreviewTitle").hide();
             }
+        }
+
+        function createModelScreenshot(renderer) {
+            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
+        }
+
+        function resetModelScreenshotField(){
+            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+            createScreenshotBtn.hide();
+            jQuery("#objectPreviewTitle").hide();
         }
 
         function clearFiles() {
@@ -485,19 +518,22 @@ get_header(); ?>
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
             document.getElementById("textureFileInput").value = "";
-            document.getElementById("texturePreviewImg").src = texturePreviewDefaultImg;
+            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+            jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
+            jQuery("#objectPreviewTitle").hide();
 
             objFileContent = '';
             textureFileContent = '';
             fbxFileContent = '';
             mtlFileContent = '';
-
-            jQuery("#objectPreviewTitle").hide();
+            previewRenderer = '';
 
             document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function resetPanels() {
+            clearFiles();
+
             jQuery("#assetDescription").show();
 
             jQuery("#doorDetailsPanel").hide();
@@ -517,8 +553,6 @@ get_header(); ?>
             jQuery("#videoFileInput").attr('disabled', 'disabled');
 
             jQuery("#objectPreviewTitle").hide();
-
-            document.getElementById("assetPreviewContainer").innerHTML = "";
         }
 
         function fileExtension(fn) {
@@ -618,33 +652,36 @@ get_header(); ?>
                 mdc.autoInit(document, () => {});
             });
 
-
             poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
                 e.preventDefault();
                 jQuery(this).parent('div').parent('div').remove(); i--;
             })
-
         } );
 
         function readFile(file, type, callback) {
             var content = '';
             var reader = new FileReader();
-            reader.readAsDataURL(file);
 
-            // Closure to capture the file information.
-            reader.onload = (function(reader) {
-                return function() {
+            if (file) {
+                reader.readAsDataURL(file);
 
-                    content = reader.result;
+                // Closure to capture the file information.
+                reader.onload = (function(reader) {
+                    return function() {
 
-                    if (type !== 'texture') {
-                        content = content.replace('data:;base64,', '');
-                        content = window.atob(content);
-                    }
+                        content = reader.result;
 
-                    callback(content, type);
-                };
-            })(reader);
+                        if (type !== 'texture') {
+                            content = content.replace('data:;base64,', '');
+                            content = window.atob(content);
+                        }
+
+                        callback(content, type);
+                    };
+                })(reader);
+            } else {
+                callback(content, type);
+            }
         }
 
     </script>

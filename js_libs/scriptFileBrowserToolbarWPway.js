@@ -39,7 +39,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
 //======================================================================
 function file_Browsing_By_DB(data){
 
-    var filemanager = jQuery('.filemanager'),
+    var filemanager = jQuery('#fileBrowserToolbar'),
         breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
@@ -410,17 +410,18 @@ function file_Browsing_By_DB(data){
                     itemsLength = 'Empty';
                 }
 
-                var folder = jQuery('<li class="folders">' +
-                    '<a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'' +
-                    '<span class="name">' + name + '</span>' +
-                    '<span class="details">' + itemsLength + '</span>' +
+                var folder = jQuery('<li class="folders mdc-list-item" style="height: 96px;">' +
+                    '<a href="'+ f.path +'" title="'+ f.path +'" class="folders mdc-list-item" data-mdc-auto-init="MDCRipple" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;">'+
+                    '<span class="mdc-list-item__start-detail CenterContents"><i class="material-icons">folder</i><br>' +
+                    '<span class="mdc-typography--caption mdc-theme--text-secondary-on-light">folder</span></span>'+
+                    '<span class="FileListItemName mdc-list-item__text" >'+ itemsLength +
+                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ name +'</span></span></a>' +
+
                     '</a></li>');
                 folder.appendTo(fileList);
             });
 
         }
-
-
 
 
         if(scannedFiles.length) {
@@ -447,9 +448,9 @@ function file_Browsing_By_DB(data){
                     imgFileExtension = '.jpg';
                 }
 
-                img = '<img class="mdc-list-item__start-detail" style="height: auto; border-radius: 0;"  src=' + f.path + imgFileExtension +'></i>';
+                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.path + imgFileExtension +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
-                var file = jQuery('<li class="mdc-list-item"><a class="mdc-list-item" href="'+ f.objPath +
+                var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;"><a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;" href="'+ f.objPath +
                     '" title="'+ f.name +
                     '" data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
@@ -463,11 +464,12 @@ function file_Browsing_By_DB(data){
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +
                     '" data-mdc-auto-init="MDCRipple">' + img +
-                    '<span class="FileListItemName mdc-list-item__text">'+ name +
-                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span>' +
-                    '<span class="CenterContents mdc-list-item__end-detail mdc-typography--caption" style="float: right;">'+ fileSize +'</span>'+
-
-                    '</a></li>');
+                    '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
+                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
+                    '<span class="FileListItemFooter">' +
+                    '<a title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '</span></li>' );
 
                 file.appendTo(fileList);
             });
@@ -475,14 +477,11 @@ function file_Browsing_By_DB(data){
             mdc.autoInit(document, () => {});
         }
 
-
         // Generate the breadcrumbs
-
         var url = '';
+        if(filemanager.hasClass('searching')) {
 
-        if(filemanager.hasClass('searching')){
-
-            url = '<span>Search results: </span>';
+            url = '<span class="mdc-typography--subheading2">Search results </span>';
             fileList.removeClass('animated');
 
         }
@@ -495,15 +494,17 @@ function file_Browsing_By_DB(data){
                 var name = u.split('/');
 
                 // rename first path to hide the full path
-                if (i==0)
-                    name[0] = gamefolder + " available assets";
+                if (i===0)
+                    name[0] = " All assets";
+                /*name[0] = gamefolder + " All assets";*/
 
 
                 if (i !== breadcrumbsUrls.length - 1) {
-                    url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a> <span class="vr_editor_arrow"> > </span> ';
+                    url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a>' +
+                        ' <span class="vr_editor_arrow"> > </span> ';
                 }
                 else {
-                    url += '<span class="folderName">' + name[name.length-1] + '</span>';
+                    url += '<span class="folderName mdc-typography--subheading2">' + name[name.length-1] + '</span>';
                 }
 
             });

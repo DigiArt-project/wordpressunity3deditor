@@ -1,14 +1,14 @@
 @charset "utf-8";
 
-.filemanager {
-	position: absolute;
-	width:20%;
-	right: 0;
-	background-color: rgba(200, 200, 200, 0.7);
-}
-
 [draggable=true] {
 	cursor: move;
+}
+
+.filemanager {
+	position: absolute;
+	width: 20%;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.12);
 }
 
 /*  For Mobiles
@@ -33,7 +33,7 @@
 }
 
 /*-------------------------
-	Breadcrumps
+	Breadcrumbs
 -------------------------*/
 
 .filemanager .breadcrumbs {
@@ -70,53 +70,23 @@
 	position: relative;
 	cursor: pointer;
 	font-size: 1.5vw;
-	color: #000;
-	background-color:#ccc;
+	/*color: #000;*/
+	/*background-color:#ccc;*/
+	background-color:transparent;
 	display: block;
 	width: 100%;
 	height: 2.2vw;
-	max-lines: 1;
 }
 
-/* The circle of the magnifier */
-.filemanager .search:before {
-	content: '';
-	position: absolute;
-	display: block;
-	right: 0.8vw;
-	margin-top: 0.2vw;
-	width: 1vw;
-	height: 1vw;
-	border-radius: 50%;
-	border: 0.2vw solid #ffffff;
-}
-
-/* The handle of the maginfying lens */
-.filemanager .search:after {
-	content: '';
-	position: absolute;
-	right:0px;
-	display: block;
-	width: 0.15vw;
-	height: 0.9vw;
-	background-color: #fff;
-	border-radius: 0.1vw;
-	top: 1.2vw;
-	right: 0.8vw;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-}
-/* TEXT INPUT */
+/* Search input */
 .filemanager .search input[type=search] {
-	border-radius: 2px;
-	color: #4D535E;
-	background-color: #FFF;
+	/*border: 2px;
+	background-color: #FFF;*/
 	width: 80%;
 	height: 2vw;
 	padding-left: 0.2vw;
 	padding-right: 0.2vw;
-	text-decoration-color: #4d535e;
-	font-size: 1.4vw;
+	/*font-size: 1.4vw;*/
 	font-weight: 400;
 	line-height: 2vw;
 	display: none;
@@ -126,20 +96,20 @@
 	-webkit-appearance: none;
 }
 
-::-webkit-input-placeholder { /* WebKit browsers */
+/*::-webkit-input-placeholder { !* WebKit browsers *!
 	color:    #4d535e;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-	color:    #4d535e;
-	opacity:  1;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
+:-moz-placeholder { !* Mozilla Firefox 4 to 18 *!
 	color:    #4d535e;
 	opacity:  1;
 }
-:-ms-input-placeholder { /* Internet Explorer 10+ */
+::-moz-placeholder { !* Mozilla Firefox 19+ *!
 	color:    #4d535e;
+	opacity:  1;
 }
+:-ms-input-placeholder { !* Internet Explorer 10+ *!
+	color:    #4d535e;
+}*/
 
 
 /*-------------------------
@@ -168,35 +138,8 @@
 
 	margin: 4px 0 4px 0;
 	transition: 0.3s background-color;
-	/*color: #6a6a72;
-	width: 98%;
-	height: 4vw;
-	list-style-type: none;
-	display: inline-block;
-	position: relative;
-
-
-	cursor: pointer;
-	box-sizing: border-box;
-	transition: 0.3s background-color;*/
 }
 
-.filemanager .data li:hover {
-	background-color: #DADDE1;
-}
-
-.filemanager .data li a {
-	/*position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;*/
-}
-
-.filemanager .data li  {
-	/*margin-bottom:0;*/
-
-}
 
 .FileListItemName {
 	width: 100%;
@@ -212,6 +155,16 @@
 	line-height: 130%;
 }
 
+.FileListItemImg {
+	border-radius: 0;
+	top:0;
+}
+
+.FileListItemFooter {
+	position: absolute;
+	bottom: 0;
+	right:0;
+}
 
 /* --------- Nothing FOUND -------------*/
 .filemanager .nothingfound {
@@ -258,10 +211,6 @@
 }
 
 
-
-
-
-
 /*@media all and (max-width:250px) {*/
 
 /*.filemanager .data li {*/
@@ -287,81 +236,6 @@
 /*-------------------------
 		Icons
 -------------------------*/
-
-.icon {
-	font-size: 0.7vw;
-}
-.icon.folder {
-	display: inline-block;
-	margin: 2%;
-	margin-top: 7%;
-	background-color: transparent;
-	overflow: hidden;
-}
-.icon.folder:before {
-	content: '';
-	float: left;
-	background-color: #7ba1ad;
-
-	width: 1.5em;
-	height: 0.45em;
-
-	margin-left: 0.07em;
-	margin-bottom: -0.07em;
-
-	border-top-left-radius: 0.1em;
-	border-top-right-radius: 0.1em;
-
-	box-shadow: 1.25em 0.25em 0 0 #7ba1ad;
-}
-.icon.folder:after {
-	content: '';
-	float: left;
-	clear: left;
-
-	background-color: #a0d4e4;
-	width: 3em;
-	height: 2.25em;
-
-	border-radius: 0.1em;
-}
-.icon.folder.full:before {
-	height: 0.55em;
-}
-.icon.folder.full:after {
-	height: 2.15em;
-	box-shadow: 0 -0.12em 0 0 #ffffff;
-}
-
-.icon.file {
-	height: auto;
-	width: auto;
-	/*line-height: 3em;*/
-
-	border-radius: 0.25em;
-	/*color: #FFF;
-	text-align: center;
-	display: inline-block;
-	margin: 0.9em 0.5em 0.5em 0.5em;
-	position: relative;
-	overflow: hidden;
-	box-shadow: 1.74em -2.1em 0 0 #A4A7AC inset;*/
-}
-/*.icon.file:first-line {
-	font-size: 0.6vw;
-	font-weight: 700;
-}
-.icon.file:after {
-	content: '';
-	position: absolute;
-	z-index: -1;
-	border-width: 0;
-	border-bottom: 2.6em solid #DADDE1;
-	border-right: 2.22em solid rgba(0, 0, 0, 0);
-	top: -34.5px;
-	right: -4px;
-}*/
-
 
 .icon.file.f-1{
 	box-shadow: 1.74em -2.1em 0 0 #7e70ee inset;

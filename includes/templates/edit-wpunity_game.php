@@ -76,7 +76,7 @@ get_header();
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <a class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
             COMPILE GAME
         </a>
     </div>
@@ -237,7 +237,7 @@ if ( $custom_query->have_posts() ) :?>
                     </section>
                     <section class="mdc-card__actions">
 						<?php if (!$default_scene) { ?>
-                            <a data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
+                            <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
 						<?php } ?>
                         <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
                     </section>
@@ -246,8 +246,32 @@ if ( $custom_query->have_posts() ) :?>
 
 		<?php endwhile;?>
 
-        <!--Delete Game Dialog-->
+        <!--Delete Scene Dialog-->
         <aside id="delete-dialog"
+               style="visibility:hidden"
+               class="mdc-dialog"
+               role="alertdialog"
+               aria-labelledby="Delete scene dialog"
+               aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+                <header class="mdc-dialog__header">
+                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                        Delete scene?
+                    </h2>
+                </header>
+                <section id="delete-dialog-description" class="mdc-dialog__body">
+                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+                </section>
+                <footer class="mdc-dialog__footer">
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" >Cancel</a>
+                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised">Delete</a>
+                </footer>
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+
+        <!--Compile Dialog-->
+        <aside id="compile-dialog"
                style="visibility:hidden"
                class="mdc-dialog"
                role="alertdialog"
@@ -255,16 +279,57 @@ if ( $custom_query->have_posts() ) :?>
                aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
             <div class="mdc-dialog__surface">
                 <header class="mdc-dialog__header">
-                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
-                        Delete scene?
+                    <h2 class="mdc-dialog__header__title">
+                        Compile game
                     </h2>
+
+
                 </header>
-                <section id="delete-dialog-description" class="mdc-dialog__body mdc-typography--body1">
-                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+
+                <section class="mdc-dialog__body">
+
+                    <div class="progressSlider" style="display: none;">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLine progressIncrease"></div>
+                        <div class="progressSliderSubLine progressDecrease"></div>
+                    </div>
+
+                    <h3 class="mdc-typography--subheading2"> Platform </h3>
+
+                    <div id="platform-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 40%;">
+                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
+                        <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
+                            <ul class="mdc-list mdc-simple-menu__items">
+                                <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;">
+                                    Select a platform
+                                </li>
+                                <li class="mdc-list-item" role="option" id="platform-windows" tabindex="0">
+                                    Windows
+                                </li>
+                                <li class="mdc-list-item" role="option" id="platform-linux" tabindex="0">
+                                    Linux
+                                </li>
+                                <li class="mdc-list-item" role="option" id="platform-mac" tabindex="0">
+                                    Mac OS
+                                </li>
+                                <li class="mdc-list-item" role="option" id="platform-web" tabindex="0">
+                                    Web
+                                </li>
+                                <li class="mdc-list-item" role="option" id="platform-android" tabindex="0">
+                                    Android
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <input id="platformInput" type="hidden">
+
+                    <hr class="WhiteSpaceSeparator">
+
                 </section>
                 <footer class="mdc-dialog__footer">
-                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" onclick="dismissDialog();">Cancel</a>
-                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised">Delete</a>
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                    <a type="button" id="compileProceedBtn" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
                 </footer>
             </div>
             <div class="mdc-dialog__backdrop"></div>
@@ -297,7 +362,19 @@ $wp_query = $temp_query;
 ?>
 
     <script type="text/javascript">
-        window.mdc.autoInit();
+        var mdc = window.mdc;
+        mdc.autoInit();
+
+        (function() {
+            var MDCSelect = mdc.select.MDCSelect;
+            var platformDropdown = document.getElementById('platform-select');
+            var platformSelect = MDCSelect.attachTo(platformDropdown);
+
+            platformDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery("#platformInput").attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+            });
+
+        })();
 
         var acc = document.getElementsByClassName("EditPageAccordion");
         var i;
@@ -313,7 +390,14 @@ $wp_query = $temp_query;
             }
         }
 
-        var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
+        var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
+        var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
+
+        jQuery( "#compileGameBtn" ).click(function() {
+            compileDialog.show();
+
+        });
+
 
         function deleteScene(id) {
 
@@ -323,19 +407,15 @@ $wp_query = $temp_query;
 
             dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
             dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
-            dialog.id = id;
-            dialog.show();
+            deleteDialog.id = id;
+            deleteDialog.show();
         }
 
-        dialog.listen('MDCDialog:accept', function(evt) {
-
-            console.log("ID:", dialog.id);
+        deleteDialog.listen('MDCDialog:accept', function(evt) {
+            console.log("ID:", deleteDialog.id);
         });
 
-        function dismissDialog() {
-            dialog.close();
-            console.log("Dialog closed");
-        }
+
 
     </script>
 <?php get_footer(); ?>
