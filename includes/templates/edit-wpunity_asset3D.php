@@ -8,22 +8,33 @@ wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 
 
+$create_new = 1;//1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
 
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 
 $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
+$asset_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 
 $game_post = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
 
-$scene_post = get_post($scene_id);
-$sceneSlug = $scene_post->post_title;
+$scene_post = get_post($asset_id);
+if($scene_post->post_type == 'wpunity_asset3d') {$create_new = 0;}
+
+//$scene_post = get_post($scene_id);
+//$sceneSlug = $scene_post->post_title;
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+
+
+
+}
 
 get_header(); ?>
 
