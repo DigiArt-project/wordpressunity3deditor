@@ -18,7 +18,13 @@ $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 $asset_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 
 $game_post = get_post($project_id);
+$gameSlug = $game_post->post_name;
 $game_type_obj = wpunity_return_game_type($project_id);
+
+//Get 'parent-game' taxonomy with the same slug as Game
+$assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
+$assetPGameID = $assetPGame->term_id;
+$assetPGameSlug = $assetPGame->post_name;
 
 $scene_post = get_post($asset_id);
 if($scene_post->post_type == 'wpunity_asset3d') {$create_new = 0;}
@@ -30,6 +36,50 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+
+    $assetCatID = $_POST['term_id'];
+
+    $asset_taxonomies = array(
+        'wpunity_asset3d_pgame' => array(
+            $assetPGameID,
+        ),
+        'wpunity_asset3d_cat' => array(
+            $assetCatID,
+        )
+    );
+
+    $asset_information = array(
+        'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
+        'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
+        'post_type' => 'wpunity_asset3d',
+        'post_status' => 'publish',
+        'tax_input' => $asset_taxonomies,
+    );
+
+    $asset_id = wp_insert_post($asset_information);
+    update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
+
+    $mtlFile = $_FILES['mtlFileInput'];
+    $objFile = $_FILES['objFileInput'];
+    $textureFile = $_FILES['textureFileInput'];
+
+
+    if($asset_id) {
+        //Upload All files as attachments of asset
+        $mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
+        $objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
+        $textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
+
+        //Set value of attachment IDs at custom fields
+        update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
+        update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
+        update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
+
+
+        wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+        exit;
+    }
 
 
 
@@ -57,7 +107,7 @@ get_header(); ?>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
 
-    <form name="3dAssetForm" id="3dAssetForm">
+    <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <div class="mdc-layout-grid">
 
@@ -112,7 +162,7 @@ get_header(); ?>
                 </p>
 
                 <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" form="3dAssetForm"></textarea>
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"></textarea>
                     <label for="multi-line" class="mdc-textfield__label">Add a description</label>
                 </div>
 
