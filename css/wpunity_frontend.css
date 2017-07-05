@@ -145,7 +145,6 @@ i.ButtonIcon {
     overflow: hidden;
 }
 
-
 .SceneThumbnail img {
     min-height: 225px;
     min-width: 100%;
@@ -171,7 +170,6 @@ i.ButtonIcon {
     width: 100%;
     height: 4px;
     overflow: hidden;
-
 }
 
 .progressSliderLine{

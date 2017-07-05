@@ -37,8 +37,7 @@ $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-
-    $assetCatID = $_POST['term_id'];
+	$assetCatID = $_POST['term_id'];
 
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -225,8 +224,8 @@ get_header(); ?>
                             </div>
                         </div>
 
-                        <input id="nextSceneInput" type="hidden" name="term_id" value="" disabled>
-                        <input id="entryPointInput" type="hidden" name="term_id" value="" disabled>
+                        <input id="nextSceneInput" type="hidden" name="next_scete_id" value="" disabled>
+                        <input id="entryPointInput" type="hidden" name="entry_point_id" value="" disabled>
                     </div>
                 </div>
 
