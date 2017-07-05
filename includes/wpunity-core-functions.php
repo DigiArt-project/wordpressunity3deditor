@@ -114,6 +114,78 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
     return false;
 }
 
+
+function wpunity_upload_Assetimg64($imagefile){
+
+    $upload_dir = wp_upload_dir();
+    // @new
+    $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+    $img = $imagefile;
+    $img = str_replace('data:image/png;base64,', '', $img);
+    $img = str_replace(' ', '+', $img);
+
+    $decoded = base64_decode($img) ;
+
+    $filename = 'tattoo.png';
+    $hashed_filename  = md5( $filename . microtime() ) . '_' . $filename;
+
+    // @new
+    $image_upload = file_put_contents( $upload_path . $hashed_filename, $decoded );
+
+    //HANDLE UPLOADED FILE
+    if( !function_exists( 'wp_handle_sideload' ) ) {
+        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    }
+
+    // Without that I'm getting a debug error!?
+    if( !function_exists( 'wp_get_current_user' ) ) {
+        require_once( ABSPATH . 'wp-includes/pluggable.php' );
+    }
+
+    $file = array();
+    $file['error'] = '';
+    $file['tmp_name'] = $upload_path . $hashed_filename;
+    $file['name'] = $hashed_filename;
+    $file['type'] = 'image/png';
+    $file['size'] = filesize( $upload_path . $hashed_filename );
+
+    // upload file to server
+    // @new use $file instead of $image_upload
+    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+
+    $filename = $file_return['file'];
+    $attachment = array(
+        'post_mime_type' => $file_return['type'],
+        'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+        'post_content' => '',
+        'post_status' => 'inherit',
+        'guid' => $upload_dir['url'] . '/' . basename($filename)
+    );
+    $attach_id = wp_insert_attachment( $attachment, $filename, 289 );
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+    wp_update_attachment_metadata( $attach_id, $attach_data );
+
+    $jsonReturn = array(
+            'Status'  =>  'Success'
+    );
+
+//  	    // Insert the post into the database
+//	    $tattoo_ID = wp_insert_post( $my_post );
+//
+//	    if ( $tattoo_ID ){
+//            add_post_meta($tattoo_ID, 'text', $_POST["tatooInput"] );
+//            add_post_meta($tattoo_ID, 'image', $_POST["imageData"] );
+//            add_post_meta($tattoo_ID, 'image_ID', $attach_id );
+//            exit( wp_redirect( get_permalink($tattoo_ID) ) );
+//
+//        }
+//
+//	  }
+
+}
+
 //==========================================================================================================================================
 
 //FORCE TITLE ON OUR CUSTOM POST TYPES
