@@ -554,6 +554,7 @@ get_header(); ?>
 
         function createModelScreenshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
+            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
         }
 
         function resetModelScreenshotField(){
