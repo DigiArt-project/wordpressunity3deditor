@@ -371,7 +371,7 @@
 
 
 
-.filemanager ::-webkit-scrollbar {
+/*.filemanager ::-webkit-scrollbar {
 	width: 0.6vw;
 	height: 0.6vw;
 }
@@ -384,6 +384,6 @@
 }
 .filemanager ::-webkit-scrollbar-thumb {
 	background: #eee;
-}​
+}​*/
 
 
