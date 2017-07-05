@@ -559,6 +559,7 @@ get_header(); ?>
 
         function resetModelScreenshotField(){
             document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+            document.getElementById("sshotFileInput").value = "";
             createScreenshotBtn.hide();
             jQuery("#objectPreviewTitle").hide();
         }
@@ -568,6 +569,7 @@ get_header(); ?>
             document.getElementById("mtlFileInput").value = "";
             document.getElementById("objFileInput").value = "";
             document.getElementById("textureFileInput").value = "";
+            document.getElementById("sshotFileInput").value = "";
             jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
             jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
             jQuery("#objectPreviewTitle").hide();
