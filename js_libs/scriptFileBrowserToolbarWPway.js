@@ -354,6 +354,8 @@ function file_Browsing_By_DB(data){
     // Here we make the list
     function render(data) {
 
+        var i, f, name;
+
         var scannedFolders = [],
             scannedFiles = [];
 
@@ -391,11 +393,14 @@ function file_Browsing_By_DB(data){
 
         if(scannedFolders.length) {
 
-            scannedFolders.forEach(function(f) {
+            for (i = 0; i < scannedFolders.length; i++) {
+
+                f = scannedFolders[i];
 
                 var itemsLength = f.items.length,
-                    name = escapeHTML(f.name),
                     icon = '<span class="icon folder"></span>';
+
+                name = escapeHTML(f.name);
 
                 if(itemsLength) {
                     icon = '<span class="icon folder full"></span>';
@@ -418,18 +423,21 @@ function file_Browsing_By_DB(data){
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ name +'</span></span></a>' +
 
                     '</a></li>');
-                folder.appendTo(fileList);
-            });
 
+                folder.appendTo(fileList);
+
+            }
         }
 
         if(scannedFiles.length) {
 
-            scannedFiles.forEach(function(f) {
+            for (i = 0; i < scannedFiles.length; i++) {
+
+                f = scannedFiles[i];
 
                 var fileSize = bytesToSize(f.size);
 
-                var name = escapeHTML(f.name);
+                name = escapeHTML(f.name);
 
                 if(!f.objPath)
                     return;
@@ -437,7 +445,7 @@ function file_Browsing_By_DB(data){
                 var fileType = f.objPath.split('.').pop();
 
                 /*console.log(f);
-                console.log(f.screenImagePath);*/
+                 console.log(f.screenImagePath);*/
 
 
                 /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
@@ -476,7 +484,7 @@ function file_Browsing_By_DB(data){
                     '</span></li>' );
 
                 file.appendTo(fileList);
-            });
+            }
 
             mdc.autoInit(document, () => {});
         }
