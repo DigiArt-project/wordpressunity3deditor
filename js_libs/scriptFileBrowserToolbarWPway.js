@@ -10,12 +10,14 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
     jQuery.ajax({
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
         type : 'GET',
-        data : {'action': 'wpunity_fetch_game_assets_action',
+        data : {
+            'action': 'wpunity_fetch_game_assets_action',
             'gamefolder':gamefolder,
             'scenefolder':scenefolder,
             'sceneID':sceneID,
             'gameProjectID': gameProjectID,
-            'gameProjectSlug': gameProjectSlug},
+            'gameProjectSlug': gameProjectSlug
+        },
 
         success : function(data) {
             file_Browsing_By_DB(data);
@@ -105,7 +107,7 @@ function file_Browsing_By_DB(data){
 
         var search = jQuery(this);
 
-        if(e.keyCode == 27) {
+        if(e.keyCode === 27) {
             search.trigger('focusout');
         }
 
@@ -314,7 +316,7 @@ function file_Browsing_By_DB(data){
 
         for(var i=0;i<path.length;i++){
             for(var j=0;j<demo.length;j++){
-                if(demo[j].name === path[i]){
+                if(demo[j].name === path[i]) {
                     flag = 1;
                     demo = demo[j].items;
                     break;
@@ -368,10 +370,7 @@ function file_Browsing_By_DB(data){
                 }
                 else if (d.type === 'file') {
                     scannedFiles.push(d);
-
                 }
-
-
             });
 
             //scannedFiles.forEach(function(cr){console.log(cr);});
@@ -443,10 +442,6 @@ function file_Browsing_By_DB(data){
                     return;
 
                 var fileType = f.objPath.split('.').pop();
-
-                /*console.log(f);
-                 console.log(f.screenImagePath);*/
-
 
                 /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
                 var img;

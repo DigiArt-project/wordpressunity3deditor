@@ -1,49 +1,49 @@
 <?php
 
 function wpunity_getEditpage($type){
-    if($type=='game'){
-        $edit_pages = get_pages(array(
-            'hierarchical' => 0,
-            'parent' => -1,
-            'meta_key' => '_wp_page_template',
-            'meta_value' => '/templates/edit-wpunity_game.php'
-        ));
-        return $edit_pages;
-    }elseif($type=='scene'){
-        $edit_pages = get_pages(array(
-            'hierarchical' => 0,
-            'parent' => -1,
-            'meta_key' => '_wp_page_template',
-            'meta_value' => '/templates/edit-wpunity_scene.php'
-        ));
-        return $edit_pages;
-    }elseif($type=='scene2D'){
-        $edit_pages = get_pages(array(
-            'hierarchical' => 0,
-            'parent' => -1,
-            'meta_key' => '_wp_page_template',
-            'meta_value' => '/templates/edit-wpunity_scene2D.php'
-        ));
-        return $edit_pages;
-    }elseif($type=='allgames'){
-        $edit_pages = get_pages(array(
-            'hierarchical' => 0,
-            'parent' => -1,
-            'meta_key' => '_wp_page_template',
-            'meta_value' => '/templates/open-wpunity_game.php'
-        ));
-        return $edit_pages;
-    }elseif($type=='asset'){
-        $edit_pages = get_pages(array(
-            'hierarchical' => 0,
-            'parent' => -1,
-            'meta_key' => '_wp_page_template',
-            'meta_value' => '/templates/edit-wpunity_asset3D.php'
-        ));
-        return $edit_pages;
-    }else{
-        return false;
-    }
+	if($type=='game'){
+		$edit_pages = get_pages(array(
+			'hierarchical' => 0,
+			'parent' => -1,
+			'meta_key' => '_wp_page_template',
+			'meta_value' => '/templates/edit-wpunity_game.php'
+		));
+		return $edit_pages;
+	}elseif($type=='scene'){
+		$edit_pages = get_pages(array(
+			'hierarchical' => 0,
+			'parent' => -1,
+			'meta_key' => '_wp_page_template',
+			'meta_value' => '/templates/edit-wpunity_scene.php'
+		));
+		return $edit_pages;
+	}elseif($type=='scene2D'){
+		$edit_pages = get_pages(array(
+			'hierarchical' => 0,
+			'parent' => -1,
+			'meta_key' => '_wp_page_template',
+			'meta_value' => '/templates/edit-wpunity_scene2D.php'
+		));
+		return $edit_pages;
+	}elseif($type=='allgames'){
+		$edit_pages = get_pages(array(
+			'hierarchical' => 0,
+			'parent' => -1,
+			'meta_key' => '_wp_page_template',
+			'meta_value' => '/templates/open-wpunity_game.php'
+		));
+		return $edit_pages;
+	}elseif($type=='asset'){
+		$edit_pages = get_pages(array(
+			'hierarchical' => 0,
+			'parent' => -1,
+			'meta_key' => '_wp_page_template',
+			'meta_value' => '/templates/edit-wpunity_asset3D.php'
+		));
+		return $edit_pages;
+	}else{
+		return false;
+	}
 
 }
 
@@ -52,152 +52,157 @@ function wpunity_getEditpage($type){
 // database method
 function wpunity_fetch_game_assets_action_callback(){
 
-    // Output the directory listing as JSON
-    header('Content-type: application/json');
+	// Output the directory listing as JSON
+	header('Content-type: application/json');
 
-    $DS = DIRECTORY_SEPARATOR;
+	$DS = DIRECTORY_SEPARATOR;
 
-    // if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
-    $dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder']; //.$DS.$_GET['scenefolder'];
+	// if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
+	$dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder']; //.$DS.$_GET['scenefolder'];
 
-    $response = wpunity_getAllassets_byGameProject($_GET['gameProjectSlug']);
+	$response = wpunity_getAllassets_byGameProject($_GET['gameProjectSlug']);
 
-    for ($i=0; $i<count($response); $i++){
-        $response[$i][name] =$response[$i][assetName];
-        $response[$i][type] ='file';
-        $response[$i][path] =$response[$i][objPath];
+	for ($i=0; $i<count($response); $i++){
+		$response[$i][name] =$response[$i][assetName];
+		$response[$i][type] ='file';
+		$response[$i][path] =$response[$i][objPath];
 
-        // Find kb size
-        $ch = curl_init($response[$i][objPath]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, TRUE);
-        curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-        $dataCurl = curl_exec($ch);
-        $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-        curl_close($ch);
-        $response[$i][size] =$size;
-    }
+		// Find kb size
+		$ch = curl_init($response[$i][objPath]);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_HEADER, TRUE);
+		curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+		$dataCurl = curl_exec($ch);
+		$size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+		curl_close($ch);
+		$response[$i][size] =$size;
+	}
 
-    $jsonResp =  json_encode(
-        array(
-            "name" => $dir,
-            "type" => "folder",
-            "path" => $dir,
-            "items" => $response
-        )
-    );
+	$jsonResp =  json_encode(
+		array(
+			"name" => $dir,
+			"type" => "folder",
+			"path" => $dir,
+			"items" => $response
+		)
+	);
 
-    echo $jsonResp;
+	echo $jsonResp;
 
-    wp_die();
+	wp_die();
 }
 
 
 function wpunity_getAllassets_byGameProject($gameProjectSlug){
 
-    $allAssets = [];
+	$allAssets = [];
 
-    $queryargs = array(
-        'post_type' => 'wpunity_asset3d',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_asset3d_pgame',
-                'field' => 'slug',
-                'terms' => $gameProjectSlug
-            )
-        )
-    );
+	$queryargs = array(
+		'post_type' => 'wpunity_asset3d',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_asset3d_pgame',
+				'field' => 'slug',
+				'terms' => $gameProjectSlug
+			)
+		)
+	);
 
-    $custom_query = new WP_Query( $queryargs );
+	$custom_query = new WP_Query( $queryargs );
 
 
-    if ( $custom_query->have_posts() ) :
-        while ( $custom_query->have_posts() ) :
+	if ( $custom_query->have_posts() ) :
+		while ( $custom_query->have_posts() ) :
 
-            $custom_query->the_post();
-            $asset_id = get_the_ID();
-            $asset_name = get_the_title();
+			$custom_query->the_post();
+			$asset_id = get_the_ID();
+			$asset_name = get_the_title();
 
-            //ALL DATA WE NEED
-            $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); //OBJ ID
-            if($objID){$objPath = wp_get_attachment_url( $objID );} //OBJ PATH
-            $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); //MTL ID
-            if($mtlID){$mtlPath = wp_get_attachment_url( $mtlID );} //MTL PATH
-            $difImageID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true); //Diffusion Image ID
-            if($difImageID){$difImagePath = wp_get_attachment_url( $difImageID );} //Diffusion Image PATH
-            $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); //Screenshot Image ID
-            if($screenImageID){$screenImagePath = wp_get_attachment_url( $screenImageID );} //Screenshot Image PATH
+			// ALL DATA WE NEED
+			$objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
+			$objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
 
-            $image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true); //OBJ ID
+			$mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
+			$mtlPath = $mtlID ? wp_get_attachment_url( $mtlID ) : '';                   // MTL PATH
 
-            $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
+			$difImageID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true);  // Diffusion Image ID
+			$difImagePath = $difImageID ? wp_get_attachment_url( $difImageID ) : '';                // Diffusion Image PATH
 
-            $allAssets[] = ['assetName'=>$asset_name,
-                'assetSlug'=>get_post()->post_name,
-                'assetid'=>$asset_id,
-                'categoryName'=>$categoryAsset[0]->name,
-                'categoryID'=>$categoryAsset[0]->term_id,
-                'objID'=>$objID,
-                'objPath'=>$objPath,
-                'mtlID'=>$mtlID,
-                'diffImageID'=>$difImageID,
-                'diffImage'=>$difImagePath,
-                'screenImageID'=>$screenImageID,
-                'screenImagePath'=>$screenImagePath,
-                'mtlPath'=>$mtlPath,
-                'image1id'=>$image1id];
+			$screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); // Screenshot Image ID
+			$screenImagePath = $screenImageID ? wp_get_attachment_url( $screenImageID ) : '';           // Screenshot Image PATH
 
-        endwhile;
-    endif;
+			$image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true); // OBJ ID
 
-    // Reset postdata
-    wp_reset_postdata();
+			$categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
 
-    return $allAssets;
+			$allAssets[] = [
+				'assetName'=>$asset_name,
+				'assetSlug'=>get_post()->post_name,
+				'assetid'=>$asset_id,
+				'categoryName'=>$categoryAsset[0]->name,
+				'categoryID'=>$categoryAsset[0]->term_id,
+				'objID'=>$objID,
+				'objPath'=>$objPath,
+				'mtlID'=>$mtlID,
+				'diffImageID'=>$difImageID,
+				'diffImage'=>$difImagePath,
+				'screenImageID'=>$screenImageID,
+				'screenImagePath'=>$screenImagePath,
+				'mtlPath'=>$mtlPath,
+				'image1id'=>$image1id
+			];
+
+		endwhile;
+	endif;
+
+	// Reset postdata
+	wp_reset_postdata();
+
+	return $allAssets;
 }
 
 
 // jimver : check this
 function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
-    $allUnityScenes = [];
+	$allUnityScenes = [];
 
-    $originalGame = get_post($gameID);
-    $gameSlug = $originalGame->post_name;
-    //Get 'Asset's Parent Scene' taxonomy with the same slug
-    $gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
-    $gameTaxonomyID = $gameTaxonomy->term_id;
+	$originalGame = get_post($gameID);
+	$gameSlug = $originalGame->post_name;
+	//Get 'Asset's Parent Scene' taxonomy with the same slug
+	$gameTaxonomy = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+	$gameTaxonomyID = $gameTaxonomy->term_id;
 
-    $queryargs = array(
-        'post_type' => 'wpunity_scene',
-        'posts_per_page' => -1,
-        'orderby'   => 'ID',
-        'order' => 'ASC',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_scene_pgame',
-                'field' => 'id',
-                'terms' => $gameTaxonomyID
-            )
-        )
-    );
+	$queryargs = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'orderby'   => 'ID',
+		'order' => 'ASC',
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field' => 'id',
+				'terms' => $gameTaxonomyID
+			)
+		)
+	);
 
-    $custom_query = new WP_Query( $queryargs );
+	$custom_query = new WP_Query( $queryargs );
 
-    if ( $custom_query->have_posts() ) :
-        while ( $custom_query->have_posts() ) :
-            $custom_query->the_post();
-            $scene_id = get_the_ID();
-            $sceneSlug = get_post_field( 'post_name', $scene_id );
-            $allUnityScenes[] = ['sceneUnityPath'=>"Assets/".$sceneSlug."/".$sceneSlug.".unity"];
-        endwhile;
-    endif;
+	if ( $custom_query->have_posts() ) :
+		while ( $custom_query->have_posts() ) :
+			$custom_query->the_post();
+			$scene_id = get_the_ID();
+			$sceneSlug = get_post_field( 'post_name', $scene_id );
+			$allUnityScenes[] = ['sceneUnityPath'=>"Assets/".$sceneSlug."/".$sceneSlug.".unity"];
+		endwhile;
+	endif;
 
-    // Reset postdata
-    wp_reset_postdata();
+	// Reset postdata
+	wp_reset_postdata();
 
-    return $allUnityScenes;
+	return $allUnityScenes;
 
 }
 
@@ -226,48 +231,48 @@ function wpunity_getTemplateID_forAsset($asset_id){
 
 //Get 'Folder.meta Pattern'
 function wpunity_getFolderMetaPattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    $folderMetaPattern = $yamloptions["wpunity_folder_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	$folderMetaPattern = $yamloptions["wpunity_folder_meta_pat"];
 
-    return $folderMetaPattern;
+	return $folderMetaPattern;
 }
 
 //Get 'each_scene.unity meta pattern'
 function wpunity_getSceneUnityMetaPattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    $sceneUnityMetaPattern = $yamloptions["wpunity_scene_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	$sceneUnityMetaPattern = $yamloptions["wpunity_scene_meta_pat"];
 
-    return $sceneUnityMetaPattern;
+	return $sceneUnityMetaPattern;
 }
 
 //Get 'obj.meta Pattern'
 function wpunity_getYaml_obj_dotmeta_pattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    return $yamloptions["wpunity_obj_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_obj_meta_pat"];
 }
 
 //Get 'jpg.meta Pattern'
 function wpunity_getYaml_jpg_dotmeta_pattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    return $yamloptions["wpunity_jpg_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_jpg_meta_pat"];
 }
 
 //Get 'The jpg sprite meta pattern'
 function wpunity_getYaml_jpg_sprite_pattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    return $yamloptions["wpunity_jpgsprite_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_jpgsprite_meta_pat"];
 }
 
 //Get 'Material (.mat) Pattern'
 function wpunity_getYaml_mat_pattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    return $yamloptions["wpunity_mat_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_mat_pat"];
 }
 
 //Get 'mat.meta Pattern'
 function wpunity_getYaml_mat_dotmeta_pattern(){
-    $yamloptions = get_option( 'yaml_settings' );
-    return $yamloptions["wpunity_mat_meta_pat"];
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_mat_meta_pat"];
 }
 
 
@@ -280,52 +285,52 @@ function wpunity_getYaml_mat_dotmeta_pattern(){
 
 //Get 'Wonder around .unity pattern' by Yaml ID
 function wpunity_getYaml_wonder_around_unity_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_wonderaround_pat',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_wonderaround_pat',true);
 }
 
 //Get 'Static Object Pattern' by Yaml ID
 function wpunity_getYaml_static_object_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_sop',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_sop',true);
 }
 
 //Get 'Dynamic Object Pattern' by Yaml ID
 function wpunity_getYaml_dynamic_object_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_dop',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_dop',true);
 }
 
 //Get 'Door Pattern' by Yaml ID
 function wpunity_getYaml_door_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_doorp',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_doorp',true);
 }
 
 //Get 'POI ImageText Pattern' by Yaml ID
 function wpunity_getYaml_poi_imagetext_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_imagetext_p',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_imagetext_p',true);
 }
 
 //Get 'POI Video Pattern' by Yaml ID
 function wpunity_getYaml_poi_video_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_video_p',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_video_p',true);
 }
 
 //Get 'The S_MainMenu.unity pattern' by Yaml ID
 function wpunity_getYaml_main_menu_unity_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_s_mainmenu',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_s_mainmenu',true);
 }
 
 //Get 'Main Menu c-sharp script (all_menu_Script.cs) Pattern' by Yaml ID
 function wpunity_getYaml_all_menu_cs_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_csharp_mainmenu',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_csharp_mainmenu',true);
 }
 
 //Get 'The S_Credentials.unity pattern' by Yaml ID
 function wpunity_getYaml_credentials_unity_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_s_credentials',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_s_credentials',true);
 }
 
 //Get 'The S_Options.unity pattern' by Yaml ID
 function wpunity_getYaml_options_unity_pattern($yamlID){
-    return get_term_meta($yamlID,'wpunity_yamlmeta_s_options',true);
+	return get_term_meta($yamlID,'wpunity_yamlmeta_s_options',true);
 }
 
 //==========================================================================================================================================
