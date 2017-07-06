@@ -8,7 +8,7 @@ wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 
 
-$create_new = 1;//1=NEW ASSET 0=EDIT ASSET
+$create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
 
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
@@ -39,53 +39,50 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$assetCatID = $_POST['term_id'];
 
-    $asset_taxonomies = array(
-        'wpunity_asset3d_pgame' => array(
-            $assetPGameID,
-        ),
-        'wpunity_asset3d_cat' => array(
-            $assetCatID,
-        )
-    );
+	$asset_taxonomies = array(
+		'wpunity_asset3d_pgame' => array(
+			$assetPGameID,
+		),
+		'wpunity_asset3d_cat' => array(
+			$assetCatID,
+		)
+	);
 
-    $asset_information = array(
-        'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
-        'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
-        'post_type' => 'wpunity_asset3d',
-        'post_status' => 'publish',
-        'tax_input' => $asset_taxonomies,
-    );
+	$asset_information = array(
+		'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
+		'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
+		'post_type' => 'wpunity_asset3d',
+		'post_status' => 'publish',
+		'tax_input' => $asset_taxonomies,
+	);
 
-    $asset_id = wp_insert_post($asset_information);
-    update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
+	$asset_id = wp_insert_post($asset_information);
+	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
 
-    $mtlFile = $_FILES['mtlFileInput'];
-    $objFile = $_FILES['objFileInput'];
-    $textureFile = $_FILES['textureFileInput'];
+	$mtlFile = $_FILES['mtlFileInput'];
+	$objFile = $_FILES['objFileInput'];
+	$textureFile = $_FILES['textureFileInput'];
 
-    $screenShotFile = $_FILES['sshotFileInput'];
-    //print_r($textureFile2);die;
+	$screenShotFile = $_POST['sshotFileInput'];
+	//print_r($textureFile2);die;
 
-    if($asset_id) {
-        //Upload All files as attachments of asset
-        $mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
-        $objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
-        $textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
-        wpunity_upload_Assetimg64($screenShotFile);
-        //$screenShotFile_id = wpunity_upload_Assetimg( $screenShotFile, $asset_id, $gameSlug);
+	if($asset_id) {
+		//Upload All files as attachments of asset
+		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
+		$objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
+		$textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
+		wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
+		//$screenShotFile_id = wpunity_upload_Assetimg( $screenShotFile, $asset_id, $gameSlug);
 
-        //Set value of attachment IDs at custom fields
-        update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
-        update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
-        update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
-
-
-        wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-        exit;
-    }
+		//Set value of attachment IDs at custom fields
+		update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
+		update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
+		update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
 
 
-
+		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+		exit;
+	}
 
 }
 

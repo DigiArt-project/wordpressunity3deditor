@@ -66,7 +66,7 @@ function file_Browsing_By_DB(data){
 
     // Hiding and showing the search box
 
-    filemanager.find('.search').click(function(){
+    filemanager.find('.search').click(function() {
 
         var search = jQuery(this);
 
@@ -401,7 +401,7 @@ function file_Browsing_By_DB(data){
                     icon = '<span class="icon folder full"></span>';
                 }
 
-                if(itemsLength == 1) {
+                if(itemsLength === 1) {
                     itemsLength += ' item';
                 }
                 else if(itemsLength > 1) {
@@ -423,7 +423,6 @@ function file_Browsing_By_DB(data){
 
         }
 
-
         if(scannedFiles.length) {
 
             scannedFiles.forEach(function(f) {
@@ -437,9 +436,14 @@ function file_Browsing_By_DB(data){
 
                 var fileType = f.objPath.split('.').pop();
 
+                /*console.log(f);
+                console.log(f.screenImagePath);*/
+
+
                 /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
                 var img;
                 var imgFileExtension;
+
                 if (fileType.toUpperCase() === 'JPG' || fileType.toUpperCase()==='PNG') {
                     imgFileExtension = '';
                 }
@@ -448,7 +452,7 @@ function file_Browsing_By_DB(data){
                     imgFileExtension = '.jpg';
                 }
 
-                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.path + imgFileExtension +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
+                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;"><a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;" href="'+ f.objPath +
                     '" title="'+ f.name +
