@@ -33,6 +33,9 @@ $newAssetPage = wpunity_getEditpage('asset');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
+    $jsonScene = $_POST['wpunity_scene_json_input'];
+    update_post_meta( $scene_id, 'wpunity_scene_json_input', $jsonScene );
+
 }
 
 wp_enqueue_media($scene_post->ID);
@@ -96,9 +99,15 @@ get_header(); ?>
 				require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
             </div>
         </div>
+
+
     </div>
 
-
+    <form name="wpunity_scene_theForm" id="wpunity_scene_theForm" method="POST" enctype="multipart/form-data">
+        <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
+        <input type="hidden" name="submitted" id="submitted" value="true" />
+        <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+    </form>
 
     <script type="text/javascript">
         window.mdc.autoInit();

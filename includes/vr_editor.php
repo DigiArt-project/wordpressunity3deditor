@@ -124,6 +124,8 @@ echo '</script>';
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
+        document.getElementById('wpunity_scene_theForm').submit();
+        //document.getElementsByClassName("wpunity_scene_theForm")[0].submit();
 
         setInterval(function() {
             document.getElementById('save-scene-button').style.backgroundColor = 'black';
