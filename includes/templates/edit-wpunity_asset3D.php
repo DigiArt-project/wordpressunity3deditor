@@ -331,7 +331,7 @@ get_header(); ?>
 
                 <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="wind-speed-range"></div>
+                <div id="wind-speed-range" class="WindSpeedRangeStyle"></div>
                 <input type="hidden" id="physicsWindMinVal" value="" disabled>
                 <input type="hidden" id="physicsWindMaxVal" value="" disabled>
 
@@ -395,15 +395,14 @@ get_header(); ?>
         </div>
 
 
+        <hr class="WhiteSpaceSeparator">
 
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
 
-        <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+        <button style="float: right; margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
             Create asset
         </button>
-
-
 
 
     </form>
