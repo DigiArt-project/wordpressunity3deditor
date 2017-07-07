@@ -62,22 +62,20 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$mtlFile = $_FILES['mtlFileInput'];
 	$objFile = $_FILES['objFileInput'];
 	$textureFile = $_FILES['textureFileInput'];
-
 	$screenShotFile = $_POST['sshotFileInput'];
-	//print_r($textureFile2);die;
 
 	if($asset_id) {
 		//Upload All files as attachments of asset
 		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
 		$objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
 		$textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
-		wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
-		//$screenShotFile_id = wpunity_upload_Assetimg( $screenShotFile, $asset_id, $gameSlug);
+		$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
 		//Set value of attachment IDs at custom fields
 		update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
 		update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
 		update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
+        update_post_meta( $asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id );
 
 
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
