@@ -25,14 +25,14 @@ $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 
 // Also available in Javascript side
 echo '<script>';
-    echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
-    echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
-    echo 'scenefolder="'.$scenefolder.'";';
-    echo 'gamefolder="'.$gamefolder.'";';
-    echo 'sceneID="'.$sceneID.'";';
-    echo 'gameProjectID="'.$project_id.'";';
-    echo 'gameProjectSlug="'.$projectGameSlug.'";';
-    echo 'isAdmin="'.$isAdmin.'";';
+echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
+echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
+echo 'scenefolder="'.$scenefolder.'";';
+echo 'gamefolder="'.$gamefolder.'";';
+echo 'sceneID="'.$sceneID.'";';
+echo 'gameProjectID="'.$project_id.'";';
+echo 'gameProjectSlug="'.$projectGameSlug.'";';
+echo 'isAdmin="'.$isAdmin.'";';
 echo '</script>';
 
 ?>
@@ -219,6 +219,18 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
+    <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
+
+    <div class="ObjectManipulationToggle" style="display: none;">
+        <input type="radio" id="translate-switch" name="translate-switch" value="translate" checked/>
+        <label for="translate-switch">Move</label>
+        <input type="radio" id="rotate-switch" name="rotate-switch" value="rotate" />
+        <label for="rotate-switch">Rotate</label>
+        <input type="radio" id="scale-switch" name="scale-switch" value="scale" />
+        <label for="scale-switch">Scale</label>
+    </div>
+
+
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
     <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
 
@@ -307,6 +319,9 @@ echo '</script>';
     transform_controls.name = 'myTransformControls';
     transform_controls.addEventListener( 'change', checkForRecycle );
     envir.addCubeToControls(transform_controls);
+
+
+    console.log(transform_controls);
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();
