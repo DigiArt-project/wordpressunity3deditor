@@ -69,24 +69,34 @@ function wpunity_upload_img($file = array(), $parent_post_id, $orientation = nul
 	return false;
 }
 
+function wpunity_upload_filter( $args  ) {
+
+    $newdir =  '/Models';
+
+    $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+    $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+    $args['subdir']  = $newdir;
+    $args['path']   .= $newdir;
+    $args['url']    .= $newdir;
+
+    return $args;
+
+}
+
 
 function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSlug) {
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
+    add_filter( 'upload_dir', 'wpunity_upload_filter');
 	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
+    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
 
 	if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
 		return false;
 	} else {
 
 		$filename = $file_return['file'];
-
-		$upload = wp_upload_dir();
-		$upload_dir = $upload['basedir'];
-		$upload_dir .= "/" . $parentGameSlug;
-		$upload_dir .= "/" . 'Models';
-		$upload_dir = str_replace('\\','/',$upload_dir);
 
 		$attachment = array(
 			'post_mime_type' => $file_return['type'],
@@ -140,10 +150,11 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 		'size'     => filesize( $upload_path . $hashed_filename ),
 	);
 
-
+	add_filter( 'upload_dir', 'wpunity_upload_filter');
 	// upload file to server
 	// @new use $file instead of $image_upload
 	$file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+	remove_filter( 'upload_dir', 'wpunity_upload_filter' );
 
 	$filename = $file_return['file'];
 
