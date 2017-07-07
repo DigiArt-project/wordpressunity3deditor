@@ -86,6 +86,8 @@ function wpunity_upload_filter( $args  ) {
 
 function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSlug) {
 
+	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
     add_filter( 'upload_dir', 'wpunity_upload_filter');
@@ -112,6 +114,8 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
 
 		wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
+		remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
 		if( 0 < intval( $attachment_id, 10 ) ) {
 			return $attachment_id;
 		}
@@ -122,6 +126,8 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
 
 
 function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug) {
+
+	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
@@ -171,10 +177,16 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 		'guid' => $file_return['url']
 	);
 
+
 	$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
+
+
 	require_once(ABSPATH . 'wp-admin/includes/image.php');
 	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 	wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+
+	remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	if( 0 < intval( $attachment_id, 10 ) ) {
 		return $attachment_id;
@@ -188,6 +200,16 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 }
 
 //==========================================================================================================================================
+
+function wpunity_remove_allthumbs_sizes( $sizes, $metadata ) {
+	return [];
+}
+
+
+
+//==========================================================================================================================================
+
+
 
 //FORCE TITLE ON OUR CUSTOM POST TYPES
 function force_post_title_init(){
