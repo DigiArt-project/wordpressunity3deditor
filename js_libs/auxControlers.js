@@ -35,10 +35,10 @@ function onMouseDown( event ) {
 
     var c = -150;
     geolinecast.vertices.push(raycasterPick.ray.origin,
-                                 new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
-                                                   (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
-                                                   (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
-                             );
+        new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
+            (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
+            (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
+    );
 
     var myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
     myBulletLine.name = 'rayLine';
@@ -58,7 +58,7 @@ function onMouseDown( event ) {
 
     // add the recycle bin and the mode change cube
     var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
-            // recycle bin                       // mode changer purple cube
+    // recycle bin                       // mode changer purple cube
 
     var arrNameObj = [];
 
@@ -126,14 +126,14 @@ function onMouseDown( event ) {
         //if (intersects[i].object.parent.name == 'Steve')
         //    return;
 
-        //for group
+        // for group
         if (intersects[i].object.parent instanceof THREE.Group) {
-           selected_object_name = intersects[i].object.parent.name;
-           arrNameObj[selected_object_name] = intersects[i].object.parent;
-           // for object3D
+            selected_object_name = intersects[i].object.parent.name;
+            arrNameObj[selected_object_name] = intersects[i].object.parent;
+            // for object3D
         } else {
-           // selected_object_name = intersects[i].object.parent.parent.name;
-           // arrNameObj[selected_object_name] = intersects[i].object.parent.parent;
+            // selected_object_name = intersects[i].object.parent.parent.name;
+            // arrNameObj[selected_object_name] = intersects[i].object.parent.parent;
         }
     }
 
@@ -147,7 +147,7 @@ function onMouseDown( event ) {
         transform_controls.attach(arrNameObj[nameL]);
 
         // If more than 2 objects are intersected
-    } else if (Object.keys(arrNameObj).length > 1){
+    } else if (Object.keys(arrNameObj).length > 1) {
         var popupSelect = document.getElementById("popupSelect");
 
         // Clear options
@@ -263,59 +263,59 @@ var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double
 function controllerDatGuiOnChange(){
 
     // When gui values changes then stop animating else won't be able to type with keyboard
-    dg_controller_tx.onChange(function(value) { 
-        
-        // Stop animating 
-        cancelAnimationFrame( id_animation_frame );
-        
-        // update object position
-        transform_controls.object.position.x = gui_controls_funs.dg_tx;
+    dg_controller_tx.onChange(function(value) {
 
-        // start animating again
-        animate();
+            // Stop animating
+            cancelAnimationFrame( id_animation_frame );
+
+            // update object position
+            transform_controls.object.position.x = gui_controls_funs.dg_tx;
+
+            // start animating again
+            animate();
         }
     );
 
-    dg_controller_ty.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.position.y = gui_controls_funs.dg_ty;
-        animate();
+    dg_controller_ty.onChange(function(value) {
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.position.y = gui_controls_funs.dg_ty;
+            animate();
         }
     );
 
-    dg_controller_tz.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.position.z = gui_controls_funs.dg_tz;
-        animate();
+    dg_controller_tz.onChange(function(value) {
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.position.z = gui_controls_funs.dg_tz;
+            animate();
         }
     );
 
-    dg_controller_rx.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.rotation.x = gui_controls_funs.dg_rx/180*Math.PI;
-        animate();
+    dg_controller_rx.onChange(function(value) {
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.rotation.x = gui_controls_funs.dg_rx/180*Math.PI;
+            animate();
         }
     );
 
-    dg_controller_ry.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.rotation.y = gui_controls_funs.dg_ry / 180*Math.PI;
-        animate();
+    dg_controller_ry.onChange(function(value) {
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.rotation.y = gui_controls_funs.dg_ry / 180*Math.PI;
+            animate();
         }
     );
 
-    dg_controller_rz.onChange(function(value) { 
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.rotation.z = gui_controls_funs.dg_rz / 180*Math.PI;
-        animate();
+    dg_controller_rz.onChange(function(value) {
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.rotation.z = gui_controls_funs.dg_rz / 180*Math.PI;
+            animate();
         }
     );
 
 
     dg_controller_sc.onChange(function(value) {
-        cancelAnimationFrame( id_animation_frame );
-        transform_controls.object.scale.set(gui_controls_funs.dg_scale, gui_controls_funs.dg_scale, gui_controls_funs.dg_scale);
-        animate();
+            cancelAnimationFrame( id_animation_frame );
+            transform_controls.object.scale.set(gui_controls_funs.dg_scale, gui_controls_funs.dg_scale, gui_controls_funs.dg_scale);
+            animate();
         }
     );
 
@@ -323,11 +323,11 @@ function controllerDatGuiOnChange(){
         var sel_obj = envir.scene.getObjectByName(selected_object_name);
         sel_obj.traverse(function (node) {
 
-                if (node.material)
-                    if (node.material.side == THREE.DoubleSide)
-                        node.material.side = THREE.SingleSide;
-                    else
-                        node.material.side = THREE.DoubleSide;
+            if (node.material)
+                if (node.material.side == THREE.DoubleSide)
+                    node.material.side = THREE.SingleSide;
+                else
+                    node.material.side = THREE.DoubleSide;
 
         });
     });

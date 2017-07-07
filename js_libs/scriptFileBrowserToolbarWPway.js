@@ -434,6 +434,8 @@ function file_Browsing_By_DB(data){
 
                 f = scannedFiles[i];
 
+
+
                 var fileSize = bytesToSize(f.size);
 
                 name = escapeHTML(f.name);

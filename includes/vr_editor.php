@@ -109,7 +109,7 @@ echo '</script>';
         });
 
 
-        //console.log("VR_editor.php:" + isAdmin + " | " +  gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);
+        /*console.log("VR_editor.php:" + isAdmin + " | " +  gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);*/
 
         wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
 
@@ -221,7 +221,7 @@ echo '</script>';
 
     <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
 
-    <div class="ObjectManipulationToggle" style="display: none;">
+    <div id="object-manipulation-toggles" class="ObjectManipulationToggle" style="display: none;">
         <input type="radio" id="translate-switch" name="translate-switch" value="translate" checked/>
         <label for="translate-switch">Move</label>
         <input type="radio" id="rotate-switch" name="rotate-switch" value="rotate" />

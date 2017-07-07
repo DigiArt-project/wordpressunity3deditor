@@ -75,7 +75,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
 		update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
 		update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
-        update_post_meta( $asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id );
+		update_post_meta( $asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id );
 
 
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
@@ -248,31 +248,6 @@ get_header(); ?>
                         <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4" disabled=""/>
                     </div>
                 </div>
-
-                <div id="physicsPanel" class="PhysicsPanel" style="display: none;">
-                    <h3 class="mdc-typography--title">Physics</h3>
-
-                    <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="wind-speed-range"></div>
-                    <input type="hidden" id="physicsWindMinVal" value="" disabled>
-                    <input type="hidden" id="physicsWindMaxVal" value="" disabled>
-
-                    <hr class="WhiteSpaceSeparator">
-
-                    <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="wind-mean-slider"></div>
-                    <input type="hidden" id="physicsWindMeanVal" value="" disabled>
-
-                    <hr class="WhiteSpaceSeparator">
-
-                    <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="wind-variance-slider"></div>
-                    <input type="hidden" id="physicsWindVarianceVal" value="" disabled="">
-                </div>
-
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -341,18 +316,96 @@ get_header(); ?>
 
                 </div>
 
-                <hr class="WhiteSpaceSeparator">
-
-				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                <input type="hidden" name="submitted" id="submitted" value="true" />
-
-                <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                    Create asset
-                </button>
-
             </div>
 
         </div>
+
+
+
+
+        <div id="terrainPanel" class="PhysicsPanel mdc-layout-grid" style="display: none;">
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Physics</h3>
+
+                <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="wind-speed-range"></div>
+                <input type="hidden" id="physicsWindMinVal" value="" disabled>
+                <input type="hidden" id="physicsWindMaxVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="wind-mean-slider"></div>
+                <input type="hidden" id="physicsWindMeanVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="wind-variance-slider"></div>
+                <input type="hidden" id="physicsWindVarianceVal" value="" disabled="">
+
+            </div>
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Construction Penalties (in $)</h3>
+
+                <div class="mdc-layout-grid">
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
+                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="accessCostPenalty" class="mdc-textfield__label">
+                                Access Cost
+                        </div>
+                    </div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
+                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="archProximityPenalty" class="mdc-textfield__label">
+                                Arch. site proximity
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
+                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="naturalReserveProximityPenalty" class="mdc-textfield__label">
+                                Natural reserve proximity
+                        </div>
+                    </div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
+                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label">
+                                Hi-Voltage line distance
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+        <input type="hidden" name="submitted" id="submitted" value="true" />
+
+        <button style="float: right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+            Create asset
+        </button>
+
+
+
+
     </form>
 
     <script type="text/javascript">
@@ -445,11 +498,16 @@ get_header(); ?>
                         break;
                     case 'static3dmodels':
 
-                        jQuery("#physicsPanel").show();
+                        jQuery("#terrainPanel").show();
                         jQuery("#physicsWindMinVal").removeAttr("disabled");
                         jQuery("#physicsWindMaxVal").removeAttr("disabled");
                         jQuery("#physicsWindMeanVal").removeAttr("disabled");
                         jQuery("#physicsWindVarianceVal").removeAttr("disabled");
+
+                        jQuery("#accessCostPenalty").removeAttr("disabled");
+                        jQuery("#archProximityPenalty").removeAttr("disabled");
+                        jQuery("#naturalReserveProximityPenalty").removeAttr("disabled");
+                        jQuery("#hiVoltLineDistancePenalty").removeAttr("disabled");
 
                         break;
                     default:
@@ -592,11 +650,16 @@ get_header(); ?>
             jQuery("#entryPointInput").attr('disabled', 'disabled');
 
 
-            jQuery("#physicsPanel").hide();
+            jQuery("#terrainPanel").hide();
             jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
             jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
             jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
             jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
+            jQuery("#accessCostPenalty").attr('disabled', 'disabled');
+            jQuery("#archProximityPenalty").attr('disabled', 'disabled');
+            jQuery("#naturalReserveProximityPenalty").attr('disabled', 'disabled');
+            jQuery("#hiVoltLineDistancePenalty").attr('disabled', 'disabled');
+
 
             jQuery("#poiImgDetailsPanel").hide();
 
