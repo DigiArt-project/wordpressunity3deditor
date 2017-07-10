@@ -332,10 +332,7 @@ get_header(); ?>
 
         </div>
 
-
-
-
-        <div id="terrainPanel" class="PhysicsPanel mdc-layout-grid" style="display: none;">
+        <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
@@ -343,7 +340,7 @@ get_header(); ?>
 
                 <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="wind-speed-range" class="WindSpeedRangeStyle"></div>
+                <div id="wind-speed-range"></div>
                 <input type="hidden" id="physicsWindMinVal" value="" disabled>
                 <input type="hidden" id="physicsWindMaxVal" value="" disabled>
 
@@ -402,6 +399,54 @@ get_header(); ?>
                                 Hi-Voltage line distance
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="consumerPanel" class="mdc-layout-grid">
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Energy Consumption</h3>
+
+                <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="energy-consumption-range"></div>
+                <input type="hidden" id="energyConsumptionMinVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMaxVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="energy-consumption-mean-slider"></div>
+                <input type="hidden" id="energyConsumptionMeanVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="energy-consumption-variance-slider"></div>
+                <input type="hidden" id="energyConsumptionVarianceVal" value="" disabled="">
+
+            </div>
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Energy Consumption Costs</h3>
+
+                <div class="mdc-layout-grid">
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Cost per kWh" id="energyCostPerKwh" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="energyCostPerKwh"
+                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="accessCostPenalty" class="mdc-textfield__label">
+                                Add the cost per kWh
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -524,6 +569,14 @@ get_header(); ?>
 
                         break;
                     case 'consumer':
+                        jQuery("#consumerPanel").show();
+                        jQuery("#energyConsumptionMinVal").removeAttr("disabled");
+                        jQuery("#energyConsumptionMaxVal").removeAttr("disabled");
+                        jQuery("#energyConsumptionMeanVal").removeAttr("disabled");
+                        jQuery("#energyConsumptionVarianceVal").removeAttr("disabled");
+
+                        jQuery("#energyCostPerKwh").removeAttr("disabled");
+
 
 
                         break;
@@ -670,7 +723,6 @@ get_header(); ?>
             jQuery("#nextSceneInput").attr('disabled', 'disabled');
             jQuery("#entryPointInput").attr('disabled', 'disabled');
 
-
             jQuery("#terrainPanel").hide();
             jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
             jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
@@ -681,6 +733,12 @@ get_header(); ?>
             jQuery("#naturalReserveProximityPenalty").attr('disabled', 'disabled');
             jQuery("#hiVoltLineDistancePenalty").attr('disabled', 'disabled');
 
+            jQuery("#consumerPanel").hide();
+            jQuery("#energyConsumptionMinVal").attr('disabled', 'disabled');
+            jQuery("#energyConsumptionMaxVal").attr('disabled', 'disabled');
+            jQuery("#energyConsumptionMeanVal").attr('disabled', 'disabled');
+            jQuery("#energyConsumptionVarianceVal").attr('disabled', 'disabled');
+            jQuery("#energyCostPerKwh").attr('disabled', 'disabled');
 
             jQuery("#poiImgDetailsPanel").hide();
 
@@ -716,12 +774,16 @@ get_header(); ?>
             });
 
 
-            // Physics Sliders
-            var speedRangeSlider = jQuery( "#wind-speed-range" );
+            // Sliders
+            var windSpeedRangeSlider = jQuery( "#wind-speed-range" );
             var windMeanSlider = jQuery( "#wind-mean-slider" );
             var windVarianceSlider =  jQuery( "#wind-variance-slider" );
 
-            speedRangeSlider.slider({
+            var energyConsumptionRangeSlider = jQuery( "#energy-consumption-range" );
+            var energyConsumptionMeanSlider = jQuery( "#energy-consumption-mean-slider" );
+            var energyConsumptionVarianceSlider =  jQuery( "#energy-consumption-variance-slider" );
+
+            windSpeedRangeSlider.slider({
                 range: true,
                 min: 0,
                 max: 40,
@@ -732,8 +794,8 @@ get_header(); ?>
                     jQuery( "#physicsWindMaxVal" ).val(ui.values[ 1 ]);
                 }
             });
-            jQuery( "#wind-speed-range-label" ).val( speedRangeSlider.slider( "values", 0 ) +
-                " - " + speedRangeSlider.slider( "values", 1 ) + " m/sec" );
+            jQuery( "#wind-speed-range-label" ).val( windSpeedRangeSlider.slider( "values", 0 ) +
+                " - " + windSpeedRangeSlider.slider( "values", 1 ) + " m/sec" );
 
             windMeanSlider.slider({
                 min: 0,
@@ -758,6 +820,49 @@ get_header(); ?>
                 }
             });
             jQuery( "#wind-variance-slider-label" ).val( windVarianceSlider.slider( "option", "value" ) + " " );
+
+
+            energyConsumptionRangeSlider.slider({
+                range: true,
+                min: 0,
+                max: 2000,
+                step: 5,
+                values: [ 50, 150 ],
+                slide: function( event, ui ) {
+                    jQuery( "#energy-consumption-range-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " kW" );
+                    jQuery( "#energyConsumptionMinVal" ).val(ui.values[ 0 ]);
+                    jQuery( "#energyConsumptionMaxVal" ).val(ui.values[ 1 ]);
+                }
+            });
+            jQuery( "#energy-consumption-range-label" ).val( energyConsumptionRangeSlider.slider( "values", 0 ) +
+                " - " + energyConsumptionRangeSlider.slider( "values", 1 ) + " kW" );
+
+            energyConsumptionMeanSlider.slider({
+                min: 0,
+                max: 2000,
+                step: 5,
+                value: 100,
+                slide: function( event, ui ) {
+                    jQuery( "#energy-consumption-mean-slider-label" ).val( ui.value + " kW" );
+                    jQuery( "#energyConsumptionMeanVal" ).val(ui.value);
+
+                }
+            });
+            jQuery( "#energy-consumption-mean-slider-label" ).val( energyConsumptionMeanSlider.slider( "option", "value" ) + " kW" );
+
+            energyConsumptionVarianceSlider.slider({
+                min: 5,
+                max: 1000,
+                step: 5,
+                value: 50,
+                slide: function( event, ui ) {
+                    jQuery( "#energy-consumption-variance-slider-label" ).val( ui.value + " ");
+                    jQuery( "#energyConsumptionVarianceVal" ).val(ui.value);
+
+                }
+            });
+
+            jQuery( "#energy-consumption-variance-slider-label" ).val( energyConsumptionVarianceSlider.slider( "option", "value" ) + " ");
 
 
             // POI Image panels - Add/remove POI inputs
