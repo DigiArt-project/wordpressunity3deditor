@@ -369,7 +369,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
-                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="accessCostPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="accessCostPenalty" class="mdc-textfield__label">
                                 Access Cost
                         </div>
@@ -377,7 +377,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
-                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="archProximityPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="archProximityPenalty" class="mdc-textfield__label">
                                 Arch. site proximity
                         </div>
@@ -386,7 +386,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
-                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="naturalReserveProximityPenalty" class="mdc-textfield__label">
                                 Natural reserve proximity
                         </div>
@@ -394,7 +394,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
-                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label">
                                 Hi-Voltage line distance
                         </div>
@@ -434,16 +434,34 @@ get_header(); ?>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h3 class="mdc-typography--title">Energy Consumption Costs</h3>
+                <h3 class="mdc-typography--title">Energy Consumption Cost (in $)</h3>
 
                 <div class="mdc-layout-grid">
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Cost per kWh" id="energyCostPerKwh" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="energyCostPerKwh"
-                                   aria-controls="title-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
-                            <label for="accessCostPenalty" class="mdc-textfield__label">
-                                Add the cost per kWh
+                            <input title="Underpower cost" id="underPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="underPowerCost"
+                                   aria-controls="underPowerCost-validation-msg" value="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="underPowerCost" class="mdc-textfield__label">
+                                Underpowered consumption cost
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Normal power cost" id="normalPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="normalPowerCost"
+                                   aria-controls="normalPowerCost-validation-msg" value="1" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="normalPowerCost" class="mdc-textfield__label">
+                                Normal power consumption cost
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                            <input title="Overpower cost" id="overPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="overPowerCost"
+                                   aria-controls="overPowerCost-validation-msg" value="0" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                            <label for="overPowerCost" class="mdc-textfield__label">
+                                Overpowered consumption cost
                         </div>
                     </div>
 
@@ -575,8 +593,9 @@ get_header(); ?>
                         jQuery("#energyConsumptionMeanVal").removeAttr("disabled");
                         jQuery("#energyConsumptionVarianceVal").removeAttr("disabled");
 
-                        jQuery("#energyCostPerKwh").removeAttr("disabled");
-
+                        jQuery("#overPowerCost").removeAttr("disabled");
+                        jQuery("#normalPowerCost").removeAttr("disabled");
+                        jQuery("#underPowerCost").removeAttr("disabled");
 
 
                         break;
@@ -738,7 +757,9 @@ get_header(); ?>
             jQuery("#energyConsumptionMaxVal").attr('disabled', 'disabled');
             jQuery("#energyConsumptionMeanVal").attr('disabled', 'disabled');
             jQuery("#energyConsumptionVarianceVal").attr('disabled', 'disabled');
-            jQuery("#energyCostPerKwh").attr('disabled', 'disabled');
+            jQuery("#overPowerCost").attr('disabled', 'disabled');
+            jQuery("#normalPowerCost").attr('disabled', 'disabled');
+            jQuery("#underPowerCost").attr('disabled', 'disabled');
 
             jQuery("#poiImgDetailsPanel").hide();
 
@@ -881,7 +902,7 @@ get_header(); ?>
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="title-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
+                        'aria-controls="poi-input-text-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
                         '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p></div>' +
