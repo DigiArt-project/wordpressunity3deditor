@@ -930,6 +930,10 @@ CanvasRenderer:
 ');
     //Points of Interest (Video) YAML
     $ini_asset_poi_video = array('Canvasion');
+    $ini_asset_terrain = array();
+    $ini_asset_staticDec = array();
+    $ini_asset_consumer = array();
+    $ini_asset_producer = array();
 
     wp_insert_term(
         'Dynamic 3D models', // the term
@@ -941,6 +945,7 @@ CanvasRenderer:
     );
     $inserted_term1 = get_term_by('slug', 'dynamic3dmodels', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_dop[0], true);
+    update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
     wp_insert_term(
         'Points of Interest (Image-Text)', // the term
@@ -952,6 +957,7 @@ CanvasRenderer:
     );
     $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi[0], true);
+    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
     wp_insert_term(
         'Points of Interest (Video)', // the term
@@ -963,6 +969,7 @@ CanvasRenderer:
     );
     $inserted_term3 = get_term_by('slug', 'pois_Video', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi_video[0], true);
+    update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
     wp_insert_term(
         'Static 3D models', // the term
@@ -974,6 +981,7 @@ CanvasRenderer:
     );
     $inserted_term4 = get_term_by('slug', 'static3dmodels', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_sop[0], true);
+    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
     wp_insert_term(
         'Doors', // the term
@@ -985,6 +993,59 @@ CanvasRenderer:
     );
     $inserted_term5 = get_term_by('slug', 'doors', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_doorp[0], true);
+    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+
+
+    /**********************************  ENERGY CATEGORIES ************************************************/
+
+    wp_insert_term(
+        'Terrain', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'A Terrain is the ground where turbines can be placed.',
+            'slug' => 'terrain',
+        )
+    );
+    $inserted_term6 = get_term_by('slug', 'terrain', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term6->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_terrain[0], true);
+    update_term_meta($inserted_term6->term_id, 'wpunity_assetcat_gamecat', 2 , true);
+
+    wp_insert_term(
+        'Static', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'A Decoration is a game object that can improve the immersiveness such as Archaeological site, Power lines, Trees, etc.',
+            'slug' => 'staticdec',
+        )
+    );
+    $inserted_term7 = get_term_by('slug', 'staticdec', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term7->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_staticDec[0], true);
+    update_term_meta($inserted_term7->term_id, 'wpunity_assetcat_gamecat', 2 , true);
+
+    wp_insert_term(
+        'Consumer', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'A Consumer is a game object that consumes energy (e.g. a building).',
+            'slug' => 'consumer',
+        )
+    );
+    $inserted_term8 = get_term_by('slug', 'consumer', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term8->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_consumer[0], true);
+    update_term_meta($inserted_term8->term_id, 'wpunity_assetcat_gamecat', 2 , true);
+
+    wp_insert_term(
+        'Producer', // the term
+        'wpunity_asset3d_cat', // the taxonomy
+        array(
+            'description'=> 'A Producer is a game object that generates energy (e.g. a Wind Turbine or a Solar Panel).',
+            'slug' => 'producer',
+        )
+    );
+    $inserted_term9 = get_term_by('slug', 'producer', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term9->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_producer[0], true);
+    update_term_meta($inserted_term9->term_id, 'wpunity_assetcat_gamecat', 2 , true);
+
 }
 
 add_action( 'init', 'wpunity_assets_taxcategory_fill' );
