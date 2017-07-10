@@ -88,7 +88,6 @@ function wpunity_fetch_game_assets_action_callback(){
 	);
 
 	echo $jsonResp;
-
 	wp_die();
 }
 
