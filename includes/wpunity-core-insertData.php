@@ -1011,14 +1011,14 @@ CanvasRenderer:
     update_term_meta($inserted_term6->term_id, 'wpunity_assetcat_gamecat', 2 , true);
 
     wp_insert_term(
-        'Static', // the term
+        'Decoration', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
             'description'=> 'A Decoration is a game object that can improve the immersiveness such as Archaeological site, Power lines, Trees, etc.',
-            'slug' => 'staticdec',
+            'slug' => 'decoration',
         )
     );
-    $inserted_term7 = get_term_by('slug', 'staticdec', 'wpunity_asset3d_cat');
+    $inserted_term7 = get_term_by('slug', 'decoration', 'wpunity_asset3d_cat');
     update_term_meta($inserted_term7->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_staticDec[0], true);
     update_term_meta($inserted_term7->term_id, 'wpunity_assetcat_gamecat', 2 , true);
 
