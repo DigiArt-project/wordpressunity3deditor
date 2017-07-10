@@ -120,7 +120,19 @@ get_header(); ?>
                                 Select a category
                             </li>
 							<?php
-							$args = array('hide_empty' => false);
+                            $myGameType = 1;
+                            $all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
+                            $game_type_slug = $all_game_types[0]->slug;
+                            if($game_type_slug == 'energy_games'){$myGameType=2;}
+							$args = array(
+                                'hide_empty' => false,
+                                'meta_query' => array(
+                                array(
+                                    'key'       => 'wpunity_assetcat_gamecat',
+                                    'value'     => $myGameType,
+                                    'compare'   => '='
+                                )
+                            ));
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 							foreach ( $cat_terms as $term ) { ?>
 
