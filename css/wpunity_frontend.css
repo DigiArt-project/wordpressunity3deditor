@@ -142,17 +142,32 @@ i.ButtonIcon {
 
 /*CARD STYLING*/
 .SceneThumbnail {
-    overflow: hidden;
-}
-
-.SceneThumbnail img {
     min-height: 225px;
     min-width: 100%;
-    left: 50%;
-    top: 50%;
-    height: 225px;
+    max-height: 225px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+
+}
+
+.SceneThumbnail a {
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.SceneThumbnail a img {
+    position: absolute;
+    min-height: 225px;
+    min-width: 100%;
+    left: -50%;
+    top: -20%;
+    height: auto;
     width: auto;
     max-width: none;
+    overflow: hidden;
+
 }
 
 .SceneCardContainer {
