@@ -64,7 +64,7 @@ function wpunity_load_file_callback(content, type) {
             previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
 
         } else {
-            resetModelScreenshotField();
+            wpunity_reset_sshot_field();
         }
 
     } else {
