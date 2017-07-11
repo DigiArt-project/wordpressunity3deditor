@@ -2,7 +2,7 @@
  * Created by tpapazoglou on 11/7/2017.
  */
 
-function readFile(file, type, callback) {
+function wpunity_read_file(file, type, callback) {
     var content = '';
     var reader = new FileReader();
 
@@ -35,7 +35,7 @@ function readFile(file, type, callback) {
 
 // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
 // We can expand this for 'fbx' files too.
-function loadFileCallback(content, type) {
+function wpunity_load_file_callback(content, type) {
 
     if(type === 'fbx') {
         fbxFileContent = content ? content : '';
@@ -73,11 +73,11 @@ function loadFileCallback(content, type) {
     }
 }
 
-function fileExtension(fn) {
+function wpunity_extract_file_extension(fn) {
     return fn ? fn.split('.').pop().toLowerCase() : '';
 }
 
-function createSliderComponent(elemId, range, options) {
+function wpunity_create_slider_component(elemId, range, options) {
 
     if (range) {
 
@@ -117,7 +117,7 @@ function createSliderComponent(elemId, range, options) {
     return jQuery( elemId ).slider;
 }
 
-function clearFiles() {
+function wpunity_clear_asset_files() {
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
@@ -136,8 +136,8 @@ function clearFiles() {
     document.getElementById("assetPreviewContainer").innerHTML = "";
 }
 
-function resetPanels() {
-    clearFiles();
+function wpunity_reset_panels() {
+    wpunity_clear_asset_files();
 
     jQuery("#assetDescription").show();
 
@@ -172,7 +172,6 @@ function resetPanels() {
     jQuery("#producerCostVal").attr('disabled', 'disabled');
     jQuery("#producerRepairCostVal").attr('disabled', 'disabled');
 
-
     jQuery("#poiImgDetailsPanel").hide();
 
     jQuery("#poiVideoDetailsPanel").hide();
@@ -180,5 +179,3 @@ function resetPanels() {
 
     jQuery("#objectPreviewTitle").hide();
 }
-
-

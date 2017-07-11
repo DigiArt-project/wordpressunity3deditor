@@ -542,7 +542,7 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        resetPanels();
+        wpunity_reset_panels();
 
         var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
@@ -591,7 +591,7 @@ get_header(); ?>
 
                 jQuery("#formSubmitBtn").show();
 
-                resetPanels();
+                wpunity_reset_panels();
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
@@ -675,7 +675,7 @@ get_header(); ?>
         fbxInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
-            if (fileExtension(fbxInput.val()) === 'fbx') {
+            if (wpunity_extract_file_extension(fbxInput.val()) === 'fbx') {
 
             } else {
                 document.getElementById("fbxFileInput").value = "";
@@ -684,27 +684,27 @@ get_header(); ?>
 
         mtlInput.click(function() {
             document.getElementById("mtlFileInput").value = "";
-            readFile('', 'mtl', loadFileCallback);
+            wpunity_read_file('', 'mtl', wpunity_load_file_callback);
             resetModelScreenshotField();
         });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
-            if (fileExtension(mtlInput.val()) === 'mtl') {
-                readFile(document.getElementById('mtlFileInput').files[0], 'mtl', loadFileCallback);
+            if (wpunity_extract_file_extension(mtlInput.val()) === 'mtl') {
+                wpunity_read_file(document.getElementById('mtlFileInput').files[0], 'mtl', wpunity_load_file_callback);
             }
         });
 
         objInput.click(function() {
             document.getElementById("objFileInput").value = "";
-            readFile('', 'obj', loadFileCallback);
+            wpunity_read_file('', 'obj', wpunity_load_file_callback);
             resetModelScreenshotField();
         });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
-            if (fileExtension(objInput.val()) === 'obj') {
-                readFile(document.getElementById('objFileInput').files[0], 'obj', loadFileCallback);
+            if (wpunity_extract_file_extension(objInput.val()) === 'obj') {
+                wpunity_read_file(document.getElementById('objFileInput').files[0], 'obj', wpunity_load_file_callback);
             }
         });
 
@@ -718,8 +718,8 @@ get_header(); ?>
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
-            if (fileExtension(textureInput.val()) === 'jpg') {
-                readFile(document.getElementById('textureFileInput').files[0], 'texture', loadFileCallback);
+            if (wpunity_extract_file_extension(textureInput.val()) === 'jpg') {
+                wpunity_read_file(document.getElementById('textureFileInput').files[0], 'texture', wpunity_load_file_callback);
             }
         });
 
@@ -743,13 +743,13 @@ get_header(); ?>
                 var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
                 if (objectType === 'fbx') {
-                    clearFiles();
+                    wpunity_clear_asset_files();
                     fbxInputContainer.show();
                     mtlInputContainer.hide();
                     objInputContainer.hide();
                 }
                 else if (objectType === 'mtl') {
-                    clearFiles();
+                    wpunity_clear_asset_files();
                     fbxInputContainer.hide();
                     mtlInputContainer.show();
                     objInputContainer.show();
@@ -758,20 +758,20 @@ get_header(); ?>
 
 
             // Sliders
-            var windSpeedRangeSlider = createSliderComponent("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/s"});
-            var windMeanSlider = createSliderComponent("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/s"});
-            var windVarianceSlider = createSliderComponent("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
+            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/s"});
+            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/s"});
+            var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
-            var energyConsumptionRangeSlider = createSliderComponent("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
-            var energyConsumptionMeanSlider = createSliderComponent("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
-            var energyConsumptionVarianceSlider = createSliderComponent("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
+            var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
+            var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
+            var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
-            var producerAirSpeedSlider = createSliderComponent("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-            var producerPowerProductionSlider = createSliderComponent("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});
-            var producerTurbineSizeSlider = createSliderComponent("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
-            var producerDmgCoeffSlider = createSliderComponent("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
-            var producerCostSlider = createSliderComponent("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
-            var producerRepairCostSlider = createSliderComponent("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
+            var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
+            var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});
+            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
+            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
+            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
+            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
 
             // POI Image panels - Add/remove POI inputs
             var poiMaxFields      = 3; // max input boxes allowed
@@ -805,8 +805,5 @@ get_header(); ?>
                 jQuery(this).parent('div').parent('div').remove(); i--;
             })
         } );
-
-
-
     </script>
 <?php  get_footer(); ?>
