@@ -6,7 +6,7 @@ wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
-
+wp_enqueue_script('wpunity_asset_editor_scripts');
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -404,7 +404,7 @@ get_header(); ?>
         </div>
 
 
-        <div id="consumerPanel" class="mdc-layout-grid">
+        <div id="consumerPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
@@ -466,6 +466,60 @@ get_header(); ?>
                     </div>
 
                 </div>
+            </div>
+        </div>
+
+        <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Producer Options</h3>
+
+                <label for="producer-air-speed-slider-label" class="mdc-typography--subheading2">Air Speed:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-air-speed-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-air-speed-slider"></div>
+                <input type="hidden" id="producerAirSpeedVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-power-production-slider-label" class="mdc-typography--subheading2">Power Production:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-power-production-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-power-production-slider"></div>
+                <input type="hidden" id="producerPowerProductionVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-turbine-size-slider"></div>
+                <input type="hidden" id="producerTurbineSizeVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-damage-coeff-slider"></div>
+                <input type="hidden" id="producerDmgCoeffVal" value="" disabled>
+
+            </div>
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                <h3 class="mdc-typography--title">Producer Costs</h3>
+
+                <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-cost-slider"></div>
+                <input type="hidden" id="producerCostVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repaid Cost:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-repair-cost-slider"></div>
+                <input type="hidden" id="producerRepairCostVal" value="" disabled>
+
+
             </div>
         </div>
 
@@ -569,7 +623,6 @@ get_header(); ?>
                         jQuery("#poiVideoDetailsPanel").show();
                         jQuery("#videoFileInput").removeAttr("disabled");
 
-
                         break;
 
                     // Energy cases
@@ -600,13 +653,12 @@ get_header(); ?>
 
                         break;
                     case 'producer':
-
+                        jQuery("#producerPanel").show();
 
                         break;
                     default:
 
                 }
-
                 console.log(cat, index);
             });
         })();
@@ -662,115 +714,16 @@ get_header(); ?>
             }
         });
 
-        // Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
-        // We can expand this for 'fbx' files too.
-        function loadFileCallback(content, type) {
-
-            if(type === 'fbx') {
-                fbxFileContent = content ? content : '';
-            }
-
-            if(type === 'mtl') {
-                mtlFileContent = content ? content : '';
-            }
-
-            if(type === 'obj') {
-                objFileContent = content ? content : '';
-            }
-
-            if (content) {
-
-                if(type === 'texture') {
-                    jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
-                    textureFileContent = content;
-                }
-
-                if (objFileContent && mtlFileContent) {
-                    jQuery("#objectPreviewTitle").show();
-
-                    createScreenshotBtn.show();
-
-                    previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
-
-                } else {
-                    resetModelScreenshotField();
-                }
-
-            } else {
-                document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            }
-        }
-
         function createModelScreenshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
             document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
         }
 
-        function resetModelScreenshotField(){
+        function resetModelScreenshotField() {
             document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
             document.getElementById("sshotFileInput").value = "";
             createScreenshotBtn.hide();
             jQuery("#objectPreviewTitle").hide();
-        }
-
-        function clearFiles() {
-            document.getElementById("fbxFileInput").value = "";
-            document.getElementById("mtlFileInput").value = "";
-            document.getElementById("objFileInput").value = "";
-            document.getElementById("textureFileInput").value = "";
-            document.getElementById("sshotFileInput").value = "";
-            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
-            jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
-            jQuery("#objectPreviewTitle").hide();
-
-            objFileContent = '';
-            textureFileContent = '';
-            fbxFileContent = '';
-            mtlFileContent = '';
-            previewRenderer = '';
-
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-        }
-
-        function resetPanels() {
-            clearFiles();
-
-            jQuery("#assetDescription").show();
-
-            jQuery("#doorDetailsPanel").hide();
-            jQuery("#nextSceneInput").attr('disabled', 'disabled');
-            jQuery("#entryPointInput").attr('disabled', 'disabled');
-
-            jQuery("#terrainPanel").hide();
-            jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
-            jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
-            jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
-            jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
-            jQuery("#accessCostPenalty").attr('disabled', 'disabled');
-            jQuery("#archProximityPenalty").attr('disabled', 'disabled');
-            jQuery("#naturalReserveProximityPenalty").attr('disabled', 'disabled');
-            jQuery("#hiVoltLineDistancePenalty").attr('disabled', 'disabled');
-
-            jQuery("#consumerPanel").hide();
-            jQuery("#energyConsumptionMinVal").attr('disabled', 'disabled');
-            jQuery("#energyConsumptionMaxVal").attr('disabled', 'disabled');
-            jQuery("#energyConsumptionMeanVal").attr('disabled', 'disabled');
-            jQuery("#energyConsumptionVarianceVal").attr('disabled', 'disabled');
-            jQuery("#overPowerCost").attr('disabled', 'disabled');
-            jQuery("#normalPowerCost").attr('disabled', 'disabled');
-            jQuery("#underPowerCost").attr('disabled', 'disabled');
-
-            jQuery("#poiImgDetailsPanel").hide();
-
-            jQuery("#poiVideoDetailsPanel").hide();
-            jQuery("#videoFileInput").attr('disabled', 'disabled');
-
-            jQuery("#objectPreviewTitle").hide();
-        }
-
-        function fileExtension(fn) {
-            return fn ? fn.split('.').pop().toLowerCase() : '';
         }
 
         jQuery( function() {
@@ -796,94 +749,13 @@ get_header(); ?>
 
 
             // Sliders
-            var windSpeedRangeSlider = jQuery( "#wind-speed-range" );
-            var windMeanSlider = jQuery( "#wind-mean-slider" );
-            var windVarianceSlider =  jQuery( "#wind-variance-slider" );
+            var windSpeedRangeSlider = createSliderComponent("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/s"});
+            var windMeanSlider = createSliderComponent("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/s"});
+            var windVarianceSlider = createSliderComponent("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
-            var energyConsumptionRangeSlider = jQuery( "#energy-consumption-range" );
-            var energyConsumptionMeanSlider = jQuery( "#energy-consumption-mean-slider" );
-            var energyConsumptionVarianceSlider =  jQuery( "#energy-consumption-variance-slider" );
-
-            windSpeedRangeSlider.slider({
-                range: true,
-                min: 0,
-                max: 40,
-                values: [ 0, 40 ],
-                slide: function( event, ui ) {
-                    jQuery( "#wind-speed-range-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " m/sec" );
-                    jQuery( "#physicsWindMinVal" ).val(ui.values[ 0 ]);
-                    jQuery( "#physicsWindMaxVal" ).val(ui.values[ 1 ]);
-                }
-            });
-            jQuery( "#wind-speed-range-label" ).val( windSpeedRangeSlider.slider( "values", 0 ) +
-                " - " + windSpeedRangeSlider.slider( "values", 1 ) + " m/sec" );
-
-            windMeanSlider.slider({
-                min: 0,
-                max: 40,
-                value: 14,
-                slide: function( event, ui ) {
-                    jQuery( "#wind-mean-slider-label" ).val( ui.value + " m/sec" );
-                    jQuery( "#physicsWindMeanVal" ).val(ui.value);
-
-                }
-            });
-            jQuery( "#wind-mean-slider-label" ).val( windMeanSlider.slider( "option", "value" ) + " m/sec" );
-
-            windVarianceSlider.slider({
-                min: 1,
-                max: 100,
-                value: 30,
-                slide: function( event, ui ) {
-                    jQuery( "#wind-variance-slider-label" ).val( ui.value + " " );
-                    jQuery( "#physicsWindVarianceVal" ).val(ui.value);
-
-                }
-            });
-            jQuery( "#wind-variance-slider-label" ).val( windVarianceSlider.slider( "option", "value" ) + " " );
-
-
-            energyConsumptionRangeSlider.slider({
-                range: true,
-                min: 0,
-                max: 2000,
-                step: 5,
-                values: [ 50, 150 ],
-                slide: function( event, ui ) {
-                    jQuery( "#energy-consumption-range-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " kW" );
-                    jQuery( "#energyConsumptionMinVal" ).val(ui.values[ 0 ]);
-                    jQuery( "#energyConsumptionMaxVal" ).val(ui.values[ 1 ]);
-                }
-            });
-            jQuery( "#energy-consumption-range-label" ).val( energyConsumptionRangeSlider.slider( "values", 0 ) +
-                " - " + energyConsumptionRangeSlider.slider( "values", 1 ) + " kW" );
-
-            energyConsumptionMeanSlider.slider({
-                min: 0,
-                max: 2000,
-                step: 5,
-                value: 100,
-                slide: function( event, ui ) {
-                    jQuery( "#energy-consumption-mean-slider-label" ).val( ui.value + " kW" );
-                    jQuery( "#energyConsumptionMeanVal" ).val(ui.value);
-
-                }
-            });
-            jQuery( "#energy-consumption-mean-slider-label" ).val( energyConsumptionMeanSlider.slider( "option", "value" ) + " kW" );
-
-            energyConsumptionVarianceSlider.slider({
-                min: 5,
-                max: 1000,
-                step: 5,
-                value: 50,
-                slide: function( event, ui ) {
-                    jQuery( "#energy-consumption-variance-slider-label" ).val( ui.value + " ");
-                    jQuery( "#energyConsumptionVarianceVal" ).val(ui.value);
-
-                }
-            });
-
-            jQuery( "#energy-consumption-variance-slider-label" ).val( energyConsumptionVarianceSlider.slider( "option", "value" ) + " ");
+            var energyConsumptionRangeSlider = createSliderComponent("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
+            var energyConsumptionMeanSlider = createSliderComponent("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
+            var energyConsumptionVarianceSlider = createSliderComponent("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:"kW"});
 
 
             // POI Image panels - Add/remove POI inputs
@@ -919,36 +791,7 @@ get_header(); ?>
             })
         } );
 
-        function readFile(file, type, callback) {
-            var content = '';
-            var reader = new FileReader();
 
-            if (file) {
-                reader.readAsDataURL(file);
-
-                // Closure to capture the file information.
-                reader.onload = (function(reader) {
-                    return function() {
-
-                        content = reader.result;
-
-                        var isChrome = !!window.chrome && !!window.chrome.webstore;
-                        var isFirefox = typeof InstallTrigger !== 'undefined';
-
-                        if (type !== 'texture') {
-                            if (isChrome) { content = content.replace('data:;base64,', ''); }
-                            if (isFirefox) { content = content.replace('data:application/octet-stream;base64,', ''); }
-
-                            content = window.atob(content);
-                        }
-
-                        callback(content, type);
-                    };
-                })(reader);
-            } else {
-                callback(content, type);
-            }
-        }
 
     </script>
 <?php  get_footer(); ?>
