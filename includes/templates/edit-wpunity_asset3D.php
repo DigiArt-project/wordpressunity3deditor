@@ -654,6 +654,13 @@ get_header(); ?>
                         break;
                     case 'producer':
                         jQuery("#producerPanel").show();
+                        jQuery("#producerAirSpeedVal").removeAttr("disabled");
+                        jQuery("#producerPowerProductionVal").removeAttr("disabled");
+                        jQuery("#producerTurbineSizeVal").removeAttr("disabled");
+                        jQuery("#producerDmgCoeffVal").removeAttr("disabled");
+                        jQuery("#producerCostVal").removeAttr("disabled");
+                        jQuery("#producerRepairCostVal").removeAttr("disabled");
+
 
                         break;
                     default:
@@ -755,8 +762,14 @@ get_header(); ?>
 
             var energyConsumptionRangeSlider = createSliderComponent("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
             var energyConsumptionMeanSlider = createSliderComponent("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
-            var energyConsumptionVarianceSlider = createSliderComponent("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:"kW"});
+            var energyConsumptionVarianceSlider = createSliderComponent("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
+            var producerAirSpeedSlider = createSliderComponent("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
+            var producerPowerProductionSlider = createSliderComponent("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});
+            var producerTurbineSizeSlider = createSliderComponent("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
+            var producerDmgCoeffSlider = createSliderComponent("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
+            var producerCostSlider = createSliderComponent("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
+            var producerRepairCostSlider = createSliderComponent("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
 
             // POI Image panels - Add/remove POI inputs
             var poiMaxFields      = 3; // max input boxes allowed

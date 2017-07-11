@@ -165,6 +165,13 @@ function resetPanels() {
     jQuery("#underPowerCost").attr('disabled', 'disabled');
 
     jQuery("#producerPanel").hide();
+    jQuery("#producerAirSpeedVal").attr('disabled', 'disabled');
+    jQuery("#producerPowerProductionVal").attr('disabled', 'disabled');
+    jQuery("#producerTurbineSizeVal").attr('disabled', 'disabled');
+    jQuery("#producerDmgCoeffVal").attr('disabled', 'disabled');
+    jQuery("#producerCostVal").attr('disabled', 'disabled');
+    jQuery("#producerRepairCostVal").attr('disabled', 'disabled');
+
 
     jQuery("#poiImgDetailsPanel").hide();
 
