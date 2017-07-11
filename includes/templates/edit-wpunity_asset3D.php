@@ -564,7 +564,7 @@ get_header(); ?>
         var previewRenderer;
 
         createScreenshotBtn.click(function() {
-            createModelScreenshot(previewRenderer);
+            wpunity_create_model_sshot(previewRenderer);
         });
 
         (function() {
@@ -685,7 +685,7 @@ get_header(); ?>
         mtlInput.click(function() {
             document.getElementById("mtlFileInput").value = "";
             wpunity_read_file('', 'mtl', wpunity_load_file_callback);
-            resetModelScreenshotField();
+            wpunity_reset_sshot_field();
         });
         mtlInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
@@ -698,7 +698,7 @@ get_header(); ?>
         objInput.click(function() {
             document.getElementById("objFileInput").value = "";
             wpunity_read_file('', 'obj', wpunity_load_file_callback);
-            resetModelScreenshotField();
+            wpunity_reset_sshot_field();
         });
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
@@ -723,12 +723,12 @@ get_header(); ?>
             }
         });
 
-        function createModelScreenshot(renderer) {
+        function wpunity_create_model_sshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
             document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
         }
 
-        function resetModelScreenshotField() {
+        function wpunity_reset_sshot_field() {
             document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
             document.getElementById("sshotFileInput").value = "";
             createScreenshotBtn.hide();
