@@ -152,6 +152,24 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
             update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
             update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
+        }elseif($assetCatTerm->slug == 'producer') {
+            //Producer Options-Costs
+            $safe_opt_val = range(3,250,1);
+            $safe_opt_dmg = range(0.001,0.02,0.001);
+            $safe_opt_cost = range(1,10,1);
+            $safe_opt_repaid = range(0.5,5,0.5);
+            $producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
+            $producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
+            $producerCostVal = intval($_POST['producerCostVal']);
+            $producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
+            if ( ! in_array( $producerTurbineSizeVal, $safe_opt_val, true ) ) {$producerTurbineSizeVal = '';}
+            if ( ! in_array( $producerDmgCoeffVal, $safe_opt_dmg, true ) ) {$producerDmgCoeffVal = '';}
+            if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
+            if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
+
+            $producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
+
+            update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
         }
 
 		//Upload All files as attachments of asset
@@ -613,14 +631,14 @@ get_header(); ?>
                 <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-turbine-size-slider"></div>
-                <input type="hidden" id="producerTurbineSizeVal" value="" disabled>
+                <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-damage-coeff-slider"></div>
-                <input type="hidden" id="producerDmgCoeffVal" value="" disabled>
+                <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="" disabled>
 
             </div>
 
@@ -631,14 +649,14 @@ get_header(); ?>
                 <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-cost-slider"></div>
-                <input type="hidden" id="producerCostVal" value="" disabled>
+                <input type="hidden" id="producerCostVal" name="producerCostVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repaid Cost:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-repair-cost-slider"></div>
-                <input type="hidden" id="producerRepairCostVal" value="" disabled>
+                <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="" disabled>
 
 
             </div>
