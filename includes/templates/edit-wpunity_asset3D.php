@@ -700,6 +700,9 @@ get_header(); ?>
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
+
+
+
                 switch(cat) {
                     // Archaeology cases
                     case 'doors':
