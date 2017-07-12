@@ -8,6 +8,7 @@ wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
+wp_enqueue_script('flot-axis-labels');
 
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
@@ -504,7 +505,9 @@ get_header(); ?>
                 <div class="PlotContainerStyle">
                     <div id="producer-chart" class="ProducerChartStyle"></div>
                 </div>
-
+                <div class="CenterContents">
+                    <label class="mdc-typography--subheading2">Select a power production value for each air speed value</label>
+                </div>
                 <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
                     <span>0</span>
                     <span>0</span>
@@ -625,26 +628,35 @@ get_header(); ?>
 
         // Flot options
         var plotOptions = {
+            axisLabels: {
+                show: true
+            },
+            xaxes: [{
+                axisLabel: 'Power Production (MW)'
+            }],
+            yaxes: [{
+                axisLabel: 'Wind Speed (m/s)'
+            }],
+
             xaxis: {
                 min: 0,
                 max: 27,
-                ticks: 27
+                ticks: 27,
+                color: '#DDDDDD'
             },
             yaxis: {
                 min: -0.5,
-                max: 6.5
+                max: 6.5,
+                color: '#DDDDDD'
             },
             tooltip: true,
-            
             series: {
                 color: "#ff4081",
                 lines: {
-                    show: true
+                    show: true,
+                    lineWidth: 4
                 },
-                points: {
-                    show: true
-                },
-
+                points: { show: true },
                 shadowSize: 0
 
             },
