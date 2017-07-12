@@ -512,14 +512,14 @@ get_header(); ?>
                     <span>0</span>
                     <span>0</span>
                     <span>0</span>
-                    <span>0.5</span>
-                    <span>0.5</span>
-                    <span>0.5</span>
+                    <span>0</span>
+                    <span>0</span>
+                    <span>0</span>
                     <span>1</span>
                     <span>1</span>
                     <span>1</span>
-                    <span>1.5</span>
-                    <span>1.5</span>
+                    <span>1</span>
+                    <span>1</span>
 
                     <span>2</span>
                     <span>2</span>
@@ -527,16 +527,16 @@ get_header(); ?>
                     <span>3</span>
                     <span>3</span>
                     <span>3</span>
-                    <span>3.5</span>
-                    <span>3.5</span>
+                    <span>3</span>
+                    <span>3</span>
                     <span>4</span>
                     <span>4</span>
                     <span>4</span>
 
                     <span>4</span>
                     <span>5</span>
-                    <span>5.5</span>
-                    <span>5.5</span>
+                    <span>5</span>
+                    <span>5</span>
                     <span>6</span>
                     <span>6</span>
                 </div>
@@ -658,7 +658,6 @@ get_header(); ?>
                 },
                 points: { show: true },
                 shadowSize: 0
-
             },
             grid: { hoverable: true }
 
@@ -764,7 +763,7 @@ get_header(); ?>
                         jQuery("#producerCostVal").removeAttr("disabled");
                         jQuery("#producerRepairCostVal").removeAttr("disabled");
 
-                        jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+                        spanProducerChartLabels();
 
                         break;
                     default:
@@ -890,6 +889,7 @@ get_header(); ?>
                         jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
 
                         jQuery("#producerPowerProductionVal").attr( "value", JSON.stringify(plotData[0].data) );
+                        spanProducerChartLabels();
 
                     },
                     create: function( event, ui ) {
@@ -946,5 +946,39 @@ get_header(); ?>
                 jQuery(this).parent('div').parent('div').remove(); i--;
             })
         } );
+
+
+        function spanProducerChartLabels() {
+            var producerEnergyChart = jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+            var plotOffset = producerEnergyChart.offset();
+            var leData = plotData[0].data;
+
+            var pos;
+
+            if (jQuery("ProducerPlotTooltip")) {
+                jQuery("div.ProducerPlotTooltip").remove();
+            }
+
+            for (var i = 0; i < leData.length; i++) {
+                pos = producerEnergyChart.p2c({x: leData[i][0], y: leData[i][1]});
+                showTooltips(pos.left+plotOffset.left, pos.top+plotOffset.top, leData[i][1], '#CCCCCC');
+            }
+
+            function showTooltips(x,y,contents, colour){
+                jQuery('<div class="ProducerPlotTooltip">' +  contents + '</div>').css( {
+                    position: 'absolute',
+                    display: 'none',
+                    top: y,
+                    left: x,
+                    'border-style': 'solid',
+                    'border-width': '1px',
+                    'border-color': colour,
+                    'border-radius': '5px',
+                    'background-color': '#ffffff',
+                    color: '#262626',
+                    padding: '2px'
+                }).appendTo("body").fadeIn(200);
+            }
+        }
     </script>
 <?php  get_footer(); ?>
