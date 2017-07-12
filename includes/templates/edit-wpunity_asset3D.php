@@ -58,6 +58,30 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'tax_input' => $asset_taxonomies,
 	);
 
+    $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+    if($assetCatTerm->slug == 'consumer'){
+        //Energy Consumption Cost (in $)
+        $safe_cost_values = array( -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 );
+        $underPowerCost = intval($_POST['underPowerCost']);
+        $normalPowerCost = intval($_POST['normalPowerCost']);
+        $overPowerCost = intval($_POST['overPowerCost']);
+        if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
+        if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
+        if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
+
+
+        //Energy Consumption
+        $safe_cons_values = range(0, 2000, 5);
+        $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+        $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+        $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+        $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+        if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
+        if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
+        if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
+        if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values, true ) ) {$energyConsumptionVarianceVal = '';}
+    }
+
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
 
@@ -415,22 +439,22 @@ get_header(); ?>
                 <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-range"></div>
-                <input type="hidden" id="energyConsumptionMinVal" value="" disabled>
-                <input type="hidden" id="energyConsumptionMaxVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-mean-slider"></div>
-                <input type="hidden" id="energyConsumptionMeanVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-variance-slider"></div>
-                <input type="hidden" id="energyConsumptionVarianceVal" value="" disabled="">
+                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="" disabled="">
 
             </div>
 
