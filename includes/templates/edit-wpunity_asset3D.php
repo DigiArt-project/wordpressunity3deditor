@@ -58,29 +58,29 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'tax_input' => $asset_taxonomies,
 	);
 
-    $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-    if($assetCatTerm->slug == 'consumer'){
-        //Energy Consumption Cost (in $)
-        $safe_cost_values = array( -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 );
-        $underPowerCost = intval($_POST['underPowerCost']);
-        $normalPowerCost = intval($_POST['normalPowerCost']);
-        $overPowerCost = intval($_POST['overPowerCost']);
-        if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
-        if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
-        if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
+	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+	if($assetCatTerm->slug == 'consumer'){
+		//Energy Consumption Cost (in $)
+		$safe_cost_values = array( -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 );
+		$underPowerCost = intval($_POST['underPowerCost']);
+		$normalPowerCost = intval($_POST['normalPowerCost']);
+		$overPowerCost = intval($_POST['overPowerCost']);
+		if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
+		if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
+		if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
 
 
-        //Energy Consumption
-        $safe_cons_values = range(0, 2000, 5);
-        $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
-        $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
-        $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
-        $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
-        if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
-        if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
-        if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
-        if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values, true ) ) {$energyConsumptionVarianceVal = '';}
-    }
+		//Energy Consumption
+		$safe_cons_values = range(0, 2000, 5);
+		$energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+		$energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+		$energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+		$energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+		if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
+		if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
+		if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
+		if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values, true ) ) {$energyConsumptionVarianceVal = '';}
+	}
 
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
@@ -633,7 +633,23 @@ get_header(); ?>
             yaxis: {
                 min: -0.5,
                 max: 6.5
-            }
+            },
+            tooltip: true,
+            
+            series: {
+                color: "#ff4081",
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                },
+
+                shadowSize: 0
+
+            },
+            grid: { hoverable: true }
+
         };
         var plotData = [{ data: [0,0] }];
         for (var i=0; i < 28; i++) {
@@ -880,7 +896,7 @@ get_header(); ?>
             });
 
             /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-            var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
+             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
             var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
             var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
             var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
