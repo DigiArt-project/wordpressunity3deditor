@@ -86,11 +86,19 @@ function wpunity_create_slider_component(elemId, range, options) {
             min: options.min,
             max: options.max,
             values: [ options.values[0], options.values[1] ],
+            create: function() {
+                jQuery( options.valIds[0] ).val(options.values[0]);
+                jQuery( options.valIds[1] ).val(options.values[1]);
+            },
             slide: function( event, ui ) {
                 jQuery( elemId+"-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " " +options.units);
+
+            },
+            stop: function( event, ui ) {
                 jQuery( options.valIds[0] ).val(ui.values[ 0 ]);
                 jQuery( options.valIds[1] ).val(ui.values[ 1 ]);
             }
+
         });
         jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) +
             " - " + jQuery( elemId ).slider( "values", 1 ) + " " + options.units );
@@ -101,8 +109,13 @@ function wpunity_create_slider_component(elemId, range, options) {
             min: options.min,
             max: options.max,
             value: options.value,
+            create: function() {
+                jQuery( options.valId ).val(options.value);
+            },
             slide: function( event, ui ) {
                 jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
+            },
+            stop: function( event, ui ) {
                 jQuery( options.valId ).val(ui.value);
             }
         });
