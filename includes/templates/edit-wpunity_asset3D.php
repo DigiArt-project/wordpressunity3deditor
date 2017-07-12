@@ -7,6 +7,8 @@ wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 wp_enqueue_script('wpunity_asset_editor_scripts');
+wp_enqueue_script('flot');
+
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -469,25 +471,55 @@ get_header(); ?>
             </div>
         </div>
 
-        <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
+        <div id="producerPanel" class="mdc-layout-grid">
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+                <h3 class="mdc-typography--title">Power Production Chart</h3>
+
+                <div class="PlotContainerStyle">
+                    <div id="producer-chart" class="ProducerChartStyle"></div>
+                </div>
+
+                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
+                    <span>0</span>
+                    <span>0</span>
+                    <span>0</span>
+                    <span>0.5</span>
+                    <span>0.5</span>
+                    <span>0.5</span>
+                    <span>1</span>
+                    <span>1</span>
+                    <span>1</span>
+                    <span>1.5</span>
+                    <span>1.5</span>
+
+                    <span>2</span>
+                    <span>2</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>3</span>
+                    <span>3</span>
+                    <span>3.5</span>
+                    <span>3.5</span>
+                    <span>4</span>
+                    <span>4</span>
+                    <span>4</span>
+
+                    <span>4</span>
+                    <span>5</span>
+                    <span>5.5</span>
+                    <span>5.5</span>
+                    <span>6</span>
+                    <span>6</span>
+                </div>
+
+                <input type="hidden" id="producerPowerProductionVal" value="" disabled>
+            </div>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
                 <h3 class="mdc-typography--title">Producer Options</h3>
-
-                <label for="producer-air-speed-slider-label" class="mdc-typography--subheading2">Air Speed:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-air-speed-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-air-speed-slider"></div>
-                <input type="hidden" id="producerAirSpeedVal" value="" disabled>
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-power-production-slider-label" class="mdc-typography--subheading2">Power Production:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-power-production-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-power-production-slider"></div>
-                <input type="hidden" id="producerPowerProductionVal" value="" disabled>
-
-                <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
@@ -566,6 +598,23 @@ get_header(); ?>
         createScreenshotBtn.click(function() {
             wpunity_create_model_sshot(previewRenderer);
         });
+
+        // Flot options
+        var plotOptions = {
+            xaxis: {
+                min: 0,
+                max: 27,
+                ticks: 27
+            },
+            yaxis: {
+                min: -0.5,
+                max: 6.5
+            }
+        };
+        var plotData = [{ data: [0,0] }];
+        for (var i=0; i < 28; i++) {
+            plotData[0].data[i] = [i, 5];
+        }
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
@@ -663,6 +712,7 @@ get_header(); ?>
                         jQuery("#producerCostVal").removeAttr("disabled");
                         jQuery("#producerRepairCostVal").removeAttr("disabled");
 
+                        jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
 
                         break;
                     default:
@@ -766,8 +816,47 @@ get_header(); ?>
             var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
             var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
-            var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-            var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});
+
+            var index = 0;
+            jQuery( "#powerProductionValuesGroup > span" ).each(function() {
+                // read initial values from markup and remove that
+                var value = parseInt( jQuery( this ).text(), 10 );
+
+                jQuery( this ).empty().slider({
+                    value: value,
+                    min: 0,
+                    max: 6,
+                    range: "min",
+                    animate: true,
+                    step: 0.5,
+                    orientation: "vertical",
+                    sliderId: index,
+                    stop: function( event, ui ) {
+
+                        var val = jQuery( this ).slider("option", "value");
+                        plotData[0].data[jQuery( this ).slider("option", "sliderId")] = [jQuery( this ).slider("option", "sliderId"), val];
+                        jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+
+                        jQuery("#producerPowerProductionVal").attr( "value", JSON.stringify(plotData[0].data) );
+
+                    },
+                    create: function( event, ui ) {
+
+                        var val = jQuery( this ).slider("option", "value");
+                        plotData[0].data[jQuery( this ).slider("option", "sliderId")] = [jQuery( this ).slider("option", "sliderId"), val];
+                        jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+
+                        jQuery("#producerPowerProductionVal").attr( "value", JSON.stringify(plotData[0].data) );
+
+                    }
+                });
+
+                jQuery( this ).attr("id", "power-production-value-"+index);
+                index++;
+            });
+
+            /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
+            var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
             var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
             var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
             var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});

@@ -165,7 +165,7 @@ function wpunity_reset_panels() {
     jQuery("#underPowerCost").attr('disabled', 'disabled');
 
     jQuery("#producerPanel").hide();
-    jQuery("#producerAirSpeedVal").attr('disabled', 'disabled');
+    /*jQuery("#producerAirSpeedVal").attr('disabled', 'disabled');*/
     jQuery("#producerPowerProductionVal").attr('disabled', 'disabled');
     jQuery("#producerTurbineSizeVal").attr('disabled', 'disabled');
     jQuery("#producerDmgCoeffVal").attr('disabled', 'disabled');

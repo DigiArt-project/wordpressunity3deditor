@@ -69,6 +69,8 @@ wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 
 wp_enqueue_style('wpunity_frontend_stylesheet');
 
 wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_asset_editor_scripts.js');
+wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
+
 
 
 wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',

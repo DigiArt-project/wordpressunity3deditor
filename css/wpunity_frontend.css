@@ -214,3 +214,28 @@ i.ButtonIcon {
     from { left: -80%; width: 80%; }
     to { left: 110%; width: 10%;}
 }
+
+
+.PlotContainerStyle {
+    box-sizing: border-box;
+    width: 100%;
+    height: 360px;
+    padding: 20px 15px 15px 15px;
+    margin: 15px auto 30px auto;
+}
+
+.ProducerChartStyle {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.2em;
+}
+
+.PowerProductionGroupStyle {
+    width: 100%;
+    margin-left: 12px;
+}
+
+.PowerProductionGroupStyle > span {
+    height:120px; float:left; margin:13px
+}
