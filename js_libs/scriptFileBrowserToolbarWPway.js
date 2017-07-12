@@ -434,8 +434,6 @@ function file_Browsing_By_DB(data){
 
                 f = scannedFiles[i];
 
-
-
                 var fileSize = bytesToSize(f.size);
 
                 name = escapeHTML(f.name);
@@ -455,6 +453,10 @@ function file_Browsing_By_DB(data){
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
                 else if (fileType.toUpperCase() === 'OBJ') {
                     imgFileExtension = '.jpg';
+                }
+
+                if (!f.screenImagePath) {
+                    f.screenImagePath = f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) + 'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
                 }
 
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';

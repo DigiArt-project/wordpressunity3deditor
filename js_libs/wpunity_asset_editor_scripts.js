@@ -17,9 +17,10 @@ function wpunity_read_file(file, type, callback) {
 
                 var isChrome = !!window.chrome && !!window.chrome.webstore;
                 var isFirefox = typeof InstallTrigger !== 'undefined';
+                var isIE = /*@cc_on!@*/false || !!document.documentMode;
 
                 if (type !== 'texture') {
-                    if (isChrome) { content = content.replace('data:;base64,', ''); }
+                    if (isChrome || isIE) { content = content.replace('data:;base64,', ''); }
                     if (isFirefox) { content = content.replace('data:application/octet-stream;base64,', ''); }
 
                     content = window.atob(content);
