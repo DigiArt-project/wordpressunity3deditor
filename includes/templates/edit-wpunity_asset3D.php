@@ -530,7 +530,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Underpower cost" id="underPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="underPowerCost"
-                                   aria-controls="underPowerCost-validation-msg" value="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="underPowerCost-validation-msg" value="0.5" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="underPowerCost" class="mdc-textfield__label">
                                 Underpowered consumption cost
                         </div>
@@ -539,7 +539,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Normal power cost" id="normalPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="normalPowerCost"
-                                   aria-controls="normalPowerCost-validation-msg" value="1" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="normalPowerCost-validation-msg" value="1" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="normalPowerCost" class="mdc-textfield__label">
                                 Normal power consumption cost
                         </div>
@@ -548,7 +548,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Overpower cost" id="overPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="overPowerCost"
-                                   aria-controls="overPowerCost-validation-msg" value="0" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="overPowerCost-validation-msg" value="0" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="overPowerCost" class="mdc-textfield__label">
                                 Overpowered consumption cost
                         </div>
