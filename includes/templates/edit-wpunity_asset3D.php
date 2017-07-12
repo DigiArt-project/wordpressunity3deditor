@@ -60,28 +60,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	);
 
     $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-    if($assetCatTerm->slug == 'consumer'){
-        //Energy Consumption Cost (in $)
-        $safe_cost_values = array( -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 );
-        $underPowerCost = intval($_POST['underPowerCost']);
-        $normalPowerCost = intval($_POST['normalPowerCost']);
-        $overPowerCost = intval($_POST['overPowerCost']);
-        if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
-        if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
-        if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
-
-
-        //Energy Consumption
-        $safe_cons_values = range(0, 2000, 5);
-        $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
-        $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
-        $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
-        $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
-        if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
-        if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
-        if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
-        if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values, true ) ) {$energyConsumptionVarianceVal = '';}
-    }
 
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
@@ -169,6 +147,9 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
             $producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
 
+            $producerPowerProductionVal = $_POST['producerPowerProductionVal'];
+
+            update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
             update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
         }
 
@@ -621,7 +602,7 @@ get_header(); ?>
                     <span>0</span>
                 </div>
 
-                <input type="hidden" id="producerPowerProductionVal" value="" disabled>
+                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="" disabled>
             </div>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
