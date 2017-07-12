@@ -152,6 +152,10 @@ function wpunity_clear_asset_files() {
 function wpunity_reset_panels() {
     wpunity_clear_asset_files();
 
+    if (jQuery("ProducerPlotTooltip")) {
+        jQuery("div.ProducerPlotTooltip").remove();
+    }
+
     jQuery("#assetDescription").show();
 
     jQuery("#doorDetailsPanel").hide();

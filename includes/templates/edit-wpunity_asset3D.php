@@ -8,6 +8,7 @@ wp_enqueue_script('wpunity_load_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
+wp_enqueue_script('flot-axis-labels');
 
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
@@ -57,6 +58,30 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'post_status' => 'publish',
 		'tax_input' => $asset_taxonomies,
 	);
+
+    $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+    if($assetCatTerm->slug == 'consumer'){
+        //Energy Consumption Cost (in $)
+        $safe_cost_values = array( -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 );
+        $underPowerCost = intval($_POST['underPowerCost']);
+        $normalPowerCost = intval($_POST['normalPowerCost']);
+        $overPowerCost = intval($_POST['overPowerCost']);
+        if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
+        if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
+        if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
+
+
+        //Energy Consumption
+        $safe_cons_values = range(0, 2000, 5);
+        $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+        $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+        $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+        $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+        if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
+        if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
+        if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
+        if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values, true ) ) {$energyConsumptionVarianceVal = '';}
+    }
 
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
@@ -542,19 +567,21 @@ get_header(); ?>
                 <div class="PlotContainerStyle">
                     <div id="producer-chart" class="ProducerChartStyle"></div>
                 </div>
-
+                <div class="CenterContents">
+                    <label class="mdc-typography--subheading2">Select a power production value for each air speed value</label>
+                </div>
                 <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
                     <span>0</span>
                     <span>0</span>
                     <span>0</span>
-                    <span>0.5</span>
-                    <span>0.5</span>
-                    <span>0.5</span>
+                    <span>0</span>
+                    <span>0</span>
+                    <span>0</span>
                     <span>1</span>
                     <span>1</span>
                     <span>1</span>
-                    <span>1.5</span>
-                    <span>1.5</span>
+                    <span>1</span>
+                    <span>1</span>
 
                     <span>2</span>
                     <span>2</span>
@@ -562,16 +589,16 @@ get_header(); ?>
                     <span>3</span>
                     <span>3</span>
                     <span>3</span>
-                    <span>3.5</span>
-                    <span>3.5</span>
+                    <span>3</span>
+                    <span>3</span>
                     <span>4</span>
                     <span>4</span>
                     <span>4</span>
 
                     <span>4</span>
                     <span>5</span>
-                    <span>5.5</span>
-                    <span>5.5</span>
+                    <span>5</span>
+                    <span>5</span>
                     <span>6</span>
                     <span>6</span>
                 </div>
@@ -663,15 +690,39 @@ get_header(); ?>
 
         // Flot options
         var plotOptions = {
+            axisLabels: {
+                show: true
+            },
+            xaxes: [{
+                axisLabel: 'Power Production (MW)'
+            }],
+            yaxes: [{
+                axisLabel: 'Wind Speed (m/s)'
+            }],
+
             xaxis: {
                 min: 0,
                 max: 27,
-                ticks: 27
+                ticks: 27,
+                color: '#DDDDDD'
             },
             yaxis: {
                 min: -0.5,
-                max: 6.5
-            }
+                max: 6.5,
+                color: '#DDDDDD'
+            },
+            tooltip: true,
+            series: {
+                color: "#ff4081",
+                lines: {
+                    show: true,
+                    lineWidth: 4
+                },
+                points: { show: true },
+                shadowSize: 0
+            },
+            grid: { hoverable: true }
+
         };
         var plotData = [{ data: [0,0] }];
         for (var i=0; i < 28; i++) {
@@ -710,6 +761,9 @@ get_header(); ?>
                 jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
+
+
 
                 switch(cat) {
                     // Archaeology cases
@@ -774,7 +828,7 @@ get_header(); ?>
                         jQuery("#producerCostVal").removeAttr("disabled");
                         jQuery("#producerRepairCostVal").removeAttr("disabled");
 
-                        jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+                        spanProducerChartLabels();
 
                         break;
                     default:
@@ -900,6 +954,7 @@ get_header(); ?>
                         jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
 
                         jQuery("#producerPowerProductionVal").attr( "value", JSON.stringify(plotData[0].data) );
+                        spanProducerChartLabels();
 
                     },
                     create: function( event, ui ) {
@@ -918,7 +973,7 @@ get_header(); ?>
             });
 
             /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-            var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
+             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
             var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
             var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
             var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
@@ -956,5 +1011,39 @@ get_header(); ?>
                 jQuery(this).parent('div').parent('div').remove(); i--;
             })
         } );
+
+
+        function spanProducerChartLabels() {
+            var producerEnergyChart = jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
+            var plotOffset = producerEnergyChart.offset();
+            var leData = plotData[0].data;
+
+            var pos;
+
+            if (jQuery("ProducerPlotTooltip")) {
+                jQuery("div.ProducerPlotTooltip").remove();
+            }
+
+            for (var i = 0; i < leData.length; i++) {
+                pos = producerEnergyChart.p2c({x: leData[i][0], y: leData[i][1]});
+                showTooltips(pos.left+plotOffset.left, pos.top+plotOffset.top, leData[i][1], '#CCCCCC');
+            }
+
+            function showTooltips(x,y,contents, colour){
+                jQuery('<div class="ProducerPlotTooltip">' +  contents + '</div>').css( {
+                    position: 'absolute',
+                    display: 'none',
+                    top: y,
+                    left: x,
+                    'border-style': 'solid',
+                    'border-width': '1px',
+                    'border-color': colour,
+                    'border-radius': '5px',
+                    'background-color': '#ffffff',
+                    color: '#262626',
+                    padding: '2px'
+                }).appendTo("body").fadeIn(200);
+            }
+        }
     </script>
 <?php  get_footer(); ?>
