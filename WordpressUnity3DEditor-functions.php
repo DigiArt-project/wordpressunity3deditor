@@ -53,6 +53,7 @@ function wpunity_load_jquery_scripts() {
 		wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
 		wp_enqueue_script( 'jquery-ui' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' );
 	}
+	wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
 	// TODO: Add jquery-ui-core
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
