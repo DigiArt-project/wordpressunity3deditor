@@ -935,65 +935,65 @@ CanvasRenderer:
     $ini_asset_consumer = array();
     $ini_asset_producer = array();
 
-    wp_insert_term(
-        'Dynamic 3D models', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.',
-            'slug' => 'dynamic3dmodels',
-        )
-    );
-    $inserted_term1 = get_term_by('slug', 'dynamic3dmodels', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_dop[0], true);
-    update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
-    wp_insert_term(
-        'Points of Interest (Image-Text)', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Image with Text',
-            'slug' => 'pois_imagetext',
-        )
-    );
-    $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi[0], true);
-    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
-    wp_insert_term(
-        'Points of Interest (Video)', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Video',
-            'slug' => 'pois_Video',
-        )
-    );
-    $inserted_term3 = get_term_by('slug', 'pois_Video', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi_video[0], true);
-    update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
-    wp_insert_term(
-        'Static 3D models', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
-            'slug' => 'static3dmodels',
-        )
-    );
-    $inserted_term4 = get_term_by('slug', 'static3dmodels', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_sop[0], true);
-    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
-    wp_insert_term(
-        'Doors', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene.',
-            'slug' => 'doors',
-        )
-    );
-    $inserted_term5 = get_term_by('slug', 'doors', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_doorp[0], true);
-    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+//    wp_insert_term(
+//        'Dynamic 3D models', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Dynamic 3D models are those that can be clicked or moved, e.g. artifacts.',
+//            'slug' => 'dynamic3dmodels',
+//        )
+//    );
+//    $inserted_term1 = get_term_by('slug', 'dynamic3dmodels', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_dop[0], true);
+//    update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+//
+//    wp_insert_term(
+//        'Points of Interest (Image-Text)', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Image with Text',
+//            'slug' => 'pois_imagetext',
+//        )
+//    );
+//    $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi[0], true);
+//    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+//
+//    wp_insert_term(
+//        'Points of Interest (Video)', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Video',
+//            'slug' => 'pois_Video',
+//        )
+//    );
+//    $inserted_term3 = get_term_by('slug', 'pois_Video', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_poi_video[0], true);
+//    update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+//
+//    wp_insert_term(
+//        'Static 3D models', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Static 3D models are those that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
+//            'slug' => 'static3dmodels',
+//        )
+//    );
+//    $inserted_term4 = get_term_by('slug', 'static3dmodels', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_sop[0], true);
+//    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+//
+//    wp_insert_term(
+//        'Doors', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene.',
+//            'slug' => 'doors',
+//        )
+//    );
+//    $inserted_term5 = get_term_by('slug', 'doors', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', $ini_asset_doorp[0], true);
+//    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
 
     /**********************************  ENERGY CATEGORIES ************************************************/
