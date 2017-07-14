@@ -108,12 +108,7 @@ echo '</script>';
 
         });
 
-
-        /*console.log("VR_editor.php:" + isAdmin + " | " +  gameProjectSlug + " | "+   gameProjectID + " | " + gamefolder + " | " + scenefolder + " | " +  sceneID);*/
-
         wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
-
-
     });
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
@@ -284,7 +279,7 @@ echo '</script>';
     </div>
 
     <!-- Full screen bar button -->
-    <div id="scene-vr-editor-fullscreen-bar" class="VrEditorFullscreenBtnBGStyle">
+    <div class="VrEditorFullscreenBtnBGStyle">
         <div id="scene-vr-editor-fullscreen-bt" class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen()">
             <i class="material-icons">fullscreen</i>
         </div>
@@ -292,8 +287,7 @@ echo '</script>';
 
     <!-- Interface for Picking two overlapping objects -->
     <div id="popUpDiv">
-        <select id="popupSelect">
-        </select>
+        <select title="Select an object" id="popupSelect"></select>
     </div>
 
 </div>

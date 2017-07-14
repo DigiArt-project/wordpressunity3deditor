@@ -39,12 +39,6 @@ echo ini_get('max_input_time').chr(10);
 
 
 //===================================== Styles & Scripts ====================================
-
-
-wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
-wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
-wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
-
 function wpunity_load_jquery_scripts() {
 	wp_enqueue_script('jquery');
 	/*wp_enqueue_script('jquery-ui-core');*/
@@ -59,6 +53,11 @@ function wpunity_load_jquery_scripts() {
 	// TODO: Add jquery-ui-core
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
+
+
+wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
+wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
+wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
 
 
 // Material & Frontend CSS & Scripts
