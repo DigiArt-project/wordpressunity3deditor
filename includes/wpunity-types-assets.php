@@ -90,7 +90,7 @@ class Asset3DClass{
             'labels' => $labels,
             'public' => false,
             'show_ui' => true,
-            'hierarchical' => true,
+            'hierarchical' => false,
             'show_admin_column' => true
         );
 
@@ -129,7 +129,7 @@ class Asset3DClass{
             'labels' => $labels,
             'public' => false,
             'show_ui' => true,
-            'hierarchical' => true,
+            'hierarchical' => false,
             'show_admin_column' => true
         );
 
