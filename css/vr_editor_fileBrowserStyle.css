@@ -388,10 +388,12 @@
 
 
 .ObjectManipulationToggle {
-	font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;
-	padding: 40px;
+
 	overflow: hidden;
 	background: transparent;
+	position: absolute;
+	top: 20px;
+	left: 250px;
 }
 
 .ObjectManipulationToggle input {

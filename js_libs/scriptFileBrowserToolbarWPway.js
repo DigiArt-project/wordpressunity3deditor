@@ -56,7 +56,7 @@ function file_Browsing_By_DB(data){
     // This event listener monitors changes on the URL. We use it to
     // capture back/forward navigation in the browser.
 
-    jQuery(window).on('hashchange', function(){
+    jQuery(window).on('hashchange', function() {
 
         goto(window.location.hash);
 

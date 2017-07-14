@@ -216,12 +216,12 @@ echo '</script>';
 
     <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
 
-    <div id="object-manipulation-toggles" class="ObjectManipulationToggle" style="display: none;">
-        <input type="radio" id="translate-switch" name="translate-switch" value="translate" checked/>
+    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
+        <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
         <label for="translate-switch">Move</label>
-        <input type="radio" id="rotate-switch" name="rotate-switch" value="rotate" />
+        <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
         <label for="rotate-switch">Rotate</label>
-        <input type="radio" id="scale-switch" name="scale-switch" value="scale" />
+        <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
         <label for="scale-switch">Scale</label>
     </div>
 
@@ -280,7 +280,7 @@ echo '</script>';
 
     <!-- Full screen bar button -->
     <div class="VrEditorFullscreenBtnBGStyle">
-        <div id="scene-vr-editor-fullscreen-bt" class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen()">
+        <div class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen();">
             <i class="material-icons">fullscreen</i>
         </div>
     </div>
@@ -315,7 +315,13 @@ echo '</script>';
     envir.addCubeToControls(transform_controls);
 
 
-    console.log(transform_controls);
+    jQuery("#object-manipulation-toggle").click(function() {
+
+        var value = jQuery("input[name='object-manipulation-switch']:checked").val();
+        transform_controls.setMode(value);
+
+    });
+
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();

@@ -119,48 +119,43 @@ window.addEventListener( 'keydown',
                 break;
             //-----------------------------------------------------------------
         }
-});
+    });
 
 
 window.addEventListener( 'keyup',
 
-        function ( event ) {
+    function ( event ) {
 
-            switch( event.keyCode ) {
+        switch( event.keyCode ) {
 
-                case 38: // up
-                case 87: // w
-                    moveForward = false;
-                    break;
+            case 38: // up
+            case 87: // w
+                moveForward = false;
+                break;
 
-                case 37: // left
-                case 65: // a
-                    moveLeft = false;
-                    break;
+            case 37: // left
+            case 65: // a
+                moveLeft = false;
+                break;
 
-                case 40: // down
-                case 83: // s
-                    moveBackward = false;
-                    break;
+            case 40: // down
+            case 83: // s
+                moveBackward = false;
+                break;
 
-                case 39: // right
-                case 68: // d
-                    moveRight = false;
-                    break;
+            case 39: // right
+            case 68: // d
+                moveRight = false;
+                break;
 
-                case 69: // e
-                    moveDown = false;
-                    break;
+            case 69: // e
+                moveDown = false;
+                break;
 
-                case 81: // e
-                    moveUp = false;
-                    break;
+            case 81: // e
+                moveUp = false;
+                break;
 
-            }
+        }
 
-        }, false );
-
-
-
-
-
+    }, false );
