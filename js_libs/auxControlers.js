@@ -15,6 +15,8 @@ var raycasterPick = new THREE.Raycaster();
  */
 function onMouseDown( event ) {
 
+    var i;
+
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
 
@@ -63,14 +65,20 @@ function onMouseDown( event ) {
     var arrNameObj = [];
 
     // ------------ TRS sprite mode changer ---------
-    if (intersects.length>0) {
-        if (intersects[0].object.name == 'trs_modeChanger') {
-            if (transform_controls.getMode() == 'rotate')
+    if (intersects.length > 0) {
+
+        if (intersects[0].object.name === 'trs_modeChanger') {
+
+            if (transform_controls.getMode() === 'rotate')
                 transform_controls.setMode("scale");
-            else if (transform_controls.getMode() == 'scale')
+
+            else if (transform_controls.getMode() === 'scale')
                 transform_controls.setMode("translate");
-            else if (transform_controls.getMode() == 'translate')
+
+            else if (transform_controls.getMode() === 'translate')
                 transform_controls.setMode("rotate");
+
+            jQuery('input:radio[name=object-manipulation-switch]').val([transform_controls.getMode()]);
 
             return;
         }
@@ -78,7 +86,7 @@ function onMouseDown( event ) {
 
     // --------- Enlist deleted items ----------
     if (intersects.length>0)
-        if(intersects[0].object.name == 'recycleBin') {
+        if(intersects[0].object.name === 'recycleBin') {
             if (!isRecycleBinDeployed)
                 enlistDeletedObjects();
             else
@@ -88,12 +96,13 @@ function onMouseDown( event ) {
 
 
     //--------- Click item from recycle Bin ? --------------------------------
-    if (intersects.length>0)
+    if (intersects.length>0) {
+
         if (intersects[0].object.parent.isInRecycleBin == true) {
 
             intersects[0].object.parent.isInRecycleBin = false;
 
-            nameToRestore = intersects[0].object.parent.name;
+            var nameToRestore = intersects[0].object.parent.name;
 
             var trs = delArchive[nameToRestore]["trs"];
 
@@ -112,12 +121,12 @@ function onMouseDown( event ) {
 
             return;
         }
-
+    }
 
 
 
     //-------------------- Select object in scene by raycasting ----------------------------------------------------
-    for ( var i = 0; i < intersects.length; i++ ) {
+    for ( i = 0; i < intersects.length; i++ ) {
 
         // selected_object_name = intersects[i].object.name;
         // arrNameObj[selected_object_name] = intersects[i].object;
@@ -151,7 +160,7 @@ function onMouseDown( event ) {
         var popupSelect = document.getElementById("popupSelect");
 
         // Clear options
-        for (var i=document.getElementById("popupSelect").options.length; i-->0;)
+        for (i = document.getElementById("popupSelect").options.length; i-->0;)
             document.getElementById("popupSelect").options[i] = null;
 
         // Auto open Selection

@@ -127,7 +127,7 @@ function updatePointerLockControls(){
         var steveShieldMesh = envir.scene.getObjectByName("SteveShieldMesh") ;
 
 
-        //console.log(Steve);
+        // console.log(Steve);
 
         // TODO: RAYCASTING SIGNIFICANTLY DETERIORATES RENDERING SPEED
 

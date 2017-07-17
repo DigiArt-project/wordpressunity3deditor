@@ -216,7 +216,7 @@ echo '</script>';
 
     <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
 
-    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
+    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
         <label for="translate-switch">Move</label>
         <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
@@ -318,6 +318,9 @@ echo '</script>';
     jQuery("#object-manipulation-toggle").click(function() {
 
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
+
+        console.log(value);
+
         transform_controls.setMode(value);
 
     });
