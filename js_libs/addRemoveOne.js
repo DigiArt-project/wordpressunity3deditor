@@ -1,22 +1,28 @@
-function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
-                categoryName, categoryID, diffImage, diffImageID, image1id,
-                x, y, z, r1=0, r2=0, r3=0, s=1){
+function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
+                          categoryName, categoryID, diffImage, diffImageID, image1id,
+                          x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
-    selected_object_trs={"translation":[x, y, z],"rotation":[r1,r2,r3],"scale":s};
+    var selected_object_trs = {
+        "translation": [x, y, z],
+        "rotation": [r1,r2,r3],
+        "scale": s
+    };
 
-    resources3D[nameModel3D]= { "path": path,
-                                "assetid": assetid,
-                                "obj":objPath,
-                                "objID":objID,
-                                "mtl":mtlPath,
-                                "mtlID":mtlID,
-                                "categoryName":categoryName,
-                                "categoryID":categoryID,
-                                "diffImage":diffImage,
-                                "diffImageID":diffImageID,
-                                "image1id":image1id,
-                                "trs":selected_object_trs};
+    resources3D[nameModel3D] = {
+        "path": path,
+        "assetid": assetid,
+        "obj": objPath,
+        "objID": objID,
+        "mtl": mtlPath,
+        "mtlID": mtlID,
+        "categoryName": categoryName,
+        "categoryID": categoryID,
+        "diffImage": diffImage,
+        "diffImageID": diffImageID,
+        "image1id": image1id,
+        "trs": selected_object_trs
+    };
 
     //   Load the extra item in 3D environment or get it from recycle bin ============================
 
@@ -24,7 +30,7 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
     var objInRecycleBin = envir.cameraOrbit.children[0].getObjectByName(nameModel3D);
 
     // Restore from recycle bin
-    if(typeof objInRecycleBin != "undefined"){
+    if(typeof objInRecycleBin != "undefined") {
 
         resources3D[nameModel3D] = delArchive[nameModel3D];
 
@@ -46,7 +52,7 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
         transform_controls.attach(objInRecycleBin);
 
 
-    // Load it if it is not in recycle bin
+        // Load it if it is not in recycle bin
     } else {
 
         // Make progress bar visible
@@ -66,7 +72,8 @@ function addOne(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
             if(!insertedObject) {
                 jQuery( "#dialog-message" ).dialog( "open" );
             }
-            trs_tmp = resources3D[nameModel3D]['trs'];
+
+            var trs_tmp = resources3D[nameModel3D]['trs'];
 
             insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
             insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -145,9 +152,9 @@ function putInRecyleBin(nameToRemove){
 
     var bbox = new THREE.Box3().setFromObject(objectSelected);
 
-    scale_factor_x = 2/(bbox.max.x - bbox.min.x);
-    scale_factor_y = 2/(bbox.max.y - bbox.min.y);
-    scale_factor_z = 2/(bbox.max.z - bbox.min.z);
+    var scale_factor_x = 2/(bbox.max.x - bbox.min.x);
+    var scale_factor_y = 2/(bbox.max.y - bbox.min.y);
+    var scale_factor_z = 2/(bbox.max.z - bbox.min.z);
 
     if (scale_factor_x > 1000)
         scale_factor_x = 1;

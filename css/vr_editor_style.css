@@ -47,14 +47,14 @@
     padding: 10px;
 }
 
-#paramsform input{
+#paramsform input {
     font-size: 0.6vw;
 }
 
 .VrGuiContainerStyle {
     position: absolute;
     text-align: left;
-    top: 100px;
+    top: 200px;
     left: 0;
     width: 20%;
     padding: 0;
@@ -251,4 +251,17 @@ canvas { pointer-events:none; z-index:10; }
     width: 42px;
     border-radius: 4px;
     height: 30px;
+}
+
+.DoubleSidedObjectToggle {
+    position: absolute;
+    left: 395px;
+    top: 30px;
+}
+
+
+.DoubleSidedObjectToggleLabel {
+    position: absolute;
+    left: 402px;
+    top: 6px;
 }

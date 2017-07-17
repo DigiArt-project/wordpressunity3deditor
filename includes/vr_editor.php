@@ -148,7 +148,7 @@ echo '</script>';
     }
 
     function drop_handler(ev) {
-        var dataDrag =JSON.parse( ev.dataTransfer.getData("text"));
+        var dataDrag = JSON.parse( ev.dataTransfer.getData("text"));
 
         var path =     dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
 
@@ -173,13 +173,17 @@ echo '</script>';
 
         var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
 
-
-
-        addOne(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
+        // Asset is added to canvas
+        addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImage, diffImageID, image1id,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);
+
+        // Show options
+        jQuery('#object-manipulation-toggle').show();
+        jQuery('#axis-manipulation-buttons').show();
+        jQuery('#double-sided-switch').show();
 
         ev.preventDefault();
     }
@@ -215,8 +219,7 @@ echo '</script>';
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
     <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
-
-    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography">
+    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
         <label for="translate-switch">Move (T)</label>
         <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
@@ -225,11 +228,21 @@ echo '</script>';
         <label for="scale-switch">Scale (U)</label>
     </div>
 
-
-    <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography">
+    <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
         <a id="axis-size-decrease-btn" title="Decrease Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
         <a id="axis-size-increase-btn" title="Increase Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
     </div>
+
+    <div id="double-sided-switch" style="display: none;">
+        <div class="mdc-switch DoubleSidedObjectToggle">
+            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Double sided object" />
+            <div class="mdc-switch__background">
+                <div class="mdc-switch__knob"></div>
+            </div>
+        </div>
+        <label for="double-sided-switch-input" class="mdc-switch-label DoubleSidedObjectToggleLabel" title="Double sided object"><i class="material-icons mdc-theme--text-hint-on-light">compare_arrows</i></label>
+    </div>
+
 
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
     <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
@@ -306,9 +319,17 @@ echo '</script>';
     // Selected object name
     var selected_object_name = '';
 
+
+
+
     // Add gui to gui container_3D_all
     var datguiContainer = document.getElementById('dat-gui-container');
-    datguiContainer.appendChild(gui.domElement);
+    /*datguiContainer.appendChild(gui.domElement);*/
+
+    datguiContainer.appendChild(controlInterface.translate.domElement);
+    datguiContainer.appendChild(controlInterface.rotate.domElement);
+    datguiContainer.appendChild(controlInterface.scale.domElement);
+
 
     // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
     var envir = new vr_editor_environmentals(container_3D_all);
@@ -321,13 +342,8 @@ echo '</script>';
     envir.addCubeToControls(transform_controls);
 
     jQuery("#object-manipulation-toggle").click(function() {
-
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
-
-        console.log(value);
-
         transform_controls.setMode(value);
-
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -338,6 +354,20 @@ echo '</script>';
         transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
     });
 
+    jQuery('#double-sided-switch-input').change(function() {
+        if (jQuery("#double-sided-switch-input").is(":checked")) {
+            var sel_obj = envir.scene.getObjectByName(selected_object_name);
+            sel_obj.traverse(function (node) {
+
+                if (node.material)
+                    if (node.material.side === THREE.DoubleSide)
+                        node.material.side = THREE.SingleSide;
+                    else
+                        node.material.side = THREE.DoubleSide;
+
+            });
+        }
+    });
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();
@@ -367,7 +397,7 @@ echo '</script>';
     };
 
     // When all are finished loading place them in the correct position
-    manager.onLoad = function (){
+    manager.onLoad = function () {
 
         var objItem;
         var trs_tmp;
@@ -415,6 +445,7 @@ $formRes->init($sceneToLoad);
 
     //--------------------------- UPDATERS ---------------------------------------------------------------------
     // ANIMATE
+
     function animate()
     {
         // 60fps
@@ -438,13 +469,15 @@ $formRes->init($sceneToLoad);
     // UPDATE
     function update()
     {
+        var i;
+
         // Only for orbit ?
-        //if (avatarControlsEnabled == false)
+        // if (avatarControlsEnabled == false)
         envir.orbitControls.update();
 
         updatePointerLockControls();
 
-        transform_controls.update();// update the axis controls based on the browse controls
+        transform_controls.update(); // update the axis controls based on the browse controls
         envir.stats.update();
 
         // light is from camera towards object
@@ -452,11 +485,18 @@ $formRes->init($sceneToLoad);
         envir.lightAvatar.position.copy(envir.avatarControls.getObject().position);
         envir.lightAvatar.position.y += 1.8;
 
-        // Now update the translation and rotation input texts
-        if (transform_controls.object != null){
 
-            for (var i in gui.__controllers)
-                gui.__controllers[i].updateDisplay();
+        // Now update the translation and rotation input texts
+        if (transform_controls.object) {
+
+            for (i in controlInterface.translate.__controllers)
+                controlInterface.translate.__controllers[i].updateDisplay();
+
+            for (i in controlInterface.rotate.__controllers)
+                controlInterface.rotate.__controllers[i].updateDisplay();
+
+            for (i in controlInterface.scale.__controllers)
+                controlInterface.scale.__controllers[i].updateDisplay();
 
             updatePositionsPhpAndJavsFromControlsAxes();
         }
