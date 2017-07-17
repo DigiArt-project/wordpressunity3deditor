@@ -218,11 +218,11 @@ echo '</script>';
 
     <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
-        <label for="translate-switch">Move</label>
+        <label for="translate-switch">Move (T)</label>
         <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
-        <label for="rotate-switch">Rotate</label>
+        <label for="rotate-switch">Rotate (Y)</label>
         <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
-        <label for="scale-switch">Scale</label>
+        <label for="scale-switch">Scale (U)</label>
     </div>
 
 
@@ -312,8 +312,8 @@ echo '</script>';
     var transform_controls = new THREE.TransformControls( envir.cameraOrbit, envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
     transform_controls.addEventListener( 'change', checkForRecycle );
-    envir.addCubeToControls(transform_controls);
 
+    envir.addCubeToControls(transform_controls);
 
     jQuery("#object-manipulation-toggle").click(function() {
 

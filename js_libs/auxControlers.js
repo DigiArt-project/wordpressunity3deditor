@@ -226,9 +226,9 @@ function onMouseDown( event ) {
  */
 var gui_controls_funs = new function(){
 
-    this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
+  /*  this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
     this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
-    this.bt_scale = function(){ transform_controls.setMode( "scale" ); };
+    this.bt_scale = function(){ transform_controls.setMode( "scale" ); };*/
 
     this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
     this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};
@@ -249,12 +249,13 @@ var gui_controls_funs = new function(){
 // GUI controls
 var gui = new dat.GUI( {autoPlace: false} );
 
-var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
+/*var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
 var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
-var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');
-var dg_controller_tx = gui.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Translate x');//.listen();
-var dg_controller_ty = gui.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Translate y');//.listen();
-var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Translate z');//.listen();
+var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');*/
+
+var dg_controller_tx = gui.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Move x');//.listen();
+var dg_controller_ty = gui.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Move y');//.listen();
+var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Move z');//.listen();
 var dg_controller_rx = gui.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
 var dg_controller_ry = gui.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
 var dg_controller_rz = gui.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
