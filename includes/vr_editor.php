@@ -226,6 +226,11 @@ echo '</script>';
     </div>
 
 
+    <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography">
+        <a id="axis-size-decrease-btn" title="Decrease Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+        <a id="axis-size-increase-btn" title="Increase Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+    </div>
+
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
     <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
 
@@ -323,6 +328,14 @@ echo '</script>';
 
         transform_controls.setMode(value);
 
+    });
+
+    jQuery("#axis-size-increase-btn").click(function() {
+        transform_controls.setSize( transform_controls.size + 0.1 );
+    });
+
+    jQuery("#axis-size-decrease-btn").click(function() {
+        transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
     });
 
 

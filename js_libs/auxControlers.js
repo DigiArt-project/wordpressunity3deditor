@@ -230,8 +230,8 @@ var gui_controls_funs = new function(){
     this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
     this.bt_scale = function(){ transform_controls.setMode( "scale" ); };*/
 
-    this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
-    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};
+    /*this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
+    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};*/
 
     this.dg_tx = 0;
     this.dg_ty = 0;
@@ -260,8 +260,8 @@ var dg_controller_rx = gui.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).na
 var dg_controller_ry = gui.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
 var dg_controller_rz = gui.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
 var dg_controller_sc = gui.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
-var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
-var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');
+/*var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
+var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
 var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');
 
 //gui.close();
