@@ -1,6 +1,4 @@
-// window or document ???
-
-window.addEventListener( 'mousedown', function ( event ) {
+document.addEventListener( 'mousedown', function ( event ) {
 
     if (avatarControlsEnabled) {
         switch (event.button) {
@@ -16,7 +14,7 @@ window.addEventListener( 'mousedown', function ( event ) {
 }, true);
 
 
-window.addEventListener( 'mouseup', function ( event ) {
+document.addEventListener( 'mouseup', function ( event ) {
 
     if (avatarControlsEnabled) {
         switch (event.button) {
@@ -33,7 +31,7 @@ window.addEventListener( 'mouseup', function ( event ) {
 }, true);
 
 
-window.addEventListener( 'wheel', function ( event ) {
+document.addEventListener( 'wheel', function ( event ) {
 
     if (avatarControlsEnabled)
         if (event.deltaY)
@@ -47,19 +45,22 @@ window.addEventListener( 'wheel', function ( event ) {
 
 
 
-window.addEventListener( 'keydown',
+document.addEventListener( 'keydown',
     function ( event ) {
+
+        var objManipulationSwitch = jQuery('input:radio[name=object-manipulation-switch]');
 
         switch ( event.keyCode ) {
             //---------------------------- TRS ---------------------------------------
 
             case 84: // T
                 transform_controls.setMode("translate");
+
                 break;
-            case 85: // Y
+            case 89: // Y
                 transform_controls.setMode("rotate");
                 break;
-            case 86: // U
+            case 85: // U
                 transform_controls.setMode("scale");
                 break;
             case 187:
@@ -119,10 +120,13 @@ window.addEventListener( 'keydown',
                 break;
             //-----------------------------------------------------------------
         }
+
+        objManipulationSwitch.val([transform_controls.getMode()]);
+        showObjectPropertiesPanel(transform_controls.getMode());
     });
 
 
-window.addEventListener( 'keyup',
+document.addEventListener( 'keyup',
 
     function ( event ) {
 
@@ -158,4 +162,5 @@ window.addEventListener( 'keyup',
 
         }
 
-    }, false );
+    }, false
+);

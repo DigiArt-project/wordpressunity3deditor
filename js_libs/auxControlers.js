@@ -15,6 +15,8 @@ var raycasterPick = new THREE.Raycaster();
  */
 function onMouseDown( event ) {
 
+    var i;
+
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
 
@@ -63,14 +65,21 @@ function onMouseDown( event ) {
     var arrNameObj = [];
 
     // ------------ TRS sprite mode changer ---------
-    if (intersects.length>0) {
-        if (intersects[0].object.name == 'trs_modeChanger') {
-            if (transform_controls.getMode() == 'rotate')
+    if (intersects.length > 0) {
+
+        if (intersects[0].object.name === 'trs_modeChanger') {
+
+            if (transform_controls.getMode() === 'rotate')
                 transform_controls.setMode("scale");
-            else if (transform_controls.getMode() == 'scale')
+
+            else if (transform_controls.getMode() === 'scale')
                 transform_controls.setMode("translate");
-            else if (transform_controls.getMode() == 'translate')
+
+            else if (transform_controls.getMode() === 'translate')
                 transform_controls.setMode("rotate");
+
+            jQuery('input:radio[name=object-manipulation-switch]').val([transform_controls.getMode()]);
+            showObjectPropertiesPanel(transform_controls.getMode());
 
             return;
         }
@@ -78,7 +87,7 @@ function onMouseDown( event ) {
 
     // --------- Enlist deleted items ----------
     if (intersects.length>0)
-        if(intersects[0].object.name == 'recycleBin') {
+        if(intersects[0].object.name === 'recycleBin') {
             if (!isRecycleBinDeployed)
                 enlistDeletedObjects();
             else
@@ -88,16 +97,17 @@ function onMouseDown( event ) {
 
 
     //--------- Click item from recycle Bin ? --------------------------------
-    if (intersects.length>0)
+    if (intersects.length>0) {
+
         if (intersects[0].object.parent.isInRecycleBin == true) {
 
             intersects[0].object.parent.isInRecycleBin = false;
 
-            nameToRestore = intersects[0].object.parent.name;
+            var nameToRestore = intersects[0].object.parent.name;
 
             var trs = delArchive[nameToRestore]["trs"];
 
-            addOne(nameToRestore, delArchive[nameToRestore]["path"],
+            addAssetToCanvas(nameToRestore, delArchive[nameToRestore]["path"],
                 delArchive[nameToRestore]["obj"], delArchive[nameToRestore]["objID"],
                 delArchive[nameToRestore]["mtl"], delArchive[nameToRestore]["mtlID"],
                 delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
@@ -112,12 +122,12 @@ function onMouseDown( event ) {
 
             return;
         }
-
+    }
 
 
 
     //-------------------- Select object in scene by raycasting ----------------------------------------------------
-    for ( var i = 0; i < intersects.length; i++ ) {
+    for ( i = 0; i < intersects.length; i++ ) {
 
         // selected_object_name = intersects[i].object.name;
         // arrNameObj[selected_object_name] = intersects[i].object;
@@ -137,10 +147,11 @@ function onMouseDown( event ) {
         }
     }
 
+    var nameL;
 
     // If only one object is intersected
     if (Object.keys(arrNameObj).length == 1) {
-        var nameL = Object.keys(arrNameObj)[0];
+        nameL = Object.keys(arrNameObj)[0];
 
         console.log("nameL Simple------------->", nameL);
 
@@ -151,7 +162,7 @@ function onMouseDown( event ) {
         var popupSelect = document.getElementById("popupSelect");
 
         // Clear options
-        for (var i=document.getElementById("popupSelect").options.length; i-->0;)
+        for (i = document.getElementById("popupSelect").options.length; i-->0;)
             document.getElementById("popupSelect").options[i] = null;
 
         // Auto open Selection
@@ -163,17 +174,18 @@ function onMouseDown( event ) {
 
 
         // Add options
+        var option;
 
         // Prompt "Select"
-        var option = document.createElement("option");
+        option = document.createElement("option");
         option.text = "Select";
         option.value = "Select";
         option.style.background = "#555";
         popupSelect.add(option);
 
         // Add options for each intersected object
-        for (var nameL in  arrNameObj ) {
-            var option = document.createElement("option");
+        for (nameL in  arrNameObj ) {
+            option = document.createElement("option");
             option.text = nameL;
             option.value = nameL;
             option.style.background = "#5f8";
@@ -181,7 +193,7 @@ function onMouseDown( event ) {
         }
 
         // Prompt "Cancel"
-        var option = document.createElement("option");
+        option = document.createElement("option");
         option.text = "Cancel";
         option.value = "Cancel";
         option.style.background = "#f59";
@@ -215,14 +227,14 @@ function onMouseDown( event ) {
  *
  * @type {gui_controls_funs}
  */
-var gui_controls_funs = new function(){
+var gui_controls_funs = new function() {
 
-    this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
-    this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
-    this.bt_scale = function(){ transform_controls.setMode( "scale" ); };
+    /*  this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
+     this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
+     this.bt_scale = function(){ transform_controls.setMode( "scale" ); };*/
 
-    this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
-    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};
+    /*this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
+     this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};*/
 
     this.dg_tx = 0;
     this.dg_ty = 0;
@@ -231,28 +243,53 @@ var gui_controls_funs = new function(){
     this.dg_ry = 0;
     this.dg_rz = 0;
     this.dg_scale = 0;
-
-    this.bt_doublesided = false ;
 };
 
 
 
 // GUI controls
-var gui = new dat.GUI( {autoPlace: false} );
+/*var gui = new dat.GUI( {autoPlace: false} );*/
 
-var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
-var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
-var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');
-var dg_controller_tx = gui.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Translate x');//.listen();
-var dg_controller_ty = gui.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Translate y');//.listen();
-var dg_controller_tz = gui.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Translate z');//.listen();
-var dg_controller_rx = gui.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
-var dg_controller_ry = gui.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
-var dg_controller_rz = gui.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
-var dg_controller_sc = gui.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
-var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
-var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');
-var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');
+var controlInterface = [];
+controlInterface.translate = new dat.GUI( { autoPlace: false });
+controlInterface.translate.domElement.id = 'translatePanelGui';
+
+controlInterface.rotate = new dat.GUI( { autoPlace: false });
+controlInterface.rotate.domElement.id = 'rotatePanelGui';
+
+controlInterface.scale = new dat.GUI( { autoPlace: false });
+controlInterface.scale.domElement.id = 'scalePanelGui';
+
+
+/*var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
+ var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
+ var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');*/
+
+var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Move x');//.listen();
+var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Move y');//.listen();
+var dg_controller_tz = controlInterface.translate.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Move z');//.listen();
+
+var dg_controller_rx = controlInterface.rotate.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
+var dg_controller_ry = controlInterface.rotate.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
+var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
+
+var dg_controller_sc = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
+/*var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
+ var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
+/*var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');*/
+
+/*cbt_doublesided.onChange(function(value) {
+ var sel_obj = envir.scene.getObjectByName(selected_object_name);
+ sel_obj.traverse(function (node) {
+
+ if (node.material)
+ if (node.material.side == THREE.DoubleSide)
+ node.material.side = THREE.SingleSide;
+ else
+ node.material.side = THREE.DoubleSide;
+
+ });
+ });*/
 
 //gui.close();
 
@@ -260,7 +297,7 @@ var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double
 /**
  *  Update php, javascript and transform_controls when dat.gui changes
  */
-function controllerDatGuiOnChange(){
+function controllerDatGuiOnChange() {
 
     // When gui values changes then stop animating else won't be able to type with keyboard
     dg_controller_tx.onChange(function(value) {
@@ -318,19 +355,6 @@ function controllerDatGuiOnChange(){
             animate();
         }
     );
-
-    cbt_doublesided.onChange(function(value){
-        var sel_obj = envir.scene.getObjectByName(selected_object_name);
-        sel_obj.traverse(function (node) {
-
-            if (node.material)
-                if (node.material.side == THREE.DoubleSide)
-                    node.material.side = THREE.SingleSide;
-                else
-                    node.material.side = THREE.DoubleSide;
-
-        });
-    });
 
     // Make slider-text controllers more interactive
     setKeyPressController(dg_controller_tx);
@@ -404,14 +428,14 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
     var val = 0;
 
     if (transform_controls.object.scale.x != gui_controls_funs.dg_scale){
-        var val = transform_controls.object.scale.x;
+        val = transform_controls.object.scale.x;
     } else if (transform_controls.object.scale.y != gui_controls_funs.dg_scale){
-        var val = transform_controls.object.scale.y
+        val = transform_controls.object.scale.y
     } else if (transform_controls.object.scale.z != gui_controls_funs.dg_scale){
-        var val = transform_controls.object.scale.z
+        val = transform_controls.object.scale.z
     }
 
-    if (val > 0){
+    if (val > 0) {
 
         gui_controls_funs.dg_scale = val;
         transform_controls.object.scale.set( val, val, val);
