@@ -72,21 +72,21 @@ class Asset3DClass{
     {
 
         $labels = array(
-            'name' => _x('Asset Category', 'taxonomy general name'),
-            'singular_name' => _x('Asset Category', 'taxonomy singular name'),
-            'menu_name' => _x('Asset Categories', 'admin menu'),
-            'search_items' => __('Search Asset Categories'),
-            'all_items' => __('All Asset Categories'),
-            'parent_item' => __('Parent Asset Category'),
-            'parent_item_colon' => __('Parent Asset Category:'),
-            'edit_item' => __('Edit Asset Category'),
-            'update_item' => __('Update Asset Category'),
-            'add_new_item' => __('Add New Asset Category'),
-            'new_item_name' => __('New Asset Category')
+            'name' => _x('Asset Type', 'taxonomy general name'),
+            'singular_name' => _x('Asset Type', 'taxonomy singular name'),
+            'menu_name' => _x('Asset Types', 'admin menu'),
+            'search_items' => __('Search Asset Types'),
+            'all_items' => __('All Asset Types'),
+            'parent_item' => __('Parent Asset Type'),
+            'parent_item_colon' => __('Parent Asset Type:'),
+            'edit_item' => __('Edit Asset Type'),
+            'update_item' => __('Update Asset Type'),
+            'add_new_item' => __('Add New Asset Type'),
+            'new_item_name' => __('New Asset Type')
         );
 
         $args = array(
-            'description' => 'Category of 3D asset',
+            'description' => 'Type (Category) of 3D asset',
             'labels' => $labels,
             'public' => false,
             'show_ui' => true,
