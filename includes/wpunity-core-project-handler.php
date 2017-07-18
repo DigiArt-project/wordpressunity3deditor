@@ -148,7 +148,7 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 
 //==========================================================================================================================================
 
-function wpnunity_compile_the_game($gameSlug){
+function wpunity_compile_the_game($gameID,$gameSlug){
     //1. Create Default Folder Structure (Delete everything old)
     wpunity_compile_folders_gen($gameSlug);
 
