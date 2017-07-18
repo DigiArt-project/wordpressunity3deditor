@@ -7,20 +7,14 @@
 // Line change with character: chr(10)
 
 
-$EditorBuildSettings_asset = array("%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!1045 &1
-EditorBuildSettings:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Scenes:
-");
-
-
-// All the others Alphabetically
+function wpunity_games_taxtype_fill_energy(){
+  // All the others Alphabetically
+  global $AudioManager_asset,$ClusterInputManager_asset,$DynamicsManager_asset,$EditorBuildSettings_asset,$EditorSettings_asset,$GraphicsSettings_asset;
+  global $InputManager_asset,$NavMeshAreas_asset,$NetworkManager_asset,$Physics2DSettings_asset,$ProjectSettings_asset,$ProjectVersion_asset;
+  global $QualitySettings_asset,$TagManager_asset,$TimeManager_asset,$UnityConnect_asset;
 
 //1. AudioManager.asset
-$AudioManager_asset = array("%YAML 1.1
+  $AudioManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!11 &1
 AudioManager:
@@ -33,12 +27,12 @@ AudioManager:
   m_DSPBufferSize: 0
   m_VirtualVoiceCount: 512
   m_RealVoiceCount: 32
-  m_SpatializerPlugin: 
+  m_SpatializerPlugin:
   m_DisableAudio: 0
   m_VirtualizeEffects: 1");
 
 //2. ClusterInputManager.asset
-$ClusterInputManager_asset = array("%YAML 1.1
+  $ClusterInputManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!236 &1
 ClusterInputManager:
@@ -47,7 +41,7 @@ ClusterInputManager:
 ");
 
 //3. DynamicsManager.asset
-$DynamicsManager_asset = array("%YAML 1.1
+  $DynamicsManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!55 &1
 PhysicsManager:
@@ -67,10 +61,18 @@ PhysicsManager:
   m_LayerCollisionMatrix: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ");
 
-
+//4. EditorBuildSettings.asset
+  $EditorBuildSettings_asset = array("%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+");
 
 //5. EditorSettings.asset
-$EditorSettings_asset = array("%YAML 1.1
+  $EditorSettings_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!159 &1
 EditorSettings:
@@ -82,12 +84,12 @@ EditorSettings:
   m_SpritePackerMode: 2
   m_SpritePackerPaddingPower: 1
   m_ProjectGenerationIncludedExtensions: txt;xml;fnt;cd
-  m_ProjectGenerationRootNamespace: 
-  m_UserGeneratedProjectSuffix: 
+  m_ProjectGenerationRootNamespace:
+  m_UserGeneratedProjectSuffix:
 ");
 
 //6. GraphicsSettings.asset
-$GraphicsSettings_asset = array("%YAML 1.1
+  $GraphicsSettings_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!30 &1
 GraphicsSettings:
@@ -168,7 +170,7 @@ GraphicsSettings:
 ");
 
 //7. InputManager.asset
-$InputManager_asset = array("%YAML 1.1
+  $InputManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!13 &1
 InputManager:
@@ -177,8 +179,8 @@ InputManager:
   m_Axes:
   - serializedVersion: 3
     m_Name: Horizontal
-    descriptiveName: 
-    descriptiveNegativeName: 
+    descriptiveName:
+    descriptiveNegativeName:
     negativeButton: left
     positiveButton: right
     altNegativeButton: a
@@ -193,8 +195,8 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Vertical
-    descriptiveName: 
-    descriptiveNegativeName: 
+    descriptiveName:
+    descriptiveNegativeName:
     negativeButton: down
     positiveButton: up
     altNegativeButton: s
@@ -209,11 +211,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire1
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: left ctrl
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: mouse 0
     gravity: 1000
     dead: 0.001
@@ -225,11 +227,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire2
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: left alt
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: mouse 1
     gravity: 1000
     dead: 0.001
@@ -241,11 +243,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire3
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: left shift
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: mouse 2
     gravity: 1000
     dead: 0.001
@@ -257,12 +259,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Jump
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: space
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton:
+    altPositiveButton:
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -273,12 +275,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Mouse X
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
+    positiveButton:
+    altNegativeButton:
+    altPositiveButton:
     gravity: 0
     dead: 0
     sensitivity: 0.1
@@ -289,12 +291,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Mouse Y
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
+    positiveButton:
+    altNegativeButton:
+    altPositiveButton:
     gravity: 0
     dead: 0
     sensitivity: 0.1
@@ -305,12 +307,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Mouse ScrollWheel
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
+    positiveButton:
+    altNegativeButton:
+    altPositiveButton:
     gravity: 0
     dead: 0
     sensitivity: 0.1
@@ -321,12 +323,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Horizontal
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
+    positiveButton:
+    altNegativeButton:
+    altPositiveButton:
     gravity: 0
     dead: 0.19
     sensitivity: 1
@@ -337,12 +339,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Vertical
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
+    positiveButton:
+    altNegativeButton:
+    altPositiveButton:
     gravity: 0
     dead: 0.19
     sensitivity: 1
@@ -353,12 +355,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire1
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: joystick button 0
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton:
+    altPositiveButton:
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -369,12 +371,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire2
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: joystick button 1
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton:
+    altPositiveButton:
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -385,12 +387,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire3
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: joystick button 2
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton:
+    altPositiveButton:
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -401,12 +403,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Jump
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: joystick button 3
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton:
+    altPositiveButton:
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -417,11 +419,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Submit
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: return
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: joystick button 0
     gravity: 1000
     dead: 0.001
@@ -433,11 +435,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Submit
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: enter
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: space
     gravity: 1000
     dead: 0.001
@@ -449,11 +451,11 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Cancel
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
+    descriptiveName:
+    descriptiveNegativeName:
+    negativeButton:
     positiveButton: escape
-    altNegativeButton: 
+    altNegativeButton:
     altPositiveButton: joystick button 1
     gravity: 1000
     dead: 0.001
@@ -466,7 +468,7 @@ InputManager:
 ");
 
 //8. NavMeshAreas.asset
-$NavMeshAreas_asset = array("%YAML 1.1
+  $NavMeshAreas_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!126 &1
 NavMeshProjectSettings:
@@ -479,68 +481,68 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
-  - name: 
+  - name:
     cost: 1
 ");
 
 //9. NetworkManager.asset
-$NetworkManager_asset = array("%YAML 1.1
+  $NetworkManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!149 &1
 NetworkManager:
@@ -551,7 +553,7 @@ NetworkManager:
 ");
 
 //10. Physics2DSettings.asset
-$Physics2DSettings_asset = array("%YAML 1.1
+  $Physics2DSettings_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!19 &1
 Physics2DSettings:
@@ -588,7 +590,7 @@ Physics2DSettings:
 ");
 
 //11. ProjectSettings.asset
-$ProjectSettings_asset = array("%YAML 1.1
+  $ProjectSettings_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!129 &1
 PlayerSettings:
@@ -737,7 +739,7 @@ PlayerSettings:
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
-  aotOptions: 
+  aotOptions:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
@@ -751,10 +753,10 @@ PlayerSettings:
     serializedVersion: 2
     m_Bits: 238
   iPhoneSdkVersion: 988
-  iOSTargetOSVersionString: 
+  iOSTargetOSVersionString:
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
-  tvOSTargetOSVersionString: 
+  tvOSTargetOSVersionString:
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
   uIRequiresFullScreen: 1
@@ -784,7 +786,7 @@ PlayerSettings:
     rgba: 0
   iOSLaunchScreenFillPct: 100
   iOSLaunchScreenSize: 100
-  iOSLaunchScreenCustomXibPath: 
+  iOSLaunchScreenCustomXibPath:
   iOSLaunchScreeniPadType: 0
   iOSLaunchScreeniPadImage: {fileID: 0}
   iOSLaunchScreeniPadBackgroundColor:
@@ -792,22 +794,22 @@ PlayerSettings:
     rgba: 0
   iOSLaunchScreeniPadFillPct: 100
   iOSLaunchScreeniPadSize: 100
-  iOSLaunchScreeniPadCustomXibPath: 
+  iOSLaunchScreeniPadCustomXibPath:
   iOSDeviceRequirements: []
   iOSURLSchemes: []
   iOSBackgroundModes: 0
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 0
   metalAPIValidation: 1
-  appleDeveloperTeamID: 
-  iOSManualSigningProvisioningProfileID: 
-  tvOSManualSigningProvisioningProfileID: 
+  appleDeveloperTeamID:
+  iOSManualSigningProvisioningProfileID:
+  tvOSManualSigningProvisioningProfileID:
   appleEnableAutomaticSigning: 0
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName:
+  AndroidKeyaliasName:
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 1
@@ -818,7 +820,7 @@ PlayerSettings:
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
   m_BuildTargetIcons:
-  - m_BuildTarget: 
+  - m_BuildTarget:
     m_Icons:
     - serializedVersion: 2
       m_Icon: {fileID: 2800000, guid: 8e2184ae8f39b5240a14a2e453a6de3d, type: 3}
@@ -848,51 +850,51 @@ PlayerSettings:
   wiiUTVStartupScreen: {fileID: 0}
   wiiUGamePadStartupScreen: {fileID: 0}
   wiiUDrcBufferDisabled: 0
-  wiiUProfilerLibPath: 
+  wiiUProfilerLibPath:
   actionOnDotNetUnhandledException: 1
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
-  locationUsageDescription: 
-  microphoneUsageDescription: 
-  switchNetLibKey: 
+  cameraUsageDescription:
+  locationUsageDescription:
+  microphoneUsageDescription:
+  switchNetLibKey:
   switchSocketMemoryPoolSize: 6144
   switchSocketAllocatorPoolSize: 128
   switchSocketConcurrencyLimit: 14
   switchUseCPUProfiler: 0
   switchApplicationID: 0x0005000C10000001
-  switchNSODependencies: 
-  switchTitleNames_0: 
-  switchTitleNames_1: 
-  switchTitleNames_2: 
-  switchTitleNames_3: 
-  switchTitleNames_4: 
-  switchTitleNames_5: 
-  switchTitleNames_6: 
-  switchTitleNames_7: 
-  switchTitleNames_8: 
-  switchTitleNames_9: 
-  switchTitleNames_10: 
-  switchTitleNames_11: 
-  switchTitleNames_12: 
-  switchTitleNames_13: 
-  switchTitleNames_14: 
-  switchPublisherNames_0: 
-  switchPublisherNames_1: 
-  switchPublisherNames_2: 
-  switchPublisherNames_3: 
-  switchPublisherNames_4: 
-  switchPublisherNames_5: 
-  switchPublisherNames_6: 
-  switchPublisherNames_7: 
-  switchPublisherNames_8: 
-  switchPublisherNames_9: 
-  switchPublisherNames_10: 
-  switchPublisherNames_11: 
-  switchPublisherNames_12: 
-  switchPublisherNames_13: 
-  switchPublisherNames_14: 
+  switchNSODependencies:
+  switchTitleNames_0:
+  switchTitleNames_1:
+  switchTitleNames_2:
+  switchTitleNames_3:
+  switchTitleNames_4:
+  switchTitleNames_5:
+  switchTitleNames_6:
+  switchTitleNames_7:
+  switchTitleNames_8:
+  switchTitleNames_9:
+  switchTitleNames_10:
+  switchTitleNames_11:
+  switchTitleNames_12:
+  switchTitleNames_13:
+  switchTitleNames_14:
+  switchPublisherNames_0:
+  switchPublisherNames_1:
+  switchPublisherNames_2:
+  switchPublisherNames_3:
+  switchPublisherNames_4:
+  switchPublisherNames_5:
+  switchPublisherNames_6:
+  switchPublisherNames_7:
+  switchPublisherNames_8:
+  switchPublisherNames_9:
+  switchPublisherNames_10:
+  switchPublisherNames_11:
+  switchPublisherNames_12:
+  switchPublisherNames_13:
+  switchPublisherNames_14:
   switchIcons_0: {fileID: 0}
   switchIcons_1: {fileID: 0}
   switchIcons_2: {fileID: 0}
@@ -923,9 +925,9 @@ PlayerSettings:
   switchSmallIcons_12: {fileID: 0}
   switchSmallIcons_13: {fileID: 0}
   switchSmallIcons_14: {fileID: 0}
-  switchManualHTML: 
-  switchAccessibleURLs: 
-  switchLegalInformation: 
+  switchManualHTML:
+  switchAccessibleURLs:
+  switchLegalInformation:
   switchMainThreadStackSize: 1048576
   switchPresenceGroupId: 0x0005000C10000001
   switchLogoHandling: 0
@@ -935,7 +937,7 @@ PlayerSettings:
   switchTouchScreenUsage: 0
   switchSupportedLanguagesMask: 0
   switchLogoType: 0
-  switchApplicationErrorCodeCategory: 
+  switchApplicationErrorCodeCategory:
   switchUserAccountSaveDataSize: 0
   switchUserAccountSaveDataJournalSize: 0
   switchAttribute: 0
@@ -955,43 +957,43 @@ PlayerSettings:
   switchRatingsInt_10: 0
   switchRatingsInt_11: 0
   switchLocalCommunicationIds_0: 0x0005000C10000001
-  switchLocalCommunicationIds_1: 
-  switchLocalCommunicationIds_2: 
-  switchLocalCommunicationIds_3: 
-  switchLocalCommunicationIds_4: 
-  switchLocalCommunicationIds_5: 
-  switchLocalCommunicationIds_6: 
-  switchLocalCommunicationIds_7: 
+  switchLocalCommunicationIds_1:
+  switchLocalCommunicationIds_2:
+  switchLocalCommunicationIds_3:
+  switchLocalCommunicationIds_4:
+  switchLocalCommunicationIds_5:
+  switchLocalCommunicationIds_6:
+  switchLocalCommunicationIds_7:
   switchParentalControl: 0
   switchAllowsScreenshot: 1
   switchDataLossConfirmation: 0
   ps4NPAgeRating: 12
-  ps4NPTitleSecret: 
-  ps4NPTrophyPackPath: 
+  ps4NPTitleSecret:
+  ps4NPTrophyPackPath:
   ps4ParentalLevel: 1
   ps4ContentID: ED1633-NPXX51362_00-0000000000000000
   ps4Category: 0
   ps4MasterVersion: 01.00
   ps4AppVersion: 01.00
   ps4AppType: 0
-  ps4ParamSfxPath: 
+  ps4ParamSfxPath:
   ps4VideoOutPixelFormat: 0
   ps4VideoOutInitialWidth: 1920
   ps4VideoOutBaseModeInitialWidth: 1920
   ps4VideoOutReprojectionRate: 120
-  ps4PronunciationXMLPath: 
-  ps4PronunciationSIGPath: 
-  ps4BackgroundImagePath: 
-  ps4StartupImagePath: 
-  ps4SaveDataImagePath: 
-  ps4SdkOverride: 
-  ps4BGMPath: 
-  ps4ShareFilePath: 
-  ps4ShareOverlayImagePath: 
-  ps4PrivacyGuardImagePath: 
-  ps4NPtitleDatPath: 
+  ps4PronunciationXMLPath:
+  ps4PronunciationSIGPath:
+  ps4BackgroundImagePath:
+  ps4StartupImagePath:
+  ps4SaveDataImagePath:
+  ps4SdkOverride:
+  ps4BGMPath:
+  ps4ShareFilePath:
+  ps4ShareOverlayImagePath:
+  ps4PrivacyGuardImagePath:
+  ps4NPtitleDatPath:
   ps4RemotePlayKeyAssignment: -1
-  ps4RemotePlayKeyMappingDir: 
+  ps4RemotePlayKeyMappingDir:
   ps4PlayTogetherPlayerCount: 0
   ps4EnterButtonAssignment: 1
   ps4ApplicationParam1: 0
@@ -1016,9 +1018,9 @@ PlayerSettings:
   ps4ScriptOptimizationLevel: 3
   ps4Audio3dVirtualSpeakerCount: 14
   ps4attribCpuUsage: 0
-  ps4PatchPkgPath: 
-  ps4PatchLatestPkgPath: 
-  ps4PatchChangeinfoPath: 
+  ps4PatchPkgPath:
+  ps4PatchLatestPkgPath:
+  ps4PatchChangeinfoPath:
   ps4PatchDayOne: 0
   ps4attribUserManagement: 0
   ps4attribMoveSupport: 0
@@ -1030,37 +1032,37 @@ PlayerSettings:
   ps4contentSearchFeaturesUsed: 0
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
-  monoEnv: 
+  monoEnv:
   psp2Splashimage: {fileID: 0}
-  psp2NPTrophyPackPath: 
+  psp2NPTrophyPackPath:
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 12
-  psp2NPTitleDatPath: 
-  psp2NPCommsID: 
-  psp2NPCommunicationsID: 
-  psp2NPCommsPassphrase: 
-  psp2NPCommsSig: 
-  psp2ParamSfxPath: 
-  psp2ManualPath: 
-  psp2LiveAreaGatePath: 
-  psp2LiveAreaBackroundPath: 
-  psp2LiveAreaPath: 
-  psp2LiveAreaTrialPath: 
-  psp2PatchChangeInfoPath: 
-  psp2PatchOriginalPackage: 
+  psp2NPTitleDatPath:
+  psp2NPCommsID:
+  psp2NPCommunicationsID:
+  psp2NPCommsPassphrase:
+  psp2NPCommsSig:
+  psp2ParamSfxPath:
+  psp2ManualPath:
+  psp2LiveAreaGatePath:
+  psp2LiveAreaBackroundPath:
+  psp2LiveAreaPath:
+  psp2LiveAreaTrialPath:
+  psp2PatchChangeInfoPath:
+  psp2PatchOriginalPackage:
   psp2PackagePassword: F69AzBlax3CF3EDNhm3soLBPh71Yexui
-  psp2KeystoneFile: 
+  psp2KeystoneFile:
   psp2MemoryExpansionMode: 0
   psp2DRMType: 0
   psp2StorageType: 0
   psp2MediaCapacity: 0
-  psp2DLCConfigPath: 
-  psp2ThumbnailPath: 
-  psp2BackgroundPath: 
-  psp2SoundPath: 
-  psp2TrophyCommId: 
-  psp2TrophyPackagePath: 
-  psp2PackagedResourcesPath: 
+  psp2DLCConfigPath:
+  psp2ThumbnailPath:
+  psp2BackgroundPath:
+  psp2SoundPath:
+  psp2TrophyCommId:
+  psp2TrophyPackagePath:
+  psp2PackagedResourcesPath:
   psp2SaveDataQuota: 10240
   psp2ParentalLevel: 1
   psp2ShortTitle: Not Set
@@ -1081,14 +1083,14 @@ PlayerSettings:
   psmSplashimage: {fileID: 0}
   splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
-  spritePackerPolicy: 
+  spritePackerPolicy:
   webGLMemorySize: 800
   webGLExceptionSupport: 0
   webGLNameFilesAsHashes: 0
   webGLDataCaching: 0
   webGLDebugSymbols: 0
-  webGLEmscriptenArgs: 
-  webGLModulesDirectory: 
+  webGLEmscriptenArgs:
+  webGLModulesDirectory:
   webGLTemplate: APPLICATION:Minimal
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
@@ -1098,7 +1100,7 @@ PlayerSettings:
     1: CROSS_PLATFORM_INPUT
     4: CROSS_PLATFORM_INPUT;MOBILE_INPUT
     7: CROSS_PLATFORM_INPUT;MOBILE_INPUT
-    13: 
+    13:
     14: MOBILE_INPUT
     17: MOBILE_INPUT
     20: MOBILE_INPUT
@@ -1106,21 +1108,21 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}
-  additionalIl2CppArgs: 
+  additionalIl2CppArgs:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Wind Farm Simulator
-  metroPackageVersion: 
-  metroCertificatePath: 
-  metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
+  metroPackageVersion:
+  metroCertificatePath:
+  metroCertificatePassword:
+  metroCertificateSubject:
+  metroCertificateIssuer:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: Wind Farm Simulator
   wsaImages: {}
-  metroTileShortName: 
-  metroCommandLineArgsFile: 
+  metroTileShortName:
+  metroCommandLineArgsFile:
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -1132,16 +1134,16 @@ PlayerSettings:
     a: 1}
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities: {}
-  metroFTAName: 
+  metroFTAName:
   metroFTAFileTypes: []
-  metroProtocolName: 
+  metroProtocolName:
   metroCompilationOverrides: 1
-  tizenProductDescription: 
-  tizenProductURL: 
-  tizenSigningProfileName: 
+  tizenProductDescription:
+  tizenProductURL:
+  tizenSigningProfileName:
   tizenGPSPermissions: 0
   tizenMicrophonePermissions: 0
-  tizenDeploymentTarget: 
+  tizenDeploymentTarget:
   tizenDeploymentTargetType: 0
   tizenMinOSVersion: 0
   n3dsUseExtSaveData: 0
@@ -1153,26 +1155,26 @@ PlayerSettings:
   n3dsMediaSize: 0
   n3dsLogoStyle: 3
   n3dsTitle: GameName
-  n3dsProductCode: 
+  n3dsProductCode:
   n3dsApplicationId: 0xFF3FF
-  stvDeviceAddress: 
-  stvProductDescription: 
-  stvProductAuthor: 
-  stvProductAuthorEmail: 
-  stvProductLink: 
+  stvDeviceAddress:
+  stvProductDescription:
+  stvProductAuthor:
+  stvProductAuthorEmail:
+  stvProductLink:
   stvProductCategory: 0
-  XboxOneProductId: 
-  XboxOneUpdateKey: 
-  XboxOneSandboxId: 
-  XboxOneContentId: 
-  XboxOneTitleId: 
-  XboxOneSCId: 
-  XboxOneGameOsOverridePath: 
-  XboxOnePackagingOverridePath: 
-  XboxOneAppManifestOverridePath: 
+  XboxOneProductId:
+  XboxOneUpdateKey:
+  XboxOneSandboxId:
+  XboxOneContentId:
+  XboxOneTitleId:
+  XboxOneSCId:
+  XboxOneGameOsOverridePath:
+  XboxOnePackagingOverridePath:
+  XboxOneAppManifestOverridePath:
   XboxOnePackageEncryption: 0
   XboxOnePackageUpdateGranularity: 2
-  XboxOneDescription: 
+  XboxOneDescription:
   XboxOneLanguage:
   - enus
   XboxOneCapability: []
@@ -1200,11 +1202,11 @@ PlayerSettings:
 ");
 
 //12. ProjectVersion.asset
-$ProjectVersion_asset = array("m_EditorVersion: 5.6.0f3
+  $ProjectVersion_asset = array("m_EditorVersion: 5.6.0f3
 ");
 
 //13. QualitySettings.asset
-$QualitySettings_asset = array("%YAML 1.1
+  $QualitySettings_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!47 &1
 QualitySettings:
@@ -1387,7 +1389,7 @@ QualitySettings:
 ");
 
 //14. TagManager.asset
-$TagManager_asset = array("%YAML 1.1
+  $TagManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
@@ -1400,35 +1402,35 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  -
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
   m_SortingLayers:
   - name: Default
     uniqueID: 0
@@ -1436,7 +1438,7 @@ TagManager:
 ");
 
 //15. TimeManager.asset
-$TimeManager_asset = array("%YAML 1.1
+  $TimeManager_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!5 &1
 TimeManager:
@@ -1448,15 +1450,15 @@ TimeManager:
 ");
 
 //16. UnityConnect.asset
-$UnityConnect_asset = array("%YAML 1.1
+  $UnityConnect_asset = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!310 &1
 UnityConnectSettings:
   m_ObjectHideFlags: 0
   m_Enabled: 0
   m_TestMode: 0
-  m_TestEventUrl: 
-  m_TestConfigUrl: 
+  m_TestEventUrl:
+  m_TestConfigUrl:
   CrashReportingSettings:
     m_EventUrl: https://perf-events.cloud.unity3d.com/api/events/crashes
     m_Enabled: 0
@@ -1468,21 +1470,48 @@ UnityConnectSettings:
     m_Enabled: 1
     m_InitializeOnStartup: 1
     m_TestMode: 0
-    m_TestEventUrl: 
-    m_TestConfigUrl: 
+    m_TestEventUrl:
+    m_TestConfigUrl:
   UnityAdsSettings:
     m_Enabled: 0
     m_InitializeOnStartup: 1
     m_TestMode: 0
     m_EnabledPlatforms: 4294967295
-    m_IosGameId: 
-    m_AndroidGameId: 
+    m_IosGameId:
+    m_AndroidGameId:
 ");
 
 
+  wp_insert_term(
+      'Energy', // the term
+      'wpunity_game_type', // the taxonomy
+      array(
+          'description'=> 'Energy Games',
+          'slug' => 'energy_games',
+      )
+  );
+  $inserted_term = get_term_by('slug', 'energy_games', 'wpunity_game_type');
 
+  update_term_meta($inserted_term->term_id, 'wpunity_audio_manager_term', $AudioManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_cluster_input_manager_term', $ClusterInputManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_dynamics_manager_term', $DynamicsManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_editor_build_settings_term', $EditorBuildSettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_editor_settings_term', $EditorSettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_graphics_settings_term', $GraphicsSettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_input_manager_term', $InputManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_nav_mesh_areas_term', $NavMeshAreas_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_network_manager_term', $NetworkManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_physics2d_settings_term', $Physics2DSettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_project_settings_term', $ProjectSettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_project_version_term', $ProjectVersion_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_quality_settings_term', $QualitySettings_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_tag_manager_term', $TagManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_time_manager_term', $TimeManager_asset[0], true);
+  update_term_meta($inserted_term->term_id, 'wpunity_unity_connect_settings_term', $UnityConnect_asset[0], true);
 
+}
 
+add_action( 'init', 'wpunity_games_taxtype_fill_energy' );
 
 
 
