@@ -79,6 +79,7 @@ function onMouseDown( event ) {
                 transform_controls.setMode("rotate");
 
             jQuery('input:radio[name=object-manipulation-switch]').val([transform_controls.getMode()]);
+            showObjectPropertiesPanel(transform_controls.getMode());
 
             return;
         }
@@ -226,12 +227,12 @@ function onMouseDown( event ) {
  */
 var gui_controls_funs = new function() {
 
-  /*  this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
-    this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
-    this.bt_scale = function(){ transform_controls.setMode( "scale" ); };*/
+    /*  this.bt_translate = function(){ transform_controls.setMode( "translate" ); };
+     this.bt_rotate = function(){ transform_controls.setMode( "rotate" ); };
+     this.bt_scale = function(){ transform_controls.setMode( "scale" ); };*/
 
     /*this.bt_axes_setbigger = function(){ transform_controls.setSize( transform_controls.size + 0.1 );};
-    this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};*/
+     this.bt_axes_setsmaller = function(){ transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 )  );};*/
 
     this.dg_tx = 0;
     this.dg_ty = 0;
@@ -248,13 +249,19 @@ var gui_controls_funs = new function() {
 /*var gui = new dat.GUI( {autoPlace: false} );*/
 
 var controlInterface = [];
-controlInterface.translate = new dat.GUI( {autoPlace: false} );
-controlInterface.rotate = new dat.GUI( {autoPlace: false} );
-controlInterface.scale = new dat.GUI( {autoPlace: false} );
+controlInterface.translate = new dat.GUI( { autoPlace: false });
+controlInterface.translate.domElement.id = 'translatePanelGui';
+
+controlInterface.rotate = new dat.GUI( { autoPlace: false });
+controlInterface.rotate.domElement.id = 'rotatePanelGui';
+
+controlInterface.scale = new dat.GUI( { autoPlace: false });
+controlInterface.scale.domElement.id = 'scalePanelGui';
+
 
 /*var cbt_translate = gui.add( gui_controls_funs, 'bt_translate').name('Translate (T)');
-var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
-var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');*/
+ var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
+ var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');*/
 
 var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Move x');//.listen();
 var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Move y');//.listen();
@@ -266,21 +273,21 @@ var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', 
 
 var dg_controller_sc = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
 /*var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
-var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
+ var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
 /*var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');*/
 
 /*cbt_doublesided.onChange(function(value) {
-    var sel_obj = envir.scene.getObjectByName(selected_object_name);
-    sel_obj.traverse(function (node) {
+ var sel_obj = envir.scene.getObjectByName(selected_object_name);
+ sel_obj.traverse(function (node) {
 
-        if (node.material)
-            if (node.material.side == THREE.DoubleSide)
-                node.material.side = THREE.SingleSide;
-            else
-                node.material.side = THREE.DoubleSide;
+ if (node.material)
+ if (node.material.side == THREE.DoubleSide)
+ node.material.side = THREE.SingleSide;
+ else
+ node.material.side = THREE.DoubleSide;
 
-    });
-});*/
+ });
+ });*/
 
 //gui.close();
 

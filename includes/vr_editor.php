@@ -185,6 +185,8 @@ echo '</script>';
         jQuery('#axis-manipulation-buttons').show();
         jQuery('#double-sided-switch').show();
 
+        showObjectPropertiesPanel(transform_controls.getMode());
+
         ev.preventDefault();
     }
 
@@ -245,7 +247,7 @@ echo '</script>';
 
 
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
-    <div id="dat-gui-container" class="VrGuiContainerStyle"></div>
+    <div id="gui-container" class="VrGuiContainerStyle"></div>
 
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
@@ -320,15 +322,12 @@ echo '</script>';
     var selected_object_name = '';
 
 
-
-
     // Add gui to gui container_3D_all
-    var datguiContainer = document.getElementById('dat-gui-container');
-    /*datguiContainer.appendChild(gui.domElement);*/
-
-    datguiContainer.appendChild(controlInterface.translate.domElement);
-    datguiContainer.appendChild(controlInterface.rotate.domElement);
-    datguiContainer.appendChild(controlInterface.scale.domElement);
+    var guiContainer = document.getElementById('gui-container');
+    guiContainer.appendChild(controlInterface.translate.domElement);
+    guiContainer.appendChild(controlInterface.rotate.domElement);
+    guiContainer.appendChild(controlInterface.scale.domElement);
+    hideObjectPropertiesPanels();
 
 
     // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
@@ -344,6 +343,7 @@ echo '</script>';
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
         transform_controls.setMode(value);
+        showObjectPropertiesPanel(value);
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -368,6 +368,17 @@ echo '</script>';
             });
         }
     });
+
+    function hideObjectPropertiesPanels() {
+        jQuery("#translatePanelGui").hide();
+        jQuery("#rotatePanelGui").hide();
+        jQuery("#scalePanelGui").hide();
+    }
+
+    function showObjectPropertiesPanel(type) {
+        hideObjectPropertiesPanels();
+        jQuery("#"+type+"PanelGui").show();
+    }
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();
@@ -502,7 +513,9 @@ $formRes->init($sceneToLoad);
         }
     }
     // Select event listener
-    jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );
+    /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
+
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDown );
 
     animate();
 </script>

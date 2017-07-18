@@ -54,8 +54,8 @@
 .VrGuiContainerStyle {
     position: absolute;
     text-align: left;
-    top: 200px;
-    left: 0;
+    top: 70px;
+    left: 20px;
     width: 20%;
     padding: 0;
 }
