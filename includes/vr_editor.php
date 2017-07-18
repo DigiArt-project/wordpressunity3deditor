@@ -327,7 +327,6 @@ echo '</script>';
     guiContainer.appendChild(controlInterface.translate.domElement);
     guiContainer.appendChild(controlInterface.rotate.domElement);
     guiContainer.appendChild(controlInterface.scale.domElement);
-    hideObjectPropertiesPanels();
 
 
     // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
@@ -368,6 +367,8 @@ echo '</script>';
             });
         }
     });
+
+    hideObjectPropertiesPanels();
 
     function hideObjectPropertiesPanels() {
         jQuery("#translatePanelGui").hide();
