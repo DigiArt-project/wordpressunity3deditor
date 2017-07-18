@@ -7,6 +7,8 @@ $editgamePage = wpunity_getEditpage('game');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
+    wpnunity_compile_the_game('test');
+
 	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
 	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
 	$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
