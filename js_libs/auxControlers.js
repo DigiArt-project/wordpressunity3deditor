@@ -147,10 +147,11 @@ function onMouseDown( event ) {
         }
     }
 
+    var nameL;
 
     // If only one object is intersected
     if (Object.keys(arrNameObj).length == 1) {
-        var nameL = Object.keys(arrNameObj)[0];
+        nameL = Object.keys(arrNameObj)[0];
 
         console.log("nameL Simple------------->", nameL);
 
@@ -173,17 +174,18 @@ function onMouseDown( event ) {
 
 
         // Add options
+        var option;
 
         // Prompt "Select"
-        var option = document.createElement("option");
+        option = document.createElement("option");
         option.text = "Select";
         option.value = "Select";
         option.style.background = "#555";
         popupSelect.add(option);
 
         // Add options for each intersected object
-        for (var nameL in  arrNameObj ) {
-            var option = document.createElement("option");
+        for (nameL in  arrNameObj ) {
+            option = document.createElement("option");
             option.text = nameL;
             option.value = nameL;
             option.style.background = "#5f8";
@@ -191,7 +193,7 @@ function onMouseDown( event ) {
         }
 
         // Prompt "Cancel"
-        var option = document.createElement("option");
+        option = document.createElement("option");
         option.text = "Cancel";
         option.value = "Cancel";
         option.style.background = "#f59";
