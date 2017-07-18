@@ -52,16 +52,21 @@ class vr_editor_environmentals {
     }
 
 
-    makeFullScreen(){
+    makeFullScreen() {
 
         if (this.container_3D_all.style.width!=="100%") {
             this.container_3D_all.style.position = 'fixed';
             this.container_3D_all.style.width = '100%';
             this.container_3D_all.style.height = '100%';
+            this.container_3D_all.style.overflow = 'hidden';
+            this.container_3D_all.style.zIndex = '9999';
             this.container_3D_all.style.top = '0';
             this.container_3D_all.style.left = '0';
             this.container_3D_all.style.right = '0';
             this.container_3D_all.style.bottom = '0';
+
+            jQuery("body#header").css("display", "none" );
+
 
             if (document.getElementById('wpadminbar')) {
                 document.getElementById('wpadminbar').style.zIndex = 0;
@@ -88,11 +93,16 @@ class vr_editor_environmentals {
             }
 
 
-        }else {
+        } else {
 
             this.container_3D_all.style.position = 'relative';
             this.container_3D_all.style.width = '99%';
+            this.container_3D_all.style.height = '100%';
+            this.container_3D_all.style.overflow = 'auto';
             this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
+            this.container_3D_all.style.zIndex = '999';
+
+            jQuery("body#header").css("display", "block" );
 
             if (document.getElementById('wpadminbar')) {
                 document.getElementById('wpadminbar').style.zIndex = 9999;
