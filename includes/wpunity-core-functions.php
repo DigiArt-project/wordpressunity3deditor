@@ -579,6 +579,9 @@ function wpunity_assemble_action_callback() {
 	wp_die();
 }
 
+
+
+
 // ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
 function wpunity_compile_action_callback() {
 	$DS = DIRECTORY_SEPARATOR;
@@ -715,5 +718,80 @@ function wpunity_game_zip_action_callback(){
 		echo 'Failed to zip, code:'.$resZip;
 		wp_die();
 	}
+
+
+
+// -- ASSEMBLY 1: Append scene paths in EditorBuildSettings.asset file --
+// $filepath : The path of the already written EditorBuildSettings.asset file
+// $scenepath : The scene to add as path : "Assets/scenes/S_Settings.unity"
+function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scenepath){
+
+        //a. open file for append
+        $fhandle = fopen($filepath, "a");
+
+        //b. create what to append
+        $newcontent = "  - enabled: 1".chr(10)."    path: ".$scenepath.chr(10);
+
+        //c. append and close
+        fwrite($fhandle, $newcontent);
+        fclose($fhandle);
+
+        //d. read test
+        //    $fhandle = fopen($filepath, "r");
+        //    echo fread($fhandle, filesize($filepath));
+}
+
+/* Create an empty WebGLBuilder.cs in a certain $filepath */
+function wpunity_createEmpty_WebGLBuilder_cs($filepath){
+
+    $handle = fopen($filepath, 'w');
+
+    $content = 'using UnityEditor;
+class WebGLBuilder {
+static void build() {
+
+        string[] scenes = {}; 
+        
+        string pathToDeploy = "builds/WebGLversion/";		
+                
+        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.WebGL, BuildOptions.None);
+    }
+}';
+
+    fwrite($handle, $content);
+    fclose($handle);
+}
+
+
+// Add to string[] scenes the   $scenepath : "Assets/scenes/S_SceneSelector.unity"
+function wpunity_add_scenes_in_WebGLBuilder_cs($filepath, $scenepath){
+
+    // Clear previous size of filepath
+    clearstatcache();
+
+    // a. Read
+    $handle = fopen($filepath, 'r');
+    $content = fread($handle, filesize($filepath));
+    fclose($handle);
+
+    // b. Extend certain string
+    $content = str_replace('};', ','.chr(10).'            "'.$scenepath.'"};', $content);
+
+    // first comma remove
+    $content = str_replace('{,','{', $content);
+
+    // c. Write to old
+    $fhandle = fopen($filepath, 'w');
+
+    fwrite($fhandle, $content, strlen($content));
+    fclose($fhandle);
+
+    //  d. Read for testing
+    //    $handle = fopen($filepath, 'r');
+    //    echo fread($handle, strlen($content));
+    //    fclose($handle);
+}
+
+
 }
 
