@@ -102,21 +102,21 @@ class SceneClass{
     function wpunity_scenes_taxyaml(){
 
         $labels = array(
-            'name' => _x('Scene YAML', 'taxonomy general name'),
-            'singular_name' => _x('Scene YAML', 'taxonomy singular name'),
-            'menu_name' => _x('Scene YAMLs', 'admin menu'),
-            'search_items' => __('Search Scene YAMLs'),
-            'all_items' => __('All Scene YAMLs'),
-            'parent_item' => __('Parent Scene YAML'),
-            'parent_item_colon' => __('Parent Scene YAML:'),
-            'edit_item' => __('Edit Scene YAML'),
-            'update_item' => __('Update Scene YAML'),
-            'add_new_item' => __('Add New Scene YAML'),
-            'new_item_name' => __('New Scene YAML')
+            'name' => _x('Scene Type', 'taxonomy general name'),
+            'singular_name' => _x('Scene Type', 'taxonomy singular name'),
+            'menu_name' => _x('Scene Types', 'admin menu'),
+            'search_items' => __('Search Scene Types'),
+            'all_items' => __('All Scene Types'),
+            'parent_item' => __('Parent Scene Type'),
+            'parent_item_colon' => __('Parent Scene Type:'),
+            'edit_item' => __('Edit Scene Type'),
+            'update_item' => __('Update Scene Type'),
+            'add_new_item' => __('Add New Scene Type'),
+            'new_item_name' => __('New Scene Type')
         );
 
         $args = array(
-            'description' => 'YAML Template that the Scene belongs',
+            'description' => 'Scene Type (YAML Template) that the Scene belongs',
             'labels' => $labels,
             'public' => false,
             'show_ui' => true,

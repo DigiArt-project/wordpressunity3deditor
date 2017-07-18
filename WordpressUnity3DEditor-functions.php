@@ -282,6 +282,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' )
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-project-settings.php' );
+
 // ===================== Obsolete ===================================
 
 /**
