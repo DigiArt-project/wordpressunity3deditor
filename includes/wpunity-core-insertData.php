@@ -33,14 +33,6 @@ add_action( 'init', 'wpunity_games_taxcategory_fill' );
 //==========================================================================================================================================
 
 function wpunity_games_taxtype_fill(){
-    wp_insert_term(
-        'Energy', // the term
-        'wpunity_game_type', // the taxonomy
-        array(
-            'description'=> 'Energy Games',
-            'slug' => 'energy_games',
-        )
-    );
 
     wp_insert_term(
         'Archaeology', // the term
