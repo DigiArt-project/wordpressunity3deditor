@@ -87,9 +87,6 @@ function wpunity_upload_dir_forAssets( $args ) {
 add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
 
 
-
-
-
 /**
  * 1.01
  * Overwrite Uploads
@@ -147,5 +144,75 @@ function wpunity_disable_imgthumbs_assets( $image_sizes ){
 }
 
 add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
+
+//==========================================================================================================================================
+
+function wpunity_compile_the_game($gameID,$gameSlug){
+    //1. Create Default Folder Structure (Delete everything old)
+    wpunity_compile_folders_gen($gameSlug);
+
+//    echo "Hello";
+//
+//    die;
+}
+
+
+function wpunity_compile_folders_gen($gameSlug){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+
+    //--Uploads/myGameProjectUnity--
+    $myGameProjectUnityF = $upload_dir . '/' . $gameSlug . 'Unity';
+    //if the folder exists, then delete everything before create new folders
+    if(is_dir($myGameProjectUnityF)){
+        wpunity_compile_folders_del($myGameProjectUnityF);
+    }
+    mkdir($myGameProjectUnityF, 0755) or wp_die("Unable to create the folder ".$myGameProjectUnityF);
+
+    //--Uploads/myGameProjectUnity/ProjectSettings--
+    //--Uploads/myGameProjectUnity/Assets--
+    //--Uploads/myGameProjectUnity/build--
+    $ProjectSettingsF = $myGameProjectUnityF . "/" . 'ProjectSettings';
+    $AssetsF = $myGameProjectUnityF . "/" . 'Assets';
+    $buildF = $myGameProjectUnityF . "/" . 'build';
+    if (!is_dir($ProjectSettingsF)) {mkdir($ProjectSettingsF, 0755) or wp_die("Unable to create the folder".$ProjectSettingsF);}
+    if (!is_dir($AssetsF)) {mkdir($AssetsF, 0755) or wp_die("Unable to create the folder".$AssetsF);}
+    if (!is_dir($buildF)) {mkdir($buildF, 0755) or wp_die("Unable to create the folder".$buildF);}
+
+    //--Uploads/myGameProjectUnity/Assets/Editor--
+    //--Uploads/myGameProjectUnity/Assets/scenes--
+    //--Uploads/myGameProjectUnity/Assets/models--
+    //--Uploads/myGameProjectUnity/Assets/StandardAssets--
+    $EditorF = $AssetsF . "/" . 'Editor';
+    $scenesF = $AssetsF . "/" . 'scenes';
+    $modelsF = $AssetsF . "/" . 'models';
+    $StandardAssetsF = $AssetsF . "/" . 'StandardAssets';
+    if (!is_dir($EditorF)) {mkdir($EditorF, 0755) or wp_die("Unable to create the folder".$EditorF);}
+    if (!is_dir($scenesF)) {mkdir($scenesF, 0755) or wp_die("Unable to create the folder".$scenesF);}
+    if (!is_dir($modelsF)) {mkdir($modelsF, 0755) or wp_die("Unable to create the folder".$modelsF);}
+    if (!is_dir($StandardAssetsF)) {mkdir($StandardAssetsF, 0755) or wp_die("Unable to create the folder".$StandardAssetsF);}
+}
+
+
+function wpunity_compile_folders_del($dirname) {
+    if (is_dir($dirname))
+        $dir_handle = opendir($dirname);
+    if (!$dir_handle)
+        return false;
+    while($file = readdir($dir_handle)) {
+        if ($file != "." && $file != "..") {
+            if (!is_dir($dirname."/".$file))
+                unlink($dirname."/".$file);
+            else
+                delete_directory($dirname.'/'.$file);
+        }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+    return true;
+}
+
 
 ?>
