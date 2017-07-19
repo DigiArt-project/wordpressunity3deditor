@@ -153,7 +153,8 @@ function wpunity_compile_the_game($gameID,$gameSlug){
     wpunity_compile_folders_gen($gameSlug);
     //2. Create Project Settings files (16 files)
     wpunity_compile_settings_gen($gameID,$gameSlug);
-    
+    //3. Create Model folders/files
+    wpunity_compile_models_gen($gameID,$gameSlug);
 }
 
 
@@ -244,11 +245,61 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
 function wpunity_compile_settings_files_gen($game_path,$fileName,$fileYaml){
 
     $file = $game_path . '/ProjectSettings/' . $fileName;
-
+    //TODO if $fileName=EditorBuildSettings.asset
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $fileYaml);
     fclose($create_file);
 
 }
+
+function wpunity_compile_models_gen($gameID,$gameSlug){
+
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
+
+    $queryargs = array(
+        'post_type' => 'wpunity_asset3d',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field' => 'slug',
+                'terms' => $gameSlug
+            )
+        )
+    );
+    $custom_query = new WP_Query( $queryargs );
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $asset_id = get_the_ID();
+            wpunity_compile_assets_cre($game_path,$asset_id);
+        endwhile;
+    endif;
+    wp_reset_postdata();
+
+}
+
+function wpunity_compile_assets_cre($game_path,$asset_id){
+    //Create the folder of the Model(Asset)
+    $asset_post = get_post($asset_id);
+    $folder = $game_path . '/' . $asset_post->post_name;
+    if (!is_dir($folder)) {mkdir($folder, 0755) or wp_die("Unable to create the folder ".$folder);}
+
+    //Copy files of the Model
+    $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
+    if(is_numeric($objID)){
+        $attachment_post = get_post($asset_id);
+        $attachment_file = $attachment_post->guid;
+        $attachment_tempname = str_replace('\\', '/', $attachment_file);
+        $attachment_name = pathinfo($attachment_tempname);
+        $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
+        copy($attachment_file,$new_file);
+    }
+
+}
+
 
 ?>
