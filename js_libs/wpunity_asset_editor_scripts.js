@@ -72,6 +72,7 @@ function wpunity_load_file_callback(content, type) {
         document.getElementById("assetPreviewContainer").innerHTML = "";
 
     }
+    spanProducerChartLabels();
 }
 
 function wpunity_extract_file_extension(fn) {
