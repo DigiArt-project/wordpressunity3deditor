@@ -476,12 +476,12 @@ function file_Browsing_By_DB(data) {
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +
-                    '" data-mdc-auto-init="MDCRipple">' + img +
+                    '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span></li>' );
 
                 file.appendTo(fileList);
