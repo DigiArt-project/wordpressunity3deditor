@@ -9,26 +9,26 @@
 
 /* Php info top right */
 .VrInfoPhpStyle {
-    font-size:0.6vw;
+    font-size: 0.6vw;
     max-font-size: 20pt;
-    background:rgba(255, 255, 255, .7);
-    color:#000;
+    background: rgba(255, 255, 255, .54);
+    color: #000;
     position: absolute;
     text-align: center;
     top: 0;
-    left: 40%;
+    right: 0;
     width: 20%;
     padding: 2px;
 }
 
-.bt_textify {
-    font-size: 14px;
-    background:#000;
-    color: #fff;
-    margin-top: 5px;
-    padding: 2px;
-    cursor:pointer;
+.SaveBtnContainerStyle {
+    position: absolute;
+    text-align: center;
+    top: 20px;
+    left: 40%;
+    width: 20%;
 }
+
 
 #formdiv{
     font-size: 1vw;

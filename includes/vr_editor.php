@@ -111,23 +111,6 @@ echo '</script>';
         wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
     });
 
-    // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
-    function save_scene(){
-
-        document.getElementById('save-scene-button').style.backgroundColor = 'green';
-
-        // Export using a custom variant of the old deprecated class SceneExporter
-        var exporter = new THREE.SceneExporter();
-        document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
-        document.getElementById('wpunity_scene_theForm').submit();
-        //document.getElementsByClassName("wpunity_scene_theForm")[0].submit();
-
-        setInterval(function() {
-            document.getElementById('save-scene-button').style.backgroundColor = 'black';
-        } , 300);
-    }
-
-
     function removeSavedText(){
         jQuery(".result").html("");
     }
@@ -231,13 +214,13 @@ echo '</script>';
     </div>
 
     <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
-        <a id="axis-size-decrease-btn" title="Decrease Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
-        <a id="axis-size-increase-btn" title="Increase Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+        <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+        <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
     </div>
 
     <div id="double-sided-switch" style="display: none;">
         <div class="mdc-switch DoubleSidedObjectToggle">
-            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Double sided object" />
+            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle double sided object" />
             <div class="mdc-switch__background">
                 <div class="mdc-switch__knob"></div>
             </div>
@@ -269,10 +252,14 @@ echo '</script>';
             </div>
         </div>
 
-        <div id="save-scene-button" class="bt_textify mdc-typography--caption" onclick="save_scene();">Save scene</div>
-
         <div class="result"></div>
         <div id="result_download"></div>
+
+    </div>
+
+
+    <div class="SaveBtnContainerStyle">
+        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene" type="button" id="save-scene-button" class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--primary">Save scene</a>
     </div>
 
     <!--  FileBrowserToolbar  -->
@@ -315,6 +302,9 @@ echo '</script>';
 
 <!--    Start 3D    -->
 <script>
+
+
+
     // all 3d dom
     var container_3D_all = document.getElementById( 'vr_editor_main_div' );
 
@@ -366,6 +356,19 @@ echo '</script>';
 
             });
         }
+    });
+
+
+    // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
+    jQuery('#save-scene-button').click(function() {
+
+        document.getElementById('save-scene-button').style.backgroundColor = '#00C853';
+
+        // Export using a custom variant of the old deprecated class SceneExporter
+        var exporter = new THREE.SceneExporter();
+        document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
+        document.getElementById('wpunity_scene_theForm').submit();
+        //document.getElementsByClassName("wpunity_scene_theForm")[0].submit();
     });
 
     hideObjectPropertiesPanels();
@@ -434,6 +437,12 @@ echo '</script>';
             transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
             transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+
+            jQuery('#object-manipulation-toggle').show();
+            jQuery('#axis-manipulation-buttons').show();
+            jQuery('#double-sided-switch').show();
+            showObjectPropertiesPanel(transform_controls.getMode());
+
 
             selected_object_name = name;
         }
