@@ -466,6 +466,15 @@ function wpunity_fetch_video_action_callback(){
 
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
+function wpunity_assepile_action_callback(){
+
+
+    echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
+    wp_die();
+}
+
+
+
 // ---- AJAX ASSEMBLE 1: Assemble game ------
 function wpunity_assemble_action_callback() {
 
