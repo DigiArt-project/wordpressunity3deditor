@@ -275,6 +275,8 @@ if ( $custom_query->have_posts() ) :?>
                style="visibility:hidden"
                class="mdc-dialog"
                role="alertdialog"
+               data-game-slug="<?php echo $gameSlug; ?>"
+               data-project-id="<?php echo $project_id; ?>"
                aria-labelledby="my-mdc-dialog-label"
                aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
             <div class="mdc-dialog__surface">
@@ -329,7 +331,7 @@ if ( $custom_query->have_posts() ) :?>
                 </section>
                 <footer class="mdc-dialog__footer">
                     <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
-                    <a type="button" id="compileProceedBtn" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
+                    <a type="button"  id="compileProceedBtn" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
                 </footer>
             </div>
             <div class="mdc-dialog__backdrop"></div>
@@ -365,6 +367,17 @@ $wp_query = $temp_query;
         var mdc = window.mdc;
         mdc.autoInit();
 
+        jQuery( "#compileGameBtn" ).click(function() {
+            compileDialog.show();
+
+        });
+
+        jQuery( "#compileProceedBtn" ).click(function() {
+            compileGameAjax();
+
+        });
+
+
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
             var platformDropdown = document.getElementById('platform-select');
@@ -392,12 +405,7 @@ $wp_query = $temp_query;
 
         var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
         var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
-
-        jQuery( "#compileGameBtn" ).click(function() {
-            compileDialog.show();
-
-        });
-
+        compileDialog.focusTrap_.deactivate();
 
         function deleteScene(id) {
 
@@ -415,6 +423,26 @@ $wp_query = $temp_query;
             console.log("ID:", deleteDialog.id);
         });
 
+
+        function compileGameAjax(id, slug) {
+
+            jQuery.ajax({
+                url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
+                type : 'GET',
+                data : {
+                    'action': 'wpunity_compile_the_game',
+                    'gameId': id,
+                    'gameSlug': slug
+                },
+
+                success : function(data) {
+                    console.log(data);
+                },
+                error : function(xhr, ajaxOptions, thrownError){
+                    console.log("ERROR: " + thrownError);
+                }
+            });
+        }
 
 
     </script>
