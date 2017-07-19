@@ -97,7 +97,7 @@ class vr_editor_environmentals {
 
             this.container_3D_all.style.position = 'relative';
             this.container_3D_all.style.width = '99%';
-            this.container_3D_all.style.height = '100%';
+            this.container_3D_all.style.height = '600px';
             this.container_3D_all.style.overflow = 'auto';
             this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
             this.container_3D_all.style.zIndex = '999';
