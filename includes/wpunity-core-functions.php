@@ -468,7 +468,7 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-
+	wpunity_compile_the_game($_REQUEST['gameId'],$_REQUEST['gameSlug']);
     echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
     wp_die();
 }
