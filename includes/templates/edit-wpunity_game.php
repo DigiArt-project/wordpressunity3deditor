@@ -427,7 +427,7 @@ $wp_query = $temp_query;
         function compileGameAjax(id, slug) {
 
             jQuery.ajax({
-                url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
+                url :  my_ajax_object.ajax_url,
                 type : 'GET',
                 data : {
                     'action': 'wpunity_compile_the_game',
