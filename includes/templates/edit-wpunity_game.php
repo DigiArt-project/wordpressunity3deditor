@@ -395,7 +395,8 @@ $wp_query = $temp_query;
         });
 
         jQuery( "#compileProceedBtn" ).click(function() {
-            wpunity_assepileAjax();
+            var compileDialog = jQuery("#compile-dialog");
+            wpunity_assepileAjax(compileDialog.data("project-id"), compileDialog.data("game-slug"));
        });
 
 
@@ -443,9 +444,6 @@ $wp_query = $temp_query;
         deleteDialog.listen('MDCDialog:accept', function(evt) {
             console.log("ID:", deleteDialog.id);
         });
-
-
-
 
     </script>
 <?php get_footer(); ?>
