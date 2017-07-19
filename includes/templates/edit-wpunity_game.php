@@ -7,9 +7,31 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 $project_id = intval( $_GET['wpunity_game'] );
 $project_id = sanitize_text_field( $project_id );
 
-
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
+
+$isAdmin = is_admin() ? 'back' : 'front';
+echo '<script>';
+echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
+echo '</script>';
+
+// Ajax logic for front end assepile
+// engueue request_game_assepile.js in ajax with in order to be able to call php and pass as parameters the ajax object and the game id and slug
+
+// Ajax for assembling
+function my_enqueue_front_end_assepile_ajax() {
+    global $project_id, $gameSlug;
+    $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
+    wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+    wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
+        array( 'ajax_url' => admin_url( 'admin-ajax.php'),
+                'id' => $project_id,
+                'slug' => $gameSlug
+            )
+    ) ;
+}
+add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_assepile_ajax');
+
 
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
@@ -373,9 +395,8 @@ $wp_query = $temp_query;
         });
 
         jQuery( "#compileProceedBtn" ).click(function() {
-            var compileDialog = jQuery("#compile-dialog");
-            compileGameAjax(compileDialog.data("project-id"), compileDialog.data("game-slug"));
-        });
+            wpunity_assepileAjax();
+       });
 
 
         (function() {
@@ -424,25 +445,6 @@ $wp_query = $temp_query;
         });
 
 
-        function compileGameAjax(id, slug) {
-
-            jQuery.ajax({
-                url :  my_ajax_object.ajax_url,
-                type : 'GET',
-                data : {
-                    'action': 'wpunity_compile_the_game',
-                    'gameId': id,
-                    'gameSlug': slug
-                },
-
-                success : function(data) {
-                    console.log(data);
-                },
-                error : function(xhr, ajaxOptions, thrownError){
-                    console.log("ERROR: " + thrownError);
-                }
-            });
-        }
 
 
     </script>

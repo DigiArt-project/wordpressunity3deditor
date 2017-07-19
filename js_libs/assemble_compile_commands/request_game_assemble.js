@@ -1,6 +1,3 @@
-// AJAX NO 1: COMPILE BUTTON
-//var os_dependend_var = phpvars.PHP_OS.toUpperCase().substr(0, 3) === 'WIN'? 1:4;
-
 // handles the click event for link 1, sends the query
 function wpunity_assembleAjax() {
 
@@ -27,3 +24,6 @@ function wpunity_assembleAjax() {
         }
     });
 }
+
+
+//var os_dependend_var = phpvars.PHP_OS.toUpperCase().substr(0, 3) === 'WIN'? 1:4;

@@ -227,6 +227,7 @@ add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback
 
 // Assemble php from ajax call
 add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
-
+// Add the assepile php
+add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback' );
 
 ?>

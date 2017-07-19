@@ -466,6 +466,15 @@ function wpunity_fetch_video_action_callback(){
 
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
+function wpunity_assepile_action_callback(){
+
+
+    echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
+    wp_die();
+}
+
+
+
 // ---- AJAX ASSEMBLE 1: Assemble game ------
 function wpunity_assemble_action_callback() {
 
@@ -721,6 +730,9 @@ function wpunity_game_zip_action_callback(){
 
 
 
+// NEW ASSEMBLY FUNCTIONS OF JULY 2017
+
+
 // -- ASSEMBLY 1: Append scene paths in EditorBuildSettings.asset file --
 // $filepath : The path of the already written EditorBuildSettings.asset file
 // $scenepath : The scene to add as path : "Assets/scenes/S_Settings.unity"
@@ -790,6 +802,52 @@ function wpunity_add_scenes_in_WebGLBuilder_cs($filepath, $scenepath){
     //    $handle = fopen($filepath, 'r');
     //    echo fread($handle, strlen($content));
     //    fclose($handle);
+}
+
+
+// Write the empty AssetsImporter.cs to $filepath
+function wpunity_make_AssetsImporter_cs($filepath){
+
+    // line break character
+    $LF = chr(10);
+    $content = "using UnityEditor".$LF."   class AssetsImporter {".$LF."	   static void build() {".$LF.
+        "		 // replace_this_with_content".$LF."	   }".$LF."}";
+
+
+    $handle = fopen($filepath, 'w');
+    fwrite($handle, $content, strlen($content));
+    fclose($handle);
+}
+
+// Add to AssetsImporter.cs (in filepath location) the objpath: "Assets/models/building1/building1.obj"
+function wpunity_add_objs_to_AssetsImporter_cs($filepath, $objpath){
+
+    // line break character
+    $LF = chr(10);
+
+    // Clear previous size of filepath
+    clearstatcache();
+
+    // a. read content
+    $handle = fopen($filepath, 'r');
+    $content = fread($handle, filesize($filepath));
+    fclose($handle);
+
+    // b. add obj
+    $content = str_replace('// replace_this_with_content','// replace_this_with_content'.$LF.
+        '          AssetDatabase.ImportAsset("'.$objpath.'", ImportAssetOptions.Default);', $content
+    );
+
+    // c. Write to file
+    $fhandle = fopen($filepath, 'w');
+    fwrite($fhandle, $content, strlen($content));
+    fclose($fhandle);
+
+//    // d. Read for testing
+//    clearstatcache();
+//    $handle = fopen($filepath, 'r');
+//    echo fread($handle, filesize($filepath));
+//    fclose($handle);
 }
 
 
