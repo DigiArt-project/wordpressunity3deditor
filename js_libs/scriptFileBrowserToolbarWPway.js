@@ -39,7 +39,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
 //                                          |___/
 // The DB way is the correct one. The old dir way was vulnerable to bugs
 //======================================================================
-function file_Browsing_By_DB(data){
+function file_Browsing_By_DB(data) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
         breadcrumbs = jQuery('.breadcrumbs'),
@@ -140,7 +140,8 @@ function file_Browsing_By_DB(data){
 
             console.log(e.target.attributes);
 
-            var dragData = {"title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
+            var dragData = {
+                "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                 "assetid": e.target.attributes.getNamedItem("data-assetid").value,
                 "obj": e.target.attributes.getNamedItem("data-objPath").value,
                 "objID": e.target.attributes.getNamedItem("data-objID").value,
@@ -150,7 +151,8 @@ function file_Browsing_By_DB(data){
                 "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
-                "image1id":e.target.attributes.getNamedItem("data-image1id").value};
+                "image1id":e.target.attributes.getNamedItem("data-image1id").value
+            };
 
             var jsonDataDrag = JSON.stringify(dragData);
 
@@ -459,7 +461,7 @@ function file_Browsing_By_DB(data){
                     f.screenImagePath = f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) + 'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
                 }
 
-                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
+                img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;"><a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;" href="'+ f.objPath +
                     '" title="'+ f.name +
@@ -474,12 +476,12 @@ function file_Browsing_By_DB(data){
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +
-                    '" data-mdc-auto-init="MDCRipple">' + img +
+                    '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span></li>' );
 
                 file.appendTo(fileList);

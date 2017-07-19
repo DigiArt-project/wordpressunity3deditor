@@ -20,15 +20,15 @@ echo '</script>';
 
 // Ajax for assembling
 function my_enqueue_front_end_assepile_ajax() {
-    global $project_id, $gameSlug;
-    $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
-    wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-    wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
-        array( 'ajax_url' => admin_url( 'admin-ajax.php'),
-                'id' => $project_id,
-                'slug' => $gameSlug
-            )
-    ) ;
+	global $project_id, $gameSlug;
+	$thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
+	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+	wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
+		array( 'ajax_url' => admin_url( 'admin-ajax.php'),
+		       'id' => $project_id,
+		       'slug' => $gameSlug
+		)
+	) ;
 }
 add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_assepile_ajax');
 
@@ -396,7 +396,7 @@ $wp_query = $temp_query;
 
         jQuery( "#compileProceedBtn" ).click(function() {
             wpunity_assepileAjax();
-       });
+        });
 
 
         (function() {
@@ -443,9 +443,6 @@ $wp_query = $temp_query;
         deleteDialog.listen('MDCDialog:accept', function(evt) {
             console.log("ID:", deleteDialog.id);
         });
-
-
-
 
     </script>
 <?php get_footer(); ?>
