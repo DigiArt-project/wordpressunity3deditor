@@ -461,7 +461,7 @@ function file_Browsing_By_DB(data) {
                     f.screenImagePath = f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) + 'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
                 }
 
-                img = '<span class="mdc-list-item__start-detail CenterContents"><img src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
+                img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;"><a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%;" href="'+ f.objPath +
                     '" title="'+ f.name +
