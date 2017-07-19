@@ -39,7 +39,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
 //                                          |___/
 // The DB way is the correct one. The old dir way was vulnerable to bugs
 //======================================================================
-function file_Browsing_By_DB(data){
+function file_Browsing_By_DB(data) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
         breadcrumbs = jQuery('.breadcrumbs'),
@@ -140,7 +140,8 @@ function file_Browsing_By_DB(data){
 
             console.log(e.target.attributes);
 
-            var dragData = {"title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
+            var dragData = {
+                "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                 "assetid": e.target.attributes.getNamedItem("data-assetid").value,
                 "obj": e.target.attributes.getNamedItem("data-objPath").value,
                 "objID": e.target.attributes.getNamedItem("data-objID").value,
@@ -150,7 +151,8 @@ function file_Browsing_By_DB(data){
                 "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
-                "image1id":e.target.attributes.getNamedItem("data-image1id").value};
+                "image1id":e.target.attributes.getNamedItem("data-image1id").value
+            };
 
             var jsonDataDrag = JSON.stringify(dragData);
 

@@ -373,8 +373,8 @@ $wp_query = $temp_query;
         });
 
         jQuery( "#compileProceedBtn" ).click(function() {
-            compileGameAjax();
-
+            var compileDialog = jQuery("#compile-dialog");
+            compileGameAjax(compileDialog.data("project-id"), compileDialog.data("game-slug"));
         });
 
 
