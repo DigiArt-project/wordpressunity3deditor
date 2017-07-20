@@ -125,11 +125,6 @@
 	padding: 0 0 0 6px;
 }
 
-.filemanager .data.animated {
-	-webkit-animation: showSlowlyElement 300ms; /* Chrome, Safari, Opera */
-	animation: showSlowlyElement 300ms; /* Standard syntax */
-}
-
 .filemanager .data li {
 
 	border-radius: 2%;

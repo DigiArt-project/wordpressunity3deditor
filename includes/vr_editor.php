@@ -206,7 +206,6 @@ echo '</script>';
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
     <div id="gui-container" class="VrGuiContainerStyle"></div>
 
-    <!-- Add new components - migrating from dat.gui-->
     <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
         <label for="translate-switch">Move (T)</label>
@@ -231,21 +230,23 @@ echo '</script>';
         <label for="double-sided-switch-input" class="mdc-switch-label DoubleSidedObjectToggleLabel" title="Double sided object"><i class="material-icons mdc-theme--text-hint-on-light">compare_arrows</i></label>
     </div>
 
+    <!--Canvas center-->
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle Interface">
         <i class="material-icons">visibility</i>
     </a>
 
-    <!-- Full screen button -->
+    <!-- The button to start walking in the 3d environment -->
+    <div id="blocker" class="VrWalkInButtonStyle">
+        <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse">
+            Perspective
+        </a>
+    </div>
+
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle Full Screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
 
-    <!-- The button to start walking in the 3d environment -->
-    <div id="blocker" class="VrWalkInButtonStyle">
-        <div id="instructions" class="VrWalkInButtonTextStyle CenterContents" title="Move: W,A,S,D,Q,E keys, Orientation: Mouse">
-            <span class="mdc-typography--subheading2">First Person Mode</span>
-        </div>
-    </div>
+
 
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle">

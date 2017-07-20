@@ -59,7 +59,8 @@ function initPointerLock() {
                 //shd("envir.avatarControls.getObject().position.x", envir.avatarControls.getObject().position.x);
                 //shd("envir.avatarControls.getObject().position.z", envir.avatarControls.getObject().position.z);
 
-                jQuery("#fileBrowserToolbar").get(0).style.display = 'none';
+                jQuery( "#toggleUIBtn" ).trigger( "click" );
+
 
             } else {
                 // ------------- ORBIT --------------------------
@@ -78,7 +79,7 @@ function initPointerLock() {
                 blocker.style.display = 'box';
                 instructions.style.display = '';
 
-                jQuery("#fileBrowserToolbar").get(0).style.display = '';
+                jQuery( "#toggleUIBtn" ).trigger( "click" );
             }
         };
 
