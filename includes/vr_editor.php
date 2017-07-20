@@ -237,7 +237,7 @@ echo '</script>';
 
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
-        <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse">
+        <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
             Perspective
         </a>
     </div>

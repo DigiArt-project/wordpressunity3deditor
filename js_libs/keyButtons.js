@@ -55,13 +55,21 @@ document.addEventListener( 'keydown',
 
             case 84: // T
                 transform_controls.setMode("translate");
+                objManipulationSwitch.val([transform_controls.getMode()]);
+                showObjectPropertiesPanel(transform_controls.getMode());
 
                 break;
             case 89: // Y
                 transform_controls.setMode("rotate");
+                objManipulationSwitch.val([transform_controls.getMode()]);
+                showObjectPropertiesPanel(transform_controls.getMode());
+
                 break;
             case 85: // U
                 transform_controls.setMode("scale");
+                objManipulationSwitch.val([transform_controls.getMode()]);
+                showObjectPropertiesPanel(transform_controls.getMode());
+                
                 break;
             case 187:
             case 107: // +,=,num+
@@ -121,8 +129,6 @@ document.addEventListener( 'keydown',
             //-----------------------------------------------------------------
         }
 
-        objManipulationSwitch.val([transform_controls.getMode()]);
-        showObjectPropertiesPanel(transform_controls.getMode());
     });
 
 
