@@ -291,15 +291,44 @@ function wpunity_compile_assets_cre($game_path,$asset_id){
     //Copy files of the Model
     $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
     if(is_numeric($objID)){
-        $attachment_post = get_post($asset_id);
+        $attachment_post = get_post($objID);
         $attachment_file = $attachment_post->guid;
         $attachment_tempname = str_replace('\\', '/', $attachment_file);
         $attachment_name = pathinfo($attachment_tempname);
         $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
         copy($attachment_file,$new_file);
+        wpunity_compile_objmeta_cre($folder,$attachment_name['filename'],$objID);
     }
+
+    $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
+    if(is_numeric($mtlID)){
+        $attachment_post = get_post($mtlID);
+        $attachment_file = $attachment_post->guid;
+        $attachment_tempname = str_replace('\\', '/', $attachment_file);
+        $attachment_name = pathinfo($attachment_tempname);
+        $new_file = $folder .'/' . $attachment_name['filename'] . '.mtl';
+        copy($attachment_file,$new_file);
+    }
+
+    $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true); // Diffusion Image ID
+    if(is_numeric($difimgID)){
+        $attachment_post = get_post($difimgID);
+        $attachment_file = $attachment_post->guid;
+        $attachment_tempname = str_replace('\\', '/', $attachment_file);
+        $attachment_name = pathinfo($attachment_tempname);
+        $new_file = $folder .'/' . $attachment_name['filename'] . '.jpg';
+        copy($attachment_file,$new_file);
+    }
+
 
 }
 
-
+function wpunity_compile_objmeta_cre($folder,$objName,$objID){
+    $file = $folder . '/' . $objName . '.obj.meta';
+    $create_file = fopen($file, "w") or die("Unable to open file!");
+    $objMetaPattern = wpunity_getYaml_obj_dotmeta_pattern();
+    $objMetaContent = wpunity_replace_objmeta($objMetaPattern,$objID);
+    fwrite($create_file, $objMetaContent);
+    fclose($create_file);
+}
 ?>
