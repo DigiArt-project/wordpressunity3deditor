@@ -149,7 +149,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .VrEditorFullscreenBtnStyle {
     position: absolute;
-    left: 620px;
+    right: 160px;
     top: 20px;
 }
 

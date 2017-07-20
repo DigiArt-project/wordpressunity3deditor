@@ -352,7 +352,6 @@ echo '</script>';
     });
 
     jQuery('#toggleUIBtn').click(function() {
-
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
 
@@ -372,17 +371,11 @@ echo '</script>';
 
             showEditorUI();
         }
-
-
-
-
     });
-
 
     jQuery('#fullScreenBtn').click(function() {
         envir.makeFullScreen();
     });
-
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
@@ -397,43 +390,6 @@ echo '</script>';
     });
 
     hideObjectPropertiesPanels();
-
-    function hideObjectPropertiesPanels() {
-        jQuery("#translatePanelGui").hide();
-        jQuery("#rotatePanelGui").hide();
-        jQuery("#scalePanelGui").hide();
-    }
-
-    function showObjectPropertiesPanel(type) {
-        hideObjectPropertiesPanels();
-        jQuery("#"+type+"PanelGui").show();
-    }
-
-    function showEditorUI() {
-        jQuery("#"+transform_controls.getMode()+"PanelGui").show();
-
-        jQuery("#object-manipulation-toggle").show();
-        jQuery("#axis-manipulation-buttons").show();
-        jQuery("#double-sided-switch").show();
-        jQuery("#fullScreenBtn").show();
-        jQuery("#blocker").show();
-        jQuery("#infophp").show();
-        jQuery("#fileBrowserToolbar").show();
-    }
-
-    function hideEditorUI() {
-        hideObjectPropertiesPanels();
-
-        jQuery("#object-manipulation-toggle").hide();
-        jQuery("#axis-manipulation-buttons").hide();
-        jQuery("#double-sided-switch").hide();
-        jQuery("#fullScreenBtn").hide();
-        jQuery("#blocker").hide();
-        jQuery("#infophp").hide();
-        jQuery("#fileBrowserToolbar").hide();
-
-
-    }
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();
@@ -494,9 +450,41 @@ echo '</script>';
             jQuery('#double-sided-switch').show();
             showObjectPropertiesPanel(transform_controls.getMode());
 
-
             selected_object_name = name;
         }
+    };
+
+    function hideObjectPropertiesPanels() {
+        jQuery("#translatePanelGui").hide();
+        jQuery("#rotatePanelGui").hide();
+        jQuery("#scalePanelGui").hide();
+    }
+
+    function showObjectPropertiesPanel(type) {
+        hideObjectPropertiesPanels();
+        jQuery("#"+type+"PanelGui").show();
+    }
+
+    function showEditorUI() {
+        jQuery("#"+transform_controls.getMode()+"PanelGui").show();
+        jQuery("#object-manipulation-toggle").show();
+        jQuery("#axis-manipulation-buttons").show();
+        jQuery("#double-sided-switch").show();
+        jQuery("#fullScreenBtn").show();
+        jQuery("#blocker").show();
+        jQuery("#infophp").show();
+        jQuery("#fileBrowserToolbar").show();
+    }
+
+    function hideEditorUI() {
+        hideObjectPropertiesPanels();
+        jQuery("#object-manipulation-toggle").hide();
+        jQuery("#axis-manipulation-buttons").hide();
+        jQuery("#double-sided-switch").hide();
+        jQuery("#fullScreenBtn").hide();
+        jQuery("#blocker").hide();
+        jQuery("#infophp").hide();
+        jQuery("#fileBrowserToolbar").hide();
     }
 </script>
 
