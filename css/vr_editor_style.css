@@ -15,7 +15,7 @@
     color: #000;
     position: absolute;
     text-align: center;
-    top: 0;
+    bottom: 20px;
     right: 0;
     width: 20%;
     padding: 2px;
@@ -25,8 +25,8 @@
     position: absolute;
     text-align: center;
     top: 20px;
-    left: 40%;
-    width: 20%;
+    right: 20px;
+    width: auto;
 }
 
 
@@ -147,34 +147,22 @@ canvas { pointer-events:none; z-index:10; }
     cursor: pointer;
 }
 
-/* ------------ Button full screen ------------------- */
-.VrEditorFullscreenBtnBGStyle {
-    position: absolute;
-    width: 40px;
-    right: 12px;
-    height: 44px;
-    bottom: 12px;
-    border-radius: 6px;
-    background-color: rgba(0,0,0,.4);
-}
-
-
-.VrEditorFullscreenBtnBGStyle:hover {
-    background-color: rgba(0,0,0,.6);
-}
-
 .VrEditorFullscreenBtnStyle {
     position: absolute;
-    right:3px;
-    text-align: center;
-    display:block;
-    margin: 4px 0 0 0;
-    color:white;
-    cursor: pointer;
+    left: 620px;
+    top: 20px;
 }
 
-.VrEditorFullscreenBtnStyle i {
-    font-size: 36px;
+.ToggleUIButtonStyle {
+    position: absolute;
+    left: calc(50% - 72px);
+    top: 12px;
+    background: transparent;
+}
+
+.ToggleUIButtonStyle i {
+    font-size: 48px;
+    cursor: pointer;
 }
 
 .ObjectManipulationToggle {

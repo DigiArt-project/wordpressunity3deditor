@@ -25,14 +25,14 @@ $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 
 // Also available in Javascript side
 echo '<script>';
-echo 'PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
-echo 'UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
-echo 'scenefolder="'.$scenefolder.'";';
-echo 'gamefolder="'.$gamefolder.'";';
-echo 'sceneID="'.$sceneID.'";';
-echo 'gameProjectID="'.$project_id.'";';
-echo 'gameProjectSlug="'.$projectGameSlug.'";';
-echo 'isAdmin="'.$isAdmin.'";';
+echo 'var PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
+echo 'var UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
+echo 'var scenefolder="'.$scenefolder.'";';
+echo 'var gamefolder="'.$gamefolder.'";';
+echo 'var sceneID="'.$sceneID.'";';
+echo 'var gameProjectID="'.$project_id.'";';
+echo 'var gameProjectSlug="'.$projectGameSlug.'";';
+echo 'var isAdmin="'.$isAdmin.'";';
 echo '</script>';
 
 ?>
@@ -203,7 +203,10 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
-    <!-- TASOS ADDITION: Add new components - migrate from dat.gui-->
+    <!-- Controlling 3d items transition-rotation-scale (trs) -->
+    <div id="gui-container" class="VrGuiContainerStyle"></div>
+
+    <!-- Add new components - migrating from dat.gui-->
     <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
         <label for="translate-switch">Move (T)</label>
@@ -228,18 +231,19 @@ echo '</script>';
         <label for="double-sided-switch-input" class="mdc-switch-label DoubleSidedObjectToggleLabel" title="Double sided object"><i class="material-icons mdc-theme--text-hint-on-light">compare_arrows</i></label>
     </div>
 
+    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle Interface">
+        <i class="material-icons">visibility</i>
+    </a>
 
-    <!-- Controlling 3d items transition-rotation-scale (trs) -->
-    <div id="gui-container" class="VrGuiContainerStyle"></div>
+    <!-- Full screen button -->
+    <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle Full Screen" data-mdc-auto-init="MDCRipple">
+        Full Screen
+    </a>
 
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
-        <div id="instructions" class="VrWalkInButtonTextStyle CenterContents">
-            <span class="mdc-typography--subheading2">Walk In</span>
-            <br>
-            <span class="mdc-typography--caption">Move: W,A,S,D,Q,E keys</span>
-            <br>
-            <span class="mdc-typography--caption">Orientation: Mouse</span>
+        <div id="instructions" class="VrWalkInButtonTextStyle CenterContents" title="Move: W,A,S,D,Q,E keys, Orientation: Mouse">
+            <span class="mdc-typography--subheading2">First Person Mode</span>
         </div>
     </div>
 
@@ -254,12 +258,11 @@ echo '</script>';
 
         <div class="result"></div>
         <div id="result_download"></div>
-
     </div>
 
 
-    <div class="SaveBtnContainerStyle">
-        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene" type="button" id="save-scene-button" class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--primary">Save scene</a>
+    <div id="saveSceneBtn" class="SaveBtnContainerStyle">
+        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene" type="button" id="save-scene-button" class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
     </div>
 
     <!--  FileBrowserToolbar  -->
@@ -282,14 +285,6 @@ echo '</script>';
         <div class="bt_close_file_toolbar">
             Close
         </div>
-
-    </div>
-
-    <!-- Full screen bar button -->
-    <div class="VrEditorFullscreenBtnBGStyle">
-        <div class="VrEditorFullscreenBtnStyle" title="Toggle Full Screen" onclick="envir.makeFullScreen();">
-            <i class="material-icons">fullscreen</i>
-        </div>
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
@@ -302,8 +297,6 @@ echo '</script>';
 
 <!--    Start 3D    -->
 <script>
-
-
 
     // all 3d dom
     var container_3D_all = document.getElementById( 'vr_editor_main_div' );
@@ -358,6 +351,38 @@ echo '</script>';
         }
     });
 
+    jQuery('#toggleUIBtn').click(function() {
+
+        var btn = jQuery('#toggleUIBtn');
+        var icon = jQuery('#toggleUIBtn i');
+
+        if (btn.data('toggle') === 'on') {
+            btn.addClass('mdc-theme--text-hint-on-light');
+            btn.removeClass('mdc-theme--accent');
+            icon.html('<i class="material-icons">visibility_off</i>');
+            btn.data('toggle', 'off');
+
+            hideEditorUI();
+
+        } else {
+            btn.removeClass('mdc-theme--text-hint-on-light');
+            btn.addClass('mdc-theme--accent');
+            icon.html('<i class="material-icons">visibility</i>');
+            btn.data('toggle', 'on');
+
+            showEditorUI();
+        }
+
+
+
+
+    });
+
+
+    jQuery('#fullScreenBtn').click(function() {
+        envir.makeFullScreen();
+    });
+
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
@@ -382,6 +407,32 @@ echo '</script>';
     function showObjectPropertiesPanel(type) {
         hideObjectPropertiesPanels();
         jQuery("#"+type+"PanelGui").show();
+    }
+
+    function showEditorUI() {
+        jQuery("#"+transform_controls.getMode()+"PanelGui").show();
+
+        jQuery("#object-manipulation-toggle").show();
+        jQuery("#axis-manipulation-buttons").show();
+        jQuery("#double-sided-switch").show();
+        jQuery("#fullScreenBtn").show();
+        jQuery("#blocker").show();
+        jQuery("#infophp").show();
+        jQuery("#fileBrowserToolbar").show();
+    }
+
+    function hideEditorUI() {
+        hideObjectPropertiesPanels();
+
+        jQuery("#object-manipulation-toggle").hide();
+        jQuery("#axis-manipulation-buttons").hide();
+        jQuery("#double-sided-switch").hide();
+        jQuery("#fullScreenBtn").hide();
+        jQuery("#blocker").hide();
+        jQuery("#infophp").hide();
+        jQuery("#fileBrowserToolbar").hide();
+
+
     }
 
     // When Dat.Gui changes update php, javascript vars and transform_controls

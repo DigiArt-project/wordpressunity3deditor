@@ -65,6 +65,8 @@ class vr_editor_environmentals {
             this.container_3D_all.style.right = '0';
             this.container_3D_all.style.bottom = '0';
 
+            jQuery("#fullScreenBtn").html('Exit Full Screen');
+
             jQuery("body#header").css("display", "none" );
 
 
@@ -101,6 +103,8 @@ class vr_editor_environmentals {
             this.container_3D_all.style.overflow = 'auto';
             this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
             this.container_3D_all.style.zIndex = '999';
+
+            jQuery("#fullScreenBtn").html('Full Screen');
 
             jQuery("body#header").css("display", "block" );
 
