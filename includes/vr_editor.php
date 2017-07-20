@@ -246,8 +246,6 @@ echo '</script>';
         Full Screen
     </a>
 
-
-
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">

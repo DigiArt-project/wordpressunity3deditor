@@ -211,8 +211,6 @@ canvas { pointer-events:none; z-index:10; }
 }
 
 .AxisManipulationBtns {
-    overflow: hidden;
-    background: transparent;
     position: absolute;
     top: 20px;
     left: 280px;
@@ -222,8 +220,6 @@ canvas { pointer-events:none; z-index:10; }
     min-width: 0;
     margin: 0 0 0 4px;
     width: 42px;
-    border-radius: 4px;
-    height: 30px;
 }
 
 .DoubleSidedObjectToggle {

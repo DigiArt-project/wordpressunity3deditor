@@ -171,9 +171,7 @@
 	margin: 0 auto;
 	display: none;
 	position:absolute;
-	font-family: Arial, Helvetica, sans-serif;
-	-webkit-animation: showSlowlyElement 300ms; /* Chrome, Safari, Opera */
-	animation: showSlowlyElement 300ms; /* Standard syntax */
+	/*font-family: Arial, Helvetica, sans-serif;*/
 }
 
 .filemanager .nothingfound .nofiles {
@@ -215,18 +213,6 @@
 /*}*/
 
 /*}*/
-
-/* Chrome, Safari, Opera */
-@-webkit-keyframes showSlowlyElement {
-	100%   	{ transform: scale(1); opacity: 1; }
-	0% 		{ transform: scale(1.2); opacity: 0; }
-}
-
-/* Standard syntax */
-@keyframes showSlowlyElement {
-	100%   	{ transform: scale(1); opacity: 1; }
-	0% 		{ transform: scale(1.2); opacity: 0; }
-}
 
 
 /*-------------------------
