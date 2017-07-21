@@ -31,8 +31,6 @@ function wpunity_remove_menus() {
 	}
 }
 
-
-
 //==========================================================================================================================================
 
 function wpunity_upload_img($file = array(), $parent_post_id, $orientation = null) {
@@ -83,7 +81,6 @@ function wpunity_upload_filter( $args  ) {
 
 }
 
-
 function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSlug) {
 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
@@ -123,7 +120,6 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
 	}
 	return false;
 }
-
 
 function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug) {
 
@@ -205,11 +201,7 @@ function wpunity_remove_allthumbs_sizes( $sizes, $metadata ) {
 	return [];
 }
 
-
-
 //==========================================================================================================================================
-
-
 
 //FORCE TITLE ON OUR CUSTOM POST TYPES
 function force_post_title_init(){
@@ -272,7 +264,6 @@ function wpunity_change_publish_button( $translation, $text ) {
 
 add_filter( 'gettext', 'wpunity_change_publish_button', 10, 2 );
 
-
 //==========================================================================================================================================
 
 function wpunity_aftertitle_info($post) {
@@ -311,13 +302,9 @@ function wpunity_aftertitle_info($post) {
 
 }
 
-
 add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
 
 //==========================================================================================================================================
-
-
-
 
 // ================ SEMANTICS ON 3D ============================================================
 
@@ -398,7 +385,6 @@ function wpunity_monitor_segment_obj_action_callback(){
 	wp_die();
 }
 
-
 //---- AJAX COMPILE 3: Enlist the split objs -------------
 function wpunity_enlist_splitted_objs_action_callback(){
 
@@ -435,7 +421,6 @@ function wpunity_fetch_description_action_callback(){
 	wp_die();
 }
 
-
 function wpunity_fetch_image_action_callback(){
 
 	if ($_POST['externalSource_image']=='Wikipedia')
@@ -447,7 +432,6 @@ function wpunity_fetch_image_action_callback(){
 
 	wp_die();
 }
-
 
 function wpunity_fetch_video_action_callback(){
 
@@ -463,7 +447,6 @@ function wpunity_fetch_video_action_callback(){
 	wp_die();
 }
 
-
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
 function wpunity_assepile_action_callback(){
@@ -472,8 +455,6 @@ function wpunity_assepile_action_callback(){
     echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
     wp_die();
 }
-
-
 
 // ---- AJAX ASSEMBLE 1: Assemble game ------
 function wpunity_assemble_action_callback() {
@@ -587,9 +568,6 @@ function wpunity_assemble_action_callback() {
 
 	wp_die();
 }
-
-
-
 
 // ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
 function wpunity_compile_action_callback() {
