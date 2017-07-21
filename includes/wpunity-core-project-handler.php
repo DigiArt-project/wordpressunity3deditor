@@ -1,13 +1,11 @@
 <?php
 
-
 //DELETE GAME PROJECT with files
 function wpunity_delete_gameproject_frontend($game_id){
 
     //wp_delete_post( $game_id, false );
 
 }
-
 
 //DELETE GAME PROJECT with files
 function wpunity_delete_asset3d_frontend($asset_id){
@@ -16,7 +14,6 @@ function wpunity_delete_asset3d_frontend($asset_id){
     wp_delete_post( $asset_id, true );
 
 }
-
 
 function wpunity_delete_asset3d_post_media( $asset_id ,$pathofPost ) {
     $attachments = get_posts(
@@ -149,16 +146,16 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 //==========================================================================================================================================
 
 function wpunity_compile_the_game($gameID,$gameSlug){
-    //0. Delete everything
-    wpunity_compile_folders_del($gameSlug);
-    //1. Create Default Folder Structure (Delete everything old)
-    wpunity_compile_folders_gen($gameSlug);
-    //2. Create Project Settings files (16 files)
-    wpunity_compile_settings_gen($gameID,$gameSlug);
-    //3. Create Model folders/files
-    wpunity_compile_models_gen($gameID,$gameSlug);
-    //4. Create Unity files (at Assets/scenes)
-    wpunity_compile_scenes_gen($gameID,$gameSlug);
+
+    wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
+
+    wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
+
+    wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
+
+    wpunity_compile_models_gen($gameID,$gameSlug);//3. Create Model folders/files
+
+    wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
     //5. Copy StandardAssets folder (at Assets/StandardAssets)
 }
 
@@ -370,24 +367,134 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
-            wpunity_compile_scenes_cre($game_path,$scene_id);
+            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug);
         endwhile;
     endif;
     wp_reset_postdata();
 }
 
-function wpunity_compile_scenes_cre($game_path,$scene_id){
+function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug){
     $scene_post = get_post($scene_id);
 
-    $file = $game_path . '/' . $scene_post->post_name . '.unity';
-    $create_file = fopen($file, "w") or die("Unable to open file!");
-    fwrite($create_file, 'Hello');
-    fclose($create_file);
+    $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
+    $scene_type_ID = $scene_type[0]->term_id;
+    $scene_type_slug = $scene_type[0]->slug;
 
-    //$term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
+    if($scene_type_slug == 'mainmenu-yaml'){
+        //DATA of mainmenu
+        $term_meta_s_mainmenu = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_mainmenu',true);
+        $title_text = $scene_post->post_title;
+        $is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) );
+        $is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) );
+        $is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) );
+        $is_exit_button_active = 1;//TODO
+        $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+        $featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);
+        $file_content = wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active);
+
+        $file = $game_path . '/' . 'S_MainMenu.unity';
+        $create_file = fopen($file, "w") or die("Unable to open file!");
+        fwrite($create_file, $file_content);
+        fclose($create_file);
+
+        if($is_bt_settings_active == '1'){
+            //CREATE SETTINGS/OPTIONS Unity file
+            $term_meta_s_settings = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_options',true);
+            $file_content2 = wpunity_replace_settings_unity($term_meta_s_settings);
+
+            $file2 = $game_path . '/' . 'S_Settings.unity';
+            $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+            fwrite($create_file2,$file_content2);
+            fclose($create_file2);
+        }
+
+        if($is_help_bt_active == '1'){
+            //CREATE HELP Unity file
+            $term_meta_s_help = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_help',true);
+            $text_help_scene = get_post_meta($scene_id,'wpunity_scene_help_text',true);
+            $img_help_scene_id = get_post_meta($scene_id,'wpunity_scene_helpimg',true);
+            $img_help_scene_guid = wpunity_compile_sprite_upload($img_help_scene_id,$gameSlug,$scene_id);
+            $file_content3 = wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid);
+
+            $file3 = $game_path . '/' . 'S_Help.unity';
+            $create_file3 = fopen($file3, "w") or die("Unable to open file!");
+            fwrite($create_file3, $file_content3);
+            fclose($create_file3);
+        }
+
+        if($is_login_bt_active == '1'){
+            //CREATE Login Unity file
+            $term_meta_s_login = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_login',true);
+            $file_content4 = wpunity_replace_login_unity($term_meta_s_login);
+
+            $file4 = $game_path . '/S_Login.unity';
+            $create_file4 = fopen($file4, "w") or die("Unable to open file!");
+            fwrite($create_file4,$file_content4);
+            fclose($create_file4);
+        }
+    }
+
 }
 
+function wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active){
+    $file_content_return = str_replace("___[mainmenu_is_bt_settings_active]___",$is_bt_settings_active,$term_meta_s_mainmenu);
+    $file_content_return = str_replace("___[mainmenu_is_help_bt_active]___",$is_help_bt_active,$file_content_return);
+    $file_content_return = str_replace("___[mainmenu_featured_image_sprite]___",$featured_image_sprite_guid,$file_content_return);
+    $file_content_return = str_replace("___[mainmenu_is_exit_button_active]___",$is_exit_button_active,$file_content_return);
+    $file_content_return = str_replace("___[mainmenu_is_login_bt_active]___",$is_login_bt_active,$file_content_return);
+    $file_content_return = str_replace("___[mainmenu_title_text]___",$title_text,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_settings_unity($term_meta_s_settings){
+    return $term_meta_s_settings;
+}
+
+function wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
+    $file_content_return = str_replace("___[text_help_scene]___",$text_help_scene,$term_meta_s_help);
+    $file_content_return = str_replace("___[img_help_scene]___",$img_help_scene_guid,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
+
+    $attachment_post = get_post($featured_image_sprite_id);
+    $attachment_file = $attachment_post->guid;
+    $attachment_tempname = str_replace('\\', '/', $attachment_file);
+    $attachment_name = pathinfo($attachment_tempname);
+    $new_file = $game_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+    copy($attachment_file,$new_file);
+
+    $sprite_meta_yaml = wpunity_getYaml_jpg_sprite_pattern();
+    $sprite_meta_guid = wpunity_create_guids('jpg', $featured_image_sprite_id);
+    $sprite_meta_yaml_replace = wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid);
 
 
+    $sprite_meta_file = $game_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'] . '.meta';
+    $create_meta_file = fopen($sprite_meta_file, "w") or die("Unable to open file!");
+    fwrite($create_meta_file,$sprite_meta_yaml_replace);
+    fclose($create_meta_file);
+
+    return $sprite_meta_guid;
+}
+
+function wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid){
+    $unix_time = time();
+
+    $file_content_return = str_replace("___[jpg_guid]___",$sprite_meta_guid,$sprite_meta_yaml);
+    $file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_login_unity($term_meta_s_login){
+    return $term_meta_s_login;
+}
 
 ?>
