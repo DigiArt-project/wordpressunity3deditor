@@ -238,15 +238,13 @@ echo '</script>';
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
         <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            Perspective
+            <i class="material-icons">face</i>
         </a>
     </div>
 
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle Full Screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
-
-
 
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle">
@@ -289,9 +287,10 @@ echo '</script>';
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
-    <div id="popUpDiv">
-        <select title="Select an object" id="popupSelect"></select>
+    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">
+        <select title="Select an object" id="popupSelect" class="mdc-select"></select>
     </div>
+
 
 </div>
 

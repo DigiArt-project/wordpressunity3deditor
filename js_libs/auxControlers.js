@@ -180,7 +180,7 @@ function onMouseDown( event ) {
         option = document.createElement("option");
         option.text = "Select";
         option.value = "Select";
-        option.style.background = "#555";
+        option.setAttribute("disabled", "disabled");
         popupSelect.add(option);
 
         // Add options for each intersected object
