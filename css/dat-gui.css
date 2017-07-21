@@ -25,14 +25,10 @@
 
 .dg li:not(.folder) {
     background: #fafafa;
-    height:1.4vw;
     border-bottom: 1px solid #ddd;
     cursor: auto;
-    /*height: 27px;*/
-    line-height: 1.5vw;
     overflow: hidden;
     padding: 0 4px 0 5px;
-
 }
 
 /*.dg li:not(.folder) {*/
@@ -107,9 +103,20 @@
 
 }
 
+.dg .cr.number {
+    border-left: none;
+}
+
+.dg .c .slider-fg, .dg .c .slider:hover .slider-fg {
+    background: #3f51b5;
+}
+
 .dg .cr.number input[type=text] {
-    color: #2fa1d6;
+    color: #3f51b5;
     font-size: 0.6vw;
+    text-align: center;
+    height: 20px;
+
 }
 
 /*Hide close button*/
