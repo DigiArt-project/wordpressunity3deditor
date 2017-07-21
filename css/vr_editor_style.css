@@ -97,19 +97,19 @@ canvas { pointer-events:none; z-index:10; }
     margin: 1px;
     font-size: smaller;
 }
-/* ---------------------------------------------- */
 
-#popUpDiv{
-    z-index: 100;
+.EditorObjOverlapSelectStyle {
+    z-index: 1000;
     position: absolute;
-    background-color: rgba(123, 123,123, 0.8);
+
     display: none;
 }
-#popupSelect{
-    z-index: 1000;
-}
 
-/* ------------------------------------------ */
+.EditorObjOverlapSelectStyle select {
+    background-color: rgba(255,255,255,.87);
+    border: 1px solid rgba(0,0,0,.12);
+
+}
 
 .VrWalkInButtonStyle {
     position: absolute;

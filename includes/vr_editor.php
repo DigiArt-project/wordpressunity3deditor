@@ -287,9 +287,10 @@ echo '</script>';
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
-    <div id="popUpDiv">
-        <select title="Select an object" id="popupSelect"></select>
+    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">
+        <select title="Select an object" id="popupSelect" class="mdc-select"></select>
     </div>
+
 
 </div>
 
