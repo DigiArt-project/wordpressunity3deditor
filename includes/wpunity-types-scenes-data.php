@@ -3,13 +3,9 @@
 // load script from js_libs
 wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
 
+//==========================================================================================================================================
 
-/**
- * C3.01
- * Create metabox with Custom Fields for Scene
- *
- * ($wpunity_databox4)
- */
+// Create metabox with Custom Fields for Scene -($wpunity_databox4)
 
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_scene_';
@@ -69,12 +65,7 @@ $wpunity_databox_helpdata = array(
 
 //==========================================================================================================================================
 
-/**
- * C3.02
- * Add and Show the metabox with Custom Field for Scene
- *
- * ($wpunity_databox4)
- */
+// Add and Show the metabox with Custom Field for Scene - ($wpunity_databox4)
 
 function wpunity_scenes_databox_add() {
     global $wpunity_databox4,$wpunity_databox_helpdata;
@@ -169,12 +160,7 @@ function wpunity_scenes_databox_helpdata_show(){
 
 //==========================================================================================================================================
 
-/**
- * C3.03
- * Save data from this metabox with Custom Field for Scene
- *
- * ($wpunity_databox4)
- */
+// Save data from this metabox with Custom Field for Scene
 
 function wpunity_scenes_databox_save($post_id) {
     global $wpunity_databox4,$wpunity_databox_helpdata;
@@ -215,6 +201,8 @@ function wpunity_scenes_databox_save($post_id) {
 }
 
 add_action('save_post', 'wpunity_scenes_databox_save');
+
+//==========================================================================================================================================
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor
 add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );

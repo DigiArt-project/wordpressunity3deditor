@@ -1,11 +1,6 @@
 <?php
-/**
- * B2.01
- * Create Game Category Box @ Game's backend
- *
- * (dropdown style)
- */
 
+//Create Game Category Box @ Game's backend
 add_action('add_meta_boxes','wpunity_games_taxcategory_box');
 
 function wpunity_games_taxcategory_box() {
@@ -22,13 +17,10 @@ function wpunity_games_taxcategory_box() {
 
 function wpunity_games_taxcategory_box_content($post){
     $tax_name = 'wpunity_game_cat';
-
     ?>
-
     <div class="tagsdiv" id="<?php echo $tax_name; ?>">
 
         <p class="howto"><?php echo 'Select category for current Game' ?></p>
-
         <?php
         // Use nonce for verification
         wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_game_cat_noncename' );
@@ -57,16 +49,13 @@ function wpunity_games_taxcategory_box_content($post){
 
         echo $select;
         ?>
-
     </div>
     <?php
 }
 
 function wpunity_games_taxtype_box_content($post){
     $tax_name = 'wpunity_game_type';
-
     ?>
-
     <div class="tagsdiv" id="<?php echo $tax_name; ?>">
 
         <p class="howto"><?php echo 'Select type for current Game' ?></p>
@@ -106,17 +95,10 @@ function wpunity_games_taxtype_box_content($post){
 
 //==========================================================================================================================================
 
-/**
- * A2.02
- * When the post is saved, also saves wpunity_game_cat / wpunity_game_type
- *
- *
- */
-
+// When the post is saved, also saves wpunity_game_cat / wpunity_game_type
 function wpunity_games_taxcategory_box_content_save( $post_id ) {
 
     global $wpdb;
-
     // verify if this is an auto save routine.
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
@@ -124,10 +106,8 @@ function wpunity_games_taxcategory_box_content_save( $post_id ) {
 
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
-
     if ( !wp_verify_nonce( $_POST['wpunity_game_cat_noncename'], plugin_basename( __FILE__ ) ) )
         return;
-
 
     // Check permissions
     if ( 'wpunity_game' == $_POST['post_type'] )
@@ -141,15 +121,12 @@ function wpunity_games_taxcategory_box_content_save( $post_id ) {
             return;
     }
 
-
-
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_game_cat'], 10);
 
     $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_game_cat' )->slug : NULL;
 
     wp_set_object_terms(  $post_id , $type, 'wpunity_game_cat' );
-
 }
 
 /* Do something with the data entered */
@@ -166,10 +143,8 @@ function wpunity_games_taxtype_box_content_save( $post_id ) {
 
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
-
     if ( !wp_verify_nonce( $_POST['wpunity_game_type_noncename'], plugin_basename( __FILE__ ) ) )
         return;
-
 
     // Check permissions
     if ( 'wpunity_game' == $_POST['post_type'] )
@@ -183,15 +158,12 @@ function wpunity_games_taxtype_box_content_save( $post_id ) {
             return;
     }
 
-
-
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_game_type'], 10);
 
     $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_game_type' )->slug : NULL;
 
     wp_set_object_terms(  $post_id , $type, 'wpunity_game_type' );
-
 }
 
 /* Do something with the data entered */
@@ -199,7 +171,7 @@ add_action( 'save_post', 'wpunity_games_taxtype_box_content_save' );
 
 //==========================================================================================================================================
 
-//Settings for each Game Type as term_meta
+//16 Settings for each Game Type as term_meta
 
 // A callback function to add a custom field to our taxonomy
 function wpunity_games_projectSettings_fields($tag) {
@@ -404,7 +376,9 @@ function wpunity_games_projectSettings_fields($tag) {
     <?php
 }
 
-// A callback function to save our extra taxonomy field(s)
+//==========================================================================================================================================
+
+// Save our extra taxonomy fields
 function wpunity_games_projectSettings_fields_save( $term_id ) {
 
     if ( isset( $_POST['wpunity_audio_manager_term'] ) ) {
@@ -488,16 +462,10 @@ function wpunity_games_projectSettings_fields_save( $term_id ) {
     }
 }
 
-
-
 add_action( 'wpunity_game_type_edit_form_fields', 'wpunity_games_projectSettings_fields', 10, 2 );
 
 add_action( 'edited_wpunity_game_type', 'wpunity_games_projectSettings_fields_save', 10, 2 );
 
-
-
 //==========================================================================================================================================
-
-
 
 ?>

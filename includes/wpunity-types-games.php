@@ -4,19 +4,13 @@ $gameClass = new GameClass();
 
 class GameClass{
     function __construct(){
-        add_action('init', array($this, 'wpunity_games_construct')); //wpunity_game
-        add_action('init', array($this, 'wpunity_games_taxcategory')); //wpunity_game_cat
-        add_action('init', array($this, 'wpunity_games_taxtype')); //wpunity_game_type
+        add_action('init', array($this, 'wpunity_games_construct')); //wpunity_game 'GAMES'
+        add_action('init', array($this, 'wpunity_games_taxcategory')); //wpunity_game_cat 'GAME CATEGORIES'
+        add_action('init', array($this, 'wpunity_games_taxtype')); //wpunity_game_type 'GAME TYPES'
     }
 
-    /**
-     * B1.01
-     * Create Game
-     *
-     * Game as custom type 'wpunity_game'
-     */
+    // Create Game as custom type 'wpunity_game'
     function wpunity_games_construct(){
-
         $labels = array(
             'name'               => _x( 'Game Projects', 'post type general name'),
             'singular_name'      => _x( 'Game Project', 'post type singular name'),
@@ -36,7 +30,6 @@ class GameClass{
             'not_found'          => __( 'No Game Projects found.'),
             'not_found_in_trash' => __( 'No Game Projects found in Trash.')
         );
-
         $args = array(
             'labels'                => $labels,
             'description'           => 'A Game Project consists of several scenes',
@@ -51,21 +44,13 @@ class GameClass{
             'hierarchical'      => false,
             'has_archive'       => false,
         );
-
         register_post_type('wpunity_game', $args);
-
     }
 
     //==========================================================================================================================================
 
-    /**
-     * B1.02
-     * Create Game Category
-     *
-     * Category of Games as custom taxonomy 'wpunity_game_cat'
-     */
+    // Create Game Category as custom taxonomy 'wpunity_game_cat'
     function wpunity_games_taxcategory(){
-
         $labels = array(
             'name'              => _x( 'Game Category', 'taxonomy general name'),
             'singular_name'     => _x( 'Game Category', 'taxonomy singular name'),
@@ -79,7 +64,6 @@ class GameClass{
             'add_new_item'      => __( 'Add New Game Category'),
             'new_item_name'     => __( 'New Game Category')
         );
-
         $args = array(
             'description' => 'Category of Game',
             'labels'    => $labels,
@@ -88,21 +72,13 @@ class GameClass{
             'hierarchical' => true,
             'show_admin_column' => true
         );
-
         register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
-
     }
 
     //==========================================================================================================================================
 
-    /**
-     * B1.04
-     * Create Game Type
-     *
-     * Type of Games as custom taxonomy 'wpunity_game_type'
-     */
+    //Create Game Type as custom taxonomy 'wpunity_game_type'
     function wpunity_games_taxtype(){
-
         $labels = array(
             'name'              => _x( 'Game Type', 'taxonomy general name'),
             'singular_name'     => _x( 'Game Type', 'taxonomy singular name'),
@@ -116,7 +92,6 @@ class GameClass{
             'add_new_item'      => __( 'Add New Game Type'),
             'new_item_name'     => __( 'New Game Type')
         );
-
         $args = array(
             'description' => 'Type of Game Project',
             'labels'    => $labels,
@@ -125,22 +100,14 @@ class GameClass{
             'hierarchical' => true,
             'show_admin_column' => true
         );
-
         register_taxonomy('wpunity_game_type', 'wpunity_game', $args);
-
     }
 }
 
 //==========================================================================================================================================
 
-/**
- * B1.03
- * Generate folder and Taxonomy (for scenes) with Game's slug/name
- *
- * Generate a folder in media to store assets named as the permalink of the game
- * Generate taxonomy with for Scene usage (wpunity_scene_pgame)
- */
-
+// Generate Taxonomy (for scenes & assets) with Game's slug/name
+// Create Default Scenes for this "Game"
 function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
@@ -148,14 +115,9 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     if ($post_type == 'wpunity_game') {
         if ( $new_status == 'publish' ) {
 
-            //FORMAT: uploads / slug Game
-
             $gameSlug = $post->post_name;
             $gameTitle = $post->post_title;
             $gameID = $post->ID;
-
-            //Create "Game" folder inside upload (without meta file)
-            wpunity_create_folder_withmeta('game','','',$gameSlug,$gameID);
 
             //Create a parent game tax category for the scenes
             wp_insert_term($gameTitle,'wpunity_scene_pgame',$gameSlug,'Scene of a Game');
@@ -166,10 +128,7 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             //Create Default Scenes for this "Game"
             wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID);
 
-        }else{
-            //TODO It's not a new Game so DELETE everything (folder & taxonomy)
         }
-
     }
 }
 

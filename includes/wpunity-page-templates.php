@@ -1,10 +1,6 @@
 <?php
 
-/**
- * 12.01
- * Add openGame templates to every theme
- *
- */
+// Add openGame templates to every theme
 
 class wpUnityTemplate {
 
@@ -19,7 +15,6 @@ class wpUnityTemplate {
         if ( null == self::$instance ) { self::$instance = new wpUnityTemplate();}
         return self::$instance;
     }
-
 
     //Initializes the ImcTemplate by setting filters and administration functions.
     private function __construct() {
@@ -69,7 +64,6 @@ class wpUnityTemplate {
         $posts_templates = array_merge( $posts_templates, $this->templates );
         return $posts_templates;
     }
-
 
     //Adds our templates to the pages cache in order to trick WordPress into thinking the template file exists where it doens't really exist.
     public function register_project_templates( $atts ) {
@@ -137,13 +131,7 @@ class wpUnityTemplate {
 
 add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
 
-/************************************************************************************************************************/
-
-/**
- *
- *
- *
- */
+//==========================================================================================================================================
 
 function wpunity_create_openGamePage() {
 
@@ -167,6 +155,8 @@ function wpunity_create_openGamePage() {
     }
 }
 
+//==========================================================================================================================================
+
 function wpunity_create_editGamePage() {
 
     if (! wpunity_get_page_by_slug('wpunity-edit-project')) {
@@ -188,6 +178,8 @@ function wpunity_create_editGamePage() {
         update_option('hclpage', $new_page_id);
     }
 }
+
+//==========================================================================================================================================
 
 function wpunity_create_editScenePage() {
 
@@ -211,6 +203,7 @@ function wpunity_create_editScenePage() {
     }
 }
 
+//==========================================================================================================================================
 
 function wpunity_create_editScene2DPage() {
 
@@ -234,6 +227,7 @@ function wpunity_create_editScene2DPage() {
     }
 }
 
+//==========================================================================================================================================
 
 function wpunity_create_editAsset3D() {
 
@@ -257,11 +251,7 @@ function wpunity_create_editAsset3D() {
     }
 }
 
-/************************************************************************************************************************/
-
-
-
-/************************************************************************************************************************/
+//==========================================================================================================================================
 
 function wpunity_get_page_by_slug($slug) {
     if ($pages = get_pages())
@@ -270,5 +260,6 @@ function wpunity_get_page_by_slug($slug) {
     return false;
 }
 
+//==========================================================================================================================================
 
 ?>

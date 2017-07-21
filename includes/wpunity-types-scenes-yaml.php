@@ -1,5 +1,7 @@
 <?php
 
+// VALUES OF UNITY PATTERNS
+
 global $ini_scene_wonder_around_unity_pattern;
 global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
 global $ini_scene_credentials_unity_pattern;
@@ -9839,7 +9841,8 @@ CanvasRenderer:
 
 //==========================================================================================================================================
 
-// A callback function to add a custom field to our taxonomy
+// Add custom fields to our taxonomy (in order to use them as term_metas
+
 function wpunity_scenes_taxyaml_customFields($tag) {
     // Check for existing taxonomy meta for the term you're editing
     $term_meta_wonderaround_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_wonderaround_pat', true );
@@ -9864,13 +9867,6 @@ function wpunity_scenes_taxyaml_customFields($tag) {
             <textarea name="wpunity_yamlmeta_wonderaround_pat" id="wpunity_yamlmeta_wonderaround_pat"><?php echo $term_meta_wonderaround_pat ? $term_meta_wonderaround_pat : ''; ?></textarea>
             <p class="description">scene-wonder-around-unity-pattern</p>
         </td>
-    </tr>
-
-
-    <tr class="form-field">
-        <th scope="row" valign="top"></th>
-        <td><em>The guid of the FPS Fab can be found in:<br/>
-                "Standard Assets\Characters\FirstPersonCharacter\Prefabs\FPSController.prefab.mat" fids up to 7 are used. First available fid is 8.</em></td>
     </tr>
 
     <tr class="form-field">
@@ -9900,41 +9896,17 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 
     <tr class="form-field">
         <th scope="row" valign="top"></th>
-        <td><em>
-                S_MainMenu.unity variables:<br/>
-                ___[main_menu_sprite_guid]___ : guid as written in the meta of the S_MainMenu/MainMenu_background.jpg.meta (it is a sprite meta)<br/><br/>
-
-                all_menu_Script.cs variables:<br/>
-                ___[initialwonderaround_scene_basename]___ : Example "S1" if the first wonder around scene is named as "S1.unity"<br/>
-                ___[credentials_scene_basename]___ : Example "S_Credentials" if the credentials scene is named as "S_Credentials.unity"<br/>
-                ___[mainmenu_scene_basename]___ : Example "S_MainMenu" if the credentials scene is named as "S_MainMenu.unity"<br/>
-
-            </em></td>
-    </tr>
-
-    <tr class="form-field">
-        <th scope="row" valign="top"></th>
-        <td><h3>Credentials Scene</h3></td>
+        <td><h3>Credits Scene</h3></td>
     </tr>
 
     <tr class="form-field term-s_credentials">
         <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_s_credentials">The S_Credentials.unity pattern</label>
+            <label for="wpunity_yamlmeta_s_credentials">The S_Credits.unity pattern</label>
         </th>
         <td>
             <textarea name="wpunity_yamlmeta_s_credentials" id="wpunity_yamlmeta_s_credentials"><?php echo $term_meta_s_credentials ? $term_meta_s_credentials : ''; ?></textarea>
             <p class="description">scene-credentials-unity-pattern</p>
         </td>
-    </tr>
-
-    <tr class="form-field">
-        <th scope="row" valign="top"></th>
-        <td><em>
-                ___[credentials_text]____ : the text to show. It should start and end from-to single quote, e.g. 'blabla LF bla blue'. LF is for changing line. <br/>
-                ___[credentials_photo_image_sprite]___ : The guid in the jpg.meta (sprite) for the banner photo, e.g. 'S_Credentials/credentials_photo_image.jpg.meta'<br/>
-                ___[credentials_logo_image_sprite]___ : The guid in the jpg.meta (sprite) for the logo, e.g. 'S_Credentials/credentials_logo_image.jpg.meta'<br/>
-
-            </em></td>
     </tr>
 
     <tr class="form-field">
@@ -9986,7 +9958,10 @@ function wpunity_scenes_taxyaml_customFields($tag) {
     <?php
 }
 
-// A callback function to save our extra taxonomy field(s)
+//==========================================================================================================================================
+
+// Save our extra taxonomy fields
+
 function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
     global $ini_scene_wonder_around_unity_pattern;
     global $ini_scene_main_menu_unity_pattern,$ini_scene_allmenu_cs;
@@ -10068,6 +10043,8 @@ add_action( 'edited_wpunity_scene_yaml', 'wpunity_scenes_taxyaml_customFields_sa
 
 //==========================================================================================================================================
 
+//Create Yaml Templates at INIT (in order to be sure that it's not possible to delete them)
+
 function wpunity_scenes_taxyaml_standard_cre(){
 
     if (!term_exists('Main Menu Default Template', 'wpunity_scene_yaml')) {
@@ -10108,6 +10085,8 @@ function wpunity_scenes_taxyaml_standard_cre(){
 add_action( 'init', 'wpunity_scenes_taxyaml_standard_cre' );
 
 //==========================================================================================================================================
+
+// Add default values to Templates (fill term metas), use empty for non-usable metas
 
 function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
     global $ini_scene_wonder_around_unity_pattern;
@@ -10152,16 +10131,11 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', $ini_scene_help_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', $ini_scene_login_unity_pattern[0]);
     }
-
-
 }
 
 add_action('create_wpunity_scene_yaml', 'wpunity_scenes_taxyaml_standard_fields_cre' , $tt_id);
 
 //==========================================================================================================================================
-
-
-
 
 ?>
 
