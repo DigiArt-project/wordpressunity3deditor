@@ -325,6 +325,9 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
         ),'meta_input'   => array(
             'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'menu',
+            'wpunity_menu_has_help' => 1,
+            'wpunity_menu_has_login' => 1,
+            'wpunity_menu_has_options' => 1,
         ),
     );
 
