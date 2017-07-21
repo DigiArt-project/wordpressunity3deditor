@@ -24,13 +24,13 @@
 .SaveBtnContainerStyle {
     position: absolute;
     text-align: center;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     width: auto;
 }
 
 
-#formdiv{
+#formdiv {
     font-size: 1vw;
     overflow-y: scroll;
     max-height:40%;
@@ -54,9 +54,9 @@
 .VrGuiContainerStyle {
     position: absolute;
     text-align: left;
-    top: 70px;
-    left: 20px;
-    width: 20%;
+    top: 48px;
+    left: 10px;
+    /*width: 20%;*/
     padding: 0;
 }
 
@@ -82,21 +82,6 @@
     width:auto;
     height:5px;
 }
-
-.enabled {
-    color: lime!important;
-    cursor:pointer;
-}
-
-.enabled:hover {
-    text-shadow: #0f0 0 0 0 !important;
-}
-
-.disabled {
-    background:gray;
-    cursor:default;
-}
-
 
 
 /* Links have red color 
@@ -128,20 +113,33 @@ canvas { pointer-events:none; z-index:10; }
 
 .VrWalkInButtonStyle {
     position: absolute;
-    right: 300px;
-    top: 20px;
+    right: 320px;
+    top: 10px;
+
+}
+
+.VrWalkInButtonStyle a {
+    width: 48px;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+
+.VrWalkInButtonStyle a i {
+    padding-top: 4px;
 }
 
 .VrEditorFullscreenBtnStyle {
     position: absolute;
-    right: 160px;
-    top: 20px;
+    right: 150px;
+    top: 10px;
 }
 
 .ToggleUIButtonStyle {
     position: absolute;
     left: calc(50% - 72px);
-    top: 12px;
+    top: 8px;
     background: transparent;
 }
 
@@ -154,8 +152,8 @@ canvas { pointer-events:none; z-index:10; }
     overflow: hidden;
     background: transparent;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
 }
 
 .ObjectManipulationToggle input {
@@ -212,8 +210,8 @@ canvas { pointer-events:none; z-index:10; }
 
 .AxisManipulationBtns {
     position: absolute;
-    top: 20px;
-    left: 280px;
+    top: 10px;
+    left: 270px;
 }
 
 .AxisManipulationBtns a {
@@ -224,13 +222,13 @@ canvas { pointer-events:none; z-index:10; }
 
 .DoubleSidedObjectToggle {
     position: absolute;
-    left: 395px;
-    top: 30px;
+    left: 384px;
+    top: 24px;
 }
 
 
 .DoubleSidedObjectToggleLabel {
     position: absolute;
-    left: 402px;
-    top: 6px;
+    left: 390px;
+    top: 1px;
 }
