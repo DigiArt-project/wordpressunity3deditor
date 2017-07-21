@@ -158,6 +158,7 @@ function wpunity_compile_the_game($gameID,$gameSlug){
     //3. Create Model folders/files
     wpunity_compile_models_gen($gameID,$gameSlug);
     //4. Create Unity files (at Assets/scenes)
+    wpunity_compile_scenes_gen($gameID,$gameSlug);
     //5. Copy StandardAssets folder (at Assets/StandardAssets)
 }
 
@@ -346,4 +347,47 @@ function wpunity_compile_objmeta_cre($folder,$objName,$objID){
     fwrite($create_file, $objMetaContent);
     fclose($create_file);
 }
+
+function wpunity_compile_scenes_gen($gameID,$gameSlug){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/scenes';
+
+    $queryargs = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field' => 'slug',
+                'terms' => $gameSlug
+            )
+        )
+    );
+    $custom_query = new WP_Query( $queryargs );
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $scene_id = get_the_ID();
+            wpunity_compile_scenes_cre($game_path,$scene_id);
+        endwhile;
+    endif;
+    wp_reset_postdata();
+}
+
+function wpunity_compile_scenes_cre($game_path,$scene_id){
+    $scene_post = get_post($scene_id);
+
+    $file = $game_path . '/' . $scene_post->post_name . '.unity';
+    $create_file = fopen($file, "w") or die("Unable to open file!");
+    fwrite($create_file, 'Hello');
+    fclose($create_file);
+
+    //$term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
+}
+
+
+
+
 ?>
