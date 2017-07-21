@@ -149,14 +149,52 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 //==========================================================================================================================================
 
 function wpunity_compile_the_game($gameID,$gameSlug){
+    //0. Delete everything
+    wpunity_compile_folders_del($gameSlug);
     //1. Create Default Folder Structure (Delete everything old)
     wpunity_compile_folders_gen($gameSlug);
     //2. Create Project Settings files (16 files)
     wpunity_compile_settings_gen($gameID,$gameSlug);
     //3. Create Model folders/files
     wpunity_compile_models_gen($gameID,$gameSlug);
+    //4. Create Unity files (at Assets/scenes)
+    //5. Copy StandardAssets folder (at Assets/StandardAssets)
 }
 
+
+function wpunity_compile_folders_del($gameSlug) {
+
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+
+    //--Uploads/myGameProjectUnity--
+    $myGameProjectUnityF = $upload_dir . '/' . $gameSlug . 'Unity';
+    $path = $myGameProjectUnityF;
+
+    if (is_dir($path) === true) {
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($files as $file) {
+            if (in_array($file->getBasename(), array('.', '..')) !== true) {
+                if ($file->isDir() === true) {
+                    rmdir($file->getPathName());
+                }
+                else if (($file->isFile() === true) || ($file->isLink() === true)) {
+                    unlink($file->getPathname());
+                }
+            }
+        }
+
+        return rmdir($path);
+    }
+    else if ((is_file($path) === true) || (is_link($path) === true)) {
+        return unlink($path);
+    }
+
+    return false;
+
+}
 
 function wpunity_compile_folders_gen($gameSlug){
     $upload = wp_upload_dir();
@@ -165,11 +203,7 @@ function wpunity_compile_folders_gen($gameSlug){
 
     //--Uploads/myGameProjectUnity--
     $myGameProjectUnityF = $upload_dir . '/' . $gameSlug . 'Unity';
-    //if the folder exists, then delete everything before create new folders
-    if(is_dir($myGameProjectUnityF)){
-        wpunity_compile_folders_del($myGameProjectUnityF);
-    }
-    mkdir($myGameProjectUnityF, 0755) or wp_die("Unable to create the folder ".$myGameProjectUnityF);
+    if (!is_dir($myGameProjectUnityF)) {mkdir($myGameProjectUnityF, 0755) or wp_die("Unable to create the folder ".$myGameProjectUnityF);}
 
     //--Uploads/myGameProjectUnity/ProjectSettings--
     //--Uploads/myGameProjectUnity/Assets--
@@ -193,25 +227,6 @@ function wpunity_compile_folders_gen($gameSlug){
     if (!is_dir($scenesF)) {mkdir($scenesF, 0755) or wp_die("Unable to create the folder".$scenesF);}
     if (!is_dir($modelsF)) {mkdir($modelsF, 0755) or wp_die("Unable to create the folder".$modelsF);}
     if (!is_dir($StandardAssetsF)) {mkdir($StandardAssetsF, 0755) or wp_die("Unable to create the folder".$StandardAssetsF);}
-}
-
-
-function wpunity_compile_folders_del($dirname) {
-    if (is_dir($dirname))
-        $dir_handle = opendir($dirname);
-    if (!$dir_handle)
-        return false;
-    while($file = readdir($dir_handle)) {
-        if ($file != "." && $file != "..") {
-            if (!is_dir($dirname."/".$file))
-                unlink($dirname."/".$file);
-            else
-                delete_directory($dirname.'/'.$file);
-        }
-    }
-    closedir($dir_handle);
-    rmdir($dirname);
-    return true;
 }
 
 function wpunity_compile_settings_gen($gameID,$gameSlug){
