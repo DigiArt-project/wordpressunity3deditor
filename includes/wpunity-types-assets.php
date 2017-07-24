@@ -8,20 +8,13 @@ class Asset3DClass{
     public $asset_subdir = '';
 
     function __construct(){
-        add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d
-        add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat
-        add_action('init', array($this, 'wpunity_assets_taxpgame')); //wpunity_asset3d_pgame
+        add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d 'ASSETS 3D'
+        add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat 'ASSET TYPES'
+        add_action('init', array($this, 'wpunity_assets_taxpgame')); //wpunity_asset3d_pgame 'ASSET GAMES'
     }
 
-    /**
-     * D1.01
-     * Create Asset3D
-     *
-     * Asset3D as custom type 'wpunity_asset3d'
-     */
-    function wpunity_assets_construct()
-    {
-
+    // Create Asset3D as custom type 'wpunity_asset3d'
+    function wpunity_assets_construct(){
         $labels = array(
             'name' => _x('Assets 3D', 'post type general name'),
             'singular_name' => _x('Asset 3D', 'post type singular name'),
@@ -41,7 +34,6 @@ class Asset3DClass{
             'not_found' => __('No Assets 3D found.'),
             'not_found_in_trash' => __('No Assets 3D found in Trash.')
         );
-
         $args = array(
             'labels' => $labels,
             'description' => 'Displays Assets 3D',
@@ -56,21 +48,13 @@ class Asset3DClass{
             'hierarchical' => false,
             'has_archive' => false,
         );
-
         register_post_type('wpunity_asset3d', $args);
     }
 
     //==========================================================================================================================================
 
-    /**
-     * D1.02
-     * Create Asset Category
-     *
-     * Category of 3D asset as custom taxonomy
-     */
-    function wpunity_assets_taxcategory()
-    {
-
+    // Create Asset Category as custom taxonomy
+    function wpunity_assets_taxcategory(){
         $labels = array(
             'name' => _x('Asset Type', 'taxonomy general name'),
             'singular_name' => _x('Asset Type', 'taxonomy singular name'),
@@ -84,7 +68,6 @@ class Asset3DClass{
             'add_new_item' => __('Add New Asset Type'),
             'new_item_name' => __('New Asset Type')
         );
-
         $args = array(
             'description' => 'Type (Category) of 3D asset',
             'labels' => $labels,
@@ -93,23 +76,13 @@ class Asset3DClass{
             'hierarchical' => false,
             'show_admin_column' => true
         );
-
         register_taxonomy('wpunity_asset3d_cat', 'wpunity_asset3d', $args);
-
     }
 
     //==========================================================================================================================================
 
-    /**
-     * D1.03
-     * Create Asset Game
-     *
-     * Select To Which Game it belongs to (as custom taxonomy)
-     */
-    function wpunity_assets_taxpgame()
-    {
-
-        // 2. Select To Which Scenes it belongs to
+    // Create Asset Game as custom taxonomy
+    function wpunity_assets_taxpgame(){
         $labels = array(
             'name' => _x('Asset Game', 'taxonomy general name'),
             'singular_name' => _x('Asset Game', 'taxonomy singular name'),
@@ -123,7 +96,6 @@ class Asset3DClass{
             'add_new_item' => __('Add New Asset Game'),
             'new_item_name' => __('New Asset Game')
         );
-
         $args = array(
             'description' => 'Game assignment of Asset 3D',
             'labels' => $labels,
@@ -132,24 +104,14 @@ class Asset3DClass{
             'hierarchical' => false,
             'show_admin_column' => true
         );
-
         register_taxonomy('wpunity_asset3d_pgame', 'wpunity_asset3d', $args);
     }
-
-    //==========================================================================================================================================
 
 }
 
 //==========================================================================================================================================
 
-/**
- * D1.04
- * Create PathData for each asset as custom field
- *
- *
- *
- */
-
+//Create PathData for each asset as custom field in order to upload files at pathdata/Models folder
 function wpunity_create_pathdata_asset( $post_id ){
 
     $post_type = get_post_type($post_id);

@@ -6,30 +6,12 @@ wp_enqueue_style('wpunity_backend');
 // Add scripts and their localization. All in a hook to get the post id.
 add_action('plugins_loaded', 'wpunity_localize_game_scripts');
 
-function wpunity_localize_game_scripts() {
-
-
-
-
-}
-
-
-//============= Compile button resources ================
-
-
-
-// dune = $post->post_name;
+function wpunity_localize_game_scripts() {}
 
 //==========================================================================================================================================
 
-/**
- * B3.01
- * Create metabox with Custom Fields for Game
- *
- * ($wpunity_databox3)
- */
+// Create metabox with Custom Fields for Game ($wpunity_databox3)
 
-//This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_game_';
 
 //All information about our meta box
@@ -58,12 +40,7 @@ $wpunity_databox3 = array(
 
 //==========================================================================================================================================
 
-/**
- * B3.02
- * Add and Show the metabox with Custom Field for Game and the Compiler Box
- *
- * ($wpunity_databox3)
- */
+//Add and Show the metabox with Custom Field for Game and the Compiler Box ($wpunity_databox3)
 
 function wpunity_games_databox_add() {
     global $wpunity_databox3;
@@ -73,9 +50,6 @@ function wpunity_games_databox_add() {
 }
 
 add_action('admin_menu', 'wpunity_games_databox_add');
-
-
-//===========================================================================================================
 
 function wpunity_games_databox_show(){
 
@@ -98,8 +72,6 @@ function wpunity_games_databox_show(){
     // load request_game.js script from js_libs
     wp_enqueue_script( 'wpunity_assemble_request');
 
-
-
     // Some parameters to pass in the request_game_assemble.js  ajax
     wp_localize_script('wpunity_assemble_request', 'phpvarsB',
         array('pluginsUrl' => plugins_url(),
@@ -110,9 +82,6 @@ function wpunity_games_databox_show(){
             'game_id'=> $post->ID
         ));
 
-
-
-
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_games_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
     echo '<table class="form-table" id="wpunity-custom-fields-table">';
@@ -122,7 +91,6 @@ function wpunity_games_databox_show(){
         echo '<tr>',
         '<th style="width:20%"><label for="', esc_attr($field['id']), '">', esc_html($field['name']), '</label></th>',
         '<td>';
-
 
         switch ($field['type']) {
             case 'text':
@@ -150,20 +118,11 @@ function wpunity_games_databox_show(){
         '</td></tr>';
     }
     echo '</table>';
-
 }
-
-
 
 //==========================================================================================================================================
 
-/**
- * B3.03
- * Save data from this metabox with Custom Field for Game
- *
- * ($wpunity_databox3)
- */
-
+// Save data from this metabox with Custom Field for Game ($wpunity_databox3)
 function wpunity_games_databox_save($post_id) {
     global $wpunity_databox3;
     // verify nonce
@@ -207,7 +166,6 @@ function wpunity_games_compilerbox_show(){
 
 }
 
-
 //================================= Assemble related ===================================================================
 function wpunity_games_assemblerbox_show(){
     echo '<div id="wpunity_assembleButton" onclick="wpunity_assembleAjax()">Assemble</div>';
@@ -217,7 +175,6 @@ function wpunity_games_assemblerbox_show(){
     echo '<div id="wpunity_assemble_report2"></div>';
 }
 //======================================================================================================================
-
 
 // the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
 // the ajax phps are on wpunity-core-functions.php
@@ -229,5 +186,7 @@ add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback
 add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
 // Add the assepile php
 add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback' );
+
+//======================================================================================================================
 
 ?>

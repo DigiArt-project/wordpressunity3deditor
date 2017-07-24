@@ -1,12 +1,6 @@
 <?php
 
-/**
- * D2.01
- * Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
- *
- * (dropdown style)
- */
-
+// Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
 add_action('add_meta_boxes','wpunity_assets_taxcategory_box');
 
 function wpunity_assets_taxcategory_box() {
@@ -20,9 +14,7 @@ function wpunity_assets_taxcategory_box() {
 
 function wpunity_assets_taxcategory_box_content($post){
     $tax_name = 'wpunity_asset3d_cat';
-
     ?>
-
     <div class="tagsdiv" id="<?php echo $tax_name; ?>">
 
         <p class="howto"><?php echo 'Select category for current Asset' ?></p>
@@ -55,16 +47,13 @@ function wpunity_assets_taxcategory_box_content($post){
 
         echo $select;
         ?>
-
     </div>
     <?php
 }
 
 function wpunity_assets_taxpgame_box_content($post){
     $tax_name = 'wpunity_asset3d_pgame';
-
     ?>
-
     <div class="tagsdiv" id="<?php echo $tax_name; ?>">
 
         <p class="howto"><?php echo 'Select category for current Asset' ?></p>
@@ -97,22 +86,14 @@ function wpunity_assets_taxpgame_box_content($post){
 
         echo $select;
         ?>
-
     </div>
     <?php
 }
 
 //==========================================================================================================================================
 
-/**
- * D2.02
- * When the post is saved, also saves wpunity_asset3d_cat & wpunity_asset3d_pgame
- *
- *
- */
-
+// Saves wpunity_asset3d_cat & wpunity_asset3d_pgame
 function wpunity_assets_taxcategory_box_content_save( $post_id ) {
-
     global $wpdb;
 
     // verify if this is an auto save routine.
@@ -126,7 +107,6 @@ function wpunity_assets_taxcategory_box_content_save( $post_id ) {
     if ( !wp_verify_nonce( $_POST['wpunity_asset3d_cat_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
-
     // Check permissions
     if ( 'wpunity_asset3d' == $_POST['post_type'] )
     {
@@ -139,15 +119,12 @@ function wpunity_assets_taxcategory_box_content_save( $post_id ) {
             return;
     }
 
-
-
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_asset3d_cat'], 10);
 
     $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_asset3d_cat' )->slug : NULL;
 
     wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_cat' );
-
 }
 
 add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
@@ -167,7 +144,6 @@ function wpunity_assets_taxpgame_box_content_save( $post_id ) {
     if ( !wp_verify_nonce( $_POST['wpunity_asset3d_pgame_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
-
     // Check permissions
     if ( 'wpunity_asset3d' == $_POST['post_type'] )
     {
@@ -179,8 +155,6 @@ function wpunity_assets_taxpgame_box_content_save( $post_id ) {
         if ( ! ( current_user_can( 'edit_post', $post_id ) ) )
             return;
     }
-
-
 
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_asset3d_pgame'], 10);
@@ -242,6 +216,6 @@ add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yam
 // Save the changes made on the taxonomy, using our callback function
 add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
 
-
+//==========================================================================================================================================
 
 ?>
