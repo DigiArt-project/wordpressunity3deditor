@@ -1,5 +1,7 @@
 <?php
 
+//SIDEBAR of Asset3D with fetch-segmentation etc...
+
 // load css/wpunity_backend.css
 wp_enqueue_style('wpunity_backend');
 
@@ -38,7 +40,6 @@ wp_localize_script('wpunity_classification_request', 'phpvars',
         'obj' => get_post_meta($post->ID, 'wpunity_asset3d_obj', true)
     )
 );
-
 
 add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
@@ -282,17 +283,9 @@ function wpunity_assets_classify_obj_box_content($post){
     <?php
 }
 
+//==========================================================================================================================================
 
-
-
-/**
- * D3.01
- * Create metabox with Custom Fields for Asset3D
- *
- * ($wpunity_databox1)
- */
-
-//This imc_prefix will be added before all of our custom fields
+// Create metabox with Custom Fields for Asset3D ($wpunity_databox1)
 $wpunity_prefix = 'wpunity_asset3d_';
 
 //All information about our meta box
@@ -353,13 +346,7 @@ $wpunity_databox1 = array(
 
 //==========================================================================================================================================
 
-/**
- * D3.02
- * Add and Show the metabox with Custom Field for Game
- *
- * ($wpunity_databox1)
- */
-
+// Add and Show the metabox with Custom Field for Game ($wpunity_databox1)
 function wpunity_assets_databox_add() {
     global $wpunity_databox1;
     add_meta_box('wpunity-assets-infobox', 'Description Tips for Image-Text', 'wpunity_assets_infobox_show', 'wpunity_asset3d','normal','high' );
@@ -399,13 +386,7 @@ function wpunity_assets_databox_show(){
     <table class="form-table" id="wpunity-custom-fields-table">
         <tbody>
             <tr><th style="width:20%">Asset 3D Preview</label></th>
-
-
             <?php
-
-            //$curr_path = "";// "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/game1/scene3/static3dmodels/asset2/";
-            //$textmtl = ""; //file_get_contents($curr_path."floor.mtl");
-            //$url_obj = ""; //$curr_path."floor.obj";
             $curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
             $mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
 
@@ -426,7 +407,6 @@ function wpunity_assets_databox_show(){
                          style="position: absolute; top:10%; background: #af0; color: #fff; margin-left: auto; margin-right: auto;  width:100px; left:50%; text-align:center; z-index:1">
                         0%
                     </div>
-
 
                 <div name="vr-preview" id="vr-preview" style="position:relative; width:95%; border: 1px solid #aaa; margin-left:5px">
 
@@ -495,13 +475,9 @@ function wpunity_assets_databox_show(){
 
                     ?>
                     <tr>
-
-
                         <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                         <td>
-
                             <?php
-
                             $valMaxUpload = intval(ini_get('upload_max_filesize'));
                             if ($valMaxUpload < 100){
                                 echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
@@ -509,9 +485,7 @@ function wpunity_assets_databox_show(){
                                 echo "php_value upload_max_filesize 256M <br />";
                                 echo "php_value post_max_size 512M";
                             }
-                            ?>
-
-                            <?php $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
+                            $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                             <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
                                    value="<?php echo esc_attr($meta_obj_id ? $meta_obj_id : $field['std']); ?>" size="30" style="width:65%"/>
@@ -612,12 +586,10 @@ function wpunity_assets_databox_show(){
     </table>
 
     <script>
-
         function wpunity_hidecfields_asset3d() {
             var e = document.getElementById("wpunity-select-asset3d-cat-dropdown");
             var value = e.options[e.selectedIndex].value;
             var text = e.options[e.selectedIndex].text;
-
 
             if(text == 'Doors'){
                 //SHOW Next Scene Custom field - Hide others
@@ -673,18 +645,6 @@ function wpunity_assets_databox_show(){
             jQuery('#wpunity_asset3d_mtl_btn').on('click', function( event ){
 
                 event.preventDefault();
-
-//                // If the media frame already exists, reopen it.
-//                if ( file_frame ) {
-//                    // Set the post ID to what we want
-//                    file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-//                    // Open frame
-//                    file_frame.open();
-//                    return;
-//                } else {
-//                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
-//                    wp.media.model.settings.post.id = set_to_post_id;
-//                }
 
                 wp.media.model.settings.post.id = set_to_post_id;
 
@@ -893,13 +853,7 @@ function wpunity_assets_databox_show(){
 
 //==========================================================================================================================================
 
-/**
- * D3.03
- * Save data from this metabox with Custom Field for Asset3D
- *
- * ($wpunity_databox)
- */
-
+// Save data from this metabox with Custom Field for Asset3D ($wpunity_databox)
 function wpunity_assets_databox_save($post_id) {
     global $wpunity_databox1;
     // verify nonce
@@ -929,21 +883,12 @@ function wpunity_assets_databox_save($post_id) {
             delete_post_meta($post_id, $field['id'], $old);
         }
     }
-
-    //After Save custom fields, delete all old meta and create the new ones
-    //wpunity_assets_delete_allmetas($post_id);
-//    foreach ($wpunity_databox1['fields'] as $field) {
-//        $attachment_ID = get_post_meta($post_id, $field['id'], true);
-//        if($attachment_ID){
-//            wpunity_assets_create_metafile($post_id,$attachment_ID, $field['id']); //create meta file
-//        }
-//    }
-
 }
 
 // Save data from infobox
 add_action('save_post', 'wpunity_assets_databox_save');
 
+//==========================================================================================================================================
 
 // AJAXES for content interlinking
 add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
@@ -954,9 +899,6 @@ add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_ca
 add_action( 'wp_ajax_wpunity_segment_obj_action', 'wpunity_segment_obj_action_callback' );
 add_action( 'wp_ajax_wpunity_monitor_segment_obj_action', 'wpunity_monitor_segment_obj_action_callback' );
 add_action( 'wp_ajax_wpunity_enlist_splitted_objs_action', 'wpunity_enlist_splitted_objs_action_callback' );
-
-
-
 
 add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_callback' );
 

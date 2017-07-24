@@ -1,11 +1,6 @@
 <?php
 
-/**
- * C2.01
- * Create Scene's Game Box @ scene's backend
- *
- * (dropdown style)
- */
+// Create Scene's Game Box @ scene's backend
 
 add_action('add_meta_boxes','wpunity_scenes_taxgame_box');
 
@@ -103,7 +98,6 @@ function wpunity_scenes_taxyaml_box_content($post){
     <?php
 }
 
-
 //==========================================================================================================================================
 
 /**
@@ -124,7 +118,6 @@ function wpunity_scenes_taxgame_box_content_save( $post_id ) {
 
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
-
     if ( !wp_verify_nonce( $_POST['wpunity_scene_pgame_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
@@ -140,8 +133,6 @@ function wpunity_scenes_taxgame_box_content_save( $post_id ) {
         if ( ! ( current_user_can( 'edit_post', $post_id ) ) )
             return;
     }
-
-
 
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_scene_pgame'], 10);
@@ -165,7 +156,6 @@ function wpunity_scenes_taxyaml_box_content_save( $post_id ) {
 
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
-
     if ( !wp_verify_nonce( $_POST['wpunity_scene_yaml_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
@@ -182,8 +172,6 @@ function wpunity_scenes_taxyaml_box_content_save( $post_id ) {
             return;
     }
 
-
-
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_scene_yaml'], 10);
 
@@ -195,6 +183,6 @@ function wpunity_scenes_taxyaml_box_content_save( $post_id ) {
 
 add_action( 'save_post', 'wpunity_scenes_taxyaml_box_content_save' );
 
-
 //==========================================================================================================================================
+
 ?>

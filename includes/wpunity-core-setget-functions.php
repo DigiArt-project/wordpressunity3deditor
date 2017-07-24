@@ -1,5 +1,6 @@
 <?php
 
+//GET page by given type (depending the template) - breacrumb and links for front-end
 function wpunity_getEditpage($type){
 	if($type=='game'){
 		$edit_pages = get_pages(array(
@@ -47,9 +48,56 @@ function wpunity_getEditpage($type){
 
 }
 
+//==========================================================================================================================================
 
+//Get Settings Values (Generic Yaml Patterns
 
-// database method
+//Get 'Folder.meta Pattern'
+function wpunity_getFolderMetaPattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_folder_meta_pat"];;
+}
+
+//Get 'each_scene.unity meta pattern'
+function wpunity_getSceneUnityMetaPattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_scene_meta_pat"];
+}
+
+//Get 'obj.meta Pattern'
+function wpunity_getYaml_obj_dotmeta_pattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_obj_meta_pat"];
+}
+
+//Get 'jpg.meta Pattern'
+function wpunity_getYaml_jpg_dotmeta_pattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_jpg_meta_pat"];
+}
+
+//Get 'The jpg sprite meta pattern'
+function wpunity_getYaml_jpg_sprite_pattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_jpgsprite_meta_pat"];
+}
+
+//Get 'Material (.mat) Pattern'
+function wpunity_getYaml_mat_pattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_mat_pat"];
+}
+
+//Get 'mat.meta Pattern'
+function wpunity_getYaml_mat_dotmeta_pattern(){
+	$yamloptions = get_option( 'yaml_settings' );
+	return $yamloptions["wpunity_mat_meta_pat"];
+}
+
+//==========================================================================================================================================
+
+//TODO check them
+
 function wpunity_fetch_game_assets_action_callback(){
 
 	// Output the directory listing as JSON
@@ -90,7 +138,6 @@ function wpunity_fetch_game_assets_action_callback(){
 	echo $jsonResp;
 	wp_die();
 }
-
 
 function wpunity_getAllassets_byGameProject($gameProjectSlug){
 
@@ -161,7 +208,6 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 	return $allAssets;
 }
 
-
 // jimver : check this
 function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
@@ -203,133 +249,6 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
 	return $allUnityScenes;
 
-}
-
-
-function wpunity_getTemplateID_forAsset($asset_id){
-
-//    $parentSceneterms = wp_get_post_terms( $asset_id, 'wpunity_asset3d_pscene');
-//
-//    $parentSceneSlug = $parentSceneterms[0]->slug;
-//
-//    $custom_args = array(
-//        'name'        => $parentSceneSlug,
-//        'post_type'   => 'wpunity_scene',
-//    );
-//    $my_posts = get_posts($custom_args);
-//    $sceneID = $my_posts[0]->ID;
-//
-//    $terms = wp_get_post_terms( $sceneID, 'wpunity_scene_yaml', array("fields" => "ids") );
-//
-//    return $terms[0];
-}
-
-//==========================================================================================================================================
-
-//Get Methods for Every Yaml Pattern  -- UPDATED
-
-//Get 'Folder.meta Pattern'
-function wpunity_getFolderMetaPattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	$folderMetaPattern = $yamloptions["wpunity_folder_meta_pat"];
-
-	return $folderMetaPattern;
-}
-
-//Get 'each_scene.unity meta pattern'
-function wpunity_getSceneUnityMetaPattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	$sceneUnityMetaPattern = $yamloptions["wpunity_scene_meta_pat"];
-
-	return $sceneUnityMetaPattern;
-}
-
-//Get 'obj.meta Pattern'
-function wpunity_getYaml_obj_dotmeta_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_obj_meta_pat"];
-}
-
-//Get 'jpg.meta Pattern'
-function wpunity_getYaml_jpg_dotmeta_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_jpg_meta_pat"];
-}
-
-//Get 'The jpg sprite meta pattern'
-function wpunity_getYaml_jpg_sprite_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_jpgsprite_meta_pat"];
-}
-
-//Get 'Material (.mat) Pattern'
-function wpunity_getYaml_mat_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_mat_pat"];
-}
-
-//Get 'mat.meta Pattern'
-function wpunity_getYaml_mat_dotmeta_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_mat_meta_pat"];
-}
-
-
-
-
-//==========================================================================================================================================
-
-//Get Methods for Every Yaml Pattern  -- NOT UPDATED
-
-
-//Get 'Wonder around .unity pattern' by Yaml ID
-function wpunity_getYaml_wonder_around_unity_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_wonderaround_pat',true);
-}
-
-//Get 'Static Object Pattern' by Yaml ID
-function wpunity_getYaml_static_object_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_sop',true);
-}
-
-//Get 'Dynamic Object Pattern' by Yaml ID
-function wpunity_getYaml_dynamic_object_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_dop',true);
-}
-
-//Get 'Door Pattern' by Yaml ID
-function wpunity_getYaml_door_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_doorp',true);
-}
-
-//Get 'POI ImageText Pattern' by Yaml ID
-function wpunity_getYaml_poi_imagetext_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_imagetext_p',true);
-}
-
-//Get 'POI Video Pattern' by Yaml ID
-function wpunity_getYaml_poi_video_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_scene_poi_video_p',true);
-}
-
-//Get 'The S_MainMenu.unity pattern' by Yaml ID
-function wpunity_getYaml_main_menu_unity_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_s_mainmenu',true);
-}
-
-//Get 'Main Menu c-sharp script (all_menu_Script.cs) Pattern' by Yaml ID
-function wpunity_getYaml_all_menu_cs_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_csharp_mainmenu',true);
-}
-
-//Get 'The S_Credentials.unity pattern' by Yaml ID
-function wpunity_getYaml_credentials_unity_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_s_credentials',true);
-}
-
-//Get 'The S_Options.unity pattern' by Yaml ID
-function wpunity_getYaml_options_unity_pattern($yamlID){
-	return get_term_meta($yamlID,'wpunity_yamlmeta_s_options',true);
 }
 
 //==========================================================================================================================================

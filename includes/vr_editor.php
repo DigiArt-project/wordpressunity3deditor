@@ -50,7 +50,7 @@ echo '</script>';
 
 <!--  My libraries  -->
 <!-- Scene Environmentals -->
-<script src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
 
 <!-- Handle keyboard buttons shortcuts -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/keyButtons.js'></script>
@@ -204,7 +204,7 @@ echo '</script>';
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
-    <div id="gui-container" class="VrGuiContainerStyle"></div>
+    <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
 
     <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
         <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
@@ -238,15 +238,13 @@ echo '</script>';
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
         <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            Perspective
+            <i class="material-icons">face</i>
         </a>
     </div>
 
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle Full Screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
-
-
 
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle">
@@ -283,15 +281,16 @@ echo '</script>';
 
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
 
-        <div class="bt_close_file_toolbar">
+        <div class="bt_close_file_toolbar mdc-typography">
             Close
         </div>
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
-    <div id="popUpDiv">
-        <select title="Select an object" id="popupSelect"></select>
+    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">
+        <select title="Select an object" id="popupSelect" class="mdc-select"></select>
     </div>
+
 
 </div>
 

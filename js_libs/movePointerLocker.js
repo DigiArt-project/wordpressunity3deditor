@@ -121,123 +121,124 @@ function updatePointerLockControls(){
 
     //if ( avatarControlsEnabled ) {
 
-        var collisionResults = [];
+    var collisionResults = [];
 
-        // Todo: Get these two out of the loop
-        var Steve = envir.scene.getObjectByName("Steve");
-        var steveShieldMesh = envir.scene.getObjectByName("SteveShieldMesh") ;
-
-
-        // console.log(Steve);
-
-        // TODO: RAYCASTING SIGNIFICANTLY DETERIORATES RENDERING SPEED
-
-        //for (var vertexIndex = 0; vertexIndex < 1; vertexIndex++) //cubeRayShield.geometry.vertices.length
-        //{
-        //    var localVertex = cubeRayShield.geometry.vertices[vertexIndex].clone();
-        //    var globalVertex = localVertex.applyProjection(cubeRayShield.matrixWorld);
-        //
-        //
-        //    var steveWorldPosition = Steve.position.clone().applyProjection(Steve.matrixWorld);
-        //
-        //    var directionVector = globalVertex.sub( steveWorldPosition  );
-        //
-        //    var dirVecNorm = directionVector.clone().normalize();
-        //
-        //    // Visualize Raycaster with a line
-        //    //    var geometryL = new THREE.Geometry();
-        //    //    var geometryL = new THREE.Geometry();
-        //    //    geometryL.vertices.push(steveWorldPosition,
-        //    //        steveWorldPosition.clone().add(dirVecNorm)
-        //    //    );
-        //    //    console.log(Steve.position.clone(), Steve.position.clone().add(dirVecNorm));
-        //    //    envir.scene.add(new THREE.Line(geometryL, new THREE.LineBasicMaterial({color: 0x0000ff})));
-        //
-        //    var raycaster = new THREE.Raycaster( steveWorldPosition, dirVecNorm, 1, 10);
-        //    var actMesh = getActiveMeshes();
-        //    var collisionResults = raycaster.intersectObjects( actMesh, true );
-        //}
+    // Todo: Get these two out of the loop
+    var Steve = envir.scene.getObjectByName("Steve");
+    var steveShieldMesh = envir.scene.getObjectByName("SteveShieldMesh") ;
 
 
-        // Collider test: Make everything touched red
-        //for ( var i = 0; i < collisionResults.length; i++ )
-        //    collisionResults[ i ].object.material.color.set( 0xff0000 );
+    // console.log(Steve);
+
+    // TODO: RAYCASTING SIGNIFICANTLY DETERIORATES RENDERING SPEED
+
+    //for (var vertexIndex = 0; vertexIndex < 1; vertexIndex++) //cubeRayShield.geometry.vertices.length
+    //{
+    //    var localVertex = cubeRayShield.geometry.vertices[vertexIndex].clone();
+    //    var globalVertex = localVertex.applyProjection(cubeRayShield.matrixWorld);
+    //
+    //
+    //    var steveWorldPosition = Steve.position.clone().applyProjection(Steve.matrixWorld);
+    //
+    //    var directionVector = globalVertex.sub( steveWorldPosition  );
+    //
+    //    var dirVecNorm = directionVector.clone().normalize();
+    //
+    //    // Visualize Raycaster with a line
+    //    //    var geometryL = new THREE.Geometry();
+    //    //    var geometryL = new THREE.Geometry();
+    //    //    geometryL.vertices.push(steveWorldPosition,
+    //    //        steveWorldPosition.clone().add(dirVecNorm)
+    //    //    );
+    //    //    console.log(Steve.position.clone(), Steve.position.clone().add(dirVecNorm));
+    //    //    envir.scene.add(new THREE.Line(geometryL, new THREE.LineBasicMaterial({color: 0x0000ff})));
+    //
+    //    var raycaster = new THREE.Raycaster( steveWorldPosition, dirVecNorm, 1, 10);
+    //    var actMesh = getActiveMeshes();
+    //    var collisionResults = raycaster.intersectObjects( actMesh, true );
+    //}
+
+
+    // Collider test: Make everything touched red
+    //for ( var i = 0; i < collisionResults.length; i++ )
+    //    collisionResults[ i ].object.material.color.set( 0xff0000 );
 
 
 //        var isOnObject = collisionResults.length > 0; // && collisionResults[0].distance < directionVector.length();
 
-        var time = performance.now();
-        var delta = ( time - prevTime ) / 1000;
+    var time = performance.now();
+    var delta = ( time - prevTime ) / 1000;
 
-        // Reductors of velocity
-         velocity.x -= velocity.x * 2.0 * delta;
-         velocity.y -= velocity.y * 2.0 * delta;
-         velocity.z -= velocity.z * 2.0 * delta;
+    // Reductors of velocity
+    velocity.x -= velocity.x * 2.0 * delta;
+    velocity.y -= velocity.y * 2.0 * delta;
+    velocity.z -= velocity.z * 2.0 * delta;
 
-        // Reductor of rotation along Y
-        torgue.y = torgue.y * 0.7; // * delta;
+    // Reductor of rotation along Y
+    torgue.y = torgue.y * 0.7; // * delta;
 
-        //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
-
-        if (avatarControlsEnabled) {
-            if (moveForward) velocity.z -= 0.3 * delta;
-            if (moveBackward) velocity.z += 0.3 * delta;
-            if (moveLeft) velocity.x -= 0.3 * delta;
-            if (moveRight) velocity.x += 0.3 * delta;
-        }else {
-            if (moveForward) velocity.z -= 0.3 * delta;
-            if (moveBackward) velocity.z += 0.3 * delta;
-            if (moveLeft) torgue.y += 0.3 * delta;
-            if (moveRight) torgue.y -= 0.3 * delta;
-        }
+    //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
 
-        if ( moveUp ) velocity.y -= 0.3 * delta;
-        if ( moveDown ) velocity.y += 0.3 * delta;
+    if (avatarControlsEnabled) {
+        if (moveForward) velocity.z -= 0.3 * delta;
+        if (moveBackward) velocity.z += 0.3 * delta;
+        if (moveLeft) velocity.x -= 0.3 * delta;
+        if (moveRight) velocity.x += 0.3 * delta;
+    }
+    else {
+        if (moveForward) velocity.z -= 0.3 * delta;
+        if (moveBackward) velocity.z += 0.3 * delta;
+        if (moveLeft) torgue.y += 0.3 * delta;
+        if (moveRight) torgue.y -= 0.3 * delta;
+    }
 
-        //if ( isOnObject === true ) {
-        //    velocity.z = Math.max( 0, velocity.z );
-        //    canJump = true;
-        //}
 
-        // Move avatar
-        envir.avatarControls.getObject().translateX( velocity.x );
-        envir.avatarControls.getObject().translateY( velocity.y );
-        envir.avatarControls.getObject().translateZ( velocity.z );
+    if ( moveUp ) velocity.y -= 0.3 * delta;
+    if ( moveDown ) velocity.y += 0.3 * delta;
 
-        if (!avatarControlsEnabled)
-              envir.avatarControls.getObject().rotation.y += torgue.y;
+    //if ( isOnObject === true ) {
+    //    velocity.z = Math.max( 0, velocity.z );
+    //    canJump = true;
+    //}
+
+    // Move avatar
+    envir.avatarControls.getObject().translateX( velocity.x );
+    envir.avatarControls.getObject().translateY( velocity.y );
+    envir.avatarControls.getObject().translateZ( velocity.z );
+
+    if (!avatarControlsEnabled)
+        envir.avatarControls.getObject().rotation.y += torgue.y;
 
     // When the avatar moves then move the camera to follow him
 
-        //if (!avatarControlsEnabled) {
-        //    //envir.orbitControls.object.translateX(velocity.x * delta);
-        //    //envir.orbitControls.object.translateY(velocity.y * delta);
-        //    //envir.orbitControls.object.translateZ(velocity.z * delta);
-        //
-        //
-        //}
-        //
-        //
+    //if (!avatarControlsEnabled) {
+    //    //envir.orbitControls.object.translateX(velocity.x * delta);
+    //    //envir.orbitControls.object.translateY(velocity.y * delta);
+    //    //envir.orbitControls.object.translateZ(velocity.z * delta);
+    //
+    //
+    //}
+    //
+    //
 
 
-        // Update the camera Y not to be so low
-        //if ( moveForward )
-        //    envir.orbitControls.object.translateY( - velocity.y * delta );
+    // Update the camera Y not to be so low
+    //if ( moveForward )
+    //    envir.orbitControls.object.translateY( - velocity.y * delta );
 
-        //if ( envir.avatarControls.getObject().position.y < 1.80 ) {
-        //    velocity.y = 0;
-        //    envir.avatarControls.getObject().position.y = 0;
-        //    envir.avatarControls.getObject().children[1].position.y=0;
-        //    envir.avatarControls.getObject().children[0].position.y=0;
-        //
-        //    canJump = true;
-        //}
+    //if ( envir.avatarControls.getObject().position.y < 1.80 ) {
+    //    velocity.y = 0;
+    //    envir.avatarControls.getObject().position.y = 0;
+    //    envir.avatarControls.getObject().children[1].position.y=0;
+    //    envir.avatarControls.getObject().children[0].position.y=0;
+    //
+    //    canJump = true;
+    //}
 
-        moveUp = false;
-        moveDown = false;
+    moveUp = false;
+    moveDown = false;
 
-        prevTime = time;
+    prevTime = time;
     //}
 }
