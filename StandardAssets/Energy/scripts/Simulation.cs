@@ -123,9 +123,17 @@ public class Simulation : MonoBehaviour {
 				targetColor = Color.blue;
 
 			GameObject[] consumersGO = GameObject.FindGameObjectsWithTag ("consumer");
-				foreach(GameObject go in consumersGO)
-					foreach (Transform tr in go.transform)
+			foreach (GameObject go in consumersGO)
+				foreach (Transform tr in go.transform) {
+
+					if (tr.gameObject.GetComponent<Renderer> ()) // old building has no parent
 						tr.gameObject.GetComponent<Renderer> ().material.color = targetColor;
+					else {  // prefab makes another child more inside
+						foreach (Transform tr2 in tr.gameObject.transform) 
+							tr2.gameObject.GetComponent<Renderer> ().material.color = targetColor;
+					}
+					
+				}
 
 			prev_power_consumption = powerUsage;
 		}
@@ -195,17 +203,19 @@ public class Simulation : MonoBehaviour {
     /* 	Calculate income */
     void incomeCalculation(){
 
-		if(string.Equals(powerUsage,"Under power"))
-			totalIncome += incomeWhenUnderPower;
+		if (currentPowerReqs > 0) {
+
+			if (string.Equals (powerUsage, "Under power"))
+				totalIncome += incomeWhenUnderPower;
 	
-		if(string.Equals(powerUsage,"Correct power"))
-			totalIncome += incomeWhenCorrectPower;
+			if (string.Equals (powerUsage, "Correct power"))
+				totalIncome += incomeWhenCorrectPower;
 
-		if(string.Equals(powerUsage,"Over power"))
-			totalIncome += incomeWhenOverPower;
+			if (string.Equals (powerUsage, "Over power"))
+				totalIncome += incomeWhenOverPower;
 
-
-		DisplayText("income");
+			DisplayText ("income");
+		}
 	}
 
 	/* 

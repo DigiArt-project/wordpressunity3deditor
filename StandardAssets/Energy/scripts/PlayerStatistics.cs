@@ -11,53 +11,49 @@ public class PlayerStatistics : MonoBehaviour {
 	public static float moneyEarned;
 	public static float energyProduced;
 
-    public bool endSimulation = false;
-  
     // Use this for initialization
     void Start () {
 
-
-
-
-		endSimulation = false;
 		if(!SceneManager.GetActiveScene().name.Equals("S_Reward")){ // if not the last scene
-			simulation = GameObject.FindGameObjectsWithTag("terrain")[0].GetComponent<Simulation>();
-			InitializeCountValues();
+
+			GameObject[] gost = GameObject.FindGameObjectsWithTag ("terrain");
+
+			if ( GameObject.FindGameObjectsWithTag("terrain").Length > 0) // in the case there is no terrain be safe
+				simulation = GameObject.FindGameObjectsWithTag("terrain")[0].GetComponent<Simulation>();
+
+			underPowerSec = 0;
+			correctPowerSec = 0;
+			overPowerSec = 0;
+			moneyEarned = 0;
+			energyProduced = 0;
+
 			InvokeRepeating("CalculatePowerUsageStatistics", 0.0f, 1.0f);
 		}
 	}
 
 	void Update(){
-		checkEndSimulation();
-	}
 
-	void InitializeCountValues(){
-		underPowerSec = 0;
-		correctPowerSec = 0;
-		overPowerSec = 0;
-		moneyEarned = 0;
-		energyProduced = 0;
-	}
-
-
-	/*
-	Stops the simulation and loads the end scene in the game. This can be achieved either by clicking on the exit button,
-	or after 24 minutes have passed.
-	*/
-	public void checkEndSimulation(){
-		if(!SceneManager.GetActiveScene().name.Equals("S_Reward")){  // if not the last scene
-			if(simulation.minutesCount >= 24 || endSimulation == true){
-				GoedleAnalytics.track ("end.simulation");
-				SceneManager.LoadScene("S_Reward" ); // loads last scene
-				Resources.UnloadUnusedAssets(); //removes unused assets to free memory
+		/* Stops the simulation and loads the end scene in the game. This can be achieved either by clicking on the exit button,
+		or after 24 minutes have passed. */
+		if(!SceneManager.GetActiveScene().name.Equals("S_Reward") && simulation){  // if not the last scene
+			if(simulation.minutesCount >= 24){
+				terminateSimulation ();
 			}
 		}
 	}
 
+
 	public void ExitButtonPressed(){
-		endSimulation = true;
+		terminateSimulation ();
 	}
 	
+
+	void terminateSimulation(){
+
+		GoedleAnalytics.track ("end.simulation");
+		SceneManager.LoadScene("S_Reward" ); // loads last scene
+		Resources.UnloadUnusedAssets(); //removes unused assets to free memory
+	}
 
 	/*
 	It holds to static variables the seconds that the player has spent in each power output scenario respectively.
@@ -66,22 +62,21 @@ public class PlayerStatistics : MonoBehaviour {
  	void CalculatePowerUsageStatistics(){
 		if( !SceneManager.GetActiveScene().name.Equals("S_Reward") ){
 
-			moneyEarned = simulation.totalIncome;
-			energyProduced = simulation.totalEnergyProduced;
+			if (simulation) { // be sure that there is a terrain
+				moneyEarned = simulation.totalIncome;
+				energyProduced = simulation.totalEnergyProduced;
 
 
-			if(string.Equals(simulation.powerUsage,"Under power")){
-				underPowerSec++;
-			}
-			else if(string.Equals(simulation.powerUsage,"Correct power")){
-				correctPowerSec++;
-			}
-			else {
-				overPowerSec++;
+				if (string.Equals (simulation.powerUsage, "Under power")) {
+					underPowerSec++;
+				} else if (string.Equals (simulation.powerUsage, "Correct power")) {
+					correctPowerSec++;
+				} else {
+					overPowerSec++;
+				}
 			}
 		}
 	}
 
-	void GetPlayerInfo(){
-	}
+	void GetPlayerInfo(){}
 }

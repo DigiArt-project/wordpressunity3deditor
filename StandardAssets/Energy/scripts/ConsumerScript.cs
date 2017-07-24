@@ -35,7 +35,7 @@ public class ConsumerScript : MonoBehaviour {
 		CurrPowerConsume = CurrPowerConsume > MaxPowerConsume ? MaxPowerConsume : CurrPowerConsume;
 		CurrPowerConsume = CurrPowerConsume < MinPowerConsume ? MinPowerConsume : CurrPowerConsume;
 
-		infoQuad.transform.LookAt (GameObject.Find ("s1_Camera").GetComponent<Camera> ().transform.position);
+		infoQuad.transform.LookAt (GameObject.Find ("camera").GetComponent<Camera> ().transform.position);
 
 
 	}

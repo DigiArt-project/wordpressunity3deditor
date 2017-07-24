@@ -13,6 +13,7 @@ public class TurbineQuadSelector : MonoBehaviour {
 
 	private GameObject infoQuad;
 	private GameObject infoQuadText;
+	private Camera camera;
 
 	void Awake(){
 		InvokeRepeating("updateInfoText", 0,5);
@@ -21,16 +22,20 @@ public class TurbineQuadSelector : MonoBehaviour {
 	void Start () {
 		turbineInputManager = transform.GetComponentInParent<TurbineInputManager>();
 		turbineController = transform.GetComponentInParent<TurbineController>();
-		simulation  = GameObject.FindGameObjectsWithTag("terrain")[0].GetComponent<Simulation>();
+
+		if ( GameObject.FindGameObjectsWithTag("terrain").Length > 0) // in the case there is no terrain be safe
+			simulation  = GameObject.FindGameObjectsWithTag("terrain")[0].GetComponent<Simulation>();
 
 		infoQuad = transform.parent.Find("InfoQuad").gameObject;
 		infoQuadText = infoQuad.transform.Find("InfoQuadText").gameObject;
+
+		camera = GameObject.Find ("camera").GetComponent<Camera> ();
 
 		updateInfoText ();
 	}
 
 	void Update () {
-		infoQuad.transform.LookAt (GameObject.Find ("s1_Camera").GetComponent<Camera> ().transform.position);
+		infoQuad.transform.LookAt (camera.transform.position);
 	}
 
 
@@ -68,9 +73,14 @@ public class TurbineQuadSelector : MonoBehaviour {
 			gameObject.GetComponent<MeshRenderer> ().enabled = false;
 
 			// Enable the Visuals of the turbine
-			foreach (Transform child in transform.parent.gameObject.transform) 
-				if (child.gameObject.name == "Turbine_Fan" || child.gameObject.name == "Turbine_Main")
-						child.gameObject.GetComponent<Renderer> ().enabled = true;
+			foreach (Transform childtr in transform.parent.gameObject.transform) { 
+
+				if (childtr.gameObject.tag == "producer_mesh") 
+					foreach (Transform tr2 in childtr)
+						if (tr2.gameObject.name == "Turbine_Fan" || tr2.gameObject.name == "Turbine_Main") // new prefab
+								tr2.gameObject.GetComponent<Renderer> ().enabled = true;
+
+			}
 
 			// Destroy Nearby turbine spots
 			float range = 3 * turbineController.turbineRotorSize;
