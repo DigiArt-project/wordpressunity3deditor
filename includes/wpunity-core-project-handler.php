@@ -378,11 +378,17 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
         'hide_empty' => false,
     ) );
     $term_meta_s_reward = get_term_meta($allGameTypeTerms[0]->term_id,'wpunity_yamlmeta_s_reward',true);
-    
+    $term_meta_s_selector = get_term_meta($allGameTypeTerms[0]->term_id,'$term_meta_s_selector',true);
+
     $file = $game_path . '/' . 'S_Reward.unity';
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $term_meta_s_reward);
     fclose($create_file);
+
+    $file2 = $game_path . '/' . 'S_SceneSelector.unity';
+    $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+    fwrite($create_file2, $term_meta_s_selector);
+    fclose($create_file2);
 
 }
 
