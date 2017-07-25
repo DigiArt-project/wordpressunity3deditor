@@ -519,7 +519,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         //Update the EditorBuildSettings.asset by adding new Scene
     }elseif($scene_type_slug == 'educational-energy'){
 
-        
+
         wpunity_compile_append_scene_to_s_selector();
 
         //Update the EditorBuildSettings.asset by adding new Scene

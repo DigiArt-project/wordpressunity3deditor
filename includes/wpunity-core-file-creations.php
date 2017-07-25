@@ -5,6 +5,9 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
     $allScenePGameID = $allScenePGame->term_id;
 
+    $all_game_category = get_the_terms( $gameID, 'wpunity_game_type' );
+    $game_category  = $all_game_category[0]->slug;
+
     $mainmenuSceneTitle = 'Main Menu'; //Title for Main Menu
     $mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
     $firstSceneTitle = 'First Scene'; //Title for First Menu
@@ -14,10 +17,15 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
 
     $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
     $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
-    $firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
-    $firstSceneYAMLID = $firstSceneYAML->term_id;
     $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
     $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+    if($game_category == 'energy_games'){
+        $firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
+        $firstSceneYAMLID = $firstSceneYAML->term_id;
+    }elseif($game_category == 'archaeology_games'){
+        $firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
+        $firstSceneYAMLID = $firstSceneYAML->term_id;
+    }
 
     // Create Main Menu Scene Data
     $mainmenuSceneData = array(
@@ -71,7 +79,6 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     wp_insert_post( $mainmenuSceneData );
     wp_insert_post( $credentialsSceneData );
     wp_insert_post( $firstSceneData );
-    wp_insert_term($firstSceneTitle,'wpunity_asset3d_pscene',array('slug'=>$firstSceneSlug,'description'=>'Scene assignment of Asset 3D'));
 
 }
 

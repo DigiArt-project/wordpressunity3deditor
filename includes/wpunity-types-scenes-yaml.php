@@ -12414,6 +12414,17 @@ function wpunity_scenes_taxyaml_standard_cre(){
         );
     }
 
+  if (!term_exists('Educational Energy Template', 'wpunity_scene_yaml')) {
+    wp_insert_term(
+        'Educational Energy Template', // the term
+        'wpunity_scene_yaml', // the taxonomy
+        array(
+            'description' => 'YAML Template for Educational Energy scenes',
+            'slug' => 'educational-energy',
+        )
+    );
+  }
+
 }
 
 add_action( 'init', 'wpunity_scenes_taxyaml_standard_cre' );
@@ -12455,8 +12466,19 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
-    }elseif($term_insterted->slug == 'wonderaround-yaml'){
+    }elseif($term_insterted->slug == 'wonderaround-yaml') {
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+    }elseif($term_insterted->slug == 'educational-energy'){
+        update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
