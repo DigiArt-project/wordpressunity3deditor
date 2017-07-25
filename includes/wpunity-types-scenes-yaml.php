@@ -12100,7 +12100,10 @@ RectTransform:
   m_PrefabInternal: {fileID: ___[guid_tile_sceneselector]___}
 ');
 
+//Copied from Github
 $ini_scene_selector_text = 'Select a Scene';
+
+
 //==========================================================================================================================================
 
 // Add custom fields to our taxonomy (in order to use them as term_metas
