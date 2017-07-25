@@ -693,10 +693,10 @@ get_header(); ?>
                 show: true
             },
             xaxes: [{
-                axisLabel: 'Power Production (MW)'
+                axisLabel: 'Wind Speed (m/s)'
             }],
             yaxes: [{
-                axisLabel: 'Wind Speed (m/s)'
+                axisLabel: 'Power Production (MW)'
             }],
 
             xaxis: {
