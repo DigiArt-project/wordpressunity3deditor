@@ -385,13 +385,14 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             )
         )
     );
+    $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path);
+            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter);
         endwhile;
     endif;
     wp_reset_postdata();
@@ -417,7 +418,7 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
 
 }
 
-function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path){
+function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter){
     $scene_post = get_post($scene_id);
 
     $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
@@ -518,10 +519,19 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_file6);
         //Update the EditorBuildSettings.asset by adding new Scene
     }elseif($scene_type_slug == 'educational-energy'){
+        //DATA of Educational Energy Scene
+        //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
+        //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+//        $scene_name = $scene_post->post_name;
+//
+//        //$file_content6 = wpunity_replace_educational_energy_unity();
+//        $file6 = $game_path . '/' . $scene_name . '.unity';
+//        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
+//        fwrite($create_file6, 'Test');
+//        fclose($create_file6);
 
-
-        wpunity_compile_append_scene_to_s_selector();
-
+        //wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
+        //$scenes_counter++;
         //Update the EditorBuildSettings.asset by adding new Scene
 
     }
@@ -594,6 +604,20 @@ function wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid){
 
 function wpunity_replace_login_unity($term_meta_s_login){
     return $term_meta_s_login;
+}
+
+function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
+    $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
+    $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
+    $sceneSelectorFile = $game_path . '/SceneSelector.unity';
+
+    //$myfile = fopen($sceneSelectorFile, "a") or die("Unable to open file!");
+    $txt = "user id date2";
+    //fwrite($myfile, "\n". $txt);
+    //fclose($myfile);
+
+    file_put_contents($sceneSelectorFile, implode("\n", $txt) . "\n", FILE_APPEND);
+
 }
 
 ?>
