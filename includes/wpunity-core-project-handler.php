@@ -443,7 +443,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         //DATA of Credits Scene
         $term_meta_s_credits = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_credentials',true);
         $credits_content = $scene_post->post_content;
-        //$credits_content = 'Hello';
+
         $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
         $featured_image_sprite_guid = 0; //if there's no Featured Image
         if($featured_image_sprite_id != ''){$featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);}
@@ -456,6 +456,17 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
         //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    }elseif($scene_type_slug == 'wonderaround-yaml'){
+        //DATA of Wonder Around Scene
+        $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
+        $json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+        $scene_name = $scene_post->post_name;
+
+        $file_content6 = wpunity_jsonArr_to_unity($term_meta_wonder_around, $json_scene);
+        $file6 = $game_path . '/' . $scene_name . '.unity';
+        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
+        fwrite($create_file6, $file_content6);
+        fclose($create_file6);
 
     }
 

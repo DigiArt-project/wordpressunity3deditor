@@ -156,14 +156,15 @@ function wpunity_replace_jpgmeta($file_content,$objID){
 
 
 //==========================================================================================================================================
-function wpunity_jsonArr_to_unity($yamlID, $jsonScene){
+function wpunity_jsonArr_to_unity($wonderaroundYaml, $jsonScene){
     $jsonScene = htmlspecialchars_decode ( $jsonScene );
 
     $sceneJsonARR = json_decode($jsonScene, TRUE);
-    $tempFirstPersonPart = wpunity_getYaml_wonder_around_unity_pattern($yamlID);
-    $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
-    $templatePart_poipt = wpunity_getYaml_poi_imagetext_pattern($yamlID);
-
+    $tempFirstPersonPart = $wonderaroundYaml;
+//    $templatePart_sop = wpunity_getYaml_static_object_pattern($yamlID);
+//    $templatePart_poipt = wpunity_getYaml_poi_imagetext_pattern($yamlID);
+    $templatePart_sop = '';
+    $templatePart_poipt = '';
 
     $unity_file_contents = "";
 
