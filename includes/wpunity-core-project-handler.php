@@ -346,6 +346,8 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/scenes';
     $settings_path = $upload_dir . "/" . $gameSlug . 'Unity/ProjectSettings';
 
+    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path);
+
     $queryargs = array(
         'post_type' => 'wpunity_scene',
         'posts_per_page' => -1,
@@ -362,10 +364,26 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
+            //Create the non-static Unity Scenes (or those that have dependency from non-static)
             wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path);
         endwhile;
     endif;
     wp_reset_postdata();
+}
+
+function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
+    //get the first Game Type taxonomy in order to get the yamls (all of them have the same)
+    $allGameTypeTerms = get_terms( array(
+        'taxonomy' => 'wpunity_scene_yaml',
+        'hide_empty' => false,
+    ) );
+    $term_meta_s_reward = get_term_meta($allGameTypeTerms[0]->term_id,'wpunity_yamlmeta_s_reward',true);
+    
+    $file = $game_path . '/' . 'S_Reward.unity';
+    $create_file = fopen($file, "w") or die("Unable to open file!");
+    fwrite($create_file, $term_meta_s_reward);
+    fclose($create_file);
+
 }
 
 function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path){
