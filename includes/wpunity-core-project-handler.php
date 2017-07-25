@@ -151,9 +151,35 @@ function wpunity_compile_the_game($gameID,$gameSlug){
     wpunity_compile_models_gen($gameID,$gameSlug);//3. Create Model folders/files
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
+
     //5. Copy StandardAssets folder (at Assets/StandardAssets)
+
+
+    recurse_copy($gameSlug);
 }
 
+function recurse_copy($gameSlug) {
+
+
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $dst = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
+    $src = get_site_url() . '/wp-content/plugins/WordpressUnity3DEditorGit/StandardAssets/Energy';
+    $dir = opendir($src);
+    @mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+                if ( is_dir($src . '/' . $file) ) {
+                recurse_copy($src . '/' . $file,$dst . '/' . $file);
+            }
+            else {
+                copy($src . '/' . $file,$dst . '/' . $file);
+            }
+        }
+    }
+    closedir($dir);
+}
 
 function wpunity_compile_folders_del($gameSlug) {
 
@@ -373,12 +399,10 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
 
 function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
     //get the first Game Type taxonomy in order to get the yamls (all of them have the same)
-    $allGameTypeTerms = get_terms( array(
-        'taxonomy' => 'wpunity_scene_yaml',
-        'hide_empty' => false,
-    ) );
-    $term_meta_s_reward = get_term_meta($allGameTypeTerms[0]->term_id,'wpunity_yamlmeta_s_reward',true);
-    $term_meta_s_selector = get_term_meta($allGameTypeTerms[0]->term_id,'$term_meta_s_selector',true);
+    $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
+    $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward',true);
+    $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector',true);
+    $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title',true);
 
     $file = $game_path . '/' . 'S_Reward.unity';
     $create_file = fopen($file, "w") or die("Unable to open file!");
@@ -386,8 +410,9 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
     fclose($create_file);
 
     $file2 = $game_path . '/' . 'S_SceneSelector.unity';
+    $file_content = str_replace("___[text_title_scene_selector]___",$term_meta_s_selector_title,$term_meta_s_selector);
     $create_file2 = fopen($file2, "w") or die("Unable to open file!");
-    fwrite($create_file2, $term_meta_s_selector);
+    fwrite($create_file2, $file_content);
     fclose($create_file2);
 
 }
@@ -491,6 +516,13 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $create_file6 = fopen($file6, "w") or die("Unable to open file!");
         fwrite($create_file6, $file_content6);
         fclose($create_file6);
+        //Update the EditorBuildSettings.asset by adding new Scene
+    }elseif($scene_type_slug == 'educational-energy'){
+
+        
+        wpunity_compile_append_scene_to_s_selector();
+
+        //Update the EditorBuildSettings.asset by adding new Scene
 
     }
 
