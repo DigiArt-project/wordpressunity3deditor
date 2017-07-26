@@ -407,7 +407,7 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             $custom_query->the_post();
             $scene_id = get_the_ID();
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file);
+            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file);
         endwhile;
     endif;
     wp_reset_postdata();
@@ -543,6 +543,12 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
         //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
         $scene_name = $scene_post->post_name;
+        $scene_title = $scene_post->post_title;
+        $scene_desc = $scene_post->post_content;
+
+        $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+        $featured_image_edu_sprite_guid = 0;//if there's no Featured Image
+        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
         //$file_content6 = wpunity_replace_educational_energy_unity();
         $file7 = $game_path . '/' . $scene_name . '.unity';
@@ -550,8 +556,8 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fwrite($create_file7, 'Test');
         fclose($create_file7);
 
-        wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
-        //$scenes_counter++;
+        wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid);
+        $scenes_counter = $scenes_counter+1;
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
         $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
@@ -561,6 +567,8 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
     }elseif($scene_type_slug == 'wonderaround-yaml'){
         //DATA of Wonder Around Scene
     }
+
+    return $scenes_counter;
 
 }
 
@@ -632,7 +640,7 @@ function wpunity_replace_login_unity($term_meta_s_login){
     return $term_meta_s_login;
 }
 
-function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
+function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid){
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
 
@@ -640,9 +648,40 @@ function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
 
     //Add Scene to initial part of Scene Selector
 
-    //Add second part of the new Scene
-    file_put_contents($sceneSelectorFile, $term_meta_s_selector2 . "\n", FILE_APPEND);
+    //Add second part of the new Scene Tile
+    $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
+    if($scenes_counter==2){$tile_pos_x = 680;$tile_pos_y=-250;}
+    if($scenes_counter==3){$tile_pos_x = 1090;$tile_pos_y=-250;}
+    if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
+    if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
+    if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
+    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
+    $seq_index_of_scene = $scenes_counter;
+    $name_of_panel = 'panel_' . $scene_name;
+    $guid_sprite_scene_featured_img = $featured_image_edu_sprite_guid;
+    $text_title_tile = $scene_title; //Title of custom field
+    $text_description_tile = $scene_desc;
+    $name_of_scene_to_load = $scene_name;//without .unity (we generate unity files with post slug as name)
 
+    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load);
+    $LF = chr(10); // line change
+    file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
+
+}
+
+
+function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load){
+    $file_content_return = str_replace("___[guid_tile_sceneselector]___",$guid_tile_sceneselector,$term_meta_s_selector2);
+    $file_content_return = str_replace("___[seq_index_of_scene]___",$seq_index_of_scene,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_x]___",$tile_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_y]___",$tile_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[name_of_panel]___",$name_of_panel,$file_content_return);
+    $file_content_return = str_replace("___[guid_sprite_scene_featured_img]___",$guid_sprite_scene_featured_img,$file_content_return);
+    $file_content_return = str_replace("___[text_title_tile]___",$text_title_tile,$file_content_return);
+    $file_content_return = str_replace("___[text_description_tile]___",$text_description_tile,$file_content_return);
+    $file_content_return = str_replace("___[name_of_scene_to_load]___",$name_of_scene_to_load,$file_content_return);
+
+    return $file_content_return;
 }
 
 ?>
