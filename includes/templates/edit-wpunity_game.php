@@ -21,10 +21,10 @@ echo '</script>';
 // Ajax for assembling
 function my_enqueue_front_end_assepile_ajax() {
 	global $project_id, $gameSlug;
-    $pluginpath = dirname (plugin_dir_url( __DIR__  ));
-    $pluginpath = str_replace('\\','/',$pluginpath);
+	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+	$pluginpath = str_replace('\\','/',$pluginpath);
 	//$thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
-    $thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
+	$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
 	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
 	wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php'),
@@ -315,11 +315,7 @@ if ( $custom_query->have_posts() ) :?>
 
                 <section class="mdc-dialog__body">
 
-                    <div class="progressSlider" style="display: none;">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLine progressIncrease"></div>
-                        <div class="progressSliderSubLine progressDecrease"></div>
-                    </div>
+
 
                     <h3 class="mdc-typography--subheading2"> Platform </h3>
 
@@ -353,10 +349,20 @@ if ( $custom_query->have_posts() ) :?>
 
                     <hr class="WhiteSpaceSeparator">
 
+                    <h2 id="compileProgressTitle" class="mdc-typography--caption CenterContents" style="display: none"> Compiling... </h2>
+
+                    <div class="progressSlider" id="compileProgressSlider" style="display: none">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLine progressIncrease"></div>
+                        <div class="progressSliderSubLine progressDecrease"></div>
+                    </div>
+
+
+
                 </section>
                 <footer class="mdc-dialog__footer">
-                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
-                    <a type="button"  id="compileProceedBtn" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
+                    <a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                    <a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
                 </footer>
             </div>
             <div class="mdc-dialog__backdrop"></div>
@@ -392,26 +398,25 @@ $wp_query = $temp_query;
         var mdc = window.mdc;
         mdc.autoInit();
 
-        jQuery( "#compileGameBtn" ).click(function() {
-            compileDialog.show();
-
-        });
+        jQuery( "#compileGameBtn" ).click(function() { compileDialog.show(); });
 
         jQuery( "#compileProceedBtn" ).click(function() {
+
+            jQuery("#platform-select").addClass( "mdc-select--disabled" ).attr( "aria-disabled","true" );
+            jQuery( "#compileProgressSlider" ).show();
+            jQuery( "#compileProgressTitle" ).show();
+
             wpunity_assepileAjax();
         });
 
+        var MDCSelect = mdc.select.MDCSelect;
+        var platformDropdown = document.getElementById('platform-select');
+        var platformSelect = MDCSelect.attachTo(platformDropdown);
 
-        (function() {
-            var MDCSelect = mdc.select.MDCSelect;
-            var platformDropdown = document.getElementById('platform-select');
-            var platformSelect = MDCSelect.attachTo(platformDropdown);
+        platformDropdown.addEventListener('MDCSelect:change', function() {
+            jQuery("#platformInput").attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+        });
 
-            platformDropdown.addEventListener('MDCSelect:change', function() {
-                jQuery("#platformInput").attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
-            });
-
-        })();
 
         var acc = document.getElementsByClassName("EditPageAccordion");
         var i;

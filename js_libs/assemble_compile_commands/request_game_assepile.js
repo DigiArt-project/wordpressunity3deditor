@@ -44,12 +44,12 @@ function wpunity_assepileAjax() {
                 var completedFlag = false;
                 var successFlag = false;
 
-                if (procMonitor.length ==0 || procMonitor.indexOf("No tasks are running") > 0){
+                if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0){
                     completedFlag = true;
                     successFlag = response.indexOf("Exiting batchmode successfully now")>0;
                 }
 
-                if (!completedFlag){
+                if (!completedFlag) {
 
                     var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
@@ -80,6 +80,8 @@ function wpunity_assepileAjax() {
 
                         console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
 
+                        clearInterval(interval);
+
                         //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
                     }
                 }
@@ -90,7 +92,7 @@ function wpunity_assepileAjax() {
                 //     xhr.getAllResponseHeaders() + " " + thrownError;
 
                 console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
-
+                clearInterval(interval);
 
                 //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
             }
@@ -131,6 +133,11 @@ function wpunity_assepileAjax() {
                 // Check if index.html exists (because it is not always compiled for web)
                 console.log("Ajax 3: Success: index.html location " + url_gameProject_path + '/builds/WebGLBuild/index.html' );
 
+                jQuery( "#compileProgressSlider" ).hide();
+                jQuery( "#compileProgressTitle" ).hide();
+                jQuery("#platform-select").removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+
+
             },
             error : function(xhr, ajaxOptions, thrownError){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;
@@ -138,6 +145,4 @@ function wpunity_assepileAjax() {
             }
         });
     }
-
-
 }
