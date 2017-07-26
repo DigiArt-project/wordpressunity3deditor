@@ -83,7 +83,7 @@ get_header(); ?>
         </div>
         <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
             <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-accent" role="tablist">
-                <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active" href="#panel-1" >Editor</a>
+                <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
                 <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" >Analytics</a>
                 <span class="mdc-tab-bar__indicator"></span>
             </nav>
