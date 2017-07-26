@@ -23,6 +23,10 @@ textarea.mdc-textfield__input {
     resize: none;
 }
 
+.mdc-toolbar .mdc-tab-bar .mdc-tab--active, .mdc-toolbar .mdc-tab-bar .mdc-tab:hover {
+    color: white;
+}
+
 .DarkBackgroundColor {
     background: rgba(0, 0, 0, .4);
 }
