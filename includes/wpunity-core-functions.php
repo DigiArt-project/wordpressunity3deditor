@@ -452,9 +452,41 @@ function wpunity_fetch_video_action_callback(){
 function wpunity_assepile_action_callback(){
 
 	wpunity_compile_the_game($_REQUEST['gameId'],$_REQUEST['gameSlug']);
+
+    //fake_compile_for_a_test_project();
+
     echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
     wp_die();
 }
+
+/**
+ *   This function is for compiling the \test_compiler\game_windows  project
+ */
+function fake_compile_for_a_test_project()
+{
+
+    $gcwd = getcwd();
+
+    chdir("C:/xampp/htdocs/digiart-project_Jan17/wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
+    // 1. Start the compile
+    $output = shell_exec('start /b starterWebGL.bat /c');
+
+    // go back to previous directory
+    chdir($gcwd);
+
+    $h = fopen('output.txt', 'w');
+    fwrite($h, $output);
+    fclose($h);
+
+    // 2. Monitor
+
+
+
+
+    // 3. provide link to play and link to download (zipped)
+
+}
+
 
 // ---- AJAX ASSEMBLE 1: Assemble game ------
 function wpunity_assemble_action_callback() {
@@ -657,55 +689,54 @@ function wpunity_monitor_compiling_action_callback(){
 }
 
 //---- AJAX COMPILE 3: Zip the builds folder
-function wpunity_game_zip_action_callback(){
+function wpunity_game_zip_action_callback()
+{
 
-	$DS = DIRECTORY_SEPARATOR;
+    $DS = DIRECTORY_SEPARATOR;
 
-	// TEST
-	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+    // TEST
+    //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
 
-	// Real
-	$game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+    // Real
+    $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
 
-	$rootPath = realpath($game_dirpath).'/builds';
-	$zip_file = realpath($game_dirpath).'/game.zip';
+    $rootPath = realpath($game_dirpath) . '/builds';
+    $zip_file = realpath($game_dirpath) . '/game.zip';
 
-	// Initialize archive object
-	$zip = new ZipArchive();
-	$resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+    // Initialize archive object
+    $zip = new ZipArchive();
+    $resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-	if ($resZip===TRUE) {
+    if ($resZip === TRUE) {
 
-		// Create recursive directory iterator
-		/** @var SplFileInfo[] $files */
-		$files = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($rootPath),
-			RecursiveIteratorIterator::LEAVES_ONLY
-		);
+        // Create recursive directory iterator
+        /** @var SplFileInfo[] $files */
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
 
-		foreach ($files as $name => $file)
-		{
-			// Skip directories (they would be added automatically)
-			if (!$file->isDir())
-			{
-				// Get real and relative path for current file
-				$filePath = $file->getRealPath();
-				$relativePath = substr($filePath, strlen($rootPath) + 1);
+        foreach ($files as $name => $file) {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir()) {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
 
-				// Add current file to archive
-				$zip->addFile($filePath, $relativePath);
-			}
-		}
+                // Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
 
-		// Zip archive will be created only after closing object
-		$zip->close();
-		echo 'Zip successfully finished [2]';
-		wp_die();
-	} else {
-		echo 'Failed to zip, code:'.$resZip;
-		wp_die();
-	}
-
+        // Zip archive will be created only after closing object
+        $zip->close();
+        echo 'Zip successfully finished [2]';
+        wp_die();
+    } else {
+        echo 'Failed to zip, code:' . $resZip;
+        wp_die();
+    }
+}
 
 
 // NEW ASSEMBLY FUNCTIONS OF JULY 2017
@@ -827,5 +858,5 @@ function wpunity_add_in_WebGLBuilder_cs($filepath, $assetpath, $scenepath){
 }
 
 
-}
+
 
