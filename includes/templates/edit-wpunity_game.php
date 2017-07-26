@@ -53,14 +53,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
 	$menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
 	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
-	$wonderaround_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
+	$educational_energy_yaml_tax = get_term_by('slug', '	educational-energy', 'wpunity_scene_yaml');
 
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
 		),
 		'wpunity_scene_yaml' => array(
-			$wonderaround_yaml_tax->term_id,
+            $educational_energy_yaml_tax->term_id,
 		)
 	);
 

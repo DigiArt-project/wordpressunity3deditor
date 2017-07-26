@@ -157,7 +157,7 @@ function wpunity_compile_the_game($gameID,$gameSlug){
     //5. Copy StandardAssets folder (at Assets/StandardAssets)
 
 
-    recurse_copy($gameSlug);
+    //recurse_copy($gameSlug);
 }
 
 function recurse_copy($gameSlug) {
@@ -538,37 +538,28 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
         $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file5_path_CS);
-    }elseif($scene_type_slug == 'wonderaround-yaml'){
-        //DATA of Wonder Around Scene
-        $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
-        $json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-        $scene_name = $scene_post->post_name;
-
-        $file_content6 = wpunity_jsonArr_to_unity($term_meta_wonder_around, $json_scene);
-        $file6 = $game_path . '/' . $scene_name . '.unity';
-        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-        fwrite($create_file6, $file_content6);
-        fclose($create_file6);
-        //Update the EditorBuildSettings.asset by adding new Scene
-        //$file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
-        //wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file6);
     }elseif($scene_type_slug == 'educational-energy'){
         //DATA of Educational Energy Scene
         //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
         //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-//        $scene_name = $scene_post->post_name;
-//
-//        //$file_content6 = wpunity_replace_educational_energy_unity();
-//        $file6 = $game_path . '/' . $scene_name . '.unity';
-//        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-//        fwrite($create_file6, 'Test');
-//        fclose($create_file6);
+        $scene_name = $scene_post->post_name;
 
-        //wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
+        //$file_content6 = wpunity_replace_educational_energy_unity();
+        $file7 = $game_path . '/' . $scene_name . '.unity';
+        $create_file7 = fopen($file7, "w") or die("Unable to open file!");
+        fwrite($create_file7, 'Test');
+        fclose($create_file7);
+
+        wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
         //$scenes_counter++;
-        //Update the EditorBuildSettings.asset by adding new Scene
-        //$file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
-        //wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file7);
+
+        $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+        $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file7path_forCS);
+
+    }elseif($scene_type_slug == 'wonderaround-yaml'){
+        //DATA of Wonder Around Scene
     }
 
 }
@@ -644,14 +635,13 @@ function wpunity_replace_login_unity($term_meta_s_login){
 function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
-    $sceneSelectorFile = $game_path . '/SceneSelector.unity';
 
-    //$myfile = fopen($sceneSelectorFile, "a") or die("Unable to open file!");
-    $txt = "user id date2";
-    //fwrite($myfile, "\n". $txt);
-    //fclose($myfile);
+    $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
-    file_put_contents($sceneSelectorFile, implode("\n", $txt) . "\n", FILE_APPEND);
+    //Add Scene to initial part of Scene Selector
+
+    //Add second part of the new Scene
+    file_put_contents($sceneSelectorFile, $term_meta_s_selector2 . "\n", FILE_APPEND);
 
 }
 
