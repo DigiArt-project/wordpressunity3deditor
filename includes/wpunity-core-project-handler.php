@@ -556,8 +556,10 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fwrite($create_file7, 'Test');
         fclose($create_file7);
 
-        wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid);
-        $scenes_counter = $scenes_counter+1;
+        if($scenes_counter<7) {
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            $scenes_counter = $scenes_counter + 1;
+        }
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
         $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
@@ -646,7 +648,10 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
 
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
+    //Create guid for the tile
+    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
     //Add Scene to initial part of Scene Selector
+    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector);
 
     //Add second part of the new Scene Tile
     $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
@@ -655,7 +660,7 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
     if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
     if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
     if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
-    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
+
     $seq_index_of_scene = $scenes_counter;
     $name_of_panel = 'panel_' . $scene_name;
     $guid_sprite_scene_featured_img = $featured_image_edu_sprite_guid;
@@ -669,6 +674,31 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
 
 }
 
+function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector){
+    # ReplaceChildren
+    $LF = chr(10); // line change
+
+    // Clear previous size of filepath
+    clearstatcache();
+
+    // a. Read
+    $handle = fopen($sceneSelectorFile, 'r');
+    $content = fread($handle, filesize($sceneSelectorFile));
+    fclose($handle);
+
+    $tile_name='- {fileID: '. $guid_tile_sceneselector .'}';
+    // b. add obj
+    $content = str_replace(
+        '# ReplaceChildren',
+        $tile_name.$LF.'  # ReplaceChildren', $content
+    );
+
+    // c. Write to file
+    $fhandle = fopen($sceneSelectorFile, 'w');
+    fwrite($fhandle, $content, strlen($content));
+    fclose($fhandle);
+
+}
 
 function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load){
     $file_content_return = str_replace("___[guid_tile_sceneselector]___",$guid_tile_sceneselector,$term_meta_s_selector2);
