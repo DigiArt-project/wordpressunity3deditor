@@ -154,33 +154,8 @@ function wpunity_compile_the_game($gameID,$gameSlug){
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
 
-    //5. Copy StandardAssets folder (at Assets/StandardAssets)
+    wpunity_compile_copy_StandardAssets($gameSlug,$gameType='Energy');//5. Copy StandardAssets depending the Game Type
 
-
-    //recurse_copy($gameSlug);
-}
-
-function recurse_copy($gameSlug) {
-
-
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
-    $dst = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
-    $src = get_site_url() . '/wp-content/plugins/WordpressUnity3DEditorGit/StandardAssets/Energy';
-    $dir = opendir($src);
-    @mkdir($dst);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-                if ( is_dir($src . '/' . $file) ) {
-                recurse_copy($src . '/' . $file,$dst . '/' . $file);
-            }
-            else {
-                copy($src . '/' . $file,$dst . '/' . $file);
-            }
-        }
-    }
-    closedir($dir);
 }
 
 function wpunity_compile_folders_del($gameSlug) {
@@ -712,6 +687,33 @@ function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$til
     $file_content_return = str_replace("___[name_of_scene_to_load]___",$name_of_scene_to_load,$file_content_return);
 
     return $file_content_return;
+}
+
+function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $dest = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
+
+    $pluginpath = dirname ( dirname (get_template_directory()));
+    $pluginpath = str_replace('\\','/',$pluginpath);
+    $pluginSlug = plugin_basename(__FILE__);
+    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
+    $source = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/' . $gameType;
+
+    mkdir($dest, 0755);
+    foreach (
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST) as $item
+    ) {
+        if ($item->isDir()) {
+            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
+    }
+
 }
 
 ?>
