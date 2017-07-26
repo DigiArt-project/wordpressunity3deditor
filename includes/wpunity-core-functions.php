@@ -689,8 +689,7 @@ function wpunity_monitor_compiling_action_callback(){
 }
 
 //---- AJAX COMPILE 3: Zip the builds folder
-function wpunity_game_zip_action_callback()
-{
+function wpunity_game_zip_action_callback(){
 
     $DS = DIRECTORY_SEPARATOR;
 
