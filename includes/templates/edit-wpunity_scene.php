@@ -132,7 +132,7 @@ get_header(); ?>
 
         </div>
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-
+            <div style="min-height: 780px;"></div>
         </div>
     </div>
 </section>
