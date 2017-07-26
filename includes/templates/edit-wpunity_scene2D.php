@@ -112,8 +112,8 @@ get_header(); ?>
 
                     <h2 class="mdc-typography--title">Credits</h2>
                     <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                        <textarea id="multi-line" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
-                        <label for="multi-line" class="mdc-textfield__label">Edit Credits text</label>
+                        <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
+                        <label for="creditsTextarea" class="mdc-textfield__label">Edit Credits text</label>
                     </div>
 
 				<?php } else { ?>
@@ -134,33 +134,56 @@ get_header(); ?>
 					$helpChecked = $helpFlag ? 'checked' : '';
 
 					?>
-                    <div class="mdc-switch">
-                        <input type="checkbox" name="options" value="<?php echo $optionsEnabled; ?>" id="options-switch" class="mdc-switch__native-control" <?php echo $optionsChecked; ?> />
-                        <div class="mdc-switch__background">
-                            <div class="mdc-switch__knob"></div>
+                    <div class="SectionSwitchItemStyle">
+                        <div class="mdc-switch">
+                            <input type="checkbox" name="options" value="<?php echo $optionsEnabled; ?>" id="options-switch" class="mdc-switch__native-control" <?php echo $optionsChecked; ?> />
+                            <div class="mdc-switch__background">
+                                <div class="mdc-switch__knob"></div>
+                            </div>
                         </div>
+                        <label for="options-switch" class="mdc-switch-label">Options</label>
                     </div>
-                    <label for="options-switch" class="mdc-switch-label">Options</label>
 
-                    <hr class="WhiteSpaceSeparator">
-
-                    <div class="mdc-switch">
-                        <input type="checkbox" name="login" value="<?php echo $loginEnabled; ?>" id="login-switch" class="mdc-switch__native-control" <?php echo $loginChecked; ?>/>
-                        <div class="mdc-switch__background">
-                            <div class="mdc-switch__knob"></div>
+                    <div class="SectionSwitchItemStyle">
+                        <div class="mdc-switch">
+                            <input type="checkbox" name="login" value="<?php echo $loginEnabled; ?>" id="login-switch" class="mdc-switch__native-control" <?php echo $loginChecked; ?>/>
+                            <div class="mdc-switch__background">
+                                <div class="mdc-switch__knob"></div>
+                            </div>
                         </div>
+                        <label for="login-switch" class="mdc-switch-label">Login</label>
                     </div>
-                    <label for="login-switch" class="mdc-switch-label">Login</label>
 
-                    <hr class="WhiteSpaceSeparator">
-
-                    <div class="mdc-switch">
-                        <input type="checkbox" name="help" value="<?php echo $helpEnabled; ?>" id="help-switch" class="mdc-switch__native-control" <?php echo $helpChecked; ?>/>
-                        <div class="mdc-switch__background">
-                            <div class="mdc-switch__knob"></div>
+                    <div class="SectionSwitchItemStyle">
+                        <div class="mdc-switch">
+                            <input type="checkbox" name="help" value="<?php echo $helpEnabled; ?>" id="help-switch" class="mdc-switch__native-control" <?php echo $helpChecked; ?>/>
+                            <div class="mdc-switch__background">
+                                <div class="mdc-switch__knob"></div>
+                            </div>
                         </div>
+                        <label for="help-switch" class="mdc-switch-label">Help</label>
                     </div>
-                    <label for="help-switch" class="mdc-switch-label">Help</label>
+
+
+                    <!--ADD NEW SHIT-->
+
+					<?php if ($helpEnabled === 'true') { ?>
+                        <div class="mdc-layout-grid" id="helpDetailsSection">
+                            <div class="mdc-layout-grid__cell--span-12">
+
+                                <h2 class="mdc-typography--title">Help details</h2>
+                                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                                    <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
+                                    <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
+                                </div>
+
+                                <h2 class="mdc-typography--title">Help image</h2>
+                                <input type="file" name="help-image" title="Help image">
+
+                            </div>
+                        </div>
+					<?php } ?>
+
 
 				<?php } ?>
             </div>
@@ -187,7 +210,17 @@ get_header(); ?>
         </div>
     </form>
     <script type="text/javascript">
-        window.mdc.autoInit();
+
+        var mdc = window.mdc;
+        mdc.autoInit();
+
+        jQuery('#help-switch').click(function() {
+            if (jQuery("#help-switch").is(":checked")) {
+                jQuery("#helpDetailsSection").show();
+            } else {
+                jQuery("#helpDetailsSection").hide();
+            }
+        });
 
     </script>
 

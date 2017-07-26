@@ -49,6 +49,11 @@ label {
     text-align: center;
 }
 
+.SectionSwitchItemStyle {
+    margin-right: 24px;
+    display: inline-block;
+}
+
 
 /* Breadcrumbs style */
 ul.EditPageBreadcrumb {
@@ -91,10 +96,6 @@ ul.EditPageBreadcrumb li {
     position: absolute;
 }
 
-
-.InlineContainer {
-
-}
 
 /* Accordion */
 /* Style the buttons that are used to open and close the accordion panel */
