@@ -451,9 +451,9 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-	wpunity_compile_the_game($_REQUEST['gameId'],$_REQUEST['gameSlug']);
+	//wpunity_compile_the_game($_REQUEST['gameId'],$_REQUEST['gameSlug']);
 
-    //fake_compile_for_a_test_project();
+    fake_compile_for_a_test_project();
 
     echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
     wp_die();
@@ -464,27 +464,24 @@ function wpunity_assepile_action_callback(){
  */
 function fake_compile_for_a_test_project()
 {
-
-    $gcwd = getcwd();
-
-    chdir("C:/xampp/htdocs/digiart-project_Jan17/wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
     // 1. Start the compile
-    $output = shell_exec('start /b starterWebGL.bat /c');
+    $gcwd = getcwd(); // get cwd (wp-admin probably)
 
-    // go back to previous directory
+    chdir("../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
+
+    // Windows
+    $output = shell_exec('start /b starter.bat /c');
+
+    // WebGL
+    //$output = shell_exec('start /b starterWebGL.bat /c');
+
+    // go back to previous directory (wp-admin probably)
     chdir($gcwd);
 
+    // Write to wp-admin dir the shell_exec cmd result
     $h = fopen('output.txt', 'w');
     fwrite($h, $output);
     fclose($h);
-
-    // 2. Monitor
-
-
-
-
-    // 3. provide link to play and link to download (zipped)
-
 }
 
 
@@ -673,22 +670,20 @@ function wpunity_monitor_compiling_action_callback(){
 
 	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-	// Monitor stdout.log but it is not safe
+	// Monitor stdout.log
 	$stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
-	//
 
-	if ($os === 'lin'){
+	if ($os === 'lin')
 		$processUnityCSV = exec('pgrep Unity');
-	} else {
+	 else
 		$processUnityCSV = exec('TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV');
-	}
 
 	echo json_encode(array('CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 
 	wp_die();
 }
 
-//---- AJAX COMPILE 3: Zip the builds folder
+//---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
 {
 
