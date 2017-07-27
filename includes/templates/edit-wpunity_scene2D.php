@@ -61,6 +61,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		if($post_login_choice){update_post_meta($scene_id, 'wpunity_menu_has_login', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_login', 0);}
 		if($post_help_choice){update_post_meta($scene_id, 'wpunity_menu_has_help', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_help', 0);}
 
+        if($post_help_choice){
+            $help_desc = esc_attr(strip_tags($_POST['help-description']));
+            update_post_meta($scene_id, 'wpunity_scene_help_text', $help_desc);
+            $help_image =  $_FILES['help-image'];
+            $attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
+            update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
+        }
+
 		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
 		set_post_thumbnail( $scene_id, $attachment_id );
 
@@ -173,13 +181,14 @@ get_header(); ?>
 
                                 <h2 class="mdc-typography--title">Help details</h2>
                                 <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                                    <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
+                                    <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
                                     <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
                                 </div>
 
                                 <h2 class="mdc-typography--title">Help image</h2>
                                 <input type="file" name="help-image" title="Help image">
 
+                                <?php echo get_post_meta($scene_id, 'wpunity_scene_helpimg', true); ?>
                             </div>
                         </div>
 					<?php } ?>
