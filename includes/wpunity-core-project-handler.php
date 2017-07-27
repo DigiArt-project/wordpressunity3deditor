@@ -156,6 +156,7 @@ function wpunity_compile_the_game($gameID,$gameSlug){
 
     wpunity_compile_copy_StandardAssets($gameSlug,$gameType='Energy');//5. Copy StandardAssets depending the Game Type
 
+    return 'true';
 }
 
 function wpunity_compile_folders_del($gameSlug) {
@@ -206,7 +207,7 @@ function wpunity_compile_folders_gen($gameSlug){
     //--Uploads/myGameProjectUnity/build--
     $ProjectSettingsF = $myGameProjectUnityF . "/" . 'ProjectSettings';
     $AssetsF = $myGameProjectUnityF . "/" . 'Assets';
-    $buildF = $myGameProjectUnityF . "/" . 'build';
+    $buildF = $myGameProjectUnityF . "/" . 'builds';
     if (!is_dir($ProjectSettingsF)) {mkdir($ProjectSettingsF, 0755) or wp_die("Unable to create the folder".$ProjectSettingsF);}
     if (!is_dir($AssetsF)) {mkdir($AssetsF, 0755) or wp_die("Unable to create the folder".$AssetsF);}
     if (!is_dir($buildF)) {mkdir($buildF, 0755) or wp_die("Unable to create the folder".$buildF);}
