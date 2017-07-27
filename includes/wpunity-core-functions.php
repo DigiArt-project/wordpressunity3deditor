@@ -461,18 +461,36 @@ function wpunity_assepile_action_callback(){
         $init_gcwd = getcwd(); // get cwd (wp-admin probably)
         //-----------------------------
 
+        //--Uploads/myGameProjectUnity--
         $upload_dir = wp_upload_dir()['basedir'];
         $upload_dir = str_replace('\\','/',$upload_dir);
-
-        //--Uploads/myGameProjectUnity--
         $game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
 
         chdir($game_dirpath);
 
+
+        $gameFormat = $_REQUEST['gameFormat'];
+
+        switch($gameFormat){
+            case 'Windows':
+                $gameFormatParameter = ' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+                break;
+            case 'Mac OS':
+                $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+                break;
+            case 'Linux':
+                $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
+                break;
+            case 'Web':
+                $gameFormatParameter = ' -executeMethod WebGLBuilder.build';
+                break;
+        }
+
+
         if ($os === 'win') {
             $os_bin = 'bat';
             $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
+                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
 
             $compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
@@ -481,7 +499,7 @@ function wpunity_assepile_action_callback(){
             $txt = "#/bin/bash"."\n".
                 "projectPath=`pwd`"."\n".
                 "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
+                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} ".$gameFormatParameter;
 
             // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
             $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
@@ -493,24 +511,7 @@ function wpunity_assepile_action_callback(){
         fclose($myfile);
         chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
-
-        if ($os === 'lin'){
-            //$init_workdir = getcwd();
-
-            //chdir($game_dirpath);
-
-            //$handle = fopen($game_dirpath.$DS.'command.txt','w');
-            // 2: run bat or sh to compile the game
-            $output = shell_exec($compile_command);
-            //chdir($init_workdir);
-
-            //fwrite($handle, getcwd() .PHP_EOL);
-            //fclose($handle);
-
-        } else {
-            // 2: run bat or sh to compile the game
-            $output = shell_exec($compile_command);
-        }
+        $output = shell_exec($compile_command);
         //---------------------------------------
 
         chdir($init_gcwd);
@@ -522,9 +523,9 @@ function wpunity_assepile_action_callback(){
 
     }
 
-    //fake_compile_for_a_test_project();
+//    fake_compile_for_a_test_project();
 
-    echo "hi handsome boy " .  $_REQUEST['gameId'] . " " . $_REQUEST['gameSlug'];
+
     wp_die();
 }
 
@@ -554,7 +555,6 @@ function fake_compile_for_a_test_project()
 }
 
 
-
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
 	$DS = DIRECTORY_SEPARATOR;
@@ -577,7 +577,6 @@ function wpunity_monitor_compiling_action_callback(){
 //---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
 {
-
     $DS = DIRECTORY_SEPARATOR;
 
     // TEST
