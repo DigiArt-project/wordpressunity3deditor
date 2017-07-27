@@ -724,8 +724,11 @@ function wpunity_add_in_WebGLBuilder_cs($filepath, $assetpath, $scenepath){
         $content = fread($handle, filesize($filepath));
         fclose($handle);
 
+
+        $scenewebgl = '          "'.$scenepath.'",'.chr(10).'// AddScenesHere '            ;
+        
         // b. Extend certain string
-        $content = str_replace('// AddScenesHere', '// AddScenesHere '.chr(10).'            "'.$scenepath.'",', $content);
+        $content = str_replace('// AddScenesHere', $scenewebgl, $content);
 
         // first comma remove
         $content = str_replace(','.chr(10).'}','}', $content);
