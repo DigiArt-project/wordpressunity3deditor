@@ -146,39 +146,16 @@ function wpunity_compile_the_game($gameID,$gameSlug){
 
     wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
 
+    wpunity_compile_cs_gen($gameSlug);//1b. Create cs file before all data
+
     wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
 
     wpunity_compile_models_gen($gameID,$gameSlug);//3. Create Model folders/files
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
 
-    //5. Copy StandardAssets folder (at Assets/StandardAssets)
+    wpunity_compile_copy_StandardAssets($gameSlug,$gameType='Energy');//5. Copy StandardAssets depending the Game Type
 
-
-    recurse_copy($gameSlug);
-}
-
-function recurse_copy($gameSlug) {
-
-
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
-    $dst = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
-    $src = get_site_url() . '/wp-content/plugins/WordpressUnity3DEditorGit/StandardAssets/Energy';
-    $dir = opendir($src);
-    @mkdir($dst);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-                if ( is_dir($src . '/' . $file) ) {
-                recurse_copy($src . '/' . $file,$dst . '/' . $file);
-            }
-            else {
-                copy($src . '/' . $file,$dst . '/' . $file);
-            }
-        }
-    }
-    closedir($dir);
 }
 
 function wpunity_compile_folders_del($gameSlug) {
@@ -248,6 +225,15 @@ function wpunity_compile_folders_gen($gameSlug){
     if (!is_dir($StandardAssetsF)) {mkdir($StandardAssetsF, 0755) or wp_die("Unable to create the folder".$StandardAssetsF);}
 }
 
+function wpunity_compile_cs_gen($gameSlug){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    //--Uploads/myGameProjectUnity--
+    $filepath =$filepath = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/WebGLBuilder.cs';
+    wpunity_createEmpty_WebGLBuilder_cs($filepath);
+}
+
 function wpunity_compile_settings_gen($gameID,$gameSlug){
 
     $all_game_category = get_the_terms( $gameID, 'wpunity_game_type' );
@@ -291,6 +277,7 @@ function wpunity_compile_models_gen($gameID,$gameSlug){
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
+    $webGLbuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/WebGLBuilder.cs';
 
     $queryargs = array(
         'post_type' => 'wpunity_asset3d',
@@ -308,14 +295,14 @@ function wpunity_compile_models_gen($gameID,$gameSlug){
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $asset_id = get_the_ID();
-            wpunity_compile_assets_cre($game_path,$asset_id);
+            wpunity_compile_assets_cre($game_path,$asset_id,$webGLbuilder_file);
         endwhile;
     endif;
     wp_reset_postdata();
 
 }
 
-function wpunity_compile_assets_cre($game_path,$asset_id){
+function wpunity_compile_assets_cre($game_path,$asset_id,$webGLbuilder_file){
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
     $folder = $game_path . '/' . $asset_post->post_name;
@@ -331,6 +318,8 @@ function wpunity_compile_assets_cre($game_path,$asset_id){
         $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
         copy($attachment_file,$new_file);
         wpunity_compile_objmeta_cre($folder,$attachment_name['filename'],$objID);
+        $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, $new_file_path_forCS, null);
     }
 
     $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
@@ -371,8 +360,9 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/scenes';
     $settings_path = $upload_dir . "/" . $gameSlug . 'Unity/ProjectSettings';
+    $webGLbuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/WebGLBuilder.cs';
 
-    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path);
+    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$webGLbuilder_file);
 
     $queryargs = array(
         'post_type' => 'wpunity_scene',
@@ -392,33 +382,40 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             $custom_query->the_post();
             $scene_id = get_the_ID();
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter);
+            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file);
         endwhile;
     endif;
     wp_reset_postdata();
 }
 
-function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path){
+function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$webGLbuilder_file){
     //get the first Game Type taxonomy in order to get the yamls (all of them have the same)
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward',true);
     $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector',true);
     $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title',true);
+    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
 
     $file = $game_path . '/' . 'S_Reward.unity';
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $term_meta_s_reward);
     fclose($create_file);
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_CS = 'Assets/scenes/' . 'S_Reward.unity';
+    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_CS);
 
     $file2 = $game_path . '/' . 'S_SceneSelector.unity';
     $file_content = str_replace("___[text_title_scene_selector]___",$term_meta_s_selector_title,$term_meta_s_selector);
     $create_file2 = fopen($file2, "w") or die("Unable to open file!");
     fwrite($create_file2, $file_content);
     fclose($create_file2);
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file2_path_CS = 'Assets/scenes/' . 'S_SceneSelector.unity';
+    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file2_path_CS);
 
 }
 
-function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter){
+function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file){
     $scene_post = get_post($scene_id);
 
     $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
@@ -445,7 +442,9 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_file);
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-        //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file1_path_CS);
 
         if($is_bt_settings_active == '1'){
             //CREATE SETTINGS/OPTIONS Unity file
@@ -457,7 +456,9 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
             fwrite($create_file2,$file_content2);
             fclose($create_file2);
 
-            //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Settings.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Settings.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            $file2_path_CS = 'Assets/scenes/' . 'S_Settings.unity';
+            wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file2_path_CS);
         }
 
         if($is_help_bt_active == '1'){
@@ -474,7 +475,9 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
             fwrite($create_file3, $file_content3);
             fclose($create_file3);
 
-            //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Help.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Help.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            $file3_path_CS = 'Assets/scenes/' . 'S_Help.unity';
+            wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file3_path_CS);
         }
 
         if($is_login_bt_active == '1'){
@@ -487,7 +490,9 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
             fwrite($create_file4,$file_content4);
             fclose($create_file4);
 
-            //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Login.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Login.unity');//Update the EditorBuildSettings.asset by adding new Scene
+            $file4_path_CS = 'Assets/scenes/' . 'S_Login.unity';
+            wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file4_path_CS);
         }
     }elseif($scene_type_slug == 'credentials-yaml'){
         //DATA of Credits Scene
@@ -505,36 +510,42 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_file5);
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-        //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    }elseif($scene_type_slug == 'wonderaround-yaml'){
-        //DATA of Wonder Around Scene
-        $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
-        $json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-        $scene_name = $scene_post->post_name;
-
-        $file_content6 = wpunity_jsonArr_to_unity($term_meta_wonder_around, $json_scene);
-        $file6 = $game_path . '/' . $scene_name . '.unity';
-        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-        fwrite($create_file6, $file_content6);
-        fclose($create_file6);
-        //Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file5_path_CS);
     }elseif($scene_type_slug == 'educational-energy'){
         //DATA of Educational Energy Scene
         //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
         //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-//        $scene_name = $scene_post->post_name;
-//
-//        //$file_content6 = wpunity_replace_educational_energy_unity();
-//        $file6 = $game_path . '/' . $scene_name . '.unity';
-//        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-//        fwrite($create_file6, 'Test');
-//        fclose($create_file6);
+        $scene_name = $scene_post->post_name;
+        $scene_title = $scene_post->post_title;
+        $scene_desc = $scene_post->post_content;
 
-        //wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
-        //$scenes_counter++;
-        //Update the EditorBuildSettings.asset by adding new Scene
+        $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+        $featured_image_edu_sprite_guid = 0;//if there's no Featured Image
+        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
+        //$file_content6 = wpunity_replace_educational_energy_unity();
+        $file7 = $game_path . '/' . $scene_name . '.unity';
+        $create_file7 = fopen($file7, "w") or die("Unable to open file!");
+        fwrite($create_file7, 'Test');
+        fclose($create_file7);
+
+        if($scenes_counter<7) {
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            $scenes_counter = $scenes_counter + 1;
+        }
+
+        $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+        $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file7path_forCS);
+
+    }elseif($scene_type_slug == 'wonderaround-yaml'){
+        //DATA of Wonder Around Scene
     }
+
+    return $scenes_counter;
 
 }
 
@@ -606,17 +617,102 @@ function wpunity_replace_login_unity($term_meta_s_login){
     return $term_meta_s_login;
 }
 
-function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
+function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid){
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
-    $sceneSelectorFile = $game_path . '/SceneSelector.unity';
 
-    //$myfile = fopen($sceneSelectorFile, "a") or die("Unable to open file!");
-    $txt = "user id date2";
-    //fwrite($myfile, "\n". $txt);
-    //fclose($myfile);
+    $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
-    file_put_contents($sceneSelectorFile, implode("\n", $txt) . "\n", FILE_APPEND);
+    //Create guid for the tile
+    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
+    //Add Scene to initial part of Scene Selector
+    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector);
+
+    //Add second part of the new Scene Tile
+    $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
+    if($scenes_counter==2){$tile_pos_x = 680;$tile_pos_y=-250;}
+    if($scenes_counter==3){$tile_pos_x = 1090;$tile_pos_y=-250;}
+    if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
+    if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
+    if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
+
+    $seq_index_of_scene = $scenes_counter;
+    $name_of_panel = 'panel_' . $scene_name;
+    $guid_sprite_scene_featured_img = $featured_image_edu_sprite_guid;
+    $text_title_tile = $scene_title; //Title of custom field
+    $text_description_tile = $scene_desc;
+    $name_of_scene_to_load = $scene_name;//without .unity (we generate unity files with post slug as name)
+
+    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load);
+    $LF = chr(10); // line change
+    file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
+
+}
+
+function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector){
+    # ReplaceChildren
+    $LF = chr(10); // line change
+
+    // Clear previous size of filepath
+    clearstatcache();
+
+    // a. Read
+    $handle = fopen($sceneSelectorFile, 'r');
+    $content = fread($handle, filesize($sceneSelectorFile));
+    fclose($handle);
+
+    $tile_name='- {fileID: '. $guid_tile_sceneselector .'}';
+    // b. add obj
+    $content = str_replace(
+        '# ReplaceChildren',
+        $tile_name.$LF.'  # ReplaceChildren', $content
+    );
+
+    // c. Write to file
+    $fhandle = fopen($sceneSelectorFile, 'w');
+    fwrite($fhandle, $content, strlen($content));
+    fclose($fhandle);
+
+}
+
+function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load){
+    $file_content_return = str_replace("___[guid_tile_sceneselector]___",$guid_tile_sceneselector,$term_meta_s_selector2);
+    $file_content_return = str_replace("___[seq_index_of_scene]___",$seq_index_of_scene,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_x]___",$tile_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_y]___",$tile_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[name_of_panel]___",$name_of_panel,$file_content_return);
+    $file_content_return = str_replace("___[guid_sprite_scene_featured_img]___",$guid_sprite_scene_featured_img,$file_content_return);
+    $file_content_return = str_replace("___[text_title_tile]___",$text_title_tile,$file_content_return);
+    $file_content_return = str_replace("___[text_description_tile]___",$text_description_tile,$file_content_return);
+    $file_content_return = str_replace("___[name_of_scene_to_load]___",$name_of_scene_to_load,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $dest = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
+
+    $pluginpath = dirname ( dirname (get_template_directory()));
+    $pluginpath = str_replace('\\','/',$pluginpath);
+    $pluginSlug = plugin_basename(__FILE__);
+    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
+    $source = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/' . $gameType;
+
+    mkdir($dest, 0755);
+    foreach (
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST) as $item
+    ) {
+        if ($item->isDir()) {
+            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
+    }
 
 }
 
