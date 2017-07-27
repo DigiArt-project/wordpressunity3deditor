@@ -140,7 +140,7 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 
 //==========================================================================================================================================
 
-function wpunity_compile_the_game($gameID,$gameSlug){
+function wpunity_assemble_the_unity_game_project($gameID, $gameSlug){
 
     wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
 

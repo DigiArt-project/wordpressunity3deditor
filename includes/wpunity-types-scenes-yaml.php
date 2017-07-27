@@ -11461,7 +11461,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1542051722}
         m_MethodName: onClick_LoadMainMenuScene
         m_Mode: 1
         m_Arguments:
@@ -11792,6 +11792,7 @@ GameObject:
   - component: {fileID: 1542051720}
   - component: {fileID: 1542051719}
   - component: {fileID: 1542051718}
+  - component: {fileID: 1542051722}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -11953,6 +11954,17 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!114 &1542051722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1542051717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c9931148ee551469a0fe973c8da4c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier:   
 --- !u!4 &2129483486
 Transform:
   m_ObjectHideFlags: 0

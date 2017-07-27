@@ -451,7 +451,76 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-	wpunity_compile_the_game($_REQUEST['gameId'],$_REQUEST['gameSlug']);
+    $DS = DIRECTORY_SEPARATOR;
+    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+
+	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug']);
+
+	if ($assemply_success == 'true') {
+
+        $init_gcwd = getcwd(); // get cwd (wp-admin probably)
+        //-----------------------------
+
+        $upload_dir = wp_upload_dir()['basedir'];
+        $upload_dir = str_replace('\\','/',$upload_dir);
+
+        //--Uploads/myGameProjectUnity--
+        $game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
+
+        chdir($game_dirpath);
+
+        if ($os === 'win') {
+            $os_bin = 'bat';
+            $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
+                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
+
+            $compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
+
+        } else { // LINUX SERVER
+            $os_bin = 'sh';
+            $txt = "#/bin/bash"."\n".
+                "projectPath=`pwd`"."\n".
+                "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
+                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
+
+            // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+            $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
+        }
+
+        // 1 : Generate bat or sh
+        $myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
+        fwrite($myfile, $txt);
+        fclose($myfile);
+        chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
+
+
+        if ($os === 'lin'){
+            //$init_workdir = getcwd();
+
+            //chdir($game_dirpath);
+
+            //$handle = fopen($game_dirpath.$DS.'command.txt','w');
+            // 2: run bat or sh to compile the game
+            $output = shell_exec($compile_command);
+            //chdir($init_workdir);
+
+            //fwrite($handle, getcwd() .PHP_EOL);
+            //fclose($handle);
+
+        } else {
+            // 2: run bat or sh to compile the game
+            $output = shell_exec($compile_command);
+        }
+        //---------------------------------------
+
+        chdir($init_gcwd);
+
+        // Write to wp-admin dir the shell_exec cmd result
+        $hf = fopen('output.txt', 'w');
+        fwrite($hf, $output);
+        fclose($hf);
+
+    }
 
     //fake_compile_for_a_test_project();
 
@@ -485,186 +554,8 @@ function fake_compile_for_a_test_project()
 }
 
 
-// ---- AJAX ASSEMBLE 1: Assemble game ------
-function wpunity_assemble_action_callback() {
 
-	$DS = DIRECTORY_SEPARATOR;
-	// Windows or Linux server variable
-	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
-
-	// Check if target folder exist from a previous assemble
-	$target_exists = file_exists ( $_POST['target'] );
-	echo '1. Target Folder exists? '.($target_exists?'true':'false');
-
-	// if exists then remove the whole game target folder
-	if ($target_exists) {
-		//echo '<br /><span>Removing:' . $_POST['target'] . '</span><br />';
-		shell_exec($os === 'win' ? 'rmdir /s/q ' . $_POST['target'] : 'rm -rf '. $_POST['target']);
-
-		if (file_exists($_POST['target'])) {
-			echo '<span style="color:yellowgreen"><br />Delete: Can not delete. Used by another process? Skipping delete, I will overwrite.</span>';
-		}else
-			echo '<br />2. Deleted target folder: Success';
-	}
-
-	shell_exec('mkdir '. ($os==='lin'?'--parents':'')  . ' '.$_POST['target']);
-
-	echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
-
-	// Copy the pre-written windows game libraries. The same are working for linux as well.
-	if ($os === 'win')
-		$copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
-	else
-		$copy_command = 'cp --verbose -rf '.$_POST['game_libraries_path'].$DS.'windows'.$DS.'. '.$_POST['target'];
-
-	$res_copy = shell_exec($copy_command);
-
-	echo '<br />4. Copy unity3d libraries: '. ($os==='win'?$res_copy: ($res_copy==0?'Success':'Failure 15'));
-
-	//------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
-	$scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
-
-	// === Assets/General_Scripts/Menu_Script.cs =====
-	$path_cs_MainMenu = $_POST['target']."/Assets/General_Scripts/Menu_Script.cs";
-
-	// first read content
-	$fhandle = fopen($path_cs_MainMenu, "r");
-	$fcontents_cs_MainMenu = fread($fhandle, filesize($path_cs_MainMenu));
-	fclose($fhandle);
-
-	//echo htmlspecialchars($fcontents_cs_MainMenu);
-
-	// then write
-	$fhandle = fopen($path_cs_MainMenu, "w");
-	$fcontents_cs_MainMenu = str_replace(['___[mainmenu_scene_basename]___',
-		'___[initialwonderaround_scene_basename]___',
-		'___[options_scene_basename]___',
-		'___[credentials_scene_basename]___'],
-		[
-			basename($scenes_Arr[0][sceneUnityPath],".unity"),
-			basename($scenes_Arr[1][sceneUnityPath],".unity"),
-			basename($scenes_Arr[2][sceneUnityPath],".unity"),
-			basename($scenes_Arr[3][sceneUnityPath],".unity")
-		],
-		$fcontents_cs_MainMenu);
-
-	//echo htmlspecialchars($fcontents_cs_MainMenu);
-
-	fwrite($fhandle, $fcontents_cs_MainMenu);
-	fclose($fhandle);
-
-	// === EditorBuildSettings.asset ===
-
-	// replace
-	$needle_str ='  m_Scenes: []'.chr(10);
-
-	// with
-	$target_str= '  m_Scenes:'.chr(10);
-
-	foreach ($scenes_Arr as $cs)
-		$target_str .= '  - enabled: 1' . chr(10) .
-		               '    path: '.$cs['sceneUnityPath']  . chr(10);
-
-
-	//  Possible bug is the LF character in the end of lines
-	echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';
-
-	$path_eba = $_POST['target']."/ProjectSettings/EditorBuildSettings.asset";
-
-	// first read
-	$fhandle = fopen($path_eba, "r");
-	$fcontents = fread($fhandle, filesize($path_eba));
-	fclose($fhandle);
-
-	// then write
-	$fhandle = fopen($path_eba, "w");
-	$fcontents = str_replace($needle_str, $target_str, $fcontents);
-	fwrite($fhandle, $fcontents);
-	fclose($fhandle);
-
-	echo '<span style="font-size:8pt"><pre>'.$fcontents.'</pre></span>';
-
-	// Copy source assets to target assets
-	if ($os === 'win')
-		$copy_assets_command = 'xcopy /s /Q '.$_POST['source'].' '.$_POST['target'].$DS.'Assets';
-	else
-		$copy_assets_command = 'cp -rf '.$_POST['source'].$DS.'. '.$_POST['target'].$DS.'Assets';
-
-	$res_copy_assets = shell_exec($copy_assets_command);
-
-	echo '<br />6. Copy Game Instance Assets to target Assets: '. ($os==='win'?$res_copy_assets:($res_copy_assets==0?'Success':'Failure 16'));
-	echo '<br /><br /> Finished assemble';
-
-	wp_die();
-}
-
-// ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
-function wpunity_compile_action_callback() {
-	$DS = DIRECTORY_SEPARATOR;
-
-	// TEST PHASE
-	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
-	// TEST PHASE
-	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
-
-	// REAL
-	$game_dirpath = $_POST['dirpath']; //  realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
-	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-		$os_bin = 'bat';
-		$txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-		       $game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
-
-		$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
-
-	} else { // LINUX SERVER
-		$os_bin = 'sh';
-		$txt = "#/bin/bash"."\n".
-		       "projectPath=`pwd`"."\n".
-		       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-		       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
-
-		// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-		$compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
-	}
-
-	// 1 : Generate bat or sh
-	$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
-	fwrite($myfile, $txt);
-	fclose($myfile);
-	chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
-
-
-	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
-
-
-	if ($os === 'lin'){
-		$init_workdir = getcwd();
-
-		chdir($game_dirpath);
-
-		//$handle = fopen($game_dirpath.$DS.'command.txt','w');
-
-
-		// 2: run bat or sh to compile the game
-		$output = shell_exec($compile_command);
-
-
-		chdir($init_workdir);
-
-		//fwrite($handle, getcwd() .PHP_EOL);
-
-		//fclose($handle);
-
-	} else {
-		// 2: run bat or sh to compile the game
-		$output = shell_exec($compile_command);
-	}
-
-
-	wp_die();
-}
-
-//---- AJAX COMPILE 2: read compile stdout.log file and return content.
+//---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
 	$DS = DIRECTORY_SEPARATOR;
 
@@ -737,7 +628,7 @@ function wpunity_game_zip_action_callback()
 // NEW ASSEMBLY FUNCTIONS OF JULY 2017
 
 
-// -- ASSEMBLY 1: Append scene paths in EditorBuildSettings.asset file --
+// -- Append scene paths in EditorBuildSettings.asset file --
 // $filepath : The path of the already written EditorBuildSettings.asset file
 // $scenepath : The scene to add as path : "Assets/scenes/S_Settings.unity"
 function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scenepath){
@@ -861,3 +752,180 @@ function wpunity_save_scene_async_action_callback()
   wp_die();
 }
 
+
+
+
+//// ---- OLD AJAX ASSEMBLE : DO NOT DELETE UNTIL WE FINISH LINUX server ------
+//function wpunity_assemble_action_callback() {
+//
+//    $DS = DIRECTORY_SEPARATOR;
+//    // Windows or Linux server variable
+//    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+//
+//    // Check if target folder exist from a previous assemble
+//    $target_exists = file_exists ( $_POST['target'] );
+//    echo '1. Target Folder exists? '.($target_exists?'true':'false');
+//
+//    // if exists then remove the whole game target folder
+//    if ($target_exists) {
+//        //echo '<br /><span>Removing:' . $_POST['target'] . '</span><br />';
+//        shell_exec($os === 'win' ? 'rmdir /s/q ' . $_POST['target'] : 'rm -rf '. $_POST['target']);
+//
+//        if (file_exists($_POST['target'])) {
+//            echo '<span style="color:yellowgreen"><br />Delete: Can not delete. Used by another process? Skipping delete, I will overwrite.</span>';
+//        }else
+//            echo '<br />2. Deleted target folder: Success';
+//    }
+//
+//    shell_exec('mkdir '. ($os==='lin'?'--parents':'')  . ' '.$_POST['target']);
+//
+//    echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
+//
+//    // Copy the pre-written windows game libraries. The same are working for linux as well.
+//    if ($os === 'win')
+//        $copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
+//    else
+//        $copy_command = 'cp --verbose -rf '.$_POST['game_libraries_path'].$DS.'windows'.$DS.'. '.$_POST['target'];
+//
+//    $res_copy = shell_exec($copy_command);
+//
+//    echo '<br />4. Copy unity3d libraries: '. ($os==='win'?$res_copy: ($res_copy==0?'Success':'Failure 15'));
+//
+//    //------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
+//    $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
+//
+//    // === Assets/General_Scripts/Menu_Script.cs =====
+//    $path_cs_MainMenu = $_POST['target']."/Assets/General_Scripts/Menu_Script.cs";
+//
+//    // first read content
+//    $fhandle = fopen($path_cs_MainMenu, "r");
+//    $fcontents_cs_MainMenu = fread($fhandle, filesize($path_cs_MainMenu));
+//    fclose($fhandle);
+//
+//    //echo htmlspecialchars($fcontents_cs_MainMenu);
+//
+//    // then write
+//    $fhandle = fopen($path_cs_MainMenu, "w");
+//    $fcontents_cs_MainMenu = str_replace(['___[mainmenu_scene_basename]___',
+//        '___[initialwonderaround_scene_basename]___',
+//        '___[options_scene_basename]___',
+//        '___[credentials_scene_basename]___'],
+//        [
+//            basename($scenes_Arr[0][sceneUnityPath],".unity"),
+//            basename($scenes_Arr[1][sceneUnityPath],".unity"),
+//            basename($scenes_Arr[2][sceneUnityPath],".unity"),
+//            basename($scenes_Arr[3][sceneUnityPath],".unity")
+//        ],
+//        $fcontents_cs_MainMenu);
+//
+//    //echo htmlspecialchars($fcontents_cs_MainMenu);
+//
+//    fwrite($fhandle, $fcontents_cs_MainMenu);
+//    fclose($fhandle);
+//
+//    // === EditorBuildSettings.asset ===
+//
+//    // replace
+//    $needle_str ='  m_Scenes: []'.chr(10);
+//
+//    // with
+//    $target_str= '  m_Scenes:'.chr(10);
+//
+//    foreach ($scenes_Arr as $cs)
+//        $target_str .= '  - enabled: 1' . chr(10) .
+//            '    path: '.$cs['sceneUnityPath']  . chr(10);
+//
+//
+//    //  Possible bug is the LF character in the end of lines
+//    echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';
+//
+//    $path_eba = $_POST['target']."/ProjectSettings/EditorBuildSettings.asset";
+//
+//    // first read
+//    $fhandle = fopen($path_eba, "r");
+//    $fcontents = fread($fhandle, filesize($path_eba));
+//    fclose($fhandle);
+//
+//    // then write
+//    $fhandle = fopen($path_eba, "w");
+//    $fcontents = str_replace($needle_str, $target_str, $fcontents);
+//    fwrite($fhandle, $fcontents);
+//    fclose($fhandle);
+//
+//    echo '<span style="font-size:8pt"><pre>'.$fcontents.'</pre></span>';
+//
+//    // Copy source assets to target assets
+//    if ($os === 'win')
+//        $copy_assets_command = 'xcopy /s /Q '.$_POST['source'].' '.$_POST['target'].$DS.'Assets';
+//    else
+//        $copy_assets_command = 'cp -rf '.$_POST['source'].$DS.'. '.$_POST['target'].$DS.'Assets';
+//
+//    $res_copy_assets = shell_exec($copy_assets_command);
+//
+//    echo '<br />6. Copy Game Instance Assets to target Assets: '. ($os==='win'?$res_copy_assets:($res_copy_assets==0?'Success':'Failure 16'));
+//    echo '<br /><br /> Finished assemble';
+//
+//    wp_die();
+//}
+
+
+    // OLD COMPILE: DO NOT DELETE
+
+//// ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
+//function wpunity_compile_action_callback() {
+//	$DS = DIRECTORY_SEPARATOR;
+//
+//	// TEST PHASE
+//	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
+//	// TEST PHASE
+//	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
+//
+//	// REAL
+//	$game_dirpath = $_POST['dirpath']; //  realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+//	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+//		$os_bin = 'bat';
+//		$txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
+//		       $game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
+//
+//		$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
+//
+//	} else { // LINUX SERVER
+//		$os_bin = 'sh';
+//		$txt = "#/bin/bash"."\n".
+//		       "projectPath=`pwd`"."\n".
+//		       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
+//		       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
+//
+//		// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+//		$compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
+//	}
+//
+//	// 1 : Generate bat or sh
+//	$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
+//	fwrite($myfile, $txt);
+//	fclose($myfile);
+//	chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
+//
+//
+//	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+//
+//	if ($os === 'lin'){
+//		$init_workdir = getcwd();
+//
+//		chdir($game_dirpath);
+//
+//		//$handle = fopen($game_dirpath.$DS.'command.txt','w');
+//		// 2: run bat or sh to compile the game
+//		$output = shell_exec($compile_command);
+//		chdir($init_workdir);
+//
+//		//fwrite($handle, getcwd() .PHP_EOL);
+//		//fclose($handle);
+//
+//	} else {
+//		// 2: run bat or sh to compile the game
+//		$output = shell_exec($compile_command);
+//	}
+//
+//	wp_die();
+//}
