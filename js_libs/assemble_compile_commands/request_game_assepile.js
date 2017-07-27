@@ -1,5 +1,8 @@
 function wpunity_assepileAjax() {
 
+    if (jQuery("#currently-selected")[0].innerHTML =='Select a platform')
+        return;
+
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
@@ -20,10 +23,10 @@ function wpunity_assepileAjax() {
 
     // ajax 2: Start monitoring with repeating interval
 
-    var interval = 0;
+    var intervalFn = 0
     var start_time = new Date().getTime();
 
-    interval = setInterval(function() {
+    intervalFn = setInterval(function() {
 
         reqMonitor = jQuery.ajax({
             url : isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
@@ -36,6 +39,15 @@ function wpunity_assepileAjax() {
             },
             success : function(response){
 
+
+                console.log('1', (new Date().getTime() - start_time)/1000);
+                console.log('2', (new Date().getTime() - start_time)/1000 < 5);
+
+                if ((new Date().getTime() - start_time)/1000 < 12  ) {
+                    console.log("Monitoring return");
+                    return;
+                }
+
                 //console.log('response' + response);
 
                 var jsonArr = JSON.parse(response);
@@ -45,6 +57,9 @@ function wpunity_assepileAjax() {
 
                 var completedFlag = false;
                 var successFlag = false;
+
+                console.log('3',procMonitor);
+                console.log('4', procMonitor.indexOf("No tasks are running"));
 
                 if (procMonitor.length ==0 || procMonitor.indexOf("No tasks are running") > 0){
                     completedFlag = true;
@@ -62,7 +77,6 @@ function wpunity_assepileAjax() {
                     console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time)/1000 + " seconds");
 
                     //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
-
                 } else {
                     //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
@@ -80,11 +94,12 @@ function wpunity_assepileAjax() {
                         myzipajax();
 
 
-                        clearInterval(interval);
+                        clearInterval(intervalFn);
                     } else {
 
                         console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
 
+                        clearInterval(intervalFn);
                         //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
                     }
                 }
@@ -96,11 +111,11 @@ function wpunity_assepileAjax() {
 
                 console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
 
-
+                clearInterval(intervalFn);
                 //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
             }
         });
-    }, 1000);
+    }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
 
     // Ajax 3: ZIP the game folder and provide link to download
     function myzipajax() {
@@ -142,11 +157,16 @@ function wpunity_assepileAjax() {
 
 
                 document.getElementById('wpunity_ziplink').style.visibility = 'visible';
-                document.getElementById('wpunity_weblink').style.visibility = 'visible';
+
 
 
                 document.getElementById('wpunity_ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
-                document.getElementById('wpunity_weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
+
+
+                if (jQuery("#currently-selected")[0].innerHTML == 'Web') {
+                    document.getElementById('wpunity_weblink').style.visibility = 'visible';
+                    document.getElementById('wpunity_weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
+                }
 
             },
             error : function(xhr, ajaxOptions, thrownError){

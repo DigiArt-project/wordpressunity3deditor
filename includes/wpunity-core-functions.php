@@ -456,6 +456,11 @@ function wpunity_assepile_action_callback(){
 
 	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug']);
 
+	// Wait 4 seconds to erase previous project before starting compiling the new one
+    // to avoiding erroneously take previous files. This is not safe with sleep however.
+    // Do not delete library folder if it takes too long
+    sleep(4);
+
 	if ($assemply_success == 'true') {
 
         $init_gcwd = getcwd(); // get cwd (wp-admin probably)
@@ -484,8 +489,11 @@ function wpunity_assepile_action_callback(){
             case 'Web':
                 $gameFormatParameter = ' -executeMethod WebGLBuilder.build';
                 break;
+            default:
+                echo "you must select an output format";
+                wp_die();
+                break;
         }
-
 
         if ($os === 'win') {
             $os_bin = 'bat';
