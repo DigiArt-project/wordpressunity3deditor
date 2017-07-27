@@ -3,6 +3,8 @@ function wpunity_assepileAjax() {
     if (jQuery("#currently-selected")[0].innerHTML =='Select a platform')
         return;
 
+    document.getElementById('progressSliderWPUnity').style.display = '';
+
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
@@ -67,7 +69,7 @@ function wpunity_assepileAjax() {
                 }
 
                 if (!completedFlag){
-                    document.getElementById('progressSliderWPUnity').style.display = '';
+
 
                     var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
