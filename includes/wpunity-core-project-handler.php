@@ -401,18 +401,13 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $term_meta_s_reward);
     fclose($create_file);
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_CS = 'Assets/scenes/' . 'S_Reward.unity';
-    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_CS);
+
 
     $file2 = $game_path . '/' . 'S_SceneSelector.unity';
     $file_content = str_replace("___[text_title_scene_selector]___",$term_meta_s_selector_title,$term_meta_s_selector);
     $create_file2 = fopen($file2, "w") or die("Unable to open file!");
     fwrite($create_file2, $file_content);
     fclose($create_file2);
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file2_path_CS = 'Assets/scenes/' . 'S_SceneSelector.unity';
-    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file2_path_CS);
 
 }
 
@@ -446,6 +441,17 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
         $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file1_path_CS);
+
+
+        //Add Static Pages to cs & BuildSettings (Main Menu must be first)
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_rewCS);
+
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_selCS);
+        
 
         if($is_bt_settings_active == '1'){
             //CREATE SETTINGS/OPTIONS Unity file
@@ -511,7 +517,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_file5);
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Credits.unity');//Update the EditorBuildSettings.asset by adding new Scene
         $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file5_path_CS);
     }elseif($scene_type_slug == 'educational-energy'){
