@@ -129,7 +129,7 @@ function wpunity_assepileAjax() {
                 console.log("Ajax 3: Success: Zip location: " + url_gameProject_path + '/game.zip' );
 
                 // Check if index.html exists (because it is not always compiled for web)
-                console.log("Ajax 3: Success: index.html location " + url_gameProject_path + '/builds/WebGLBuild/index.html' );
+                //console.log("Ajax 3: Success: index.html location " + url_gameProject_path + '/builds/WebGLBuild/index.html' );
 
             },
             error : function(xhr, ajaxOptions, thrownError){
