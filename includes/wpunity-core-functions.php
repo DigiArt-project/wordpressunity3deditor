@@ -853,5 +853,11 @@ function wpunity_add_in_WebGLBuilder_cs($filepath, $assetpath, $scenepath){
 }
 
 
-
+function wpunity_save_scene_async_action_callback()
+{
+  // put meta in scene. True, false, or id of meta if does not exist
+  $res= update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
+  echo $res ? 'true' : 'false';
+  wp_die();
+}
 

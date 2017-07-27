@@ -1,13 +1,5 @@
 <?php
 
-// Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
-function my_enqueue_front_end_ajax() {
-	$thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/scriptFileBrowserToolbarWPway.js';
-	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-	wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-}
-add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_ajax' );
-
 //---------------------------------------------------------------------
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
@@ -29,18 +21,30 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
 
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-	$jsonScene = $_POST['wpunity_scene_json_input'];
-	update_post_meta( $scene_id, 'wpunity_scene_json_input', $jsonScene );
 
+// Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
+function my_enqueue_front_end_ajax() {
+    global $scene_id;
+
+    $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/scriptFileBrowserToolbarWPway.js';
+    wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+    wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+
+    $thepath2 = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js';
+    wp_enqueue_script( 'ajax-script2', $thepath2, array('jquery') );
+    wp_localize_script( 'ajax-script2', 'my_ajax_object_savescene',
+        array( 'ajax_url' => admin_url( 'admin-ajax.php' ),
+               'scene_id' => $scene_id //,
+               //'scene_json' => '' getElementById('wpunity_scene_json_input')->value // I get json with javascript in ajax
+        )
+    );
 }
+add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_ajax' );
+
 
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
-
-
-
 
 get_header(); ?>
 
@@ -124,11 +128,9 @@ get_header(); ?>
                 </div>
             </div>
 
-            <form name="wpunity_scene_theForm" id="wpunity_scene_theForm" method="POST" enctype="multipart/form-data">
-                <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
-                <input type="hidden" name="submitted" id="submitted" value="true" />
-				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-            </form>
+
+            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility: hidden"
+                     name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
         </div>
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">

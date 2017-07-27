@@ -261,7 +261,9 @@ echo '</script>';
 
 
     <div id="saveSceneBtn" class="SaveBtnContainerStyle">
-        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene" type="button" id="save-scene-button" class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
+        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
+           type="button" id="save-scene-button"
+           class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
     </div>
 
     <!--  FileBrowserToolbar  -->
@@ -385,8 +387,10 @@ echo '</script>';
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
-        document.getElementById('wpunity_scene_theForm').submit();
-        //document.getElementsByClassName("wpunity_scene_theForm")[0].submit();
+
+        wpunity_saveSceneAjax();
+        //document.getElementById('wpunity_scene_theForm').submit();
+
     });
 
     hideObjectPropertiesPanels();
