@@ -1,6 +1,9 @@
 function wpunity_assepileAjax() {
 
     var platform = jQuery( "#platformInput" ).attr( "value" );
+    var compilationProgressText = jQuery( "#compilationProgressText" );
+
+    compilationProgressText.append( '<p>Compiling project...</p>' );
 
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
@@ -12,11 +15,14 @@ function wpunity_assepileAjax() {
             'gameSlug': my_ajax_object_assepile.slug,
             'gameFormat': platform
         },
+
         success : function(data) {
             console.log("Ajax 1:" + data);
         },
-        error : function(xhr, ajaxOptions, thrownError){
+
+        error : function(xhr, ajaxOptions, thrownError) {
             console.log("Ajax 1: ERROR: " + thrownError);
+            hideProgressSlider();
         }
     });
 
@@ -61,13 +67,12 @@ function wpunity_assepileAjax() {
                     console.log('3', procMonitor);
                     console.log('4', procMonitor.indexOf("No tasks are running"));
 
-                    if (procMonitor.length == 0 || procMonitor.indexOf("No tasks are running") > 0) {
+                    if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0) {
                         completedFlag = true;
                         successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                     }
 
                     if (!completedFlag) {
-
 
                         var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
@@ -80,15 +85,16 @@ function wpunity_assepileAjax() {
                     } else {
                         //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
 
-                        hideProgressSlider();
-
                         console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
 
                         if (successFlag) {
                             //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
                             //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
 
                             console.log("Ajax 2: Compile Result: Success");
+
+                            compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
 
                             // After success we start the Ajax
                             myzipajax();
@@ -99,8 +105,12 @@ function wpunity_assepileAjax() {
 
                             console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
 
+                            compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
+
                             clearInterval(intervalFn);
                             //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+
+                            hideProgressSlider();
                         }
                     }
 
@@ -114,6 +124,8 @@ function wpunity_assepileAjax() {
 
                 clearInterval(intervalFn);
                 //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+
+                hideProgressSlider();
             }
         });
     }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
@@ -122,7 +134,9 @@ function wpunity_assepileAjax() {
     function myzipajax() {
         console.log("Ajax 3, Zipping all in game.zip ...");
 
-        hideProgressSlider();
+        compilationProgressText.append( '<p>Creating Zip file...  </p>');
+
+        /*hideProgressSlider();*/
 
         var dir_gamepath = my_ajax_object_assepile.gameUnityProject_dirpath ;//"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"; // my_ajax_object_assepile.game_dirpath; // without filename
 
@@ -154,24 +168,26 @@ function wpunity_assepileAjax() {
                 // Check if index.html exists (because it is not always compiled for web)
                 console.log("Ajax 3: Success: index.html location " + my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html' );
 
-
-                document.getElementById('wpunity_ziplink').style.visibility = 'visible';
-
-                document.getElementById('wpunity_ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
+                document.getElementById('wpunity-ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
+                jQuery('#wpunity-ziplink').show();
 
 
                 if (platform === 'platform-web') {
-                    document.getElementById('wpunity_weblink').style.visibility = 'visible';
-                    document.getElementById('wpunity_weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
+                    document.getElementById('wpunity-weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
+                    jQuery('#wpunity-weblink').show();
                 }
 
                 hideProgressSlider();
+
+                compilationProgressText.append( '<p>Zip file creation complete!</p>');
 
 
             },
             error : function(xhr, ajaxOptions, thrownError){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;
                 console.log("Ajax 3: Fail:" + "Zipping game: ERROR [17]! " + thrownError);
+
+                hideProgressSlider();
             }
         });
     }
