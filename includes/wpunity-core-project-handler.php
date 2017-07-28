@@ -374,7 +374,9 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
                 'field' => 'slug',
                 'terms' => $gameSlug
             )
-        )
+        ),
+        'orderby' => 'ID',
+        'order'   => 'ASC',
     );
     $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
