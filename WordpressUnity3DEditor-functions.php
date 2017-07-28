@@ -85,6 +85,9 @@ wp_register_script( 'wpunity_assemble_request', plugin_dir_url( __FILE__ ) . 'js
 wp_register_script( 'wpunity_assepile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_assepile.js',
     null, null, false);
 
+wp_register_script( 'wpunity_savescene_request', plugin_dir_url( __FILE__ ) . 'js_libs/save_scene_ajax/wpunity_save_scene_ajax.js',
+    null, null, false);
+
 wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
 	null, null, false);
 

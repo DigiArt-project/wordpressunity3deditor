@@ -140,7 +140,7 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 
 //==========================================================================================================================================
 
-function wpunity_compile_the_game($gameID,$gameSlug){
+function wpunity_assemble_the_unity_game_project($gameID, $gameSlug){
 
     wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
 
@@ -154,33 +154,9 @@ function wpunity_compile_the_game($gameID,$gameSlug){
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
 
-    //5. Copy StandardAssets folder (at Assets/StandardAssets)
+    wpunity_compile_copy_StandardAssets($gameSlug,$gameType='Energy');//5. Copy StandardAssets depending the Game Type
 
-
-    recurse_copy($gameSlug);
-}
-
-function recurse_copy($gameSlug) {
-
-
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
-    $dst = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
-    $src = get_site_url() . '/wp-content/plugins/WordpressUnity3DEditorGit/StandardAssets/Energy';
-    $dir = opendir($src);
-    @mkdir($dst);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-                if ( is_dir($src . '/' . $file) ) {
-                recurse_copy($src . '/' . $file,$dst . '/' . $file);
-            }
-            else {
-                copy($src . '/' . $file,$dst . '/' . $file);
-            }
-        }
-    }
-    closedir($dir);
+    return 'true';
 }
 
 function wpunity_compile_folders_del($gameSlug) {
@@ -231,7 +207,7 @@ function wpunity_compile_folders_gen($gameSlug){
     //--Uploads/myGameProjectUnity/build--
     $ProjectSettingsF = $myGameProjectUnityF . "/" . 'ProjectSettings';
     $AssetsF = $myGameProjectUnityF . "/" . 'Assets';
-    $buildF = $myGameProjectUnityF . "/" . 'build';
+    $buildF = $myGameProjectUnityF . "/" . 'builds';
     if (!is_dir($ProjectSettingsF)) {mkdir($ProjectSettingsF, 0755) or wp_die("Unable to create the folder".$ProjectSettingsF);}
     if (!is_dir($AssetsF)) {mkdir($AssetsF, 0755) or wp_die("Unable to create the folder".$AssetsF);}
     if (!is_dir($buildF)) {mkdir($buildF, 0755) or wp_die("Unable to create the folder".$buildF);}
@@ -407,7 +383,7 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             $custom_query->the_post();
             $scene_id = get_the_ID();
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file);
+            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$webGLbuilder_file);
         endwhile;
     endif;
     wp_reset_postdata();
@@ -425,18 +401,13 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $term_meta_s_reward);
     fclose($create_file);
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_CS = 'Assets/scenes/' . 'S_Reward.unity';
-    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_CS);
+
 
     $file2 = $game_path . '/' . 'S_SceneSelector.unity';
     $file_content = str_replace("___[text_title_scene_selector]___",$term_meta_s_selector_title,$term_meta_s_selector);
     $create_file2 = fopen($file2, "w") or die("Unable to open file!");
     fwrite($create_file2, $file_content);
     fclose($create_file2);
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file2_path_CS = 'Assets/scenes/' . 'S_SceneSelector.unity';
-    wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file2_path_CS);
 
 }
 
@@ -470,6 +441,17 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
         $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file1_path_CS);
+
+
+        //Add Static Pages to cs & BuildSettings (Main Menu must be first)
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_rewCS);
+
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file_path_selCS);
+        
 
         if($is_bt_settings_active == '1'){
             //CREATE SETTINGS/OPTIONS Unity file
@@ -535,41 +517,42 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_file5);
 
         $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Credits.unity');//Update the EditorBuildSettings.asset by adding new Scene
         $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file5_path_CS);
-    }elseif($scene_type_slug == 'wonderaround-yaml'){
-        //DATA of Wonder Around Scene
-        $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
-        $json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-        $scene_name = $scene_post->post_name;
-
-        $file_content6 = wpunity_jsonArr_to_unity($term_meta_wonder_around, $json_scene);
-        $file6 = $game_path . '/' . $scene_name . '.unity';
-        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-        fwrite($create_file6, $file_content6);
-        fclose($create_file6);
-        //Update the EditorBuildSettings.asset by adding new Scene
-        //$file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
-        //wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file6);
     }elseif($scene_type_slug == 'educational-energy'){
         //DATA of Educational Energy Scene
-        //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
+        $term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
         //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-//        $scene_name = $scene_post->post_name;
-//
-//        //$file_content6 = wpunity_replace_educational_energy_unity();
-//        $file6 = $game_path . '/' . $scene_name . '.unity';
-//        $create_file6 = fopen($file6, "w") or die("Unable to open file!");
-//        fwrite($create_file6, 'Test');
-//        fclose($create_file6);
+        $scene_name = $scene_post->post_name;
+        $scene_title = $scene_post->post_title;
+        $scene_desc = $scene_post->post_content;
 
-        //wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path);
-        //$scenes_counter++;
-        //Update the EditorBuildSettings.asset by adding new Scene
-        //$file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
-        //wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file7);
+        $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+        $featured_image_edu_sprite_guid = 0;//if there's no Featured Image
+        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
+
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy);
+        $file7 = $game_path . '/' . $scene_name . '.unity';
+        $create_file7 = fopen($file7, "w") or die("Unable to open file!");
+        fwrite($create_file7, $file_content7);
+        fclose($create_file7);
+
+        if($scenes_counter<7) {
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            $scenes_counter = $scenes_counter + 1;
+        }
+
+        $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+        $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file7path_forCS);
+
+    }elseif($scene_type_slug == 'wonderaround-yaml'){
+        //DATA of Wonder Around Scene
     }
+
+    return $scenes_counter;
 
 }
 
@@ -586,6 +569,10 @@ function wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featu
 
 function wpunity_replace_settings_unity($term_meta_s_settings){
     return $term_meta_s_settings;
+}
+
+function wpunity_replace_educational_energy_unity($term_meta_educational_energy){
+    return $term_meta_educational_energy;
 }
 
 function wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
@@ -641,18 +628,224 @@ function wpunity_replace_login_unity($term_meta_s_login){
     return $term_meta_s_login;
 }
 
-function wpunity_compile_append_scene_to_s_selector($scene_type_ID,$game_path){
+function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid){
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
     $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
-    $sceneSelectorFile = $game_path . '/SceneSelector.unity';
 
-    //$myfile = fopen($sceneSelectorFile, "a") or die("Unable to open file!");
-    $txt = "user id date2";
-    //fwrite($myfile, "\n". $txt);
-    //fclose($myfile);
+    $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
-    file_put_contents($sceneSelectorFile, implode("\n", $txt) . "\n", FILE_APPEND);
+    //Create guid for the tile
+    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
+    //Add Scene to initial part of Scene Selector
+    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector);
 
+    //Add second part of the new Scene Tile
+    $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
+    if($scenes_counter==2){$tile_pos_x = 680;$tile_pos_y=-250;}
+    if($scenes_counter==3){$tile_pos_x = 1090;$tile_pos_y=-250;}
+    if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
+    if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
+    if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
+
+    $seq_index_of_scene = $scenes_counter;
+    $name_of_panel = 'panel_' . $scene_name;
+    $guid_sprite_scene_featured_img = $featured_image_edu_sprite_guid;
+    $text_title_tile = $scene_title; //Title of custom field
+    $text_description_tile = $scene_desc;
+    $name_of_scene_to_load = $scene_name;//without .unity (we generate unity files with post slug as name)
+
+    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load);
+    $LF = chr(10); // line change
+    file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
+
+}
+
+function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector){
+    # ReplaceChildren
+    $LF = chr(10); // line change
+
+    // Clear previous size of filepath
+    clearstatcache();
+
+    // a. Read
+    $handle = fopen($sceneSelectorFile, 'r');
+    $content = fread($handle, filesize($sceneSelectorFile));
+    fclose($handle);
+
+    $tile_name='- {fileID: '. $guid_tile_sceneselector .'}';
+    // b. add obj
+    $content = str_replace(
+        '# ReplaceChildren',
+        $tile_name.$LF.'  # ReplaceChildren', $content
+    );
+
+    // c. Write to file
+    $fhandle = fopen($sceneSelectorFile, 'w');
+    fwrite($fhandle, $content, strlen($content));
+    fclose($fhandle);
+
+}
+
+function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load){
+    $file_content_return = str_replace("___[guid_tile_sceneselector]___",$guid_tile_sceneselector,$term_meta_s_selector2);
+    $file_content_return = str_replace("___[seq_index_of_scene]___",$seq_index_of_scene,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_x]___",$tile_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[tile_pos_y]___",$tile_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[name_of_panel]___",$name_of_panel,$file_content_return);
+    $file_content_return = str_replace("___[guid_sprite_scene_featured_img]___",$guid_sprite_scene_featured_img,$file_content_return);
+    $file_content_return = str_replace("___[text_title_tile]___",$text_title_tile,$file_content_return);
+    $file_content_return = str_replace("___[text_description_tile]___",$text_description_tile,$file_content_return);
+    $file_content_return = str_replace("___[name_of_scene_to_load]___",$name_of_scene_to_load,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $dest = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/StandardAssets';
+
+    $pluginpath = dirname ( dirname (get_template_directory()));
+    $pluginpath = str_replace('\\','/',$pluginpath);
+    $pluginSlug = plugin_basename(__FILE__);
+    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
+    $source = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/' . $gameType;
+
+    mkdir($dest, 0755);
+    foreach (
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST) as $item
+    ) {
+        if ($item->isDir()) {
+            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
+    }
+
+}
+
+function wpunity_replace_terain_unity($term_meta_terain_yaml,$guid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$guid_rect_transform_terrain,$guid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
+
+    $file_content_return = str_replace("___[guid_of_terrain]___",$guid_of_terrain,$term_meta_terain_yaml);
+    $file_content_return = str_replace("___[income_when_overpower]___",$income_when_overpower,$file_content_return);
+    $file_content_return = str_replace("___[income_when_correct_power]___",$income_when_correct_power,$file_content_return);
+    $file_content_return = str_replace("___[income_when_under_power]___",$income_when_under_power,$file_content_return);
+    $file_content_return = str_replace("___[mean_speed_wind]___",$mean_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[var_speed_wind]___",$var_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[min_speed_wind]___",$min_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[max_speed_wind]___",$max_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[access_penalty]___",$access_penalty,$file_content_return);
+    $file_content_return = str_replace("___[archaeology_penalty]___",$archaeology_penalty,$file_content_return);
+    $file_content_return = str_replace("___[natural_reserve_penalty]___",$natural_reserve_penalty,$file_content_return);
+    $file_content_return = str_replace("___[hvdistance_penalty]___",$hvdistance_penalty,$file_content_return);
+    $file_content_return = str_replace("___[guid_rect_transform_terrain]___",$guid_rect_transform_terrain,$file_content_return);
+    $file_content_return = str_replace("___[guid_terrain_prefab_mesh]___",$guid_terrain_prefab_mesh,$file_content_return);
+    $file_content_return = str_replace("___[guid_terrain_mesh]___",$guid_terrain_mesh,$file_content_return);
+    $file_content_return = str_replace("___[x_pos_terrain]___",$x_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_terrain]___",$y_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_terrain]___",$z_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_terrain]___",$x_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_terrain]___",$y_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_terrain]___",$z_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[w_rotation_terrain]___",$w_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[x_scale_terrain]___",$x_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_scale_terrain]___",$y_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_scale_terrain]___",$z_scale_terrain,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_consumer_unity($term_meta_consumer_yaml,$guid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$guid_consumer_prefab_transform,$guid_consumer_prefab_child){
+
+    $file_content_return = str_replace("___[guid_prefab_consumer_parent]___",$guid_prefab_consumer_parent,$term_meta_consumer_yaml);
+    $file_content_return = str_replace("___[x_pos_consumer]___",$x_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_consumer]___",$y_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_consumer]___",$z_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_consumer]___",$x_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_consumer]___",$y_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_consumer]___",$z_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[w_rotation_consumer]___",$w_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[name_consumer]___",$name_consumer,$file_content_return);
+    $file_content_return = str_replace("___[guid_consumer_prefab_transform]___",$guid_consumer_prefab_transform,$file_content_return);
+    $file_content_return = str_replace("___[guid_consumer_prefab_child]___",$guid_consumer_prefab_child,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$guid_transformation_parent_producer,$guid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
+
+    $file_content_return = str_replace("___[guid_producer]___",$guid_producer,$term_meta_producer_yaml);
+    $file_content_return = str_replace("___[x_pos_producer]___",$x_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_producer]___",$y_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_producer]___",$z_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[x_rot_parent]___",$x_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[y_rot_parent]___",$y_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[z_rot_parent]___",$z_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[w_rot_parent]___",$w_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[y_position_infoquad]___",$y_position_infoquad,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_quadselector]___",$y_pos_quadselector,$file_content_return);
+    $file_content_return = str_replace("___[turbine_name_class]___",$turbine_name_class,$file_content_return);
+    $file_content_return = str_replace("___[turbine_max_power]___",$turbine_max_power,$file_content_return);
+    $file_content_return = str_replace("___[turbine_cost]___",$turbine_cost,$file_content_return);
+    $file_content_return = str_replace("___[rotor_diameter]___",$rotor_diameter,$file_content_return);
+    $file_content_return = str_replace("___[turbine_windspeed_class]___",$turbine_windspeed_class,$file_content_return);
+    $file_content_return = str_replace("___[turbine_repair_cost]___",$turbine_repair_cost,$file_content_return);
+    $file_content_return = str_replace("___[turbine_damage_coefficient]___",$turbine_damage_coefficient,$file_content_return);
+    $file_content_return = str_replace("___[guid_transformation_parent_producer]___",$guid_transformation_parent_producer,$file_content_return);
+    $file_content_return = str_replace("___[guid_child_producer]___",$guid_child_producer,$file_content_return);
+    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[producer_name]___",$producer_name,$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[0],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_1]___",$power_curve_val[1],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_2]___",$power_curve_val[2],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_3]___",$power_curve_val[3],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_4]___",$power_curve_val[4],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_5]___",$power_curve_val[5],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_6]___",$power_curve_val[6],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_7]___",$power_curve_val[7],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_8]___",$power_curve_val[8],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_9]___",$power_curve_val[9],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_10]___",$power_curve_val[10],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_11]___",$power_curve_val[11],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_12]___",$power_curve_val[12],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_13]___",$power_curve_val[13],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_14]___",$power_curve_val[14],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_15]___",$power_curve_val[15],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_16]___",$power_curve_val[16],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_17]___",$power_curve_val[17],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_18]___",$power_curve_val[18],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_19]___",$power_curve_val[19],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_20]___",$power_curve_val[20],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_21]___",$power_curve_val[21],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_22]___",$power_curve_val[22],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_23]___",$power_curve_val[23],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_24]___",$power_curve_val[24],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_25]___",$power_curve_val[25],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_26]___",$power_curve_val[26],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_27]___",$power_curve_val[27],$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_decorator_unity($term_meta_decorator_yaml,$guid_decorator,$guid_decorator_obj,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
+
+    $file_content_return = str_replace("___[guid_decorator]___",$guid_decorator,$term_meta_decorator_yaml);
+    $file_content_return = str_replace("___[guid_decorator_obj]___",$guid_decorator_obj,$file_content_return);
+    $file_content_return = str_replace("___[x_pos_decorator]___",$x_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_decorator]___",$y_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_decorator]___",$z_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_decorator]___",$x_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_decorator]___",$y_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_decorator]___",$z_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[x_scale_decorator]___",$x_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_scale_decorator]___",$y_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);
+
+    return $file_content_return;
 }
 
 ?>

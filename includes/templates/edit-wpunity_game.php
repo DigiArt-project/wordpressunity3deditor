@@ -21,15 +21,23 @@ echo '</script>';
 // Ajax for assembling
 function my_enqueue_front_end_assepile_ajax() {
 	global $project_id, $gameSlug;
-	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
-	$pluginpath = str_replace('\\','/',$pluginpath);
+    $pluginpath = dirname (plugin_dir_url( __DIR__  ));
+    $pluginpath = str_replace('\\','/',$pluginpath);
+
+    //--Uploads/myGameProjectUnity--
+    $upload_dir = wp_upload_dir()['basedir'];
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+
 	//$thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
-	$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
+    $thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
 	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
 	wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php'),
 		       'id' => $project_id,
-		       'slug' => $gameSlug
+		       'slug' => $gameSlug,
+               'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
+               'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
 		)
 	) ;
 }
@@ -53,20 +61,46 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
 	$menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
 	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
-	$wonderaround_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
+	$educational_energy_yaml_tax = get_term_by('slug', '	educational-energy', 'wpunity_scene_yaml');
+
+    $default_json = '{
+	"metadata": {
+		"formatVersion" : 4.0,
+		"type"		    : "scene",
+		"generatedBy"	: "SceneExporter.js",
+		"objects"       : 1},
+
+	"urlBaseType": "relativeToScene",
+
+	"objects" :
+	{
+		"avatarYawObject" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"visible"  : true,
+			"children" : {
+			}
+		}
+
+	}
+
+}
+';
 
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
 		),
 		'wpunity_scene_yaml' => array(
-			$wonderaround_yaml_tax->term_id,
+            $educational_energy_yaml_tax->term_id,
 		)
 	);
 
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
 		'wpunity_scene_metatype' => 'scene',
+        'wpunity_scene_json_input' => $default_json,
 	);
 
 	$scene_information = array(
@@ -349,6 +383,11 @@ if ( $custom_query->have_posts() ) :?>
 
                     <hr class="WhiteSpaceSeparator">
 
+                    <div id="output_linksWPUnity">
+                        <a href="" id="wpunity_ziplink" style="display:block;visibility:hidden">Download Zip</a>
+                        <a href="" id="wpunity_weblink" style="display:block;visibility:hidden" target="_blank">Web link</a>
+                    </div>
+
                     <h2 id="compileProgressTitle" class="mdc-typography--caption CenterContents" style="display: none"> Compiling... </h2>
 
                     <div class="progressSlider" id="compileProgressSlider" style="display: none">
@@ -398,7 +437,10 @@ $wp_query = $temp_query;
         var mdc = window.mdc;
         mdc.autoInit();
 
-        jQuery( "#compileGameBtn" ).click(function() { compileDialog.show(); });
+        jQuery( "#compileGameBtn" ).click(function() {
+            compileDialog.show();
+
+        });
 
         jQuery( "#compileProceedBtn" ).click(function() {
 

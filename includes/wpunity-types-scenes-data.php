@@ -3,6 +3,9 @@
 // load script from js_libs
 wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
 
+
+
+
 //==========================================================================================================================================
 
 // Create metabox with Custom Fields for Scene -($wpunity_databox4)
@@ -68,7 +71,9 @@ $wpunity_databox_helpdata = array(
 // Add and Show the metabox with Custom Field for Scene - ($wpunity_databox4)
 
 function wpunity_scenes_databox_add() {
-    global $wpunity_databox4,$wpunity_databox_helpdata;
+    global $wpunity_databox4,$wpunity_databox_helpdata, $post;
+
+
     add_meta_box($wpunity_databox4['id'], 'Scene Data', 'wpunity_scenes_databox_show', $wpunity_databox4['page'], $wpunity_databox4['context'], $wpunity_databox4['priority']);
     add_meta_box($wpunity_databox_helpdata['id'], 'Help Scene Data', 'wpunity_scenes_databox_helpdata_show', $wpunity_databox_helpdata['page'], $wpunity_databox_helpdata['context'], $wpunity_databox_helpdata['priority']);
 }
@@ -77,6 +82,9 @@ add_action('admin_menu', 'wpunity_scenes_databox_add');
 
 function wpunity_scenes_databox_show(){
     global $wpunity_databox4, $post;
+
+
+
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_scenes_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
 
@@ -100,7 +108,16 @@ function wpunity_scenes_databox_show(){
 
         $isAdmin = is_admin() ? 'back' : 'front';
 
-        // vr_editor loads the $sceneToLoad
+
+        wp_enqueue_script( 'wpunity_savescene_request');
+
+        wp_localize_script('wpunity_savescene_request', 'phpmyvarC',
+            array('scene_id'=> $sceneID
+            ));
+
+
+
+    // vr_editor loads the $sceneToLoad
         require( 'vr_editor.php' );
 
     echo '</div>';
@@ -206,5 +223,10 @@ add_action('save_post', 'wpunity_scenes_databox_save');
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor
 add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
+
+
+// Ajax for saving scene asynchronoysly
+add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
+
 
 ?>
