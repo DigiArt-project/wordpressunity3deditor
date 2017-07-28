@@ -63,6 +63,31 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
 	$educational_energy_yaml_tax = get_term_by('slug', '	educational-energy', 'wpunity_scene_yaml');
 
+    $default_json = '{
+	"metadata": {
+		"formatVersion" : 4.0,
+		"type"		    : "scene",
+		"generatedBy"	: "SceneExporter.js",
+		"objects"       : 1},
+
+	"urlBaseType": "relativeToScene",
+
+	"objects" :
+	{
+		"avatarYawObject" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"visible"  : true,
+			"children" : {
+			}
+		}
+
+	}
+
+}
+';
+
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
@@ -75,6 +100,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
 		'wpunity_scene_metatype' => 'scene',
+        'wpunity_scene_json_input' => $default_json,
 	);
 
 	$scene_information = array(

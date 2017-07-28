@@ -27,6 +27,31 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
         $firstSceneYAMLID = $firstSceneYAML->term_id;
     }
 
+    $default_json = '{
+	"metadata": {
+		"formatVersion" : 4.0,
+		"type"		    : "scene",
+		"generatedBy"	: "SceneExporter.js",
+		"objects"       : 1},
+
+	"urlBaseType": "relativeToScene",
+
+	"objects" :
+	{
+		"avatarYawObject" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"visible"  : true,
+			"children" : {
+			}
+		}
+
+	}
+
+}
+';
+
     // Create Main Menu Scene Data
     $mainmenuSceneData = array(
         'post_title'    => $mainmenuSceneTitle,
@@ -57,6 +82,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
         ),'meta_input'   => array(
             'wpunity_scene_default' => 1,
             'wpunity_scene_metatype' => 'scene',
+            'wpunity_scene_json_input' => $default_json,
         ),
     );
 
