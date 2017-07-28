@@ -57,58 +57,56 @@ function wpunity_assepileAjax() {
                 var completedFlag = false;
                 var successFlag = false;
 
+                console.log('Task report', procMonitor);
+
                 if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0) {
-                    console.log('3', procMonitor);
-                    console.log('4', procMonitor.indexOf("No tasks are running"));
-
-                    if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0) {
-                        completedFlag = true;
-                        successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
-                    }
-
-                    if (!completedFlag) {
-
-                        var counterLines = logfile.split(/\r\n|\r|\n/).length;
-
-                        // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
-                        //     + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                        console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
-
-                        //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
-                    } else {
-                        //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                        console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
-
-
-                        if (successFlag) {
-                            //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
-                            //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
-
-                            console.log("Ajax 2: Compile Result: Success");
-
-                            compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
-
-                            // After success we start the Ajax
-                            myzipajax();
-
-
-                            clearInterval(intervalFn);
-                        } else {
-
-                            console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
-
-                            compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
-
-                            clearInterval(intervalFn);
-                            //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
-
-                            hideProgressSlider();
-                        }
-                    }
-
+                     completedFlag = true;
+                     successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                 }
+
+                if (!completedFlag) {
+
+                    var counterLines = logfile.split(/\r\n|\r|\n/).length;
+
+                    // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
+                    //     + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                    console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+                    //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
+                } else {
+                    //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                    console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+
+                    if (successFlag) {
+                        //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
+                        //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
+
+                        console.log("Ajax 2: Compile Result: Success");
+
+                        compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
+
+                        // After success we start the Ajax
+                        myzipajax();
+
+
+                        clearInterval(intervalFn);
+                    } else {
+
+                        console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
+
+                        compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
+
+                        clearInterval(intervalFn);
+                        //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+
+                        hideProgressSlider();
+                    }
+                }
+
+
             },
             error : function(xhr, ajaxOptions, thrownError){
                 // document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
