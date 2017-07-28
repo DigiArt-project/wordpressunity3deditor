@@ -458,6 +458,8 @@ $wp_query = $temp_query;
             jQuery( "#wpunity-ziplink" ).hide();
             jQuery( "#wpunity-weblink" ).hide();
 
+            jQuery( "#compilationProgressText" ).html();
+
             wpunity_assepileAjax();
         });
 
