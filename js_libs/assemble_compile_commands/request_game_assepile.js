@@ -44,16 +44,10 @@ function wpunity_assepileAjax() {
             },
             success : function(response) {
 
-
-                console.log('1', (new Date().getTime() - start_time) / 1000);
-                console.log('2', (new Date().getTime() - start_time) / 1000 < 5);
-
                 if ((new Date().getTime() - start_time) / 1000 < 12) {
-                    console.log("Monitoring return");
+                    console.log("Monitoring ignore when < 12sec ");
                     return;
                 }
-
-                //console.log('response' + response);
 
                 var jsonArr = JSON.parse(response);
 
