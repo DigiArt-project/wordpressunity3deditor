@@ -3,7 +3,7 @@ function wpunity_assepileAjax() {
     if (jQuery("#currently-selected")[0].innerHTML =='Select a platform')
         return;
 
-    document.getElementById('progressSliderWPUnity').style.display = '';
+    //hideProgressSlider();
 
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
@@ -39,13 +39,13 @@ function wpunity_assepileAjax() {
                 'action': 'wpunity_monitor_compiling_action',
                 'dirpath': my_ajax_object_assepile.gameUnityProject_dirpath  //"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"} , //my_ajax_object_assepile.id,
             },
-            success : function(response){
+            success : function(response) {
 
 
-                console.log('1', (new Date().getTime() - start_time)/1000);
-                console.log('2', (new Date().getTime() - start_time)/1000 < 5);
+                console.log('1', (new Date().getTime() - start_time) / 1000);
+                console.log('2', (new Date().getTime() - start_time) / 1000 < 5);
 
-                if ((new Date().getTime() - start_time)/1000 < 12  ) {
+                if ((new Date().getTime() - start_time) / 1000 < 12) {
                     console.log("Monitoring return");
                     return;
                 }
@@ -60,53 +60,54 @@ function wpunity_assepileAjax() {
                 var completedFlag = false;
                 var successFlag = false;
 
-                if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0){
-                console.log('3',procMonitor);
-                console.log('4', procMonitor.indexOf("No tasks are running"));
+                if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0) {
+                    console.log('3', procMonitor);
+                    console.log('4', procMonitor.indexOf("No tasks are running"));
 
-                if (procMonitor.length ==0 || procMonitor.indexOf("No tasks are running") > 0){
-                    completedFlag = true;
-                    successFlag = response.indexOf("Exiting batchmode successfully now")>0;
-                }
-
-                if (!completedFlag) {
-
-
-                    var counterLines = logfile.split(/\r\n|\r|\n/).length;
-
-                    // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
-                    //     + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                    console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time)/1000 + " seconds");
-
-                    //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
-                } else {
-                    //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                    document.getElementById('progressSliderWPUnity').style.display = 'none';
-
-                    console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds");
-
-                    if (successFlag) {
-                        //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
-                        //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
-
-                        console.log("Ajax 2: Compile Result: Success");
-
-                        // After success we start the Ajax
-                        myzipajax();
-
-
-                        clearInterval(intervalFn);
-                    } else {
-
-                        console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
-
-                        clearInterval(intervalFn);
-                        //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+                    if (procMonitor.length == 0 || procMonitor.indexOf("No tasks are running") > 0) {
+                        completedFlag = true;
+                        successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                     }
-                }
 
+                    if (!completedFlag) {
+
+
+                        var counterLines = logfile.split(/\r\n|\r|\n/).length;
+
+                        // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
+                        //     + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                        console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+                        //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
+                    } else {
+                        //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                        hideProgressSlider();
+
+                        console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+                        if (successFlag) {
+                            //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
+                            //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
+
+                            console.log("Ajax 2: Compile Result: Success");
+
+                            // After success we start the Ajax
+                            myzipajax();
+
+
+                            clearInterval(intervalFn);
+                        } else {
+
+                            console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
+
+                            clearInterval(intervalFn);
+                            //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+                        }
+                    }
+
+                }
             },
             error : function(xhr, ajaxOptions, thrownError){
                 // document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
@@ -124,7 +125,7 @@ function wpunity_assepileAjax() {
     function myzipajax() {
         console.log("Ajax 3, Zipping all in game.zip ...");
 
-        document.getElementById('progressSliderWPUnity').style.display = '';
+        hideProgressSlider();
 
         var dir_gamepath = my_ajax_object_assepile.gameUnityProject_dirpath ;//"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"; // my_ajax_object_assepile.game_dirpath; // without filename
 
@@ -143,13 +144,11 @@ function wpunity_assepileAjax() {
             type : 'POST',
             timeout: 1200000, // 20 min
             data : {'action': 'wpunity_game_zip_action',
-                    'dirpath': dir_gamepath},
+                'dirpath': dir_gamepath},
 
             success : function(response){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = response;
                 //document.getElementById('wpunity_zipgame_report').innerHTML = '<a href="'+ phpvarsA.game_urlpath + '/game.zip">Download game in a zip file </a>';
-
-                document.getElementById('progressSliderWPUnity').style.display = 'none';
 
                 console.log("Ajax 3: Success: ");
                 console.log("Ajax 3: Success: response"+ response);
@@ -161,8 +160,6 @@ function wpunity_assepileAjax() {
 
                 document.getElementById('wpunity_ziplink').style.visibility = 'visible';
 
-
-
                 document.getElementById('wpunity_ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
 
 
@@ -171,9 +168,7 @@ function wpunity_assepileAjax() {
                     document.getElementById('wpunity_weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
                 }
 
-                jQuery( "#compileProgressSlider" ).hide();
-                jQuery( "#compileProgressTitle" ).hide();
-                jQuery("#platform-select").removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+                hideProgressSlider();
 
 
             },
