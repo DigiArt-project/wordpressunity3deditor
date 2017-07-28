@@ -12127,7 +12127,7 @@ function wpunity_scenes_taxyaml_customFields($tag) {
     $term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
     $term_meta_s_credentials = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials', true );
     $term_meta_s_options = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options', true );
-    $term_meta_s_help = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options', true );
+    $term_meta_s_help = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_help', true );
     $term_meta_s_login = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_login', true );
     $term_meta_s_reward = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_reward', true );
     $term_meta_s_selector = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector', true );
