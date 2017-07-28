@@ -522,7 +522,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         wpunity_add_in_WebGLBuilder_cs($webGLbuilder_file, null, $file5_path_CS);
     }elseif($scene_type_slug == 'educational-energy'){
         //DATA of Educational Energy Scene
-        //$term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
+        $term_meta_educational_energy = get_term_meta($scene_type_ID,'wpunity_yamlmeta_educational_energy',true);
         //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
         $scene_name = $scene_post->post_name;
         $scene_title = $scene_post->post_title;
@@ -532,10 +532,10 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $featured_image_edu_sprite_guid = 0;//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
-        //$file_content6 = wpunity_replace_educational_energy_unity();
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy);
         $file7 = $game_path . '/' . $scene_name . '.unity';
         $create_file7 = fopen($file7, "w") or die("Unable to open file!");
-        fwrite($create_file7, 'Test');
+        fwrite($create_file7, $file_content7);
         fclose($create_file7);
 
         if($scenes_counter<7) {
@@ -569,6 +569,10 @@ function wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featu
 
 function wpunity_replace_settings_unity($term_meta_s_settings){
     return $term_meta_s_settings;
+}
+
+function wpunity_replace_educational_energy_unity($term_meta_educational_energy){
+    return $term_meta_educational_energy;
 }
 
 function wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
