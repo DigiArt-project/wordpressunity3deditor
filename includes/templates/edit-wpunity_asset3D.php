@@ -40,7 +40,7 @@ $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-	$assetCatID = $_POST['term_id'];
+	$assetCatID = intval($_POST['term_id']);
 
 	$asset_taxonomies = array(
 		'wpunity_asset3d_pgame' => array(
@@ -59,7 +59,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'tax_input' => $asset_taxonomies,
 	);
 
-    $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
 
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
