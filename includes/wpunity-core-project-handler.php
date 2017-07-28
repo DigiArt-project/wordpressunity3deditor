@@ -727,4 +727,125 @@ function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
 
 }
 
+function wpunity_replace_terain_unity($term_meta_terain_yaml,$guid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$guid_rect_transform_terrain,$guid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
+
+    $file_content_return = str_replace("___[guid_of_terrain]___",$guid_of_terrain,$term_meta_terain_yaml);
+    $file_content_return = str_replace("___[income_when_overpower]___",$income_when_overpower,$file_content_return);
+    $file_content_return = str_replace("___[income_when_correct_power]___",$income_when_correct_power,$file_content_return);
+    $file_content_return = str_replace("___[income_when_under_power]___",$income_when_under_power,$file_content_return);
+    $file_content_return = str_replace("___[mean_speed_wind]___",$mean_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[var_speed_wind]___",$var_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[min_speed_wind]___",$min_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[max_speed_wind]___",$max_speed_wind,$file_content_return);
+    $file_content_return = str_replace("___[access_penalty]___",$access_penalty,$file_content_return);
+    $file_content_return = str_replace("___[archaeology_penalty]___",$archaeology_penalty,$file_content_return);
+    $file_content_return = str_replace("___[natural_reserve_penalty]___",$natural_reserve_penalty,$file_content_return);
+    $file_content_return = str_replace("___[hvdistance_penalty]___",$hvdistance_penalty,$file_content_return);
+    $file_content_return = str_replace("___[guid_rect_transform_terrain]___",$guid_rect_transform_terrain,$file_content_return);
+    $file_content_return = str_replace("___[guid_terrain_prefab_mesh]___",$guid_terrain_prefab_mesh,$file_content_return);
+    $file_content_return = str_replace("___[guid_terrain_mesh]___",$guid_terrain_mesh,$file_content_return);
+    $file_content_return = str_replace("___[x_pos_terrain]___",$x_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_terrain]___",$y_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_terrain]___",$z_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_terrain]___",$x_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_terrain]___",$y_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_terrain]___",$z_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[w_rotation_terrain]___",$w_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[x_scale_terrain]___",$x_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[y_scale_terrain]___",$y_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[z_scale_terrain]___",$z_scale_terrain,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_consumer_unity($term_meta_consumer_yaml,$guid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$guid_consumer_prefab_transform,$guid_consumer_prefab_child){
+
+    $file_content_return = str_replace("___[guid_prefab_consumer_parent]___",$guid_prefab_consumer_parent,$term_meta_consumer_yaml);
+    $file_content_return = str_replace("___[x_pos_consumer]___",$x_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_consumer]___",$y_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_consumer]___",$z_pos_consumer,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_consumer]___",$x_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_consumer]___",$y_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_consumer]___",$z_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[w_rotation_consumer]___",$w_rotation_consumer,$file_content_return);
+    $file_content_return = str_replace("___[name_consumer]___",$name_consumer,$file_content_return);
+    $file_content_return = str_replace("___[guid_consumer_prefab_transform]___",$guid_consumer_prefab_transform,$file_content_return);
+    $file_content_return = str_replace("___[guid_consumer_prefab_child]___",$guid_consumer_prefab_child,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$guid_transformation_parent_producer,$guid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
+
+    $file_content_return = str_replace("___[guid_producer]___",$guid_producer,$term_meta_producer_yaml);
+    $file_content_return = str_replace("___[x_pos_producer]___",$x_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_producer]___",$y_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_producer]___",$z_pos_producer,$file_content_return);
+    $file_content_return = str_replace("___[x_rot_parent]___",$x_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[y_rot_parent]___",$y_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[z_rot_parent]___",$z_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[w_rot_parent]___",$w_rot_parent,$file_content_return);
+    $file_content_return = str_replace("___[y_position_infoquad]___",$y_position_infoquad,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_quadselector]___",$y_pos_quadselector,$file_content_return);
+    $file_content_return = str_replace("___[turbine_name_class]___",$turbine_name_class,$file_content_return);
+    $file_content_return = str_replace("___[turbine_max_power]___",$turbine_max_power,$file_content_return);
+    $file_content_return = str_replace("___[turbine_cost]___",$turbine_cost,$file_content_return);
+    $file_content_return = str_replace("___[rotor_diameter]___",$rotor_diameter,$file_content_return);
+    $file_content_return = str_replace("___[turbine_windspeed_class]___",$turbine_windspeed_class,$file_content_return);
+    $file_content_return = str_replace("___[turbine_repair_cost]___",$turbine_repair_cost,$file_content_return);
+    $file_content_return = str_replace("___[turbine_damage_coefficient]___",$turbine_damage_coefficient,$file_content_return);
+    $file_content_return = str_replace("___[guid_transformation_parent_producer]___",$guid_transformation_parent_producer,$file_content_return);
+    $file_content_return = str_replace("___[guid_child_producer]___",$guid_child_producer,$file_content_return);
+    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[producer_name]___",$producer_name,$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[0],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_1]___",$power_curve_val[1],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_2]___",$power_curve_val[2],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_3]___",$power_curve_val[3],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_4]___",$power_curve_val[4],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_5]___",$power_curve_val[5],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_6]___",$power_curve_val[6],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_7]___",$power_curve_val[7],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_8]___",$power_curve_val[8],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_9]___",$power_curve_val[9],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_10]___",$power_curve_val[10],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_11]___",$power_curve_val[11],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_12]___",$power_curve_val[12],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_13]___",$power_curve_val[13],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_14]___",$power_curve_val[14],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_15]___",$power_curve_val[15],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_16]___",$power_curve_val[16],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_17]___",$power_curve_val[17],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_18]___",$power_curve_val[18],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_19]___",$power_curve_val[19],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_20]___",$power_curve_val[20],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_21]___",$power_curve_val[21],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_22]___",$power_curve_val[22],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_23]___",$power_curve_val[23],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_24]___",$power_curve_val[24],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_25]___",$power_curve_val[25],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_26]___",$power_curve_val[26],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_27]___",$power_curve_val[27],$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_decorator_unity($term_meta_decorator_yaml,$guid_decorator,$guid_decorator_obj,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
+
+    $file_content_return = str_replace("___[guid_decorator]___",$guid_decorator,$term_meta_decorator_yaml);
+    $file_content_return = str_replace("___[guid_decorator_obj]___",$guid_decorator_obj,$file_content_return);
+    $file_content_return = str_replace("___[x_pos_decorator]___",$x_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_pos_decorator]___",$y_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_pos_decorator]___",$z_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[x_rotation_decorator]___",$x_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_rotation_decorator]___",$y_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_rotation_decorator]___",$z_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[x_scale_decorator]___",$x_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[y_scale_decorator]___",$y_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);
+
+    return $file_content_return;
+}
+
 ?>
