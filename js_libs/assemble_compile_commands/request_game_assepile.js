@@ -1,9 +1,6 @@
 function wpunity_assepileAjax() {
 
-    if (jQuery("#currently-selected")[0].innerHTML =='Select a platform')
-        return;
-
-    //hideProgressSlider();
+    var platform = jQuery( "#platformInput" ).attr( "value" );
 
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
@@ -13,7 +10,7 @@ function wpunity_assepileAjax() {
             'action': 'wpunity_assepile_action',
             'gameId': my_ajax_object_assepile.id,
             'gameSlug': my_ajax_object_assepile.slug,
-            'gameFormat': jQuery("#currently-selected")[0].innerHTML
+            'gameFormat': platform
         },
         success : function(data) {
             console.log("Ajax 1:" + data);
@@ -163,7 +160,7 @@ function wpunity_assepileAjax() {
                 document.getElementById('wpunity_ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
 
 
-                if (jQuery("#currently-selected")[0].innerHTML == 'Web') {
+                if (platform === 'platform-web') {
                     document.getElementById('wpunity_weblink').style.visibility = 'visible';
                     document.getElementById('wpunity_weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
                 }

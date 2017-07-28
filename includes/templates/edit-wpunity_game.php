@@ -401,7 +401,7 @@ if ( $custom_query->have_posts() ) :?>
 				</section>
 				<footer class="mdc-dialog__footer">
 					<a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
-					<a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised">Proceed</a>
+					<a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised LinkDisabled">Proceed</a>
 				</footer>
 			</div>
 			<div class="mdc-dialog__backdrop"></div>
@@ -460,7 +460,8 @@ $wp_query = $temp_query;
         var platformSelect = MDCSelect.attachTo(platformDropdown);
 
         platformDropdown.addEventListener('MDCSelect:change', function() {
-            jQuery("#platformInput").attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+            jQuery( "#platformInput" ).attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+            jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
         });
 
 
@@ -501,7 +502,9 @@ $wp_query = $temp_query;
         function hideProgressSlider() {
             jQuery( "#compileProgressSlider" ).hide();
             jQuery( "#compileProgressTitle" ).hide();
-            jQuery("#platform-select").removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+            jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+
+            jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
         }
 
 	</script>
