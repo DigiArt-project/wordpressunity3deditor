@@ -427,7 +427,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) );
         $is_exit_button_active = 1;//TODO
         $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
-        $featured_image_sprite_guid = 0;//if there's no Featured Image
+        $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_sprite_id != ''){$featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);}
 
         $file_content = wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active);
@@ -473,7 +473,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
             $term_meta_s_help = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_help',true);
             $text_help_scene = get_post_meta($scene_id,'wpunity_scene_help_text',true);
             $img_help_scene_id = get_post_meta($scene_id,'wpunity_scene_helpimg',true);
-            $img_help_scene_guid = 0; //if there's no Featured Image (custom field at Main Menu)
+            $img_help_scene_guid = 'dad02368a81759f4784c7dbe752b05d6'; //if there's no Featured Image (custom field at Main Menu)
             if($img_help_scene_id != ''){$img_help_scene_guid = wpunity_compile_sprite_upload($img_help_scene_id,$gameSlug,$scene_id);}
             $file_content3 = wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid);
 
@@ -507,7 +507,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $credits_content = $scene_post->post_content;
 
         $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
-        $featured_image_sprite_guid = 0; //if there's no Featured Image
+        $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6'; //if there's no Featured Image
         if($featured_image_sprite_id != ''){$featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);}
         $file_content5 = wpunity_replace_creditsscene_unity($term_meta_s_credits,$credits_content,$featured_image_sprite_guid);
 
@@ -529,7 +529,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $scene_desc = $scene_post->post_content;
 
         $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
-        $featured_image_edu_sprite_guid = 0;//if there's no Featured Image
+        $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
         $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy);
