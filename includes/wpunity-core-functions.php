@@ -477,16 +477,16 @@ function wpunity_assepile_action_callback(){
         $gameFormat = $_REQUEST['gameFormat'];
 
         switch($gameFormat){
-            case 'Windows':
+            case 'platform-windows':
                 $gameFormatParameter = ' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
                 break;
-            case 'Mac OS':
+            case 'platform-mac':
                 $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
                 break;
-            case 'Linux':
+            case 'platform-linux':
                 $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
                 break;
-            case 'Web':
+            case 'platform-web':
                 $gameFormatParameter = ' -executeMethod WebGLBuilder.build';
                 break;
             default:
