@@ -635,9 +635,11 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
     //Create guid for the tile
-    $guid_tile_sceneselector = wpunity_create_guids('tile',$scene_id);
+    $guid_tile_sceneselector = wpunity_create_fids($scene_id);
+
+    $guid_tile_recttransform = wpunity_create_fids_rect($scene_id);
     //Add Scene to initial part of Scene Selector
-    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector);
+    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform);
 
     //Add second part of the new Scene Tile
     $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
@@ -654,13 +656,14 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
     $text_description_tile = $scene_desc;
     $name_of_scene_to_load = $scene_name;//without .unity (we generate unity files with post slug as name)
 
-    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load);
+
+    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load,$guid_tile_recttransform);
     $LF = chr(10); // line change
     file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
 
 }
 
-function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_sceneselector){
+function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform){
     # ReplaceChildren
     $LF = chr(10); // line change
 
@@ -672,7 +675,7 @@ function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_scenes
     $content = fread($handle, filesize($sceneSelectorFile));
     fclose($handle);
 
-    $tile_name='- {fileID: '. $guid_tile_sceneselector .'}';
+    $tile_name='- {fileID: '. $guid_tile_recttransform .'}';
     // b. add obj
     $content = str_replace(
         '# ReplaceChildren',
@@ -686,7 +689,7 @@ function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_scenes
 
 }
 
-function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load){
+function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load,$guid_tile_recttransform){
     $file_content_return = str_replace("___[guid_tile_sceneselector]___",$guid_tile_sceneselector,$term_meta_s_selector2);
     $file_content_return = str_replace("___[seq_index_of_scene]___",$seq_index_of_scene,$file_content_return);
     $file_content_return = str_replace("___[tile_pos_x]___",$tile_pos_x,$file_content_return);
@@ -696,6 +699,7 @@ function wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$til
     $file_content_return = str_replace("___[text_title_tile]___",$text_title_tile,$file_content_return);
     $file_content_return = str_replace("___[text_description_tile]___",$text_description_tile,$file_content_return);
     $file_content_return = str_replace("___[name_of_scene_to_load]___",$name_of_scene_to_load,$file_content_return);
+    $file_content_return = str_replace("___[guid_tile_recttransform]___",$guid_tile_recttransform,$file_content_return);
 
     return $file_content_return;
 }

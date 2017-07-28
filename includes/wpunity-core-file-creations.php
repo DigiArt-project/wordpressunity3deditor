@@ -143,7 +143,7 @@ function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
         case 'obj': $objType = "3"; break;
         case 'mat': $objType = "4".$extra_id_material; break; // an obj can have two or more mat
         case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
-        case 'tile': $objType = "6".$extra_id_material; break; // an obj can have multiple textures jpg
+        //case 'tile': $objType = "6".$extra_id_material; break; // an obj can have multiple textures jpg
     }
 
     return str_pad($objType, 4, "0", STR_PAD_LEFT) . str_pad($objID, 28, "0", STR_PAD_LEFT);
@@ -156,6 +156,9 @@ function wpunity_create_fids($id){
     return str_pad($id, 10, "0", STR_PAD_LEFT);
 }
 
+function wpunity_create_fids_rect($id){
+    return '1' . str_pad($id, 9, "0", STR_PAD_LEFT);
+}
 
 function wpunity_replace_foldermeta($file_content,$folderID){
     $unix_time = time();

@@ -12106,7 +12106,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ab777fb2dff33fd469c6ae98715913a1, type: 2}
   m_IsPrefabParent: 0
---- !u!224 &746937033 stripped
+--- !u!224 &___[guid_tile_recttransform]___ stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224303536868538874, guid: ab777fb2dff33fd469c6ae98715913a1,
     type: 2}
