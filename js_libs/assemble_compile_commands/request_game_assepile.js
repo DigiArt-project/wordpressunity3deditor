@@ -3,6 +3,7 @@ function wpunity_assepileAjax() {
     var platform = jQuery( "#platformInput" ).attr( "value" );
     var compilationProgressText = jQuery( "#compilationProgressText" );
     window.unity_pid = -1;
+    jQuery( "#compileCancelBtn" ).attr('data-unity-pid', window.unity_pid);
 
     compilationProgressText.append( '<p>Compiling project...</p>' );
 
@@ -18,9 +19,12 @@ function wpunity_assepileAjax() {
         },
 
         success : function(unity_pid) {
+
             console.log("Ajax 1 unity_pid:" + unity_pid);
 
             window.unity_pid = unity_pid.replace(/^\s+|\s+$/g , "");
+
+            jQuery( "#compileCancelBtn" ).attr('data-unity-pid', window.unity_pid).removeClass( "LinkDisabled" );
 
         },
 
@@ -32,9 +36,9 @@ function wpunity_assepileAjax() {
 
 
     // Check periodically if window.unity_pid has a value (unity process id)
-    intervFn2 = setInterval(function(){
+    var intervFn2 = setInterval(function(){
 
-        if (window.unity_pid == -1)
+        if (window.unity_pid === -1)
             return;
 
         var intervalFn = 0;
@@ -197,26 +201,28 @@ function wpunity_assepileAjax() {
 }
 
 // Kill the compile
-function wpunity_killtask_compile(){
+function wpunity_killtask_compile(pid) {
 
+    if (pid === -1) {
+        console.log("Couldn't find process!")
+    }
 
     jQuery.ajax({
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
         type : 'GET',
         data : {
             'action': 'wpunity_killtask_compiling_action',
-            'pid': window.unity_pid,
+            'pid': pid
         },
-
         success : function(result) {
             console.log("Ajax 4 KILL result unity_pid:" + result);
+            hideProgressSlider();
         },
 
         error : function(xhr, ajaxOptions, thrownError) {
             console.log("Ajax 4: ERROR: " + thrownError);
         }
     });
-
 
 
 }

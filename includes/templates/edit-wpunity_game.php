@@ -441,8 +441,16 @@ $wp_query = $temp_query;
             compileDialog.show();
         });
 
-        jQuery( "#compileCancelBtn" ).click(function() {
-            hideProgressSlider();
+        jQuery( "#compileCancelBtn" ).click(function(e) {
+
+            var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
+
+            console.log(pid);
+
+            if (pid) {
+                wpunity_killtask_compile(pid);
+            }
+
         });
 
 
@@ -458,12 +466,9 @@ $wp_query = $temp_query;
             jQuery( "#wpunity-ziplink" ).hide();
             jQuery( "#wpunity-weblink" ).hide();
 
-            jQuery( "#compilationProgressText" ).html();
-
-
+            jQuery( "#compilationProgressText" ).html("");
 
             wpunity_assepileAjax();
-
 
         });
 
@@ -494,6 +499,7 @@ $wp_query = $temp_query;
         var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
         var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
         compileDialog.focusTrap_.deactivate();
+
 
         deleteDialog.listen('MDCDialog:accept', function(evt) {
             console.log("ID:", deleteDialog.id);
