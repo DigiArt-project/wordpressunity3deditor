@@ -460,7 +460,11 @@ $wp_query = $temp_query;
 
             jQuery( "#compilationProgressText" ).html();
 
+
+
             wpunity_assepileAjax();
+
+
         });
 
         var MDCSelect = mdc.select.MDCSelect;

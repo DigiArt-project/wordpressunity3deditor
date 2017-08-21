@@ -2,6 +2,7 @@ function wpunity_assepileAjax() {
 
     var platform = jQuery( "#platformInput" ).attr( "value" );
     var compilationProgressText = jQuery( "#compilationProgressText" );
+    window.unity_pid = -1;
 
     compilationProgressText.append( '<p>Compiling project...</p>' );
 
@@ -16,8 +17,11 @@ function wpunity_assepileAjax() {
             'gameFormat': platform
         },
 
-        success : function(data) {
-            console.log("Ajax 1:" + data);
+        success : function(unity_pid) {
+            console.log("Ajax 1 unity_pid:" + unity_pid);
+
+            window.unity_pid = unity_pid.replace(/^\s+|\s+$/g , "");
+
         },
 
         error : function(xhr, ajaxOptions, thrownError) {
@@ -26,101 +30,108 @@ function wpunity_assepileAjax() {
         }
     });
 
-    // ajax 2: Start monitoring with repeating interval
 
-    var intervalFn = 0;
-    var start_time = new Date().getTime();
+    // Check periodically if window.unity_pid has a value (unity process id)
+    intervFn2 = setInterval(function(){
 
-    intervalFn = setInterval(function() {
+        if (window.unity_pid == -1)
+            return;
 
-        reqMonitor = jQuery.ajax({
-            url : isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
-            type : 'POST',
-            cache: false,
-            timeout: 3600000, // 1 hour
-            data: {
-                'action': 'wpunity_monitor_compiling_action',
-                'dirpath': my_ajax_object_assepile.gameUnityProject_dirpath  //"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"} , //my_ajax_object_assepile.id,
-            },
-            success : function(response) {
+        var intervalFn = 0;
+        var start_time = new Date().getTime();
 
-                if ((new Date().getTime() - start_time) / 1000 < 12) {
-                    console.log("Monitoring ignore when < 12sec ");
-                    return;
-                }
+        // ajax 2: Start monitoring with repeating interval
+        intervalFn = setInterval(function() {
 
-                var jsonArr = JSON.parse(response);
+            reqMonitor = jQuery.ajax({
+                url : isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
+                type : 'POST',
+                cache: false,
+                timeout: 3600000, // 1 hour
+                data: {
+                    'action': 'wpunity_monitor_compiling_action',
+                    'pid': window.unity_pid,
+                    'dirpath': my_ajax_object_assepile.gameUnityProject_dirpath  //"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"} , //my_ajax_object_assepile.id,
+                },
+                success : function(response) {
 
-                var procMonitor = jsonArr.CSV;
-                var logfile = jsonArr.LOGFILE;
+                    var jsonArr = JSON.parse(response);
 
-                var completedFlag = false;
-                var successFlag = false;
+                    var procMonitor = jsonArr.CSV;
+                    var logfile = jsonArr.LOGFILE;
 
-                console.log('Task report', procMonitor);
+                    var completedFlag = false;
+                    var successFlag = false;
 
-                if (procMonitor.length === 0 || procMonitor.indexOf("No tasks are running") > 0) {
-                     completedFlag = true;
-                     successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
-                }
+                    console.log('Task report', procMonitor);
 
-                if (!completedFlag) {
-
-                    var counterLines = logfile.split(/\r\n|\r|\n/).length;
-
-                    // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
-                    //     + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                    console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
-
-                    //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
-                } else {
-                    //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
-
-                    console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
-
-
-                    if (successFlag) {
-                        //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
-                        //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
-
-                        console.log("Ajax 2: Compile Result: Success");
-
-                        compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
-
-                        // After success we start the Ajax
-                        myzipajax();
-
-
-                        clearInterval(intervalFn);
-                    } else {
-
-                        console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
-
-                        compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
-
-                        clearInterval(intervalFn);
-                        //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
-
-                        hideProgressSlider();
+                    if (procMonitor.indexOf("No tasks are running") > 0) {
+                        completedFlag = true;
+                        successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                     }
+
+                    if (!completedFlag) {
+
+                        var counterLines = logfile.split(/\r\n|\r|\n/).length;
+
+                        // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
+                        //     + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                        console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+                        //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
+                    } else {
+                        //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
+
+                        console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
+
+
+                        if (successFlag) {
+                            //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
+                            //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
+
+                            console.log("Ajax 2: Compile Result: Success");
+
+                            compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
+
+                            // After success we start the Ajax
+                            myzipajax();
+
+
+                            clearInterval(intervalFn);
+                        } else {
+
+                            console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
+
+                            compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
+
+                            clearInterval(intervalFn);
+                            //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
+
+                            hideProgressSlider();
+                        }
+                    }
+
+
+                },
+                error : function(xhr, ajaxOptions, thrownError){
+                    // document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
+                    //     xhr.getAllResponseHeaders() + " " + thrownError;
+
+                    console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
+
+                    clearInterval(intervalFn);
+                    //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
+
+                    hideProgressSlider();
                 }
+            });
+        }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
 
+        clearInterval(intervFn2);
 
-            },
-            error : function(xhr, ajaxOptions, thrownError){
-                // document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
-                //     xhr.getAllResponseHeaders() + " " + thrownError;
+    }, 1000);
 
-                console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
-
-                clearInterval(intervalFn);
-                //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
-
-                hideProgressSlider();
-            }
-        });
-    }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
 
     // Ajax 3: ZIP the game folder and provide link to download
     function myzipajax() {
@@ -183,4 +194,29 @@ function wpunity_assepileAjax() {
             }
         });
     }
+}
+
+// Kill the compile
+function wpunity_killtask_compile(){
+
+
+    jQuery.ajax({
+        url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
+        type : 'GET',
+        data : {
+            'action': 'wpunity_killtask_compiling_action',
+            'pid': window.unity_pid,
+        },
+
+        success : function(result) {
+            console.log("Ajax 4 KILL result unity_pid:" + result);
+        },
+
+        error : function(xhr, ajaxOptions, thrownError) {
+            console.log("Ajax 4: ERROR: " + thrownError);
+        }
+    });
+
+
+
 }

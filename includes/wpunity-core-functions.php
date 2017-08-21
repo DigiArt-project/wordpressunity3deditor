@@ -497,8 +497,42 @@ function wpunity_assepile_action_callback(){
 
         if ($os === 'win') {
             $os_bin = 'bat';
-            $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
+//            $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
+//                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
+
+
+            $txt = '@echo off'."\n"; // change line always with double quote
+            $txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
+
+            $txt .= "\n";
+            $txt .= 'ECHO %PID%';
+            $txt .= "\n";
+            $txt .= 'exit'; // exit command useful for not showing again the command prompt
+            $txt .= "\n";
+
+$txt .= '
+:spawn command args
+:: sets %PID% on completion
+@echo off
+setlocal
+set "PID="
+set "return="
+set "args=%*"
+set "args=%args:\=\\%"
+
+for /f "tokens=2 delims==;" %%I in (
+    \'wmic process call create "%args:"=\"%" ^| find "ProcessId"\'
+) do set "return=%%I"
+
+endlocal & set "PID=%return: =%"
+goto :EOF
+@echo on';
+
+
+
+
+
+
 
             $compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
@@ -519,16 +553,17 @@ function wpunity_assepile_action_callback(){
         fclose($myfile);
         chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
-        $output = shell_exec($compile_command);
+        $unity_pid = shell_exec($compile_command);
         //---------------------------------------
 
         chdir($init_gcwd);
 
         // Write to wp-admin dir the shell_exec cmd result
         $hf = fopen('output.txt', 'w');
-        fwrite($hf, $output);
+        fwrite($hf, $unity_pid);
         fclose($hf);
 
+        echo $unity_pid;
     }
 
 //    fake_compile_for_a_test_project();
@@ -574,13 +609,41 @@ function wpunity_monitor_compiling_action_callback(){
 
 	if ($os === 'lin')
 		$processUnityCSV = exec('pgrep Unity');
-	 else
-		$processUnityCSV = exec('TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV');
+	 else {
+	     //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
+         $phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
+         $processUnityCSV = exec($phpcomd);
+     }
 
 	echo json_encode(array('CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 
 	wp_die();
 }
+
+
+//---- AJAX KILL TASK: KILL COMPILE PROCESS ------
+function wpunity_killtask_compiling_action_callback(){
+    $DS = DIRECTORY_SEPARATOR;
+
+    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+
+
+
+    if ($os === 'lin') {
+     //  $killres = exec(???);
+    }else {
+
+        $phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
+        $killres = exec($phpcomd);
+    }
+
+
+    echo $killres;
+
+    wp_die();
+}
+
+
 
 //---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
