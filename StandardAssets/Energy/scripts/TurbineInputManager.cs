@@ -32,6 +32,8 @@ public class TurbineInputManager : MonoBehaviour {
 		PopUpCanvas.gameObject.SetActive (true);
 		turbineController = GetComponent<TurbineController>();
 		InitializePopUpText();
+		// We have to talk about this tracking point
+		//GoedleAnalytics.track ("add.turbineDetailed",null,turbineController.turbineEnergyOutput.ToString());
 
 		infoQuad = transform.Find("InfoQuad").gameObject;
 		infoQuadText = infoQuad.transform.Find("InfoQuadText").gameObject;
@@ -46,12 +48,12 @@ public class TurbineInputManager : MonoBehaviour {
 		foreach (Transform tr in transform)
 			if (tr.gameObject.tag == "producer_mesh") {
 				turbine_Fan = tr.Find ("Turbine_Fan").gameObject;
-				turbine_Main= tr.Find ("Turbine_Main").gameObject;	 
+				turbine_Main= tr.Find ("Turbine_Main").gameObject;
 			}
 
 		original_material = turbine_Fan.GetComponent<Renderer> ().material;
 		defaultMat.CopyPropertiesFromMaterial (original_material);
-		highlightedMat.color = Color.cyan; 
+		highlightedMat.color = Color.cyan;
 		transparentMat.color = Color.black;
 
 	}
@@ -72,13 +74,10 @@ public class TurbineInputManager : MonoBehaviour {
 		if (turbineController.isConstructed) {
 			if (turbineController.isRotating && !turbineController.isDamaged) {
 				turbineController.DisableTurbine ();
-				GoedleAnalytics.track ("disable.turbine");
 			} else if (!turbineController.isRotating && !turbineController.isDamaged) {
 				turbineController.EnableTurbine ("onTurbine");
-				GoedleAnalytics.track ("enable.turbine");
 			} else if (turbineController.isDamaged) {
 				turbineController.repairTurbine ();
-				GoedleAnalytics.track ("repair.turbine");
 			}
 		}
 	}

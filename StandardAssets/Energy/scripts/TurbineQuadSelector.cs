@@ -57,7 +57,13 @@ public class TurbineQuadSelector : MonoBehaviour {
 		infoQuadText.GetComponent<MeshRenderer>().enabled = true;
 
 		if(Input.GetMouseButtonDown(0)){
-			GoedleAnalytics.track ("add.turbine");
+
+			string turbine_name = transform.parent.gameObject.name;
+			// Marc: set an event here ti indicate: the user builds a turbine withe name turbine_name
+			GoedleAnalytics.track ("add.detailedturbine", turbine_name );
+			Debug.Log("I have build turbine: " + turbine_name);
+
+
 
 			simulation.totalIncome -= turbineController.turbineCost;
 

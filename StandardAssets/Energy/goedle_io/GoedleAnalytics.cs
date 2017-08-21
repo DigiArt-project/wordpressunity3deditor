@@ -122,6 +122,7 @@ namespace goedle_sdk
             tracking_enabled = false;
             Debug.LogWarning("Your Unity version does not support native plugins. Disabling goedle.io.");
             #endif
+			Debug.Log ('GIO SDK initialized');
 			System.Guid user_id = System.Guid.NewGuid();
 
 			if (tracking_enabled && gio_interface  == null) {				

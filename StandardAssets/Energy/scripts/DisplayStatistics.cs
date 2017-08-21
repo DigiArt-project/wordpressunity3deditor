@@ -49,7 +49,12 @@ public class DisplayStatistics : MonoBehaviour {
 	}
 	
 	void DisplayPlayerStatistics(){
-		GoedleAnalytics.track ("show.statistics");
+		GoedleAnalytics.track ("submit.score", "time_underpower", (underPowerMin*60+underPowerSec).ToString());
+		GoedleAnalytics.track ("submit.score", "time_correctpower", (correctPowerMin*60+correctPowerSec).ToString());
+		GoedleAnalytics.track ("submit.score", "time_overpower", (overPowerMin*60+overPowerSec).ToString());
+		GoedleAnalytics.track ("submit.score", "money_earned", moneyEarned.ToString());
+		GoedleAnalytics.track ("submit.score","energy_produced",energyProduced.ToString());
+		GoedleAnalytics.track ("submit.score","time_played",(underPowerMin*60+underPowerSec+correctPowerMin*60+correctPowerSec+overPowerMin*60+overPowerSec).ToString() );
 
 		underPowerUsageText.text = "Under power :  " + underPowerMin.ToString() + " minutes and " + underPowerSec.ToString() + " seconds" ;
 		correctPowerUsageText.text = "Correct power :  " + correctPowerMin.ToString() + " minutes and " + correctPowerSec.ToString() + " seconds" ;

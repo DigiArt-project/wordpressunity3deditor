@@ -13,32 +13,45 @@ public class Menu_Script : MonoBehaviour {
 
 
 	public void onClick_LoadScene(string sceneName){
+		GoedleAnalytics.track ("select.educationalScene",sceneName);
+
 		SceneManager.LoadScene(sceneName);
 	}
 
 	public void onClick_LoadCredsScene(){
 		SceneManager.LoadScene("S_Credits");
+		GoedleAnalytics.track ("select.scence","S_Credits");
 	}
 
 	public void onClick_LoadSceneSelectorScene(){
 		SceneManager.LoadScene("S_SceneSelector");
+		GoedleAnalytics.track ("select.scence","S_SceneSelector");
+
 	}
 
 	public void onClick_LoadMainMenuScene(){
 		SceneManager.LoadScene("S_MainMenu");
+		GoedleAnalytics.track ("select.scence","S_MainMenu");
+
 	}
 
 	public void onClick_LoadSettingsScene(){
 		SceneManager.LoadScene("S_Settings");
+		GoedleAnalytics.track ("select.scence","S_Settings");
+
 	}
-	
+
 	public void onClick_LoadLoginScene(){
 		SceneManager.LoadScene("S_Login");
+		GoedleAnalytics.track ("select.scence","S_Login");
+
 	}
 
 
 	public void onClick_LoadHelpScene(){
 		SceneManager.LoadScene("S_Help");
+		GoedleAnalytics.track ("select.scence","S_Help");
+
 	}
 	
 

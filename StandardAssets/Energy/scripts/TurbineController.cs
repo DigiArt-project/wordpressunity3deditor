@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using goedle_sdk;
 
 public class TurbineController : MonoBehaviour {
-	
+
 	private TurbineInputManager inputManager;
 	private Simulation simulation;
 	GameObject turbineFan;
@@ -15,7 +16,7 @@ public class TurbineController : MonoBehaviour {
 
 	public bool isRotating = false;
 
-	public bool isEmiting = false; //Smoke 
+	public bool isEmiting = false; //Smoke
 
 	public bool isRepaired = false;
 
@@ -28,7 +29,7 @@ public class TurbineController : MonoBehaviour {
 	public float  turbineRepairCost = 0.5f;
 	public float  damageProbCoefficient = 0.005f;
 
-	// Damage 
+	// Damage
 	public bool isDamaged = false;
 
 	private float turbineUsage;
@@ -54,7 +55,9 @@ public class TurbineController : MonoBehaviour {
 		// Damage
 		float startCall = damageStartTime; //Random.Range(0.0f,90.0f);
 		float rate = 1;       //Random.Range(120.0f,300.0f);
-		InvokeRepeating("CalculateDamagePropability",startCall,rate); 		//Calls the method for the first time in "startCall" with a repeat rate of the "rate" value.		 
+		InvokeRepeating("CalculateDamagePropability",startCall,rate); 		//Calls the method for the first time in "startCall" with a repeat rate of the "rate" value.
+		//GoedleAnalytics.track ("add.detailedturbine", gameObject.name,turbineEnergyOutput.ToString());
+
 	}
 
 
@@ -79,11 +82,11 @@ public class TurbineController : MonoBehaviour {
 			//used for disables rotation when wind is low
 			if(simulation.currentWindSpeed < 3 && isRotating)
 				DisableOnWindLow();
-		
-			 
+
+
 			if(simulation.currentWindSpeed > 3 && !isRotating && lowWindDisabled)
 				EnableOnWindHigh();
-			
+
 		}
 
 		if(isDamaged && !isEmiting ){
@@ -98,7 +101,7 @@ public class TurbineController : MonoBehaviour {
 	}
 
 
-	/* 
+	/*
 	make turbines stop rotating when wind is below 4 m/s.
 	*/
 	public void DisableOnWindLow(){
@@ -107,7 +110,7 @@ public class TurbineController : MonoBehaviour {
 	}
 
 
-	/* 
+	/*
 	make turbines rotate again when wind is not below
 	the low speed.
 	*/
@@ -117,21 +120,34 @@ public class TurbineController : MonoBehaviour {
 	}
 
 	public void repairTurbine(){
+
+
 		//decreases total income
 		if(simulation.totalIncome >= 1){
 			simulation.totalIncome -= turbineRepairCost;
 			turbineRepair();
+
+			Debug.Log("I have repaired turbine" + gameObject.name);
+			GoedleAnalytics.track ("repair.turbine", gameObject.name);
 			simulation.damagedTurbines--;
 		}
 	}
 
 	public void DisableTurbine(){
+
+		Debug.Log("I have disabled turbine" + gameObject.name);
+		GoedleAnalytics.track ("disable.turbine", gameObject.name);
+
 		//StartCoroutine(simulation.calculateSubstractedPower());
     	isRotating = false;
-		simulation.numberOfTurbinesOperating--;	
+		simulation.numberOfTurbinesOperating--;
 	}
 
 	public void EnableTurbine(string who){
+
+		Debug.Log("I have enabled turbine" + gameObject.name);
+		GoedleAnalytics.track ("enable.turbine", gameObject.name);
+
 		//used to display the numbers for the output values next to the minimap
 		//StartCoroutine(simulation.calculateAddedPower());
 		isRotating = true;
