@@ -107,7 +107,7 @@ function wpunity_assepileAjax() {
 
                             console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error or process killed' + logfile);
 
-                            compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
+                            compilationProgressText.append( '<p>Compilation error!</p>');
 
                             clearInterval(intervalFn);
                             //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
@@ -219,6 +219,8 @@ function wpunity_killtask_compile(pid) {
         success : function(result) {
             console.log("Ajax 4 KILL result unity_pid:" + result);
             hideProgressSlider();
+            jQuery( "#compilationProgressText" ).html("");
+
         },
 
         error : function(xhr, ajaxOptions, thrownError) {
