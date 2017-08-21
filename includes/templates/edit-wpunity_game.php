@@ -378,11 +378,14 @@ if ( $custom_query->have_posts() ) :?>
                     </div>
                     <input id="platformInput" type="hidden">
 
+
+                    <h3 class="mdc-typography--subheading2" style="float: right;"> Memory Usage: <span id="unityTaskMemValue">0</span> KB </h3>
+
                     <hr class="WhiteSpaceSeparator">
 
                     <h2 id="compileProgressTitle" class="mdc-typography--caption CenterContents" style="display: none"> Creating your game... </h2>
 
-                    <div class="progressSlider" id="compileProgressSlider" style="display: none">
+                    <div class="progressSlider" id="compileProgressSlider" style="display: none;">
                         <div class="progressSliderLine"></div>
                         <div class="progressSliderSubLine progressIncrease"></div>
                         <div class="progressSliderSubLine progressDecrease"></div>
@@ -467,6 +470,8 @@ $wp_query = $temp_query;
             jQuery( "#wpunity-weblink" ).hide();
 
             jQuery( "#compilationProgressText" ).html("");
+
+            jQuery('#unityTaskMemValue').html("0");
 
             wpunity_assepileAjax();
 
