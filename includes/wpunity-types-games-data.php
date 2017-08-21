@@ -180,6 +180,7 @@ function wpunity_games_assemblerbox_show(){
 // the ajax phps are on wpunity-core-functions.php
 add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
 add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
+add_action( 'wp_ajax_wpunity_killtask_compiling_action', 'wpunity_killtask_compiling_action_callback' );
 add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
 
 // Assemble php from ajax call

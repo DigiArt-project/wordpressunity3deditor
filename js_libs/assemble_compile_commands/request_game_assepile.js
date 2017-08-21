@@ -105,7 +105,7 @@ function wpunity_assepileAjax() {
                             clearInterval(intervalFn);
                         } else {
 
-                            console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error ' + logfile);
+                            console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error or process killed' + logfile);
 
                             compilationProgressText.append( '<p>Compilation error:  </p>' + logfile );
 
@@ -205,11 +205,13 @@ function wpunity_killtask_compile(pid) {
 
     if (pid === -1) {
         console.log("Couldn't find process!")
+    } else {
+        console.log("Killing process!" + pid);
     }
 
     jQuery.ajax({
         url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object_assepile.ajax_url,
-        type : 'GET',
+        type : 'POST',
         data : {
             'action': 'wpunity_killtask_compiling_action',
             'pid': pid
