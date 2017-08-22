@@ -65,8 +65,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             $help_desc = esc_attr(strip_tags($_POST['help-description']));
             update_post_meta($scene_id, 'wpunity_scene_help_text', $help_desc);
             $help_image =  $_FILES['help-image'];
-            $attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
-            update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
+            if($help_image['size']!=0){
+                $attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
+                update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
+            }
         }
 
 		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
@@ -188,7 +190,11 @@ get_header(); ?>
                                 <h2 class="mdc-typography--title">Help image</h2>
                                 <input type="file" name="help-image" title="Help image">
 
-                                <?php echo get_post_meta($scene_id, 'wpunity_scene_helpimg', true); ?>
+                                <?php $help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
+                                $help_imgURL = wp_get_attachment_url( $help_imgID );
+                                echo '<img src="' . $help_imgURL . '" width=100% height=auto />';
+                                ?>
+
                             </div>
                         </div>
 					<?php } ?>

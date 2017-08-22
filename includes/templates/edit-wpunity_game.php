@@ -379,7 +379,7 @@ if ( $custom_query->have_posts() ) :?>
                     <input id="platformInput" type="hidden">
 
 
-                    <h3 class="mdc-typography--subheading2" style="float: right;"> Memory Usage: <span id="unityTaskMemValue">0</span> KB </h3>
+                    <div class="mdc-typography--caption mdc-theme--text-primary-on-background" style="float: right;"> <i title="Memory Usage" class="material-icons AlignIconToBottom">memory</i> <span  id="unityTaskMemValue">0</span> KB </div>
 
                     <hr class="WhiteSpaceSeparator">
 
