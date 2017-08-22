@@ -100,6 +100,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
 			update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
 		}elseif($assetCatTerm->slug == 'terrain'){
+            //Income (in $)
+            $safe_income_values = range(-5,5,0.5);
+            $underPowerIncome = floatval($_POST['underPowerIncomeVal']);
+            $correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
+            $overPowerIncome = floatval($_POST['overPowerIncomeVal']);
+            if ( ! in_array( $underPowerIncome, $safe_income_values, true ) ) {$underPowerIncome = '';}
+            if ( ! in_array( $correctPowerIncome, $safe_income_values, true ) ) {$correctPowerIncome = '';}
+            if ( ! in_array( $overPowerIncome, $safe_income_values, true ) ) {$overPowerIncome = '';}
+
+            $energyConsumptionIncome = array('under' => $underPowerIncome,'correct' => $correctPowerIncome,'over' => $overPowerIncome);
+
 			//Construction Penalties (in $)
 			$safe_penalty_values = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
 			$accessCostPenalty = intval($_POST['accessCostPenalty']);
@@ -127,6 +138,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 			$physicsValues = array('min' => $physicsWindMinVal,'max' => $physicsWindMaxVal,'mean' => $physicsWindMeanVal,'variance' => $physicsWindVarianceVal);
 
+            update_post_meta( $asset_id, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome );
 			update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
 			update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
 		}elseif($assetCatTerm->slug == 'producer') {
