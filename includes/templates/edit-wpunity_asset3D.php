@@ -969,9 +969,9 @@ get_header(); ?>
             var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
             var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
-            var energyOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: 0.5, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
-            var energyCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: 1, valId:"#currentPowerIncomeVal", step: 0.5, units:"$"});
-            var energyUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: 0, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
+            var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: 0.5, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
+            var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: 1, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
+            var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: 0, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
 
             var index = 0;
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
