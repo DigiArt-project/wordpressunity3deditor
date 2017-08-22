@@ -489,7 +489,7 @@ get_header(); ?>
                 </div>
 
 
-                <h3 class="mdc-typography--title">Income (in $)</h3>
+                <h3 class="mdc-typography--title">Income</h3>
                 <h6 class="mdc-typography--caption"> Applied to all components on the terrain </h6>
 
 
