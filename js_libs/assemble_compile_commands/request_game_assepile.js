@@ -81,10 +81,14 @@ function wpunity_assepileAjax() {
                         var infoArr = procMonitor.replace(/\"/g, "");
                         infoArr = infoArr.split(",");
 
+
+                        // FIX THIS
                         var memVal = infoArr[4].slice(0, -2);
+
+
                         jQuery('#unityTaskMemValue').html(memVal);
 
-                        console.log();
+
 
                         // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
                         //     + (new Date().getTime() - start_time)/1000 + " seconds";
