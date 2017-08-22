@@ -70,87 +70,87 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	if($asset_id) {
 
-        $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-        if($assetCatTerm->slug == 'consumer'){
-            //Energy Consumption Cost (in $)
-            $safe_cost_values = range(-5,5,0.5);
-            $underPowerCost = floatval($_POST['underPowerCost']);
-            $normalPowerCost = floatval($_POST['normalPowerCost']);
-            $overPowerCost = floatval($_POST['overPowerCost']);
-            if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
-            if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
-            if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
+		$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+		if($assetCatTerm->slug == 'consumer'){
+			//Energy Consumption Cost (in $)
+			$safe_cost_values = range(-5,5,0.5);
+			$underPowerCost = floatval($_POST['underPowerCost']);
+			$normalPowerCost = floatval($_POST['normalPowerCost']);
+			$overPowerCost = floatval($_POST['overPowerCost']);
+			if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
+			if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
+			if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
 
-            $energyConsumptionCost = array('under' => $underPowerCost,'normal' => $normalPowerCost,'over' => $overPowerCost);
+			$energyConsumptionCost = array('under' => $underPowerCost,'normal' => $normalPowerCost,'over' => $overPowerCost);
 
-            //Energy Consumption
-            $safe_cons_values = range(0, 2000, 5);
-            $safe_cons_values2 = range(0, 1000, 5);
-            $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
-            $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
-            $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
-            $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
-            if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
-            if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
-            if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
-            if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values2, true ) ) {$energyConsumptionVarianceVal = '';}
+			//Energy Consumption
+			$safe_cons_values = range(0, 2000, 5);
+			$safe_cons_values2 = range(0, 1000, 5);
+			$energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+			$energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+			$energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+			$energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+			if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
+			if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
+			if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
+			if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values2, true ) ) {$energyConsumptionVarianceVal = '';}
 
-            $energyConsumption = array('min' => $energyConsumptionMinVal,'max' => $energyConsumptionMaxVal,'mean' => $energyConsumptionMeanVal,'var' => $energyConsumptionVarianceVal);
+			$energyConsumption = array('min' => $energyConsumptionMinVal,'max' => $energyConsumptionMaxVal,'mean' => $energyConsumptionMeanVal,'var' => $energyConsumptionVarianceVal);
 
-            update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
-            update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
-        }elseif($assetCatTerm->slug == 'terrain'){
-            //Construction Penalties (in $)
-            $safe_penalty_values = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
-            $accessCostPenalty = intval($_POST['accessCostPenalty']);
-            $archProximityPenalty = intval($_POST['archProximityPenalty']);
-            $naturalReserveProximityPenalty = intval($_POST['naturalReserveProximityPenalty']);
-            $hiVoltLineDistancePenalty = intval($_POST['hiVoltLineDistancePenalty']);
-            if ( ! in_array( $accessCostPenalty, $safe_penalty_values, true ) ) {$accessCostPenalty = '';}
-            if ( ! in_array( $archProximityPenalty, $safe_penalty_values, true ) ) {$archProximityPenalty = '';}
-            if ( ! in_array( $naturalReserveProximityPenalty, $safe_penalty_values, true ) ) {$naturalReserveProximityPenalty = '';}
-            if ( ! in_array( $hiVoltLineDistancePenalty, $safe_penalty_values, true ) ) {$hiVoltLineDistancePenalty = '';}
+			update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
+			update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
+		}elseif($assetCatTerm->slug == 'terrain'){
+			//Construction Penalties (in $)
+			$safe_penalty_values = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
+			$accessCostPenalty = intval($_POST['accessCostPenalty']);
+			$archProximityPenalty = intval($_POST['archProximityPenalty']);
+			$naturalReserveProximityPenalty = intval($_POST['naturalReserveProximityPenalty']);
+			$hiVoltLineDistancePenalty = intval($_POST['hiVoltLineDistancePenalty']);
+			if ( ! in_array( $accessCostPenalty, $safe_penalty_values, true ) ) {$accessCostPenalty = '';}
+			if ( ! in_array( $archProximityPenalty, $safe_penalty_values, true ) ) {$archProximityPenalty = '';}
+			if ( ! in_array( $naturalReserveProximityPenalty, $safe_penalty_values, true ) ) {$naturalReserveProximityPenalty = '';}
+			if ( ! in_array( $hiVoltLineDistancePenalty, $safe_penalty_values, true ) ) {$hiVoltLineDistancePenalty = '';}
 
-            $constructionPenalties = array('access' => $accessCostPenalty,'arch' => $archProximityPenalty,'natural' => $naturalReserveProximityPenalty,'hiVolt' => $hiVoltLineDistancePenalty);
+			$constructionPenalties = array('access' => $accessCostPenalty,'arch' => $archProximityPenalty,'natural' => $naturalReserveProximityPenalty,'hiVolt' => $hiVoltLineDistancePenalty);
 
-            //Physics
-            $safe_physics_values = range(0, 40, 1);
-            $safe_physics_values2 = range(1, 100, 1);//for Wind Variance
-            $physicsWindMinVal = intval($_POST['physicsWindMinVal']);
-            $physicsWindMaxVal = intval($_POST['physicsWindMaxVal']);
-            $physicsWindMeanVal = intval($_POST['physicsWindMeanVal']);
-            $physicsWindVarianceVal = intval($_POST['physicsWindVarianceVal']);
-            if ( ! in_array( $physicsWindMinVal, $safe_physics_values, true ) ) {$physicsWindMinVal = '';}
-            if ( ! in_array( $physicsWindMaxVal, $safe_physics_values, true ) ) {$physicsWindMaxVal = '';}
-            if ( ! in_array( $physicsWindMeanVal, $safe_physics_values, true ) ) {$physicsWindMeanVal = '';}
-            if ( ! in_array( $physicsWindVarianceVal, $safe_physics_values2, true ) ) {$physicsWindVarianceVal = '';}
+			//Physics
+			$safe_physics_values = range(0, 40, 1);
+			$safe_physics_values2 = range(1, 100, 1);//for Wind Variance
+			$physicsWindMinVal = intval($_POST['physicsWindMinVal']);
+			$physicsWindMaxVal = intval($_POST['physicsWindMaxVal']);
+			$physicsWindMeanVal = intval($_POST['physicsWindMeanVal']);
+			$physicsWindVarianceVal = intval($_POST['physicsWindVarianceVal']);
+			if ( ! in_array( $physicsWindMinVal, $safe_physics_values, true ) ) {$physicsWindMinVal = '';}
+			if ( ! in_array( $physicsWindMaxVal, $safe_physics_values, true ) ) {$physicsWindMaxVal = '';}
+			if ( ! in_array( $physicsWindMeanVal, $safe_physics_values, true ) ) {$physicsWindMeanVal = '';}
+			if ( ! in_array( $physicsWindVarianceVal, $safe_physics_values2, true ) ) {$physicsWindVarianceVal = '';}
 
-            $physicsValues = array('min' => $physicsWindMinVal,'max' => $physicsWindMaxVal,'mean' => $physicsWindMeanVal,'variance' => $physicsWindVarianceVal);
+			$physicsValues = array('min' => $physicsWindMinVal,'max' => $physicsWindMaxVal,'mean' => $physicsWindMeanVal,'variance' => $physicsWindVarianceVal);
 
-            update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
-            update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
-        }elseif($assetCatTerm->slug == 'producer') {
-            //Producer Options-Costs
-            $safe_opt_val = range(3,250,1);
-            $safe_opt_dmg = range(0.001,0.02,0.001);
-            $safe_opt_cost = range(1,10,1);
-            $safe_opt_repaid = range(0.5,5,0.5);
-            $producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
-            $producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
-            $producerCostVal = intval($_POST['producerCostVal']);
-            $producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
-            if ( ! in_array( $producerTurbineSizeVal, $safe_opt_val, true ) ) {$producerTurbineSizeVal = '';}
-            if ( ! in_array( $producerDmgCoeffVal, $safe_opt_dmg, true ) ) {$producerDmgCoeffVal = '';}
-            if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
-            if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
+			update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
+			update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
+		}elseif($assetCatTerm->slug == 'producer') {
+			//Producer Options-Costs
+			$safe_opt_val = range(3,250,1);
+			$safe_opt_dmg = range(0.001,0.02,0.001);
+			$safe_opt_cost = range(1,10,1);
+			$safe_opt_repaid = range(0.5,5,0.5);
+			$producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
+			$producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
+			$producerCostVal = intval($_POST['producerCostVal']);
+			$producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
+			if ( ! in_array( $producerTurbineSizeVal, $safe_opt_val, true ) ) {$producerTurbineSizeVal = '';}
+			if ( ! in_array( $producerDmgCoeffVal, $safe_opt_dmg, true ) ) {$producerDmgCoeffVal = '';}
+			if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
+			if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
 
-            $producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
+			$producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
 
-            $producerPowerProductionVal = $_POST['producerPowerProductionVal'];
+			$producerPowerProductionVal = $_POST['producerPowerProductionVal'];
 
-            update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
-            update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
-        }
+			update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
+			update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
+		}
 
 		//Upload All files as attachments of asset
 		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
@@ -487,6 +487,32 @@ get_header(); ?>
                         </div>
                     </div>
                 </div>
+
+
+                <h3 class="mdc-typography--title">Income (in $)</h3>
+                <h6 class="mdc-typography--caption"> Applied to all components on the terrain </h6>
+
+
+                    <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="over-power-income-slider"></div>
+                    <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="correct-power-income-slider"></div>
+                    <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="under-power-income-slider"></div>
+                    <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
+
+
             </div>
         </div>
 
@@ -800,6 +826,10 @@ get_header(); ?>
                         jQuery("#naturalReserveProximityPenalty").removeAttr("disabled");
                         jQuery("#hiVoltLineDistancePenalty").removeAttr("disabled");
 
+                        jQuery("#overPowerIncomeVal").removeAttr("disabled");
+                        jQuery("#correctPowerIncomeVal").removeAttr("disabled");
+                        jQuery("#underPowerIncomeVal").removeAttr("disabled");
+
                         break;
                     case 'consumer':
                         jQuery("#consumerPanel").show();
@@ -927,6 +957,9 @@ get_header(); ?>
             var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
             var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
+            var energyOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: 0.5, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
+            var energyCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: 1, valId:"#currentPowerIncomeVal", step: 0.5, units:"$"});
+            var energyUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: 0, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
 
             var index = 0;
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {

@@ -173,6 +173,10 @@ function wpunity_reset_panels() {
     jQuery("#archProximityPenalty").attr('disabled', 'disabled');
     jQuery("#naturalReserveProximityPenalty").attr('disabled', 'disabled');
     jQuery("#hiVoltLineDistancePenalty").attr('disabled', 'disabled');
+    jQuery("#overPowerIncomeVal").attr('disabled', 'disabled');
+    jQuery("#correctPowerIncomeVal").attr('disabled', 'disabled');
+    jQuery("#underPowerIncomeVal").attr('disabled', 'disabled');
+
 
     jQuery("#consumerPanel").hide();
     jQuery("#energyConsumptionMinVal").attr('disabled', 'disabled');
