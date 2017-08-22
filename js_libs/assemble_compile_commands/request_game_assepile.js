@@ -78,12 +78,15 @@ function wpunity_assepileAjax() {
 
                         var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
-                        var infoArr = procMonitor.replace(/\"/g, "");
-                        infoArr = infoArr.split(",");
+                        //var infoArr = procMonitor.replace(/\"/g, "");
+                        //infoArr = infoArr.split(",");
+                        // Split string '"Unity.exe","6524","Console","1","174,856 K","Running","DESKTOP-H42A14M\jimve","0:00:03","OleMainThreadWndName"' into array
+                        var infoArr = procMonitor.match(/(".*?")(?=\s*,|\s*$)/g);
+
+                        //console.log(infoArr);
 
 
-                        // FIX THIS
-                        var memVal = infoArr[4].slice(0, -2);
+                        var memVal = infoArr[4].slice(1, -2);
 
 
                         jQuery('#unityTaskMemValue').html(memVal);
