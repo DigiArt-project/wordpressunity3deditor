@@ -2696,6 +2696,7 @@ GameObject:
   - component: {fileID: 1940476102}
   - component: {fileID: 1940476101}
   - component: {fileID: 1940476100}
+  - component: {fileID: 1940476099}
   m_Layer: 0
   m_Name: mainmenu_Camera
   m_TagString: MainCamera
@@ -2703,6 +2704,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1940476099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1940476098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b641ab8cd6194d7da1e51fef12eee7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  app_key: 1
+  api_key: secret
+  disable: False
 --- !u!124 &1940476100
 Behaviour:
   m_ObjectHideFlags: 0
@@ -9723,7 +9738,6 @@ GameObject:
   - component: {fileID: 2017143698}
   - component: {fileID: 2017143697}
   - component: {fileID: 2017143696}
-  - component: {fileID: 2017143700}
   m_Layer: 0
   m_Name: loginCamera
   m_TagString: MainCamera
@@ -9794,20 +9808,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2017143700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2017143694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b641ab8cd6194d7da1e51fef12eee7b, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  app_key:
-  api_key:
-  disable:
 --- !u!1 &2147237571
 GameObject:
   m_ObjectHideFlags: 0
