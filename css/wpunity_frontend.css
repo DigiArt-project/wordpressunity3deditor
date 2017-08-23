@@ -258,3 +258,13 @@ i.ButtonIcon {
     height: 1.2em !important;
     top: auto !important;
 }
+
+.ui-slider .ui-slider-handle::before {
+    border: none;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    background-color: transparent;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    content: none !important;
+}
