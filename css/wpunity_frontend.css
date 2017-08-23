@@ -260,7 +260,7 @@ i.ButtonIcon {
     z-index: 2 !important;
     width: 1.2em !important;
     height: 1.2em !important;
-    top: auto !important;
+    /*top: auto !important;*/
 }
 
 .ui-slider .ui-slider-handle::before {
