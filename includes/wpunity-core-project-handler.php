@@ -589,6 +589,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $energy_income = get_post_meta($terrain_id,'wpunity_energyConsumptionIncome',true);
                 $constr_pen = get_post_meta($terrain_id,'wpunity_constructionPenalties',true);
                 $physics = get_post_meta($terrain_id,'wpunity_physicsValues',true);
+                $terrain_obj = get_post_meta($terrain_id,'wpunity_asset3d_obj',true);
 
                 $terrain_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_of_terrain = wpunity_create_fids($current_fid++);
@@ -605,7 +606,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $hvdistance_penalty = $constr_pen['hiVolt'];
                 $fid_rect_transform_terrain = wpunity_create_fids($current_fid++);
                 $fid_terrain_prefab_mesh = wpunity_create_fids($current_fid++);
-                $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_id);
+                $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_obj);
                 $x_pos_terrain = $value['position'][0];
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
@@ -624,10 +625,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $deco_id = $value['assetid'];
                 $asset_type = get_the_terms( $deco_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
+                $deco_obj = get_post_meta($deco_id,'wpunity_asset3d_obj',true);
 
                 $deco_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_decorator = wpunity_create_fids($current_fid++);
-                $guid_obj_decorator = wpunity_create_guids('obj', $deco_id);
+                $guid_obj_decorator = wpunity_create_guids('obj', $deco_obj);
                 $x_pos_decorator = $value['position'][0];
                 $y_pos_decorator = $value['position'][1];
                 $z_pos_decorator = $value['position'][2];
@@ -669,9 +671,10 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $asset_type = get_the_terms( $producer_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
+                $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
                 $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
                 $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
-                
+
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
                 $x_pos_producer = $value['position'][0];
@@ -693,7 +696,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $turbine_damage_coefficient = $prod_optCosts['dmg'];
                 $fid_transformation_parent_producer = wpunity_create_fids($current_fid++);
                 $fid_child_producer = wpunity_create_fids($current_fid++);
-                $obj_guid_producer = wpunity_create_guids('obj', $producer_id);
+                $obj_guid_producer = wpunity_create_guids('obj', $producer_obj);
                 $producer_name = get_the_title($producer_id);
                 $power_curve_val = '';
 
