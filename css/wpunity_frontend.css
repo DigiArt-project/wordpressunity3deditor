@@ -247,12 +247,14 @@ i.ButtonIcon {
 }
 
 /*Override default theme to correctly show jQuery UI styles*/
-.ui-slider .ui-slider-handle:last-child { margin-left: 0; }
+.ui-slider .ui-slider-handle:last-child {
+    margin-left: 0; !important;
+}
 
 .ui-slider .ui-slider-handle {
-    position: absolute;
-    z-index: 2;
-    width: 1.2em;
-    height: 1.2em;
-    top: auto;
+    position: absolute; !important;
+    z-index: 2; !important;
+    width: 1.2em; !important;
+    height: 1.2em; !important;
+    top: auto; !important;
 }
