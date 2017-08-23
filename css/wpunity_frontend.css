@@ -238,12 +238,16 @@ i.ButtonIcon {
 }
 
 .PowerProductionGroupStyle {
+    display: flex;
     width: 100%;
-    margin-left: 12px;
+    margin-left: 36px;
 }
 
 .PowerProductionGroupStyle > span {
-    height:120px; float:left; margin:13px
+    height: 120px;
+    float:left;
+    margin: 13px;
+    width: 12px;
 }
 
 /*Override default theme to correctly show jQuery UI styles*/
