@@ -78,20 +78,10 @@ function wpunity_assepileAjax() {
 
                         var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
-                        //var infoArr = procMonitor.replace(/\"/g, "");
-                        //infoArr = infoArr.split(",");
-                        // Split string '"Unity.exe","6524","Console","1","174,856 K","Running","DESKTOP-H42A14M\jimve","0:00:03","OleMainThreadWndName"' into array
-                        var infoArr = procMonitor.match(/(".*?")(?=\s*,|\s*$)/g);
-
-                        //console.log(infoArr);
-
+                        var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
 
                         var memVal = infoArr[4].slice(1, -2);
-
-
                         jQuery('#unityTaskMemValue').html(memVal);
-
-
 
                         // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
                         //     + (new Date().getTime() - start_time)/1000 + " seconds";

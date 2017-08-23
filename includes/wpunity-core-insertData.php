@@ -924,7 +924,7 @@ CanvasRenderer:
     $ini_asset_poi_video = array('Canvasion');
 
     //Github copied
-    $ini_asset_terrain = array('--- !u!1001 &___[guid_of_terrain]___
+    $ini_asset_terrain = array('--- !u!1001 &___[fid_of_terrain]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1030,17 +1030,17 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f354ad33b83806342bbd961828cb6010, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &___[guid_rect_transform_terrain]___ stripped
+--- !u!4 &___[fid_rect_transform_terrain]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4068649796560302, guid: f354ad33b83806342bbd961828cb6010,
     type: 2}
-  m_PrefabInternal: {fileID: ___[guid_of_terrain]___}
---- !u!1001 &___[guid_terrain_prefab_mesh]___
+  m_PrefabInternal: {fileID: ___[fid_of_terrain]___}
+--- !u!1001 &___[fid_terrain_prefab_mesh]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: ___[guid_rect_transform_terrain]___}
+    m_TransformParent: {fileID: ___[fid_rect_transform_terrain]___}
     m_Modifications:
     - target: {fileID: 400002, guid: ___[guid_terrain_mesh]___, type: 3}
       propertyPath: m_LocalPosition.x
