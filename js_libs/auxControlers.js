@@ -271,15 +271,15 @@ controlInterface.scale.domElement.id = 'scalePanelGui';
  var cbt_rotate = gui.add( gui_controls_funs, 'bt_rotate').name('Rotate (R)');
  var cbt_scale = gui.add( gui_controls_funs, 'bt_scale').name('Scale (E)');*/
 
-var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx', -1000, 1000, 1).name('Move x');//.listen();
-var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty', -1000, 1000, 0.1).name('Move y');//.listen();
-var dg_controller_tz = controlInterface.translate.add( gui_controls_funs, 'dg_tz', -1000, 1000, 0.1).name('Move z');//.listen();
+var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx').step(0.001).name('Move x');//.listen();
+var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty').step(0.001).name('Move y');//.listen();
+var dg_controller_tz = controlInterface.translate.add( gui_controls_funs, 'dg_tz').step(0.001).name('Move z');//.listen();
 
 var dg_controller_rx = controlInterface.rotate.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
 var dg_controller_ry = controlInterface.rotate.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
-var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180,0.001).name('Rotate z');//.listen();
+var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180, 0.001).name('Rotate z');//.listen();
 
-var dg_controller_sc = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.01).name('Scale');//.listen();
+var dg_controller_sc = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.001).name('Scale');//.listen();
 /*var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
  var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
 /*var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');*/
@@ -363,27 +363,29 @@ function controllerDatGuiOnChange() {
     );
 
     // Make slider-text controllers more interactive
-    setKeyPressController(dg_controller_tx);
-    setKeyPressController(dg_controller_ty);
-    setKeyPressController(dg_controller_tz);
-    setKeyPressController(dg_controller_rx);
-    setKeyPressController(dg_controller_ry);
-    setKeyPressController(dg_controller_rz);
-    setKeyPressController(dg_controller_sc);
+    setKeyPressControllerUnconstrained(dg_controller_tx);
+    setKeyPressControllerUnconstrained(dg_controller_ty);
+    setKeyPressControllerUnconstrained(dg_controller_tz);
+    setKeyPressControllerConstrained(dg_controller_rx);
+    setKeyPressControllerConstrained(dg_controller_ry);
+    setKeyPressControllerConstrained(dg_controller_rz);
+    setKeyPressControllerConstrained(dg_controller_sc);
 }
 
 /**
  * This function allows the dat gui text element of the slider to be clickable and interactive
- *
+ *  This is for translation which is not constrained (no slider) with limits
  * @param element
  */
-function setKeyPressController(element){
+function setKeyPressControllerUnconstrained(element){
 
     var div = element.domElement.children;
 
-    div[0].children[0].onclick = function(event){
-        cancelAnimationFrame( id_animation_frame );
-    };
+    div[0].onclick = function(event){
+         cancelAnimationFrame( id_animation_frame );
+     };
+
+
 
     // div[0].children[0].onkeyup= function(event){
     //                             if(event.keyCode == 13){ // 13 is "Enter" button
@@ -394,6 +396,21 @@ function setKeyPressController(element){
     //                             }
     //                       };
 }
+
+
+/**
+* This function allows the dat gui text element of the slider to be clickable and interactive
+* @param element
+*/
+function setKeyPressControllerConstrained(element) {
+
+    var div = element.domElement.children;
+
+    div[0].children[0].onclick = function (event) {
+        cancelAnimationFrame(id_animation_frame);
+    };
+}
+
 
 /**
  *  When you change trs from axes controls then automatically the dat.gui and the php form are updated
