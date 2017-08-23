@@ -51,6 +51,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
         transform_controls.attach(objInRecycleBin);
 
+        // highlight
+        envir.outlinePass.selectedObjects = [objInRecycleBin];
+        envir.renderer.setClearColor( 0xffffff, 0.9 );
 
         // Load it if it is not in recycle bin
     } else {
@@ -82,11 +85,18 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
             // place controls to last inserted obj
             transform_controls.attach(insertedObject);
+
+            // highlight
+            envir.outlinePass.selectedObjects = [insertedObject];
+            envir.renderer.setClearColor( 0xffffff, 0.9 );
+
             envir.scene.add(transform_controls);
 
             transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
             transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+
+
 
             selected_object_name = nameModel3D;
         };

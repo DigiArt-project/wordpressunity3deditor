@@ -4,6 +4,15 @@
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
 
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/CopyShader.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/FXAAShader.js'></script>
+
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/EffectComposer.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/RenderPass.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OutlinePass.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/ShaderPass.js'></script>
+
+
 <!-- vr_editor.php -->
 <?php
 wp_enqueue_style('wpunity_vr_editor');
@@ -44,10 +53,6 @@ echo '</script>';
 <!-- 3rd party libraries -->
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
 
-
-<!-- 3rd Party with some customizations -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/THREEx.WindowResize.js'></script>
-
 <!--  My libraries  -->
 <!-- Scene Environmentals -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
@@ -69,6 +74,8 @@ echo '</script>';
 
 <script type="text/javascript">
 
+    isComposerOn = true;
+
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
 
@@ -76,9 +83,9 @@ echo '</script>';
         var cw = vr_editor.width();
         vr_editor.css({'height':cw*2/3+'px'});
 
-        envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
-        envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
-        envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+
+        envir.turboResize();
+
 
         // make filebrowser draggable
         var filemanager = jQuery('#fileBrowserToolbar'),
@@ -116,11 +123,7 @@ echo '</script>';
     }
 
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
-
-
-
     var raycasterDrag = new THREE.Raycaster();
-
 
     // find all indexes of the needle inside the str
     function allIndexOf(needle, str){
@@ -188,12 +191,8 @@ echo '</script>';
         var cw = vr_editor.width();
         vr_editor.css({'height':cw*2/3+'px'});
 
-        envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
-        envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
-        envir.ASPECT = envir.SCREEN_WIDTH / envir.SCREEN_HEIGHT;
-        envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+        envir.turboResize();
     }
-
 
     window.addEventListener('resize', resize_handler, true);
 
@@ -443,6 +442,11 @@ echo '</script>';
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
+
+            // highlight
+            envir.outlinePass.selectedObjects = [objItem];
+            envir.renderer.setClearColor( 0xffffff, 0.9 );
+
             envir.scene.add(transform_controls);
 
             transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
@@ -476,6 +480,7 @@ echo '</script>';
         jQuery("#double-sided-switch").show();
         jQuery("#fullScreenBtn").show();
         jQuery("#blocker").show();
+        isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
     }
@@ -487,6 +492,7 @@ echo '</script>';
         jQuery("#double-sided-switch").hide();
         jQuery("#fullScreenBtn").hide();
         jQuery("#blocker").hide();
+        isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
     }
@@ -524,9 +530,12 @@ $formRes->init($sceneToLoad);
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
 
+        if (isComposerOn)
+            envir.composer.render();
+
+
         // Update it
         update();
-
 
     }
 
