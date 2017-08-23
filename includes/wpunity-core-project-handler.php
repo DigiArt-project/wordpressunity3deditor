@@ -534,18 +534,20 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
-        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy);
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy); //empty energy scene
+        $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
         $file7 = $game_path . '/' . $scene_name . '.unity';
         $create_file7 = fopen($file7, "w") or die("Unable to open file!");
         fwrite($create_file7, $file_content7);
+        fwrite($create_file7,$file_content7b);
         fclose($create_file7);
 
         //temp:
-        $tempcontent = wpunity_addAssets_educational_energy_unity($scene_id);
-        $tempfile = $game_path . '/' . $scene_name . '.txt';
-        $create_tempfile = fopen($tempfile, "w") or die("Unable to open file!");
-        fwrite($create_tempfile, $tempcontent);
-        fclose($create_tempfile);
+//        $tempcontent = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
+//        $tempfile = $game_path . '/' . $scene_name . '.txt';
+//        $create_tempfile = fopen($tempfile, "w") or die("Unable to open file!");
+//        fwrite($create_tempfile, $tempcontent);
+//        fclose($create_tempfile);
 
         if($scenes_counter<7) {
             wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
@@ -572,7 +574,8 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
     $sceneJsonARR = json_decode($jsonScene, TRUE);
 
     $current_fid = 51;
-
+    $allObjectsYAML = '';
+    $LF = chr(10) ;// line break
 
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
         if ($key == 'avatarYawObject') {
@@ -586,6 +589,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $energy_income = get_post_meta($terrain_id,'wpunity_energyConsumptionIncome',true);
                 $constr_pen = get_post_meta($terrain_id,'wpunity_constructionPenalties',true);
                 $physics = get_post_meta($terrain_id,'wpunity_physicsValues',true);
+                $terrain_obj = get_post_meta($terrain_id,'wpunity_asset3d_obj',true);
 
                 $terrain_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_of_terrain = wpunity_create_fids($current_fid++);
@@ -602,7 +606,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $hvdistance_penalty = $constr_pen['hiVolt'];
                 $fid_rect_transform_terrain = wpunity_create_fids($current_fid++);
                 $fid_terrain_prefab_mesh = wpunity_create_fids($current_fid++);
-                $guid_terrain_mesh = wpunity_create_guids(1, $terrain_id);
+                $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_obj);
                 $x_pos_terrain = $value['position'][0];
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
@@ -615,45 +619,100 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $z_scale_terrain = $value['scale'][2];
 
                 $terrain_finalyaml = wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$fid_rect_transform_terrain,$fid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain);
+                $allObjectsYAML = $allObjectsYAML . $LF . $terrain_finalyaml;
+            }
+            if ($value['categoryName'] == 'Decoration'){
+                $deco_id = $value['assetid'];
+                $asset_type = get_the_terms( $deco_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+                $deco_obj = get_post_meta($deco_id,'wpunity_asset3d_obj',true);
 
+                $deco_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $fid_decorator = wpunity_create_fids($current_fid++);
+                $guid_obj_decorator = wpunity_create_guids('obj', $deco_obj);
+                $x_pos_decorator = $value['position'][0];
+                $y_pos_decorator = $value['position'][1];
+                $z_pos_decorator = $value['position'][2];
+                $x_rotation_decorator = $value['quaternion'][0];
+                $y_rotation_decorator = $value['quaternion'][1];
+                $z_rotation_decorator = $value['quaternion'][2];
+                $w_rotation_decorator = $value['quaternion'][3];
+                $x_scale_decorator = $value['scale'][0];
+                $y_scale_decorator = $value['scale'][1];
+                $z_scale_decorator = $value['scale'][2];
+
+                $deco_finalyaml = wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator);
+                $allObjectsYAML = $allObjectsYAML . $LF . $deco_finalyaml;
+            }
+            if ($value['categoryName'] == 'Consumer'){
+                $consumer_id = $value['assetid'];
+                $asset_type = get_the_terms( $consumer_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $consumer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+
+                $fid_prefab_consumer_parent = wpunity_create_fids($current_fid++);
+                $x_pos_consumer = $value['position'][0];
+                $y_pos_consumer = $value['position'][1];
+                $z_pos_consumer = $value['position'][2];
+                $x_rotation_consumer = $value['quaternion'][0];
+                $y_rotation_consumer = $value['quaternion'][1];
+                $z_rotation_consumer = $value['quaternion'][2];
+                $w_rotation_consumer = $value['quaternion'][3];
+                $name_consumer = get_the_title($consumer_id);
+                $fid_consumer_prefab_transform = wpunity_create_fids($current_fid++);
+                $fid_consumer_prefab_child = wpunity_create_fids($current_fid++);
+
+                $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child);
+                $allObjectsYAML = $allObjectsYAML . $LF . $consumer_finalyaml;
+            }
+            if ($value['categoryName'] == 'Producer'){
+                $producer_id = $value['assetid'];
+                $asset_type = get_the_terms( $producer_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
+                $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
+                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+
+                $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $fid_producer = wpunity_create_fids($current_fid++);
+                $x_pos_producer = $value['position'][0];
+                $y_pos_producer = $value['position'][1];
+                $z_pos_producer = $value['position'][2];
+                $x_rot_parent = $value['quaternion'][0];
+                $y_rot_parent = $value['quaternion'][1];
+                $z_rot_parent = $value['quaternion'][2];
+                $w_rot_parent = $value['quaternion'][3];
+                $rotor_diameter = $prod_optCosts['size'];
+                $y_position_infoquad = $rotor_diameter * (1.5);
+                $y_pos_quadselector = $rotor_diameter * (-0.95);
+                $turbine_name_class = '';
+                $turbine_max_power = '';
+                $turbine_cost = $prod_optCosts['cost'];
+                $rotor_diameter = $prod_optCosts['size'];
+                $turbine_windspeed_class = '';
+                $turbine_repair_cost = $prod_optCosts['repaid'];
+                $turbine_damage_coefficient = $prod_optCosts['dmg'];
+                $fid_transformation_parent_producer = wpunity_create_fids($current_fid++);
+                $fid_child_producer = wpunity_create_fids($current_fid++);
+                $obj_guid_producer = wpunity_create_guids('obj', $producer_obj);
+                $producer_name = get_the_title($producer_id);
+                $power_curve_val = '';
+
+                $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
+                $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
             }
 
 
-        }
+            }
     }
-    return $terrain_finalyaml;
+
+    //return all objects
+    return $allObjectsYAML;
 
 }
 
-function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$fid_rect_transform_terrain,$fid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
-    $file_content_return = str_replace("___[fid_of_terrain]___",$fid_of_terrain,$terrain_yaml);
-    $file_content_return = str_replace("___[income_when_overpower]___",$income_when_overpower,$file_content_return);
-    $file_content_return = str_replace("___[income_when_correct_power]___",$income_when_correct_power,$file_content_return);
-    $file_content_return = str_replace("___[income_when_under_power]___",$income_when_under_power,$file_content_return);
-    $file_content_return = str_replace("___[mean_speed_wind]___",$mean_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[var_speed_wind]___",$var_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[min_speed_wind]___",$min_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[max_speed_wind]___",$max_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[access_penalty]___",$access_penalty,$file_content_return);
-    $file_content_return = str_replace("___[archaeology_penalty]___",$archaeology_penalty,$file_content_return);
-    $file_content_return = str_replace("___[natural_reserve_penalty]___",$natural_reserve_penalty,$file_content_return);
-    $file_content_return = str_replace("___[hvdistance_penalty]___",$hvdistance_penalty,$file_content_return);
-    $file_content_return = str_replace("___[fid_rect_transform_terrain]___",$fid_rect_transform_terrain,$file_content_return);
-    $file_content_return = str_replace("___[fid_terrain_prefab_mesh]___",$fid_terrain_prefab_mesh,$file_content_return);
-    $file_content_return = str_replace("___[guid_terrain_mesh]___",$guid_terrain_mesh,$file_content_return);
-    $file_content_return = str_replace("___[x_pos_terrain]___",$x_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_pos_terrain]___",$y_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_pos_terrain]___",$z_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[x_rotation_terrain]___",$x_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_rotation_terrain]___",$y_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_rotation_terrain]___",$z_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[w_rotation_terrain]___",$w_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[x_scale_terrain]___",$x_scale_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_scale_terrain]___",$y_scale_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_scale_terrain]___",$z_scale_terrain,$file_content_return);
-
-    return $file_content_return;
-}
 
 function wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active){
     $file_content_return = str_replace("___[mainmenu_is_bt_settings_active]___",$is_bt_settings_active,$term_meta_s_mainmenu);
@@ -830,9 +889,8 @@ function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
 
 }
 
-function wpunity_replace_terain_unity($term_meta_terain_yaml,$guid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$guid_rect_transform_terrain,$guid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
-
-    $file_content_return = str_replace("___[guid_of_terrain]___",$guid_of_terrain,$term_meta_terain_yaml);
+function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$fid_rect_transform_terrain,$fid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
+    $file_content_return = str_replace("___[fid_of_terrain]___",$fid_of_terrain,$terrain_yaml);
     $file_content_return = str_replace("___[income_when_overpower]___",$income_when_overpower,$file_content_return);
     $file_content_return = str_replace("___[income_when_correct_power]___",$income_when_correct_power,$file_content_return);
     $file_content_return = str_replace("___[income_when_under_power]___",$income_when_under_power,$file_content_return);
@@ -844,8 +902,8 @@ function wpunity_replace_terain_unity($term_meta_terain_yaml,$guid_of_terrain,$i
     $file_content_return = str_replace("___[archaeology_penalty]___",$archaeology_penalty,$file_content_return);
     $file_content_return = str_replace("___[natural_reserve_penalty]___",$natural_reserve_penalty,$file_content_return);
     $file_content_return = str_replace("___[hvdistance_penalty]___",$hvdistance_penalty,$file_content_return);
-    $file_content_return = str_replace("___[guid_rect_transform_terrain]___",$guid_rect_transform_terrain,$file_content_return);
-    $file_content_return = str_replace("___[guid_terrain_prefab_mesh]___",$guid_terrain_prefab_mesh,$file_content_return);
+    $file_content_return = str_replace("___[fid_rect_transform_terrain]___",$fid_rect_transform_terrain,$file_content_return);
+    $file_content_return = str_replace("___[fid_terrain_prefab_mesh]___",$fid_terrain_prefab_mesh,$file_content_return);
     $file_content_return = str_replace("___[guid_terrain_mesh]___",$guid_terrain_mesh,$file_content_return);
     $file_content_return = str_replace("___[x_pos_terrain]___",$x_pos_terrain,$file_content_return);
     $file_content_return = str_replace("___[y_pos_terrain]___",$y_pos_terrain,$file_content_return);
@@ -861,9 +919,9 @@ function wpunity_replace_terain_unity($term_meta_terain_yaml,$guid_of_terrain,$i
     return $file_content_return;
 }
 
-function wpunity_replace_consumer_unity($term_meta_consumer_yaml,$guid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$guid_consumer_prefab_transform,$guid_consumer_prefab_child){
+function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child){
 
-    $file_content_return = str_replace("___[guid_prefab_consumer_parent]___",$guid_prefab_consumer_parent,$term_meta_consumer_yaml);
+    $file_content_return = str_replace("___[fid_prefab_consumer_parent]___",$fid_prefab_consumer_parent,$consumer_yaml);
     $file_content_return = str_replace("___[x_pos_consumer]___",$x_pos_consumer,$file_content_return);
     $file_content_return = str_replace("___[y_pos_consumer]___",$y_pos_consumer,$file_content_return);
     $file_content_return = str_replace("___[z_pos_consumer]___",$z_pos_consumer,$file_content_return);
@@ -872,15 +930,15 @@ function wpunity_replace_consumer_unity($term_meta_consumer_yaml,$guid_prefab_co
     $file_content_return = str_replace("___[z_rotation_consumer]___",$z_rotation_consumer,$file_content_return);
     $file_content_return = str_replace("___[w_rotation_consumer]___",$w_rotation_consumer,$file_content_return);
     $file_content_return = str_replace("___[name_consumer]___",$name_consumer,$file_content_return);
-    $file_content_return = str_replace("___[guid_consumer_prefab_transform]___",$guid_consumer_prefab_transform,$file_content_return);
-    $file_content_return = str_replace("___[guid_consumer_prefab_child]___",$guid_consumer_prefab_child,$file_content_return);
+    $file_content_return = str_replace("___[fid_consumer_prefab_transform]___",$fid_consumer_prefab_transform,$file_content_return);
+    $file_content_return = str_replace("___[fid_consumer_prefab_child]___",$fid_consumer_prefab_child,$file_content_return);
 
     return $file_content_return;
 }
 
-function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$guid_transformation_parent_producer,$guid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
+function wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
 
-    $file_content_return = str_replace("___[guid_producer]___",$guid_producer,$term_meta_producer_yaml);
+    $file_content_return = str_replace("___[fid_producer]___",$fid_producer,$producer_yaml);
     $file_content_return = str_replace("___[x_pos_producer]___",$x_pos_producer,$file_content_return);
     $file_content_return = str_replace("___[y_pos_producer]___",$y_pos_producer,$file_content_return);
     $file_content_return = str_replace("___[z_pos_producer]___",$z_pos_producer,$file_content_return);
@@ -897,9 +955,8 @@ function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,
     $file_content_return = str_replace("___[turbine_windspeed_class]___",$turbine_windspeed_class,$file_content_return);
     $file_content_return = str_replace("___[turbine_repair_cost]___",$turbine_repair_cost,$file_content_return);
     $file_content_return = str_replace("___[turbine_damage_coefficient]___",$turbine_damage_coefficient,$file_content_return);
-    $file_content_return = str_replace("___[guid_transformation_parent_producer]___",$guid_transformation_parent_producer,$file_content_return);
-    $file_content_return = str_replace("___[guid_child_producer]___",$guid_child_producer,$file_content_return);
-    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[fid_transformation_parent_producer]___",$fid_transformation_parent_producer,$file_content_return);
+    $file_content_return = str_replace("___[fid_child_producer]___",$fid_child_producer,$file_content_return);
     $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
     $file_content_return = str_replace("___[producer_name]___",$producer_name,$file_content_return);
     $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[0],$file_content_return);
@@ -934,16 +991,16 @@ function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,
     return $file_content_return;
 }
 
-function wpunity_replace_decorator_unity($term_meta_decorator_yaml,$guid_decorator,$guid_decorator_obj,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
-
-    $file_content_return = str_replace("___[guid_decorator]___",$guid_decorator,$term_meta_decorator_yaml);
-    $file_content_return = str_replace("___[guid_decorator_obj]___",$guid_decorator_obj,$file_content_return);
+function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
+    $file_content_return = str_replace("___[fid_decorator]___",$fid_decorator,$deco_yaml);
+    $file_content_return = str_replace("___[guid_obj_decorator]___",$guid_obj_decorator,$file_content_return);
     $file_content_return = str_replace("___[x_pos_decorator]___",$x_pos_decorator,$file_content_return);
     $file_content_return = str_replace("___[y_pos_decorator]___",$y_pos_decorator,$file_content_return);
     $file_content_return = str_replace("___[z_pos_decorator]___",$z_pos_decorator,$file_content_return);
     $file_content_return = str_replace("___[x_rotation_decorator]___",$x_rotation_decorator,$file_content_return);
     $file_content_return = str_replace("___[y_rotation_decorator]___",$y_rotation_decorator,$file_content_return);
     $file_content_return = str_replace("___[z_rotation_decorator]___",$z_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[w_rotation_decorator]___",$w_rotation_decorator,$file_content_return);
     $file_content_return = str_replace("___[x_scale_decorator]___",$x_scale_decorator,$file_content_return);
     $file_content_return = str_replace("___[y_scale_decorator]___",$y_scale_decorator,$file_content_return);
     $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);

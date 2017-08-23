@@ -1092,7 +1092,7 @@ Prefab:
     ');
 
     //Github copied
-    $ini_asset_consumer = array('--- !u!1001 &___[guid_prefab_consumer_parent]___
+    $ini_asset_consumer = array('--- !u!1001 &___[fid_prefab_consumer_parent]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1138,17 +1138,17 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &___[guid_consumer_prefab_transform]___ stripped
+--- !u!4 &___[fid_consumer_prefab_transform]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4481460071382266, guid: 445abb95b6721c64aa4204dff733341e,
     type: 2}
-  m_PrefabInternal: {fileID: ___[guid_prefab_consumer_parent]___}
---- !u!1001 &___[guid_consumer_prefab_child]___
+  m_PrefabInternal: {fileID: ___[fid_prefab_consumer_parent]___}
+--- !u!1001 &___[fid_consumer_prefab_child]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: ___[guid_consumer_prefab_transform]___}
+    m_TransformParent: {fileID: ___[fid_consumer_prefab_transform]___}
     m_Modifications:
     - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1188,7 +1188,7 @@ Prefab:
     ');
 
     //Github copied
-    $ini_asset_producer = array('--- !u!1001 &___[guid_producer]___
+    $ini_asset_producer = array('--- !u!1001 &___[fid_producer]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1416,17 +1416,17 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cddc7e0e3b6ab5340a00da10e23d3837, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &___[guid_transformation_parent_producer]___ stripped
+--- !u!4 &___[fid_transformation_parent_producer]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4047139695584158, guid: cddc7e0e3b6ab5340a00da10e23d3837,
     type: 2}
-  m_PrefabInternal: {fileID: ___[guid_producer]___}
---- !u!1001 &___[guid_child_producer]___
+  m_PrefabInternal: {fileID: ___[fid_producer]___}
+--- !u!1001 &___[fid_child_producer]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: ___[guid_transformation_parent_producer]___}
+    m_TransformParent: {fileID: ___[fid_transformation_parent_producer]___}
     m_Modifications:
     - target: {fileID: 400004, guid: ___[obj_guid_producer]___, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1477,59 +1477,59 @@ Prefab:
     ');
 
     //Github copied
-    $ini_asset_staticDec = array('--- !u!1001 &___[guid_decorator]___
+    $ini_asset_staticDec = array('--- !u!1001 &___[fid_decorator]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalPosition.x
       value: ___[x_pos_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalPosition.y
       value: ___[y_pos_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalPosition.z
       value: ___[z_pos_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalRotation.x
       value: ___[x_rotation_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalRotation.y
       value: ___[y_rotation_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalRotation.z
       value: ___[z_rotation_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalRotation.w
       value: ___[w_rotation_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalScale.x
       value: ___[x_scale_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalScale.y
       value: ___[y_scale_decorator]___
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ___[guid_decorator_obj]___, type: 3}
+    - target: {fileID: 400000, guid: ___[guid_obj_decorator]___, type: 3}
       propertyPath: m_LocalScale.z
       value: ___[z_scale_decorator]___
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: ___[guid_decorator_obj]___, type: 3}
+  m_ParentPrefab: {fileID: 100100000, guid: ___[guid_obj_decorator]___, type: 3}
   m_IsPrefabParent: 0
     ');
 
