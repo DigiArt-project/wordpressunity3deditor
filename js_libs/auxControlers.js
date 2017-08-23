@@ -141,6 +141,9 @@ function onMouseDown( event ) {
             selected_object_name = intersects[i].object.parent.name;
             arrNameObj[selected_object_name] = intersects[i].object.parent;
             // for object3D
+
+
+
         } else {
             // selected_object_name = intersects[i].object.parent.parent.name;
             // arrNameObj[selected_object_name] = intersects[i].object.parent.parent;
@@ -153,9 +156,11 @@ function onMouseDown( event ) {
     if (Object.keys(arrNameObj).length == 1) {
         nameL = Object.keys(arrNameObj)[0];
 
-        console.log("nameL Simple------------->", nameL);
-
         transform_controls.attach(arrNameObj[nameL]);
+
+        // highlight
+        envir.outlinePass.selectedObjects = [arrNameObj[nameL].children[0]];
+        envir.renderer.setClearColor( 0xffffff, 0.9 );
 
         // If more than 2 objects are intersected
     } else if (Object.keys(arrNameObj).length > 1) {
@@ -180,7 +185,6 @@ function onMouseDown( event ) {
         option = document.createElement("option");
         option.text = "Select";
         option.value = "Select";
-        option.setAttribute("disabled", "disabled");
         popupSelect.add(option);
 
         // Add options for each intersected object
@@ -210,12 +214,14 @@ function onMouseDown( event ) {
         jQuery("#popupSelect").change(function(e) {
             var nameL = jQuery("#popupSelect").val();
 
-            if (nameL != "Cancel" || nameL != "Select") {
+            if (nameL != "Cancel" && nameL != "Select") {
                 transform_controls.attach(arrNameObj[nameL]);
-                console.log("nameL", nameL);
 
-                jQuery("#popUpDiv").hide();
+                // highlight
+                envir.outlinePass.selectedObjects = [ arrNameObj[nameL].children[0] ];
+                envir.renderer.setClearColor( 0xffffff, 0.9 );
             }
+            jQuery("#popUpDiv").hide();
         });
     }
 }// onMouseDown

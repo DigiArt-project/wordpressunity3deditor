@@ -238,10 +238,37 @@ i.ButtonIcon {
 }
 
 .PowerProductionGroupStyle {
+    display: flex;
     width: 100%;
-    margin-left: 12px;
+    margin-left: 36px;
 }
 
 .PowerProductionGroupStyle > span {
-    height:120px; float:left; margin:13px
+    height: 120px;
+    float:left;
+    margin: 13px;
+    width: 12px;
+}
+
+/*Override default theme to correctly show jQuery UI styles*/
+.ui-slider .ui-slider-handle:last-child {
+    margin-left: 0 !important;
+}
+
+.ui-slider .ui-slider-handle {
+    position: absolute !important;
+    z-index: 2 !important;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    top: auto !important;
+}
+
+.ui-slider .ui-slider-handle::before {
+    border: none;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    background-color: transparent;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    content: none !important;
 }

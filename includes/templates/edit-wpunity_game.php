@@ -397,7 +397,7 @@ if ( $custom_query->have_posts() ) :?>
 
                     <div class="CenterContents">
                         <a class="mdc-typography--title" href="" id="wpunity-ziplink" style="display:none;"> <i style="vertical-align: text-bottom" class="material-icons">file_download</i> Download Zip</a>
-                        <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;" target="_blank">Web link</a>
+                        <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;margin-left:30px" target="_blank">Web link</a>
                     </div>
 
                 </section>

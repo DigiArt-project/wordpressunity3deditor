@@ -31,6 +31,12 @@ class vr_editor_environmentals {
         this.cameraOrbitHelper;
         this.cameraAvatarHelper;
 
+        this.outlinePass;
+        this.composer;
+        this.renderPass;
+        this.effectFXAA;
+
+
 
         this.setScene();
         this.setRenderer();
@@ -44,13 +50,39 @@ class vr_editor_environmentals {
         this.setStats();
         this.setSky();
         this.setSunSphere();
+
+        this.setComposer();
         // this.setTerrain(); // test after 74
 
         // Window resize event (container was added)
-        THREEx.WindowResize( this.renderer, this.cameraOrbit, this.container_3D_all);
-        THREEx.WindowResize( this.renderer, this.cameraAvatar, this.container_3D_all);
+        //THREEx.WindowResize( this.renderer, this.cameraOrbit, this.container_3D_all);
+        //THREEx.WindowResize( this.renderer, this.cameraAvatar, this.container_3D_all);
+
+        // renderer.setSize( dom.clientWidth, dom.clientHeight );
+        // // update the camera
+        // camera.aspect	= dom.clientWidth/ dom.clientHeight;
+        // camera.updateProjectionMatrix();
     }
 
+
+    turboResize(){
+        this.SCREEN_WIDTH = this.container_3D_all.clientWidth; // 500; //window.innerWidth;
+        this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
+        this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
+
+        this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+        this.renderer.setPixelRatio(this.ASPECT);
+
+        this.cameraOrbit.aspect = this.ASPECT;
+        this.cameraOrbit.updateProjectionMatrix();
+
+         this.cameraAvatar.aspect = this.ASPECT;
+         this.cameraAvatar.updateProjectionMatrix();
+
+        this.composer.renderer.setSize( envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT );
+        this.composer.renderer.setPixelRatio(this.ASPECT);
+        this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT , 1 / this.SCREEN_HEIGHT / this.ASPECT);
+    }
 
     makeFullScreen() {
 
@@ -168,6 +200,9 @@ class vr_editor_environmentals {
         //this.scene.add( this.cameraOrbitHelper );
     }
 
+
+
+
     /**
      *  Set the Avatar camera
      *
@@ -175,9 +210,6 @@ class vr_editor_environmentals {
     setAvatarCamera() {
         this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 1.2, 3000);
         this.cameraAvatar.name = "avatarCamera";
-
-
-        //console.log(this.cameraAvatar); // /.parent.name = "avatarCameraInnerObject";
 
         this.scene.add(this.cameraAvatar);
 
@@ -332,15 +364,42 @@ class vr_editor_environmentals {
      */
     setRenderer() {
 
-        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
+
+        //console.log("1 window.devicePixelRatio", window.devicePixelRatio);
+
+        //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+        this.renderer.setClearColor( 0xffffff, 0.9 );
+
         this.renderer.sortObjects = false;
         this.renderer.name = "myRenderer";
         this.container_3D_all.appendChild( this.renderer.domElement );
     }
 
+    setComposer(){
+        this.composer = new THREE.EffectComposer( this.renderer );
 
+        this.renderPass = new THREE.RenderPass( this.scene, this.cameraOrbit );
+        this.composer.addPass( this.renderPass );
+
+        this.outlinePass = new THREE.OutlinePass(
+            new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, this.cameraOrbit);
+
+        this.outlinePass.visibleEdgeColor = new THREE.Color( 0xffff00 );
+
+        this.outlinePass.edgeGlow = 1;
+        this.outlinePass.edgeStrength = 2;
+        this.outlinePass.edgeThickness = 2;
+
+        this.composer.addPass( this.outlinePass );
+
+         this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+         this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH ,
+                                                          1 / this.SCREEN_HEIGHT );
+         this.effectFXAA.renderToScreen = true;
+         this.composer.addPass( this.effectFXAA );
+    }
 
 
     /**
