@@ -194,6 +194,9 @@ function wpunity_reset_panels() {
     jQuery("#producerDmgCoeffVal").attr('disabled', 'disabled');
     jQuery("#producerCostVal").attr('disabled', 'disabled');
     jQuery("#producerRepairCostVal").attr('disabled', 'disabled');
+    jQuery("#producerClassVal").attr('disabled', 'disabled');
+    jQuery("#producerMaxPowerVal").attr('disabled', 'disabled');
+    jQuery("#producerWindSpeedClassVal").attr('disabled', 'disabled');
 
     jQuery("#poiImgDetailsPanel").hide();
 
