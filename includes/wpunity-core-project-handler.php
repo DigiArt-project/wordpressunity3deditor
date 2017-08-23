@@ -605,7 +605,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $hvdistance_penalty = $constr_pen['hiVolt'];
                 $fid_rect_transform_terrain = wpunity_create_fids($current_fid++);
                 $fid_terrain_prefab_mesh = wpunity_create_fids($current_fid++);
-                $guid_terrain_mesh = wpunity_create_guids(1, $terrain_id);
+                $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_id);
                 $x_pos_terrain = $value['position'][0];
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
@@ -627,7 +627,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $deco_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_decorator = wpunity_create_fids($current_fid++);
-                $guid_obj_decorator = wpunity_create_guids(1, $deco_id);
+                $guid_obj_decorator = wpunity_create_guids('obj', $deco_id);
                 $x_pos_decorator = $value['position'][0];
                 $y_pos_decorator = $value['position'][1];
                 $z_pos_decorator = $value['position'][2];
@@ -664,8 +664,45 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child);
                 $allObjectsYAML = $allObjectsYAML . $LF . $consumer_finalyaml;
             }
+            if ($value['categoryName'] == 'Producer'){
+                $producer_id = $value['assetid'];
+                $asset_type = get_the_terms( $producer_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
 
-        }
+                $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
+                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+                
+                $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $fid_producer = wpunity_create_fids($current_fid++);
+                $x_pos_producer = $value['position'][0];
+                $y_pos_producer = $value['position'][1];
+                $z_pos_producer = $value['position'][2];
+                $x_rot_parent = $value['quaternion'][0];
+                $y_rot_parent = $value['quaternion'][1];
+                $z_rot_parent = $value['quaternion'][2];
+                $w_rot_parent = $value['quaternion'][3];
+                $rotor_diameter = $prod_optCosts['size'];
+                $y_position_infoquad = $rotor_diameter * (1.5);
+                $y_pos_quadselector = $rotor_diameter * (-0.95);
+                $turbine_name_class = '';
+                $turbine_max_power = '';
+                $turbine_cost = $prod_optCosts['cost'];
+                $rotor_diameter = $prod_optCosts['size'];
+                $turbine_windspeed_class = '';
+                $turbine_repair_cost = $prod_optCosts['repaid'];
+                $turbine_damage_coefficient = $prod_optCosts['dmg'];
+                $fid_transformation_parent_producer = wpunity_create_fids($current_fid++);
+                $fid_child_producer = wpunity_create_fids($current_fid++);
+                $obj_guid_producer = wpunity_create_guids('obj', $producer_id);
+                $producer_name = get_the_title($producer_id);
+                $power_curve_val = '';
+
+                $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
+                $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
+            }
+
+
+            }
     }
 
     //return all objects
@@ -896,9 +933,9 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
     return $file_content_return;
 }
 
-function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$guid_transformation_parent_producer,$guid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
+function wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
 
-    $file_content_return = str_replace("___[guid_producer]___",$guid_producer,$term_meta_producer_yaml);
+    $file_content_return = str_replace("___[fid_producer]___",$fid_producer,$producer_yaml);
     $file_content_return = str_replace("___[x_pos_producer]___",$x_pos_producer,$file_content_return);
     $file_content_return = str_replace("___[y_pos_producer]___",$y_pos_producer,$file_content_return);
     $file_content_return = str_replace("___[z_pos_producer]___",$z_pos_producer,$file_content_return);
@@ -915,9 +952,8 @@ function wpunity_replace_producer_unity($term_meta_producer_yaml,$guid_producer,
     $file_content_return = str_replace("___[turbine_windspeed_class]___",$turbine_windspeed_class,$file_content_return);
     $file_content_return = str_replace("___[turbine_repair_cost]___",$turbine_repair_cost,$file_content_return);
     $file_content_return = str_replace("___[turbine_damage_coefficient]___",$turbine_damage_coefficient,$file_content_return);
-    $file_content_return = str_replace("___[guid_transformation_parent_producer]___",$guid_transformation_parent_producer,$file_content_return);
-    $file_content_return = str_replace("___[guid_child_producer]___",$guid_child_producer,$file_content_return);
-    $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
+    $file_content_return = str_replace("___[fid_transformation_parent_producer]___",$fid_transformation_parent_producer,$file_content_return);
+    $file_content_return = str_replace("___[fid_child_producer]___",$fid_child_producer,$file_content_return);
     $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
     $file_content_return = str_replace("___[producer_name]___",$producer_name,$file_content_return);
     $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[0],$file_content_return);

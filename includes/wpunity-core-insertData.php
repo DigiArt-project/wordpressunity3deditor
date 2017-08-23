@@ -1188,7 +1188,7 @@ Prefab:
     ');
 
     //Github copied
-    $ini_asset_producer = array('--- !u!1001 &___[guid_producer]___
+    $ini_asset_producer = array('--- !u!1001 &___[fid_producer]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1416,17 +1416,17 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cddc7e0e3b6ab5340a00da10e23d3837, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &___[guid_transformation_parent_producer]___ stripped
+--- !u!4 &___[fid_transformation_parent_producer]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4047139695584158, guid: cddc7e0e3b6ab5340a00da10e23d3837,
     type: 2}
-  m_PrefabInternal: {fileID: ___[guid_producer]___}
---- !u!1001 &___[guid_child_producer]___
+  m_PrefabInternal: {fileID: ___[fid_producer]___}
+--- !u!1001 &___[fid_child_producer]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: ___[guid_transformation_parent_producer]___}
+    m_TransformParent: {fileID: ___[fid_transformation_parent_producer]___}
     m_Modifications:
     - target: {fileID: 400004, guid: ___[obj_guid_producer]___, type: 3}
       propertyPath: m_LocalPosition.x
