@@ -100,16 +100,16 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
 			update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
 		}elseif($assetCatTerm->slug == 'terrain'){
-            //Income (in $)
-            $safe_income_values = range(-5,5,0.5);
-            $underPowerIncome = floatval($_POST['underPowerIncomeVal']);
-            $correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
-            $overPowerIncome = floatval($_POST['overPowerIncomeVal']);
-            if ( ! in_array( $underPowerIncome, $safe_income_values, true ) ) {$underPowerIncome = '';}
-            if ( ! in_array( $correctPowerIncome, $safe_income_values, true ) ) {$correctPowerIncome = '';}
-            if ( ! in_array( $overPowerIncome, $safe_income_values, true ) ) {$overPowerIncome = '';}
+			//Income (in $)
+			$safe_income_values = range(-5,5,0.5);
+			$underPowerIncome = floatval($_POST['underPowerIncomeVal']);
+			$correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
+			$overPowerIncome = floatval($_POST['overPowerIncomeVal']);
+			if ( ! in_array( $underPowerIncome, $safe_income_values, true ) ) {$underPowerIncome = '';}
+			if ( ! in_array( $correctPowerIncome, $safe_income_values, true ) ) {$correctPowerIncome = '';}
+			if ( ! in_array( $overPowerIncome, $safe_income_values, true ) ) {$overPowerIncome = '';}
 
-            $energyConsumptionIncome = array('under' => $underPowerIncome,'correct' => $correctPowerIncome,'over' => $overPowerIncome);
+			$energyConsumptionIncome = array('under' => $underPowerIncome,'correct' => $correctPowerIncome,'over' => $overPowerIncome);
 
 			//Construction Penalties (in $)
 			$safe_penalty_values = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
@@ -138,7 +138,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 			$physicsValues = array('min' => $physicsWindMinVal,'max' => $physicsWindMaxVal,'mean' => $physicsWindMeanVal,'variance' => $physicsWindVarianceVal);
 
-            update_post_meta( $asset_id, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome );
+			update_post_meta( $asset_id, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome );
 			update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
 			update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
 		}elseif($assetCatTerm->slug == 'producer') {
@@ -505,24 +505,24 @@ get_header(); ?>
                 <h6 class="mdc-typography--caption"> Applied to all components on the terrain </h6>
 
 
-                    <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="over-power-income-slider"></div>
-                    <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
+                <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="over-power-income-slider"></div>
+                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
 
-                    <hr class="WhiteSpaceSeparator">
+                <hr class="WhiteSpaceSeparator">
 
-                    <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="correct-power-income-slider"></div>
-                    <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
+                <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="correct-power-income-slider"></div>
+                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
 
-                    <hr class="WhiteSpaceSeparator">
+                <hr class="WhiteSpaceSeparator">
 
-                    <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                    <div id="under-power-income-slider"></div>
-                    <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
+                <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="under-power-income-slider"></div>
+                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
 
 
             </div>
@@ -679,38 +679,63 @@ get_header(); ?>
 
                 <h3 class="mdc-typography--title">Producer Options</h3>
 
+                <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                    <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
+                           aria-controls="producer-class-validation-msg" value="A" required minlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                    <label for="producerClassVal" class="mdc-textfield__label">
+                        Producer class
+                </div>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-wind-speed-class-slider-label" class="mdc-typography--subheading2">Wind Speed Class:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-wind-speed-class-slider"></div>
+                <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="producer-max-power-slider-label" class="mdc-typography--subheading2">Max Power:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="producer-max-power-slider"></div>
+                <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
                 <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-turbine-size-slider"></div>
                 <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-damage-coeff-slider"></div>
                 <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="" disabled>
 
             </div>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
                 <h3 class="mdc-typography--title">Producer Costs</h3>
 
                 <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-cost-slider"></div>
                 <input type="hidden" id="producerCostVal" name="producerCostVal" value="" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
-                <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repaid Cost:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repair Cost:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-repair-cost-slider"></div>
                 <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="" disabled>
 
-
             </div>
+
         </div>
 
 
@@ -898,6 +923,12 @@ get_header(); ?>
                         jQuery("#producerCostVal").removeAttr("disabled");
                         jQuery("#producerRepairCostVal").removeAttr("disabled");
 
+                        jQuery("#producerClassVal").removeAttr("disabled");
+                        jQuery("#producerMaxPowerVal").removeAttr("disabled");
+                        jQuery("#producerWindSpeedClassVal").removeAttr("disabled");
+
+
+
                         spanProducerChartLabels();
 
                         break;
@@ -994,8 +1025,8 @@ get_header(); ?>
 
 
             // Sliders
-            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/s"});
-            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/s"});
+            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
+            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
             var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
             var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
@@ -1005,6 +1036,15 @@ get_header(); ?>
             var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: 0.5, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
             var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: 1, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
             var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: 0, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
+
+            /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
+             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
+            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
+            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
+            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
+            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
+            var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: 10, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
+            var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: 3, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
 
             var index = 0;
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
@@ -1045,12 +1085,7 @@ get_header(); ?>
                 index++;
             });
 
-            /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
-            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
-            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
-            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
-            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
+
 
             // POI Image panels - Add/remove POI inputs
             var poiMaxFields      = 3; // max input boxes allowed
