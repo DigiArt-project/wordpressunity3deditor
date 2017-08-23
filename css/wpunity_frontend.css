@@ -272,3 +272,8 @@ i.ButtonIcon {
     -webkit-box-shadow: none !important;
     content: none !important;
 }
+
+.ui-slider-horizontal .ui-slider-handle {
+    top: -.3em !important;
+    margin-left: -.6em !important;
+}
