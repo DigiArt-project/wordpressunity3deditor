@@ -30,6 +30,8 @@ static void build() {
     }
 }';
 
+
+
     fwrite($handle, $content);
     fclose($handle);
 }
