@@ -534,18 +534,20 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
-        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy);
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy); //empty energy scene
+        $tempcontent = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
         $file7 = $game_path . '/' . $scene_name . '.unity';
         $create_file7 = fopen($file7, "w") or die("Unable to open file!");
         fwrite($create_file7, $file_content7);
+        fwrite($create_file7,$tempcontent);
         fclose($create_file7);
 
         //temp:
-        $tempcontent = wpunity_addAssets_educational_energy_unity($scene_id);
-        $tempfile = $game_path . '/' . $scene_name . '.txt';
-        $create_tempfile = fopen($tempfile, "w") or die("Unable to open file!");
-        fwrite($create_tempfile, $tempcontent);
-        fclose($create_tempfile);
+
+//        $tempfile = $game_path . '/' . $scene_name . '.txt';
+//        $create_tempfile = fopen($tempfile, "w") or die("Unable to open file!");
+//        fwrite($create_tempfile, $tempcontent);
+//        fclose($create_tempfile);
 
         if($scenes_counter<7) {
             wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
