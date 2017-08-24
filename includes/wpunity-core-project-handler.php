@@ -692,6 +692,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
                 $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
                 $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+                $prod_optGen = get_post_meta($producer_id,'wpunity_producerOptGen',true);
 
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
@@ -705,11 +706,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $rotor_diameter = $prod_optCosts['size'];
                 $y_position_infoquad = $rotor_diameter * (1.5);
                 $y_pos_quadselector = $rotor_diameter * (-0.95);
-                $turbine_name_class = '';
-                $turbine_max_power = '';
+                $turbine_name_class = $prod_optGen['class'];
+                $turbine_max_power = $prod_optGen['power'];
                 $turbine_cost = $prod_optCosts['cost'];
                 $rotor_diameter = $prod_optCosts['size'];
-                $turbine_windspeed_class = '';
+                $turbine_windspeed_class = $prod_optGen['speed'];
                 $turbine_repair_cost = $prod_optCosts['repaid'];
                 $turbine_damage_coefficient = $prod_optCosts['dmg'];
                 $fid_transformation_parent_producer = wpunity_create_fids($current_fid++);
