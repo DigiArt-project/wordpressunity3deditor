@@ -549,7 +549,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
-        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy); //empty energy scene
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
         $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
         $file7 = $game_path . '/' . $scene_name . '.unity';
         $create_file7 = fopen($file7, "w") or die("Unable to open file!");
@@ -747,8 +747,32 @@ function wpunity_replace_settings_unity($term_meta_s_settings){
     return $term_meta_s_settings;
 }
 
-function wpunity_replace_educational_energy_unity($term_meta_educational_energy){
-    return $term_meta_educational_energy;
+function wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id){
+
+    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+
+    $jsonScene = htmlspecialchars_decode ( $scene_json );
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+        if ($key == 'avatarYawObject') {
+            $x_pos = - $value['position'][0]; // x is in the opposite site in unity
+            $y_pos = $value['position'][1];
+            $z_pos = $value['position'][2];
+            $x_rot = $value['quaternion'][0];
+            $y_rot = $value['quaternion'][1];
+            $z_rot = $value['quaternion'][2];
+            $w_rot = $value['quaternion'][3];
+        }
+    }
+    $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
+    $file_content_return = str_replace("___[avatar_position_y]___",$y_pos,$file_content_return);
+    $file_content_return = str_replace("___[avatar_position_z]___",$z_pos,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot,$file_content_return);
+    return $file_content_return;
 }
 
 function wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
