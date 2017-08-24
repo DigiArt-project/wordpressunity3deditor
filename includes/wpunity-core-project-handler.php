@@ -172,18 +172,33 @@ function wpunity_compile_folders_del($gameSlug) {
     if (is_dir($path) === true) {
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
 
+        //$h = fopen("files_report.txt","w");
+
         foreach ($files as $file) {
+
+//            fwrite($h, $file->getPathname() . chr(10));
+//
+//            if (strpos($file->getPathname(), $gameSlug . "Unity\Library")) {
+//                continue;
+//                //fwrite($h, "Yes" . chr(10));
+//            }else
+//                fwrite($h, "No". chr(10));
+
+
+
             if (in_array($file->getBasename(), array('.', '..')) !== true) {
-                if ($file->isDir() === true) {
+                if ($file->isDir() === true && $file->getBasename() != 'Library'  ) {
                     rmdir($file->getPathName());
                 }
-                else if (($file->isFile() === true) || ($file->isLink() === true)) {
+                else if (($file->isFile() === true) || ($file->isLink() === true)){ // && $file->getParentFolderName() != 'Library' ) {
                     unlink($file->getPathname());
                 }
             }
         }
 
-        return rmdir($path);
+        //fclose($h);
+
+        return true; //rmdir($path);
     }
     else if ((is_file($path) === true) || (is_link($path) === true)) {
         return unlink($path);
@@ -607,13 +622,16 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $fid_rect_transform_terrain = wpunity_create_fids($current_fid++);
                 $fid_terrain_prefab_mesh = wpunity_create_fids($current_fid++);
                 $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_obj);
-                $x_pos_terrain = $value['position'][0];
+                $x_pos_terrain = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
-                $x_rotation_terrain = $value['quaternion'][0];
-                $y_rotation_terrain = $value['quaternion'][1];
-                $z_rotation_terrain = $value['quaternion'][2];
-                $w_rotation_terrain = $value['quaternion'][3];
+
+                $quats = transform_minusx_quaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
+
+                $x_rotation_terrain = $quats[0]; //$value['quaternion'][0];
+                $y_rotation_terrain = $quats[1]; //$value['quaternion'][1];
+                $z_rotation_terrain = $quats[2]; //$value['quaternion'][2];
+                $w_rotation_terrain = $quats[3]; //$value['quaternion'][3];
                 $x_scale_terrain = $value['scale'][0];
                 $y_scale_terrain = $value['scale'][1];
                 $z_scale_terrain = $value['scale'][2];
@@ -630,7 +648,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $deco_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_decorator = wpunity_create_fids($current_fid++);
                 $guid_obj_decorator = wpunity_create_guids('obj', $deco_obj);
-                $x_pos_decorator = $value['position'][0];
+                $x_pos_decorator = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_decorator = $value['position'][1];
                 $z_pos_decorator = $value['position'][2];
                 $x_rotation_decorator = $value['quaternion'][0];
@@ -652,7 +670,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $consumer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
 
                 $fid_prefab_consumer_parent = wpunity_create_fids($current_fid++);
-                $x_pos_consumer = $value['position'][0];
+                $x_pos_consumer = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_consumer = $value['position'][1];
                 $z_pos_consumer = $value['position'][2];
                 $x_rotation_consumer = $value['quaternion'][0];
@@ -677,7 +695,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
-                $x_pos_producer = $value['position'][0];
+                $x_pos_producer = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_producer = $value['position'][1];
                 $z_pos_producer = $value['position'][2];
                 $x_rot_parent = $value['quaternion'][0];
@@ -1006,6 +1024,32 @@ function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_dec
     $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);
 
     return $file_content_return;
+}
+
+function transform_minusx_quaternions($ax, $ay, $az){
+
+    $t0 = cos($ay * 0.5);  // yaw
+    $t1 = sin($ay * 0.5);
+    $t2 = cos($az * 0.5);  // roll
+    $t3 = sin($az * 0.5);
+    $t4 = cos($ax * 0.5);  // pitch
+    $t5 = sin($ax * 0.5);
+
+    $t024 = $t0 * $t2 * $t4;
+    $t025 = $t0 * $t2 * $t5;
+    $t034 = $t0 * $t3 * $t4;
+    $t035 = $t0 * $t3 * $t5;
+    $t124 = $t1 * $t2 * $t4;
+    $t125 = $t1 * $t2 * $t5;
+    $t134 = $t1 * $t3 * $t4;
+    $t135 = $t1 * $t3 * $t5;
+
+    $x = $t025 + $t134;
+    $y =-$t035 + $t124;
+    $z = $t034 + $t125;
+    $w = $t024 - $t135;
+
+    return [$x,$y,$z,$w];
 }
 
 ?>

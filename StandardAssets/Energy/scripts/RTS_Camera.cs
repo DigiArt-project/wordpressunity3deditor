@@ -15,7 +15,7 @@ namespace RTS_Cam
         float keyboardMovementSpeed = 50f; //speed with keyboard movement
         float screenEdgeMovementSpeed = 50f; //spee with screen edge movement
         float followingSpeed = 50f; //speed when following a target
-        float rotationSped = 2f;
+        float rotationSpeed = 2f;
         float panningSpeed = 100f;
         float mouseRotationSpeed = 10f;
 
@@ -26,21 +26,21 @@ namespace RTS_Cam
         public bool autoHeight = true;
         public LayerMask groundMask = -1; //layermask of ground or other objects that affect height
 
-        float maxHeight = 500f; //maximal height
-        float minHeight = 10f; //minimnal height
-        float heightDampening = 5f; 
+        float maxHeight =  1000f; //maximal height
+        float minHeight =     0f; //minimnal height
+        float heightDampening = 5f;
         float keyboardZoomingSensitivity = 2f;
         float scrollWheelZoomingSensitivity = 5f;
 
-        float zoomPos = 0.5f; //value in range (0, 1) used as t in Matf.Lerp
+        float zoomPos =   0f; //value in range (0, 1) used as t in Matf.Lerp
 
         #endregion
 
         #region MapLimits
 
         public bool limitMap = true;
-        float limitX = 1000f; //x limit of map
-        float limitY = 1000f; //z limit of map
+        float limitX = 10000f; //x limit of map
+        float limitY = 10000f; //z limit of map
 
         #endregion
 
@@ -120,7 +120,7 @@ namespace RTS_Cam
                     return 1;
                 else if (zoomIn && !zoomOut)
                     return -1;
-                else 
+                else
                     return 0;
             }
         }
@@ -137,7 +137,7 @@ namespace RTS_Cam
                     return -1;
                 else if(!rotateLeft && rotateRight)
                     return 1;
-                else 
+                else
                     return 0;
             }
         }
@@ -149,6 +149,8 @@ namespace RTS_Cam
         private void Start()
         {
             m_Transform = transform;
+
+			zoomPos = m_Transform.position.y / maxHeight /2;
         }
 
         private void Update()
@@ -217,8 +219,8 @@ namespace RTS_Cam
                 desiredMove = m_Transform.InverseTransformDirection(desiredMove);
 
                 m_Transform.Translate(desiredMove, Space.Self);
-            }       
-        
+            }
+
             if(usePanning && Input.GetKey(panningKey) && MouseAxis != Vector2.zero)
             {
                 Vector3 desiredMove = new Vector3(-MouseAxis.x, 0, -MouseAxis.y);
@@ -237,7 +239,7 @@ namespace RTS_Cam
         /// </summary>
         private void HeightCalculation()
         {
-            float distanceToGround = DistanceToGround();
+			float distanceToGround = DistanceToGround();
             if(useScrollwheelZooming)
                 zoomPos += ScrollWheel * Time.deltaTime * scrollWheelZoomingSensitivity;
             if (useKeyboardZooming)
@@ -246,12 +248,14 @@ namespace RTS_Cam
             zoomPos = Mathf.Clamp01(zoomPos);
 
             float targetHeight = Mathf.Lerp(minHeight, maxHeight, zoomPos);
-            float difference = 0; 
+            float difference = 0;
 
             if(distanceToGround != targetHeight)
                 difference = targetHeight - distanceToGround;
 
-            m_Transform.position = Vector3.Lerp(m_Transform.position, 
+
+
+            m_Transform.position = Vector3.Lerp(m_Transform.position,
                 new Vector3(m_Transform.position.x, targetHeight + difference, m_Transform.position.z), Time.deltaTime * heightDampening);
         }
 
@@ -261,7 +265,7 @@ namespace RTS_Cam
         private void Rotation()
         {
             if(useKeyboardRotation)
-                transform.Rotate(Vector3.up, RotationDirection * Time.deltaTime * rotationSped, Space.World);
+                transform.Rotate(Vector3.up, RotationDirection * Time.deltaTime * rotationSpeed, Space.World);
 
             if (useMouseRotation && Input.GetKey(mouseRotationKey))
                 m_Transform.Rotate(Vector3.up, -MouseAxis.x * Time.deltaTime * mouseRotationSpeed, Space.World);

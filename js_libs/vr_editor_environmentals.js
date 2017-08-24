@@ -160,10 +160,7 @@ class vr_editor_environmentals {
             }
         }
 
-        envir.SCREEN_WIDTH = envir.container_3D_all.clientWidth; // 500; //window.innerWidth;
-        envir.SCREEN_HEIGHT = envir.container_3D_all.clientHeight; // 500; //window.innerHeight;
-        envir.ASPECT = envir.SCREEN_WIDTH / envir.SCREEN_HEIGHT;
-        envir.renderer.setSize(envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT);
+        envir.turboResize();
     }
 
 
@@ -210,17 +207,14 @@ class vr_editor_environmentals {
     setAvatarCamera() {
         this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 1.2, 3000);
         this.cameraAvatar.name = "avatarCamera";
+        this.cameraAvatar.rotation.y = Math.PI;
 
         this.scene.add(this.cameraAvatar);
-
-        // PointerLockControls (arrows+mouse, Counter strike like)
-        //this.cameraAvatar.position.set(0, 1.8, 0);
 
         this.avatarControls = new THREE.PointerLockControls( this.cameraAvatar, this.renderer.domElement );
         this.avatarControls.name = "avatarControls";
 
         this.initAvatarPosition = new THREE.Vector3( 0, 0, 0);
-
 
         var avatarControlsYawObject = this.avatarControls.getObject();
 
@@ -231,8 +225,8 @@ class vr_editor_environmentals {
         this.orbitControls.target = avatarControlsYawObject.position;
 
         // Add a helper for this camera
-        // this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
-        // this.scene.add( this.cameraAvatarHelper );
+        this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
+        this.scene.add( this.cameraAvatarHelper );
     }
 
 
