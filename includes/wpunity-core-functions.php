@@ -454,7 +454,28 @@ function wpunity_assepile_action_callback(){
     $DS = DIRECTORY_SEPARATOR;
     $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug']);
+    $gameFormat = $_REQUEST['gameFormat'];
+
+    switch($gameFormat){
+        case 'platform-windows':
+            $targetPlatform =  'StandaloneWindows'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+            break;
+        case 'platform-mac':
+            $targetPlatform = 'StandaloneOSXUniversal'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+            break;
+        case 'platform-linux':
+            $targetPlatform = 'StandaloneLinux'; // ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
+            break;
+        case 'platform-web':
+            $targetPlatform =  'WebGL'; //' -executeMethod WebGLBuilder.build';
+            break;
+        default:
+            echo "you must select an output format";
+            wp_die();
+            break;
+    }
+
+	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug'], $targetPlatform);
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
     // to avoiding erroneously take previous files. This is not safe with sleep however.
@@ -474,35 +495,16 @@ function wpunity_assepile_action_callback(){
         chdir($game_dirpath);
 
 
-        $gameFormat = $_REQUEST['gameFormat'];
 
-        switch($gameFormat){
-            case 'platform-windows':
-                $gameFormatParameter = ' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
-                break;
-            case 'platform-mac':
-                $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
-                break;
-            case 'platform-linux':
-                $gameFormatParameter = ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
-                break;
-            case 'platform-web':
-                $gameFormatParameter = ' -executeMethod WebGLBuilder.build';
-                break;
-            default:
-                echo "you must select an output format";
-                wp_die();
-                break;
-        }
 
         if ($os === 'win') {
             $os_bin = 'bat';
 //            $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-//                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
+//                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
 
 
             $txt = '@echo off'."\n"; // change line always with double quote
-            $txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' ' .$gameFormatParameter;
+            $txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
 
             $txt .= "\n";
             $txt .= 'ECHO %PID%';
@@ -721,12 +723,26 @@ function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scen
 
 
     /* Create an empty WebGLBuilder.cs in a certain $filepath */
-    function wpunity_createEmpty_WebGLBuilder_cs($filepath){
+    function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
 
         $handle = fopen($filepath, 'w');
 
+        $targetFileFormat = ''; // WebGL and Linux are blank
+
+        switch($targetPlatform)
+        {
+            case 'StandaloneWindows':
+                $targetFileFormat =  'mygame.exe'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+                break;
+            case 'StandaloneOSXUniversal':
+                $targetFileFormat = 'mygame.app'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+                break;
+        }
+
+
+
         $content = 'using UnityEditor;
-class WebGLBuilder {
+class HandyBuilder {
 static void build() {
 
         // AddAssetsToImportHere
@@ -734,9 +750,9 @@ static void build() {
         string[] scenes = { // AddScenesHere
 }; 
         
-        string pathToDeploy = "builds/WebGLversion/";		
+        string pathToDeploy = "builds/'.$targetPlatform.'/'.$targetFileFormat.'";		
                 
-        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.WebGL, BuildOptions.None);
+        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.'.$targetPlatform.', BuildOptions.None);
     }
 }';
 
@@ -751,7 +767,7 @@ static void build() {
 //    $scenepath = "Assets/scenes/S_SceneSelector.unity"
 // to
 //    WebGLBuilder.cs
-function wpunity_add_in_WebGLBuilder_cs($filepath, $assetpath, $scenepath){
+function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 
     $LF = chr(10); // line change
 
