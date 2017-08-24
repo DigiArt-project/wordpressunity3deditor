@@ -549,7 +549,7 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
         if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
-        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy); //empty energy scene
+        $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
         $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
         $file7 = $game_path . '/' . $scene_name . '.unity';
         $create_file7 = fopen($file7, "w") or die("Unable to open file!");
@@ -692,6 +692,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
                 $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
                 $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+                $prod_optGen = get_post_meta($producer_id,'wpunity_producerOptGen',true);
 
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
@@ -705,11 +706,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $rotor_diameter = $prod_optCosts['size'];
                 $y_position_infoquad = $rotor_diameter * (1.5);
                 $y_pos_quadselector = $rotor_diameter * (-0.95);
-                $turbine_name_class = '';
-                $turbine_max_power = '';
+                $turbine_name_class = $prod_optGen['class'];
+                $turbine_max_power = $prod_optGen['power'];
                 $turbine_cost = $prod_optCosts['cost'];
                 $rotor_diameter = $prod_optCosts['size'];
-                $turbine_windspeed_class = '';
+                $turbine_windspeed_class = $prod_optGen['speed'];
                 $turbine_repair_cost = $prod_optCosts['repaid'];
                 $turbine_damage_coefficient = $prod_optCosts['dmg'];
                 $fid_transformation_parent_producer = wpunity_create_fids($current_fid++);
@@ -747,8 +748,32 @@ function wpunity_replace_settings_unity($term_meta_s_settings){
     return $term_meta_s_settings;
 }
 
-function wpunity_replace_educational_energy_unity($term_meta_educational_energy){
-    return $term_meta_educational_energy;
+function wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id){
+
+    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+
+    $jsonScene = htmlspecialchars_decode ( $scene_json );
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+        if ($key == 'avatarYawObject') {
+            $x_pos = - $value['position'][0]; // x is in the opposite site in unity
+            $y_pos = $value['position'][1];
+            $z_pos = $value['position'][2];
+            $x_rot = $value['quaternion'][0];
+            $y_rot = $value['quaternion'][1];
+            $z_rot = $value['quaternion'][2];
+            $w_rot = $value['quaternion'][3];
+        }
+    }
+    $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
+    $file_content_return = str_replace("___[avatar_position_y]___",$y_pos,$file_content_return);
+    $file_content_return = str_replace("___[avatar_position_z]___",$z_pos,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot,$file_content_return);
+    return $file_content_return;
 }
 
 function wpunity_replace_help_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
