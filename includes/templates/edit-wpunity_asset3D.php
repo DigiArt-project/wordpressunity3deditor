@@ -63,9 +63,9 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$asset_id = wp_insert_post($asset_information);
 	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
 
-	$mtlFile = $_FILES['mtlFileInput'];
-	$objFile = $_FILES['objFileInput'];
-	$textureFile = $_FILES['textureFileInput'];
+	//$mtlFile = $_FILES['mtlFileInput'];
+	//$objFile = $_FILES['objFileInput'];
+	//$textureFile = $_FILES['textureFileInput'];
 	$screenShotFile = $_POST['sshotFileInput'];
 
 	if($asset_id) {
@@ -164,10 +164,30 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
 		}
 
+
+        //$objFile = $_FILES['objFileInput'];
+        $textureFile = $_FILES['textureFileInput'];
+
 		//Upload All files as attachments of asset
-		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
-		$objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
-		$textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
+        //first upload jpg and get the filename for input at mtl
+        $textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
+        $textureFile_filename = basename( get_attached_file( $textureFile_id ) );
+
+        //open mtl file and replace jpg filename
+        $mtl_content = file_get_contents( $_FILES['mtlFileInput']['tmp_name']);
+        $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+        file_put_contents($_FILES['mtlFileInput']['tmp_name'],$mtl_content);
+        $mtlFile = $_FILES['mtlFileInput'];
+        //upload mtl and get the filename for input at obj
+        $mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
+        $mtlFile_filename = basename( get_attached_file( $mtlFile_id ) );
+
+        $obj_content = file_get_contents( $_FILES['objFileInput']['tmp_name']);
+        $obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+        file_put_contents($_FILES['objFileInput']['tmp_name'],$obj_content);
+        $objFile = $_FILES['objFileInput'];
+        $objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
+        
 		$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
 		//Set value of attachment IDs at custom fields
