@@ -277,3 +277,12 @@ i.ButtonIcon {
     top: -.3em !important;
     margin-left: -.6em !important;
 }
+
+/* jimver04 additions */
+#backtotop {
+    z-index : 100;
+}
+
+#header.sticky-header {
+    z-index: 100;
+}
