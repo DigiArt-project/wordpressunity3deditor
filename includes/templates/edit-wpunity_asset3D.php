@@ -556,7 +556,7 @@ get_header(); ?>
 
         <div id="consumerPanel" class="mdc-layout-grid" style="display: none;">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                 <h3 class="mdc-typography--title">Energy Consumption</h3>
 
@@ -582,7 +582,7 @@ get_header(); ?>
 
             </div>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <!--<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
                 <h3 class="mdc-typography--title">Energy Consumption Cost (in $)</h3>
 
@@ -616,10 +616,10 @@ get_header(); ?>
                     </div>
 
                 </div>
-            </div>
+            </div>-->
         </div>
 
-        <div id="producerPanel" class="mdc-layout-grid">
+        <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
@@ -933,9 +933,9 @@ get_header(); ?>
                         jQuery("#energyConsumptionMeanVal").removeAttr("disabled");
                         jQuery("#energyConsumptionVarianceVal").removeAttr("disabled");
 
-                        jQuery("#overPowerCost").removeAttr("disabled");
+                        /*jQuery("#overPowerCost").removeAttr("disabled");
                         jQuery("#normalPowerCost").removeAttr("disabled");
-                        jQuery("#underPowerCost").removeAttr("disabled");
+                        jQuery("#underPowerCost").removeAttr("disabled");*/
 
 
                         break;
