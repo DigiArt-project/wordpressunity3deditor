@@ -62,14 +62,7 @@ timeCreated: ___[unx_time_created]___
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
+  fileIDToRecycleName:{}
   materials:
     importMaterials: 1
     materialName: 2
