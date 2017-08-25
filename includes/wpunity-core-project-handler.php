@@ -760,19 +760,21 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
             $x_pos = - $value['position'][0]; // x is in the opposite site in unity
             $y_pos = $value['position'][1];
             $z_pos = $value['position'][2];
-            $x_rot = $value['quaternion'][0];
-            $y_rot = $value['quaternion'][1];
-            $z_rot = $value['quaternion'][2];
-            $w_rot = $value['quaternion'][3];
+//            $x_rot = $value['quaternion'][0];
+//            $y_rot = $value['quaternion'][1];
+//            $z_rot = $value['quaternion'][2];
+//            $w_rot = $value['quaternion'][3];
+
+            $newquats = transform_minusx_quaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
         }
     }
     $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
     $file_content_return = str_replace("___[avatar_position_y]___",$y_pos,$file_content_return);
     $file_content_return = str_replace("___[avatar_position_z]___",$z_pos,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_x]___",$newquats[0],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_y]___",$newquats[1],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_z]___",$newquats[2],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_w]___",$newquats[3],$file_content_return);
     return $file_content_return;
 }
 
