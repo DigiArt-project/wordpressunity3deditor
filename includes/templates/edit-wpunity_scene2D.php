@@ -61,15 +61,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		if($post_login_choice){update_post_meta($scene_id, 'wpunity_menu_has_login', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_login', 0);}
 		if($post_help_choice){update_post_meta($scene_id, 'wpunity_menu_has_help', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_help', 0);}
 
-        if($post_help_choice){
-            $help_desc = esc_attr(strip_tags($_POST['help-description']));
-            update_post_meta($scene_id, 'wpunity_scene_help_text', $help_desc);
-            $help_image =  $_FILES['help-image'];
-            if($help_image['size']!=0){
-                $attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
-                update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
-            }
-        }
+		if($post_help_choice){
+			$help_desc = esc_attr(strip_tags($_POST['help-description']));
+			update_post_meta($scene_id, 'wpunity_scene_help_text', $help_desc);
+			$help_image =  $_FILES['help-image'];
+			if($help_image['size']!=0){
+				$attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
+				update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
+			}
+		}
 
 		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
 		set_post_thumbnail( $scene_id, $attachment_id );
@@ -118,15 +118,22 @@ get_header(); ?>
 
             <div class="mdc-layout-grid__cell--span-5">
 
-				<?php if ($scene_type == 'credits') { ?>
+				<?php if ($scene_type === 'credits') { ?>
 
-                    <h2 class="mdc-typography--title">Credits</h2>
+                    <h2 class="mdc-typography--title">Credits text</h2>
                     <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
                         <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
                         <label for="creditsTextarea" class="mdc-textfield__label">Edit Credits text</label>
                     </div>
 
 				<?php } else { ?>
+
+                    <h2 class="mdc-typography--title">Main Menu featured image</h2>
+                    <input type="file" name="scene-featured-image" title="Featured image">
+
+					<?php echo get_the_post_thumbnail( $scene_id ); ?>
+
+                    <hr class="WhiteSpaceSeparator">
 
                     <h2 class="mdc-typography--title">Enable sections</h2>
 					<?php
@@ -175,52 +182,48 @@ get_header(); ?>
                     </div>
 
 
-                    <!--ADD NEW SHIT-->
-
-					<?php if ($helpEnabled === 'true') { ?>
-                        <div class="mdc-layout-grid" id="helpDetailsSection">
-                            <div class="mdc-layout-grid__cell--span-12">
-
-                                <h2 class="mdc-typography--title">Help details</h2>
-                                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                                    <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
-                                    <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
-                                </div>
-
-                                <h2 class="mdc-typography--title">Help image</h2>
-                                <input type="file" name="help-image" title="Help image">
-
-                                <?php $help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
-                                $help_imgURL = wp_get_attachment_url( $help_imgID );
-                                echo '<img src="' . $help_imgURL . '" width=100% height=auto />';
-                                ?>
-
-                            </div>
-                        </div>
-					<?php } ?>
-
-
 				<?php } ?>
             </div>
 
             <div class="mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell--span-5">
 
-                <!-- ADD MORE DEPENDING ON THE SCENE -->
+				<?php if ($helpEnabled === 'true') { ?>
+                    <div class="mdc-layout-grid" id="helpDetailsSection">
 
-                <h2 class="mdc-typography--title">Featured image</h2>
-                <input type="file" name="scene-featured-image" title="Featured image">
+                        <div class="mdc-layout-grid__cell--span-12">
+                            <h2 class="mdc-typography--title">Help description</h2>
+                            <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                                <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
+                                <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
+                            </div>
+                        </div>
 
-				<?php echo get_the_post_thumbnail( $scene_id ); ?>
+                        <div class="mdc-layout-grid__cell--span-12">
+
+                            <h2 class="mdc-typography--title">Help image</h2>
+                            <input type="file" name="help-image" title="Help image">
+
+							<?php $help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
+							$help_imgURL = wp_get_attachment_url( $help_imgID );
+							echo '<img src="' . $help_imgURL . '" width=100% height=auto />';
+							?>
+                        </div>
+
+                    </div>
+				<?php } ?>
 
                 <hr class="WhiteSpaceSeparator">
 
 				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
-                <button  class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+            </div>
+
+            <div class="mdc-layout-grid__cell--span-12">
+
+                <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                     Submit changes
                 </button>
-
             </div>
         </div>
     </form>
