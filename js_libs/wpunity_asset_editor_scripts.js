@@ -183,9 +183,9 @@ function wpunity_reset_panels() {
     jQuery("#energyConsumptionMaxVal").attr('disabled', 'disabled');
     jQuery("#energyConsumptionMeanVal").attr('disabled', 'disabled');
     jQuery("#energyConsumptionVarianceVal").attr('disabled', 'disabled');
-    jQuery("#overPowerCost").attr('disabled', 'disabled');
+    /*jQuery("#overPowerCost").attr('disabled', 'disabled');
     jQuery("#normalPowerCost").attr('disabled', 'disabled');
-    jQuery("#underPowerCost").attr('disabled', 'disabled');
+    jQuery("#underPowerCost").attr('disabled', 'disabled');*/
 
     jQuery("#producerPanel").hide();
     /*jQuery("#producerAirSpeedVal").attr('disabled', 'disabled');*/
