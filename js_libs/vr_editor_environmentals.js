@@ -226,6 +226,7 @@ class vr_editor_environmentals {
 
         // Add a helper for this camera
         this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
+        this.cameraAvatarHelper.name = "cameraAvatarHelper";
         this.scene.add( this.cameraAvatarHelper );
     }
 

@@ -109,7 +109,7 @@ THREE.SceneExporter.prototype = {
 
                     continue;
 
-                } else if ( node instanceof THREE.Camera ) {
+                } else if ( node instanceof THREE.Camera || node instanceof THREE.CameraHelper ) {
                     // Cameras are not modifiable
                     // linesArray.push( CameraString( node, pad ) );
                     // nobjects += 1;
@@ -119,7 +119,6 @@ THREE.SceneExporter.prototype = {
                         // Everything is Object3D !
                         // What remains here is the (Groups) = 3d models obj to load
                         // and Object3D avatarYawObject
-
                         linesArray.push(ObjectString(node, pad));
                         nobjects += 1;
                 }
@@ -297,6 +296,8 @@ THREE.SceneExporter.prototype = {
         }
 
         function ObjectString( o, n ) {
+
+
 
 
 
