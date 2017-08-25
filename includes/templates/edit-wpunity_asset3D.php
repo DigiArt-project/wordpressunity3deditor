@@ -73,15 +73,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
 		if($assetCatTerm->slug == 'consumer'){
 			//Energy Consumption Cost (in $)
-			$safe_cost_values = range(-5,5,0.5);
-			$underPowerCost = floatval($_POST['underPowerCost']);
-			$normalPowerCost = floatval($_POST['normalPowerCost']);
-			$overPowerCost = floatval($_POST['overPowerCost']);
-			if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
-			if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
-			if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
-
-			$energyConsumptionCost = array('under' => $underPowerCost,'normal' => $normalPowerCost,'over' => $overPowerCost);
+//			$safe_cost_values = range(-5,5,0.5);
+//			$underPowerCost = floatval($_POST['underPowerCost']);
+//			$normalPowerCost = floatval($_POST['normalPowerCost']);
+//			$overPowerCost = floatval($_POST['overPowerCost']);
+//			if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
+//			if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
+//			if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
+//
+//			$energyConsumptionCost = array('under' => $underPowerCost,'normal' => $normalPowerCost,'over' => $overPowerCost);
 
 			//Energy Consumption
 			$safe_cons_values = range(0, 2000, 5);
@@ -98,7 +98,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			$energyConsumption = array('min' => $energyConsumptionMinVal,'max' => $energyConsumptionMaxVal,'mean' => $energyConsumptionMeanVal,'var' => $energyConsumptionVarianceVal);
 
 			update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
-			update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
+			//update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
 		}elseif($assetCatTerm->slug == 'terrain'){
 			//Income (in $)
 			$safe_income_values = range(-5,5,0.5);
