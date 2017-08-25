@@ -614,7 +614,7 @@ get_header(); ?>
             </div>
         </div>
 
-        <div id="producerPanel" class="mdc-layout-grid">
+        <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
