@@ -156,12 +156,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
 			if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
 
-			$producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
+            $producerClassVal = $_POST['producerClassVal'];
+            $producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
+            $producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
 
+			$producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
+            $producerOptGen = array('class' => $producerClassVal,'speed' => $producerWindSpeedClassVal,'power' => $producerMaxPowerVal);
 			$producerPowerProductionVal = $_POST['producerPowerProductionVal'];
 
 			update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
 			update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
+            update_post_meta( $asset_id, 'wpunity_producerOptGen', $producerOptGen );
 		}
 
 
