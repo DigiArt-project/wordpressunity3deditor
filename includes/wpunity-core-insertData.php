@@ -1150,40 +1150,40 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: ___[fid_consumer_prefab_transform]___}
     m_Modifications:
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+    - target: {fileID: 400002, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 64d690459f3cb8a4ca08c28f4ac524bd, type: 3}
+  m_ParentPrefab: {fileID: 100100000, guid: ___[guid_consumer_prefab_child_obj]___, type: 3}
   m_IsPrefabParent: 0
     ');
 

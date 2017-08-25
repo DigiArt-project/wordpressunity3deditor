@@ -667,6 +667,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $asset_type = get_the_terms( $consumer_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
+                $consumer_obj = get_post_meta($consumer_id,'wpunity_asset3d_obj',true);
                 $consumer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
 
                 $fid_prefab_consumer_parent = wpunity_create_fids($current_fid++);
@@ -680,8 +681,9 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $name_consumer = get_the_title($consumer_id);
                 $fid_consumer_prefab_transform = wpunity_create_fids($current_fid++);
                 $fid_consumer_prefab_child = wpunity_create_fids($current_fid++);
+                $guid_consumer_prefab_child_obj = wpunity_create_guids('obj', $consumer_obj);
 
-                $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child);
+                $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child,$guid_consumer_prefab_child_obj);
                 $allObjectsYAML = $allObjectsYAML . $LF . $consumer_finalyaml;
             }
             if ($value['categoryName'] == 'Producer'){
@@ -964,7 +966,7 @@ function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_whe
     return $file_content_return;
 }
 
-function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child){
+function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child,$guid_consumer_prefab_child_obj){
 
     $file_content_return = str_replace("___[fid_prefab_consumer_parent]___",$fid_prefab_consumer_parent,$consumer_yaml);
     $file_content_return = str_replace("___[x_pos_consumer]___",$x_pos_consumer,$file_content_return);
@@ -977,6 +979,7 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
     $file_content_return = str_replace("___[name_consumer]___",$name_consumer,$file_content_return);
     $file_content_return = str_replace("___[fid_consumer_prefab_transform]___",$fid_consumer_prefab_transform,$file_content_return);
     $file_content_return = str_replace("___[fid_consumer_prefab_child]___",$fid_consumer_prefab_child,$file_content_return);
+    $file_content_return = str_replace("___[guid_consumer_prefab_child_obj]___",$guid_consumer_prefab_child_obj,$file_content_return);
 
     return $file_content_return;
 }
