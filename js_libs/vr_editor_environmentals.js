@@ -9,7 +9,7 @@ class vr_editor_environmentals {
 
         this.SCREEN_WIDTH = this.container_3D_all.clientWidth; // 500; //window.innerWidth;
         this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
-        this.VIEW_ANGLE = 45;
+        this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
         this.NEAR = 0.1;

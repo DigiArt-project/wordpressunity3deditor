@@ -280,9 +280,9 @@ i.ButtonIcon {
 
 /* jimver04 additions */
 #backtotop {
-    z-index : 100;
+    z-index : 100 !important;
 }
 
 #header.sticky-header {
-    z-index: 100;
+    z-index: 100 !important;
 }

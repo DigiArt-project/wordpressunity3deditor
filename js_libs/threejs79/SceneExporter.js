@@ -334,16 +334,29 @@ THREE.SceneExporter.prototype = {
 
             } else {
 
+
+                console.log("Avataro", o);
+
+
+                var camEulerCombined = new THREE.Euler(o.children[0].rotation._x, o.rotation.y, 0);
+
+                var quatCombined = new THREE.Quaternion();
+
+                console.log(camEulerCombined);
+
+                quatCombined.setFromEuler(camEulerCombined);
+
+
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
                     '	"position" : ' + Vector3String(o.position) + ',',
-                    '	"rotation" : ' + "[" + mradians2degrees(o.rotation.x) + "," +
+                    '	"rotation" : ' + "[" + mradians2degrees(o.children[0].rotation._x) + "," +
                                                mradians2degrees(o.rotation.y) + "," +
                                                mradians2degrees(o.rotation.z)  + "]" + ',', //+ Vector3String(o.rotation) + ',',
-                    '	"quaternion" : ' + "[" + o.quaternion._x + "," +
-                                                 o.quaternion._y + "," +
-                                                 o.quaternion._z + "," +
-                                                 o.quaternion._w + "]" + ',',
+                    '	"quaternion" : ' + "[" + quatCombined._x + "," +
+                                                 quatCombined._y + "," +
+                                                 quatCombined._z + "," +
+                                                 quatCombined._w + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
