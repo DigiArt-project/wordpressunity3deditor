@@ -128,10 +128,25 @@ get_header(); ?>
 
 				<?php } else { ?>
 
-                    <h2 class="mdc-typography--title">Main Menu featured image</h2>
-                    <input type="file" name="scene-featured-image" title="Featured image">
+					<?php $featuredImgUrl = get_the_post_thumbnail_url( $scene_id ); ?>
 
-					<?php echo get_the_post_thumbnail( $scene_id ); ?>
+                    <h2 class="mdc-typography--title">Main Menu featured image</h2>
+
+					<?php /*echo get_the_post_thumbnail( $scene_id ); */?>
+
+					<?php if ($featuredImgUrl) { ?>
+
+                        <div class="ImageContainer">
+                            <img id="featuredImgPreview" src="<?php echo $featuredImgUrl; ?>">
+                        </div>
+
+					<?php } else { ?>
+
+                        <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+
+					<?php } ?>
+
+                    <input type="file" name="scene-featured-image" title="Featured image" value="" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                     <hr class="WhiteSpaceSeparator">
 
@@ -181,7 +196,6 @@ get_header(); ?>
                         <label for="help-switch" class="mdc-switch-label">Help</label>
                     </div>
 
-
 				<?php } ?>
             </div>
 
@@ -202,12 +216,26 @@ get_header(); ?>
                         <div class="mdc-layout-grid__cell--span-12">
 
                             <h2 class="mdc-typography--title">Help image</h2>
-                            <input type="file" name="help-image" title="Help image">
+
 
 							<?php $help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
 							$help_imgURL = wp_get_attachment_url( $help_imgID );
-							echo '<img src="' . $help_imgURL . '" width=100% height=auto />';
-							?>
+
+							if ($help_imgURL) { ?>
+
+                                <div class="ImageContainer">
+                                    <img id="helpImgPreview" src="<?php echo $help_imgURL; ?>">
+                                </div>
+
+                                <img src="<?php echo $help_imgURL; ?>" />
+							<?php } else { ?>
+
+                                <img id="helpImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+
+							<?php } ?>
+
+                            <input type="file" name="help-image" title="Help image" value="" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
+
                         </div>
 
                     </div>
@@ -239,6 +267,27 @@ get_header(); ?>
                 jQuery("#helpDetailsSection").hide();
             }
         });
+
+        jQuery("#sceneFeaturedImgInput").change(function() {
+            readURL(this, "#featuredImgPreview");
+        });
+
+        jQuery("#sceneHelpImgInput").change(function() {
+            readURL(this, "#helpImgPreview");
+        });
+
+        function readURL(input, id) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    jQuery(id).attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
     </script>
 
