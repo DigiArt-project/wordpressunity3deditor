@@ -51,13 +51,16 @@ class LoaderMulti {
                                 envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
                                                             resources3D[name]['trs']['translation'][1],
                                                             resources3D[name]['trs']['translation'][2],
+                                                            resources3D[name]['trs']['rotation'][0],
                                                             resources3D[name]['trs']['rotation'][1]
-                                                            )
+                                                            );
 
                                 if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
                                     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
                                     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
                                 }
+
+
 
                             }
                         );

@@ -706,8 +706,6 @@
 
 		this.dispose = function () {
 
-			console.log("dispose 124");
-
 			domElement.removeEventListener( "mousedown", onPointerDown );
 			domElement.removeEventListener( "touchstart", onPointerDown );
 
@@ -861,15 +859,14 @@
 
 				var intersect = intersectObjects( pointer, _gizmo[ _mode ].pickers.children );
 
-
-                //console.log("PPP", intersect);
-
 				if ( intersect ) {
+
+                    event.stopImmediatePropagation();
 
 					event.preventDefault();
 					event.stopPropagation();
 
-					scope.dispatchEvent( mouseDownEvent );
+                    scope.dispatchEvent( mouseDownEvent );
 
 					scope.axis = intersect.object.name;
 
@@ -987,7 +984,6 @@
 
 						scale = 1 + ( ( point.y ) / Math.max( oldScale.x, oldScale.y, oldScale.z ) );
 
-                        console.log("scale1", scale);
 
 						scope.object.scale.x = oldScale.x * scale;
 						scope.object.scale.y = oldScale.y * scale;
@@ -1156,6 +1152,7 @@
 		}
 
 		function intersectObjects( pointer, objects ) {
+
 
 			var rect = domElement.getBoundingClientRect();
 			var x = ( pointer.clientX - rect.left ) / rect.width;

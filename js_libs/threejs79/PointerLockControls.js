@@ -40,8 +40,6 @@ THREE.PointerLockControls = function ( camera ) {
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
-
-
 		//console.log("pitchObject", pitchObject.rotation)
 		//console.log("yawObject",yawObject.rotation)
 	};

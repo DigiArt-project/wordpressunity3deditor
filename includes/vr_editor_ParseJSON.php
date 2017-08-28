@@ -13,8 +13,6 @@ class ParseJSON {
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
 
-
-
         foreach ($json_objects as $key=>$value) {
 
             $name = $key;
@@ -25,6 +23,11 @@ class ParseJSON {
                 $obj = '';
                 $mtl = '';
                 $type_behavior = 'avatar';
+
+                $r_x = $value->rotation[0];
+                $r_y = $value->rotation[1];
+                $r_z = 0;
+
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $assetid=$value->assetid;
@@ -37,15 +40,15 @@ class ParseJSON {
                 $categoryName = $value->categoryName;
                 $categoryID = $value->categoryID;
                 $image1id = $value->image1id;
+
+                $r_x = $value->rotation[0];
+                $r_y = $value->rotation[1];
+                $r_z = $value->rotation[2];
             }
 
             $t_x = $value->position[0];
             $t_y = $value->position[1];
             $t_z = $value->position[2];
-
-            $r_x = $value->rotation[0];
-            $r_y = $value->rotation[1];
-            $r_z = $value->rotation[2];
 
             $scale = $value->scale[0];
 

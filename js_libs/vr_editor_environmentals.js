@@ -52,6 +52,10 @@ class vr_editor_environmentals {
         this.setSunSphere();
 
         this.setComposer();
+
+
+
+
         // this.setTerrain(); // test after 74
 
         // Window resize event (container was added)
@@ -218,24 +222,32 @@ class vr_editor_environmentals {
 
         var avatarControlsYawObject = this.avatarControls.getObject();
 
+
+
+
+
+
+
         avatarControlsYawObject.position.set(this.initAvatarPosition.x, this.initAvatarPosition.y, this.initAvatarPosition.z);
 
         this.scene.add(avatarControlsYawObject);
 
         this.orbitControls.target = avatarControlsYawObject.position;
 
+
+
         // Add a helper for this camera
         this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
         this.cameraAvatarHelper.name = "cameraAvatarHelper";
         this.scene.add( this.cameraAvatarHelper );
+
+
     }
 
 
     setSteveToAvatarControls(){
-
         var Steve = envir.scene.getObjectByName("Steve");
         Steve.rotation.set(0, Math.PI/2, 0);
-
         this.avatarControls.getObject().add(Steve );
     }
 
@@ -244,11 +256,18 @@ class vr_editor_environmentals {
     }
 
 
-    setSteveWorldPosition(x,y,z,ry){
+    setSteveWorldPosition(x,y,z,rx,ry){
+
+
+
         envir.avatarControls.getObject().position.x = x;
         envir.avatarControls.getObject().position.y = y;
         envir.avatarControls.getObject().position.z = z;
+
+        envir.avatarControls.getObject().children[0].rotation.x = rx;
         envir.avatarControls.getObject().rotation.y = ry;
+
+
     }
 
     //================= Static Environmentals ==============================
@@ -360,8 +379,6 @@ class vr_editor_environmentals {
     setRenderer() {
 
         this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
-
-        //console.log("1 window.devicePixelRatio", window.devicePixelRatio);
 
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
@@ -542,6 +559,34 @@ class vr_editor_environmentals {
         }
         context.putImageData( image, 0, 0 );
         return canvas;
+    }
+
+    convertQuats(ax, ay, az){
+
+        ay = Math.PI - ay;
+
+        var t0 = Math.cos(ay * 0.5);  // yaw
+        var t1 = Math.sin(ay * 0.5);
+        var t2 = Math.cos(az * 0.5);  // roll
+        var t3 = Math.sin(az * 0.5);
+        var t4 = Math.cos(ax * 0.5);  // pitch
+        var t5 = Math.sin(ax * 0.5);
+
+        var t024 = t0 * t2 * t4;
+        var t025 = t0 * t2 * t5;
+        var t034 = t0 * t3 * t4;
+        var t035 = t0 * t3 * t5;
+        var t124 = t1 * t2 * t4;
+        var t125 = t1 * t2 * t5;
+        var t134 = t1 * t3 * t4;
+        var t135 = t1 * t3 * t5;
+
+        var x = t025 + t134;
+        var y =-t035 + t124;
+        var z = t034 + t125;
+        var w = t024 - t135;
+
+        return new THREE.Quaternion(x,y,z,w);
     }
 
 

@@ -13,7 +13,7 @@ var raycasterPick = new THREE.Raycaster();
  *
  * @param event
  */
-function onMouseDown( event ) {
+function onMouseDownSelect( event ) {
 
     var i;
 
@@ -62,7 +62,8 @@ function onMouseDown( event ) {
     var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
     // recycle bin                       // mode changer purple cube
 
-    var arrNameObj = [];
+    // This should be a global variable because it is referenced inside pops
+    arrNameObjInter = [];
 
     // ------------ TRS sprite mode changer ---------
     if (intersects.length > 0) {
@@ -124,13 +125,11 @@ function onMouseDown( event ) {
         }
     }
 
-
-
     //-------------------- Select object in scene by raycasting ----------------------------------------------------
     for ( i = 0; i < intersects.length; i++ ) {
 
         // selected_object_name = intersects[i].object.name;
-        // arrNameObj[selected_object_name] = intersects[i].object;
+        // arrNameObjInter[selected_object_name] = intersects[i].object;
 
         //---------------- Steve -------------------------------
         //if (intersects[i].object.parent.name == 'Steve')
@@ -139,31 +138,30 @@ function onMouseDown( event ) {
         // for group
         if (intersects[i].object.parent instanceof THREE.Group) {
             selected_object_name = intersects[i].object.parent.name;
-            arrNameObj[selected_object_name] = intersects[i].object.parent;
+            arrNameObjInter[selected_object_name] = intersects[i].object.parent;
             // for object3D
-
-
 
         } else {
             // selected_object_name = intersects[i].object.parent.parent.name;
-            // arrNameObj[selected_object_name] = intersects[i].object.parent.parent;
+            // arrNameObjInter[selected_object_name] = intersects[i].object.parent.parent;
         }
     }
+
 
     var nameL;
 
     // If only one object is intersected
-    if (Object.keys(arrNameObj).length == 1) {
-        nameL = Object.keys(arrNameObj)[0];
+    if (Object.keys(arrNameObjInter).length == 1) {
+        nameL = Object.keys(arrNameObjInter)[0];
 
-        transform_controls.attach(arrNameObj[nameL]);
+        transform_controls.attach(arrNameObjInter[nameL]);
 
         // highlight
-        envir.outlinePass.selectedObjects = [arrNameObj[nameL].children[0]];
+        envir.outlinePass.selectedObjects = [arrNameObjInter[nameL].children[0]];
         envir.renderer.setClearColor( 0xffffff, 0.9 );
 
         // If more than 2 objects are intersected
-    } else if (Object.keys(arrNameObj).length > 1) {
+    } else if (Object.keys(arrNameObjInter).length > 1) {
         var popupSelect = document.getElementById("popupSelect");
 
         // Clear options
@@ -188,7 +186,7 @@ function onMouseDown( event ) {
         popupSelect.add(option);
 
         // Add options for each intersected object
-        for (nameL in  arrNameObj ) {
+        for (nameL in  arrNameObjInter ) {
             option = document.createElement("option");
             option.text = nameL;
             option.value = nameL;
@@ -210,15 +208,16 @@ function onMouseDown( event ) {
         ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
         ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
+
         // On popup change
         jQuery("#popupSelect").change(function(e) {
             var nameL = jQuery("#popupSelect").val();
 
             if (nameL != "Cancel" && nameL != "Select") {
-                transform_controls.attach(arrNameObj[nameL]);
+                transform_controls.attach(arrNameObjInter[nameL]);
 
                 // highlight
-                envir.outlinePass.selectedObjects = [ arrNameObj[nameL].children[0] ];
+                envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
                 envir.renderer.setClearColor( 0xffffff, 0.9 );
             }
             jQuery("#popUpDiv").hide();

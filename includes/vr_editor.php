@@ -428,10 +428,12 @@ echo '</script>';
         var trs_tmp;
         var name;
 
-        for (name in resources3D ) {
+        for (name in resources3D  ) {
+
+            if (name == 'avatarYawObject')
+                continue;
 
             trs_tmp = resources3D[name]['trs'];
-
             objItem = envir.scene.getObjectByName(name);
 
             objItem.position.set( trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
@@ -558,7 +560,6 @@ $formRes->init($sceneToLoad);
         envir.lightAvatar.position.copy(envir.avatarControls.getObject().position);
         envir.lightAvatar.position.y += 1.8;
 
-
         // Now update the translation and rotation input texts
         if (transform_controls.object) {
 
@@ -577,7 +578,9 @@ $formRes->init($sceneToLoad);
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
 
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDown );
+
+
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect );
 
     animate();
 </script>

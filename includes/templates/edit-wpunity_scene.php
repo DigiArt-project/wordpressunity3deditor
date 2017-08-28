@@ -21,8 +21,6 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
 
-
-
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 function my_enqueue_front_end_ajax() {
     global $scene_id;
@@ -129,7 +127,7 @@ get_header(); ?>
             </div>
 
 
-            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility: hidden"
+            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden ; width:900px; max-with:1100px"
                      name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
         </div>

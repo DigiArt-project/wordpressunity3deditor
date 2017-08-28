@@ -595,6 +595,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
         if ($key == 'avatarYawObject') {
             //do something about AVATAR
+
         }else{
             if ($value['categoryName'] == 'Terrain'){
                 $terrain_id = $value['assetid'];
@@ -626,7 +627,10 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
 
-                $quats = transform_minusx_quaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
+
+                $quats = transform_minusx_radiansToquaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
+
+
 
                 $x_rotation_terrain = $quats[0]; //$value['quaternion'][0];
                 $y_rotation_terrain = $quats[1]; //$value['quaternion'][1];
@@ -762,21 +766,33 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
             $x_pos = - $value['position'][0]; // x is in the opposite site in unity
             $y_pos = $value['position'][1];
             $z_pos = $value['position'][2];
-//            $x_rot = $value['quaternion'][0];
-//            $y_rot = $value['quaternion'][1];
-//            $z_rot = $value['quaternion'][2];
-//            $w_rot = $value['quaternion'][3];
+            $x_rot = $value['quaternion'][0];
+            $y_rot = $value['quaternion'][1];
+            $z_rot = $value['quaternion'][2];
+            $w_rot = $value['quaternion'][3];
 
-            $newquats = transform_minusx_quaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
+
+//            $fg = fopen('testquats.txt','w');
+//            fwrite($fg, print_r($value,true));
+//            fwrite($fg, chr(10));
+//
+//
+//            $newquats = (new THREE.Quaternion(0,0,0,0)).setFromEuler(- $value['rotation'][0], $value['rotation'][1], $value['rotation'][2], 'YXZ'));   //transform_minusx_radiansToquaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
+//
+//            fwrite($fg, print_r($newquats,true));
+//            fclose($fg);
+
+
+
         }
     }
     $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
     $file_content_return = str_replace("___[avatar_position_y]___",$y_pos,$file_content_return);
     $file_content_return = str_replace("___[avatar_position_z]___",$z_pos,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_x]___",$newquats[0],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_y]___",$newquats[1],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_z]___",$newquats[2],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_w]___",$newquats[3],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot[0],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot[1],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot[2],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot[3],$file_content_return);
     return $file_content_return;
 }
 
@@ -1056,7 +1072,9 @@ function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_dec
     return $file_content_return;
 }
 
-function transform_minusx_quaternions($ax, $ay, $az){
+function transform_minusx_radiansToquaternions($ax, $ay, $az){
+
+    $ay = Math.PI - $ay;
 
     $t0 = cos($ay * 0.5);  // yaw
     $t1 = sin($ay * 0.5);
