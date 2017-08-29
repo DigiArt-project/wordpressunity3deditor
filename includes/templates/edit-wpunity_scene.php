@@ -130,6 +130,8 @@ get_header(); ?>
             <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden ; width:900px; max-with:1100px"
                      name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
+            <input id="wpunity_scene_sshot" type="hidden" value="">
+
         </div>
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
             <div style="min-height: 780px;"></div>
