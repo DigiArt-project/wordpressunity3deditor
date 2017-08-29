@@ -836,7 +836,14 @@ function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 function wpunity_save_scene_async_action_callback()
 {
   // put meta in scene. True, false, or id of meta if does not exist
-  $res= update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
+  $res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
+
+   $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
+       $_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
+
+   set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+
+
   echo $res ? 'true' : 'false';
   wp_die();
 }

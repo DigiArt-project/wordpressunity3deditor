@@ -83,9 +83,7 @@ echo '</script>';
         var cw = vr_editor.width();
         vr_editor.css({'height':cw*2/3+'px'});
 
-
         envir.turboResize();
-
 
         // make filebrowser draggable
         var filemanager = jQuery('#fileBrowserToolbar'),
@@ -389,9 +387,12 @@ echo '</script>';
 
 
         // Save screenshot data to input
+        envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
         document.getElementById("wpunity_scene_sshot").value = envir.renderer.domElement.toDataURL("image/jpeg");
 
+
         wpunity_saveSceneAjax();
+
         //document.getElementById('wpunity_scene_theForm').submit();
 
     });
