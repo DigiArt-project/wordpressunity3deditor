@@ -387,6 +387,10 @@ echo '</script>';
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
+
+        // Save screenshot data to input
+        document.getElementById("wpunity_scene_sshot").value = envir.renderer.domElement.toDataURL("image/jpeg");
+
         wpunity_saveSceneAjax();
         //document.getElementById('wpunity_scene_theForm').submit();
 
