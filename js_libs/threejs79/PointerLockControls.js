@@ -27,27 +27,15 @@ THREE.PointerLockControls = function ( camera ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		// Ververidis
-		if (movementX>50 || movementY>50)
-			return;
-
 		yawObject.rotation.y -= movementX * 0.002;
 		pitchObject.rotation.x -= movementY * 0.002;
 
-		yawObject.rotation.x = 0;
-		yawObject.rotation.z = 0;
-
-
+		// Limit pitch to avoid upside down view
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
-
-		//console.log("pitchObject", pitchObject.rotation)
-		//console.log("yawObject",yawObject.rotation)
 	};
 
 	this.dispose = function() {
-
 		document.removeEventListener( 'mousemove', onMouseMove, false );
-
 	};
 
 	document.addEventListener( 'mousemove', onMouseMove, false );
@@ -55,31 +43,20 @@ THREE.PointerLockControls = function ( camera ) {
 	this.enabled = false;
 
 	this.getObject = function () {
-
-		//console.log("PointerLockControls", yawObject.rotation.y);
-
 		return yawObject;
-
 	};
 
 	this.getDirection = function() {
-
 		// assumes the camera itself is not rotated
 
 		var direction = new THREE.Vector3( 0, 0, - 1 );
 		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
 
 		return function( v ) {
-
 			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
-
 			v.copy( direction ).applyEuler( rotation );
-
 			return v;
-
-
 		};
-
 	}();
 
 };
