@@ -771,7 +771,6 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
             $z_rot = $value['quaternion'][2];
             $w_rot = $value['quaternion'][3];
 
-
 //            $fg = fopen('testquats.txt','w');
 //            fwrite($fg, print_r($value,true));
 //            fwrite($fg, chr(10));
@@ -789,10 +788,10 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
     $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
     $file_content_return = str_replace("___[avatar_position_y]___",$y_pos,$file_content_return);
     $file_content_return = str_replace("___[avatar_position_z]___",$z_pos,$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot[0],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot[1],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot[2],$file_content_return);
-    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot[3],$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_x]___",$x_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot,$file_content_return);
+    $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot,$file_content_return);
     return $file_content_return;
 }
 

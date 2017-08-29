@@ -297,11 +297,6 @@ THREE.SceneExporter.prototype = {
 
         function ObjectString( o, n ) {
 
-
-
-
-
-
             if (o.name != 'avatarYawObject'){
 
                 // ================ Ververidis Main =============: All objs
@@ -336,14 +331,8 @@ THREE.SceneExporter.prototype = {
             } else {
 
                 var quatCombined = new THREE.Quaternion();
-
-                var camEulerCombined = new THREE.Euler(- o.children[0].rotation._x, o.rotation.y, 0);
-
-                console.log("camEulerCombined", camEulerCombined);
-
-                quatCombined.setFromEuler(camEulerCombined, 'YXZ');
-
-                //console.log("quatCombined",quatCombined)
+                var camEulerCombined = new THREE.Euler(- o.children[0].rotation._x, (Math.PI - o.rotation.y)%(2*Math.PI), 0, 'YXZ');
+                quatCombined.setFromEuler(camEulerCombined);
 
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
@@ -358,13 +347,9 @@ THREE.SceneExporter.prototype = {
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
-
-                console.log("SCENE EXPO AVATAR", output);
-
             }
 
             return generateMultiLineString( output, '\n\t\t', n );
-
         }
 
         function mradians2degrees(x){
