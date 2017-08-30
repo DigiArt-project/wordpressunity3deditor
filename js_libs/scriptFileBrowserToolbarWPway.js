@@ -49,8 +49,6 @@ function file_Browsing_By_DB(responseData) {
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
 
-    console.log("responseData", responseData);
-
     render(responseData);
 
     // Hiding and showing the search box
@@ -132,8 +130,6 @@ function file_Browsing_By_DB(responseData) {
     function render(enlistData) {
 
         var i, f, name;
-
-        console.log("enlistData", enlistData);
 
         // Empty the old result and make the new one
         fileList.empty().hide();
@@ -237,7 +233,6 @@ function file_Browsing_By_DB(responseData) {
             if (d.assetName.indexOf(needle) !== -1)
                     output_data.push(d);
         });
-
         return output_data;
     }
 

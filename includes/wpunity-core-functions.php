@@ -499,10 +499,6 @@ function wpunity_assepile_action_callback(){
 
         if ($os === 'win') {
             $os_bin = 'bat';
-//            $txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-//                $game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
-
-
             $txt = '@echo off'."\n"; // change line always with double quote
             $txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
 
@@ -511,7 +507,6 @@ function wpunity_assepile_action_callback(){
             $txt .= "\n";
             $txt .= 'exit'; // exit command useful for not showing again the command prompt
             $txt .= "\n";
-
 $txt .= '
 :spawn command args
 :: sets %PID% on completion
@@ -530,12 +525,6 @@ endlocal & set "PID=%return: =%"
 goto :EOF
 @echo on';
 
-
-
-
-
-
-
             $compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
         } else { // LINUX SERVER
@@ -543,7 +532,7 @@ goto :EOF
             $txt = "#/bin/bash"."\n".
                 "projectPath=`pwd`"."\n".
                 "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} ".$gameFormatParameter;
+                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} ". ' -executeMethod HandyBuilder.build';
 
             // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
             $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
