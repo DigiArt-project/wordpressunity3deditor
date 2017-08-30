@@ -1,36 +1,133 @@
 <?php
 
-//DELETE GAME PROJECT with files
+//DELETE GAME PROJECT
 function wpunity_delete_gameproject_frontend($game_id){
+    $game_post = get_post($game_id);
+    $gameSlug = $game_post->post_name;
 
-    //wp_delete_post( $game_id, false );
+    //1.Delete Assets
+    $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
+    $assetPGameID = $assetPGame->term_id;
+
+    $custom_query_args1 = array(
+        'post_type' => 'wpunity_asset3d',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field'    => 'term_id',
+                'terms'    => $assetPGameID,
+            ),
+        ),
+    );
+     // Instantiate custom query
+    $custom_query = new WP_Query( $custom_query_args1 );
+    // Output custom query loop
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $asset_id = get_the_ID();
+            wpunity_delete_asset3d_frontend($asset_id,$gameSlug);
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+
+    //2.Delete Scenes
+    $scenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    $scenePGameID = $scenePGame->term_id;
+
+    $custom_query_args2 = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $scenePGameID,
+            ),
+        ),
+    );
+    // Instantiate custom query
+    $custom_query2 = new WP_Query( $custom_query_args2 );
+    // Output custom query loop
+    if ( $custom_query2->have_posts() ) :
+        while ( $custom_query2->have_posts() ) :
+            $custom_query2->the_post();
+            $scene_id = get_the_ID();
+            wpunity_delete_scene_frontend($scene_id);
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+
+    //3. Delete taxonomies from Assets & Scenes
+    wp_delete_term( $assetPGameID, 'wpunity_asset3d_pgame' );
+    wp_delete_term( $scenePGameID, 'wpunity_scene_pgame' );
+
+    //4. Delete Compile Folder of Game (if exists)
+    wpunity_compile_folders_del($gameSlug);
+
+    //5. Delete Game CUSTOM POST
+    wp_delete_post( $game_id, false );
 
 }
 
+function wpunity_delete_scene_frontend($scene_id){
+    //1. Delete Scene CUSTOM POST
+    wp_delete_post( $scene_id, true );
+}
+
 //DELETE GAME PROJECT with files
-function wpunity_delete_asset3d_frontend($asset_id){
-    $pathofPost = get_post_meta($asset_id,'wpunity_asset3d_pathData',true);
-    wpunity_delete_asset3d_post_media( $asset_id , $pathofPost );
+function wpunity_delete_asset3d_frontend($asset_id,$gameSlug){
+
+    //1. Delete all Attachments (mtl/obj/jpg ...)
+    $mtlID = get_post_meta($asset_id,'wpunity_asset3d_mtl', true);
+    wp_delete_attachment( $mtlID,true );
+    $objID = get_post_meta($asset_id,'wpunity_asset3d_obj', true);
+    wp_delete_attachment( $objID,true );
+    $difID = get_post_meta($asset_id,'wpunity_asset3d_diffimage', true);
+    wp_delete_attachment( $difID,true );
+    $screenID = get_post_meta($asset_id,'wpunity_asset3d_screenimage', true);
+    wp_delete_attachment( $screenID,true );
+
+    //2. Delete all uses of Asset from Scenes (json)
+    wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug);
+
+    //3. Delete Asset3D CUSTOM POST
     wp_delete_post( $asset_id, true );
 
 }
 
-function wpunity_delete_asset3d_post_media( $asset_id ,$pathofPost ) {
-    $attachments = get_posts(
-        array(
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'post_status'    => 'any',
-            'post_parent'    => $asset_id,
-        )
-    );
+function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
+    $scenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    $scenePGameID = $scenePGame->term_id;
 
-    foreach ( $attachments as $attachment ) {
-        //1.get attachment name/slug
-        $attachment_name = $attachment->post_name;
-        //2.delete (unlink) meta with the same name
-        wp_delete_attachment( $attachment->ID );
-    }
+    $custom_query_args2 = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $scenePGameID,
+            ),
+        ),
+    );
+    // Instantiate custom query
+    $custom_query2 = new WP_Query( $custom_query_args2 );
+    // Output custom query loop
+    if ( $custom_query2->have_posts() ) :
+        while ( $custom_query2->have_posts() ) :
+            $custom_query2->the_post();
+            $scene_id = get_the_ID();
+            $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
+            //check if asset exists in json of each scene and delete it
+            
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
 }
 
 
@@ -697,8 +794,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
                 $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
-                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
                 $prod_optGen = get_post_meta($producer_id,'wpunity_producerOptGen',true);
+                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+                $prod_powerVal = str_replace(array('[',']'), '',$prod_powerVal);//remove all [ ]
+                $prod_powerVal_array = explode(',', $prod_powerVal);//create Array with values of string
+
 
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
@@ -723,7 +823,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $fid_child_producer = wpunity_create_fids($current_fid++);
                 $obj_guid_producer = wpunity_create_guids('obj', $producer_obj);
                 $producer_name = get_the_title($producer_id);
-                $power_curve_val = '';
+                $power_curve_val = $prod_powerVal_array;
 
                 $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
                 $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;

@@ -1058,6 +1058,18 @@ get_header(); ?>
             var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
             var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
+            // Change Mean range according to Speed range
+            jQuery( "#wind-speed-range" ).on( "slidestop", function( event, ui ) {
+
+                var elemId = "#wind-mean-slider";
+                jQuery( elemId ).slider( "option", "min", ui.values[ 0 ] );
+                jQuery( elemId ).slider( "option", "max", ui.values[ 1 ] );
+                jQuery( elemId ).slider( "option", "values", [ ui.values[ 0 ], ui.values[ 1 ] ] );
+
+                jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) + " " + 'm/sec' );
+
+            } );
+
             var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
             var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 0, max: 2000, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
             var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
