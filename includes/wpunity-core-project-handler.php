@@ -122,7 +122,19 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
             $custom_query2->the_post();
             $scene_id = get_the_ID();
             $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
-            //check if asset exists in json of each scene and delete it
+
+            $jsonScene = htmlspecialchars_decode ( $scene_json );
+            $sceneJsonARR = json_decode($jsonScene, TRUE);
+            $tempScenearr = $sceneJsonARR;
+            foreach ($tempScenearr['objects'] as $key => $value ) {
+                if ($key != 'avatarYawObject') {
+                    if($value['assetid'] == $asset_id) {
+                        unset($tempScenearr['objects'][$key]);
+                        $tempScenearr = json_decode($tempScenearr,true);
+                        update_post_meta($scene_id,'wpunity_scene_json_input',$tempScenearr );
+                    }
+                }
+            }
 
         endwhile;
     endif;
