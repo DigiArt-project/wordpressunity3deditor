@@ -299,6 +299,13 @@ THREE.SceneExporter.prototype = {
 
             if (o.name != 'avatarYawObject'){
 
+                var quatR = new THREE.Quaternion();
+                var eulerR = new THREE.Euler( o.rotation._x,  -o.rotation.y , - o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
+                quatR.setFromEuler(eulerR);
+
+                // console.log("ROTATION:", eulerR);
+                // console.log("Quaternion:", quatR);
+
                 // ================ Ververidis Main =============: All objs
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
@@ -306,10 +313,10 @@ THREE.SceneExporter.prototype = {
                     '	"rotation" : ' + "[" + o.rotation.x  + "," +
                                                o.rotation.y  + "," +
                                                o.rotation.z  + "]" + ',', //+ Vector3String(o.rotation) + ',',
-                    '	"quaternion" : ' + "[" + o.quaternion._x + "," +
-                                                 o.quaternion._y + "," +
-                                                 o.quaternion._z + "," +
-                                                 o.quaternion._w + "]" + ',',
+                    '	"quaternion" : ' + "[" + quatR._x + "," +
+                                                quatR._y + "," +
+                                                quatR._z + "," +
+                                                quatR._w + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"assetid" : ' + '"' + o.assetid  + '"' + ',',

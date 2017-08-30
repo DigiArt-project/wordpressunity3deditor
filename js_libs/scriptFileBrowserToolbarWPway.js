@@ -42,13 +42,13 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
 function file_Browsing_By_DB(data) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
-        breadcrumbs = jQuery('.breadcrumbs'),
+        //breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
 
-    var response = [data],
-        currentPath = '',
-        breadcrumbsUrls = [];
+    var response = [data];
+        // currentPath = '';  stores the path after #f1/f2/ ...
+        //breadcrumbsUrls = [];
 
     var folders = [],
         files = [];
@@ -98,7 +98,7 @@ function file_Browsing_By_DB(data) {
 
         else {
             filemanager.removeClass('searching');
-            window.location.hash = encodeURIComponent(currentPath);
+            //window.location.hash = encodeURIComponent(currentPath);
         }
 
     }).on('keyup', function(e){
@@ -119,7 +119,7 @@ function file_Browsing_By_DB(data) {
 
         if(!search.val().trim().length) {
 
-            window.location.hash = encodeURIComponent(currentPath);
+            //window.location.hash = encodeURIComponent(currentPath);
             search.hide();
             search.parent().find('span').show();
 
@@ -202,41 +202,41 @@ function file_Browsing_By_DB(data) {
     //
     //});
 
-    // Clicking on folders
-    fileList.on('click', 'li.folders', function(e){
-        e.preventDefault();
-
-        var nextDir = jQuery(this).find('a.folders').attr('href');
-
-        if(filemanager.hasClass('searching')) {
-
-            // Building the breadcrumbs
-            breadcrumbsUrls = generateBreadcrumbs(nextDir);
-
-            filemanager.removeClass('searching');
-            filemanager.find('input[type=search]').val('').hide();
-            filemanager.find('span').show();
-        }
-        else {
-            breadcrumbsUrls.push(nextDir);
-        }
-
-        window.location.hash = encodeURIComponent(nextDir);
-        currentPath = nextDir;
-    });
+    // Obsolete: Clicking on folders.
+    // fileList.on('click', 'li.folders', function(e){
+    //     e.preventDefault();
+    //
+    //     var nextDir = jQuery(this).find('a.folders').attr('href');
+    //
+    //     if(filemanager.hasClass('searching')) {
+    //
+    //         // Building the breadcrumbs
+    //         breadcrumbsUrls = generateBreadcrumbs(nextDir);
+    //
+    //         filemanager.removeClass('searching');
+    //         filemanager.find('input[type=search]').val('').hide();
+    //         filemanager.find('span').show();
+    //     }
+    //     else {
+    //         breadcrumbsUrls.push(nextDir);
+    //     }
+    //
+    //     window.location.hash = encodeURIComponent(nextDir);
+    //     currentPath = nextDir;
+    // });
 
 
     // Clicking on breadcrumbs
-    breadcrumbs.on('click', 'a', function(e){
-        e.preventDefault();
-
-        var index = breadcrumbs.find('a').index(jQuery(this)),
-            nextDir = breadcrumbsUrls[index];
-
-        breadcrumbsUrls.length = Number(index);
-
-        window.location.hash = encodeURIComponent(nextDir);
-    });
+    // breadcrumbs.on('click', 'a', function(e){
+    //     e.preventDefault();
+    //
+    //     var index = breadcrumbs.find('a').index(jQuery(this)),
+    //         nextDir = breadcrumbsUrls[index];
+    //
+    //     breadcrumbsUrls.length = Number(index);
+    //
+    //     window.location.hash = encodeURIComponent(nextDir);
+    // });
 
 
     // Navigates to the given hash (path)
@@ -249,48 +249,42 @@ function file_Browsing_By_DB(data) {
             var rendered = '';
 
             // if hash has search in it
-
             if (hash[0] === 'search') {
-
                 filemanager.addClass('searching');
                 rendered = searchData(response, hash[1].toLowerCase());
 
                 if (rendered.length) {
-                    currentPath = hash[0];
+                    //currentPath = hash[0];
                     render(rendered);
                 }
                 else {
                     render(rendered);
                 }
-
             }
 
             // if hash is some path
 
-            else if (hash[0].trim().length) {
-
-                rendered = searchByPath(hash[0]);
-
-                if (rendered.length) {
-
-                    currentPath = hash[0];
-                    breadcrumbsUrls = generateBreadcrumbs(hash[0]);
-                    render(rendered);
-
-                }
-                else {
-                    currentPath = hash[0];
-                    breadcrumbsUrls = generateBreadcrumbs(hash[0]);
-                    render(rendered);
-                }
-
-            }
+            // else if (hash[0].trim().length) {
+            //
+            //     rendered = searchByPath(hash[0]);
+            //
+            //     if (rendered.length) {
+            //         currentPath = hash[0];
+            //         //breadcrumbsUrls = generateBreadcrumbs(hash[0]);
+            //         render(rendered);
+            //     }
+            //     else {
+            //         currentPath = hash[0];
+            //         //breadcrumbsUrls = generateBreadcrumbs(hash[0]);
+            //         render(rendered);
+            //     }
+            // }
 
             // if there is no hash
 
             else {
-                currentPath = data.path;
-                breadcrumbsUrls.push(data.path);
+                //currentPath = data.path;
+                //breadcrumbsUrls.push(data.path);
                 render(searchByPath(data.path));
             }
         }
@@ -298,14 +292,14 @@ function file_Browsing_By_DB(data) {
 
     // Splits a file path and turns it into clickable breadcrumbs
 
-    function generateBreadcrumbs(nextDir){
-        var path = nextDir.split('/').slice(0);
-
-        for(var i=1;i<path.length;i++){
-            path[i] = path[i-1]+ '/' +path[i];
-        }
-        return path;
-    }
+    // function generateBreadcrumbs(nextDir){
+    //     var path = nextDir.split('/').slice(0);
+    //
+    //     for(var i=1;i<path.length;i++){
+    //         path[i] = path[i-1]+ '/' +path[i];
+    //     }
+    //     return path;
+    // }
 
 
     // Locates a file by path
@@ -362,6 +356,9 @@ function file_Browsing_By_DB(data) {
 
         var scannedFolders = [],
             scannedFiles = [];
+
+
+        console.log("data", data);
 
         if (Array.isArray(data)) {
 
@@ -501,31 +498,31 @@ function file_Browsing_By_DB(data) {
         }
         else {
 
-            fileList.addClass('animated');
+            //fileList.addClass('animated');
 
-            breadcrumbsUrls.forEach(function (u, i) {
-
-                var name = u.split('/');
-
-                // rename first path to hide the full path
-                if (i===0)
-                    name[0] = " All assets";
-                /*name[0] = gamefolder + " All assets";*/
-
-
-                if (i !== breadcrumbsUrls.length - 1) {
-                    url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a>' +
-                        ' <span class="vr_editor_arrow"> > </span> ';
-                }
-                else {
-                    url += '<span class="folderName mdc-typography--subheading2">' + name[name.length-1] + '</span>';
-                }
-
-            });
+            // breadcrumbsUrls.forEach(function (u, i) {
+            //
+            //     var name = u.split('/');
+            //
+            //     // rename first path to hide the full path
+            //     if (i===0)
+            //         name[0] = " All assets";
+            //     /*name[0] = gamefolder + " All assets";*/
+            //
+            //
+            //     if (i !== breadcrumbsUrls.length - 1) {
+            //         url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a>' +
+            //             ' <span class="vr_editor_arrow"> > </span> ';
+            //     }
+            //     else {
+            //         url += '<span class="folderName mdc-typography--subheading2">' + name[name.length-1] + '</span>';
+            //     }
+            //
+            // });
 
         }
 
-        breadcrumbs.text('').append(url);
+        //breadcrumbs.text('').append(url);
 
         // Show the generated elements
         fileList.animate({'display':'inline-block'});
