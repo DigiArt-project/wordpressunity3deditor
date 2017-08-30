@@ -697,8 +697,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $producer_obj = get_post_meta($producer_id,'wpunity_asset3d_obj',true);
                 $prod_optCosts = get_post_meta($producer_id,'wpunity_producerOptCosts',true);
-                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
                 $prod_optGen = get_post_meta($producer_id,'wpunity_producerOptGen',true);
+                $prod_powerVal = get_post_meta($producer_id,'wpunity_producerPowerProductionVal',true);
+                $prod_powerVal = str_replace(array('[',']'), '',$prod_powerVal);//remove all [ ]
+                $prod_powerVal_array = explode(',', $prod_powerVal);//create Array with values of string
+
 
                 $producer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $fid_producer = wpunity_create_fids($current_fid++);
@@ -723,7 +726,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $fid_child_producer = wpunity_create_fids($current_fid++);
                 $obj_guid_producer = wpunity_create_guids('obj', $producer_obj);
                 $producer_name = get_the_title($producer_id);
-                $power_curve_val = '';
+                $power_curve_val = $prod_powerVal_array;
 
                 $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
                 $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
