@@ -123,7 +123,7 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
             $scene_id = get_the_ID();
             $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
             //check if asset exists in json of each scene and delete it
-            
+
         endwhile;
     endif;
 
@@ -1122,34 +1122,34 @@ function wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_prod
     $file_content_return = str_replace("___[fid_child_producer]___",$fid_child_producer,$file_content_return);
     $file_content_return = str_replace("___[obj_guid_producer]___",$obj_guid_producer,$file_content_return);
     $file_content_return = str_replace("___[producer_name]___",$producer_name,$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[0],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_1]___",$power_curve_val[1],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_2]___",$power_curve_val[2],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_3]___",$power_curve_val[3],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_4]___",$power_curve_val[4],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_5]___",$power_curve_val[5],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_6]___",$power_curve_val[6],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_7]___",$power_curve_val[7],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_8]___",$power_curve_val[8],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_9]___",$power_curve_val[9],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_10]___",$power_curve_val[10],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_11]___",$power_curve_val[11],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_12]___",$power_curve_val[12],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_13]___",$power_curve_val[13],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_14]___",$power_curve_val[14],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_15]___",$power_curve_val[15],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_16]___",$power_curve_val[16],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_17]___",$power_curve_val[17],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_18]___",$power_curve_val[18],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_19]___",$power_curve_val[19],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_20]___",$power_curve_val[20],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_21]___",$power_curve_val[21],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_22]___",$power_curve_val[22],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_23]___",$power_curve_val[23],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_24]___",$power_curve_val[24],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_25]___",$power_curve_val[25],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_26]___",$power_curve_val[26],$file_content_return);
-    $file_content_return = str_replace("___[power_curve_val_27]___",$power_curve_val[27],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_0]___",$power_curve_val[1],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_1]___",$power_curve_val[3],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_2]___",$power_curve_val[5],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_3]___",$power_curve_val[7],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_4]___",$power_curve_val[9],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_5]___",$power_curve_val[11],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_6]___",$power_curve_val[13],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_7]___",$power_curve_val[15],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_8]___",$power_curve_val[17],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_9]___",$power_curve_val[19],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_10]___",$power_curve_val[21],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_11]___",$power_curve_val[23],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_12]___",$power_curve_val[25],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_13]___",$power_curve_val[27],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_14]___",$power_curve_val[29],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_15]___",$power_curve_val[31],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_16]___",$power_curve_val[33],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_17]___",$power_curve_val[35],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_18]___",$power_curve_val[37],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_19]___",$power_curve_val[39],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_20]___",$power_curve_val[41],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_21]___",$power_curve_val[43],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_22]___",$power_curve_val[45],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_23]___",$power_curve_val[47],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_24]___",$power_curve_val[49],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_25]___",$power_curve_val[51],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_26]___",$power_curve_val[53],$file_content_return);
+    $file_content_return = str_replace("___[power_curve_val_27]___",$power_curve_val[55],$file_content_return);
 
     return $file_content_return;
 }
