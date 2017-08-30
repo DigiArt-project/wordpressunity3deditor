@@ -55,6 +55,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     // Create Main Menu Scene Data
     $mainmenuSceneData = array(
         'post_title'    => $mainmenuSceneTitle,
+        'post_content' => 'Main Menu of the Game',
         'post_name' => $mainmenuSceneSlug,
         'post_type' => 'wpunity_scene',
         'post_status'   => 'publish',
@@ -73,6 +74,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     // Create First Scene Data
     $firstSceneData = array(
         'post_title'    => $firstSceneTitle,
+        'post_content' => 'Auto-created scene',
         'post_name' => $firstSceneSlug,
         'post_type' => 'wpunity_scene',
         'post_status'   => 'publish',
@@ -89,6 +91,7 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     // Create Credentials Scene Data
     $credentialsSceneData = array(
         'post_title'    => $credentialsSceneTitle,
+        'post_content' => 'Credits of the Game',
         'post_name' => $credentialsSceneSlug,
         'post_type' => 'wpunity_scene',
         'post_status'   => 'publish',
