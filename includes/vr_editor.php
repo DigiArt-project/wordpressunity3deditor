@@ -281,7 +281,7 @@ echo '</script>';
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
 
         <div class="bt_close_file_toolbar mdc-typography">
-            Close
+            Open
         </div>
     </div>
 
