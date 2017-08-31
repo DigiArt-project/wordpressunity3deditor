@@ -166,7 +166,7 @@ get_header();
         <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
             <div class="mdc-layout-grid">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
                                aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
@@ -177,8 +177,11 @@ get_header();
                        id="title-validation-msg">
                         Between 6 - 25 characters
                     </p>
+                </div>
 
-                    <hr class="WhiteSpaceSeparator">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
@@ -189,13 +192,8 @@ get_header();
 
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-
-                    <h2 class="mdc-typography--title">Screenshot image</h2>
-                    <input type="file" title="Scene screenshot image" name="scene-featured-image" accept="image/png, image/jpeg">
-
-                    <hr class="WhiteSpaceSeparator">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                     <input type="hidden" name="submitted" id="submitted" value="true" />
