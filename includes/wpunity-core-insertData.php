@@ -1446,7 +1446,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: ___[obj_guid_producer]___, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9238796
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: ___[obj_guid_producer]___, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1460,7 +1460,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: ___[obj_guid_producer]___, type: 3}
+    - target: {fileID: 100000, guid: ___[obj_guid_producer]___, type: 3}
       propertyPath: m_TagString
       value: producer_mesh
       objectReference: {fileID: 0}

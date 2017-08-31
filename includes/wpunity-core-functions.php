@@ -531,22 +531,37 @@ goto :EOF
             $os_bin = 'sh';
             $txt = "#/bin/bash"."\n".
                 "projectPath=`pwd`"."\n".
+                //"export TMPDIR=projectPath"."\n".
                 "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} ". ' -executeMethod HandyBuilder.build';
+                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} "." -executeMethod HandyBuilder.build". //"-buildWindowsPlayer ' build/mygame.exe'";// " -executeMethod HandyBuilder.build";  //;  //. ;
+                 ""; //"export TMPDIR="."\n";
+
+                   //--auth-file=/opt/lampp/htdocs/envisage/authortool/wp-content/uploads/testcompiledimitrisUnity/.Xauthority
+
 
             // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-            $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
+            $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null & echo $! >>pid.txt';
         }
 
         // 1 : Generate bat or sh
         $myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
         fwrite($myfile, $txt);
+
+        //$curruser = "\n" . posix_geteuid() . " " . posix_getpwuid(posix_geteuid())['name'];
+        //fwrite($myfile, $curruser);
+
         fclose($myfile);
         chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
-        $unity_pid = shell_exec($compile_command);
+        if ($os === 'win')
+            $unity_pid = shell_exec($compile_command);
+        else {
+            shell_exec($compile_command);
+            $fpid = fopen("pid.txt","r");
+            $unity_pid = fgets($fpid);
+            fclose($fpid);
+        }
         //---------------------------------------
-
         chdir($init_gcwd);
 
         // Write to wp-admin dir the shell_exec cmd result
@@ -599,14 +614,14 @@ function wpunity_monitor_compiling_action_callback(){
 	$stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
 
 	if ($os === 'lin')
-		$processUnityCSV = exec('pgrep Unity');
+		$processUnityCSV = exec('ps --no-headers -p '.$_POST['pid'].' -o "%mem"'); // ,%cpu
 	 else {
 	     //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
          $phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
          $processUnityCSV = exec($phpcomd);
      }
 
-	echo json_encode(array('CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
+	echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 
 	wp_die();
 }
@@ -618,19 +633,15 @@ function wpunity_killtask_compiling_action_callback(){
 
     $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-
-
     if ($os === 'lin') {
-     //  $killres = exec(???);
+        $phpcomd = 'kill '.$_POST['pid'];
+        $killres = exec($phpcomd);
     }else {
-
         $phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
         $killres = exec($phpcomd);
     }
 
-
     echo $killres;
-
     wp_die();
 }
 

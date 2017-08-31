@@ -19,13 +19,10 @@ function wpunity_assepileAjax() {
         },
 
         success : function(unity_pid) {
-
             console.log("Ajax 1 unity_pid:" + unity_pid);
 
             window.unity_pid = unity_pid.replace(/^\s+|\s+$/g , "");
-
             jQuery( "#compileCancelBtn" ).attr('data-unity-pid', window.unity_pid).removeClass( "LinkDisabled" );
-
         },
 
         error : function(xhr, ajaxOptions, thrownError) {
@@ -60,85 +57,60 @@ function wpunity_assepileAjax() {
                 success : function(response) {
 
                     var jsonArr = JSON.parse(response);
-
+                    var os = jsonArr.os;
                     var procMonitor = jsonArr.CSV;
                     var logfile = jsonArr.LOGFILE;
 
                     var completedFlag = false;
                     var successFlag = false;
 
-                    console.log('Task report', procMonitor);
-
-                    if (procMonitor.indexOf("No tasks are running") > 0) {
+                    if (procMonitor.indexOf("No tasks are running") > 0 || procMonitor.length == 0) {
                         completedFlag = true;
                         successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                     }
 
                     if (!completedFlag) {
-
                         var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
-                        var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-
-                        var memVal = infoArr[4].slice(1, -2);
-                        jQuery('#unityTaskMemValue').html(memVal);
-
-                        // document.getElementById("wpunity_compile_report1").innerHTML = "Log file:" + counterLines + " lines at " +
-                        //     + (new Date().getTime() - start_time)/1000 + " seconds";
-
                         console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
+                        console.log("procMonitor:", procMonitor);
 
-                        //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = procMonitor + " " + logfile;
+                        if (os == 'win') {
+                            var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                            var memVal = infoArr[4].slice(1, -2);
+                            jQuery('#unityTaskMemValue').html(memVal);
+                        } else {
+                            jQuery('#unityTaskMemValue').html(procMonitor);
+                        }
+
                     } else {
-                        //document.getElementById("wpunity_compile_report1").innerHTML = "Process completed, lasted: " + (new Date().getTime() - start_time)/1000 + " seconds";
-
                         console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");
 
-
                         if (successFlag) {
-                            //document.getElementById('wpunity_compileButton').innerHTML = "Compile";
-                            //document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Success.";
-
                             console.log("Ajax 2: Compile Result: Success");
 
                             compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
 
                             // After success we start the Ajax
                             myzipajax();
-
-
                             clearInterval(intervalFn);
                         } else {
-
                             console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error or process killed' + logfile);
-
                             compilationProgressText.append( '<p>Compilation error / Process was killed</p>');
-
                             clearInterval(intervalFn);
-                            //document.getElementById("wpunity_compile_report2").innerHTML = 'and the result is Error [15] : Compile error ' + logfile;
-
                             hideProgressSlider();
                         }
                     }
-
-
                 },
                 error : function(xhr, ajaxOptions, thrownError){
-                    // document.getElementById("wpunity_compile_report2").innerHTML = "and the result is Error [16] : HTML " + xhr.status + "<br />" +
-                    //     xhr.getAllResponseHeaders() + " " + thrownError;
-
                     console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
-
                     clearInterval(intervalFn);
-                    //document.getElementById("wpunity_compile_game_stdoutlog_report").innerHTML = response;
-
                     hideProgressSlider();
                 }
             });
         }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
 
         clearInterval(intervFn2);
-
     }, 1000);
 
 
@@ -183,17 +155,13 @@ function wpunity_assepileAjax() {
                 document.getElementById('wpunity-ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
                 jQuery('#wpunity-ziplink').show();
 
-
                 if (platform === 'platform-web') {
                     document.getElementById('wpunity-weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
                     jQuery('#wpunity-weblink').show();
                 }
 
                 hideProgressSlider();
-
                 compilationProgressText.append( '<p>Zip file creation complete!</p>');
-
-
             },
             error : function(xhr, ajaxOptions, thrownError){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;
@@ -233,6 +201,4 @@ function wpunity_killtask_compile(pid) {
             console.log("Ajax 4: ERROR: " + thrownError);
         }
     });
-
-
 }
