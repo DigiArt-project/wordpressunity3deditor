@@ -114,11 +114,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_id = wp_insert_post($scene_information);
 
-	$scene_image = $_FILES['scene-featured-image'];
+	//$scene_image = $_FILES['scene-featured-image'];
 
 	if($scene_id){
-		$attachment_id = wpunity_upload_img( $scene_image, $scene_id);
-		set_post_thumbnail( $scene_id, $attachment_id );
+		//$attachment_id = wpunity_upload_img( $scene_image, $scene_id);
+		//set_post_thumbnail( $scene_id, $attachment_id );
 
 		$newpost = get_post($scene_id);
 
