@@ -7,7 +7,7 @@ $editgamePage = wpunity_getEditpage('game');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    //wpunity_compile_the_game($gameID,$gameSlug);
+	//wpunity_compile_the_game($gameID,$gameSlug);
 
 	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
 	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
@@ -49,6 +49,11 @@ get_header();
 
     <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new game project or edit an existing one</h2>
+
+    <p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?
+        <a target="_blank" href="<?php echo plugin_dir_url( __DIR__ ); ?>files/usage-scenario.pdf" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>
+    </p>
+
     <hr class="WhiteSpaceSeparator">
     <div class="mdc-layout-grid FrontPageStyle">
 
