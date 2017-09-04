@@ -235,13 +235,15 @@ get_header(); ?>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
+                <h3 class="mdc-typography--title">Select a category</h3>
+
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                    <i class="material-icons mdc-theme--text-icon-on-light">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a category</span>
+                    <i class="material-icons mdc-theme--text-primary-on-background">web_asset</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
                     <div class="mdc-simple-menu mdc-select__menu">
                         <ul class="mdc-list mdc-simple-menu__items">
 
                             <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="categories" aria-disabled="true" style="pointer-events: none;">
-                                Select a category
+                                No category selected
                             </li>
 							<?php
 							$myGameType = 1;
@@ -274,15 +276,15 @@ get_header(); ?>
             <input id="termIdInput" type="hidden" name="term_id" value="">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                <span class="mdc-typography--subheading2" id="categoryDescription"></span>
+                <span class="mdc-typography--subheading2" id="categoryDescription"> </span>
             </div>
         </div>
 
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-                <h3 id="physicsTitle" class="mdc-typography--title">Information</h3>
+                <h3 class="mdc-typography--title">Information</h3>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
@@ -874,7 +876,11 @@ get_header(); ?>
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
 
+                jQuery("#informationPanel").show();
+
                 jQuery("#formSubmitBtn").show();
+
+
 
                 wpunity_reset_panels();
 
@@ -955,8 +961,6 @@ get_header(); ?>
                         jQuery("#producerClassVal").removeAttr("disabled");
                         jQuery("#producerMaxPowerVal").removeAttr("disabled");
                         jQuery("#producerWindSpeedClassVal").removeAttr("disabled");
-
-
 
                         spanProducerChartLabels();
 
