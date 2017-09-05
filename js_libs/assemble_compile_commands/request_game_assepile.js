@@ -59,6 +59,9 @@ function wpunity_assepileAjax() {
                     var jsonArr = JSON.parse(response);
                     var os = jsonArr.os;
                     var procMonitor = jsonArr.CSV;
+
+                    console.log("procMonitor length",  procMonitor.length);
+
                     var logfile = jsonArr.LOGFILE;
 
                     var completedFlag = false;

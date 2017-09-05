@@ -492,7 +492,7 @@ function wpunity_assepile_action_callback(){
         $upload_dir = str_replace('\\','/',$upload_dir);
         $game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
 
-        chdir($game_dirpath);
+
 
 
 
@@ -531,31 +531,24 @@ goto :EOF
             $os_bin = 'sh';
             $txt = "#/bin/bash"."\n".
                 "projectPath=`pwd`"."\n".
-                //"export TMPDIR=projectPath"."\n".
                 "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} "." -executeMethod HandyBuilder.build". //"-buildWindowsPlayer ' build/mygame.exe'";// " -executeMethod HandyBuilder.build";  //;  //. ;
-                 ""; //"export TMPDIR="."\n";
-
-                   //--auth-file=/opt/lampp/htdocs/envisage/authortool/wp-content/uploads/testcompiledimitrisUnity/.Xauthority
-
+                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -executeMethod HandyBuilder.build";// " -executeMethod HandyBuilder.build";  //;  //. ; "-buildWindowsPlayer ' build/mygame.exe'"; //
 
             // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-            $compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null & echo $! >>pid.txt';
+            $compile_command = 'nohup sh starter_artificial.sh> /dev/null 2>/dev/null & echo $! >>pid.txt';
         }
 
         // 1 : Generate bat or sh
         $myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
         fwrite($myfile, $txt);
-
-        //$curruser = "\n" . posix_geteuid() . " " . posix_getpwuid(posix_geteuid())['name'];
-        //fwrite($myfile, $curruser);
-
         fclose($myfile);
         chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
+        chdir($game_dirpath);
         if ($os === 'win')
-            $unity_pid = shell_exec($compile_command);
+            $unity_pid = shell_exec($game_dirpath.$DS.$compile_command);
         else {
+            $res = putenv("HOME=/home/jimver04");
             shell_exec($compile_command);
             $fpid = fopen("pid.txt","r");
             $unity_pid = fgets($fpid);
@@ -564,10 +557,6 @@ goto :EOF
         //---------------------------------------
         chdir($init_gcwd);
 
-        // Write to wp-admin dir the shell_exec cmd result
-        $hf = fopen('output.txt', 'w');
-        fwrite($hf, $unity_pid);
-        fclose($hf);
 
         echo $unity_pid;
     }
@@ -576,31 +565,6 @@ goto :EOF
 
 
     wp_die();
-}
-
-/**
- *   This function is for compiling the \test_compiler\game_windows  project
- */
-function fake_compile_for_a_test_project()
-{
-    // 1. Start the compile
-    $gcwd = getcwd(); // get cwd (wp-admin probably)
-
-    chdir("../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
-
-    // Windows
-    $output = shell_exec('start /b starter.bat /c');
-
-    // WebGL
-    //$output = shell_exec('start /b starterWebGL.bat /c');
-
-    // go back to previous directory (wp-admin probably)
-    chdir($gcwd);
-
-    // Write to wp-admin dir the shell_exec cmd result
-    $h = fopen('output.txt', 'w');
-    fwrite($h, $output);
-    fclose($h);
 }
 
 
@@ -613,9 +577,32 @@ function wpunity_monitor_compiling_action_callback(){
 	// Monitor stdout.log
 	$stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
 
-	if ($os === 'lin')
-		$processUnityCSV = exec('ps --no-headers -p '.$_POST['pid'].' -o "%mem"'); // ,%cpu
-	 else {
+	if ($os === 'lin') {
+
+
+        //pid is the sh process id. First get the xvfbrun process ID
+        $phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
+
+        // from the xvfbrun process ID get the Unity process ID
+        $phpcomd2 = exec("ps -ef | grep Unity | awk -v myvar=".$phpcomd1." '$3==myvar {print $2;}';");
+
+        $processUnityCSV = exec('ps --no-headers -p ' . $phpcomd2 . ' -o size'); // ,%cpu
+
+        // Write to wp-admin dir the shell_exec cmd result
+//        $hf = fopen('output.txt', 'w');
+//        fwrite($hf, $phpcomd1);
+//        fwrite($hf, $phpcomd2);
+//        fclose($hf);
+
+        $processUnityCSV = round(((float)($processUnityCSV))/1000,0);
+
+        if ($processUnityCSV==0)
+            $processUnityCSV = "";
+        else
+            $processUnityCSV = "".$processUnityCSV."";
+
+
+    } else {
 	     //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
          $phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
          $processUnityCSV = exec($phpcomd);
@@ -634,8 +621,16 @@ function wpunity_killtask_compiling_action_callback(){
     $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
     if ($os === 'lin') {
-        $phpcomd = 'kill '.$_POST['pid'];
+        //pid is the sh process id. First get the xvfbrun process ID
+        $phpcomd  = "xvfbrun_ID=$(ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}');";
+
+        // from the xvfbrun process ID get the Unity process ID
+        $phpcomd .= "unity_pid=$(ps -ef | grep Unity | awk -v myvar=\"\$xvfbrun_ID\" '$3==myvar {print $2;}');";
+
+        // kill Unity
+        $phpcomd .= "kill `echo \"\$unity_pid\"`";
         $killres = exec($phpcomd);
+
     }else {
         $phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
         $killres = exec($phpcomd);
@@ -846,6 +841,31 @@ function wpunity_save_scene_async_action_callback()
 
   echo $res ? 'true' : 'false';
   wp_die();
+}
+
+/**
+ *   This function is for compiling the \test_compiler\game_windows  project
+ */
+function fake_compile_for_a_test_project()
+{
+    // 1. Start the compile
+    $gcwd = getcwd(); // get cwd (wp-admin probably)
+
+    chdir("../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
+
+    // Windows
+    $output = shell_exec('start /b starter.bat /c');
+
+    // WebGL
+    //$output = shell_exec('start /b starterWebGL.bat /c');
+
+    // go back to previous directory (wp-admin probably)
+    chdir($gcwd);
+
+    // Write to wp-admin dir the shell_exec cmd result
+    $h = fopen('output.txt', 'w');
+    fwrite($h, $output);
+    fclose($h);
 }
 
 
