@@ -388,6 +388,8 @@ echo '</script>';
         envir.cameraAvatarHelper.visible = false;
         envir.axisHelper.visible = false;
         envir.gridHelper.visible = false;
+        envir.scene.getObjectByName("myTransformControls").visible=false;
+        envir.scene.getObjectByName("recycleBin").visible=false;
 
         // Save screenshot data to input
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
@@ -396,6 +398,10 @@ echo '</script>';
         envir.cameraAvatarHelper.visible = true;
         envir.axisHelper.visible = true;
         envir.gridHelper.visible = true;
+        envir.scene.getObjectByName("myTransformControls").visible=true;
+        envir.scene.getObjectByName("recycleBin").visible=true;
+
+
 
         wpunity_saveSceneAjax();
 
