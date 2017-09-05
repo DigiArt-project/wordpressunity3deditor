@@ -123,6 +123,7 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
             $scene_id = get_the_ID();
             $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
 
+
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);
             $tempScenearr = $sceneJsonARR;
@@ -130,11 +131,12 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
                 if ($key != 'avatarYawObject') {
                     if($value['assetid'] == $asset_id) {
                         unset($tempScenearr['objects'][$key]);
+                        $tempScenearr['metadata']['objects'] --;
                     }
                 }
             }
 
-            $tempScenearr = json_decode($tempScenearr,true);
+            $tempScenearr = json_encode($tempScenearr, JSON_PRETTY_PRINT);
             update_post_meta($scene_id,'wpunity_scene_json_input',$tempScenearr );
 
         endwhile;

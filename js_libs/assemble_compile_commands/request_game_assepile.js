@@ -153,13 +153,13 @@ function wpunity_assepileAjax() {
                 console.log("Ajax 3: Success: Zip location: " + my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip' );
 
                 // Check if index.html exists (because it is not always compiled for web)
-                console.log("Ajax 3: Success: index.html location " + my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html' );
+                console.log("Ajax 3: Success: index.html location " + my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGL/index.html' );
 
                 document.getElementById('wpunity-ziplink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/game.zip';
                 jQuery('#wpunity-ziplink').show();
 
                 if (platform === 'platform-web') {
-                    document.getElementById('wpunity-weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGLversion/index.html';
+                    document.getElementById('wpunity-weblink').href = my_ajax_object_assepile.gameUnityProject_urlpath + '/builds/WebGL/index.html';
                     jQuery('#wpunity-weblink').show();
                 }
 
