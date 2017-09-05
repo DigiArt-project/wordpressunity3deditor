@@ -60,7 +60,7 @@ function wpunity_assepileAjax() {
                     var os = jsonArr.os;
                     var procMonitor = jsonArr.CSV;
 
-                    console.log("procMonitor length",  procMonitor.length);
+                    console.log("procMonitor length", procMonitor, procMonitor.length);
 
                     var logfile = jsonArr.LOGFILE;
 
@@ -73,10 +73,10 @@ function wpunity_assepileAjax() {
                     }
 
                     if (!completedFlag) {
+
                         var counterLines = logfile.split(/\r\n|\r|\n/).length;
 
                         console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
-                        console.log("procMonitor:", procMonitor);
 
                         if (os == 'win') {
                             var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
@@ -85,6 +85,47 @@ function wpunity_assepileAjax() {
                         } else {
                             jQuery('#unityTaskMemValue').html(procMonitor);
                         }
+
+
+                        // STEPS:
+
+                        if (platform == 'platform-windows' || platform == 'platform-mac' || platform == 'platform-linux'  )
+                            var steps = ["COMMAND LINE ARGUMENTS", "Compute hash(es)", "DisplayProgressbar: Building Player",
+                                            "DisplayProgressNotification: Build Successful"];
+                        else if (platform == 'platform-web'){
+                            var steps = ["COMMAND LINE ARGUMENTS", "Compute hash(es)", "DisplayProgressbar: Scripting",
+                                "DisplayProgressbar: Scripting",
+                                "DisplayProgressbar: Fetching assembly references",
+                                "Invoking il2cpp with arguments",       //   This takes too long
+                                "DisplayProgressbar: Scripting",        //   This also takes too long
+                                "DisplayProgressbar: Files",
+                                "DisplayProgressbar: Compress",
+                                "DisplayProgressbar: Building Player",
+                                 "DisplayProgressNotification: Build Successful"];
+                        }
+
+                        var totalSteps = steps.length;
+
+                        for (var i=0; i<totalSteps; i++)
+                            if (logfile.indexOf(steps[i]) !== -1 )
+                                currstep = i;
+
+                        var user_msg = steps[currstep].replace(new RegExp("DisplayProgress.+?(?=[ ])"),"");
+
+
+                        // For Tasos
+                        console.log("currstep: ", currstep + "/" + totalSteps + " :" + user_msg);
+
+
+
+
+
+
+
+
+
+
+
 
                     } else {
                         console.log("Ajax 2: Process completed, lasted: " + (new Date().getTime() - start_time) / 1000 + " seconds");

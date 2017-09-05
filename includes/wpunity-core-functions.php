@@ -492,11 +492,6 @@ function wpunity_assepile_action_callback(){
         $upload_dir = str_replace('\\','/',$upload_dir);
         $game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
 
-
-
-
-
-
         if ($os === 'win') {
             $os_bin = 'bat';
             $txt = '@echo off'."\n"; // change line always with double quote
@@ -545,9 +540,13 @@ goto :EOF
         chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
         chdir($game_dirpath);
-        if ($os === 'win')
-            $unity_pid = shell_exec($game_dirpath.$DS.$compile_command);
-        else {
+
+        if ($os === 'win') {
+            $unity_pid = shell_exec($compile_command);
+            $fga = fopen("output2.txt", "w");
+            fwrite($fga, $compile_command);
+            fclose($fga);
+        } else {
             $res = putenv("HOME=/home/jimver04");
             shell_exec($compile_command);
             $fpid = fopen("pid.txt","r");
@@ -557,12 +556,8 @@ goto :EOF
         //---------------------------------------
         chdir($init_gcwd);
 
-
         echo $unity_pid;
     }
-
-//    fake_compile_for_a_test_project();
-
 
     wp_die();
 }
