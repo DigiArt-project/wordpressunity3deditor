@@ -170,7 +170,7 @@ i.ButtonIcon {
     left: 50%;
     top: 50%;
     height: auto;
-    width: auto;
+    /*width: auto;*/
     max-width: none;
     overflow: hidden;
     -webkit-transform: translate(-50%,-50%);
