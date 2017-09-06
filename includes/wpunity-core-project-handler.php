@@ -84,6 +84,8 @@ function wpunity_delete_gameproject_frontend_callback(){
     wp_delete_post( $game_id, false );
 
     echo $gameTitle;
+
+    wp_die();
 }
 
 function wpunity_delete_scene_frontend_callback(){
@@ -91,14 +93,16 @@ function wpunity_delete_scene_frontend_callback(){
     $scene_id = $_POST['scene_id'];
     $postTitle = get_the_title($scene_id);
 
-    $fg = fopen("output_delete_scene.txt","w");
-    fwrite($fg, $postTitle." ".$scene_id);
-    fclose($fg);
+//    $fg = fopen("output_delete_scene.txt","w");
+//    fwrite($fg, $postTitle." ".$scene_id);
+//    fclose($fg);
 
     //1. Delete Scene CUSTOM POST
     wp_delete_post( $scene_id, true );
 
     echo $postTitle;
+
+    wp_die();
 }
 
 //DELETE GAME PROJECT with files
