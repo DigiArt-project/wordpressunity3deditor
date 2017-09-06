@@ -5,7 +5,38 @@ function wpunity_assepileAjax() {
     window.unity_pid = -1;
     jQuery( "#compileCancelBtn" ).attr('data-unity-pid', window.unity_pid);
 
-    compilationProgressText.append( '<p>Compiling project...</p>' );
+
+    // STEPS:
+    var steps = [];
+    if (platform === 'platform-windows' || platform === 'platform-mac' || platform === 'platform-linux'  ) {
+
+        steps = [
+            "Executing Command Line Arguments",
+            "Computing hashes",
+            "DisplayProgressbar: Building Player",
+            "DisplayProgressNotification: Build Successful"
+        ];
+    }
+    else if (platform === 'platform-web') {
+
+        steps = [
+            "Executing Command Line Arguments",
+            "Computing hashes",
+            "DisplayProgressbar: Scripting",
+            "DisplayProgressbar: Scripting",
+            "DisplayProgressbar: Fetching assembly references",
+            "Invoking il2cpp with arguments",       //   This takes too long
+            "DisplayProgressbar: Scripting",        //   This also takes too long
+            "DisplayProgressbar: Files",
+            "DisplayProgressbar: Compress",
+            "DisplayProgressbar: Building Player",
+            "DisplayProgressNotification: Build Successful"
+        ];
+    }
+    var totalSteps = steps.length;
+
+    jQuery("#compileProgressTitle").html("Step: 1 / " + totalSteps);
+    compilationProgressText.append( '<p>Executing Command Line Arguments</p>' );
 
     // ajax 1 : Start the assembly-compile
     jQuery.ajax({
@@ -67,7 +98,7 @@ function wpunity_assepileAjax() {
                     var completedFlag = false;
                     var successFlag = false;
 
-                    if (procMonitor.indexOf("No tasks are running") > 0 || procMonitor.length == 0) {
+                    if (procMonitor.indexOf("No tasks are running") > 0 || procMonitor.length === 0) {
                         completedFlag = true;
                         successFlag = response.indexOf("Exiting batchmode successfully now") > 0;
                     }
@@ -78,7 +109,7 @@ function wpunity_assepileAjax() {
 
                         console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
 
-                        if (os == 'win') {
+                        if (os === 'win') {
                             var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
                             var memVal = infoArr[4].slice(1, -2);
                             jQuery('#unityTaskMemValue').html(memVal);
@@ -87,42 +118,41 @@ function wpunity_assepileAjax() {
                         }
 
 
-                        // STEPS:
 
-                        if (platform == 'platform-windows' || platform == 'platform-mac' || platform == 'platform-linux'  )
-                            var steps = ["COMMAND LINE ARGUMENTS", "Compute hash(es)", "DisplayProgressbar: Building Player",
-                                            "DisplayProgressNotification: Build Successful"];
-                        else if (platform == 'platform-web'){
-                            var steps = ["COMMAND LINE ARGUMENTS", "Compute hash(es)", "DisplayProgressbar: Scripting",
-                                "DisplayProgressbar: Scripting",
-                                "DisplayProgressbar: Fetching assembly references",
-                                "Invoking il2cpp with arguments",       //   This takes too long
-                                "DisplayProgressbar: Scripting",        //   This also takes too long
-                                "DisplayProgressbar: Files",
-                                "DisplayProgressbar: Compress",
-                                "DisplayProgressbar: Building Player",
-                                 "DisplayProgressNotification: Build Successful"];
-                        }
 
-                        var totalSteps = steps.length;
-
+                        var currstep = 1;
                         for (var i=0; i<totalSteps; i++)
                             if (logfile.indexOf(steps[i]) !== -1 )
                                 currstep = i;
+
+                        console.log(steps);
+                        console.log(currstep);
+
+                        console.log(steps[currstep]);
+
 
                         var user_msg = steps[currstep].replace(new RegExp("DisplayProgress.+?(?=[ ])"),"");
 
 
                         // For Tasos
-                        console.log("currstep: ", currstep + "/" + totalSteps + " :" + user_msg);
+                        console.log("currstep: ", currstep+1 + "/" + totalSteps + " - " + user_msg);
+
+                        var stepCounter = currstep+1;
 
 
+                        jQuery("#compileProgressTitle").html("Step: " + stepCounter + " / " + totalSteps);
+
+                        jQuery("#compileProgressDeterminate").show();
+                        jQuery("#compileProgressSlider").hide();
 
 
+                        var compilationPercentage = String(parseInt((100/totalSteps) * (currstep+1), 10) + "%");
 
+                        console.log(compilationPercentage);
 
+                        jQuery("#progressSliderSubLineDeterminateValue").width(compilationPercentage);
 
-
+                        compilationProgressText.html( '<p>' + user_msg + '</p>' );
 
 
 
@@ -133,7 +163,9 @@ function wpunity_assepileAjax() {
                         if (successFlag) {
                             console.log("Ajax 2: Compile Result: Success");
 
-                            compilationProgressText.append( '<p>Compilation successful, lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds.</p>');
+                            compilationProgressText.html( '<p>Build Successful - Lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds</p>');
+
+                            jQuery("#compileProgressDeterminate").hide();
 
                             // After success we start the Ajax
                             myzipajax();
@@ -205,7 +237,7 @@ function wpunity_assepileAjax() {
                 }
 
                 hideProgressSlider();
-                compilationProgressText.append( '<p>Zip file creation complete!</p>');
+                compilationProgressText.append( '<p>Zip file created!</p>');
             },
             error : function(xhr, ajaxOptions, thrownError){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;
