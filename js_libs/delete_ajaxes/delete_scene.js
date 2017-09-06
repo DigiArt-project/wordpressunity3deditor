@@ -20,7 +20,7 @@ function wpunity_deleteSceneAjax(id) {
 
             delete window.scene_id_for_delete;
 
-            console.log("Scene with id=" + res + " was succesfully deleted");
+            console.log("Scene with title = " + res + " was succesfully deleted");
 
             jQuery('#delete-scene-dialog-progress-bar').hide();
             jQuery( "#deleteSceneDialogDeleteBtn" ).removeClass( "LinkDisabled" );
@@ -30,7 +30,6 @@ function wpunity_deleteSceneAjax(id) {
 
             jQuery( "#scene-" + id).fadeOut(300, function() { jQuery(this).remove(); });
 
-            /*location.reload();*/
         },
         error: function (xhr, ajaxOptions, thrownError) {
 
