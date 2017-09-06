@@ -64,7 +64,10 @@ function wpunity_delete_gameproject_frontend_callback(){
         while ( $custom_query2->have_posts() ) :
             $custom_query2->the_post();
             $scene_id = get_the_ID();
-            wpunity_delete_scene_frontend($scene_id);
+
+            // Delete scene
+            wp_delete_post( $scene_id, true );
+
         endwhile;
     endif;
 
@@ -83,9 +86,19 @@ function wpunity_delete_gameproject_frontend_callback(){
     echo $gameTitle;
 }
 
-function wpunity_delete_scene_frontend($scene_id){
+function wpunity_delete_scene_frontend_callback(){
+
+    $scene_id = $_POST['scene_id'];
+    $postTitle = get_the_title($scene_id);
+
+    $fg = fopen("output_delete_scene.txt","w");
+    fwrite($fg, $postTitle." ".$scene_id);
+    fclose($fg);
+
     //1. Delete Scene CUSTOM POST
     wp_delete_post( $scene_id, true );
+
+    echo $postTitle;
 }
 
 //DELETE GAME PROJECT with files
@@ -133,7 +146,6 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
             $scene_id = get_the_ID();
             $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
 
-
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);
             $tempScenearr = $sceneJsonARR;
@@ -158,8 +170,6 @@ function wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug){
 
 //==========================================================================================================================================
 //ABOUT MEDIA HANDLE
-
-
 function wpunity_upload_dir_forAssets( $args ) {
 
     // Get the current post_id

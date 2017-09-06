@@ -43,6 +43,17 @@ function my_enqueue_front_end_assepile_ajax() {
 add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_assepile_ajax');
 
 
+// Ajax for delete scene
+$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+$pluginpath = str_replace('\\','/',$pluginpath);
+// Define Ajax for the delete Game functionality
+$thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js';
+wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script', 'my_ajax_object_deletescene',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+);
+
+
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
@@ -456,9 +467,7 @@ $wp_query = $temp_query;
             if (pid) {
                 wpunity_killtask_compile(pid);
             }
-
         });
-
 
         jQuery( "#compileProceedBtn" ).click(function() {
 
@@ -477,7 +486,6 @@ $wp_query = $temp_query;
             jQuery('#unityTaskMemValue').html("0");
 
             wpunity_assepileAjax();
-
         });
 
         var MDCSelect = mdc.select.MDCSelect;
@@ -508,9 +516,11 @@ $wp_query = $temp_query;
         var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
         compileDialog.focusTrap_.deactivate();
 
-
         deleteDialog.listen('MDCDialog:accept', function(evt) {
-            console.log("ID:", deleteDialog.id);
+            //console.log("ID:", deleteDialog.id);
+
+            window.scene_id_for_delete = deleteDialog.id;
+            wpunity_deleteSceneAjax();
         });
 
         function deleteScene(id) {
@@ -534,12 +544,6 @@ $wp_query = $temp_query;
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
-
-
-
-
-
-
 
     </script>
 <?php get_footer(); ?>

@@ -104,6 +104,9 @@ wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE
 wp_register_script( 'wpunity_deletegame_request', plugin_dir_url( __FILE__ ) . 'js_libs/delete_ajaxes/delete_game_scene_asset.js',
     null, null, false);
 
+wp_register_script( 'wpunity_deletegame_request', plugin_dir_url( __FILE__ ) . 'js_libs/delete_ajaxes/delete_scene.js',
+    null, null, false);
+
 
 //=========================== THREE js scripts ============================================
 wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
