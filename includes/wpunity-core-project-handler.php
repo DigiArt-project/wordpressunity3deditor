@@ -36,7 +36,7 @@ function wpunity_delete_gameproject_frontend_callback(){
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $asset_id = get_the_ID();
-            wpunity_delete_asset3d_frontend($asset_id,$gameSlug);
+            wpunity_delete_asset3d_noscenes_frontend($asset_id,$gameSlug);
         endwhile;
     endif;
 
@@ -105,6 +105,24 @@ function wpunity_delete_asset3d_frontend($asset_id,$gameSlug){
     wpunity_delete_asset3d_from_scenes($asset_id,$gameSlug);
 
     //3. Delete Asset3D CUSTOM POST
+    wp_delete_post( $asset_id, true );
+
+}
+
+function wpunity_delete_asset3d_noscenes_frontend($asset_id){
+    //No need to delete assets from scenes, cause scene will be deleted at the same event
+    
+    //1. Delete all Attachments (mtl/obj/jpg ...)
+    $mtlID = get_post_meta($asset_id,'wpunity_asset3d_mtl', true);
+    wp_delete_attachment( $mtlID,true );
+    $objID = get_post_meta($asset_id,'wpunity_asset3d_obj', true);
+    wp_delete_attachment( $objID,true );
+    $difID = get_post_meta($asset_id,'wpunity_asset3d_diffimage', true);
+    wp_delete_attachment( $difID,true );
+    $screenID = get_post_meta($asset_id,'wpunity_asset3d_screenimage', true);
+    wp_delete_attachment( $screenID,true );
+
+    //2. Delete Asset3D CUSTOM POST
     wp_delete_post( $asset_id, true );
 
 }
