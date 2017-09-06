@@ -381,7 +381,9 @@ if ( $custom_query->have_posts() ) :?>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <h2 id="compileProgressTitle" class="mdc-typography--caption CenterContents" style="display: none"> Creating your game... </h2>
+                    <h2 id="compileProgressTitle" style="display: none" class="CenterContents mdc-typography--headline">
+                        Step: 1/4
+                    </h2>
 
                     <div class="progressSlider" id="compileProgressSlider" style="display: none;">
                         <div class="progressSliderLine"></div>
@@ -526,6 +528,12 @@ $wp_query = $temp_query;
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
+
+
+
+
+
+
 
     </script>
 <?php get_footer(); ?>
