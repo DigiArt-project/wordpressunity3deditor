@@ -13,35 +13,27 @@ function wpunity_deleteGameAjax() {
         type: 'POST',
         data: {
             'action': 'wpunity_delete_game_action',
-            'game_id': window.game_id_for_delete,
+            'game_id': window.game_id_for_delete
         },
         success: function (res) {
 
             delete window.game_id_for_delete;
 
-            // ToDo-Tasos: Close wait progressBar
-
-
-
-            // ToDo-Tasos : Show smth when the Game is successfully deleted
-            console.log("Game with id=" + res + " was succesfully deleted");
-
-            // ToDo-Tasos: Instead of reload, remove the dom element of the project from the list
             location.reload();
-
-
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
 
             delete window.game_id_for_delete;
 
-            // ToDo-Tasos: Close wait progressBar
+            jQuery('#delete-dialog-progress-bar').hide();
 
+            jQuery( "#deleteGameBtn" ).removeClass( "LinkDisabled" );
+            jQuery( "#cancelDeleteGameBtn" ).removeClass( "LinkDisabled" );
 
-            // ToDo-Tasos : Show smth when the Game is not successfully deleted
+            alert("Could not delete game. Try deleting it from the administration panel");
+
             console.log("Ajax Delete Game: ERROR: 166" + thrownError);
-
 
         }
     });
