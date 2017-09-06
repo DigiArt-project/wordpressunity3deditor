@@ -172,7 +172,7 @@ class vr_editor_environmentals {
 
         // Change trs mode by click on the purple cube
         var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-        var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff00ff } );
+        var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
 
         var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
         cubeForModeChangeDetec.position.set( 1.4, 1.4, 0);
