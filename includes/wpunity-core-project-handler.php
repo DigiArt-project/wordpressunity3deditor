@@ -1,9 +1,18 @@
 <?php
 
 //DELETE GAME PROJECT
-function wpunity_delete_gameproject_frontend($game_id){
+function wpunity_delete_gameproject_frontend_callback(){
+
+    $game_id = $_POST['game_id'];
+
+//    $fg = fopen("output_delete_game.txt","w");
+//    fwrite($fg, $game_id);
+//    fclose($fg);
+
+
     $game_post = get_post($game_id);
     $gameSlug = $game_post->post_name;
+    $gameTitle = get_the_title( $game_id );
 
     //1.Delete Assets
     $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
@@ -71,6 +80,7 @@ function wpunity_delete_gameproject_frontend($game_id){
     //5. Delete Game CUSTOM POST
     wp_delete_post( $game_id, false );
 
+    echo $gameTitle;
 }
 
 function wpunity_delete_scene_frontend($scene_id){

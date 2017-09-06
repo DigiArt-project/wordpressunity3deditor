@@ -29,7 +29,6 @@ function my_enqueue_front_end_assepile_ajax() {
 	$upload_dir = str_replace('\\','/',$upload_dir);
 	$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
 
-	//$thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/assemble_compile_commands/request_game_assepile.js';
 	$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
 	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
 	wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',

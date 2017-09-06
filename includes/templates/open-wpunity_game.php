@@ -5,6 +5,17 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 
 $editgamePage = wpunity_getEditpage('game');
 
+$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+$pluginpath = str_replace('\\','/',$pluginpath);
+// Define Ajax for the delete Game functionality
+$thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
+wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script', 'my_ajax_object_deletegame',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+);
+
+
+
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	//wpunity_compile_the_game($gameID,$gameSlug);
@@ -82,7 +93,7 @@ get_header();
 			$wp_query   = NULL;
 			$wp_query   = $custom_query;
 
-			// Output custom query loop
+            // Output custom query loop
 			if ( $custom_query->have_posts() ) : ?>
 
                 <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
@@ -105,7 +116,8 @@ get_header();
                                     <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date;?></span>
                                 </span>
                             </a>
-                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete project" onclick="deleteGame(<?php echo $game_id; ?>)">
+                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete project"
+                               onclick="deleteGame(<?php echo $game_id; ?>)">
                                 <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete project">
                                     delete
                                 </i>
@@ -252,12 +264,20 @@ get_header();
 
         // Use dialog.id inside, to initiate the action to delete a project
         dialog.listen('MDCDialog:accept', function(evt) {
-            console.log("ID:", dialog.id);
+            //console.log("ID:", dialog.id);
+            window.game_id_for_delete = dialog.id;
+            wpunity_deleteGameAjax();
+
+            // ToDO-Tasos: Show a progressBar undetermined
+
         });
 
         function dismissDialog() {
             dialog.close();
-            console.log("Dialog closed");
+
         }
     </script>
 <?php get_footer(); ?>
+
+
+
