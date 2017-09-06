@@ -58,7 +58,7 @@ function wpunity_assepileAjax() {
 
         error : function(xhr, ajaxOptions, thrownError) {
             console.log("Ajax 1: ERROR: " + thrownError);
-            hideProgressSlider();
+            hideCompileProgressSlider();
         }
     });
 
@@ -174,14 +174,14 @@ function wpunity_assepileAjax() {
                             console.log('Ajax 2 error:' + 'and the result is Error [15] : Compile error or process killed' + logfile);
                             compilationProgressText.append( '<p>Compilation error / Process was killed</p>');
                             clearInterval(intervalFn);
-                            hideProgressSlider();
+                            hideCompileProgressSlider();
                         }
                     }
                 },
                 error : function(xhr, ajaxOptions, thrownError){
                     console.log("Ajax 2 error:" + "and the result is Error [16] : HTML " + xhr.status + " " + xhr.getAllResponseHeaders() + " " + thrownError);
                     clearInterval(intervalFn);
-                    hideProgressSlider();
+                    hideCompileProgressSlider();
                 }
             });
         }, 4000); //  delay > 4 secs to avoid reading previous stdout.txt file
@@ -196,7 +196,7 @@ function wpunity_assepileAjax() {
 
         compilationProgressText.append( '<p>Creating Zip file...  </p>');
 
-        /*hideProgressSlider();*/
+
 
         var dir_gamepath = my_ajax_object_assepile.gameUnityProject_dirpath ;//"../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/"; // my_ajax_object_assepile.game_dirpath; // without filename
 
@@ -236,14 +236,14 @@ function wpunity_assepileAjax() {
                     jQuery('#wpunity-weblink').show();
                 }
 
-                hideProgressSlider();
+                hideCompileProgressSlider();
                 compilationProgressText.append( '<p>Zip file created!</p>');
             },
             error : function(xhr, ajaxOptions, thrownError){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = 'Zipping game: ERROR [17]! '+ thrownError;
                 console.log("Ajax 3: Fail:" + "Zipping game: ERROR [17]! " + thrownError);
 
-                hideProgressSlider();
+                hideCompileProgressSlider();
             }
         });
     }
@@ -267,7 +267,7 @@ function wpunity_killtask_compile(pid) {
         },
         success : function(result) {
             console.log("Ajax 4 KILL result unity_pid:" + result);
-            hideProgressSlider();
+            hideCompileProgressSlider();
             jQuery( "#compilationProgressText" ).html("");
             jQuery('#unityTaskMemValue').html("0");
 

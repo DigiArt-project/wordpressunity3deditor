@@ -236,15 +236,13 @@ get_header();
             </section>
 
             <section id="delete-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
-
                 <h3 class="mdc-typography--title">Deleting...</h3>
 
-                <div class="progressSlider" id="deleteProgressSlider">
+                <div class="progressSlider">
                     <div class="progressSliderLine"></div>
                     <div class="progressSliderSubLine progressIncrease"></div>
                     <div class="progressSliderSubLine progressDecrease"></div>
                 </div>
-
             </section>
 
             <footer class="mdc-dialog__footer">

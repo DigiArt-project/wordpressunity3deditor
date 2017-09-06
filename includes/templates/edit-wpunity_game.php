@@ -50,7 +50,7 @@ $pluginpath = str_replace('\\','/',$pluginpath);
 $thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js';
 wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
 wp_localize_script( 'ajax-script', 'my_ajax_object_deletescene',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 
 
@@ -263,7 +263,7 @@ if ( $custom_query->have_posts() ) :?>
 
 			?>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+            <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                 <div class="mdc-card SceneCardContainer mdc-theme--background">
                     <div class="SceneThumbnail">
 						<?php
@@ -329,9 +329,20 @@ if ( $custom_query->have_posts() ) :?>
                 <section id="delete-dialog-description" class="mdc-dialog__body">
                     Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
                 </section>
+
+                <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
+                    <h3 class="mdc-typography--title">Deleting...</h3>
+
+                    <div class="progressSlider">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLine progressIncrease"></div>
+                        <div class="progressSliderSubLine progressDecrease"></div>
+                    </div>
+                </section>
+
                 <footer class="mdc-dialog__footer">
-                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" >Cancel</a>
-                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised">Delete</a>
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
+                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
                 </footer>
             </div>
             <div class="mdc-dialog__backdrop"></div>
@@ -454,6 +465,12 @@ $wp_query = $temp_query;
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
+        var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
+        compileDialog.focusTrap_.deactivate();
+        deleteDialog.focusTrap_.deactivate();
+
+
         jQuery( "#compileGameBtn" ).click(function() {
             compileDialog.show();
         });
@@ -512,15 +529,25 @@ $wp_query = $temp_query;
             }
         }
 
-        var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
-        var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
-        compileDialog.focusTrap_.deactivate();
 
-        deleteDialog.listen('MDCDialog:accept', function(evt) {
+
+        jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
+
             //console.log("ID:", deleteDialog.id);
 
+            jQuery('#delete-scene-dialog-progress-bar').show();
+
+            jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
+            jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
+
             window.scene_id_for_delete = deleteDialog.id;
-            wpunity_deleteSceneAjax();
+            wpunity_deleteSceneAjax(deleteDialog.id);
+        });
+
+        jQuery("#deleteSceneDialogCancelBtn").click(function (e) {
+
+            jQuery('#delete-scene-dialog-progress-bar').hide();
+            deleteDialog.close();
         });
 
         function deleteScene(id) {
@@ -535,7 +562,7 @@ $wp_query = $temp_query;
             deleteDialog.show();
         }
 
-        function hideProgressSlider() {
+        function hideCompileProgressSlider() {
             jQuery( "#compileProgressSlider" ).hide();
             jQuery( "#compileProgressTitle" ).hide();
             jQuery( "#compileProgressDeterminate" ).hide();
