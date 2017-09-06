@@ -202,11 +202,17 @@ i.ButtonIcon {
     height: 5px;
 }
 
-.progressSliderSubLine{
+.progressSliderSubLine, .progressSliderSubLineDeterminate {
     position: absolute;
     background: #3F51B5;
     height: 5px;
 }
+
+.progressSliderSubLineDeterminate {
+    left: 0;
+}
+
+
 .progressIncrease{
     animation: increase 2s infinite;
 }

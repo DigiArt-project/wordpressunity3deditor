@@ -385,11 +385,17 @@ if ( $custom_query->have_posts() ) :?>
                         Step: 1/4
                     </h2>
 
+                    <div class="progressSlider" id="compileProgressDeterminate" style="display: none;">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLineDeterminate" id="progressSliderSubLineDeterminateValue"></div>
+                    </div>
+
                     <div class="progressSlider" id="compileProgressSlider" style="display: none;">
                         <div class="progressSliderLine"></div>
                         <div class="progressSliderSubLine progressIncrease"></div>
                         <div class="progressSliderSubLine progressDecrease"></div>
                     </div>
+
 
                     <div id="compilationProgressText" class="CenterContents mdc-typography--title"></div>
 
@@ -523,6 +529,7 @@ $wp_query = $temp_query;
         function hideProgressSlider() {
             jQuery( "#compileProgressSlider" ).hide();
             jQuery( "#compileProgressTitle" ).hide();
+            jQuery( "#compileProgressDeterminate" ).hide();
             jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
 
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );

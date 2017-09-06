@@ -139,7 +139,18 @@ function wpunity_assepileAjax() {
 
                         var stepCounter = currstep+1;
 
+
                         jQuery("#compileProgressTitle").html("Step: " + stepCounter + " / " + totalSteps);
+
+                        jQuery("#compileProgressDeterminate").show();
+                        jQuery("#compileProgressSlider").hide();
+
+
+                        var compilationPercentage = String(parseInt((100/totalSteps) * (currstep+1), 10) + "%");
+
+                        console.log(compilationPercentage);
+
+                        jQuery("#progressSliderSubLineDeterminateValue").width(compilationPercentage);
 
                         compilationProgressText.html( '<p>' + user_msg + '</p>' );
 
@@ -153,6 +164,8 @@ function wpunity_assepileAjax() {
                             console.log("Ajax 2: Compile Result: Success");
 
                             compilationProgressText.html( '<p>Build Successful - Lasted '+ Math.floor((new Date().getTime() - start_time) / 1000) + ' seconds</p>');
+
+                            jQuery("#compileProgressDeterminate").hide();
 
                             // After success we start the Ajax
                             myzipajax();
