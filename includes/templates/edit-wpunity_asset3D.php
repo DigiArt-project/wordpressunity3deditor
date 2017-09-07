@@ -153,43 +153,43 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
 			if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
 
-            $producerClassVal = $_POST['producerClassVal'];
-            $producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
-            $producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
+			$producerClassVal = $_POST['producerClassVal'];
+			$producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
+			$producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
 
 			$producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
-            $producerOptGen = array('class' => $producerClassVal,'speed' => $producerWindSpeedClassVal,'power' => $producerMaxPowerVal);
+			$producerOptGen = array('class' => $producerClassVal,'speed' => $producerWindSpeedClassVal,'power' => $producerMaxPowerVal);
 			$producerPowerProductionVal = $_POST['producerPowerProductionVal'];
 
 			update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
 			update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
-            update_post_meta( $asset_id, 'wpunity_producerOptGen', $producerOptGen );
+			update_post_meta( $asset_id, 'wpunity_producerOptGen', $producerOptGen );
 		}
 
 
-        //$objFile = $_FILES['objFileInput'];
-        $textureFile = $_FILES['textureFileInput'];
+		//$objFile = $_FILES['objFileInput'];
+		$textureFile = $_FILES['textureFileInput'];
 
 		//Upload All files as attachments of asset
-        //first upload jpg and get the filename for input at mtl
-        $textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
-        $textureFile_filename = basename( get_attached_file( $textureFile_id ) );
+		//first upload jpg and get the filename for input at mtl
+		$textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
+		$textureFile_filename = basename( get_attached_file( $textureFile_id ) );
 
-        //open mtl file and replace jpg filename
-        $mtl_content = file_get_contents( $_FILES['mtlFileInput']['tmp_name']);
-        $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
-        file_put_contents($_FILES['mtlFileInput']['tmp_name'],$mtl_content);
-        $mtlFile = $_FILES['mtlFileInput'];
-        //upload mtl and get the filename for input at obj
-        $mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
-        $mtlFile_filename = basename( get_attached_file( $mtlFile_id ) );
+		//open mtl file and replace jpg filename
+		$mtl_content = file_get_contents( $_FILES['mtlFileInput']['tmp_name']);
+		$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+		file_put_contents($_FILES['mtlFileInput']['tmp_name'],$mtl_content);
+		$mtlFile = $_FILES['mtlFileInput'];
+		//upload mtl and get the filename for input at obj
+		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
+		$mtlFile_filename = basename( get_attached_file( $mtlFile_id ) );
 
-        $obj_content = file_get_contents( $_FILES['objFileInput']['tmp_name']);
-        $obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
-        file_put_contents($_FILES['objFileInput']['tmp_name'],$obj_content);
-        $objFile = $_FILES['objFileInput'];
-        $objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
-        
+		$obj_content = file_get_contents( $_FILES['objFileInput']['tmp_name']);
+		$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+		file_put_contents($_FILES['objFileInput']['tmp_name'],$obj_content);
+		$objFile = $_FILES['objFileInput'];
+		$objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
+
 		$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
 		//Set value of attachment IDs at custom fields
@@ -221,46 +221,59 @@ get_header(); ?>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Creator</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
 
-    <?php if($create_new == 1){ ?>
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
-    <?php }else{ ?>
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Edit 3D asset</span></h2>
-    <?php } ?>
+<?php $breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset"); ?>
+
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span><?php echo $breacrumbsTitle; ?></span></h2>
 
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <div class="mdc-layout-grid">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                <?php if($create_new == 1){ ?>
+
                 <h3 class="mdc-typography--title">Select a category</h3>
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                    <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
+                    <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+
+					<?php
+					$myGameType = 1;
+					$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
+					$game_type_slug = $all_game_types[0]->slug;
+
+					if($game_type_slug == 'energy_games'){
+						$myGameType=2;
+					}
+
+					$args = array(
+						'hide_empty' => false,
+						'meta_query' => array(
+							array(
+								'key'       => 'wpunity_assetcat_gamecat',
+								'value'     => $myGameType,
+								'compare'   => '='
+							)
+						));
+
+					$cat_terms = get_terms('wpunity_asset3d_cat', $args); ?>
+
+					<?php if($create_new == 1) { ?>
+                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
+					<?php } else { ?>
+                        <span data-cat-desc="<?php echo $cat_terms[0]->description; ?>" data-cat-slug="<?php echo $cat_terms[0]->slug; ?>" data-cat-id="<?php echo $cat_terms[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $cat_terms[0]->name; ?></span>
+					<?php } ?>
+
+
                     <div class="mdc-simple-menu mdc-select__menu">
                         <ul class="mdc-list mdc-simple-menu__items">
 
                             <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
                                 No category selected
                             </li>
-							<?php
-							$myGameType = 1;
-							$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
-							$game_type_slug = $all_game_types[0]->slug;
-							if($game_type_slug == 'energy_games'){$myGameType=2;}
-							$args = array(
-								'hide_empty' => false,
-								'meta_query' => array(
-									array(
-										'key'       => 'wpunity_assetcat_gamecat',
-										'value'     => $myGameType,
-										'compare'   => '='
-									)
-								));
-							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-							foreach ( $cat_terms as $term ) { ?>
+
+							<?php foreach ( $cat_terms as $term ) { ?>
 
                                 <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
@@ -271,26 +284,6 @@ get_header(); ?>
                         </ul>
                     </div>
                 </div>
-                <?php }else{ ?>
-                    <h3 class="mdc-typography--title">Category</h3>
-                    <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                        <?php $cat_terms = get_terms('wpunity_asset3d_cat', $args);?>
-                        <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $cat_terms[0]->name; ?></span>
-                        <div class="mdc-simple-menu mdc-select__menu">
-                            <ul class="mdc-list mdc-simple-menu__items">
-
-                                    <?php $cat_terms = get_terms('wpunity_asset3d_cat', $args);?>
-
-                                    <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" data-cat-desc="<?php echo $cat_terms[0]->description; ?>" data-cat-slug="<?php echo $cat_terms[0]->slug; ?>" id="<?php echo $cat_terms[0]->term_id?>" tabindex="0">
-                                        <?php echo $cat_terms[0]->name; ?>
-                                    </li>
-
-                            </ul>
-                        </div>
-                    </div>
-
-
-                <?php } ?>
 
                 <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
             </div>
@@ -323,18 +316,18 @@ get_header(); ?>
 
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
                 <!--<select title="I am a title" class="mdc-select" required>
-                    <option value="" default selected>Pick a food</option>
-                    <option value="grains">Bread, Cereal, Rice, and Pasta</option>
-                    <option value="vegetables">Vegetables</option>
-                    <optgroup label="Fruits">
-                        <option value="apple">Apple</option>
-                        <option value="oranges">Orange</option>
-                        <option value="banana">Banana</option>
-                    </optgroup>
-                    <option value="dairy">Milk, Yogurt, and Cheese</option>
-                    <option value="meat">Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts</option>
-                    <option value="fats">Fats, Oils, and Sweets</option>
-                </select>-->
+					<option value="" default selected>Pick a food</option>
+					<option value="grains">Bread, Cereal, Rice, and Pasta</option>
+					<option value="vegetables">Vegetables</option>
+					<optgroup label="Fruits">
+						<option value="apple">Apple</option>
+						<option value="oranges">Orange</option>
+						<option value="banana">Banana</option>
+					</optgroup>
+					<option value="dairy">Milk, Yogurt, and Cheese</option>
+					<option value="meat">Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts</option>
+					<option value="fats">Fats, Oils, and Sweets</option>
+				</select>-->
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -618,39 +611,39 @@ get_header(); ?>
 
             <!--<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h3 class="mdc-typography--title">Energy Consumption Cost (in $)</h3>
+				<h3 class="mdc-typography--title">Energy Consumption Cost (in $)</h3>
 
-                <div class="mdc-layout-grid">
+				<div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Underpower cost" id="underPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="underPowerCost"
-                                   aria-controls="underPowerCost-validation-msg" value="0.5" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-                            <label for="underPowerCost" class="mdc-textfield__label">
-                                Underpowered consumption cost
-                        </div>
-                    </div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+							<input title="Underpower cost" id="underPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="underPowerCost"
+								   aria-controls="underPowerCost-validation-msg" value="0.5" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+							<label for="underPowerCost" class="mdc-textfield__label">
+								Underpowered consumption cost
+						</div>
+					</div>
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Normal power cost" id="normalPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="normalPowerCost"
-                                   aria-controls="normalPowerCost-validation-msg" value="1" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-                            <label for="normalPowerCost" class="mdc-textfield__label">
-                                Normal power consumption cost
-                        </div>
-                    </div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+							<input title="Normal power cost" id="normalPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="normalPowerCost"
+								   aria-controls="normalPowerCost-validation-msg" value="1" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+							<label for="normalPowerCost" class="mdc-textfield__label">
+								Normal power consumption cost
+						</div>
+					</div>
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Overpower cost" id="overPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="overPowerCost"
-                                   aria-controls="overPowerCost-validation-msg" value="0" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-                            <label for="overPowerCost" class="mdc-textfield__label">
-                                Overpowered consumption cost
-                        </div>
-                    </div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+							<input title="Overpower cost" id="overPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="overPowerCost"
+								   aria-controls="overPowerCost-validation-msg" value="0" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+							<label for="overPowerCost" class="mdc-textfield__label">
+								Overpowered consumption cost
+						</div>
+					</div>
 
-                </div>
-            </div>-->
+				</div>
+			</div>-->
         </div>
 
         <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
@@ -808,11 +801,11 @@ get_header(); ?>
             Create asset
         </button>
 
-        <?php if($game_type_obj->string == 'Energy') {
-                echo "<p>Help: Packet of 3D models for game type: " . $game_type_obj->string . "</p>" ;
-                echo "<a href='https://www.dropbox.com/s/0ed7f9c6v4qnsnl/paketo_3d_v3.zip?dl=0'>Energy Lab 3D models</a>";
-            }
-        ?>
+		<?php if($game_type_obj->string == 'Energy') {
+			echo "<p>Help: Packet of 3D models for game type: " . $game_type_obj->string . "</p>" ;
+			echo "<a href='https://www.dropbox.com/s/0ed7f9c6v4qnsnl/paketo_3d_v3.zip?dl=0'>Energy Lab 3D models</a>";
+		}
+		?>
     </form>
 
     <script type="text/javascript">
@@ -897,6 +890,15 @@ get_header(); ?>
             var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
             var entryPointSelect = MDCSelect.attachTo(entryPointDropdown);
 
+            // This fires on EDIT
+            if (jQuery('#currently-selected').attr("data-cat-id")) {
+
+                var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
+                jQuery('#'+ selectedCatId).attr("aria-selected", true);
+                loadLayout();
+
+            }
+
             nextSceneDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#nextSceneInput").attr( "value", nextSceneSelect.selectedOptions[0].getAttribute("id") );
             });
@@ -906,8 +908,15 @@ get_header(); ?>
             });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
+                loadLayout();
+            });
+
+
+            function loadLayout() {
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
+
+                console.log(item, index);
 
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
@@ -999,7 +1008,7 @@ get_header(); ?>
 
                 }
                 console.log(cat, index);
-            });
+            }
         })();
 
         fbxInput.change(function() {
