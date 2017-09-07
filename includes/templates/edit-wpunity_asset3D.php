@@ -18,7 +18,7 @@ $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 
 $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
-$asset_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -29,11 +29,8 @@ $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->post_name;
 
-$scene_post = get_post($asset_id);
-if($scene_post->post_type == 'wpunity_asset3d') {$create_new = 0;}
-
-//$scene_post = get_post($scene_id);
-//$sceneSlug = $scene_post->post_title;
+$asset_post = get_post($asset_inserted_id);
+if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;}
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
@@ -227,16 +224,19 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Creator</span></li>
     </ul>
 
+    <?php if($create_new == 1){ ?>
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
+    <?php }else{ ?>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Edit 3D asset</span></h2>
+    <?php } ?>
 
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <div class="mdc-layout-grid">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-
+                <?php if($create_new == 1){ ?>
                 <h3 class="mdc-typography--title">Select a category</h3>
-
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
                     <div class="mdc-simple-menu mdc-select__menu">
@@ -271,6 +271,27 @@ get_header(); ?>
                         </ul>
                     </div>
                 </div>
+                <?php }else{ ?>
+                    <h3 class="mdc-typography--title">Category</h3>
+                    <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                        <?php $cat_terms = get_terms('wpunity_asset3d_cat', $args);?>
+                        <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp; <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $cat_terms[0]->name; ?></span>
+                        <div class="mdc-simple-menu mdc-select__menu">
+                            <ul class="mdc-list mdc-simple-menu__items">
+
+                                    <?php $cat_terms = get_terms('wpunity_asset3d_cat', $args);?>
+
+                                    <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" data-cat-desc="<?php echo $cat_terms[0]->description; ?>" data-cat-slug="<?php echo $cat_terms[0]->slug; ?>" id="<?php echo $cat_terms[0]->term_id?>" tabindex="0">
+                                        <?php echo $cat_terms[0]->name; ?>
+                                    </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+                <?php } ?>
+
                 <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
             </div>
             <input id="termIdInput" type="hidden" name="term_id" value="">
