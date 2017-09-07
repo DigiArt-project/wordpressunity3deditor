@@ -213,8 +213,8 @@ echo '</script>';
     </div>
 
     <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
-        <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
-        <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase Axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+        <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+        <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
     </div>
 
     <div id="double-sided-switch" style="display: none;">
@@ -228,7 +228,7 @@ echo '</script>';
     </div>
 
     <!--Canvas center-->
-    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle Interface">
+    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
 
@@ -239,7 +239,7 @@ echo '</script>';
         </a>
     </div>
 
-    <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle Full Screen" data-mdc-auto-init="MDCRipple">
+    <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
 

@@ -224,7 +224,7 @@ get_header(); ?>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Asset Creator</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Creator</span></li>
     </ul>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span>Create a new 3D asset</span></h2>
@@ -242,7 +242,7 @@ get_header(); ?>
                     <div class="mdc-simple-menu mdc-select__menu">
                         <ul class="mdc-list mdc-simple-menu__items">
 
-                            <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="categories" aria-disabled="true" style="pointer-events: none;">
+                            <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
                                 No category selected
                             </li>
 							<?php
@@ -262,7 +262,7 @@ get_header(); ?>
 							$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 							foreach ( $cat_terms as $term ) { ?>
 
-                                <li class="mdc-list-item" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 									<?php echo $term->name; ?>
                                 </li>
 
@@ -271,13 +271,11 @@ get_header(); ?>
                         </ul>
                     </div>
                 </div>
-
+                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
             </div>
             <input id="termIdInput" type="hidden" name="term_id" value="">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                <span class="mdc-typography--subheading2" id="categoryDescription"> </span>
-            </div>
+
         </div>
 
         <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
@@ -288,13 +286,13 @@ get_header(); ?>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
-                           aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
+                           aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">
                     <label for="assetTitle" class="mdc-textfield__label">
                         Enter a title for your asset
                 </div>
                 <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
                    id="title-validation-msg">
-                    Between 6 - 25 characters
+                    Between 3 - 25 characters
                 </p>
 
                 <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
@@ -460,9 +458,14 @@ get_header(); ?>
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
                 <h3 class="mdc-typography--title">Physics</h3>
+                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                    Change the terrain physics properties.
+                </span>
+
+                <br>
 
                 <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
@@ -486,9 +489,41 @@ get_header(); ?>
 
             </div>
 
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
+                <h3 class="mdc-typography--title">Income</h3>
+
+                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                    Applied to all producer components that are placed on this terrain.
+                </span>
+
+                <br>
+
+                <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="over-power-income-slider"></div>
+                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="correct-power-income-slider"></div>
+                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
+
+                <hr class="WhiteSpaceSeparator">
+
+                <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
+                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                <div id="under-power-income-slider"></div>
+                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
+
                 <h3 class="mdc-typography--title">Construction Penalties (in $)</h3>
+
+                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                    Construction penalties apply for consumers and producers that are placed on this terrain.
+                </span>
 
                 <div class="mdc-layout-grid">
 
@@ -526,30 +561,6 @@ get_header(); ?>
                         </div>
                     </div>
                 </div>
-
-
-                <h3 class="mdc-typography--title">Income</h3>
-                <h6 class="mdc-typography--caption"> Applied to all components on the terrain </h6>
-
-
-                <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="over-power-income-slider"></div>
-                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="correct-power-income-slider"></div>
-                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="under-power-income-slider"></div>
-                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
 
 
             </div>
@@ -631,7 +642,7 @@ get_header(); ?>
                     <div id="producer-chart" class="ProducerChartStyle"></div>
                 </div>
                 <div class="CenterContents">
-                    <label class="mdc-typography--subheading2">Select a power production value for each air speed value</label>
+                    <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
                 </div>
                 <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
                     <span>0</span>
@@ -698,6 +709,7 @@ get_header(); ?>
                     <span>26</span>
                     <span>27</span>
                 </div>
+
 
                 <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="" disabled>
             </div>
