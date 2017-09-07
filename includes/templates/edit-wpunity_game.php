@@ -170,13 +170,13 @@ get_header();
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                               aria-controls="title-validation-msg" required minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">
+                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">
                         <label for="title" class="mdc-textfield__label">
                             Enter a scene title
                     </div>
                     <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
-                        Between 6 - 25 characters
+                        Between 3 - 25 characters
                     </p>
                 </div>
 

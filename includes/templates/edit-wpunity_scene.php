@@ -175,5 +175,9 @@ get_header(); ?>
         }
     }
 
+    window.onbeforeunload = function() {
+        return true;
+    };
+
 </script>
 <?php get_footer(); ?>

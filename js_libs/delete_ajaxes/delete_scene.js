@@ -27,7 +27,6 @@ function wpunity_deleteSceneAjax(scene_id) {
 
             jQuery( "#scene-" + scene_id).fadeOut(300, function() { jQuery(this).remove(); });
 
-            /*location.reload();*/
         },
         error: function (xhr, ajaxOptions, thrownError) {
 

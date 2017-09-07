@@ -70,7 +70,7 @@ get_header();
 
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-        <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Projects</h2>
+        <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Existing projects</h2>
 
         <hr class="mdc-list-divider">
 
@@ -157,7 +157,7 @@ get_header();
 
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-        <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">New game project</h2>
+        <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Create new project</h2>
 
         <hr class="mdc-list-divider">
 
@@ -169,18 +169,18 @@ get_header();
                 <form name="newProjectForm" action="" id="newProjectForm" method="POST" enctype="multipart/form-data">
 
                     <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                        <input id="title" name="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="6" style="box-shadow: none; border-color:transparent;">
+                        <input id="title" name="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" required minlength="3" style="box-shadow: none; border-color:transparent;">
                         <label for="title" class="mdc-textfield__label">
                             Enter a title for your project
                     </div>
                     <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
-                        Must be at least 6 characters long
+                        Must be at least 3 characters long
                     </p>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <label class="mdc-typography--subheading2 NewGameLabel">Game Project Type</label>
+                    <label class="mdc-typography--subheading2 NewGameLabel">Choose project type</label>
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
