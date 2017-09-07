@@ -22,12 +22,25 @@ $access_penalty = 0;
 $archaeology_penalty = 0;
 $natural_reserve_penalty = 0;
 $hvdistance_penalty = 0;
+$min_consumption = 50;
+$max_consumption = 150;
+$mean_consumption = 100;
+$var_consumption = 50;
+$optCosts_size = 90;
+$optCosts_dmg = 0.005;
+$optCosts_cost = 3;
+$optCosts_repaid = 1;
+$optGen_class = 'A';
+$optGen_speed = 10;
+$optGen_power = 3;
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
 
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
+$parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
+
 
 $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 $asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
@@ -42,179 +55,310 @@ $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->post_name;
 
 $asset_post = get_post($asset_inserted_id);
-if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;}
+if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+    $assetCatID = 77;//delete it
+    if($create_new == 1){
 
-	$assetCatID = intval($_POST['term_id']);
+        //TODO
+        //$assetCatID = intval($_POST['term_id']);
+        $assetCatID = 77;//delete it
 
-	$asset_taxonomies = array(
-		'wpunity_asset3d_pgame' => array(
-			$assetPGameID,
-		),
-		'wpunity_asset3d_cat' => array(
-			$assetCatID,
-		)
-	);
+        $asset_taxonomies = array(
+            'wpunity_asset3d_pgame' => array(
+                $assetPGameID,
+            ),
+            'wpunity_asset3d_cat' => array(
+                $assetCatID,
+            )
+        );
 
-	$asset_information = array(
-		'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
-		'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
-		'post_type' => 'wpunity_asset3d',
-		'post_status' => 'publish',
-		'tax_input' => $asset_taxonomies,
-	);
-
-
-	$asset_id = wp_insert_post($asset_information);
-	update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
-
-	//$mtlFile = $_FILES['mtlFileInput'];
-	//$objFile = $_FILES['objFileInput'];
-	//$textureFile = $_FILES['textureFileInput'];
-	$screenShotFile = $_POST['sshotFileInput'];
-
-	if($asset_id) {
-
-		$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-		if($assetCatTerm->slug == 'consumer'){
-			//Energy Consumption Cost (in $)
-//			$safe_cost_values = range(-5,5,0.5);
-//			$underPowerCost = floatval($_POST['underPowerCost']);
-//			$normalPowerCost = floatval($_POST['normalPowerCost']);
-//			$overPowerCost = floatval($_POST['overPowerCost']);
-//			if ( ! in_array( $underPowerCost, $safe_cost_values, true ) ) {$underPowerCost = '';}
-//			if ( ! in_array( $normalPowerCost, $safe_cost_values, true ) ) {$normalPowerCost = '';}
-//			if ( ! in_array( $overPowerCost, $safe_cost_values, true ) ) {$overPowerCost = '';}
-//
-//			$energyConsumptionCost = array('under' => $underPowerCost,'normal' => $normalPowerCost,'over' => $overPowerCost);
-
-			//Energy Consumption
-			$safe_cons_values = range(0, 2000, 5);
-			$safe_cons_values2 = range(0, 1000, 5);
-			$energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
-			$energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
-			$energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
-			$energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
-			if ( ! in_array( $energyConsumptionMinVal, $safe_cons_values, true ) ) {$energyConsumptionMinVal = '';}
-			if ( ! in_array( $energyConsumptionMaxVal, $safe_cons_values, true ) ) {$energyConsumptionMaxVal = '';}
-			if ( ! in_array( $energyConsumptionMeanVal, $safe_cons_values, true ) ) {$energyConsumptionMeanVal = '';}
-			if ( ! in_array( $energyConsumptionVarianceVal, $safe_cons_values2, true ) ) {$energyConsumptionVarianceVal = '';}
-
-			$energyConsumption = array('min' => $energyConsumptionMinVal,'max' => $energyConsumptionMaxVal,'mean' => $energyConsumptionMeanVal,'var' => $energyConsumptionVarianceVal);
-
-			update_post_meta( $asset_id, 'wpunity_energyConsumption', $energyConsumption );
-			//update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
-		}elseif($assetCatTerm->slug == 'terrain'){
-			//Income (in $)
-			$safe_income_values = range(-5,5,0.5);
-			$underPowerIncome = floatval($_POST['underPowerIncomeVal']);
-			$correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
-			$overPowerIncome = floatval($_POST['overPowerIncomeVal']);
-			if ( ! in_array( $underPowerIncome, $safe_income_values, true ) ) {$underPowerIncome = '';}
-			if ( ! in_array( $correctPowerIncome, $safe_income_values, true ) ) {$correctPowerIncome = '';}
-			if ( ! in_array( $overPowerIncome, $safe_income_values, true ) ) {$overPowerIncome = '';}
-
-			$energyConsumptionIncome = array('under' => $underPowerIncome,'correct' => $correctPowerIncome,'over' => $overPowerIncome);
-
-			//Construction Penalties (in $)
-			$safe_penalty_values = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
-			$accessCostPenalty = intval($_POST['accessCostPenalty']);
-			$archProximityPenalty = intval($_POST['archProximityPenalty']);
-			$naturalReserveProximityPenalty = intval($_POST['naturalReserveProximityPenalty']);
-			$hiVoltLineDistancePenalty = intval($_POST['hiVoltLineDistancePenalty']);
-			if ( ! in_array( $accessCostPenalty, $safe_penalty_values, true ) ) {$accessCostPenalty = '';}
-			if ( ! in_array( $archProximityPenalty, $safe_penalty_values, true ) ) {$archProximityPenalty = '';}
-			if ( ! in_array( $naturalReserveProximityPenalty, $safe_penalty_values, true ) ) {$naturalReserveProximityPenalty = '';}
-			if ( ! in_array( $hiVoltLineDistancePenalty, $safe_penalty_values, true ) ) {$hiVoltLineDistancePenalty = '';}
-
-			$constructionPenalties = array('access' => $accessCostPenalty,'arch' => $archProximityPenalty,'natural' => $naturalReserveProximityPenalty,'hiVolt' => $hiVoltLineDistancePenalty);
-
-			//Physics
-			$safe_physics_values = range(0, 40, 1);
-			$safe_physics_values2 = range(1, 100, 1);//for Wind Variance
-			$physicsWindMinVal = intval($_POST['physicsWindMinVal']);
-			$physicsWindMaxVal = intval($_POST['physicsWindMaxVal']);
-			$physicsWindMeanVal = intval($_POST['physicsWindMeanVal']);
-			$physicsWindVarianceVal = intval($_POST['physicsWindVarianceVal']);
-			if ( ! in_array( $physicsWindMinVal, $safe_physics_values, true ) ) {$physicsWindMinVal = '';}
-			if ( ! in_array( $physicsWindMaxVal, $safe_physics_values, true ) ) {$physicsWindMaxVal = '';}
-			if ( ! in_array( $physicsWindMeanVal, $safe_physics_values, true ) ) {$physicsWindMeanVal = '';}
-			if ( ! in_array( $physicsWindVarianceVal, $safe_physics_values2, true ) ) {$physicsWindVarianceVal = '';}
-
-			$physicsValues = array('min' => $physicsWindMinVal,'max' => $physicsWindMaxVal,'mean' => $physicsWindMeanVal,'variance' => $physicsWindVarianceVal);
-
-			update_post_meta( $asset_id, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome );
-			update_post_meta( $asset_id, 'wpunity_physicsValues', $physicsValues );
-			update_post_meta( $asset_id, 'wpunity_constructionPenalties', $constructionPenalties );
-		}elseif($assetCatTerm->slug == 'producer') {
-			//Producer Options-Costs
-			$safe_opt_val = range(3,250,1);
-			$safe_opt_dmg = range(0.001,0.02,0.001);
-			$safe_opt_cost = range(1,10,1);
-			$safe_opt_repaid = range(0.5,5,0.5);
-			$producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
-			$producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
-			$producerCostVal = intval($_POST['producerCostVal']);
-			$producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
-			if ( ! in_array( $producerTurbineSizeVal, $safe_opt_val, true ) ) {$producerTurbineSizeVal = '';}
-			if ( ! in_array( $producerDmgCoeffVal, $safe_opt_dmg, true ) ) {$producerDmgCoeffVal = '';}
-			if ( ! in_array( $producerCostVal, $safe_opt_cost, true ) ) {$producerCostVal = '';}
-			if ( ! in_array( $producerRepairCostVal, $safe_opt_repaid, true ) ) {$producerRepairCostVal = '';}
-
-			$producerClassVal = $_POST['producerClassVal'];
-			$producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
-			$producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
-
-			$producerOptCosts = array('size' => $producerTurbineSizeVal,'dmg' => $producerDmgCoeffVal,'cost' => $producerCostVal,'repaid' => $producerRepairCostVal);
-			$producerOptGen = array('class' => $producerClassVal,'speed' => $producerWindSpeedClassVal,'power' => $producerMaxPowerVal);
-			$producerPowerProductionVal = $_POST['producerPowerProductionVal'];
-
-			update_post_meta( $asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal );
-			update_post_meta( $asset_id, 'wpunity_producerOptCosts', $producerOptCosts );
-			update_post_meta( $asset_id, 'wpunity_producerOptGen', $producerOptGen );
-		}
+        $asset_information = array(
+            'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
+            'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
+            'post_type' => 'wpunity_asset3d',
+            'post_status' => 'publish',
+            'tax_input' => $asset_taxonomies,
+        );
 
 
-		//$objFile = $_FILES['objFileInput'];
-		$textureFile = $_FILES['textureFileInput'];
+        $asset_id = wp_insert_post($asset_information);
+        update_post_meta( $asset_id, 'wpunity_asset3d_pathData', $gameSlug );
 
-		//Upload All files as attachments of asset
-		//first upload jpg and get the filename for input at mtl
-		$textureFile_id = wpunity_upload_Assetimg( $textureFile, $asset_id, $gameSlug);
-		$textureFile_filename = basename( get_attached_file( $textureFile_id ) );
+        //$mtlFile = $_FILES['mtlFileInput'];
+        //$objFile = $_FILES['objFileInput'];
+        //$textureFile = $_FILES['textureFileInput'];
+        $screenShotFile = $_POST['sshotFileInput'];
 
-		//open mtl file and replace jpg filename
-		$mtl_content = file_get_contents( $_FILES['mtlFileInput']['tmp_name']);
-		$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
-		file_put_contents($_FILES['mtlFileInput']['tmp_name'],$mtl_content);
-		$mtlFile = $_FILES['mtlFileInput'];
-		//upload mtl and get the filename for input at obj
-		$mtlFile_id = wpunity_upload_Assetimg( $mtlFile, $asset_id, $gameSlug);
-		$mtlFile_filename = basename( get_attached_file( $mtlFile_id ) );
+        if($asset_id) {
+            $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+            if ($assetCatTerm->slug == 'consumer') {
+                //Energy Consumption
+                $safe_cons_values = range(0, 2000, 5);
+                $safe_cons_values2 = range(0, 1000, 5);
+                $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+                $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+                $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+                $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+                if (!in_array($energyConsumptionMinVal, $safe_cons_values, true)) {$energyConsumptionMinVal = '';}
+                if (!in_array($energyConsumptionMaxVal, $safe_cons_values, true)) {$energyConsumptionMaxVal = '';}
+                if (!in_array($energyConsumptionMeanVal, $safe_cons_values, true)) {$energyConsumptionMeanVal = '';}
+                if (!in_array($energyConsumptionVarianceVal, $safe_cons_values2, true)) {$energyConsumptionVarianceVal = '';}
 
-		$obj_content = file_get_contents( $_FILES['objFileInput']['tmp_name']);
-		$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
-		file_put_contents($_FILES['objFileInput']['tmp_name'],$obj_content);
-		$objFile = $_FILES['objFileInput'];
-		$objFile_id = wpunity_upload_Assetimg( $objFile, $asset_id, $gameSlug);
+                $energyConsumption = array('min' => $energyConsumptionMinVal, 'max' => $energyConsumptionMaxVal, 'mean' => $energyConsumptionMeanVal, 'var' => $energyConsumptionVarianceVal);
 
-		$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
+                update_post_meta($asset_id, 'wpunity_energyConsumption', $energyConsumption);
+                //update_post_meta( $asset_id, 'wpunity_energyConsumptionCost', $energyConsumptionCost );
+            } elseif ($assetCatTerm->slug == 'terrain') {
+                //Income (in $)
+                $safe_income_values = range(-5, 5, 0.5);
+                $underPowerIncome = floatval($_POST['underPowerIncomeVal']);
+                $correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
+                $overPowerIncome = floatval($_POST['overPowerIncomeVal']);
+                if (!in_array($underPowerIncome, $safe_income_values, true)) {$underPowerIncome = '';}
+                if (!in_array($correctPowerIncome, $safe_income_values, true)) {$correctPowerIncome = '';}
+                if (!in_array($overPowerIncome, $safe_income_values, true)) {$overPowerIncome = '';}
 
-		//Set value of attachment IDs at custom fields
-		update_post_meta( $asset_id, 'wpunity_asset3d_mtl', $mtlFile_id );
-		update_post_meta( $asset_id, 'wpunity_asset3d_obj', $objFile_id );
-		update_post_meta( $asset_id, 'wpunity_asset3d_diffimage', $textureFile_id );
-		update_post_meta( $asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id );
+                $energyConsumptionIncome = array('under' => $underPowerIncome, 'correct' => $correctPowerIncome, 'over' => $overPowerIncome);
+
+                //Construction Penalties (in $)
+                $safe_penalty_values = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+                $accessCostPenalty = intval($_POST['accessCostPenalty']);
+                $archProximityPenalty = intval($_POST['archProximityPenalty']);
+                $naturalReserveProximityPenalty = intval($_POST['naturalReserveProximityPenalty']);
+                $hiVoltLineDistancePenalty = intval($_POST['hiVoltLineDistancePenalty']);
+                if (!in_array($accessCostPenalty, $safe_penalty_values, true)) {$accessCostPenalty = '';}
+                if (!in_array($archProximityPenalty, $safe_penalty_values, true)) {$archProximityPenalty = '';}
+                if (!in_array($naturalReserveProximityPenalty, $safe_penalty_values, true)) {$naturalReserveProximityPenalty = '';}
+                if (!in_array($hiVoltLineDistancePenalty, $safe_penalty_values, true)) {$hiVoltLineDistancePenalty = '';}
+
+                $constructionPenalties = array('access' => $accessCostPenalty, 'arch' => $archProximityPenalty, 'natural' => $naturalReserveProximityPenalty, 'hiVolt' => $hiVoltLineDistancePenalty);
+
+                //Physics
+                $safe_physics_values = range(0, 40, 1);
+                $safe_physics_values2 = range(1, 100, 1);//for Wind Variance
+                $physicsWindMinVal = intval($_POST['physicsWindMinVal']);
+                $physicsWindMaxVal = intval($_POST['physicsWindMaxVal']);
+                $physicsWindMeanVal = intval($_POST['physicsWindMeanVal']);
+                $physicsWindVarianceVal = intval($_POST['physicsWindVarianceVal']);
+                if (!in_array($physicsWindMinVal, $safe_physics_values, true)) {$physicsWindMinVal = '';}
+                if (!in_array($physicsWindMaxVal, $safe_physics_values, true)) {$physicsWindMaxVal = '';}
+                if (!in_array($physicsWindMeanVal, $safe_physics_values, true)) {$physicsWindMeanVal = '';}
+                if (!in_array($physicsWindVarianceVal, $safe_physics_values2, true)) {$physicsWindVarianceVal = '';}
+
+                $physicsValues = array('min' => $physicsWindMinVal, 'max' => $physicsWindMaxVal, 'mean' => $physicsWindMeanVal, 'variance' => $physicsWindVarianceVal);
+
+                update_post_meta($asset_id, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome);
+                update_post_meta($asset_id, 'wpunity_physicsValues', $physicsValues);
+                update_post_meta($asset_id, 'wpunity_constructionPenalties', $constructionPenalties);
+            } elseif ($assetCatTerm->slug == 'producer') {
+                //Producer Options-Costs
+                $safe_opt_val = range(3, 250, 1);
+                $safe_opt_dmg = range(0.001, 0.02, 0.001);
+                $safe_opt_cost = range(1, 10, 1);
+                $safe_opt_repaid = range(0.5, 5, 0.5);
+                $producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
+                $producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
+                $producerCostVal = intval($_POST['producerCostVal']);
+                $producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
+                if (!in_array($producerTurbineSizeVal, $safe_opt_val, true)) {$producerTurbineSizeVal = '';}
+                if (!in_array($producerDmgCoeffVal, $safe_opt_dmg, true)) {$producerDmgCoeffVal = '';}
+                if (!in_array($producerCostVal, $safe_opt_cost, true)) {$producerCostVal = '';}
+                if (!in_array($producerRepairCostVal, $safe_opt_repaid, true)) {$producerRepairCostVal = '';}
+
+                $producerClassVal = $_POST['producerClassVal'];
+                $producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
+                $producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
+
+                $producerOptCosts = array('size' => $producerTurbineSizeVal, 'dmg' => $producerDmgCoeffVal, 'cost' => $producerCostVal, 'repaid' => $producerRepairCostVal);
+                $producerOptGen = array('class' => $producerClassVal, 'speed' => $producerWindSpeedClassVal, 'power' => $producerMaxPowerVal);
+                $producerPowerProductionVal = $_POST['producerPowerProductionVal'];
+
+                update_post_meta($asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal);
+                update_post_meta($asset_id, 'wpunity_producerOptCosts', $producerOptCosts);
+                update_post_meta($asset_id, 'wpunity_producerOptGen', $producerOptGen);
+            }
 
 
-		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-		exit;
-	}
+            //$objFile = $_FILES['objFileInput'];
+            $textureFile = $_FILES['textureFileInput'];
 
+            //Upload All files as attachments of asset
+            //first upload jpg and get the filename for input at mtl
+            $textureFile_id = wpunity_upload_Assetimg($textureFile, $asset_id, $gameSlug);
+            $textureFile_filename = basename(get_attached_file($textureFile_id));
+
+            //open mtl file and replace jpg filename
+            $mtl_content = file_get_contents($_FILES['mtlFileInput']['tmp_name']);
+            $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+            file_put_contents($_FILES['mtlFileInput']['tmp_name'], $mtl_content);
+            $mtlFile = $_FILES['mtlFileInput'];
+            //upload mtl and get the filename for input at obj
+            $mtlFile_id = wpunity_upload_Assetimg($mtlFile, $asset_id, $gameSlug);
+            $mtlFile_filename = basename(get_attached_file($mtlFile_id));
+
+            $obj_content = file_get_contents($_FILES['objFileInput']['tmp_name']);
+            $obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+            file_put_contents($_FILES['objFileInput']['tmp_name'], $obj_content);
+            $objFile = $_FILES['objFileInput'];
+            $objFile_id = wpunity_upload_Assetimg($objFile, $asset_id, $gameSlug);
+
+            $screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
+
+            //Set value of attachment IDs at custom fields
+            update_post_meta($asset_id, 'wpunity_asset3d_mtl', $mtlFile_id);
+            update_post_meta($asset_id, 'wpunity_asset3d_obj', $objFile_id);
+            update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
+            update_post_meta($asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id);
+
+
+            wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+            exit;
+        }
+	}else {
+
+        $asset_new_info = array(
+            'ID' => $asset_inserted_id,
+            'post_title' => esc_attr(strip_tags($_POST['assetTitle'])),
+            'post_content' => esc_attr(strip_tags($_POST['assetDesc'])),
+        );
+
+        wp_update_post($asset_new_info);
+
+        $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+        if ($assetCatTerm->slug == 'consumer') {
+
+            //Energy Consumption
+            $safe_cons_values = range(0, 2000, 5);
+            $safe_cons_values2 = range(0, 1000, 5);
+            $energyConsumptionMinVal = intval($_POST['energyConsumptionMinVal']);
+            $energyConsumptionMaxVal = intval($_POST['energyConsumptionMaxVal']);
+            $energyConsumptionMeanVal = intval($_POST['energyConsumptionMeanVal']);
+            $energyConsumptionVarianceVal = intval($_POST['energyConsumptionVarianceVal']);
+            if (!in_array($energyConsumptionMinVal, $safe_cons_values, true)) {
+                $energyConsumptionMinVal = '';
+            }
+            if (!in_array($energyConsumptionMaxVal, $safe_cons_values, true)) {
+                $energyConsumptionMaxVal = '';
+            }
+            if (!in_array($energyConsumptionMeanVal, $safe_cons_values, true)) {
+                $energyConsumptionMeanVal = '';
+            }
+            if (!in_array($energyConsumptionVarianceVal, $safe_cons_values2, true)) {
+                $energyConsumptionVarianceVal = '';
+            }
+
+            $new_energyConsumption = array('min' => $energyConsumptionMinVal, 'max' => $energyConsumptionMaxVal, 'mean' => $energyConsumptionMeanVal, 'var' => $energyConsumptionVarianceVal);
+
+            update_post_meta($asset_inserted_id, 'wpunity_energyConsumption', $new_energyConsumption);
+
+        } elseif ($assetCatTerm->slug == 'terrain') {
+            //Income (in $)
+            $safe_income_values = range(-5, 5, 0.5);
+            $underPowerIncome = floatval($_POST['underPowerIncomeVal']);
+            $correctPowerIncome = floatval($_POST['correctPowerIncomeVal']);
+            $overPowerIncome = floatval($_POST['overPowerIncomeVal']);
+            if (!in_array($underPowerIncome, $safe_income_values, true)) {
+                $underPowerIncome = '';
+            }
+            if (!in_array($correctPowerIncome, $safe_income_values, true)) {
+                $correctPowerIncome = '';
+            }
+            if (!in_array($overPowerIncome, $safe_income_values, true)) {
+                $overPowerIncome = '';
+            }
+
+            $new_energyConsumptionIncome = array('under' => $underPowerIncome, 'correct' => $correctPowerIncome, 'over' => $overPowerIncome);
+
+            //Construction Penalties (in $)
+            $safe_penalty_values = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            $accessCostPenalty = intval($_POST['accessCostPenalty']);
+            $archProximityPenalty = intval($_POST['archProximityPenalty']);
+            $naturalReserveProximityPenalty = intval($_POST['naturalReserveProximityPenalty']);
+            $hiVoltLineDistancePenalty = intval($_POST['hiVoltLineDistancePenalty']);
+            if (!in_array($accessCostPenalty, $safe_penalty_values, true)) {
+                $accessCostPenalty = '';
+            }
+            if (!in_array($archProximityPenalty, $safe_penalty_values, true)) {
+                $archProximityPenalty = '';
+            }
+            if (!in_array($naturalReserveProximityPenalty, $safe_penalty_values, true)) {
+                $naturalReserveProximityPenalty = '';
+            }
+            if (!in_array($hiVoltLineDistancePenalty, $safe_penalty_values, true)) {
+                $hiVoltLineDistancePenalty = '';
+            }
+
+            $new_constructionPenalties = array('access' => $accessCostPenalty, 'arch' => $archProximityPenalty, 'natural' => $naturalReserveProximityPenalty, 'hiVolt' => $hiVoltLineDistancePenalty);
+
+            //Physics
+            $safe_physics_values = range(0, 40, 1);
+            $safe_physics_values2 = range(1, 100, 1);//for Wind Variance
+            $physicsWindMinVal = intval($_POST['physicsWindMinVal']);
+            $physicsWindMaxVal = intval($_POST['physicsWindMaxVal']);
+            $physicsWindMeanVal = intval($_POST['physicsWindMeanVal']);
+            $physicsWindVarianceVal = intval($_POST['physicsWindVarianceVal']);
+            if (!in_array($physicsWindMinVal, $safe_physics_values, true)) {
+                $physicsWindMinVal = '';
+            }
+            if (!in_array($physicsWindMaxVal, $safe_physics_values, true)) {
+                $physicsWindMaxVal = '';
+            }
+            if (!in_array($physicsWindMeanVal, $safe_physics_values, true)) {
+                $physicsWindMeanVal = '';
+            }
+            if (!in_array($physicsWindVarianceVal, $safe_physics_values2, true)) {
+                $physicsWindVarianceVal = '';
+            }
+
+            $new_physicsValues = array('min' => $physicsWindMinVal, 'max' => $physicsWindMaxVal, 'mean' => $physicsWindMeanVal, 'variance' => $physicsWindVarianceVal);
+
+            update_post_meta($asset_inserted_id, 'wpunity_energyConsumptionIncome', $new_energyConsumptionIncome);
+            update_post_meta($asset_inserted_id, 'wpunity_physicsValues', $new_physicsValues);
+            update_post_meta($asset_inserted_id, 'wpunity_constructionPenalties', $new_constructionPenalties);
+        } elseif ($assetCatTerm->slug == 'producer') {
+            //Producer Options-Costs
+            $safe_opt_val = range(3, 250, 1);
+            $safe_opt_dmg = range(0.001, 0.02, 0.001);
+            $safe_opt_cost = range(1, 10, 1);
+            $safe_opt_repaid = range(0.5, 5, 0.5);
+            $producerTurbineSizeVal = intval($_POST['producerTurbineSizeVal']);
+            $producerDmgCoeffVal = floatval($_POST['producerDmgCoeffVal']);
+            $producerCostVal = intval($_POST['producerCostVal']);
+            $producerRepairCostVal = floatval($_POST['producerRepairCostVal']);
+            if (!in_array($producerTurbineSizeVal, $safe_opt_val, true)) {
+                $producerTurbineSizeVal = '';
+            }
+            if (!in_array($producerDmgCoeffVal, $safe_opt_dmg, true)) {
+                $producerDmgCoeffVal = '';
+            }
+            if (!in_array($producerCostVal, $safe_opt_cost, true)) {
+                $producerCostVal = '';
+            }
+            if (!in_array($producerRepairCostVal, $safe_opt_repaid, true)) {
+                $producerRepairCostVal = '';
+            }
+
+            $producerClassVal = $_POST['producerClassVal'];
+            $producerWindSpeedClassVal = floatval($_POST['producerWindSpeedClassVal']);
+            $producerMaxPowerVal = floatval($_POST['producerMaxPowerVal']);
+
+            $new_producerOptCosts = array('size' => $producerTurbineSizeVal, 'dmg' => $producerDmgCoeffVal, 'cost' => $producerCostVal, 'repaid' => $producerRepairCostVal);
+            $new_producerOptGen = array('class' => $producerClassVal, 'speed' => $producerWindSpeedClassVal, 'power' => $producerMaxPowerVal);
+            $new_producerPowerProductionVal = $_POST['producerPowerProductionVal'];
+
+            update_post_meta($asset_inserted_id, 'wpunity_producerPowerProductionVal', $new_producerPowerProductionVal);
+            update_post_meta($asset_inserted_id, 'wpunity_producerOptCosts', $new_producerOptCosts);
+            update_post_meta($asset_inserted_id, 'wpunity_producerOptGen', $new_producerOptGen);
+        }
+
+        wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+        exit;
+    }
 }
 
 get_header(); ?>
@@ -273,7 +417,7 @@ get_header(); ?>
 						));
 
 					$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-                    $saved_term = wp_get_post_terms( $asset_inserted_id, 'wpunity_asset3d_cat' );
+                    $saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
                     ?>
 
 					<?php if($create_new == 1) { ?>
@@ -316,9 +460,9 @@ get_header(); ?>
             $asset_desc_saved = "";
             $asset_desc_label = "Add a description";
         }else{
-            $asset_title_saved = get_the_title( $asset_inserted_id );
+            $asset_title_saved = get_the_title( $asset_checked_id );
             $asset_title_label = "Edit the title of your asset";
-            $asset_desc_saved = get_post_field('post_content', $asset_inserted_id);
+            $asset_desc_saved = get_post_field('post_content', $asset_checked_id);
             $asset_desc_label = "Edit description";
         }
         ?>
@@ -503,29 +647,53 @@ get_header(); ?>
 
         <?php //Check if its new/saved and get data for Terrain Options
         if($create_new != 1){
-            $saved_term = wp_get_post_terms( $asset_inserted_id, 'wpunity_asset3d_cat' );
+            $saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
             if($saved_term[0]->slug == 'terrain'){
-                $physics = get_post_meta($terrain_id,'wpunity_physicsValues',true);
+                $physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
                 if($physics) {
                     $mean_speed_wind = $physics['mean'];
                     $var_speed_wind = $physics['variance'];
                     $min_speed_wind = $physics['min'];
                     $max_speed_wind = $physics['max'];
                 }
-                $energy_income = get_post_meta($terrain_id,'wpunity_energyConsumptionIncome',true);
+                $energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
                 if($energy_income) {
                     $income_when_overpower = $energy_income['over'];
                     $income_when_correct_power = $energy_income['correct'];
                     $income_when_under_power = $energy_income['under'];
                 }
-                $constr_pen = get_post_meta($terrain_id,'wpunity_constructionPenalties',true);
+                $constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
                 if($constr_pen){
                     $access_penalty = $constr_pen['access'];
                     $archaeology_penalty = $constr_pen['arch'];
                     $natural_reserve_penalty = $constr_pen['natural'];
                     $hvdistance_penalty = $constr_pen['hiVolt'];
                 }
+            }elseif($saved_term[0]->slug == 'consumer'){
+                $consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
+                if($consumptions) {
+                    $min_consumption = $consumptions['min'];
+                    $max_consumption = $consumptions['max'];
+                    $mean_consumption = $consumptions['mean'];
+                    $var_consumption = $consumptions['var'];
+                }
+            }elseif($saved_term[0]->slug == 'producer') {
+                $optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
+                if($optCosts) {
+                    $optCosts_size = $optCosts['size'];
+                    $optCosts_dmg = $optCosts['dmg'];
+                    $optCosts_cost = $optCosts['cost'];
+                    $optCosts_repaid = $optCosts['repaid'];
+                }
+                $optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
+                if($optGen) {
+                    $optGen_class = $optGen['class'];
+                    $optGen_speed = $optGen['speed'];
+                    $optGen_power = $optGen['power'];
+                }
             }
+
+
         }
         ?>
 
@@ -637,7 +805,6 @@ get_header(); ?>
             </div>
         </div>
 
-
         <div id="consumerPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
@@ -647,22 +814,22 @@ get_header(); ?>
                 <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-range"></div>
-                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="" disabled>
-                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>" disabled>
+                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-mean-slider"></div>
-                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="" disabled>
+                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>" disabled>
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-variance-slider"></div>
-                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="" disabled="">
+                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>" disabled="">
 
             </div>
 
@@ -791,7 +958,7 @@ get_header(); ?>
 
                 <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
-                           aria-controls="producer-class-validation-msg" value="A" required minlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                           aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
                     <label for="producerClassVal" class="mdc-textfield__label">
                         Producer class
                 </div>
@@ -853,9 +1020,9 @@ get_header(); ?>
 
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
-
+        <?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
         <button id="formSubmitBtn" style="margin-bottom: 24px; width: 100%; height: 48px; display: none;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-            Create asset
+            <?php echo $buttonTitleText; ?>
         </button>
 
 		<?php if($game_type_obj->string == 'Energy') {
@@ -1186,9 +1353,14 @@ get_header(); ?>
 
             } );
 
-            var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[50, 150], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
-            var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 50, max: 150, value: 100, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
-            var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: 50, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
+            var min_cons = <?php echo json_encode($min_consumption);?>;
+            var max_cons = <?php echo json_encode($max_consumption);?>;
+            var mean_cons = <?php echo json_encode($mean_consumption);?>;
+            var var_cons = <?php echo json_encode($var_consumption);?>;
+
+            var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[min_cons, max_cons], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
+            var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 50, max: 150, value: mean_cons, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
+            var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: var_cons, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
 
 
             // Change Mean range according to Speed range
@@ -1211,14 +1383,21 @@ get_header(); ?>
             var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: income_correct, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
             var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: income_underpower, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
 
+            var opt_size = <?php echo json_encode($optCosts_size);?>;
+            var opt_dmg = <?php echo json_encode($optCosts_dmg);?>;
+            var opt_cost = <?php echo json_encode($optCosts_cost);?>;
+            var opt_repaid = <?php echo json_encode($optCosts_repaid);?>;
+            var opt_speed = <?php echo json_encode($optGen_speed);?>;
+            var opt_power = <?php echo json_encode($optGen_power);?>;
+
             /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
              var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
-            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: 90, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
-            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: 0.005, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
-            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: 3, valId:"#producerCostVal", step: 1, units:"$"});
-            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: 1, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
-            var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: 10, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
-            var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: 3, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
+            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: opt_size, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
+            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: opt_dmg, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
+            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: opt_cost, valId:"#producerCostVal", step: 1, units:"$"});
+            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: opt_repaid, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
+            var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: opt_speed, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
+            var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: opt_power, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
 
             var index = 0;
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
