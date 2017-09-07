@@ -9,8 +9,8 @@ $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 // Define Ajax for the delete Game functionality
 $thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
-wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-wp_localize_script( 'ajax-script', 'my_ajax_object_deletegame',
+wp_enqueue_script( 'ajax-script_delete_game', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script_delete_game', 'my_ajax_object_deletegame',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 

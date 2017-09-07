@@ -22,23 +22,19 @@ $allGamesPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
-function my_enqueue_front_end_ajax() {
-    global $scene_id;
+$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+$pluginpath = str_replace('\\','/',$pluginpath);
 
-    $thepath = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/scriptFileBrowserToolbarWPway.js';
-    wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-    wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+$thepath = $pluginpath + '/js_libs/scriptFileBrowserToolbarWPway.js';
+wp_enqueue_script( 'ajax-script_filebrowser', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script_filebrowser', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
-    $thepath2 = get_site_url().'/wp-content/plugins/wordpressunity3deditor/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js';
-    wp_enqueue_script( 'ajax-script2', $thepath2, array('jquery') );
-    wp_localize_script( 'ajax-script2', 'my_ajax_object_savescene',
-        array( 'ajax_url' => admin_url( 'admin-ajax.php' ),
-               'scene_id' => $scene_id //,
-               //'scene_json' => '' getElementById('wpunity_scene_json_input')->value // I get json with javascript in ajax
-        )
-    );
-}
-add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_ajax' );
+$thepath2 = $pluginpath + '/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js';
+wp_enqueue_script( 'ajax-script_savescene', $thepath2, array('jquery') );
+wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'scene_id' => $scene_id )
+);
+
 
 
 wp_enqueue_media($scene_post->ID);
