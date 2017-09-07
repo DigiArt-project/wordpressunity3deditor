@@ -6,25 +6,19 @@
  *
  *  All the above are encompassed in     wpunity_delete_gameproject_frontend($game_id)
  */
-function wpunity_deleteGameAjax() {
+function wpunity_deleteGameAjax(game_id) {
 
     jQuery.ajax({
         url: my_ajax_object_deletegame.ajax_url,
         type: 'POST',
         data: {
             'action': 'wpunity_delete_game_action',
-            'game_id': window.game_id_for_delete
+            'game_id': game_id
         },
         success: function (res) {
-
-            delete window.game_id_for_delete;
-
             location.reload();
-
         },
         error: function (xhr, ajaxOptions, thrownError) {
-
-            delete window.game_id_for_delete;
 
             jQuery('#delete-dialog-progress-bar').hide();
 
@@ -34,7 +28,6 @@ function wpunity_deleteGameAjax() {
             alert("Could not delete game. Try deleting it from the administration panel");
 
             console.log("Ajax Delete Game: ERROR: 166" + thrownError);
-
         }
     });
 
