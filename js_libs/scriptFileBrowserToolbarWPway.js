@@ -13,7 +13,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
 
             responseRecords = responseRecords.items;
 
-            file_Browsing_By_DB(responseRecords);
+            file_Browsing_By_DB(responseRecords, gameProjectSlug);
         },
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR 51:" + thrownError);
@@ -25,14 +25,14 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
  * Start the browser
  * @param responseData
  */
-function file_Browsing_By_DB(responseData) {
+function file_Browsing_By_DB(responseData, gameProjectSlug) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
         //breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
 
-    render(responseData);
+    render(responseData, gameProjectSlug );
 
     // Hiding and showing the search box
     filemanager.find('.search').click(function() {
@@ -54,10 +54,10 @@ function file_Browsing_By_DB(responseData) {
 
             // Filter the responseData according to value.trim()
             filteredResponseData = selectByTitleComparizon(responseData, value.trim());
-            render(filteredResponseData);
+            render(filteredResponseData, gameProjectSlug);
         } else {
             filemanager.removeClass('searching');
-            render(responseData);
+            render(responseData, gameProjectSlug);
         }
 
     }).on('keyup', function(e){ // Clicking 'ESC' button triggers focusout and cancels the search
@@ -110,7 +110,7 @@ function file_Browsing_By_DB(responseData) {
 
     // Render the HTML for the file manager
     // Here we make the list
-    function render(enlistData) {
+    function render(enlistData, gameProjectSlug) {
 
         var i, f, name;
 
@@ -175,8 +175,8 @@ function file_Browsing_By_DB(responseData) {
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
                     '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" id="editAssetBtn" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn" onclick="wpunity_deleteAssetAjax(' + f.assetid +
-                             ')" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn" onclick="wpunity_deleteAssetAjax(' +
+                       f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span></li>' );
 
                 file.appendTo(fileList);
@@ -219,8 +219,5 @@ function file_Browsing_By_DB(responseData) {
         });
         return output_data;
     }
-
-
-
 
 }
