@@ -10,6 +10,18 @@ wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
 
+//Default Values
+$mean_speed_wind = 14;
+$var_speed_wind = 30;
+$min_speed_wind = 0;
+$max_speed_wind = 40;
+$income_when_overpower = 0.5;
+$income_when_correct_power = 1;
+$income_when_under_power = 0;
+$access_penalty = 0;
+$archaeology_penalty = 0;
+$natural_reserve_penalty = 0;
+$hvdistance_penalty = 0;
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -224,7 +236,10 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
 
-<?php $breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset"); ?>
+    <?php
+    $breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
+    $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
+?>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span><?php echo $breacrumbsTitle; ?></span></h2>
 
@@ -234,7 +249,7 @@ get_header(); ?>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                <h3 class="mdc-typography--title">Select a category</h3>
+                <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                 <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
 
@@ -257,12 +272,14 @@ get_header(); ?>
 							)
 						));
 
-					$cat_terms = get_terms('wpunity_asset3d_cat', $args); ?>
+					$cat_terms = get_terms('wpunity_asset3d_cat', $args);
+                    $saved_term = wp_get_post_terms( $asset_inserted_id, 'wpunity_asset3d_cat' );
+                    ?>
 
 					<?php if($create_new == 1) { ?>
                         <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
 					<?php } else { ?>
-                        <span data-cat-desc="<?php echo $cat_terms[0]->description; ?>" data-cat-slug="<?php echo $cat_terms[0]->slug; ?>" data-cat-id="<?php echo $cat_terms[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $cat_terms[0]->name; ?></span>
+                        <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
 					<?php } ?>
 
 
@@ -292,6 +309,20 @@ get_header(); ?>
 
         </div>
 
+        <?php //Check if its new/saved and get data for TITLE/DESCRIPTION
+        if($create_new == 1){
+            $asset_title_saved = "";
+            $asset_title_label = "Enter a title for your asset";
+            $asset_desc_saved = "";
+            $asset_desc_label = "Add a description";
+        }else{
+            $asset_title_saved = get_the_title( $asset_inserted_id );
+            $asset_title_label = "Edit the title of your asset";
+            $asset_desc_saved = get_post_field('post_content', $asset_inserted_id);
+            $asset_desc_label = "Edit description";
+        }
+        ?>
+
         <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
@@ -300,9 +331,9 @@ get_header(); ?>
 
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
-                           aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">
+                           aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;" value="<?php echo $asset_title_saved; ?>">
                     <label for="assetTitle" class="mdc-textfield__label">
-                        Enter a title for your asset
+                        <?php echo $asset_title_label; ?>
                 </div>
                 <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
                    id="title-validation-msg">
@@ -310,8 +341,8 @@ get_header(); ?>
                 </p>
 
                 <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"></textarea>
-                    <label for="multi-line" class="mdc-textfield__label">Add a description</label>
+                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"><?php echo $asset_desc_saved; ?></textarea>
+                    <label for="multi-line" class="mdc-textfield__label"><?php echo $asset_desc_label; ?></label>
                 </div>
 
                 <!-- FALLBACK: Use this if you cannot validate the above on submit -->
@@ -470,6 +501,34 @@ get_header(); ?>
 
         </div>
 
+        <?php //Check if its new/saved and get data for Terrain Options
+        if($create_new != 1){
+            $saved_term = wp_get_post_terms( $asset_inserted_id, 'wpunity_asset3d_cat' );
+            if($saved_term[0]->slug == 'terrain'){
+                $physics = get_post_meta($terrain_id,'wpunity_physicsValues',true);
+                if($physics) {
+                    $mean_speed_wind = $physics['mean'];
+                    $var_speed_wind = $physics['variance'];
+                    $min_speed_wind = $physics['min'];
+                    $max_speed_wind = $physics['max'];
+                }
+                $energy_income = get_post_meta($terrain_id,'wpunity_energyConsumptionIncome',true);
+                if($energy_income) {
+                    $income_when_overpower = $energy_income['over'];
+                    $income_when_correct_power = $energy_income['correct'];
+                    $income_when_under_power = $energy_income['under'];
+                }
+                $constr_pen = get_post_meta($terrain_id,'wpunity_constructionPenalties',true);
+                if($constr_pen){
+                    $access_penalty = $constr_pen['access'];
+                    $archaeology_penalty = $constr_pen['arch'];
+                    $natural_reserve_penalty = $constr_pen['natural'];
+                    $hvdistance_penalty = $constr_pen['hiVolt'];
+                }
+            }
+        }
+        ?>
+
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
@@ -538,13 +597,11 @@ get_header(); ?>
                 <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                     Construction penalties apply for consumers and producers that are placed on this terrain.
                 </span>
-
                 <div class="mdc-layout-grid">
-
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
-                                   aria-controls="accessCostPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="accessCostPenalty" class="mdc-textfield__label">
                                 Access Cost
                         </div>
@@ -552,7 +609,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
-                                   aria-controls="archProximityPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="archProximityPenalty" class="mdc-textfield__label">
                                 Arch. site proximity
                         </div>
@@ -561,7 +618,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
-                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="naturalReserveProximityPenalty" class="mdc-textfield__label">
                                 Natural reserve proximity
                         </div>
@@ -569,7 +626,7 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
-                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="0" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
                             <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label">
                                 Hi-Voltage line distance
                         </div>
@@ -1102,10 +1159,20 @@ get_header(); ?>
             });
 
 
-            // Sliders
-            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
-            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
-            var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
+            // Sliders OLD
+            //var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
+            //var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
+            //var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
+
+            var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
+            var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
+            var meanspeed_value = <?php echo json_encode($mean_speed_wind);?>;
+            var varspeed_value = <?php echo json_encode($var_speed_wind);?>;
+
+            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[minspeed_value,maxspeed_value], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
+            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: meanspeed_value, valId:"#physicsWindMeanVal", units:"m/sec"});
+            var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: varspeed_value, valId:"#physicsWindVarianceVal", units:""});
+
 
             // Change Mean range according to Speed range
             jQuery( "#wind-speed-range" ).on( "slidestop", function( event, ui ) {
@@ -1136,9 +1203,13 @@ get_header(); ?>
 
             } );
 
-            var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: 0.5, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
-            var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: 1, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
-            var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: 0, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
+            var income_overpower = <?php echo json_encode($income_when_overpower);?>;
+            var income_correct = <?php echo json_encode($income_when_correct_power);?>;
+            var income_underpower = <?php echo json_encode($income_when_under_power);?>;
+
+            var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: income_overpower, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
+            var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: income_correct, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
+            var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: income_underpower, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
 
             /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
              var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
