@@ -895,7 +895,7 @@ get_header(); ?>
 
                 var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
                 jQuery('#'+ selectedCatId).attr("aria-selected", true);
-                loadLayout();
+                loadLayout(false);
 
             }
 
@@ -908,11 +908,12 @@ get_header(); ?>
             });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
-                loadLayout();
+                loadLayout(jQuery('#currently-selected').attr("data-cat-slug"));
             });
 
 
-            function loadLayout() {
+            function loadLayout(createAsset) {
+
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
 
@@ -926,7 +927,13 @@ get_header(); ?>
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
-                jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
+                if(createAsset) {
+                    jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+                } else {
+                    jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("data-cat-id") );
+                }
+
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
@@ -1007,7 +1014,6 @@ get_header(); ?>
                     default:
 
                 }
-                console.log(cat, index);
             }
         })();
 
