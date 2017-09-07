@@ -895,8 +895,8 @@ get_header(); ?>
 
                 var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
                 jQuery('#'+ selectedCatId).attr("aria-selected", true);
+                jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                 loadLayout(false);
-
             }
 
             nextSceneDropdown.addEventListener('MDCSelect:change', function() {
