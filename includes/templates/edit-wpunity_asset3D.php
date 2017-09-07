@@ -1206,10 +1206,10 @@ get_header(); ?>
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="poi-input-text-validation-msg" minlength="6" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
+                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
-                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 6 - 25 characters</p></div>' +
+                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
                         '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>'
                     ); // Add input box
                 }
