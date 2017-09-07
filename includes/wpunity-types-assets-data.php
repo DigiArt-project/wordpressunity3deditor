@@ -902,6 +902,10 @@ add_action( 'wp_ajax_wpunity_enlist_splitted_objs_action', 'wpunity_enlist_split
 
 add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_callback' );
 
+// AJAX for delete asset
+add_action('wp_ajax_wpunity_delete_asset_action', 'wpunity_delete_asset3d_frontend_callback');
+
+
 //==========================================================================================================================================
 
 ?>
