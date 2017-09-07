@@ -531,7 +531,6 @@ $wp_query = $temp_query;
             jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
 
-            window.scene_id_for_delete = deleteDialog.id;
             wpunity_deleteSceneAjax(deleteDialog.id);
         });
 

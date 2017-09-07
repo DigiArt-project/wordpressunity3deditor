@@ -108,7 +108,7 @@ function wpunity_fetch_game_assets_action_callback(){
 	// if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
 	//$dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder']; //.$DS.$_GET['scenefolder'];
 
-	$response = wpunity_getAllassets_byGameProject($_GET['gameProjectSlug']);
+	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug']);
 
 	for ($i=0; $i<count($response); $i++){
 		$response[$i][name] =$response[$i][assetName];

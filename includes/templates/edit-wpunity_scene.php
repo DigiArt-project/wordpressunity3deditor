@@ -25,15 +25,24 @@ $newAssetPage = wpunity_getEditpage('asset');
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
-$thepath = $pluginpath + '/js_libs/scriptFileBrowserToolbarWPway.js';
-wp_enqueue_script( 'ajax-script_filebrowser', $thepath, array('jquery') );
-wp_localize_script( 'ajax-script_filebrowser', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
-$thepath2 = $pluginpath + '/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js';
-wp_enqueue_script( 'ajax-script_savescene', $thepath2, array('jquery') );
+wp_enqueue_script( 'ajax-script_filebrowse', $pluginpath.'/js_libs/scriptFileBrowserToolbarWPway.js', array('jquery') );
+wp_localize_script( 'ajax-script_filebrowse', 'my_ajax_object_fbrowse', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+
+wp_enqueue_script( 'ajax-script_savescene', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
 wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
     array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'scene_id' => $scene_id )
 );
+
+
+wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
+wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+);
+
+
+
+
 
 
 

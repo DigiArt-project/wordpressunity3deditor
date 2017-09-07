@@ -283,8 +283,7 @@ get_header();
         jQuery( "#cancelDeleteGameBtn" ).addClass( "LinkDisabled" );
 
         //console.log("ID:", dialog.id);
-        window.game_id_for_delete = dialog.id;
-        wpunity_deleteGameAjax();
+        wpunity_deleteGameAjax(dialog.id);
 
     });
 

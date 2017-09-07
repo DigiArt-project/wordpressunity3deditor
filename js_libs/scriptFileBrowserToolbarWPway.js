@@ -1,21 +1,11 @@
-/**
- * Created by jimve on 15-Feb-17.
- */
-
-//----------------------------------------------------------------------------------
-//  AJAX: FETCH DIR CONTENT
-//----------------------------------------------------------------------------------
-function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID){
+//  AJAX: FETCH Assets 3d
+function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
 
     jQuery.ajax({
-        url :  isAdmin=="back" ? 'admin-ajax.php' : my_ajax_object.ajax_url,
-        type : 'GET',
+        url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
+        type : 'POST',
         data : {
             'action': 'wpunity_fetch_game_assets_action',
-            // 'gamefolder':gamefolder,
-            // 'scenefolder':scenefolder,
-            //'sceneID':sceneID,
-            //'gameProjectID': gameProjectID,
             'gameProjectSlug': gameProjectSlug
         },
 
@@ -31,17 +21,10 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, g
     });
 }
 
-//======================================================================
-//  ____                               _             _____  ____
-// |  _ \                             | |           |  __ \|  _ \
-// | |_) |_ __ _____      _____  ___  | |__  _   _  | |  | | |_) |
-// |  _ <| '__/ _ \ \ /\ / / __|/ _ \ | '_ \| | | | | |  | |  _ <
-// | |_) | | | (_) \ V  V /\__ \  __/ | |_) | |_| | | |__| | |_) |
-// |____/|_|  \___/ \_/\_/ |___/\___| |_.__/ \__, | |_____/|____/
-//                                           __/ |
-//                                          |___/
-// The DB way is the correct one. The old dir way was vulnerable to bugs
-//======================================================================
+/**
+ * Start the browser
+ * @param responseData
+ */
 function file_Browsing_By_DB(responseData) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
@@ -191,8 +174,9 @@ function file_Browsing_By_DB(responseData) {
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" class="mdc-button mdc-button--dense">Delete</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" id="editAssetBtn" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn" onclick="wpunity_deleteAssetAjax(' + f.assetid +
+                             ')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span></li>' );
 
                 file.appendTo(fileList);
@@ -235,5 +219,8 @@ function file_Browsing_By_DB(responseData) {
         });
         return output_data;
     }
+
+
+
 
 }
