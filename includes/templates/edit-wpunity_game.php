@@ -15,42 +15,33 @@ echo '<script>';
 echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
 echo '</script>';
 
-// Ajax logic for front end assepile
-// engueue request_game_assepile.js in ajax with in order to be able to call php and pass as parameters the ajax object and the game id and slug
 
-// Ajax for assembling
-function my_enqueue_front_end_assepile_ajax() {
-	global $project_id, $gameSlug;
-	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
-	$pluginpath = str_replace('\\','/',$pluginpath);
-
-	//--Uploads/myGameProjectUnity--
-	$upload_dir = wp_upload_dir()['basedir'];
-	$upload_dir = str_replace('\\','/',$upload_dir);
-	$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
-
-	$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
-	wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-	wp_localize_script( 'ajax-script', 'my_ajax_object_assepile',
-		array( 'ajax_url' => admin_url( 'admin-ajax.php'),
-		       'id' => $project_id,
-		       'slug' => $gameSlug,
-		       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
-		       'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
-		)
-	) ;
-}
-add_action( 'wp_enqueue_scripts', 'my_enqueue_front_end_assepile_ajax');
-
-
-// Ajax for delete scene
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
-// Define Ajax for the delete Game functionality
-$thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js';
-wp_enqueue_script( 'ajax-script', $thepath, array('jquery') );
-wp_localize_script( 'ajax-script', 'my_ajax_object_deletescene',
-	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+
+//--Uploads/myGameProjectUnity--
+$upload_dir = wp_upload_dir()['basedir'];
+$upload_dir = str_replace('\\','/',$upload_dir);
+
+
+// COMPILE Ajax
+$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+
+$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
+wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'),
+        'id' => $project_id,
+        'slug' => $gameSlug,
+        'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
+        'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
+    )
+);
+
+// DELETE SCENE AJAX
+wp_enqueue_script( 'ajax-script_deletescene', $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js', array('jquery') );
+wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 
 
