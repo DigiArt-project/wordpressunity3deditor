@@ -61,12 +61,8 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-    $assetCatID = 77;//delete it
+    $assetCatID = intval($_POST['term_id']);
     if($create_new == 1){
-
-        //TODO
-        //$assetCatID = intval($_POST['term_id']);
-        $assetCatID = 77;//delete it
 
         $asset_taxonomies = array(
             'wpunity_asset3d_pgame' => array(
