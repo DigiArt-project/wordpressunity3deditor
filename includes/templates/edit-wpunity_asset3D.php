@@ -1128,7 +1128,7 @@ get_header(); ?>
             });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
-                loadLayout(jQuery('#currently-selected').attr("data-cat-slug"));
+                loadLayout(true);
             });
 
 
@@ -1147,11 +1147,14 @@ get_header(); ?>
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
 
+                console.log(categorySelect.selectedOptions[0].getAttribute("id"));
 
                 if(createAsset) {
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
                 } else {
-                    jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("data-cat-id") );
+                    jQuery("#termIdInput").attr( "value", selectedCatId );
+
                 }
 
 
