@@ -418,6 +418,13 @@ function wpunity_compile_folders_gen($gameSlug){
     if (!is_dir($StandardAssetsF)) {mkdir($StandardAssetsF, 0755) or wp_die("Unable to create the folder".$StandardAssetsF);}
 }
 
+/**
+ *
+ * Generate HandyBuilder.cs
+ *
+ * @param $gameSlug
+ * @param $targetPlatform
+ */
 function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
@@ -464,6 +471,13 @@ function wpunity_compile_settings_files_gen($game_path,$fileName,$fileYaml){
 
 }
 
+/**
+ *
+ * Add all objs in HandyBuilder.cs for importing (wrapper)
+ *
+ * @param $gameID
+ * @param $gameSlug
+ */
 function wpunity_compile_models_gen($gameID,$gameSlug){
 
     $upload = wp_upload_dir();
@@ -488,14 +502,23 @@ function wpunity_compile_models_gen($gameID,$gameSlug){
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $asset_id = get_the_ID();
-            wpunity_compile_assets_cre($game_path,$asset_id,$handybuilder_file);
+            wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file);
         endwhile;
     endif;
     wp_reset_postdata();
 
 }
 
-function wpunity_compile_assets_cre($game_path,$asset_id,$handybuilder_file){
+/**
+ *
+ * Import all objs to HandyBuilder (function internal)
+ *
+ * @param $game_path
+ * @param $asset_id
+ * @param $handybuilder_file
+ */
+
+function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
     $folder = $game_path . '/' . $asset_post->post_name;
@@ -538,6 +561,13 @@ function wpunity_compile_assets_cre($game_path,$asset_id,$handybuilder_file){
 
 }
 
+/**
+ * Create initial meta for objs
+ *
+ * @param $folder
+ * @param $objName
+ * @param $objID
+ */
 function wpunity_compile_objmeta_cre($folder,$objName,$objID){
     $file = $folder . '/' . $objName . '.obj.meta';
     $create_file = fopen($file, "w") or die("Unable to open file!");
@@ -547,6 +577,13 @@ function wpunity_compile_objmeta_cre($folder,$objName,$objID){
     fclose($create_file);
 }
 
+/**
+ *
+ * Generate scenes
+ *
+ * @param $gameID
+ * @param $gameSlug
+ */
 function wpunity_compile_scenes_gen($gameID,$gameSlug){
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
@@ -583,6 +620,15 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     wp_reset_postdata();
 }
 
+/**
+ *
+ * Create Reward and SceneSelector
+ *
+ * @param $game_path
+ * @param $gameSlug
+ * @param $settings_path
+ * @param $handybuilder_file
+ */
 function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file){
     //get the first Game Type taxonomy in order to get the yamls (all of them have the same)
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
@@ -602,9 +648,21 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     $create_file2 = fopen($file2, "w") or die("Unable to open file!");
     fwrite($create_file2, $file_content);
     fclose($create_file2);
-
 }
 
+
+/**
+ *
+ * Make MainMenu scene and others
+ *
+ * @param $game_path
+ * @param $scene_id
+ * @param $gameSlug
+ * @param $settings_path
+ * @param $scenes_counter
+ * @param $handybuilder_file
+ * @return mixed
+ */
 function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$handybuilder_file){
     $scene_post = get_post($scene_id);
 
@@ -622,7 +680,10 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         $is_exit_button_active = 1;//TODO
         $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
         $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
-        if($featured_image_sprite_id != ''){$featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);}
+
+        if($featured_image_sprite_id != ''){
+            $featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id, $gameSlug, $scene_id);
+        }
 
         $file_content = wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active);
 
@@ -989,26 +1050,56 @@ function wpunity_replace_creditsscene_unity($term_meta_s_credits,$credits_conten
     return $file_content_return;
 }
 
-function wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id){
+function wpunity_compile_sprite_upload($featured_image_sprite_id, $gameSlug, $scene_id){
+
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
-    $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
+    $game_models_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
+
+    $fs = fopen("output_sprite_creation.txt","w");
+
 
     $attachment_post = get_post($featured_image_sprite_id);
+
+    fwrite($fs, "attachment_post:".print_r($attachment_post,true).chr(10));
+
     $attachment_file = $attachment_post->guid;
+
+    fwrite($fs, "attachment_file:". $attachment_file .chr(10));
+
     $attachment_tempname = str_replace('\\', '/', $attachment_file);
+
+    fwrite($fs, "attachment_tempname:". $attachment_tempname.chr(10) );
+
     $attachment_name = pathinfo($attachment_tempname);
-    $new_file = $game_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+
+    fwrite($fs, "attachment_name:". $attachment_name .chr(10) );
+
+    $new_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+
+    fwrite($fs, "new_file:". $new_file .chr(10) );
+
     copy($attachment_file,$new_file);
 
     $sprite_meta_yaml = wpunity_getYaml_jpg_sprite_pattern();
+
+    fwrite($fs, "sprite_meta_yaml:". $sprite_meta_yaml .chr(10) );
+
     $sprite_meta_guid = wpunity_create_guids('jpg', $featured_image_sprite_id);
+
+    fwrite($fs, "sprite_meta_guid:". $sprite_meta_guid .chr(10) );
+
     $sprite_meta_yaml_replace = wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid);
 
+    fwrite($fs, "sprite_meta_yaml_replace:". $sprite_meta_yaml_replace .chr(10) );
 
-    $sprite_meta_file = $game_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'] . '.meta';
+    $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'] . '.meta';
     $create_meta_file = fopen($sprite_meta_file, "w") or die("Unable to open file!");
+
+    fwrite($fs, "create_meta_file:". $create_meta_file .chr(10) );
+    fclose($fs);
+
     fwrite($create_meta_file,$sprite_meta_yaml_replace);
     fclose($create_meta_file);
 
