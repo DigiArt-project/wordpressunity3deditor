@@ -194,9 +194,11 @@ get_header(); ?>
             }
         }
 
-        window.onbeforeunload = function() {
+
+        /* TODO: Implement this in a smart way */
+        /*window.onbeforeunload = function() {
             return true;
-        };
+        };*/
 
     </script>
 <?php get_footer(); ?>
