@@ -3,9 +3,14 @@
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+$parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $project_id = intval( $_GET['wpunity_game'] );
 $project_id = sanitize_text_field( $project_id );
+
+$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+$asset_post = get_post($asset_inserted_id);
+if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
