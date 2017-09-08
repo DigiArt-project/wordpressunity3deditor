@@ -133,12 +133,9 @@ function wpunity_assepileAjax() {
 
                         var user_msg = steps[currstep].replace(new RegExp("DisplayProgress.+?(?=[ ])"),"");
 
-
-                        // For Tasos
                         console.log("currstep: ", currstep+1 + "/" + totalSteps + " - " + user_msg);
 
                         var stepCounter = currstep+1;
-
 
                         jQuery("#compileProgressTitle").html("Step: " + stepCounter + " / " + totalSteps);
 
