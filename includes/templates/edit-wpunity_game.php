@@ -269,10 +269,7 @@ if ( $custom_query->have_posts() ) :?>
                         <a href="<?php echo $edit_page_link; ?>">
 
 							<?php if(has_post_thumbnail($scene_id)) { ?>
-
-
 								<?php echo get_the_post_thumbnail( $scene_id ); ?>
-
 
 							<?php } else { ?>
 
