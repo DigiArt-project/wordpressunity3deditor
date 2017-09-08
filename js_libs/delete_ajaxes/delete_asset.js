@@ -9,7 +9,6 @@
 function wpunity_deleteAssetAjax(asset_id, game_slug) {
 
     jQuery("#deleteAssetProgressBar-"+ asset_id).show();
-
     jQuery("#asset-"+asset_id).addClass("LinkDisabled");
 
     jQuery.ajax({
@@ -35,7 +34,7 @@ function wpunity_deleteAssetAjax(asset_id, game_slug) {
             for (i=0; i< names_to_remove.length; i++)
                 envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
-            jQuery("#asset-"+asset_id).remove();
+            jQuery("#asset-"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
 
         },
         error: function (xhr, ajaxOptions, thrownError) {

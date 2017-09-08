@@ -163,7 +163,7 @@ get_header();
 
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 ">
 
 
                 <form name="newProjectForm" action="" id="newProjectForm" method="POST" enctype="multipart/form-data">

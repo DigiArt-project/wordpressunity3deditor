@@ -11,12 +11,18 @@ function wpunity_saveSceneAjax() {
         },
         success: function (data) {
             console.log("Ajax Save Scene:" + data);
-            document.getElementById('save-scene-button').style.backgroundColor = '#ff4081';
+
+
+            jQuery('#save-scene-button').html("Save scene").removeClass("LinkDisabled");
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log("Ajax Save Scene: ERROR: 156" + thrownError);
 
-            document.getElementById('save-scene-button').style.backgroundColor = '#000000';
+            jQuery('#save-scene-button').html("Save scene").removeClass("LinkDisabled");
+
+            document.getElementById('save-scene-button').style.backgroundColor = '#FF0000';
+
             alert("Ajax Save Scene: ERROR: 156" + thrownError);
         }
     });
