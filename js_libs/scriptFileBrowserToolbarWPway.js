@@ -179,10 +179,10 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
                        f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span>' +
                     '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
-                    '                    <div class="progressSliderLine"></div>\n' +
-                    '                    <div class="progressSliderSubLine progressIncrease"></div>\n' +
-                    '                    <div class="progressSliderSubLine progressDecrease"></div>\n' +
-                    '                </div>' +
+                    '<div class="progressSliderLine"></div>\n' +
+                    '<div class="progressSliderSubLine progressIncrease"></div>\n' +
+                    '<div class="progressSliderSubLine progressDecrease"></div>\n' +
+                    '</div>' +
                     '</li>' );
 
                 file.appendTo(fileList);

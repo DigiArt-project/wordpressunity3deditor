@@ -256,12 +256,12 @@ echo '</script>';
         <div id="result_download"></div>
     </div>
 
-
-    <div id="saveSceneBtn" class="SaveBtnContainerStyle">
+    <!--Moved this to outer php file-->
+    <!--<div id="saveSceneBtn" class="SaveBtnContainerStyle">
         <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
            type="button" id="save-scene-button"
            class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
-    </div>
+    </div>-->
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
