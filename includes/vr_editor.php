@@ -256,12 +256,12 @@ echo '</script>';
         <div id="result_download"></div>
     </div>
 
-
-    <div id="saveSceneBtn" class="SaveBtnContainerStyle">
+    <!--Moved this to outer php file-->
+    <!--<div id="saveSceneBtn" class="SaveBtnContainerStyle">
         <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
            type="button" id="save-scene-button"
            class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
-    </div>
+    </div>-->
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -379,7 +379,8 @@ echo '</script>';
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
 
-        document.getElementById('save-scene-button').style.backgroundColor = '#00C853';
+        jQuery('#save-scene-button').html("Saving...").addClass("LinkDisabled");
+
 
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
