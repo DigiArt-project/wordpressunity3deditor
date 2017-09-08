@@ -156,7 +156,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
 
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
-                var file = jQuery('<li class="mdc-list-item" style="height: 96px; position: relative;">' +
+                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item" style="height: 96px; position: relative;">' +
                     '<a class="mdc-list-item" style="align-items:baseline; left:0; padding:12px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
                     '" title="'+ f.name +
                     '" data-assetslug="'+ f.assetSlug +
@@ -174,10 +174,16 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" id="editAssetBtn" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn" onclick="wpunity_deleteAssetAjax(' +
+                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" id="editAssetBtn-'+ f.assetid + '" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax(' +
                        f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
-                    '</span></li>' );
+                    '</span>' +
+                    '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
+                    '                    <div class="progressSliderLine"></div>\n' +
+                    '                    <div class="progressSliderSubLine progressIncrease"></div>\n' +
+                    '                    <div class="progressSliderSubLine progressDecrease"></div>\n' +
+                    '                </div>' +
+                    '</li>' );
 
                 file.appendTo(fileList);
             }

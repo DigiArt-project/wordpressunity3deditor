@@ -8,7 +8,9 @@
  */
 function wpunity_deleteAssetAjax(asset_id, game_slug) {
 
-    // Todo-Tasos: Open dialog or progressbar to wait for asset delete
+    jQuery("#deleteAssetProgressBar-"+ asset_id).show();
+
+    jQuery("#asset-"+asset_id).addClass("LinkDisabled");
 
     jQuery.ajax({
         url: my_ajax_object_deleteasset.ajax_url,
@@ -20,33 +22,29 @@ function wpunity_deleteAssetAjax(asset_id, game_slug) {
         },
         success: function (res) {
 
-            res =  JSON.parse(res);
-
+            res = JSON.parse(res);
             console.log("Asset with id=" + res + " was succesfully deleted");
 
             // Remove objects from scene
+            var i;
             var names_to_remove = [];
-            for (var i=0; i< envir.scene.children.length; i++)
+            for (i=0; i< envir.scene.children.length; i++)
                 if (envir.scene.children[i].assetid == "" + res + "")
                     names_to_remove.push(envir.scene.children[i].name);
 
-            for (var i=0; i< names_to_remove.length; i++)
+            for (i=0; i< names_to_remove.length; i++)
                 envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
-
-            // Todo-Tasos: Close dialog or progressbar to wait for asset delete
-
-
-            // ToDo-Tasos: Remove dom of asset tile from the 3d editor
-
-
-
+            jQuery("#asset-"+asset_id).remove();
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
 
-            // Todo-Tasos: Close dialog or progressbar to wait for asset delete
+            jQuery("#deleteAssetProgressBar--"+ asset_id).hide();
 
+            jQuery("#asset-"+asset_id).removeClass("LinkDisabled");
+
+            alert("Could not delete asset. Please try again or try deleting it from the administration panel.");
 
             console.log("Ajax Delete Asset: ERROR: 169" + thrownError);
         }
