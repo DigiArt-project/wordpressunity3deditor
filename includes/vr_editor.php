@@ -379,7 +379,8 @@ echo '</script>';
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
 
-        document.getElementById('save-scene-button').style.backgroundColor = '#00C853';
+        jQuery('#save-scene-button').html("Saving...").addClass("LinkDisabled");
+
 
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
