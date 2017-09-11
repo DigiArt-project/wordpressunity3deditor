@@ -590,7 +590,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <h3 class="mdc-typography--title">Object Properties</h3>
 
                 <ul class="RadioButtonList">
-                    <li class="mdc-form-field" style="pointer-events: none; " disabled>
+                    <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
                         <div class="mdc-radio" >
                             <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
                             <div class="mdc-radio__background">
@@ -598,8 +598,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                                 <div class="mdc-radio__inner-circle"></div>
                             </div>
                         </div>
-                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label> (Under preparation)
-                    </li>
+                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+                    </li>-->
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
                             <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
