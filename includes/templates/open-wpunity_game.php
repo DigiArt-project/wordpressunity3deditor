@@ -78,7 +78,8 @@ get_header();
 		// Define custom query parameters
 		$custom_query_args = array(
 			'post_type' => 'wpunity_game',
-			'posts_per_page' => 10,
+			/*'posts_per_page' => 10,*/
+			'posts_per_page'   => -1,
 			/*'paged' => $paged,*/
 		);
 
