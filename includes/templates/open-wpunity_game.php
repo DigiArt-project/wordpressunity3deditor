@@ -68,7 +68,7 @@ get_header();
 <hr class="WhiteSpaceSeparator">
 <div class="mdc-layout-grid FrontPageStyle">
 
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
         <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Existing projects</h2>
 
@@ -216,7 +216,7 @@ get_header();
             </div>
         </div>
     </div>
-
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
     <!--Delete Game Dialog-->
     <aside id="delete-dialog"

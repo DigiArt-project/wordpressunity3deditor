@@ -141,7 +141,7 @@ get_header();
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
 
-        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
+        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary CompileGameButtonStyle" data-mdc-auto-init="MDCRipple">
             COMPILE GAME
         </a>
     </div>
@@ -158,7 +158,7 @@ get_header();
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
     </ul>
 
-    <a class="mdc-button mdc-button--primary mdc-theme--primary" style="float: right;" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+    <a class="mdc-button mdc-button--primary mdc-theme--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
@@ -259,8 +259,8 @@ if ( $custom_query->have_posts() ) :?>
 
 			?>
 
-            <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                <div class="mdc-card SceneCardContainer mdc-theme--background">
+            <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
+                <div class="mdc-card mdc-theme--background">
                     <div class="SceneThumbnail">
 						<?php
 
@@ -290,7 +290,7 @@ if ( $custom_query->have_posts() ) :?>
                             style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
 							<?php echo $scene_title; ?>
                         </h1>
-                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
                             &#8203;<?php echo $scene_desc; ?>
                         </h2>
 
