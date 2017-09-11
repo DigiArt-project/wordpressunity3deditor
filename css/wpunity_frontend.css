@@ -202,7 +202,7 @@ i.ButtonIcon {
 }
 @media screen and (max-width: 670px) {
     .SceneCardDescriptionStyle {
-        min-height: 60px;
+/*        min-height: 60px;*/
     }
 }
 @media (max-width: 839px) and (min-width: 480px) {
@@ -218,15 +218,9 @@ i.ButtonIcon {
 }
 @media screen and (min-width: 839px) {
     .SceneCardDescriptionStyle {
-        min-height: 60px;
+        min-height: 68px;
     }
 }
-@media screen and (min-width: 992px) {
-    .SceneCardDescriptionStyle {
-        min-height: 40px;
-    }
-}
-
 
 .AlignIconToBottom {
     vertical-align: bottom;
