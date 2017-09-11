@@ -576,15 +576,15 @@ get_header(); ?>
                 <h3 class="mdc-typography--title">Object Properties</h3>
 
                 <ul class="RadioButtonList">
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx">
+                    <li class="mdc-form-field" style="pointer-events: none; " disabled>
+                        <div class="mdc-radio" >
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
                             </div>
                         </div>
-                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label> (Under preparation)
                     </li>
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
@@ -617,7 +617,7 @@ get_header(); ?>
                 </div>
 
                 <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
-                <div id="assetPreviewContainer"></div>
+                <div id="assetPreviewContainer" style="margin:auto;"></div>
 
                 <div class="mdc-layout-grid">
 
@@ -1056,9 +1056,23 @@ get_header(); ?>
         var textureFileContent = '';
         var fbxFileContent = '';
         var previewRenderer;
+//        var preview_3d_vars;
+//        var preview_scene;
+//        var preview_camera;
+//        var preview_gridHelper;
+//        var preview_axisHelper;
 
         createScreenshotBtn.click(function() {
+
+
+//            preview_axisHelper.visible = false;
+//            preview_gridHelper.visible = false;
+
             wpunity_create_model_sshot(previewRenderer);
+
+//            preview_axisHelper.visible = true;
+//            preview_gridHelper.visible = true;
+
         });
 
         // Flot options
@@ -1284,6 +1298,15 @@ get_header(); ?>
             textureFileContent = '';
             document.getElementById("assetPreviewContainer").innerHTML = "";
             previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
+//            previewRenderer = preview_3d_vars[0];
+//            preview_scene = preview_3d_vars[1];
+//            preview_camera = preview_3d_vars[2];
+//            preview_gridHelper = preview_3d_vars[3];
+//            preview_axisHelper = preview_3d_vars[4];
+
+
+            //console.log("preview_axisHelper", preview_axisHelper);
+
         });
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
