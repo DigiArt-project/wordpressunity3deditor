@@ -457,8 +457,9 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         val = transform_controls.object.scale.z
     }
 
-    if (val > 0) {
+    //console.log("val", val);
 
+    if (val != 0) {
         gui_controls_funs.dg_scale = val;
         transform_controls.object.scale.set( val, val, val);
     }

@@ -53,6 +53,9 @@ public class Simulation : MonoBehaviour {
 	Text wind_mean_var;
 	Image powerOutputsideImage;
 
+	Button s1_bt_pause;
+	Dropdown dropdown_sim_speed;
+
 	float startTime;
 	float currentPowerReqs;
 	float totalPowerOutput;
@@ -80,6 +83,17 @@ public class Simulation : MonoBehaviour {
 		powerOutputsideImage = GameObject.Find("sideImage").GetComponent<Image>();
 		txt_energyTotal = GameObject.Find ("s1_txt_energy_value").GetComponent<Text>();
 
+
+		s1_bt_pause = GameObject.Find ("s1_bt_pause").GetComponent<Button>();
+		s1_bt_pause.onClick.AddListener (() => { PauseButtonPressed(); 	});
+
+
+		dropdown_sim_speed = GameObject.Find ("dropdown_sim_speed").GetComponent<Dropdown>();
+		dropdown_sim_speed.onValueChanged.AddListener ( delegate{ ChangeSimulationSpeed(dropdown_sim_speed); });
+
+
+
+
 		Time.timeScale = simulationSpeed;
 
 		txt_energyTotal.text = "0";
@@ -90,6 +104,15 @@ public class Simulation : MonoBehaviour {
 		powerOutputsideImage.enabled = false;
 
 		startTime = Time.time;
+	}
+
+	void ChangeSimulationSpeed(Dropdown dd){
+		if (dd.value == 0)
+			simulationSpeed = 1;
+		else if (dd.value == 1)
+			simulationSpeed = 4;
+		else if (dd.value == 2)
+			simulationSpeed = 10;
 	}
 
 	void Awake() {
@@ -300,131 +323,3 @@ public class Simulation : MonoBehaviour {
 	}
 }
 
-
-
-// Obsolete power consumption
-
-//		int powerAdjust;
-//		int powerAdjustMultiplier = (Mathf.FloorToInt(Random.Range(5.0f,8.0f)))*100;	
-//		int powerDirectionAmount = Mathf.FloorToInt(Random.Range(6.0f,9.0f));
-//		
-//		if( powerChangeDirection == 0 ){
-//			// decrease
-//			powerAdjust = Mathf.FloorToInt(Random.Range(-3.0f,0.0f))*powerAdjustMultiplier;
-//			if((currentPowerReqs + powerAdjust) >= powerRequirementsMin){
-//				currentPowerReqs += powerAdjust;
-//			}
-//			powerChangeCounter--;
-//			if(powerChangeCounter == 0){
-//				powerDirectionAmount = Mathf.FloorToInt(Random.Range(3.0f,6.0f));
-//				powerChangeCounter = Mathf.FloorToInt(Random.Range(powerDirectionAmount,powerDirectionAmount + 3.0f));
-//				powerChangeDirection = 1;
-//			}
-//		}
-//		else{
-//			// increase
-//			powerAdjust = (Mathf.FloorToInt(Random.Range(1.0f,4.0f))) * powerAdjustMultiplier;
-//			if((currentPowerReqs + powerAdjust) <= powerRequirementsMax){
-//				currentPowerReqs += powerAdjust;
-//			}
-//			powerChangeCounter--;
-//			if( powerChangeCounter == 0 ){
-//				powerDirectionAmount = Mathf.FloorToInt(Random.Range(3.0f,6.0f));
-//				powerChangeCounter = Mathf.FloorToInt(Random.Range(powerDirectionAmount,powerDirectionAmount + 3.0f));
-//				powerChangeDirection = 0;
-//			}
-//		}
-//		CalculateBarriers("powerReqs");
-
-
-
-
-// Old method to calculate wind speed
-
-
-//		int windAdjust;
-//		if(windChangeDirection == 0){
-//			// display decrease icon 
-//			windIncreaseIcon.enabled = false;
-//			windDecreaseIcon.enabled = true;
-//			windAdjust = Mathf.FloorToInt(Mathf.Floor(Random.Range(-3.0f,0.0f)));
-//			if((currentWindSpeed + windAdjust) >= windMinSpeed){
-//				currentWindSpeed += windAdjust;
-//			}
-//			windChangeCounter--;
-//			if(windChangeCounter == 0){
-//				windChangeCounter = Mathf.FloorToInt(Mathf.Floor(Random.Range(2.0f,5.0f)));
-//				windChangeDirection = 1;
-//			}
-//		}
-//		 else{
-//			// display increase icon
-//			windDecreaseIcon.enabled = false;
-//			windIncreaseIcon.enabled = true;
-//			windAdjust = Mathf.FloorToInt(Mathf.Floor(Random.Range(1.0f,4.0f)));
-//			if((currentWindSpeed+windAdjust) <= windMaxSpeed){
-//				currentWindSpeed += windAdjust;	
-//			}
-//			windChangeCounter--;
-//			if(windChangeCounter == 0){
-//				windChangeCounter = Mathf.FloorToInt(Mathf.Floor(Random.Range(2.0f,5.0f)));
-//				windChangeDirection = 0;
-//			}		
-//		}
-//		CalculateBarriers("wind");
-
-
-
-
-//
-//void CalculateBarriers(string whatTypeForBarrierCheck){
-//	//wind	
-//	if(string.Equals(whatTypeForBarrierCheck,"wind")){
-//		if(currentWindSpeed > windMaxSpeed){
-//			currentWindSpeed = windMaxSpeed;
-//		}
-//		else if(currentWindSpeed < windMinSpeed){
-//			currentWindSpeed = windMinSpeed;
-//		}
-//	}
-//	// power Reqs
-//	else if(string.Equals(whatTypeForBarrierCheck,"powerReqs")){
-//
-//		if(currentPowerReqs > powerRequirementsMax){
-//			currentPowerReqs = powerRequirementsMax;
-//		}
-//		else if(currentPowerReqs < powerRequirementsMin){
-//			currentPowerReqs = powerRequirementsMin;
-//		}
-//	}
-//	else{
-//		Debug.Log("wrong input at CalculateBarriers() , check given parameters");
-//	}
-//}
-
-//	/* displays the added power output to the total amount 
-//	that each turbine is producing (text above the power output)*/
-//    public IEnumerator calculateAddedPower()
-//    {
-//		float addedAmount = totalPowerOutput - prevtotalPowerOutput;       //singlePowerOutput[currentWindSpeed];
-//
-//		powerOutputSideText.text = " + " + (addedAmount).ToString();
-//
-//		powerOutputSideText.enabled = true;
-//		powerOutputsideImage.enabled = true;
-//		yield return new WaitForSeconds(2f);
-//		powerOutputSideText.enabled = false;
-//		powerOutputsideImage.enabled = false;
-//    }
-
-
-//	public IEnumerator calculateSubstractedPower()
-//    {
-//		float substractedAmount = totalPowerOutput - prevtotalPowerOutput; // singlePowerOutput[currentWindSpeed];
-//		powerOutputSideText.text = " - " + (substractedAmount).ToString();
-//		powerOutputSideText.enabled = true;
-//		powerOutputsideImage.enabled = true;
-//		yield return new WaitForSeconds(2f);
-//		powerOutputSideText.enabled = false;
-//		powerOutputsideImage.enabled = false;
-//    }
