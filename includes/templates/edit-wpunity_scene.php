@@ -47,6 +47,16 @@ wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
 );
 
 
+//$scene_new_info = array(
+//    'ID' => $scene_id,
+//    'post_title' => esc_attr(strip_tags()),
+//    'post_content' => esc_attr(strip_tags()),
+//);
+//
+//wp_update_post($scene_new_info);
+
+
+
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )

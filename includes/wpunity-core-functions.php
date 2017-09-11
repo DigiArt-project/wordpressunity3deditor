@@ -831,7 +831,18 @@ function wpunity_save_scene_async_action_callback()
    $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
        $_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
 
-   set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+  set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+
+
+    $scene_new_info = array(
+        'ID' => $_POST['scene_id'],
+        'post_title' => $_POST['scene_title'],
+        'post_content' => $_POST['scene_description']
+    );
+
+    wp_update_post($scene_new_info);
+
+
 
 
   echo $res ? 'true' : 'false';
