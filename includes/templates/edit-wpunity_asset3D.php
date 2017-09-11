@@ -893,36 +893,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
                 </div>
                 <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
-                    <span>0</span>
-                    <span>0</span>
-                    <span>0</span>
-                    <span>0</span>
-                    <span>0</span>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>1</span>
-                    <span>1</span>
-                    <span>1</span>
-                    <span>1</span>
-
-                    <span>2</span>
-                    <span>2</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>5</span>
-                    <span>0</span>
-                    <span>0</span>
                 </div>
 
                 <div class="PowerProductionGroupStyle">
@@ -1167,8 +1137,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
 
-                console.log(item, index);
-
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
@@ -1176,8 +1144,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
-
-                console.log(categorySelect.selectedOptions[0].getAttribute("id"));
 
                 if(createAsset) {
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
@@ -1264,7 +1230,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         jQuery("#producerWindSpeedClassVal").removeAttr("disabled");
 
                         createPowerProductionValues();
-
                         spanProducerChartLabels();
 
                         break;
@@ -1477,6 +1442,40 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         function createPowerProductionValues() {
             var index = 0;
+
+            jQuery ("#powerProductionValuesGroup").html('').append('' +
+                '<span>0</span>\n' +
+                '<span>0</span>\n' +
+                '<span>0</span>\n' +
+                '<span>0</span>\n' +
+                '<span>0</span>\n' +
+                '<span>0</span>\n' +
+                '<span>1</span>\n' +
+                '<span>1</span>\n' +
+                '<span>1</span>\n' +
+                '<span>1</span>\n' +
+                '<span>1</span>\n' +
+
+                '<span>2</span>\n' +
+                '<span>2</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>5</span>\n' +
+                '<span>0</span>\n' +
+                '<span>0</span>');
+
+
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
                 // read initial values from markup and remove that
                 var value = parseInt( jQuery( this ).text(), 10 );
@@ -1510,6 +1509,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                     }
                 });
+
+                jQuery( this ).attr("value", value);
 
                 jQuery( this ).attr("id", "power-production-value-"+index);
                 index++;
