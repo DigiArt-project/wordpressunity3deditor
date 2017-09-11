@@ -154,7 +154,6 @@ i.ButtonIcon {
     text-align: center;
     overflow: hidden;
     position: relative;
-
 }
 
 .SceneThumbnail a, .ImageContainer img {
@@ -178,9 +177,56 @@ i.ButtonIcon {
     transform: translate(-50%,-50%);
 }
 
-.SceneCardContainer {
-    min-height: 360px;
+.AddNewAssetBtnStyle {
+    float: right;
 }
+
+@media screen and (max-width: 479px) {
+    .SceneCardDescriptionStyle {
+        min-height: 40px;
+    }
+
+    .mdc-layout-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr))
+    }
+
+    .SceneCardContainer {
+        width: 100%;
+    }
+
+    .AddNewAssetBtnStyle {
+        float: left;
+        margin: 12px 0 12px 0;
+    }
+
+}
+@media screen and (max-width: 670px) {
+    .SceneCardDescriptionStyle {
+        min-height: 60px;
+    }
+}
+@media (max-width: 839px) and (min-width: 480px) {
+
+    .SceneCardDescriptionStyle {
+        min-height: 40px;
+    }
+
+    .mdc-layout-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+}
+@media screen and (min-width: 839px) {
+    .SceneCardDescriptionStyle {
+        min-height: 60px;
+    }
+}
+@media screen and (min-width: 992px) {
+    .SceneCardDescriptionStyle {
+        min-height: 40px;
+    }
+}
+
 
 .AlignIconToBottom {
     vertical-align: bottom;
@@ -285,6 +331,9 @@ i.ButtonIcon {
     top: -.3em !important;
     margin-left: -.6em !important;
 }
+
+
+
 
 /* jimver04 additions */
 #backtotop {
