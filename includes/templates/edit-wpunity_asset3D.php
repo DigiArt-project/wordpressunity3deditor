@@ -1185,7 +1185,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 } else {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
 
-                    /*jQuery("#objectPropertiesPanel").hide();*/
+                    jQuery("#objectPropertiesPanel").hide();
 
                 }
 
