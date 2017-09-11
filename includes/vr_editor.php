@@ -392,7 +392,8 @@ echo '</script>';
         envir.cameraAvatarHelper.visible = false;
         envir.axisHelper.visible = false;
         envir.gridHelper.visible = false;
-        envir.scene.getObjectByName("myTransformControls").visible=false;
+        if (envir.scene.getObjectByName("myTransformControls"))
+            envir.scene.getObjectByName("myTransformControls").visible=false;
         envir.scene.getObjectByName("recycleBin").visible=false;
 
         // Save screenshot data to input
@@ -402,7 +403,10 @@ echo '</script>';
         envir.cameraAvatarHelper.visible = true;
         envir.axisHelper.visible = true;
         envir.gridHelper.visible = true;
-        envir.scene.getObjectByName("myTransformControls").visible=true;
+
+        if (envir.scene.getObjectByName("myTransformControls"))
+            envir.scene.getObjectByName("myTransformControls").visible=true;
+
         envir.scene.getObjectByName("recycleBin").visible=true;
 
 
