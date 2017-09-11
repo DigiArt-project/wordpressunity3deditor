@@ -44,6 +44,7 @@ $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 $asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+$scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -59,6 +60,7 @@ if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
+$editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
     $assetCatID = intval($_POST['term_id']);
@@ -211,8 +213,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
             update_post_meta($asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
-
-            wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+            if($scene_id == 0){
+                wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+            }else{
+                wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
+            }
             exit;
         }
 	}else {
@@ -352,11 +357,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             update_post_meta($asset_inserted_id, 'wpunity_producerOptGen', $new_producerOptGen);
         }
 
-        wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+        if($scene_id == 0){
+            wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+        }else{
+            wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
+        }
         exit;
     }
 }
-
 get_header(); ?>
 
     <div class="EditPageHeader">
