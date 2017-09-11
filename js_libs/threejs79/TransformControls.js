@@ -991,6 +991,10 @@
 
 					} else {
 
+                        point.x /= 100;
+                        point.y /= 100;
+                        point.z /= 100;
+
 						var newScaleX = oldScale.x * ( 1 + point.x / oldScale.x );
                         var newScaleY = oldScale.y * ( 1 + point.y / oldScale.y );
                         var newScaleZ = oldScale.z * ( 1 + point.z / oldScale.z );

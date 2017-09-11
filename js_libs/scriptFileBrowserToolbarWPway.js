@@ -1,5 +1,7 @@
 //  AJAX: FETCH Assets 3d
-function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
+function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit){
+
+
 
     jQuery.ajax({
         url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
@@ -13,7 +15,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
 
             responseRecords = responseRecords.items;
 
-            file_Browsing_By_DB(responseRecords, gameProjectSlug);
+            file_Browsing_By_DB(responseRecords, gameProjectSlug, urlforAssetEdit);
         },
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR 51:" + thrownError);
@@ -25,14 +27,14 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug){
  * Start the browser
  * @param responseData
  */
-function file_Browsing_By_DB(responseData, gameProjectSlug) {
+function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
         //breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
 
-    render(responseData, gameProjectSlug );
+    render(responseData, gameProjectSlug, urlforAssetEdit );
 
     // Hiding and showing the search box
     filemanager.find('.search').click(function() {
@@ -54,10 +56,10 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
 
             // Filter the responseData according to value.trim()
             filteredResponseData = selectByTitleComparizon(responseData, value.trim());
-            render(filteredResponseData, gameProjectSlug);
+            render(filteredResponseData, gameProjectSlug, urlforAssetEdit);
         } else {
             filemanager.removeClass('searching');
-            render(responseData, gameProjectSlug);
+            render(responseData, gameProjectSlug, urlforAssetEdit);
         }
 
     }).on('keyup', function(e){ // Clicking 'ESC' button triggers focusout and cancels the search
@@ -110,7 +112,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
 
     // Render the HTML for the file manager
     // Here we make the list
-    function render(enlistData, gameProjectSlug) {
+    function render(enlistData, gameProjectSlug, urlforAssetEdit) {
 
         var i, f, name;
 
@@ -174,8 +176,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a draggable="false" ondragstart="return false;" title="Edit asset" href="#" id="editAssetBtn-'+ f.assetid + '" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax(' +
+                    '<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
+                    '" onclick="javascript:window.location.href=\''+urlforAssetEdit + f.assetid + '\'" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax('+
                        f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span>' +
                     '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
@@ -184,6 +187,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
                     '<div class="progressSliderSubLine progressDecrease"></div>\n' +
                     '</div>' +
                     '</li>' );
+
+
+            // <?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_assetpass . $asset_checked_id ); ?>
 
                 file.appendTo(fileList);
             }
@@ -201,7 +207,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug) {
         // Perform click to open (bug appeared from migrating jquery-1.11 to 3.1.1
         closeButton.click();
     }
-
 
     // This function escapes special html characters in names
     function escapeHTML(text) {

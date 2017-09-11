@@ -42,6 +42,7 @@ echo 'var sceneID="'.$sceneID.'";';
 echo 'var gameProjectID="'.$project_id.'";';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
+echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
 echo '</script>';
 
 ?>
@@ -113,7 +114,9 @@ echo '</script>';
 
         });
 
-        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, gameProjectID, gamefolder, scenefolder, sceneID);
+
+
+        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit);
     });
 
     function removeSavedText(){

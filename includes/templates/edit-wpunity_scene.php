@@ -2,8 +2,8 @@
 
 //---------------------------------------------------------------------
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
-if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else {$parameter_Scenepass = '&wpunity_scene=';}
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $scene_id = intval( $_GET['wpunity_scene'] );
@@ -17,14 +17,21 @@ $game_type_obj = wpunity_return_game_type($project_id);
 $scene_post = get_post($scene_id);
 $sceneTitle = $scene_post->post_name;
 
-$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-$asset_post = get_post($asset_inserted_id);
-if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
+//$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+//$asset_post = get_post($asset_inserted_id);
+//if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
+
+
+
 
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
+
+
+$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
+
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
