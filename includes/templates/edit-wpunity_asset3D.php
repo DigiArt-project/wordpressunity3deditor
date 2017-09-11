@@ -621,12 +621,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                     <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="mtlFileInput"> Select an MTL file</label>
-                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl"/>
+                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl" required/>
                     </div>
 
                     <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label  for="objFileInput" > Select an OBJ file</label>
-                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj"/>
+                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
                     </div>
                 </div>
 
