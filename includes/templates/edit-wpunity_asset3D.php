@@ -388,6 +388,7 @@ get_header(); ?>
 <?php
 $breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
 $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
+
 ?>
     <div class="EditPageHeader">
         <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span><?php echo $breacrumbsTitle; ?></span></h2>
@@ -584,7 +585,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
 
                 <h3 class="mdc-typography--title">Object Properties</h3>
 
@@ -1184,6 +1185,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 } else {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
 
+                    /*jQuery("#objectPropertiesPanel").hide();*/
+
                 }
 
 
@@ -1259,6 +1262,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         jQuery("#producerClassVal").removeAttr("disabled");
                         jQuery("#producerMaxPowerVal").removeAttr("disabled");
                         jQuery("#producerWindSpeedClassVal").removeAttr("disabled");
+
+                        createPowerProductionValues();
 
                         spanProducerChartLabels();
 
@@ -1436,6 +1441,41 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: opt_speed, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
             var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: opt_power, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
 
+
+            // POI Image panels - Add/remove POI inputs
+            var poiMaxFields      = 3; // max input boxes allowed
+            var poiImgDetailsWrapper         = jQuery("#poiImgDetailsWrapper"); // Fields wrapper
+            var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
+            var i = 0; // Initial text box count
+
+            addPoiFieldBtn.click(function(e){ // On add input button click
+                e.preventDefault();
+                if(i < poiMaxFields) { // Max input box allowed
+                    i++; // Text box increment
+                    poiImgDetailsWrapper.append(
+                        '<div class="mdc-layout-grid">'+
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
+                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
+                        '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
+                        '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
+                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
+                        '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
+                        '</div>' +
+                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>'
+                    ); // Add input box
+                }
+                // Run autoInit with noop to suppress warnings.
+                mdc.autoInit(document, () => {});
+            });
+
+            poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
+                e.preventDefault();
+                jQuery(this).parent('div').parent('div').remove(); i--;
+            })
+        } );
+
+        function createPowerProductionValues() {
             var index = 0;
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
                 // read initial values from markup and remove that
@@ -1474,42 +1514,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery( this ).attr("id", "power-production-value-"+index);
                 index++;
             });
-
-
-
-            // POI Image panels - Add/remove POI inputs
-            var poiMaxFields      = 3; // max input boxes allowed
-            var poiImgDetailsWrapper         = jQuery("#poiImgDetailsWrapper"); // Fields wrapper
-            var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
-            var i = 0; // Initial text box count
-
-            addPoiFieldBtn.click(function(e){ // On add input button click
-                e.preventDefault();
-                if(i < poiMaxFields) { // Max input box allowed
-                    i++; // Text box increment
-                    poiImgDetailsWrapper.append(
-                        '<div class="mdc-layout-grid">'+
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
-                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
-                        '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
-                        '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
-                        '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
-                        '</div>' +
-                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>'
-                    ); // Add input box
-                }
-                // Run autoInit with noop to suppress warnings.
-                mdc.autoInit(document, () => {});
-            });
-
-            poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
-                e.preventDefault();
-                jQuery(this).parent('div').parent('div').remove(); i--;
-            })
-        } );
-
+        }
 
         function spanProducerChartLabels() {
             var producerEnergyChart = jQuery("#producer-chart").plot(plotData, plotOptions).data("plot");
@@ -1523,6 +1528,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             }
 
             for (var i = 0; i < leData.length; i++) {
+
                 pos = producerEnergyChart.p2c({x: leData[i][0], y: leData[i][1]});
                 showTooltips(pos.left+plotOffset.left, pos.top+plotOffset.top, leData[i][1], '#CCCCCC');
             }
