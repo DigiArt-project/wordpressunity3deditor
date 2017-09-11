@@ -65,7 +65,7 @@ get_header();
     <a target="_blank" href="<?php echo plugin_dir_url( __DIR__ ); ?>files/usage-scenario.pdf" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>
 </p>
 
-<hr class="WhiteSpaceSeparator">
+
 <div class="mdc-layout-grid FrontPageStyle">
 
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
@@ -178,9 +178,7 @@ get_header();
                         Must be at least 3 characters long
                     </p>
 
-                    <hr class="WhiteSpaceSeparator">
-
-                    <label class="mdc-typography--subheading2 NewGameLabel">Choose project type</label>
+                    <label class="mdc-typography--title NewGameLabel">Choose project type</label>
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
@@ -190,7 +188,7 @@ get_header();
                                     <div class="mdc-radio__inner-circle"></div>
                                 </div>
                             </div>
-                            <label id="gameTypeArchRadio-label" for="gameTypeArchRadio" style="margin-bottom: 0;">
+                            <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">
                                 <i class="material-icons"></i>Archaeology</label>
                         </li>
                         <li class="mdc-form-field">
@@ -201,7 +199,7 @@ get_header();
                                     <div class="mdc-radio__inner-circle"></div>
                                 </div>
                             </div>
-                            <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio" style="margin-bottom: 0;">Energy</label>
+                            <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
                         </li>
 
                     </ul>
@@ -210,7 +208,7 @@ get_header();
 
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                     <input type="hidden" name="submitted" id="submitted" value="true" />
-                    <button type="submit" style="float: right;" class="mdc-form-field mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                    <button type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"> CREATE</button>
 
                 </form>
             </div>

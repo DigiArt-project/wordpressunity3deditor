@@ -1030,7 +1030,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
 		<?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
-        <button id="formSubmitBtn" style="margin-bottom: 24px; width: 100%; height: 48px; display: none;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
 			<?php echo $buttonTitleText; ?>
         </button>
 
