@@ -14,9 +14,13 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     // get the dom
     var container3d_previewer = document.getElementById(canvas_id);
 
+    container3d_previewer.style.height = "256px";
+    container3d_previewer.style.width = "256px";
+
+
     // sizes
     var windowW = container3d_previewer.clientWidth;
-    var windowH = windowW * 2 / 3;
+    var windowH = windowW;
 
     // Camera position and view
     var camera = new THREE.PerspectiveCamera(45, windowW / windowH, 0.5, 20000);
@@ -38,12 +42,12 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
     // Add Grid
     var gridHelper = new THREE.GridHelper(2000, 40);
     gridHelper.name = "myGridHelper";
-    scene.add(gridHelper);
+    //scene.add(gridHelper);
 
     // Add Axes helper
     var axisHelper = new THREE.AxisHelper(100);
     axisHelper.name = "myAxisHelper";
-    scene.add(axisHelper);
+    //scene.add(axisHelper);
 
     var renderer = new THREE.WebGLRenderer({
         preserveDrawingBuffer: true
@@ -54,7 +58,7 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
 
     // Orbit controls
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
+    //controls.addEventListener('change', render); // add this only if there is no animation loop (requestAnimationFrame)
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
@@ -124,7 +128,7 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
 
     function onWindowResize() {
         var windowW = container3d_previewer.clientWidth;
-        var windowH = windowW * 2 / 3;
+        var windowH = windowW; // * 2 / 3;
 
         camera.aspect = windowW / windowH;
         camera.updateProjectionMatrix();
@@ -143,7 +147,7 @@ function wu_3d_view_main(modeBeforeOrAfterSave, curr_path, textmtl, url_or_text_
         renderer.render(scene, camera);
     }
 
-    return renderer;
+    return renderer; //[renderer, scene, camera, gridHelper, axisHelper];
 }
 
 

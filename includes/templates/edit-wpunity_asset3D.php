@@ -44,6 +44,7 @@ $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
 $asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+$scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -59,6 +60,7 @@ if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
+$editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 	$assetCatID = intval($_POST['term_id']);
@@ -211,10 +213,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
-
-			wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
-			exit;
-		}
+            if($scene_id == 0){
+                wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+            }else{
+                wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
+            }
+            exit;
+        }
 	}else {
 
 		$asset_new_info = array(
@@ -352,9 +357,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_inserted_id, 'wpunity_producerOptGen', $new_producerOptGen);
 		}
 
-		wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-		exit;
-	}
+        if($scene_id == 0){
+            wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+        }else{
+            wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
+        }
+        exit;
+    }
 }
 
 get_header(); ?>
@@ -362,8 +371,6 @@ get_header(); ?>
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
     </div>
-
-
 
     <span class="mdc-typography--caption">
         <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string; ?></span>
@@ -582,15 +589,15 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <h3 class="mdc-typography--title">Object Properties</h3>
 
                 <ul class="RadioButtonList">
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx">
+                    <li class="mdc-form-field" style="pointer-events: none; " disabled>
+                        <div class="mdc-radio" >
+                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
                             <div class="mdc-radio__background">
                                 <div class="mdc-radio__outer-circle"></div>
                                 <div class="mdc-radio__inner-circle"></div>
                             </div>
                         </div>
-                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label> (Under preparation)
                     </li>
                     <li class="mdc-form-field">
                         <div class="mdc-radio">
@@ -623,7 +630,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
 
                 <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
-                <div id="assetPreviewContainer"></div>
+                <div id="assetPreviewContainer" style="margin:auto;"></div>
 
                 <div class="mdc-layout-grid">
 
@@ -1062,9 +1069,23 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var textureFileContent = '';
         var fbxFileContent = '';
         var previewRenderer;
+//        var preview_3d_vars;
+//        var preview_scene;
+//        var preview_camera;
+//        var preview_gridHelper;
+//        var preview_axisHelper;
 
         createScreenshotBtn.click(function() {
+
+
+//            preview_axisHelper.visible = false;
+//            preview_gridHelper.visible = false;
+
             wpunity_create_model_sshot(previewRenderer);
+
+//            preview_axisHelper.visible = true;
+//            preview_gridHelper.visible = true;
+
         });
 
         // Flot options
@@ -1290,6 +1311,15 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             textureFileContent = '';
             document.getElementById("assetPreviewContainer").innerHTML = "";
             previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
+//            previewRenderer = preview_3d_vars[0];
+//            preview_scene = preview_3d_vars[1];
+//            preview_camera = preview_3d_vars[2];
+//            preview_gridHelper = preview_3d_vars[3];
+//            preview_axisHelper = preview_3d_vars[4];
+
+
+            //console.log("preview_axisHelper", preview_axisHelper);
+
         });
         textureInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
