@@ -137,11 +137,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 get_header();
 ?>
 
-    <div class="EditPageHeader">
+    <div class="PageHeaderStyle">
 
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
+        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
+            <a class="mdc-button--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <?php echo $game_post->post_title; ?>
+        </h1>
 
-        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary CompileGameButtonStyle" data-mdc-auto-init="MDCRipple">
+        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
             COMPILE GAME
         </a>
     </div>
@@ -153,19 +156,16 @@ get_header();
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-button--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
     </ul>
 
-    <a class="mdc-button mdc-button--primary mdc-theme--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+    <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
-    <a class="mdc-button mdc-button--primary mdc-theme--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons mdc-theme--primary ButtonIcon" >add</i> Add New Scene</a>
-
-
-    <!--<h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">My Scenes</h3>-->
+    <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Add New Scene</a>
 
 
     <div class="EditPageAccordionPanel">
