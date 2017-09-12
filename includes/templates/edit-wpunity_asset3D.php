@@ -213,13 +213,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
-            if($scene_id == 0){
-                wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
-            }else{
-                wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
-            }
-            exit;
-        }
+			if($scene_id == 0){
+				wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+			}else{
+				wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
+			}
+			exit;
+		}
 	}else {
 
 		$asset_new_info = array(
@@ -357,19 +357,22 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_inserted_id, 'wpunity_producerOptGen', $new_producerOptGen);
 		}
 
-        if($scene_id == 0){
-            wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
-        }else{
-            wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
-        }
-        exit;
-    }
+		if($scene_id == 0){
+			wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+		}else{
+			wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));
+		}
+		exit;
+	}
 }
 
 get_header(); ?>
 
     <div class="PageHeaderStyle">
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
+        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
+            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+			<?php echo $game_post->post_title; ?>
+        </h1>
     </div>
 
     <span class="mdc-typography--caption">
@@ -1040,11 +1043,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var textureFileContent = '';
         var fbxFileContent = '';
         var previewRenderer;
-//        var preview_3d_vars;
-//        var preview_scene;
-//        var preview_camera;
-//        var preview_gridHelper;
-//        var preview_axisHelper;
+        //        var preview_3d_vars;
+        //        var preview_scene;
+        //        var preview_camera;
+        //        var preview_gridHelper;
+        //        var preview_axisHelper;
 
         createScreenshotBtn.click(function() {
 

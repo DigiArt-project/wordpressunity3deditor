@@ -80,7 +80,10 @@ get_header(); ?>
 
     <!-- START PAGE -->
     <div class="EditPageHeader">
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
+        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
+            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <?php echo $game_post->post_title; ?>
+        </h1>
 
         <a class="HeaderButtonStyle mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $scene_id); ?>">
             Add a new 3D asset

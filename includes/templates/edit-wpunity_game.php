@@ -140,7 +140,7 @@ get_header();
     <div class="PageHeaderStyle">
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a class="mdc-button--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <a title="Back" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
             <?php echo $game_post->post_title; ?>
         </h1>
 

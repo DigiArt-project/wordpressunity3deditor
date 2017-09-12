@@ -89,11 +89,11 @@ get_header(); ?>
 
 
     <div class="PageHeaderStyle">
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light"><?php echo $game_post->post_title; ?></h1>
+        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
+            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <?php echo $game_post->post_title; ?>
+        </h1>
 
-        <!--<a class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple">
-            Save
-        </a>-->
     </div>
 
     <span class="mdc-typography--caption">
