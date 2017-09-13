@@ -1,6 +1,7 @@
 <?php
 
 // Three js : for simple rendering
+wp_enqueue_script('wpunity_scripts');
 wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
@@ -502,76 +503,26 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <label for="multi-line" class="mdc-textfield__label"><?php echo $asset_desc_label; ?></label>
                 </div>
 
-                <!-- FALLBACK: Use this if you cannot validate the above on submit -->
-                <!--<select title="I am a title" class="mdc-select" required>
-					<option value="" default selected>Pick a food</option>
-					<option value="grains">Bread, Cereal, Rice, and Pasta</option>
-					<option value="vegetables">Vegetables</option>
-					<optgroup label="Fruits">
-						<option value="apple">Apple</option>
-						<option value="oranges">Orange</option>
-						<option value="banana">Banana</option>
-					</optgroup>
-					<option value="dairy">Milk, Yogurt, and Cheese</option>
-					<option value="meat">Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts</option>
-					<option value="fats">Fats, Oils, and Sweets</option>
-				</select>-->
-
                 <hr class="WhiteSpaceSeparator">
 
-                <div id="doorDetailsPanel">
+                <!--<div id="doorDetailsPanel">
                     <h3 class="mdc-typography--title">Door options</h3>
-
-                    <div class="mdc-layout-grid">
-
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
-                            <div id="next-scene-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                                <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Next scene</span>
-                                <div class="mdc-simple-menu mdc-select__menu" style="left: 48px; top: 0; transform-origin: center 8px 0; transform: scale(0, 0);">
-                                    <ul class="mdc-list mdc-simple-menu__items" style="transform: scale(1, 1);">
-                                        <li class="mdc-list-item" role="option" id="scenes" aria-disabled="true">
-                                            Next scene
-                                        </li>
-
-                                        <li class="mdc-list-item" role="option" id="" tabindex="0">
-                                            Dummy
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                            <div id="entry-point-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                                <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Entry point</span>
-                                <div class="mdc-simple-menu mdc-select__menu">
-                                    <ul class="mdc-list mdc-simple-menu__items">
-                                        <li class="mdc-list-item" role="option" id="entryPoints" aria-disabled="true">
-                                            Entry point
-                                        </li>
-
-                                        <li class="mdc-list-item" role="option" id="" tabindex="0">
-                                            Dummy
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <input id="nextSceneInput" type="hidden" name="next_scete_id" value="" disabled>
-                        <input id="entryPointInput" type="hidden" name="entry_point_id" value="" disabled>
-                    </div>
-                </div>
+                </div>-->
 
                 <div id="poiImgDetailsPanel" style="display: none;">
+
+                    <h3 class="mdc-typography--title">Featured Image</h3>
+
+                    <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+
+                    <hr class="WhiteSpaceSeparator">
+
                     <h3 class="mdc-typography--title">Image POI Details</h3>
 
                     <div id="poiImgDetailsWrapper">
-                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">
-                            <i class="material-icons mdc-theme--primary ButtonIcon">add</i> Add Field
+                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                            <i class="material-icons ButtonIcon">add</i> Add Field
                         </a>
 
                         <hr class="WhiteSpaceSeparator">
@@ -579,11 +530,19 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
 
                 <div id="poiVideoDetailsPanel" style="display: none;">
+
+                    <h3 class="mdc-typography--title">Featured Image</h3>
+
+                    <img id="poiVideoFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+
+                    <hr class="WhiteSpaceSeparator">
+
                     <h3 class="mdc-typography--title">Video POI Details</h3>
 
                     <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="videoFileInput"> Select a video</label>
-                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4" disabled=""/>
+                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
                     </div>
                 </div>
             </div>
@@ -724,22 +683,22 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="wind-speed-range"></div>
-                <input type="hidden" id="physicsWindMinVal" name="physicsWindMinVal" value="" disabled>
-                <input type="hidden" id="physicsWindMaxVal" name="physicsWindMaxVal" value="" disabled>
+                <input type="hidden" id="physicsWindMinVal" name="physicsWindMinVal" value="">
+                <input type="hidden" id="physicsWindMaxVal" name="physicsWindMaxVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="wind-mean-slider"></div>
-                <input type="hidden" id="physicsWindMeanVal" name="physicsWindMeanVal" value="" disabled>
+                <input type="hidden" id="physicsWindMeanVal" name="physicsWindMeanVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="wind-variance-slider"></div>
-                <input type="hidden" id="physicsWindVarianceVal" name="physicsWindVarianceVal" value="" disabled="">
+                <input type="hidden" id="physicsWindVarianceVal" name="physicsWindVarianceVal" value="">
 
             </div>
 
@@ -757,21 +716,21 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="over-power-income-slider"></div>
-                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="" disabled>
+                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="correct-power-income-slider"></div>
-                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="" disabled>
+                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="under-power-income-slider"></div>
-                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="" disabled>
+                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="">
 
                 <h3 class="mdc-typography--title">Construction Penalties (in $)</h3>
 
@@ -782,7 +741,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
-                                   aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
                             <label for="accessCostPenalty" class="mdc-textfield__label">
                                 Access Cost
                         </div>
@@ -790,7 +749,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
-                                   aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
                             <label for="archProximityPenalty" class="mdc-textfield__label">
                                 Arch. site proximity
                         </div>
@@ -799,7 +758,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
-                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
                             <label for="naturalReserveProximityPenalty" class="mdc-textfield__label">
                                 Natural reserve proximity
                         </div>
@@ -807,7 +766,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
-                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;" disabled="">
+                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
                             <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label">
                                 Hi-Voltage line distance
                         </div>
@@ -827,60 +786,24 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-range"></div>
-                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>" disabled>
-                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>" disabled>
+                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>">
+                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-mean-slider"></div>
-                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>" disabled>
+                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="energy-consumption-variance-slider"></div>
-                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>" disabled="">
+                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>">
 
             </div>
-
-            <!--<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
-				<h3 class="mdc-typography--title">Energy Consumption Cost (in $)</h3>
-
-				<div class="mdc-layout-grid">
-
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-							<input title="Underpower cost" id="underPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="underPowerCost"
-								   aria-controls="underPowerCost-validation-msg" value="0.5" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-							<label for="underPowerCost" class="mdc-textfield__label">
-								Underpowered consumption cost
-						</div>
-					</div>
-
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-							<input title="Normal power cost" id="normalPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="normalPowerCost"
-								   aria-controls="normalPowerCost-validation-msg" value="1" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-							<label for="normalPowerCost" class="mdc-textfield__label">
-								Normal power consumption cost
-						</div>
-					</div>
-
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-						<div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-							<input title="Overpower cost" id="overPowerCost" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="overPowerCost"
-								   aria-controls="overPowerCost-validation-msg" value="0" step="0.5" required min="-5" max="5" minlength="1" maxlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
-							<label for="overPowerCost" class="mdc-textfield__label">
-								Overpowered consumption cost
-						</div>
-					</div>
-
-				</div>
-			</div>-->
         </div>
 
         <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
@@ -932,7 +855,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
 
 
-                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="" disabled>
+                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="">
             </div>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -941,7 +864,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                 <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
-                           aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="box-shadow: none; border-color:transparent;" disabled="">
+                           aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="box-shadow: none; border-color:transparent;">
                     <label for="producerClassVal" class="mdc-textfield__label">
                         Producer class
                 </div>
@@ -951,28 +874,28 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <label for="producer-wind-speed-class-slider-label" class="mdc-typography--subheading2">Wind Speed Class:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-wind-speed-class-slider"></div>
-                <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="" disabled>
+                <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-max-power-slider-label" class="mdc-typography--subheading2">Max Power:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-max-power-slider"></div>
-                <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="" disabled>
+                <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-turbine-size-slider"></div>
-                <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="" disabled>
+                <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-damage-coeff-slider"></div>
-                <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="" disabled>
+                <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="">
 
             </div>
 
@@ -985,14 +908,14 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-cost-slider"></div>
-                <input type="hidden" id="producerCostVal" name="producerCostVal" value="" disabled>
+                <input type="hidden" id="producerCostVal" name="producerCostVal" value="">
 
                 <hr class="WhiteSpaceSeparator">
 
                 <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repair Cost:</label>
                 <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
                 <div id="producer-repair-cost-slider"></div>
-                <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="" disabled>
+                <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="">
 
             </div>
 
@@ -1011,7 +934,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 		<?php if($game_type_obj->string == 'Energy') {
 			echo "<p>Help: Packet of 3D models for game type: " . $game_type_obj->string . "</p>" ;
 			echo "<a href='".plugins_url( '../assets/paketo_3d_v3.zip', dirname(__FILE__)  )."'>Energy Lab 3D models</a>";
-
 
 		}
 		?>
@@ -1106,12 +1028,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
             var categoryDropdown = document.getElementById('category-select');
-            var nextSceneDropdown = document.getElementById('next-scene-select');
-            var entryPointDropdown = document.getElementById('entry-point-select');
 
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
-            var nextSceneSelect = MDCSelect.attachTo(nextSceneDropdown);
-            var entryPointSelect = MDCSelect.attachTo(entryPointDropdown);
 
             // This fires on EDIT
             if (jQuery('#currently-selected').attr("data-cat-id")) {
@@ -1121,14 +1039,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                 loadLayout(false);
             }
-
-            nextSceneDropdown.addEventListener('MDCSelect:change', function() {
-                jQuery("#nextSceneInput").attr( "value", nextSceneSelect.selectedOptions[0].getAttribute("id") );
-            });
-
-            entryPointDropdown.addEventListener('MDCSelect:change', function() {
-                jQuery("#entryPointInput").attr( "value", entryPointSelect.selectedOptions[0].getAttribute("id") );
-            });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
@@ -1167,9 +1077,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                         jQuery("#doorDetailsPanel").show();
 
-                        jQuery("#nextSceneInput").removeAttr("disabled");
-                        jQuery("#entryPointInput").removeAttr("disabled");
-
                         break;
                     case 'dynamic3dmodels':
 
@@ -1184,53 +1091,20 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     case 'pois_video':
 
                         jQuery("#poiVideoDetailsPanel").show();
-                        jQuery("#videoFileInput").removeAttr("disabled");
 
                         break;
 
                     // Energy cases
                     case 'terrain':
                         jQuery("#terrainPanel").show();
-                        jQuery("#physicsWindMinVal").removeAttr("disabled");
-                        jQuery("#physicsWindMaxVal").removeAttr("disabled");
-                        jQuery("#physicsWindMeanVal").removeAttr("disabled");
-                        jQuery("#physicsWindVarianceVal").removeAttr("disabled");
-
-                        jQuery("#accessCostPenalty").removeAttr("disabled");
-                        jQuery("#archProximityPenalty").removeAttr("disabled");
-                        jQuery("#naturalReserveProximityPenalty").removeAttr("disabled");
-                        jQuery("#hiVoltLineDistancePenalty").removeAttr("disabled");
-
-                        jQuery("#overPowerIncomeVal").removeAttr("disabled");
-                        jQuery("#correctPowerIncomeVal").removeAttr("disabled");
-                        jQuery("#underPowerIncomeVal").removeAttr("disabled");
 
                         break;
                     case 'consumer':
                         jQuery("#consumerPanel").show();
-                        jQuery("#energyConsumptionMinVal").removeAttr("disabled");
-                        jQuery("#energyConsumptionMaxVal").removeAttr("disabled");
-                        jQuery("#energyConsumptionMeanVal").removeAttr("disabled");
-                        jQuery("#energyConsumptionVarianceVal").removeAttr("disabled");
-
-                        /*jQuery("#overPowerCost").removeAttr("disabled");
-                        jQuery("#normalPowerCost").removeAttr("disabled");
-                        jQuery("#underPowerCost").removeAttr("disabled");*/
-
 
                         break;
                     case 'producer':
                         jQuery("#producerPanel").show();
-                        jQuery("#producerAirSpeedVal").removeAttr("disabled");
-                        jQuery("#producerPowerProductionVal").removeAttr("disabled");
-                        jQuery("#producerTurbineSizeVal").removeAttr("disabled");
-                        jQuery("#producerDmgCoeffVal").removeAttr("disabled");
-                        jQuery("#producerCostVal").removeAttr("disabled");
-                        jQuery("#producerRepairCostVal").removeAttr("disabled");
-
-                        jQuery("#producerClassVal").removeAttr("disabled");
-                        jQuery("#producerMaxPowerVal").removeAttr("disabled");
-                        jQuery("#producerWindSpeedClassVal").removeAttr("disabled");
 
                         createPowerProductionValues();
                         spanProducerChartLabels();
@@ -1553,5 +1427,14 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 }).appendTo("body").fadeIn(200);
             }
         }
+
+        jQuery("#poiImgFeaturedImgInput").change(function() {
+            wpunity_read_url(this, "#poiImgFeaturedImgPreview");
+        });
+
+        jQuery("#poiVideoFeaturedImgInput").change(function() {
+            wpunity_read_url(this, "#poiVideoFeaturedImgPreview");
+        });
+
     </script>
 <?php  get_footer(); ?>
