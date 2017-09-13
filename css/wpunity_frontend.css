@@ -179,12 +179,14 @@ i.ButtonIcon {
     left: 50%;
     top: 50%;
     height: auto;
-    /*width: auto;*/
-    max-width: none;
     overflow: hidden;
     -webkit-transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
+}
+
+.SceneThumbnail a img {
+    max-width: none;
 }
 
 .AddNewAssetBtnStyle {
