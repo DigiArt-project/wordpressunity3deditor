@@ -191,7 +191,11 @@ get_header(); ?>
 
             </div>
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 780px;"></div>
+                <div style="min-height: 780px;">
+
+                    <iframe src="http://52.59.219.11/" style="min-width: 100%; min-height: inherit;"></iframe>
+
+                </div>
             </div>
         </div>
     </section>
