@@ -15,16 +15,24 @@ function wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID){
     $credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
     $credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 
-    $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
-    $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
-    $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
-    $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+//    $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+//    $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+//    $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+//    $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
     if($game_category == 'energy_games'){
         $firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
         $firstSceneYAMLID = $firstSceneYAML->term_id;
+        $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+        $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+        $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+        $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
     }elseif($game_category == 'archaeology_games'){
         $firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
         $firstSceneYAMLID = $firstSceneYAML->term_id;
+        $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+        $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+        $credentialsSceneYAML = get_term_by('slug', 'credentials-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+        $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
     }
 
     $default_json = '{

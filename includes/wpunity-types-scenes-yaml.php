@@ -7,6 +7,8 @@ global $ini_scene_main_menu_unity_pattern;
 global $ini_scene_credentials_unity_pattern;
 global $ini_scene_options_unity_pattern;
 global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
+global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
+
 
 $ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
@@ -127,8 +129,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -145,8 +147,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
@@ -441,7 +443,7 @@ Prefab:
 --- !u!20 &___[wa_player_camera_fid]___ stripped
 Camera:
   m_PrefabParentObject: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
-  m_PrefabInternal: {fileID: ___[wa_player_prefab_fid]___}  
+  m_PrefabInternal: {fileID: ___[wa_player_prefab_fid]___}
 --- !u!1 &___[wa_exitBt_fid]___
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,8 +490,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_SelectOnUp: {fileID: 0}
@@ -526,7 +528,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -540,8 +542,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -589,8 +591,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14696386bd1c5da488902a2ff751bc79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &___[wa_scene_manager_transform_fid]___
 Transform:
   m_ObjectHideFlags: 0
@@ -764,8 +766,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
@@ -821,8 +823,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
   m_BlockingMask:
@@ -837,8 +839,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
@@ -951,6 +953,24 @@ Transform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 ');
+
+$ini_scene_main_menu_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_credentials_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_options_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_help_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_login_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_reward_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_arch_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_arch_unity_pattern2 = array('ADD HERE');
+
+$ini_scene_selector_arch_text = 'ADD HERE';
 
 //Copied from Github
 $ini_scene_main_menu_unity_pattern = array('%YAML 1.1
@@ -16036,6 +16056,16 @@ function wpunity_scenes_taxyaml_customFields($tag) {
     $term_meta_s_selector2 = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector2', true );
     $term_meta_s_selector_title = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_title', true );
 
+    $term_meta_s_mainmenu_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu_arch', true );
+    $term_meta_s_credentials_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials_arch', true );
+    $term_meta_s_options_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options_arch', true );
+    $term_meta_s_help_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_help_arch', true );
+    $term_meta_s_login_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_login_arch', true );
+    $term_meta_s_reward_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_reward_arch', true );
+    $term_meta_s_selector_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_arch', true );
+    $term_meta_s_selector2_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector2_arch', true );
+    $term_meta_s_selector_title_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_title_arch', true );
+
     ?>
     <tr class="form-field">
         <th scope="row" valign="top"></th>
@@ -16050,6 +16080,142 @@ function wpunity_scenes_taxyaml_customFields($tag) {
             <textarea name="wpunity_yamlmeta_wonderaround_pat" id="wpunity_yamlmeta_wonderaround_pat"><?php echo $term_meta_wonderaround_pat ? $term_meta_wonderaround_pat : ''; ?></textarea>
             <p class="description">scene-wonder-around-unity-pattern</p>
         </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Main Menu Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_mainmenu_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_mainmenu_arch">The S_MainMenu.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_mainmenu_arch" id="wpunity_yamlmeta_s_mainmenu_arch"><?php echo $term_meta_s_mainmenu_arch ? $term_meta_s_mainmenu_arch : ''; ?></textarea>
+        <p class="description">scene-main-menu-unity-pattern</p>
+      </td>
+    </tr>
+
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Credits Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_credentials_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_credentials_arch">The S_Credits.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_credentials_arch" id="wpunity_yamlmeta_s_credentials_arch"><?php echo $term_meta_s_credentials_arch ? $term_meta_s_credentials_arch : ''; ?></textarea>
+        <p class="description">scene-credentials-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Options/Settings Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_options_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_options_arch">The S_Options.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_options_arch" id="wpunity_yamlmeta_s_options_arch"><?php echo $term_meta_s_options_arch ? $term_meta_s_options_arch : ''; ?></textarea>
+        <p class="description">scene-options-unity-pattern</p>
+      </td>
+    </tr>
+
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Help Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_options_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_options_arch">The S_Help.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_help_arch" id="wpunity_yamlmeta_s_help_arch"><?php echo $term_meta_s_help_arch ? $term_meta_s_help_arch : ''; ?></textarea>
+        <p class="description">scene-help-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Login Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_login_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_login_arch">The S_Login.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_login_arch" id="wpunity_yamlmeta_s_login_arch"><?php echo $term_meta_s_login_arch ? $term_meta_s_login_arch : ''; ?></textarea>
+        <p class="description">scene-login-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Reward Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_reward_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_reward_arch">The S_Reward.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_reward_arch" id="wpunity_yamlmeta_s_reward_arch"><?php echo $term_meta_s_reward_arch ? $term_meta_s_reward_arch : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Scene Selector</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_selector_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector_arch">The S_SceneSelector.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector_arch" id="wpunity_yamlmeta_s_selector_arch"><?php echo $term_meta_s_selector_arch ? $term_meta_s_selector_arch : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field term-s_selector2_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector2_arch">The S_SceneSelector.unity pattern (each tile yaml)</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector2_arch" id="wpunity_yamlmeta_s_selector2_arch"><?php echo $term_meta_s_selector2_arch ? $term_meta_s_selector2_arch : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field term-s_selector_title_arch">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector_title_arch">The S_SceneSelector.unity pattern (TITLE)</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector_title_arch" id="wpunity_yamlmeta_s_selector_title_arch"><?php echo $term_meta_s_selector_title_arch ? $term_meta_s_selector_title_arch : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>------------------------------------------------------------------------------------</h3></td>
     </tr>
 
     <tr class="form-field">
@@ -16208,6 +16374,8 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
     global $ini_scene_help_unity_pattern;
     global $ini_scene_login_unity_pattern;
     global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
+    global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
+
 
     if ( isset( $_POST['wpunity_yamlmeta_wonderaround_pat'] ) ) {
         $term_meta_wonderaround_pat = $_POST['wpunity_yamlmeta_wonderaround_pat'];
@@ -16217,6 +16385,92 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
             update_term_meta($term_id, 'wpunity_yamlmeta_wonderaround_pat', $term_meta_wonderaround_pat);
         }
     }
+
+
+  if ( isset( $_POST['wpunity_yamlmeta_s_mainmenu_arch'] ) ) {
+    $term_meta_scene_s_mainmenu = $_POST['wpunity_yamlmeta_s_mainmenu_arch'];
+    if($term_meta_scene_s_mainmenu == ''){
+      update_term_meta($term_id, 'wpunity_yamlmeta_s_mainmenu_arch', $ini_scene_main_menu_arch_unity_pattern[0]);
+    }else{
+      update_term_meta($term_id, 'wpunity_yamlmeta_s_mainmenu_arch', $term_meta_scene_s_mainmenu);
+    }
+  }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_credentials_arch'] ) ) {
+      $term_meta_scene_s_credentials = $_POST['wpunity_yamlmeta_s_credentials_arch'];
+      if($term_meta_scene_s_credentials == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials_arch', $ini_scene_credentials_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials_arch', $term_meta_scene_s_credentials);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_options_arch'] ) ) {
+      $term_meta_scene_s_options = $_POST['wpunity_yamlmeta_s_options_arch'];
+      if($term_meta_scene_s_options == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_options_arch', $ini_scene_options_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_options_arch', $term_meta_scene_s_options);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_help_arch'] ) ) {
+      $term_meta_scene_s_help = $_POST['wpunity_yamlmeta_s_help_arch'];
+      if($term_meta_scene_s_help == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_help_arch', $ini_scene_help_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_help_arch', $term_meta_scene_s_help);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_login_arch'] ) ) {
+      $term_meta_scene_s_login = $_POST['wpunity_yamlmeta_s_login_arch'];
+      if($term_meta_scene_s_login == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_login_arch', $ini_scene_login_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_login_arch', $term_meta_scene_s_login);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_reward_arch'] ) ) {
+      $term_meta_scene_s_reward = $_POST['wpunity_yamlmeta_s_reward_arch'];
+      if($term_meta_scene_s_reward == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_reward_arch', $ini_scene_reward_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_reward_arch', $term_meta_scene_s_reward);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector_arch'] ) ) {
+      $term_meta_scene_s_selector = $_POST['wpunity_yamlmeta_s_selector_arch'];
+      if($term_meta_scene_s_selector == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_arch', $ini_scene_selector_arch_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_arch', $term_meta_scene_s_selector);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector2_arch'] ) ) {
+      $term_meta_scene_s_selector2 = $_POST['wpunity_yamlmeta_s_selector2_arch'];
+      if($term_meta_scene_s_selector2 == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector2_arch', $ini_scene_selector_arch_unity_pattern2[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector2_arch', $term_meta_scene_s_selector2);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector_title_arch'] ) ) {
+      $term_meta_scene_s_selector_title = $_POST['wpunity_yamlmeta_s_selector_title_arch'];
+      if($term_meta_scene_s_selector_title == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_title_arch', $ini_scene_selector_arch_text);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_title_arch', $term_meta_scene_s_selector_title);
+      }
+    }
+
+  /********************************************************************************************************************/
+  /********************************************************************************************************************/
+  /********************************************************************************************************************/
 
     if ( isset( $_POST['wpunity_yamlmeta_educational_energy'] ) ) {
       $term_meta_educational_energy = $_POST['wpunity_yamlmeta_educational_energy'];
@@ -16322,26 +16576,48 @@ add_action( 'edited_wpunity_scene_yaml', 'wpunity_scenes_taxyaml_customFields_sa
 
 function wpunity_scenes_taxyaml_standard_cre(){
 
-    if (!term_exists('Main Menu Default Template', 'wpunity_scene_yaml')) {
+    if (!term_exists('Main Menu Energy Template', 'wpunity_scene_yaml')) {
         wp_insert_term(
-            'Main Menu Default Template', // the term
+            'Main Menu Energy Template', // the term
             'wpunity_scene_yaml', // the taxonomy
             array(
-                'description' => 'YAML Template for Main Menu scenes',
+                'description' => 'YAML Template for Main Menu (Energy) scenes',
                 'slug' => 'mainmenu-yaml',
             )
         );
     }
 
-    if (!term_exists('Credits Default Template', 'wpunity_scene_yaml')) {
+    if (!term_exists('Credits Energy Template', 'wpunity_scene_yaml')) {
         wp_insert_term(
-            'Credits Default Template', // the term
+            'Credits Energy Template', // the term
             'wpunity_scene_yaml', // the taxonomy
             array(
-                'description' => 'YAML Template for Credits scenes',
+                'description' => 'YAML Template for Credits (Energy) scenes',
                 'slug' => 'credentials-yaml',
             )
         );
+    }
+
+    if (!term_exists('Main Menu Archaeology Template', 'wpunity_scene_yaml')) {
+      wp_insert_term(
+          'Main Menu Archaeology Template', // the term
+          'wpunity_scene_yaml', // the taxonomy
+          array(
+              'description' => 'YAML Template for Main Menu (Archaeology) scenes',
+              'slug' => 'mainmenu-arch-yaml',
+          )
+      );
+    }
+
+    if (!term_exists('Credits Archaeology Template', 'wpunity_scene_yaml')) {
+      wp_insert_term(
+          'Credits Archaeology Template', // the term
+          'wpunity_scene_yaml', // the taxonomy
+          array(
+              'description' => 'YAML Template for Credits (Archaeology) scenes',
+              'slug' => 'credentials-arch-yaml',
+          )
+      );
     }
 
     if (!term_exists('Wonder Around Default Template', 'wpunity_scene_yaml')) {
@@ -16382,6 +16658,7 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
     global $ini_scene_help_unity_pattern;
     global $ini_scene_login_unity_pattern;
     global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
+    global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
 
   $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
 
@@ -16397,6 +16674,15 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', $ini_scene_selector_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', $ini_scene_selector_unity_pattern2[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', $ini_scene_selector_text);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     }elseif($term_insterted->slug == 'credentials-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16409,6 +16695,15 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     }elseif($term_insterted->slug == 'wonderaround-yaml') {
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16421,6 +16716,57 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+    }elseif($term_insterted->slug == 'mainmenu-arch-yaml'){
+        update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', $ini_scene_main_menu_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', $ini_scene_options_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', $ini_scene_help_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', $ini_scene_login_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', $ini_scene_reward_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', $ini_scene_selector_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', $ini_scene_selector_arch_unity_pattern2[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', $ini_scene_selector_arch_text);
+    }elseif($term_insterted->slug == 'credentials-arch-yaml'){
+        update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', $ini_scene_credentials_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     }elseif($term_insterted->slug == 'educational-energy'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', $ini_educational_energy[0]);
@@ -16433,6 +16779,15 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     }else{
         update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', $ini_educational_energy[0]);
@@ -16445,6 +16800,15 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', $ini_scene_selector_unity_pattern[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', $ini_scene_selector_unity_pattern2[0]);
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', $ini_scene_selector_text);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', $ini_scene_main_menu_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', $ini_scene_credentials_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', $ini_scene_options_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', $ini_scene_help_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', $ini_scene_login_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', $ini_scene_reward_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', $ini_scene_selector_arch_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', $ini_scene_selector_arch_unity_pattern2[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', $ini_scene_selector_arch_text);
     }
 }
 
