@@ -163,49 +163,11 @@ function wpunity_reset_panels() {
     }
 
     jQuery("#assetDescription").show();
-
     jQuery("#doorDetailsPanel").hide();
-    jQuery("#nextSceneInput").attr('disabled', 'disabled');
-    jQuery("#entryPointInput").attr('disabled', 'disabled');
-
     jQuery("#terrainPanel").hide();
-    jQuery("#physicsWindMinVal").attr('disabled', 'disabled');
-    jQuery("#physicsWindMaxVal").attr('disabled', 'disabled');
-    jQuery("#physicsWindMeanVal").attr('disabled', 'disabled');
-    jQuery("#physicsWindVarianceVal").attr('disabled', 'disabled');
-    jQuery("#accessCostPenalty").attr('disabled', 'disabled');
-    jQuery("#archProximityPenalty").attr('disabled', 'disabled');
-    jQuery("#naturalReserveProximityPenalty").attr('disabled', 'disabled');
-    jQuery("#hiVoltLineDistancePenalty").attr('disabled', 'disabled');
-    jQuery("#overPowerIncomeVal").attr('disabled', 'disabled');
-    jQuery("#correctPowerIncomeVal").attr('disabled', 'disabled');
-    jQuery("#underPowerIncomeVal").attr('disabled', 'disabled');
-
-
     jQuery("#consumerPanel").hide();
-    jQuery("#energyConsumptionMinVal").attr('disabled', 'disabled');
-    jQuery("#energyConsumptionMaxVal").attr('disabled', 'disabled');
-    jQuery("#energyConsumptionMeanVal").attr('disabled', 'disabled');
-    jQuery("#energyConsumptionVarianceVal").attr('disabled', 'disabled');
-    /*jQuery("#overPowerCost").attr('disabled', 'disabled');
-    jQuery("#normalPowerCost").attr('disabled', 'disabled');
-    jQuery("#underPowerCost").attr('disabled', 'disabled');*/
-
     jQuery("#producerPanel").hide();
-    /*jQuery("#producerAirSpeedVal").attr('disabled', 'disabled');*/
-    jQuery("#producerPowerProductionVal").attr('disabled', 'disabled');
-    jQuery("#producerTurbineSizeVal").attr('disabled', 'disabled');
-    jQuery("#producerDmgCoeffVal").attr('disabled', 'disabled');
-    jQuery("#producerCostVal").attr('disabled', 'disabled');
-    jQuery("#producerRepairCostVal").attr('disabled', 'disabled');
-    jQuery("#producerClassVal").attr('disabled', 'disabled');
-    jQuery("#producerMaxPowerVal").attr('disabled', 'disabled');
-    jQuery("#producerWindSpeedClassVal").attr('disabled', 'disabled');
-
     jQuery("#poiImgDetailsPanel").hide();
-
     jQuery("#poiVideoDetailsPanel").hide();
-    jQuery("#videoFileInput").attr('disabled', 'disabled');
-
     jQuery("#objectPreviewTitle").hide();
 }

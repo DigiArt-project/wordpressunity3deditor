@@ -1,5 +1,7 @@
 <?php
 
+wp_enqueue_script('wpunity_scripts');
+
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
@@ -274,26 +276,12 @@ get_header(); ?>
         });
 
         jQuery("#sceneFeaturedImgInput").change(function() {
-            readURL(this, "#featuredImgPreview");
+            wpunity_read_url(this, "#featuredImgPreview");
         });
 
         jQuery("#sceneHelpImgInput").change(function() {
-            readURL(this, "#helpImgPreview");
+            wpunity_read_url(this, "#helpImgPreview");
         });
-
-        function readURL(input, id) {
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    jQuery(id).attr('src', e.target.result);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
     </script>
 
 <?php get_footer(); ?>
