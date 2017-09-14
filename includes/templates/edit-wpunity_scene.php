@@ -184,7 +184,7 @@ get_header(); ?>
                 </div>
 
 
-                <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden ; width:900px; max-with:1100px"
+                <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:900px; max-width:1100px;"
                           name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
                 <input id="wpunity_scene_sshot" type="hidden" value="">
