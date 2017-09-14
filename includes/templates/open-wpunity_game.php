@@ -61,9 +61,9 @@ get_header();
 <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
 <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new game project or edit an existing one</h2>
 
-<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?
-    <a target="_blank" href="<?php echo plugin_dir_url( __DIR__ ); ?>files/usage-scenario.pdf" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>
-</p>
+<!--<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?-->
+<!--    <a target="_blank" href="--><?php //echo plugin_dir_url( __DIR__ ); ?><!--files/usage-scenario.pdf" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>-->
+<!--</p>-->
 
 
 <div class="mdc-layout-grid FrontPageStyle">
