@@ -89,16 +89,14 @@ ul.EditPageBreadcrumb li {
     position: relative;
 }
 
-.PageHeaderStyle h1 {
+.PageHeaderStyle h1, .EditPageHeader h1 {
     width: auto;
     display: inline-block;
 }
 
 .HeaderButtonStyle {
     float: right;
-    bottom: 0;
-    right: 0;
-    position: absolute;
+    margin-top:20px;
 }
 
 
