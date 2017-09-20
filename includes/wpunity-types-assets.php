@@ -47,6 +47,17 @@ class Asset3DClass{
             'supports' => array('title', 'editor', 'custom-fields'),
             'hierarchical' => false,
             'has_archive' => false,
+            'capabilities' => array(
+                'publish_posts' => 'publish_wpunity_asset3d',
+                'edit_posts' => 'edit_wpunity_asset3d',
+                'edit_others_posts' => 'edit_others_wpunity_asset3d',
+                'delete_posts' => 'delete_wpunity_asset3d',
+                'delete_others_posts' => 'delete_others_wpunity_asset3d',
+                'read_private_posts' => 'read_private_wpunity_asset3d',
+                'edit_post' => 'edit_wpunity_asset3d',
+                'delete_post' => 'delete_wpunity_asset3d',
+                'read_post' => 'read_wpunity_asset3d',
+            ),
         );
         register_post_type('wpunity_asset3d', $args);
     }

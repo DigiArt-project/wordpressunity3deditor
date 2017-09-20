@@ -44,6 +44,17 @@ class SceneClass{
             'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
             'hierarchical' => false,
             'has_archive' => false,
+            'capabilities' => array(
+                'publish_posts' => 'publish_wpunity_scene',
+                'edit_posts' => 'edit_wpunity_scene',
+                'edit_others_posts' => 'edit_others_wpunity_scene',
+                'delete_posts' => 'delete_wpunity_scene',
+                'delete_others_posts' => 'delete_others_wpunity_scene',
+                'read_private_posts' => 'read_private_wpunity_scene',
+                'edit_post' => 'edit_wpunity_scene',
+                'delete_post' => 'delete_wpunity_scene',
+                'read_post' => 'read_wpunity_scene',
+            ),
         );
         register_post_type('wpunity_scene', $args);
     }

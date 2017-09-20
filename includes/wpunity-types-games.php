@@ -43,6 +43,17 @@ class GameClass{
             'supports'          => array('title','editor','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
+            'capabilities' => array(
+                'publish_posts' => 'publish_wpunity_game',
+                'edit_posts' => 'edit_wpunity_game',
+                'edit_others_posts' => 'edit_others_wpunity_game',
+                'delete_posts' => 'delete_wpunity_game',
+                'delete_others_posts' => 'delete_others_wpunity_game',
+                'read_private_posts' => 'read_private_wpunity_game',
+                'edit_post' => 'edit_wpunity_game',
+                'delete_post' => 'delete_wpunity_game',
+                'read_post' => 'read_wpunity_game',
+            ),
         );
         register_post_type('wpunity_game', $args);
     }
