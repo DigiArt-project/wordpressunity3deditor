@@ -1,3 +1,5 @@
+
+
 <?php
 
 // Three js : for simple rendering
@@ -6,10 +8,26 @@ wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');
+
+//wp_enqueue_script('wpunity_load87_threejs');
+//wp_enqueue_script('wpunity_load87_objloader2');
+////wp_enqueue_script('wpunity_load87_wwobjloader2');
+//wp_enqueue_script('wpunity_load87_mtlloader');
+//wp_enqueue_script('wpunity_load87_orbitcontrols');
 wp_enqueue_script('wu_3d_view');
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
+?>
+
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
+
+
+
+
+<?php
+
+
 
 //Default Values
 $mean_speed_wind = 14;
@@ -574,7 +592,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     </li>
                 </ul>
 
+
                 <div class="mdc-layout-grid">
+
 
                     <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
                         <label for="fbxFileInput"> Select an FBX file</label>
@@ -592,8 +612,13 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     </div>
                 </div>
 
+
                 <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
-                <div id="assetPreviewContainer" style="margin:auto;"></div>
+
+
+                <div id="assetPreviewContainer" style="margin:auto;">
+
+                </div>
 
                 <div class="mdc-layout-grid">
 
@@ -1144,6 +1169,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             wpunity_read_file('', 'obj', wpunity_load_file_callback);
             wpunity_reset_sshot_field();
         });
+
         objInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
@@ -1152,24 +1178,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             }
         });
 
-        textureInput.click(function() {
-            document.getElementById("textureFileInput").value = "";
-            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
-            textureFileContent = '';
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
-//            previewRenderer = preview_3d_vars[0];
-//            preview_scene = preview_3d_vars[1];
-//            preview_camera = preview_3d_vars[2];
-//            preview_gridHelper = preview_3d_vars[3];
-//            preview_axisHelper = preview_3d_vars[4];
-
-
-            //console.log("preview_axisHelper", preview_axisHelper);
-
-        });
         textureInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (wpunity_extract_file_extension(textureInput.val()) === 'jpg') {
                 wpunity_read_file(document.getElementById('textureFileInput').files[0], 'texture', wpunity_load_file_callback);

@@ -8,11 +8,9 @@ function wpunity_read_file(file, type, callback) {
 
     if (file) {
         reader.readAsDataURL(file);
-
         // Closure to capture the file information.
         reader.onload = (function(reader) {
             return function() {
-
                 content = reader.result;
 
                 var isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -24,6 +22,7 @@ function wpunity_read_file(file, type, callback) {
                     if (isFirefox) { content = content.replace('data:application/octet-stream;base64,', ''); }
 
                     content = window.atob(content);
+
                 }
 
                 callback(content, type);
@@ -55,6 +54,14 @@ function wpunity_load_file_callback(content, type) {
         if(type === 'texture') {
             jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
             textureFileContent = content;
+
+
+            // if the obj is already loaded, then load texture on the fly
+            if (typeof view3d !== 'undefined') {
+
+                view3d.newTexture(textureFileContent);
+
+            }
         }
 
         if (objFileContent && mtlFileContent) {
@@ -62,7 +69,18 @@ function wpunity_load_file_callback(content, type) {
 
             createScreenshotBtn.show();
 
-            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+            if (typeof view3d == 'undefined') {
+
+                view3d = new wu_3d_view('before',
+                    '',
+                    mtlFileContent,
+                    objFileContent,
+                    textureFileContent,
+                    document.getElementById('assetTitle').value,
+                    'assetPreviewContainer');
+
+                previewRenderer = view3d.renderer;
+            }
 
         } else {
             wpunity_reset_sshot_field();
@@ -70,7 +88,6 @@ function wpunity_load_file_callback(content, type) {
 
     } else {
         document.getElementById("assetPreviewContainer").innerHTML = "";
-
     }
 
     if (jQuery('#producerPanel').is(':visible')) {
@@ -151,6 +168,8 @@ function wpunity_clear_asset_files() {
     fbxFileContent = '';
     mtlFileContent = '';
     previewRenderer = '';
+
+
 
     document.getElementById("assetPreviewContainer").innerHTML = "";
 }

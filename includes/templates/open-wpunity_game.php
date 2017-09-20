@@ -183,7 +183,7 @@ get_header();
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio" value="1">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -194,7 +194,7 @@ get_header();
                         </li>
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"  name="gameTypeRadio" value="2">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
