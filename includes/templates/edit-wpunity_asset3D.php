@@ -642,30 +642,35 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <div class="mdc-layout-grid">
                     <!--Test new three js-->
 
-
-                    <div id="glscreen">
-                        <canvas id="mycanvas"></canvas>
-                    </div>
-                    <div id="dat">
-
-                    </div>
-                    <div id="info">
-                        OBJLoader2 direct loader test
-                        <div id="feedback"></div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <canvas id="previewCanvas" style="width: 300px; height:200px;"></canvas>
                     </div>
 
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                    <div id="infoparsing">
-                        Parsing info
-                        <div id="feedbackparsing"></div>
+                        <div id="dat" style="user-select: none;  position: absolute; right: 0; top: 0; z-Index: 200;"></div>
+                        <div id="info">
+                            OBJLoader2 direct loader test
+
+                            <div id="feedback"></div>
+                        </div>
+
+
+                        <div id="infoparsing">
+                            Parsing info
+                            <div id="feedbackparsing"></div>
+                        </div>
+
+                        <div id="multipleFileSInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <label for="multipleFileSInputContainer"> Select multiple asset files</label>
+                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+                        </div>
+
                     </div>
-
-                    <input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl,.jpg" />
-
 
                     <script>
                         'use strict';
-                        var app = new wu_webw_3d_view( document.getElementById( 'mycanvas' ) );
+                        var app = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
 
                         // Init dat.gui and controls
                         var elemFileInput = document.getElementById( 'fileUploadInput' );
