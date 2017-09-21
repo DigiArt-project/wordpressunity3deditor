@@ -643,7 +643,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <!--Test new three js-->
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <canvas id="previewCanvas" style="width: 300px; height:200px;"></canvas>
+                        <canvas id="previewCanvas" style="width: 300px; height:200px; top: 0; left: 0;"></canvas>
                     </div>
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
