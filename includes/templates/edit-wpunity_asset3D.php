@@ -661,7 +661,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                             <div id="feedbackparsing"></div>
                         </div>
 
-                        <div id="multipleFileSInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div id="multipleFileSInputContainer">
                             <label for="multipleFilesInput"> Select multiple asset files</label>
                             <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
                         </div>
