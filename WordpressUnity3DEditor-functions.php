@@ -118,11 +118,11 @@ wp_register_script( 'wpunity_load_objloader2', plugin_dir_url( __FILE__ ) . 'js_
 wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
 wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
 
-//wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
-//wp_register_script( 'wpunity_load87_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader2.js', null, null, false);
-////wp_register_script( 'wpunity_load87_wwobjloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/WWOBJLoader2.js', null, null, false);
-//wp_register_script( 'wpunity_load87_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/MTLLoader.js', null, null, false);
-//wp_register_script( 'wpunity_load87_trackballcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/TrackballControls.js', null, null, false);
+wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
+wp_register_script( 'wpunity_load87_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader2.js', null, null, false);
+wp_register_script( 'wpunity_load87_wwobjloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/WWOBJLoader2.js', null, null, false);
+wp_register_script( 'wpunity_load87_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/MTLLoader.js', null, null, false);
+wp_register_script( 'wpunity_load87_trackballcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/TrackballControls.js', null, null, false);
 
 
 wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporterUtils.js', null, null, false);
@@ -135,6 +135,7 @@ wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . '
 //wp_register_script( 'wpunity_load_statsmin', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/stats.min.js', null, null, false);
 
 wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
+wp_register_script( 'wu_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_webw_3d_view.js', null, null, false);
 //================================= Scene YAML Templates ===================================
 
 
