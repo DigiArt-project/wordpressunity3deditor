@@ -747,6 +747,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                                     };
                                     fileReader.readAsText(fileMtl);
                                 }
+                                app.resizeDisplayGL();
 
                             };
                             fileReader.readAsArrayBuffer( fileObj );
