@@ -1,30 +1,30 @@
-
-
 <?php
 
 // Three js : for simple rendering
 wp_enqueue_script('wpunity_scripts');
-wp_enqueue_script('wpunity_load_threejs');
+
+/*wp_enqueue_script('wpunity_load_threejs');
 wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
-wp_enqueue_script('wpunity_load_orbitcontrols');
+wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
-//wp_enqueue_script('wpunity_load87_threejs');
-//wp_enqueue_script('wpunity_load87_objloader2');
-////wp_enqueue_script('wpunity_load87_wwobjloader2');
-//wp_enqueue_script('wpunity_load87_mtlloader');
-//wp_enqueue_script('wpunity_load87_orbitcontrols');
-wp_enqueue_script('wu_3d_view');
+wp_enqueue_script('wpunity_load87_threejs');
+wp_enqueue_script('wpunity_load87_objloader2');
+wp_enqueue_script('wpunity_load87_wwobjloader2');
+wp_enqueue_script('wpunity_load87_mtlloader');
+wp_enqueue_script('wpunity_load87_orbitcontrols');
+wp_enqueue_script('wpunity_load87_trackballcontrols');
+
+wp_enqueue_script('wu_webw_3d_view');
+
+/*wp_enqueue_script('wu_3d_view');*/
+
+
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
 ?>
-
-<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
-
-
-
-
+    <!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
 <?php
 
 
@@ -637,6 +637,146 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     </div>
 
                 </div>
+
+
+                <div class="mdc-layout-grid">
+                    <!--Test new three js-->
+
+
+                    <div id="glscreen">
+                        <canvas id="mycanvas"></canvas>
+                    </div>
+                    <div id="dat">
+
+                    </div>
+                    <div id="info">
+                        OBJLoader2 direct loader test
+                        <div id="feedback"></div>
+                    </div>
+
+
+                    <div id="infoparsing">
+                        Parsing info
+                        <div id="feedbackparsing"></div>
+                    </div>
+
+                    <input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl,.jpg" />
+
+
+                    <script>
+                        'use strict';
+                        var app = new wu_webw_3d_view( document.getElementById( 'mycanvas' ) );
+
+                        // Init dat.gui and controls
+                        var elemFileInput = document.getElementById( 'fileUploadInput' );
+
+                        var _handleFileSelect = function ( event  ) {
+                            var fileObj = null;
+                            var fileMtl = null;
+                            var fileJpg = null;
+                            var files = event.target.files;
+
+                            for ( var i = 0, file; file = files[ i ]; i++) {
+
+                                if ( file.name.indexOf( '\.obj' ) > 0 && fileObj === null ) {
+                                    fileObj = file;
+                                }
+
+                                if ( file.name.indexOf( '\.mtl' ) > 0 && fileMtl === null ) {
+                                    fileMtl = file;
+                                }
+
+                                if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg === null ) {
+                                    fileJpg = file;
+                                }
+                            }
+
+                            var Validator = THREE.OBJLoader2.prototype._getValidator();
+
+                            if ( ! Validator.isValid( fileObj ) ) {
+                                alert( 'Unable to load OBJ file from given files.' );
+                            }
+
+                            var fileReader = new FileReader();
+                            fileReader.onload = function( fileDataObj ) {
+
+                                var uint8Array = new Uint8Array( fileDataObj.target.result );
+
+                                if ( fileMtl === null ) {
+
+                                    app.loadFilesUser({
+                                        name: 'userObj',
+                                        objAsArrayBuffer: uint8Array,
+                                        pathTexture: "",
+                                        mtlAsString: null
+                                    })
+
+                                } else {
+
+                                    fileReader.onload = function (fileDataMtl) {
+
+                                        var mtldata = fileDataMtl.target.result;
+
+                                        if ( fileJpg === null ) {
+
+                                            app.loadFilesUser({
+                                                name: 'userObj',
+                                                objAsArrayBuffer: uint8Array,
+                                                pathTexture: "",
+                                                mtlAsString: mtldata
+                                            })
+
+
+                                        } else {
+                                            fileReader.onload = function (fileDataJpg) {
+
+                                                app.loadFilesUser({
+                                                    name: 'userObj',
+                                                    objAsArrayBuffer: uint8Array,
+                                                    pathTexture: fileDataJpg.target.result,
+                                                    mtlAsString: mtldata
+                                                })
+                                            };
+                                            fileReader.readAsDataURL(fileJpg);
+                                        }
+                                    };
+                                    fileReader.readAsText(fileMtl);
+                                }
+
+                            };
+                            fileReader.readAsArrayBuffer( fileObj );
+                        };
+
+                        elemFileInput.addEventListener( 'change' , _handleFileSelect, false );
+
+                        //Clear all
+                        //app.clearAllAssets();
+
+                        // init three.js example application
+                        var resizeWindow = function () {
+                            app.resizeDisplayGL();
+                        };
+
+                        var render = function () {
+                            requestAnimationFrame( render );
+                            app.render();
+                        };
+
+                        window.addEventListener( 'resize', resizeWindow, false );
+
+                        app.initGL();
+                        app.resizeDisplayGL();
+                        app.initPostGL();
+
+                        // kick render loop
+                        render();
+
+                    </script>
+
+
+                </div>
+
+
 
             </div>
 
