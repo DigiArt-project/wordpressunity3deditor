@@ -2,6 +2,8 @@
  * Created by tpapazoglou on 11/7/2017.
  */
 
+'use strict';
+
 function wpunity_read_file(file, type, callback) {
     var content = '';
     var reader = new FileReader();
@@ -43,33 +45,32 @@ function wpunity_load_file_callback(content, type) {
 
     if(type === 'mtl') {
         mtlFileContent = content ? content : '';
+        document.getElementById('mtlFileInput').value = mtlFileContent;
     }
 
     if(type === 'obj') {
         objFileContent = content ? content : '';
+        document.getElementById('objFileInput').value = objFileContent;
     }
 
     if (content) {
 
         if(type === 'texture') {
-            jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
+            /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
             textureFileContent = content;
-
+            document.getElementById('textureFileInput').value = textureFileContent;
 
             // if the obj is already loaded, then load texture on the fly
-            if (typeof view3d !== 'undefined') {
-
+            /*if (typeof view3d !== 'undefined') {
                 view3d.newTexture(textureFileContent);
-
-            }
+            }*/
         }
 
         if (objFileContent && mtlFileContent) {
-            jQuery("#objectPreviewTitle").show();
+            /*jQuery("#objectPreviewTitle").show();*/
+            /*createScreenshotBtn.show();*/
 
-            createScreenshotBtn.show();
-
-            if (typeof view3d == 'undefined') {
+            /*if (typeof view3d == 'undefined') {
 
                 view3d = new wu_3d_view('before',
                     '',
@@ -80,7 +81,7 @@ function wpunity_load_file_callback(content, type) {
                     'assetPreviewContainer');
 
                 previewRenderer = view3d.renderer;
-            }
+            }*/
 
         } else {
             wpunity_reset_sshot_field();
@@ -154,12 +155,17 @@ function wpunity_create_slider_component(elemId, range, options) {
 }
 
 function wpunity_clear_asset_files() {
+
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("textureFileInput").value = "";
+
+
+    document.getElementById("fileUploadInput").value = "";
+
     document.getElementById("sshotFileInput").value = "";
-    jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+    /*jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);*/
     jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
     jQuery("#objectPreviewTitle").hide();
 
@@ -169,9 +175,7 @@ function wpunity_clear_asset_files() {
     mtlFileContent = '';
     previewRenderer = '';
 
-
-
-    document.getElementById("assetPreviewContainer").innerHTML = "";
+    /*document.getElementById("assetPreviewContainer").innerHTML = "";*/
 }
 
 function wpunity_reset_panels() {
@@ -189,4 +193,114 @@ function wpunity_reset_panels() {
     jQuery("#poiImgDetailsPanel").hide();
     jQuery("#poiVideoDetailsPanel").hide();
     jQuery("#objectPreviewTitle").hide();
+}
+
+function resizeCanvas(canvasElement) {
+
+    var canvas = document.getElementById(canvasElement), context = canvas.getContext('3d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
+
+    var _handleFileSelect = function ( event  ) {
+        var fileObj = null;
+        var fileMtl = null;
+        var fileJpg = null;
+        var files = event.target.files;
+
+        for ( var i = 0, file; file = files[ i ]; i++) {
+            if ( file.name.indexOf( '\.obj' ) > 0 && fileObj === null ) {
+                fileObj = file;
+                wpunity_read_file(fileObj, 'obj', wpunity_load_file_callback);
+
+            }
+            if ( file.name.indexOf( '\.mtl' ) > 0 && fileMtl === null ) {
+                fileMtl = file;
+                wpunity_read_file(fileMtl, 'mtl', wpunity_load_file_callback);
+            }
+            if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg === null ) {
+                fileJpg = file;
+                wpunity_read_file(fileJpg, 'texture', wpunity_load_file_callback);
+            }
+        }
+
+        var Validator = THREE.OBJLoader2.prototype._getValidator();
+
+        if ( ! Validator.isValid( fileObj ) ) {
+
+            // Add object reset here
+            alert( 'Unable to load OBJ file from given files.' );
+
+            wpunity_clear_asset_files();
+
+
+            return;
+        }
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function( fileDataObj ) {
+
+            var uint8Array = new Uint8Array( fileDataObj.target.result );
+
+            var objectDefinition = {
+                name: 'userObj',
+                objAsArrayBuffer: uint8Array,
+                pathTexture: "",
+                mtlAsString: null
+            };
+
+            if ( fileMtl === null ) {
+                previewCanvas.loadFilesUser(objectDefinition);
+
+            } else {
+
+                fileReader.onload = function (fileDataMtl) {
+
+                    objectDefinition.mtlAsString = fileDataMtl.target.result;
+
+                    if ( fileJpg === null ) {
+                        previewCanvas.loadFilesUser(objectDefinition);
+
+                    } else {
+                        fileReader.onload = function (fileDataJpg) {
+
+                            objectDefinition.pathTexture = fileDataJpg.target.result;
+                            previewCanvas.loadFilesUser(objectDefinition);
+
+                        };
+                        fileReader.readAsDataURL(fileJpg);
+                    }
+                };
+                fileReader.readAsText(fileMtl);
+            }
+        };
+        fileReader.readAsArrayBuffer( fileObj );
+    };
+    multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
+
+//Clear all
+//previewCanvas.clearAllAssets();
+
+// init three.js example application
+    var resizeWindow = function () {
+        previewCanvas.resizeDisplayGL();
+    };
+
+    var render = function () {
+        requestAnimationFrame( render );
+        previewCanvas.render();
+    };
+
+    window.addEventListener( 'resize', resizeWindow, false );
+
+    previewCanvas.initGL();
+    previewCanvas.resizeDisplayGL();
+    previewCanvas.initPostGL();
+
+// kick render loop
+    render();
+
 }
