@@ -1134,6 +1134,25 @@ Prefab:
     - target: {fileID: 1010085542761384, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
       propertyPath: m_Name
       value: ___[name_consumer]___
+    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
+      propertyPath: MeanPowerConsume
+      value: ___[mean_power_consumer]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
+      propertyPath: VarPowerConsume
+      value: ___[var_power_consumer]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
+      propertyPath: MinPowerConsume
+      value: ___[min_power_consumer]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
+      propertyPath: MaxPowerConsume
+      value: ___[max_power_consumer]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
+      propertyPath: CurrPowerConsume
+      value: 0      
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
