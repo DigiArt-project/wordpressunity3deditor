@@ -56,6 +56,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 get_header();
 
+$user_id = get_current_user_id();
+
 ?>
 
 <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
@@ -75,81 +77,98 @@ get_header();
         <hr class="mdc-list-divider">
 
 		<?php
-		// Define custom query parameters
-		$custom_query_args = array(
-			'post_type' => 'wpunity_game',
-			/*'posts_per_page' => 10,*/
-			'posts_per_page'   => -1,
-			/*'paged' => $paged,*/
-		);
+        if ( !is_user_logged_in() ){ //not user
+            echo "Please sign in";
+        }else { //is user
+            // Define custom query parameters
+            $custom_query_args = array(
+                'post_type' => 'wpunity_game',
+                'posts_per_page' => -1,
+            );
+            if (current_user_can('administrator') || current_user_can('adv_game_master')) {
+                //do something for admins
+            } elseif (current_user_can('game_master')) {
+                $custom_query_args['author'] = $user_id;
+            }
 
-		// Get current page and append to custom query parameters array
-		//$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+                // Get current page and append to custom query parameters array
+                //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-		// Instantiate custom query
-		$custom_query = new WP_Query( $custom_query_args );
+                // Instantiate custom query
+                $custom_query = new WP_Query($custom_query_args);
 
-		// Pagination fix
-		$temp_query = $wp_query;
-		$wp_query   = NULL;
-		$wp_query   = $custom_query;
+                // Pagination fix
+                $temp_query = $wp_query;
+                $wp_query = NULL;
+                $wp_query = $custom_query;
 
-		// Output custom query loop
-		if ( $custom_query->have_posts() ) : ?>
+                // Output custom query loop
+                if ($custom_query->have_posts()) : ?>
 
-            <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
-				<?php while ( $custom_query->have_posts() ) :
-					$custom_query->the_post();
+                    <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                        <?php while ($custom_query->have_posts()) :
+                            $custom_query->the_post();
 
-					$game_id = get_the_ID();
-					$game_title = get_the_title();
-					$game_date = get_the_date();
-					//$game_link = get_permalink();
+                            $game_id = get_the_ID();
+                            $game_title = get_the_title();
+                            $game_date = get_the_date();
+                            //$game_link = get_permalink();
 
-					$game_type_obj = wpunity_return_game_type($id);
+                            $game_type_obj = wpunity_return_game_type($id);
 
-					?>
-                    <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                        <a href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ); ?>" class="mdc-list-item" data-mdc-auto-init="MDCRipple" title="Open <?php echo $game_title;?>">
+                            ?>
+                            <li class="mdc-list-item" id="<?php echo $game_id; ?>">
+                                <a href="<?php echo esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id); ?>"
+                                   class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+                                   title="Open <?php echo $game_title; ?>">
 
-                            <i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="<?php echo $game_type_obj->string;?>"><?php echo $game_type_obj->icon;?></i>
-                            <span id="<?php echo $game_id; ?>-title" class="mdc-list-item__text"><?php echo $game_title;?>
-                                <span id="<?php echo $game_id; ?>-date" class="mdc-list-item__text__secondary"><?php echo $game_date;?></span>
-                                </span>
-                        </a>
-                        <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game" title="Delete project"
-                           onclick="deleteGame(<?php echo $game_id; ?>)">
-                            <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete project">
-                                delete
-                            </i>
-                        </a>
-                    </li>
+                                    <i class="material-icons mdc-list-item__start-detail" aria-hidden="true"
+                                       title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?></i>
+                                <span id="<?php echo $game_id; ?>-title"
+                                      class="mdc-list-item__text"><?php echo $game_title; ?>
+                                    <span id="<?php echo $game_id; ?>-date"
+                                          class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
+                                    </span>
+                                </a>
+                                <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game"
+                                   title="Delete project"
+                                   onclick="deleteGame(<?php echo $game_id; ?>)">
+                                    <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                                       title="Delete project">
+                                        delete
+                                    </i>
+                                </a>
+                            </li>
 
-					<?php
+                            <?php
 
-				endwhile;?>
-            </ul>
+                        endwhile; ?>
+                    </ul>
 
-		<?php else : ?>
+                <?php else : ?>
 
-            <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-            <div class="CenterContents">
+                    <div class="CenterContents">
 
-                <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No game projects available">
-                    games
-                </i>
+                        <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;"
+                           aria-hidden="true" title="No game projects available">
+                            games
+                        </i>
 
-                <h3 class="mdc-typography--headline">No Game Projects available</h3>
-                <hr class="WhiteSpaceSeparator">
-                <h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new one</h4>
+                        <h3 class="mdc-typography--headline">No Game Projects available</h3>
+                        <hr class="WhiteSpaceSeparator">
+                        <h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new
+                            one</h4>
 
-            </div>
-		<?php endif;
+                    </div>
+                <?php endif;
 
-		wp_reset_postdata();
-		$wp_query = NULL;
-		$wp_query = $temp_query;
+                wp_reset_postdata();
+                $wp_query = NULL;
+                $wp_query = $temp_query;
+
+        }
 		?>
 
     </div>
