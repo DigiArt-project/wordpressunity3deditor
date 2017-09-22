@@ -111,7 +111,8 @@ var wu_webw_3d_view = (function () {
 
     WWOBJLoader2Example.prototype._reportProgress = function( text ) {
         console.log( 'Progress: ' + text );
-        document.getElementById( 'feedback' ).innerHTML = Validator.isValid( text ) ? text : '';
+        /*document.getElementById( 'feedback' ).innerHTML = Validator.isValid( text ) ? text : '';*/
+        console.log(Validator.isValid( text ) ? text : '');
     };
 
     WWOBJLoader2Example.prototype.loadFiles = function ( prepData ) {

@@ -593,7 +593,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </ul>
 
 
-                <div class="mdc-layout-grid">
+                <!--<div class="mdc-layout-grid">
 
 
                     <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
@@ -610,182 +610,60 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <label  for="objFileInput" > Select an OBJ file</label>
                         <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
                     </div>
-                </div>
+                </div>-->
 
 
-                <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
+                <!--<div id="assetPreviewContainer" style="margin:auto;"></div>-->
 
-
-                <div id="assetPreviewContainer" style="margin:auto;">
-
-                </div>
-
-                <div class="mdc-layout-grid">
+                <!--<div class="mdc-layout-grid">
 
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="textureFileInput"> Select a texture</label><br>
-                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); ?>">
+                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); */?>">
                         <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg"/>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="sshotFileInput"> Screenshot</label><br>
-                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); */?>">
                         <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
                         <a style="display: none;" id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
 
-                </div>
+                </div>-->
 
 
                 <div class="mdc-layout-grid">
-                    <!--Test new three js-->
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <canvas id="previewCanvas" style="width: 300px; height:200px; top: 0; left: 0;"></canvas>
-                    </div>
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <h3 class="mdc-typography--title">Object Preview</h3>
+                        <canvas id="previewCanvas" style="height: 300px;"></canvas>
 
-                        <div id="dat" style="user-select: none;  position: absolute; right: 0; top: 0; z-Index: 200;"></div>
-                        <div id="info">
-                            OBJLoader2 direct loader test
-
-                            <div id="feedback"></div>
-                        </div>
-
-
-                        <div id="infoparsing">
-                            Parsing info
-                            <div id="feedbackparsing"></div>
-                        </div>
-
-                        <div id="multipleFileSInputContainer">
-                            <label for="multipleFilesInput"> Select multiple asset files</label>
+                        <div id="multipleFilesInputContainer">
+                            <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                             <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+
+                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                            <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
+
                         </div>
 
                     </div>
 
-                    <script>
-                        'use strict';
-                        var app = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <h3 class="mdc-typography--title">Screenshot</h3>
 
-                        // Init dat.gui and controls
-                        var elemFileInput = document.getElementById( 'fileUploadInput' );
+                        <img id="sshotPreviewImg" style="width: 100px; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
-                        var _handleFileSelect = function ( event  ) {
-                            var fileObj = null;
-                            var fileMtl = null;
-                            var fileJpg = null;
-                            var files = event.target.files;
-
-                            for ( var i = 0, file; file = files[ i ]; i++) {
-
-                                if ( file.name.indexOf( '\.obj' ) > 0 && fileObj === null ) {
-                                    fileObj = file;
-                                }
-
-                                if ( file.name.indexOf( '\.mtl' ) > 0 && fileMtl === null ) {
-                                    fileMtl = file;
-                                }
-
-                                if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg === null ) {
-                                    fileJpg = file;
-                                }
-                            }
-
-                            var Validator = THREE.OBJLoader2.prototype._getValidator();
-
-                            if ( ! Validator.isValid( fileObj ) ) {
-                                alert( 'Unable to load OBJ file from given files.' );
-                            }
-
-                            var fileReader = new FileReader();
-                            fileReader.onload = function( fileDataObj ) {
-
-                                var uint8Array = new Uint8Array( fileDataObj.target.result );
-
-                                if ( fileMtl === null ) {
-
-                                    app.loadFilesUser({
-                                        name: 'userObj',
-                                        objAsArrayBuffer: uint8Array,
-                                        pathTexture: "",
-                                        mtlAsString: null
-                                    })
-
-                                } else {
-
-                                    fileReader.onload = function (fileDataMtl) {
-
-                                        var mtldata = fileDataMtl.target.result;
-
-                                        if ( fileJpg === null ) {
-
-                                            app.loadFilesUser({
-                                                name: 'userObj',
-                                                objAsArrayBuffer: uint8Array,
-                                                pathTexture: "",
-                                                mtlAsString: mtldata
-                                            })
-
-
-                                        } else {
-                                            fileReader.onload = function (fileDataJpg) {
-
-                                                app.loadFilesUser({
-                                                    name: 'userObj',
-                                                    objAsArrayBuffer: uint8Array,
-                                                    pathTexture: fileDataJpg.target.result,
-                                                    mtlAsString: mtldata
-                                                })
-                                            };
-                                            fileReader.readAsDataURL(fileJpg);
-                                        }
-                                    };
-                                    fileReader.readAsText(fileMtl);
-                                }
-                                app.resizeDisplayGL();
-
-                            };
-                            fileReader.readAsArrayBuffer( fileObj );
-                        };
-
-                        elemFileInput.addEventListener( 'change' , _handleFileSelect, false );
-
-                        //Clear all
-                        //app.clearAllAssets();
-
-                        // init three.js example application
-                        var resizeWindow = function () {
-                            app.resizeDisplayGL();
-                        };
-
-                        var render = function () {
-                            requestAnimationFrame( render );
-                            app.render();
-                        };
-
-                        window.addEventListener( 'resize', resizeWindow, false );
-
-                        app.initGL();
-                        app.resizeDisplayGL();
-                        app.initPostGL();
-
-                        // kick render loop
-                        render();
-
-                    </script>
-
+                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                    </div>
 
                 </div>
-
-
-
             </div>
-
         </div>
 
 		<?php //Check if its new/saved and get data for Terrain Options
@@ -1118,15 +996,27 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         wpunity_reset_panels();
 
-        var fbxInputContainer = jQuery('#fbxFileInputContainer');
+        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+        var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
+
+        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
+
+        resizeCanvas('previewCanvas');
+
+        /*var fbxInputContainer = jQuery('#fbxFileInputContainer');
         var fbxInput = jQuery('#fbxFileInput');
         var mtlInputContainer = jQuery('#mtlFileInputContainer');
-        var mtlInput = jQuery('#mtlFileInput');
+
         var objInputContainer = jQuery('#objFileInputContainer');
-        var objInput = jQuery('#objFileInput');
+
         var textureInputContainer = jQuery('#textureFileInputContainer');
+
+        /*var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;*/
+
+        var mtlInput = jQuery('#mtlFileInput');
+        var objInput = jQuery('#objFileInput');
         var textureInput = jQuery('#textureFileInput');
-        var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;
+
         var sshotInput = jQuery('#sshotFileInput');
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
@@ -1224,6 +1114,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
+                previewCanvas.resizeDisplayGL();
+
                 wpunity_reset_panels();
 
                 var descText = document.getElementById('categoryDescription');
@@ -1287,7 +1179,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             }
         })();
 
-        fbxInput.change(function() {
+        /*fbxInput.change(function() {
             document.getElementById("assetPreviewContainer").innerHTML = "";
 
             if (wpunity_extract_file_extension(fbxInput.val()) === 'fbx') {
@@ -1295,9 +1187,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             } else {
                 document.getElementById("fbxFileInput").value = "";
             }
-        });
+        });*/
 
-        mtlInput.click(function() {
+        /*mtlInput.click(function() {
             document.getElementById("mtlFileInput").value = "";
             wpunity_read_file('', 'mtl', wpunity_load_file_callback);
             wpunity_reset_sshot_field();
@@ -1329,7 +1221,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             if (wpunity_extract_file_extension(textureInput.val()) === 'jpg') {
                 wpunity_read_file(document.getElementById('textureFileInput').files[0], 'texture', wpunity_load_file_callback);
             }
-        });
+        });*/
 
         function wpunity_create_model_sshot(renderer) {
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
@@ -1339,8 +1231,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         function wpunity_reset_sshot_field() {
             document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
             document.getElementById("sshotFileInput").value = "";
-            createScreenshotBtn.hide();
-            jQuery("#objectPreviewTitle").hide();
+            /*createScreenshotBtn.hide();*/
+            /*jQuery("#objectPreviewTitle").hide();*/
         }
 
         jQuery( function() {
@@ -1350,7 +1242,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                 var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
-                if (objectType === 'fbx') {
+                /*if (objectType === 'fbx') {
                     wpunity_clear_asset_files();
                     fbxInputContainer.show();
                     mtlInputContainer.hide();
@@ -1361,14 +1253,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     fbxInputContainer.hide();
                     mtlInputContainer.show();
                     objInputContainer.show();
-                }
+                }*/
             });
-
-
-            // Sliders OLD
-            //var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
-            //var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
-            //var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
             var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
             var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
@@ -1429,8 +1315,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             var opt_speed = <?php echo json_encode($optGen_speed);?>;
             var opt_power = <?php echo json_encode($optGen_power);?>;
 
-            /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
             var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: opt_size, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
             var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: opt_dmg, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
             var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: opt_cost, valId:"#producerCostVal", step: 1, units:"$"});
