@@ -1009,11 +1009,14 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var mdc = window.mdc;
         mdc.autoInit();
 
-        wpunity_reset_panels();
 
-        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+
+        var my_wu = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+
+        wpunity_reset_panels(my_wu);
+
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
+        loadAssetPreviewer(my_wu, multipleFilesInputElem);
 
         //resizeCanvas('previewCanvas');
 
@@ -1034,8 +1037,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         createScreenshotBtn.click(function() {
 
-            previewCanvas.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(previewCanvas.renderer);
+            my_wu.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(my_wu.renderer);
+
 
 //            preview_axisHelper.visible = false;
 //            preview_gridHelper.visible = false;
@@ -1113,9 +1117,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
-                previewCanvas.resizeDisplayGL();
+                my_wu.resizeDisplayGL();
 
-                wpunity_reset_panels();
+                wpunity_reset_panels(my_wu);
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");

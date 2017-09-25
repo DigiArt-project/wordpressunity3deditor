@@ -160,10 +160,10 @@ function wpunity_create_slider_component(elemId, range, options) {
     return jQuery( elemId ).slider;
 }
 
-function wpunity_clear_asset_files() {
+function wpunity_clear_asset_files(my_wu) {
 
-    if (previewCanvas) {
-        previewCanvas.clearAllAssets();
+    if (my_wu.renderer) {
+        my_wu.clearAllAssets();
     }
 
     document.getElementById("fbxFileInput").value = "";
@@ -182,11 +182,10 @@ function wpunity_clear_asset_files() {
     textureFileContent = '';
     fbxFileContent = '';
     mtlFileContent = '';
-    previewRenderer = '';
 }
 
-function wpunity_reset_panels() {
-    wpunity_clear_asset_files();
+function wpunity_reset_panels(my_wu) {
+    wpunity_clear_asset_files(my_wu);
 
     if (jQuery("ProducerPlotTooltip")) {
         jQuery("div.ProducerPlotTooltip").remove();
@@ -206,7 +205,7 @@ function resizeCanvas(canvasElement) {
     var canvas = document.getElementById(canvasElement), context = canvas.getContext('3d');
 }
 
-function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
+function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
 
     var _handleFileSelect = function ( event  ) {
         var fileObj = null;
@@ -237,7 +236,7 @@ function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
             // Add object reset here
             alert( 'Unable to load OBJ file from given files.' );
 
-            wpunity_clear_asset_files();
+            wpunity_clear_asset_files(my_wu);
 
             return;
         }
@@ -274,7 +273,7 @@ function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
                         fileReader.onload = function (fileDataJpg) {
 
                             objectDefinition.pathTexture = fileDataJpg.target.result;
-                            previewCanvas.loadFilesUser(objectDefinition);
+                            my_wu.loadFilesUser(objectDefinition);
 
                         };
                         fileReader.readAsDataURL(fileJpg);
@@ -292,19 +291,19 @@ function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
 
 // init three.js example application
     var resizeWindow = function () {
-        previewCanvas.resizeDisplayGL();
+        my_wu.resizeDisplayGL();
     };
 
     var render = function () {
         requestAnimationFrame( render );
-        previewCanvas.render();
+        my_wu.render();
     };
 
     window.addEventListener( 'resize', resizeWindow, false );
 
-    previewCanvas.initGL();
-    previewCanvas.resizeDisplayGL();
-    previewCanvas.initPostGL();
+    my_wu.initGL();
+    my_wu.resizeDisplayGL();
+    my_wu.initPostGL();
 
 // kick render loop
     render();
