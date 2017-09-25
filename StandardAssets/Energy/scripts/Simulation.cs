@@ -203,6 +203,8 @@ public class Simulation : MonoBehaviour {
 		foreach (GameObject c in allconsumers)
 			currentPowerReqs += c.transform.GetComponentInParent<ConsumerScript> ().CurrPowerConsume;
 
+        currentPowerReqs = currentPowerReqs/1000;
+
 		evalBalance();
 
 		DisplayText("powerReqs");
