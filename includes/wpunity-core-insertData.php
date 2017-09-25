@@ -1150,10 +1150,6 @@ Prefab:
       propertyPath: MaxPowerConsume
       value: ___[max_power_consumer]___
       objectReference: {fileID: 0}
-    - target: {fileID: 114352149921982826, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
-      propertyPath: CurrPowerConsume
-      value: 0      
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 445abb95b6721c64aa4204dff733341e, type: 2}
   m_IsPrefabParent: 0

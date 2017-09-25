@@ -927,10 +927,10 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
 
                 // REM STATHIS
-                $mean_power_consumer = get_post_meta($consumer_id,'',true);
-                $var_power_consumer = get_post_meta($consumer_id,'',true);
-                $min_power_consumer = get_post_meta($consumer_id,'',true);
-                $max_power_consumer = get_post_meta($consumer_id,'',true);
+                $mean_power_consumer = ''; //get_post_meta($consumer_id,'',true);
+                $var_power_consumer = ''; //get_post_meta($consumer_id,'',true);
+                $min_power_consumer = ''; //get_post_meta($consumer_id,'',true);
+                $max_power_consumer = ''; //get_post_meta($consumer_id,'',true);
 
 
                 $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,
@@ -1279,10 +1279,10 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
 
 
 
-    $file_content_return = str_replace("___[mean_power_consumer]___", $mean_power_consumer, $file_content_return);
-    $file_content_return = str_replace("___[var_power_consumer]___", $var_power_consumer, $file_content_return);
-    $file_content_return = str_replace("___[min_power_consumer]___", $min_power_consumer, $file_content_return);
-    $file_content_return = str_replace("___[max_power_consumer]___", $max_power_consumer, $file_content_return);
+//    $file_content_return = str_replace("___[mean_power_consumer]___", $mean_power_consumer, $file_content_return);
+//    $file_content_return = str_replace("___[var_power_consumer]___", $var_power_consumer, $file_content_return);
+//    $file_content_return = str_replace("___[min_power_consumer]___", $min_power_consumer, $file_content_return);
+//    $file_content_return = str_replace("___[max_power_consumer]___", $max_power_consumer, $file_content_return);
 
     $file_content_return = str_replace("___[fid_consumer_prefab_transform]___",$fid_consumer_prefab_transform,$file_content_return);
     $file_content_return = str_replace("___[fid_consumer_prefab_child]___",$fid_consumer_prefab_child,$file_content_return);
