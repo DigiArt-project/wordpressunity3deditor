@@ -437,9 +437,10 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
         switch ( payload.cmd ) {
 
             case 'obj_parsing_prc':
-
-                /*document.getElementById( 'feedbackparsing' ).innerHTML = payload.msg;*/
                 console.log(payload.msg);
+                document.getElementById( 'previewProgressSliderLine' ).style.width = payload.msg;
+                document.getElementById( 'previewProgressLabel' ).innerHTML = payload.msg;
+
 
                 break;
             case 'objData':

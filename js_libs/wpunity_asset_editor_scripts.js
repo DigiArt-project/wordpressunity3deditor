@@ -4,6 +4,12 @@
 
 'use strict';
 
+var mtlFileContent = '';
+var objFileContent = '';
+var textureFileContent = '';
+var fbxFileContent = '';
+var previewRenderer;
+
 function wpunity_read_file(file, type, callback) {
     var content = '';
     var reader = new FileReader();
@@ -156,11 +162,14 @@ function wpunity_create_slider_component(elemId, range, options) {
 
 function wpunity_clear_asset_files() {
 
+    if (previewCanvas) {
+        previewCanvas.clearAllAssets();
+    }
+
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("textureFileInput").value = "";
-
 
     document.getElementById("fileUploadInput").value = "";
 
@@ -174,8 +183,6 @@ function wpunity_clear_asset_files() {
     fbxFileContent = '';
     mtlFileContent = '';
     previewRenderer = '';
-
-    /*document.getElementById("assetPreviewContainer").innerHTML = "";*/
 }
 
 function wpunity_reset_panels() {
@@ -196,10 +203,7 @@ function wpunity_reset_panels() {
 }
 
 function resizeCanvas(canvasElement) {
-
     var canvas = document.getElementById(canvasElement), context = canvas.getContext('3d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 }
 
 function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
@@ -235,13 +239,15 @@ function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
 
             wpunity_clear_asset_files();
 
-
             return;
         }
 
         var fileReader = new FileReader();
 
         fileReader.onload = function( fileDataObj ) {
+
+            // Add loader
+            jQuery('#previewProgressSlider').show();
 
             var uint8Array = new Uint8Array( fileDataObj.target.result );
 
@@ -255,7 +261,7 @@ function loadAssetPreviewer(previewCanvas, multipleFilesInputElem) {
             if ( fileMtl === null ) {
                 previewCanvas.loadFilesUser(objectDefinition);
 
-            } else {
+                } else {
 
                 fileReader.onload = function (fileDataMtl) {
 

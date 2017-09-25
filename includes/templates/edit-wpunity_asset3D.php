@@ -638,7 +638,20 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                         <h3 class="mdc-typography--title">Object Preview</h3>
-                        <canvas id="previewCanvas" style="height: 300px;"></canvas>
+
+                        <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                            <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                            <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+                            <div class="progressSlider" style="top:5px;">
+                                <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                            </div>
+                        </div>
+
+                        <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+
+
+
 
                         <div id="multipleFilesInputContainer">
                             <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
@@ -998,20 +1011,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
         loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
 
-        resizeCanvas('previewCanvas');
-
-        /*var fbxInputContainer = jQuery('#fbxFileInputContainer');
-        var fbxInput = jQuery('#fbxFileInput');
-        var mtlInputContainer = jQuery('#mtlFileInputContainer');
-
-        var objInputContainer = jQuery('#objFileInputContainer');
-
-        var textureInputContainer = jQuery('#textureFileInputContainer');
-
-        /*var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;*/
+        //resizeCanvas('previewCanvas');
 
         var mtlInput = jQuery('#mtlFileInput');
         var objInput = jQuery('#objFileInput');
@@ -1021,11 +1023,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
 
-        var mtlFileContent = '';
-        var objFileContent = '';
-        var textureFileContent = '';
-        var fbxFileContent = '';
-        var previewRenderer;
+
         //        var preview_3d_vars;
         //        var preview_scene;
         //        var preview_camera;
@@ -1034,12 +1032,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         createScreenshotBtn.click(function() {
 
+            previewCanvas.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(previewCanvas.renderer);
 
 //            preview_axisHelper.visible = false;
 //            preview_gridHelper.visible = false;
-
-            wpunity_create_model_sshot(previewRenderer);
-
 //            preview_axisHelper.visible = true;
 //            preview_gridHelper.visible = true;
 
@@ -1179,61 +1176,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             }
         })();
 
-        /*fbxInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(fbxInput.val()) === 'fbx') {
-
-            } else {
-                document.getElementById("fbxFileInput").value = "";
-            }
-        });*/
-
-        /*mtlInput.click(function() {
-            document.getElementById("mtlFileInput").value = "";
-            wpunity_read_file('', 'mtl', wpunity_load_file_callback);
-            wpunity_reset_sshot_field();
-        });
-        mtlInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(mtlInput.val()) === 'mtl') {
-                wpunity_read_file(document.getElementById('mtlFileInput').files[0], 'mtl', wpunity_load_file_callback);
-            }
-        });
-
-        objInput.click(function() {
-            document.getElementById("objFileInput").value = "";
-            wpunity_read_file('', 'obj', wpunity_load_file_callback);
-            wpunity_reset_sshot_field();
-        });
-
-        objInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(objInput.val()) === 'obj') {
-                wpunity_read_file(document.getElementById('objFileInput').files[0], 'obj', wpunity_load_file_callback);
-            }
-        });
-
-        textureInput.change(function() {
-
-            if (wpunity_extract_file_extension(textureInput.val()) === 'jpg') {
-                wpunity_read_file(document.getElementById('textureFileInput').files[0], 'texture', wpunity_load_file_callback);
-            }
-        });*/
-
-        function wpunity_create_model_sshot(renderer) {
-            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
-        }
-
-        function wpunity_reset_sshot_field() {
-            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
-            document.getElementById("sshotFileInput").value = "";
-            /*createScreenshotBtn.hide();*/
-            /*jQuery("#objectPreviewTitle").hide();*/
-        }
 
         jQuery( function() {
 
@@ -1474,6 +1416,19 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         jQuery("#poiVideoFeaturedImgInput").change(function() {
             wpunity_read_url(this, "#poiVideoFeaturedImgPreview");
         });
+
+
+        function wpunity_create_model_sshot(renderer) {
+            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
+            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
+        }
+
+        function wpunity_reset_sshot_field() {
+            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+            document.getElementById("sshotFileInput").value = "";
+            /*createScreenshotBtn.hide();*/
+            /*jQuery("#objectPreviewTitle").hide();*/
+        }
 
     </script>
 <?php  get_footer(); ?>

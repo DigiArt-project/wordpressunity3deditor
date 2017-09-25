@@ -99,6 +99,11 @@ var wu_webw_3d_view = (function () {
         };
         var completedLoading = function () {
             console.log( 'Loading complete!' );
+
+            jQuery('#previewProgressSlider').hide();
+            document.getElementById( 'previewProgressSliderLine' ).style.width = 0;
+            document.getElementById( 'previewProgressLabel' ).innerHTML = "";
+
             scope._reportProgress( '' );
         };
         this.wwObjLoader2.registerCallbackProgress( this._reportProgress );
