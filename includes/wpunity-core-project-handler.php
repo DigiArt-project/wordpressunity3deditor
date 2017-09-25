@@ -911,6 +911,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $consumer_obj = get_post_meta($consumer_id,'wpunity_asset3d_obj',true);
                 $consumer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $energy_consumption = get_post_meta($consumer_id,'wpunity_energyConsumption',true);
 
                 $fid_prefab_consumer_parent = wpunity_create_fids($current_fid++);
                 $x_pos_consumer = - $value['position'][0]; // x is in the opposite site in unity
@@ -927,10 +928,10 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
 
                 // REM STATHIS
-                $mean_power_consumer = ''; //get_post_meta($consumer_id,'',true);
-                $var_power_consumer = ''; //get_post_meta($consumer_id,'',true);
-                $min_power_consumer = ''; //get_post_meta($consumer_id,'',true);
-                $max_power_consumer = ''; //get_post_meta($consumer_id,'',true);
+                $mean_power_consumer = $energy_consumption['mean'];
+                $var_power_consumer = $energy_consumption['var'];
+                $min_power_consumer = $energy_consumption['min'];
+                $max_power_consumer = $energy_consumption['max'];
 
 
                 $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,
@@ -1279,10 +1280,10 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
 
 
 
-//    $file_content_return = str_replace("___[mean_power_consumer]___", $mean_power_consumer, $file_content_return);
-//    $file_content_return = str_replace("___[var_power_consumer]___", $var_power_consumer, $file_content_return);
-//    $file_content_return = str_replace("___[min_power_consumer]___", $min_power_consumer, $file_content_return);
-//    $file_content_return = str_replace("___[max_power_consumer]___", $max_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[mean_power_consumer]___", $mean_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[var_power_consumer]___", $var_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[min_power_consumer]___", $min_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[max_power_consumer]___", $max_power_consumer, $file_content_return);
 
     $file_content_return = str_replace("___[fid_consumer_prefab_transform]___",$fid_consumer_prefab_transform,$file_content_return);
     $file_content_return = str_replace("___[fid_consumer_prefab_child]___",$fid_consumer_prefab_child,$file_content_return);
