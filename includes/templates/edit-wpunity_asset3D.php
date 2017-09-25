@@ -8,6 +8,8 @@ wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
+
+
 wp_enqueue_script('wpunity_load87_threejs');
 wp_enqueue_script('wpunity_load87_objloader2');
 wp_enqueue_script('wpunity_load87_wwobjloader2');
@@ -24,7 +26,7 @@ wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
 ?>
-    <!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
+
 <?php
 
 
