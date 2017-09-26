@@ -8,8 +8,6 @@ wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
-
-
 wp_enqueue_script('wpunity_load87_threejs');
 wp_enqueue_script('wpunity_load87_objloader2');
 wp_enqueue_script('wpunity_load87_wwobjloader2');
@@ -21,14 +19,9 @@ wp_enqueue_script('wu_webw_3d_view');
 
 /*wp_enqueue_script('wu_3d_view');*/
 
-
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
-?>
-
-<?php
-
 
 
 //Default Values
@@ -1009,14 +1002,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
 
-
-        var my_wu = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
-
-        wpunity_reset_panels(my_wu);
+        wpunity_reset_panels(previewCanvas);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-        loadAssetPreviewer(my_wu, multipleFilesInputElem);
+        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
 
         //resizeCanvas('previewCanvas');
 
@@ -1037,8 +1028,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         createScreenshotBtn.click(function() {
 
-            my_wu.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(my_wu.renderer);
+            previewCanvas.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(previewCanvas.renderer);
 
 
 //            preview_axisHelper.visible = false;
@@ -1117,9 +1108,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
-                my_wu.resizeDisplayGL();
+                previewCanvas.resizeDisplayGL();
 
-                wpunity_reset_panels(my_wu);
+                wpunity_reset_panels(previewCanvas);
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
