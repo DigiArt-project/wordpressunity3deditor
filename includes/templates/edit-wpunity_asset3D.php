@@ -1029,7 +1029,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         createScreenshotBtn.click(function() {
 
             previewCanvas.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(previewCanvas.renderer);
+            wpunity_create_model_sshot(previewCanvas);
 
 
 //            preview_axisHelper.visible = false;
@@ -1415,13 +1415,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         });
 
 
-        function wpunity_create_model_sshot(renderer) {
+        function wpunity_create_model_sshot(canvas) {
 
-
-
-            my_wu.render();
-            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
+            canvas.render();
+            document.getElementById("sshotPreviewImg").src = canvas.renderer.domElement.toDataURL("image/jpeg");
+            document.getElementById("sshotFileInput").value = canvas.renderer.domElement.toDataURL("image/jpeg");
         }
 
         function wpunity_reset_sshot_field() {
