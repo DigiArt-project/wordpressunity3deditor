@@ -1416,6 +1416,10 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
 
         function wpunity_create_model_sshot(renderer) {
+
+
+
+            my_wu.render();
             document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
             document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
         }
