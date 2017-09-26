@@ -203,7 +203,7 @@ function wpunity_reset_panels(previewCanvas) {
 }
 
 
-function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
+function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     var _handleFileSelect = function ( event  ) {
         var fileObj = null;
@@ -234,7 +234,7 @@ function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
             // Add object reset here
             alert( 'Unable to load OBJ file from given files.' );
 
-            wpunity_clear_asset_files(my_wu);
+            wpunity_clear_asset_files(canvas);
 
             return;
         }
@@ -271,7 +271,7 @@ function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
                         fileReader.onload = function (fileDataJpg) {
 
                             objectDefinition.pathTexture = fileDataJpg.target.result;
-                            my_wu.loadFilesUser(objectDefinition);
+                            canvas.loadFilesUser(objectDefinition);
 
                         };
                         fileReader.readAsDataURL(fileJpg);
@@ -289,19 +289,19 @@ function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
 
 // init three.js example application
     var resizeWindow = function () {
-        my_wu.resizeDisplayGL();
+        canvas.resizeDisplayGL();
     };
 
     var render = function () {
         requestAnimationFrame( render );
-        my_wu.render();
+        canvas.render();
     };
 
     window.addEventListener( 'resize', resizeWindow, false );
 
-    my_wu.initGL();
-    my_wu.resizeDisplayGL();
-    my_wu.initPostGL();
+    canvas.initGL();
+    canvas.resizeDisplayGL();
+    canvas.initPostGL();
 
 // kick render loop
     render();

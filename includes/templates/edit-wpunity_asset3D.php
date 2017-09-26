@@ -17,14 +17,11 @@ wp_enqueue_script('wpunity_load87_trackballcontrols');
 
 wp_enqueue_script('wu_webw_3d_view');
 
-/*wp_enqueue_script('wu_3d_view');*/
-
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
 
-
-//Default Values
+// Default Values
 $mean_speed_wind = 14;
 $var_speed_wind = 30;
 $min_speed_wind = 0;
@@ -204,7 +201,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			$textureFile_id = wpunity_upload_Assetimg($textureFile, $asset_id, $gameSlug);
 			$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-			//open mtl file and replace jpg filename
+			// Open mtl file and replace jpg filename
 			$mtl_content = file_get_contents($_FILES['mtlFileInput']['tmp_name']);
 			$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
 			file_put_contents($_FILES['mtlFileInput']['tmp_name'], $mtl_content);
@@ -221,7 +218,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 			$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
-			//Set value of attachment IDs at custom fields
+			// Set value of attachment IDs at custom fields
 			update_post_meta($asset_id, 'wpunity_asset3d_mtl', $mtlFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_obj', $objFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
