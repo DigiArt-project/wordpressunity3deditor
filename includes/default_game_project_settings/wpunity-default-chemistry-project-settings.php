@@ -1,5 +1,4 @@
 <?php
-<?php
 
 //4th alphabetically:  EditorBuildSettings.asset   : It is the only that should change across compilations
 // Each scene should be added with
