@@ -1514,7 +1514,7 @@ UnityConnectSettings:
 
 }
 
-add_action( 'init', 'wpunity_games_taxtype_fill_energy' );
+add_action( 'init', 'wpunity_games_taxtype_fill_chemistry' );
 
 
  ?>
