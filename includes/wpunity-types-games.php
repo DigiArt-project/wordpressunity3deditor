@@ -81,7 +81,13 @@ class GameClass{
             'public'    => false,
             'show_ui'   => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_game_cat',
+                'edit_terms' => 'manage_game_cat',
+                'delete_terms' => 'manage_game_cat',
+                'assign_terms' => 'edit_game_cat'
+            ),
         );
         register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
     }
@@ -109,7 +115,13 @@ class GameClass{
             'public'    => false,
             'show_ui'   => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_game_type',
+                'edit_terms' => 'manage_game_type',
+                'delete_terms' => 'manage_game_type',
+                'assign_terms' => 'edit_game_type'
+            ),
         );
         register_taxonomy('wpunity_game_type', 'wpunity_game', $args);
     }

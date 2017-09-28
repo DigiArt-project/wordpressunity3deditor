@@ -85,7 +85,13 @@ class Asset3DClass{
             'public' => false,
             'show_ui' => true,
             'hierarchical' => false,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_asset3d_cat',
+                'edit_terms' => 'manage_asset3d_cat',
+                'delete_terms' => 'manage_asset3d_cat',
+                'assign_terms' => 'edit_asset3d_cat'
+            ),
         );
         register_taxonomy('wpunity_asset3d_cat', 'wpunity_asset3d', $args);
     }
@@ -113,7 +119,13 @@ class Asset3DClass{
             'public' => false,
             'show_ui' => true,
             'hierarchical' => false,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_asset3d_pgame',
+                'edit_terms' => 'manage_asset3d_pgame',
+                'delete_terms' => 'manage_asset3d_pgame',
+                'assign_terms' => 'edit_asset3d_pgame'
+            ),
         );
         register_taxonomy('wpunity_asset3d_pgame', 'wpunity_asset3d', $args);
     }
