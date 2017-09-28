@@ -85,10 +85,12 @@ $user_id = get_current_user_id();
                 'post_type' => 'wpunity_game',
                 'posts_per_page' => -1,
             );
-            if (current_user_can('administrator') || current_user_can('adv_game_master')) {
-                //do something for admins
-            } elseif (current_user_can('game_master')) {
+            if (current_user_can('administrator')){
+
+            } elseif (current_user_can('adv_game_master')) {
                 $custom_query_args['author'] = $user_id;
+            }elseif (current_user_can('game_master')) {
+                //$custom_query_args['author'] = $user_id;
             }
 
                 // Get current page and append to custom query parameters array
