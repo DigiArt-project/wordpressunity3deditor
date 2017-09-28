@@ -125,7 +125,7 @@ wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_vi
 //================================= Scene YAML Templates ===================================
 
 
-
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
 
 //===================================== Games ============================================
 
