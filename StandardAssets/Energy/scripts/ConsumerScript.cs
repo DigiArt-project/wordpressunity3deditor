@@ -24,7 +24,7 @@ public class ConsumerScript : MonoBehaviour {
 		infoQuad = transform.Find("InfoQuad").gameObject;
 		infoQuadText = infoQuad.transform.Find("InfoQuadText").gameObject;
 
-		infoQuadText.GetComponent<TextMesh> ().text = MeanPowerConsume + " MW\n" + "\u00B1" + "\n" + VarPowerConsume + " MW";
+		infoQuadText.GetComponent<TextMesh> ().text = MeanPowerConsume + " kW\n" + "\u00B1" + "\n" + VarPowerConsume + " kW";
 	}
 	
 	// Update is called once per frame
@@ -42,7 +42,7 @@ public class ConsumerScript : MonoBehaviour {
 
 
 	void updateInfoConsumerText(){
-		//infoQuadText.GetComponent<TextMesh>().text = CurrPowerConsume.ToString ("0.0") + " MW";  
+		//infoQuadText.GetComponent<TextMesh>().text = CurrPowerConsume.ToString ("0.0") + " kW";
 	}
 
 

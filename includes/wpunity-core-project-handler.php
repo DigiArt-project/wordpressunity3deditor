@@ -911,6 +911,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $consumer_obj = get_post_meta($consumer_id,'wpunity_asset3d_obj',true);
                 $consumer_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $energy_consumption = get_post_meta($consumer_id,'wpunity_energyConsumption',true);
 
                 $fid_prefab_consumer_parent = wpunity_create_fids($current_fid++);
                 $x_pos_consumer = - $value['position'][0]; // x is in the opposite site in unity
@@ -925,7 +926,18 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $fid_consumer_prefab_child = wpunity_create_fids($current_fid++);
                 $guid_consumer_prefab_child_obj = wpunity_create_guids('obj', $consumer_obj);
 
-                $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child,$guid_consumer_prefab_child_obj);
+
+                // REM STATHIS
+                $mean_power_consumer = $energy_consumption['mean'];
+                $var_power_consumer = $energy_consumption['var'];
+                $min_power_consumer = $energy_consumption['min'];
+                $max_power_consumer = $energy_consumption['max'];
+
+
+                $consumer_finalyaml = wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,
+                    $z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,
+                    $fid_consumer_prefab_child,$guid_consumer_prefab_child_obj,
+                    $mean_power_consumer, $var_power_consumer, $min_power_consumer, $max_power_consumer);
                 $allObjectsYAML = $allObjectsYAML . $LF . $consumer_finalyaml;
             }
             if ($value['categoryName'] == 'Producer'){
@@ -1252,7 +1264,9 @@ function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_whe
     return $file_content_return;
 }
 
-function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,$fid_consumer_prefab_child,$guid_consumer_prefab_child_obj){
+function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,
+                                        $fid_consumer_prefab_child,$guid_consumer_prefab_child_obj,
+                                        $mean_power_consumer, $var_power_consumer, $min_power_consumer, $max_power_consumer){
 
     $file_content_return = str_replace("___[fid_prefab_consumer_parent]___",$fid_prefab_consumer_parent,$consumer_yaml);
     $file_content_return = str_replace("___[x_pos_consumer]___",$x_pos_consumer,$file_content_return);
@@ -1263,6 +1277,14 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
     $file_content_return = str_replace("___[z_rotation_consumer]___",$z_rotation_consumer,$file_content_return);
     $file_content_return = str_replace("___[w_rotation_consumer]___",$w_rotation_consumer,$file_content_return);
     $file_content_return = str_replace("___[name_consumer]___",$name_consumer,$file_content_return);
+
+
+
+    $file_content_return = str_replace("___[mean_power_consumer]___", $mean_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[var_power_consumer]___", $var_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[min_power_consumer]___", $min_power_consumer, $file_content_return);
+    $file_content_return = str_replace("___[max_power_consumer]___", $max_power_consumer, $file_content_return);
+
     $file_content_return = str_replace("___[fid_consumer_prefab_transform]___",$fid_consumer_prefab_transform,$file_content_return);
     $file_content_return = str_replace("___[fid_consumer_prefab_child]___",$fid_consumer_prefab_child,$file_content_return);
     $file_content_return = str_replace("___[guid_consumer_prefab_child_obj]___",$guid_consumer_prefab_child_obj,$file_content_return);

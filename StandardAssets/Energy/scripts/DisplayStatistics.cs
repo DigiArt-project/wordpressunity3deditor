@@ -44,8 +44,6 @@ public class DisplayStatistics : MonoBehaviour {
 
 		moneyEarned = PlayerStatistics.moneyEarned;
 		energyProduced = Mathf.Round(PlayerStatistics.energyProduced*10)/10;
-
-
 	}
 	
 	void DisplayPlayerStatistics(){
@@ -65,24 +63,11 @@ public class DisplayStatistics : MonoBehaviour {
 		energyProducedText.text = "Energy produced: " + energyProduced + " MWh";
 
 		// set text msg based on power usage.
-		if (underPowerMin > correctPowerMin && underPowerMin > overPowerMin){
-			usage.text = "The wind farm was mostly working in under Power, not very efficient.";		
-		}
-		else if (overPowerMin > correctPowerMin && overPowerMin > underPowerMin){
-			usage.text = "The wind farm was mostly working in over Power, not very efficient.";	
-		}
-		else if (correctPowerMin > underPowerMin && correctPowerMin > overPowerMin){
-			usage.text = "The wind farm was mostly working in correct Power, very efficient.";
-		}
-		else if (underPowerSec > correctPowerSec && underPowerSec > overPowerSec){
-			usage.text = "The wind farm was mostly working in under Power, not very efficient.";		
-		}
-		else if(overPowerSec > correctPowerSec && overPowerSec > underPowerSec){
-			usage.text = "The wind farm was mostly working in over Power, not very efficient.";	
-		}
-		else {
-			usage.text = "The wind farm was mostly working in correct Power, very efficient.";
-		}
+		if (PlayerStatistics.underPowerSec > PlayerStatistics.correctPowerSec && PlayerStatistics.underPowerSec > PlayerStatistics.overPowerSec)
+			usage.text = "The wind farm was mostly working in <b>Under Power</b>, not very efficient.";
+		else if (PlayerStatistics.overPowerSec > PlayerStatistics.correctPowerSec && PlayerStatistics.overPowerSec > PlayerStatistics.underPowerSec)
+			usage.text = "The wind farm was mostly working in <b>Over Power</b>, not very efficient.";
+		else
+			usage.text = "The wind farm was mostly working in <b>Correct Power</b>, very efficient.";
 	}
-
 }
