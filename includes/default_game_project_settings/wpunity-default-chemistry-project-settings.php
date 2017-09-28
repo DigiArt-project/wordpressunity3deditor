@@ -7,7 +7,7 @@
 // Line change with character: chr(10)
 
 
-function wpunity_games_taxtype_fill_energy(){
+function wpunity_games_taxtype_fill_chemistry(){
     // All the others Alphabetically
     global $AudioManager_asset,$ClusterInputManager_asset,$DynamicsManager_asset,$EditorBuildSettings_asset,$EditorSettings_asset,$GraphicsSettings_asset;
     global $InputManager_asset,$NavMeshAreas_asset,$NetworkManager_asset,$Physics2DSettings_asset,$ProjectSettings_asset,$ProjectVersion_asset;
@@ -1493,7 +1493,7 @@ UnityConnectSettings:
         )
     );
 
-    $inserted_term = get_term_by('slug', 'energy_games', 'wpunity_game_type');
+    $inserted_term = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
 
     update_term_meta($inserted_term->term_id, 'wpunity_audio_manager_term', $AudioManager_asset[0], true);
     update_term_meta($inserted_term->term_id, 'wpunity_cluster_input_manager_term', $ClusterInputManager_asset[0], true);
