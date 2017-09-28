@@ -51,9 +51,6 @@ echo '</script>';
 <!-- JS libraries -->
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
 
-<!-- 3rd party libraries -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
-
 <!--  My libraries  -->
 <!-- Scene Environmentals -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
