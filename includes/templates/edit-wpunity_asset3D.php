@@ -8,8 +8,6 @@ wp_enqueue_script('wpunity_load_objloader');
 wp_enqueue_script('wpunity_load_mtlloader');
 wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
-
-
 wp_enqueue_script('wpunity_load87_threejs');
 wp_enqueue_script('wpunity_load87_objloader2');
 wp_enqueue_script('wpunity_load87_wwobjloader2');
@@ -19,19 +17,11 @@ wp_enqueue_script('wpunity_load87_trackballcontrols');
 
 wp_enqueue_script('wu_webw_3d_view');
 
-/*wp_enqueue_script('wu_3d_view');*/
-
-
 wp_enqueue_script('wpunity_asset_editor_scripts');
 wp_enqueue_script('flot');
 wp_enqueue_script('flot-axis-labels');
-?>
 
-<?php
-
-
-
-//Default Values
+// Default Values
 $mean_speed_wind = 14;
 $var_speed_wind = 30;
 $min_speed_wind = 0;
@@ -211,7 +201,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			$textureFile_id = wpunity_upload_Assetimg($textureFile, $asset_id, $gameSlug);
 			$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-			//open mtl file and replace jpg filename
+			// Open mtl file and replace jpg filename
 			$mtl_content = file_get_contents($_FILES['mtlFileInput']['tmp_name']);
 			$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
 			file_put_contents($_FILES['mtlFileInput']['tmp_name'], $mtl_content);
@@ -228,7 +218,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 			$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
-			//Set value of attachment IDs at custom fields
+			// Set value of attachment IDs at custom fields
 			update_post_meta($asset_id, 'wpunity_asset3d_mtl', $mtlFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_obj', $objFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
@@ -492,12 +482,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 			$asset_title_saved = "";
 			$asset_title_label = "Enter a title for your asset";
 			$asset_desc_saved = "";
-			$asset_desc_label = "Add a description";
+			$asset_desc_label = "Add a small description for your asset.";
 		}else{
 			$asset_title_saved = get_the_title( $asset_checked_id );
 			$asset_title_label = "Edit the title of your asset";
 			$asset_desc_saved = get_post_field('post_content', $asset_checked_id);
-			$asset_desc_label = "Edit description";
+			$asset_desc_label = "Edit the description of your asset";
 		}
 		?>
 
@@ -1009,14 +999,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var mdc = window.mdc;
         mdc.autoInit();
 
+        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
 
-
-        var my_wu = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
-
-        wpunity_reset_panels(my_wu);
+        wpunity_reset_panels(previewCanvas);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-        loadAssetPreviewer(my_wu, multipleFilesInputElem);
+        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
 
         //resizeCanvas('previewCanvas');
 
@@ -1037,8 +1025,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         createScreenshotBtn.click(function() {
 
-            my_wu.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(my_wu.renderer);
+            previewCanvas.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(previewCanvas);
 
 
 //            preview_axisHelper.visible = false;
@@ -1117,9 +1105,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
-                my_wu.resizeDisplayGL();
+                previewCanvas.resizeDisplayGL();
 
-                wpunity_reset_panels(my_wu);
+                wpunity_reset_panels(previewCanvas);
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
@@ -1424,13 +1412,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         });
 
 
-        function wpunity_create_model_sshot(renderer) {
+        function wpunity_create_model_sshot(canvas) {
 
-
-
-            my_wu.render();
-            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
+            canvas.render();
+            document.getElementById("sshotPreviewImg").src = canvas.renderer.domElement.toDataURL("image/jpeg");
+            document.getElementById("sshotFileInput").value = canvas.renderer.domElement.toDataURL("image/jpeg");
         }
 
         function wpunity_reset_sshot_field() {
