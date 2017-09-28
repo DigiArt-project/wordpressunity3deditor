@@ -482,12 +482,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 			$asset_title_saved = "";
 			$asset_title_label = "Enter a title for your asset";
 			$asset_desc_saved = "";
-			$asset_desc_label = "Add a description";
+			$asset_desc_label = "Add a small description for your asset.";
 		}else{
 			$asset_title_saved = get_the_title( $asset_checked_id );
 			$asset_title_label = "Edit the title of your asset";
 			$asset_desc_saved = get_post_field('post_content', $asset_checked_id);
-			$asset_desc_label = "Edit description";
+			$asset_desc_label = "Edit the description of your asset";
 		}
 		?>
 

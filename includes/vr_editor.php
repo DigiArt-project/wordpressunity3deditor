@@ -220,7 +220,7 @@ echo '</script>';
 
     <div id="double-sided-switch" style="display: none;">
         <div class="mdc-switch DoubleSidedObjectToggle">
-            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle double sided object" />
+            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle rendering of the inside of the selected object" />
             <div class="mdc-switch__background">
                 <div class="mdc-switch__knob"></div>
             </div>
