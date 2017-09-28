@@ -43,6 +43,17 @@ class GameClass{
             'supports'          => array('title','editor','custom-fields'),
             'hierarchical'      => false,
             'has_archive'       => false,
+            'capabilities' => array(
+                'publish_posts' => 'publish_wpunity_game',
+                'edit_posts' => 'edit_wpunity_game',
+                'edit_others_posts' => 'edit_others_wpunity_game',
+                'delete_posts' => 'delete_wpunity_game',
+                'delete_others_posts' => 'delete_others_wpunity_game',
+                'read_private_posts' => 'read_private_wpunity_game',
+                'edit_post' => 'edit_wpunity_game',
+                'delete_post' => 'delete_wpunity_game',
+                'read_post' => 'read_wpunity_game',
+            ),
         );
         register_post_type('wpunity_game', $args);
     }
@@ -70,7 +81,13 @@ class GameClass{
             'public'    => false,
             'show_ui'   => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_game_cat',
+                'edit_terms' => 'manage_game_cat',
+                'delete_terms' => 'manage_game_cat',
+                'assign_terms' => 'edit_game_cat'
+            ),
         );
         register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
     }
@@ -98,7 +115,13 @@ class GameClass{
             'public'    => false,
             'show_ui'   => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_game_type',
+                'edit_terms' => 'manage_game_type',
+                'delete_terms' => 'manage_game_type',
+                'assign_terms' => 'edit_game_type'
+            ),
         );
         register_taxonomy('wpunity_game_type', 'wpunity_game', $args);
     }
