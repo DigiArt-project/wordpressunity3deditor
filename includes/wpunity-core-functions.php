@@ -134,7 +134,7 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 
 	$image_upload = file_put_contents($upload_path . $hashed_filename, base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
 
-	//HANDLE UPLOADED FILE
+	// HANDLE UPLOADED FILE
 	if( !function_exists( 'wp_handle_sideload' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}

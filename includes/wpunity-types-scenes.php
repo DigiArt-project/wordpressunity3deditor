@@ -82,7 +82,13 @@ class SceneClass{
             'public' => false,
             'show_ui' => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_taxpgame',
+                'edit_terms' => 'manage_taxpgame',
+                'delete_terms' => 'manage_taxpgame',
+                'assign_terms' => 'edit_taxpgame'
+            ),
         );
         register_taxonomy('wpunity_scene_pgame', 'wpunity_scene', $args);
     }
@@ -108,7 +114,13 @@ class SceneClass{
             'public' => false,
             'show_ui' => true,
             'hierarchical' => true,
-            'show_admin_column' => true
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_scene_yaml',
+                'edit_terms' => 'manage_scene_yaml',
+                'delete_terms' => 'manage_scene_yaml',
+                'assign_terms' => 'edit_scene_yaml'
+            ),
         );
         register_taxonomy('wpunity_scene_yaml', 'wpunity_scene', $args);
     }

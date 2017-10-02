@@ -41,16 +41,11 @@ echo ini_get('max_input_time').chr(10);
 //===================================== Styles & Scripts ====================================
 function wpunity_load_jquery_scripts() {
 	wp_enqueue_script('jquery');
-	/*wp_enqueue_script('jquery-ui-core');*/
-
-	if( !wp_script_is('jquery-ui') ) {
-
-		// You don't have to use googleapi's, but I think it helps. It saves the user's browser from loading the same script again if it has already been loaded
-		wp_enqueue_script( 'jquery-ui' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' );
-	}
+	wp_enqueue_script('jquery-ui-core');
+	wp_enqueue_script('jquery-ui-slider');
+	wp_enqueue_script('jquery-ui-draggable');
+	wp_enqueue_script('jquery-effects-core');
 	wp_enqueue_style( 'jquery-ui-css' , 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
-
-	// TODO: Add jquery-ui-core
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 

@@ -51,9 +51,6 @@ echo '</script>';
 <!-- JS libraries -->
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
 
-<!-- 3rd party libraries -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/jquery/jquery-ui1.11.4.min.js"></script>
-
 <!--  My libraries  -->
 <!-- Scene Environmentals -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
@@ -220,7 +217,7 @@ echo '</script>';
 
     <div id="double-sided-switch" style="display: none;">
         <div class="mdc-switch DoubleSidedObjectToggle">
-            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle double sided object" />
+            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle rendering of the inside of the selected object" />
             <div class="mdc-switch__background">
                 <div class="mdc-switch__knob"></div>
             </div>
