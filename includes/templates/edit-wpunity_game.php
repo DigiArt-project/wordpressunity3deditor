@@ -8,9 +8,16 @@ $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 $project_id = intval( $_GET['wpunity_game'] );
 $project_id = sanitize_text_field( $project_id );
 
-$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-$asset_post = get_post($asset_inserted_id);
-if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
+if( isset($_GET['wpunity_asset']) ) {
+
+	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+	$asset_post = get_post($asset_inserted_id);
+	if($asset_post->post_type == 'wpunity_asset3d') {
+	    $create_new = 0;
+	    $asset_checked_id = $asset_inserted_id;
+	}
+}
+
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -35,18 +42,18 @@ $gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
 $thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
 wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
 wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php'),
-        'id' => $project_id,
-        'slug' => $gameSlug,
-        'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
-        'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
-    )
+	array( 'ajax_url' => admin_url( 'admin-ajax.php'),
+	       'id' => $project_id,
+	       'slug' => $gameSlug,
+	       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
+	       'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
+	)
 );
 
 // DELETE SCENE AJAX
 wp_enqueue_script( 'ajax-script_deletescene', $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js', array('jquery') );
 wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 
 
@@ -141,7 +148,7 @@ get_header();
 
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
             <a title="Back" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-            <?php echo $game_post->post_title; ?>
+			<?php echo $game_post->post_title; ?>
         </h1>
 
         <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary HeaderButtonStyle" data-mdc-auto-init="MDCRipple">

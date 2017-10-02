@@ -1,7 +1,9 @@
 <?php
 
-// load css/wpunity_backend.css
-wp_enqueue_style('wpunity_backend');
+function loadWPUnityBackendStyles() {
+	wp_enqueue_style('wpunity_backend');
+}
+add_action('wp_enqueue_scripts', 'loadWPUnityBackendStyles' );
 
 // Add scripts and their localization. All in a hook to get the post id.
 add_action('plugins_loaded', 'wpunity_localize_game_scripts');
