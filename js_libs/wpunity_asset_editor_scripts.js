@@ -1,7 +1,6 @@
 /**
  * Created by tpapazoglou on 11/7/2017.
  */
-
 'use strict';
 
 var mtlFileContent = '';
@@ -303,7 +302,6 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
     canvas.resizeDisplayGL();
     canvas.initPostGL();
 
-// kick render loop
+    // kick render loop
     render();
-
 }
