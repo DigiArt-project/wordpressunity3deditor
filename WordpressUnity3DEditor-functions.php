@@ -230,6 +230,31 @@ function my_admin_styles()  {
 
 }
 
+/**
+ *   shorcode to show content inside page with [visitor] Some content for the people just browsing your site. [/visitor]
+ */
+add_shortcode( 'visitor', 'visitor_check_shortcode' );
+
+function visitor_check_shortcode( $atts, $content = null ) {
+    if ( ( !is_user_logged_in() && !is_null( $content ) ) || is_feed() )
+        return $content;
+    return '';
+}
+
+/**
+ * On reset password redirect to wpunity-main
+ */
+function wpse_lost_password_redirect() {
+    // Check if have submitted
+    $confirm = ( isset($_GET['checkemail'] ) ? $_GET['checkemail'] : '' );
+
+    if( $confirm ) {
+        wp_redirect( get_site_url( ).'/wpunity-main.php' );
+        exit;
+    }
+}
+add_action('login_headerurl', 'wpse_lost_password_redirect');
+
 
 
 ?>
