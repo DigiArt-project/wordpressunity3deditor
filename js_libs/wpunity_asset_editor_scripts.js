@@ -1,7 +1,6 @@
 /**
  * Created by tpapazoglou on 11/7/2017.
  */
-
 'use strict';
 
 var mtlFileContent = '';
@@ -305,7 +304,6 @@ function loadAssetPreviewer(my_wu, multipleFilesInputElem) {
     my_wu.resizeDisplayGL();
     my_wu.initPostGL();
 
-// kick render loop
+    // kick render loop
     render();
-
 }
