@@ -74,6 +74,9 @@ $allGamesPage = wpunity_getEditpage('allgames');
 $editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+    
+
 	$assetCatID = intval($_POST['term_id']);
 	if($create_new == 1){
 
@@ -194,28 +197,24 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 
 			//$objFile = $_FILES['objFileInput'];
-			$textureFile = $_FILES['textureFileInput'];
+			$textureContent = $_POST['textureFileInput'];
 
-			//Upload All files as attachments of asset
-			//first upload jpg and get the filename for input at mtl
-			$textureFile_id = wpunity_upload_Assetimg($textureFile, $asset_id, $gameSlug);
+			// TEXTURE: first upload jpg and get the filename for input at mtl
+			$textureFile_id = wpunity_upload_Assetimg64($textureContent, 'texture'.$asset_information['post_title'], $asset_id, $gameSlug);
 			$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-			// Open mtl file and replace jpg filename
-			$mtl_content = file_get_contents($_FILES['mtlFileInput']['tmp_name']);
-			$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
-			file_put_contents($_FILES['mtlFileInput']['tmp_name'], $mtl_content);
-			$mtlFile = $_FILES['mtlFileInput'];
-			//upload mtl and get the filename for input at obj
-			$mtlFile_id = wpunity_upload_Assetimg($mtlFile, $asset_id, $gameSlug);
-			$mtlFile_filename = basename(get_attached_file($mtlFile_id));
+            // MTL : Open mtl file and replace jpg filename
+            $mtl_content = $_POST['mtlFileInput'];
+            $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+            $mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$asset_information['post_title'], $asset_id, $gameSlug);
+            $mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
-			$obj_content = file_get_contents($_FILES['objFileInput']['tmp_name']);
-			$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
-			file_put_contents($_FILES['objFileInput']['tmp_name'], $obj_content);
-			$objFile = $_FILES['objFileInput'];
-			$objFile_id = wpunity_upload_Assetimg($objFile, $asset_id, $gameSlug);
+   			// OBJ
+  			$obj_content = $_POST['objFileInput']; //file_get_contents($_FILES['objFileInput']['tmp_name']);
+   			$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+            $objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$asset_information['post_title'], $asset_id, $gameSlug);
 
+            // SCREENSHOT
 			$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
 			// Set value of attachment IDs at custom fields
@@ -231,7 +230,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}
 			exit;
 		}
-	}else {
+	}else { // Edit an existing asset
 
 		$asset_new_info = array(
 			'ID' => $asset_inserted_id,
@@ -645,7 +644,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
 
 
-                        <div id="multipleFilesInputContainer">
+
                             <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                             <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
 
@@ -654,7 +653,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                             <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                             <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
 
-                        </div>
+
 
                     </div>
 
@@ -981,7 +980,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
 		<?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
-        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
+                data-mdc-auto-init="MDCRipple" type="submit">
 			<?php echo $buttonTitleText; ?>
         </button>
 
