@@ -1,25 +1,29 @@
 <?php
 
-// Three js : for simple rendering
-wp_enqueue_script('wpunity_scripts');
+function loadAsset3DManagerScripts() {
+	// Three js : for simple rendering
+	wp_enqueue_script('wpunity_scripts');
 
-/*wp_enqueue_script('wpunity_load_threejs');
-wp_enqueue_script('wpunity_load_objloader');
-wp_enqueue_script('wpunity_load_mtlloader');
-wp_enqueue_script('wpunity_load_orbitcontrols');*/
+	/*wp_enqueue_script('wpunity_load_threejs');
+	wp_enqueue_script('wpunity_load_objloader');
+	wp_enqueue_script('wpunity_load_mtlloader');
+	wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
-wp_enqueue_script('wpunity_load87_threejs');
-wp_enqueue_script('wpunity_load87_objloader2');
-wp_enqueue_script('wpunity_load87_wwobjloader2');
-wp_enqueue_script('wpunity_load87_mtlloader');
-wp_enqueue_script('wpunity_load87_orbitcontrols');
-wp_enqueue_script('wpunity_load87_trackballcontrols');
+	wp_enqueue_script('wpunity_load87_threejs');
+	wp_enqueue_script('wpunity_load87_objloader2');
+	wp_enqueue_script('wpunity_load87_wwobjloader2');
+	wp_enqueue_script('wpunity_load87_mtlloader');
+	wp_enqueue_script('wpunity_load87_orbitcontrols');
+	wp_enqueue_script('wpunity_load87_trackballcontrols');
 
-wp_enqueue_script('wu_webw_3d_view');
+	wp_enqueue_script('wu_webw_3d_view');
 
-wp_enqueue_script('wpunity_asset_editor_scripts');
-wp_enqueue_script('flot');
-wp_enqueue_script('flot-axis-labels');
+	wp_enqueue_script('wpunity_asset_editor_scripts');
+	wp_enqueue_script('flot');
+	wp_enqueue_script('flot-axis-labels');
+}
+add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
+
 
 // Default Values
 $mean_speed_wind = 14;
@@ -52,10 +56,9 @@ $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
-
-$project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
-$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-$scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
+$project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET['wpunity_game'] )) : null ;
+$asset_inserted_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
+$scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['wpunity_scene'] )) : null ;
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -67,7 +70,12 @@ $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->post_name;
 
 $asset_post = get_post($asset_inserted_id);
-if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
+
+$asset_checked_id = 0;
+if($asset_post->post_type == 'wpunity_asset3d') {
+    $create_new = 0;
+    $asset_checked_id = $asset_inserted_id;
+}
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
