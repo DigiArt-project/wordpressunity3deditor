@@ -1,10 +1,10 @@
 <?php
 
 // load script from js_libs
-wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
-
-
-
+function loadJSScripts() {
+	wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
+}
+add_action('wp_enqueue_scripts', 'loadJSScripts' );
 
 //==========================================================================================================================================
 

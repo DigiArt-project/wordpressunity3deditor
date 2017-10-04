@@ -49,73 +49,56 @@ function wpunity_load_jquery_scripts() {
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
+function wpunity_register_scripts() {
+	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_asset_editor_scripts.js');
+	wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
+	wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
 
-wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
-wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
-wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
-
-
-// Material & Frontend CSS & Scripts
-// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
-wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
-wp_enqueue_style('wpunity_material_stylesheet');
-wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
-wp_enqueue_script('wpunity_material_scripts');
-wp_enqueue_style( 'wpunity_material_icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
-wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
-wp_enqueue_style('wpunity_frontend_stylesheet');
-
-wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_asset_editor_scripts.js');
-wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
-wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
-
-
-
-//wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
+	//wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
 //	null, null, false);
 //
 //wp_register_script( 'wpunity_assemble_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_assemble.js',
 //	null, null, false);
 
-wp_register_script( 'wpunity_assepile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_assepile.js',
-    null, null, false);
+	wp_register_script( 'wpunity_assepile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_assepile.js',
+		null, null, false);
 
-wp_register_script( 'wpunity_savescene_request', plugin_dir_url( __FILE__ ) . 'js_libs/save_scene_ajax/wpunity_save_scene_ajax.js',
-    null, null, false);
+	wp_register_script( 'wpunity_savescene_request', plugin_dir_url( __FILE__ ) . 'js_libs/save_scene_ajax/wpunity_save_scene_ajax.js',
+		null, null, false);
 
-wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
-	null, null, false);
+	wp_register_script( 'wpunity_content_interlinking_request', plugin_dir_url( __FILE__ ) . 'js_libs/content_interlinking_commands/content_interlinking.js',
+		null, null, false);
 
-wp_register_script( 'wpunity_segmentation_request', plugin_dir_url( __FILE__ ) . 'js_libs/semantics_commands/segmentation.js',
-	null, null, false);
+	wp_register_script( 'wpunity_segmentation_request', plugin_dir_url( __FILE__ ) . 'js_libs/semantics_commands/segmentation.js',
+		null, null, false);
 
-wp_register_script( 'wpunity_classification_request', plugin_dir_url( __FILE__ ) . 'js_libs/semantics_commands/classification.js',
-	null, null, false);
+	wp_register_script( 'wpunity_classification_request', plugin_dir_url( __FILE__ ) . 'js_libs/semantics_commands/classification.js',
+		null, null, false);
 
 
-wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE__ ) . 'js_libs/scriptFileBrowserToolbarWPway.js',
-	null, null, false);
+	wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE__ ) . 'js_libs/scriptFileBrowserToolbarWPway.js',
+		null, null, false);
 
-wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js',
-	null, null, false);
+	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js',
+		null, null, false);
 
 
 //=========================== THREE js scripts ============================================
-wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
-wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
-wp_register_script( 'wpunity_load_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader2.js', null, null, false);
-wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
-wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
+	wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
+	wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
+	wp_register_script( 'wpunity_load_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader2.js', null, null, false);
+	wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
+	wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
 
-wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
-wp_register_script( 'wpunity_load87_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader2.js', null, null, false);
-wp_register_script( 'wpunity_load87_wwobjloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/WWOBJLoader2.js', null, null, false);
-wp_register_script( 'wpunity_load87_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/MTLLoader.js', null, null, false);
-wp_register_script( 'wpunity_load87_trackballcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/TrackballControls.js', null, null, false);
+	wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
+	wp_register_script( 'wpunity_load87_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader2.js', null, null, false);
+	wp_register_script( 'wpunity_load87_wwobjloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/WWOBJLoader2.js', null, null, false);
+	wp_register_script( 'wpunity_load87_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/MTLLoader.js', null, null, false);
+	wp_register_script( 'wpunity_load87_trackballcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/TrackballControls.js', null, null, false);
 
 
-wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporterUtils.js', null, null, false);
-wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporter.js', null, null, false);
+	wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporterUtils.js', null, null, false);
+	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporter.js', null, null, false);
 
 // ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
 //wp_register_script( 'wpunity_load_pointerlockcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/PointerLockControls.js', null, null, false);
@@ -123,9 +106,29 @@ wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . '
 //wp_register_script( 'wpunity_load_datgui'            , plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/dat.gui.js', null, null, false);
 //wp_register_script( 'wpunity_load_statsmin', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/stats.min.js', null, null, false);
 
-wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
-wp_register_script( 'wu_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_webw_3d_view.js', null, null, false);
+	wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
+	wp_register_script( 'wu_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_webw_3d_view.js', null, null, false);
 //================================= Scene YAML Templates ===================================
+}
+add_action('wp_enqueue_scripts', 'wpunity_register_scripts' );
+
+function wpunity_register_styles() {
+	wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
+	wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
+	wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
+	wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
+	wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
+	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
+
+	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
+	// Material & Frontend CSS & Scripts
+	wp_enqueue_style('wpunity_material_stylesheet');
+	wp_enqueue_script('wpunity_material_scripts');
+	wp_enqueue_style( 'wpunity_material_icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
+	wp_enqueue_style('wpunity_frontend_stylesheet');
+}
+add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
+
 
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
@@ -199,7 +202,7 @@ function my_myme_types($mime_types){
 	$mime_types['json'] = 'text/json';
 	$mime_types['obj'] = 'text/plain';
 	$mime_types['mp4'] = 'video/mp4';
-    $mime_types['ogv'] = 'video/ogv';
+	$mime_types['ogv'] = 'video/ogv';
 	$mime_types['mtl'] = 'text/plain';
 	$mime_types['mat'] = 'text/plain';
 	return $mime_types;
@@ -229,6 +232,31 @@ function my_admin_styles()  {
 	wp_enqueue_style('thickbox');
 
 }
+
+/**
+ *   shorcode to show content inside page with [visitor] Some content for the people just browsing your site. [/visitor]
+ */
+add_shortcode( 'visitor', 'visitor_check_shortcode' );
+
+function visitor_check_shortcode( $atts, $content = null ) {
+    if ( ( !is_user_logged_in() && !is_null( $content ) ) || is_feed() )
+        return $content;
+    return '';
+}
+
+/**
+ * On reset password redirect to wpunity-main
+ */
+function wpse_lost_password_redirect() {
+    // Check if have submitted
+    $confirm = ( isset($_GET['checkemail'] ) ? $_GET['checkemail'] : '' );
+
+    if( $confirm ) {
+        wp_redirect( get_site_url( ).'/wpunity-main.php' );
+        exit;
+    }
+}
+add_action('login_headerurl', 'wpse_lost_password_redirect');
 
 
 
