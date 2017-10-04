@@ -48,6 +48,7 @@ $optCosts_repaid = 1;
 $optGen_class = 'A';
 $optGen_speed = 10;
 $optGen_power = 3;
+$optProductionVal = null;
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -73,8 +74,8 @@ $asset_post = get_post($asset_inserted_id);
 
 $asset_checked_id = 0;
 if($asset_post->post_type == 'wpunity_asset3d') {
-    $create_new = 0;
-    $asset_checked_id = $asset_inserted_id;
+	$create_new = 0;
+	$asset_checked_id = $asset_inserted_id;
 }
 
 $editgamePage = wpunity_getEditpage('game');
@@ -83,7 +84,7 @@ $editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    
+
 
 	$assetCatID = intval($_POST['term_id']);
 	if($create_new == 1){
@@ -211,18 +212,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			$textureFile_id = wpunity_upload_Assetimg64($textureContent, 'texture'.$asset_information['post_title'], $asset_id, $gameSlug);
 			$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-            // MTL : Open mtl file and replace jpg filename
-            $mtl_content = $_POST['mtlFileInput'];
-            $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
-            $mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$asset_information['post_title'], $asset_id, $gameSlug);
-            $mtlFile_filename = basename(get_attached_file($mtlFile_id));
+			// MTL : Open mtl file and replace jpg filename
+			$mtl_content = $_POST['mtlFileInput'];
+			$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+			$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$asset_information['post_title'], $asset_id, $gameSlug);
+			$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
-   			// OBJ
-  			$obj_content = $_POST['objFileInput']; //file_get_contents($_FILES['objFileInput']['tmp_name']);
-   			$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
-            $objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$asset_information['post_title'], $asset_id, $gameSlug);
+			// OBJ
+			$obj_content = $_POST['objFileInput']; //file_get_contents($_FILES['objFileInput']['tmp_name']);
+			$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+			$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$asset_information['post_title'], $asset_id, $gameSlug);
 
-            // SCREENSHOT
+			// SCREENSHOT
 			$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
 			// Set value of attachment IDs at custom fields
@@ -653,13 +654,13 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
 
 
-                            <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+                        <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                        <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
 
-                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
+                        <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                        <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                        <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                        <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
 
 
 
@@ -679,7 +680,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         </div>
 
 		<?php //Check if its new/saved and get data for Terrain Options
-		if($create_new != 1){
+		if($create_new != 1) {
 			$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
 			if($saved_term[0]->slug == 'terrain'){
 				$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
@@ -724,6 +725,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 					$optGen_speed = $optGen['speed'];
 					$optGen_power = $optGen['power'];
 				}
+
 				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
 			}
 
@@ -880,8 +882,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <div class="CenterContents">
                     <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
                 </div>
-                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
-                </div>
+                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle"></div>
 
                 <div class="PowerProductionGroupStyle">
                     <span>0</span>
@@ -917,7 +918,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
 
 
-                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="">
+                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="<?php echo $optProductionVal ?>">
             </div>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -1091,15 +1092,17 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             var categoryDropdown = document.getElementById('category-select');
 
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
+            var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
 
             // This fires on EDIT
-            if (jQuery('#currently-selected').attr("data-cat-id")) {
+            jQuery( document ).ready(function() {
 
-                var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
-                jQuery('#'+ selectedCatId).attr("aria-selected", true);
-                jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
-                loadLayout(false);
-            }
+                if (jQuery('#currently-selected').attr("data-cat-id")) {
+                    jQuery('#'+ selectedCatId).attr("aria-selected", true);
+                    jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
+                    loadLayout(false);
+                }
+            });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
@@ -1169,7 +1172,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     case 'producer':
                         jQuery("#producerPanel").show();
 
-                        createPowerProductionValues();
+                        createPowerProductionValues(createAsset);
                         spanProducerChartLabels();
 
                         break;
@@ -1301,44 +1304,58 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             })
         } );
 
-        function createPowerProductionValues() {
+        function createPowerProductionValues(createAsset) {
             var index = 0;
+            var previousValues = null;
+            var elements = [];
 
-            jQuery ("#powerProductionValuesGroup").html('').append('' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
+            if (createAsset) {
 
-                '<span>2</span>\n' +
-                '<span>2</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
+                elements = '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
 
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>');
+                    '<span>2</span>\n' +
+                    '<span>2</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
 
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>';
+
+                jQuery ("#powerProductionValuesGroup").html('').append(elements);
+
+            } else {
+                previousValues = JSON.parse(document.getElementById('producerPowerProductionVal').value) ;
+
+                var i;
+                for (i=0; i < previousValues.length; i++) {
+                    elements.push('<span>'+ String(previousValues[i][1]) +'</span>\n');
+                }
+                jQuery("#powerProductionValuesGroup").html('').append(elements);
+            }
 
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
-                // read initial values from markup and remove that
+                // Read initial values from markup and remove that
                 var value = parseInt( jQuery( this ).text(), 10 );
 
                 jQuery( this ).empty().slider({
