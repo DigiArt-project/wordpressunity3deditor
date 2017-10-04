@@ -717,6 +717,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 					$optGen_speed = $optGen['speed'];
 					$optGen_power = $optGen['power'];
 				}
+				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
 			}
 
 
