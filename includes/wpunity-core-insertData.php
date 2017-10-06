@@ -809,79 +809,89 @@ Prefab:
     m_IsPrefabParent: 0
   ');
 
-    $ini_asset_door = array('--- !u!1 &___[door_fid]___ stripped
-  GameObject:
-    m_PrefabParentObject: {fileID: 100000, guid: ___[door_guid]___, type: 3}
-    m_PrefabInternal: {fileID: ___[door_prefab_fid]___}
-  --- !u!114 &___[door_script_fid]___
-  MonoBehaviour:
-    m_ObjectHideFlags: 0
-    m_PrefabParentObject: {fileID: 0}
-    m_PrefabInternal: {fileID: 0}
-    m_GameObject: {fileID: ___[door_fid]___}
-    m_Enabled: 1
-    m_EditorHideFlags: 0
-    m_Script: {fileID: 11500000, guid: ___[door_script_guid]___, type: 3}
-    m_Name:
-    m_EditorClassIdentifier:
-  --- !u!65 &___[door_boxcol_fid]___
-  BoxCollider:
-    m_ObjectHideFlags: 0
-    m_PrefabParentObject: {fileID: 0}
-    m_PrefabInternal: {fileID: 0}
-    m_GameObject: {fileID: ___[door_fid]___}
-    m_Material: {fileID: 0}
-    m_IsTrigger: 1
-    m_Enabled: 1
-    serializedVersion: 2
-    m_Size: {x: ___[door_boxcol_size_x]___, y: ___[door_boxcol_size_y]___, z: ___[door_boxcol_size_z]___}
-    m_Center: {x: 0, y: 0, z: 0}
-  --- !u!1001 &___[door_prefab_fid]___
-  Prefab:
-    m_ObjectHideFlags: 0
-    serializedVersion: 2
-    m_Modification:
-      m_TransformParent: {fileID: 0}
-      m_Modifications:
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalPosition.x
-        value: ___[door_pos_x]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalPosition.y
-        value: ___[door_pos_y]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalPosition.z
-        value: ___[door_pos_z]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalRotation.x
-        value: ___[door_rotation_x]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalRotation.y
-        value: ___[door_rotation_y]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalRotation.z
-        value: ___[door_rotation_z]___
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_LocalRotation.w
-        value: 0
-        objectReference: {fileID: 0}
-      - target: {fileID: 400000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_RootOrder
-        value: 5
-        objectReference: {fileID: 0}
-      - target: {fileID: 100000, guid: ___[door_guid]___, type: 3}
-        propertyPath: m_TagString
-        value: Untagged
-        objectReference: {fileID: 0}
-      m_RemovedComponents: []
-    m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
-    m_IsPrefabParent: 0
+    //Github copied
+    $ini_asset_door = array('--- !u!1001 &___[door_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: ___[door_pos_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: ___[door_pos_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: ___[door_pos_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: ___[door_rot_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: ___[door_rot_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: ___[door_rot_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: ___[door_rot_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1693961036409888, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_Name
+      value: ___[door_title]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114092677568471722, guid: b15690de041079845965f87f4847e73f,
+        type: 2}
+      propertyPath: sceneArrival
+      value: ___[door_scene_arrival]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 114092677568471722, guid: b15690de041079845965f87f4847e73f,
+        type: 2}
+      propertyPath: doorArrival
+      value: ___[door_door_arrival]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalScale.x
+      value: ___[door_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalScale.y
+      value: ___[door_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f, type: 2}
+      propertyPath: m_LocalScale.z
+      value: ___[door_scale_z]___
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: b15690de041079845965f87f4847e73f, type: 2}
+  m_IsPrefabParent: 0
+--- !u!4 &___[door_transform_fid]___ stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4660078065809236, guid: b15690de041079845965f87f4847e73f,
+    type: 2}
+  m_PrefabInternal: {fileID: ___[door_fid]___}
+--- !u!1001 &___[door_obj_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: ___[door_transform_fid]___}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
+  m_IsPrefabParent: 0
   ');
 
     //Github copied
@@ -970,7 +980,79 @@ Prefab:
   ");
 
     //Github copied
-    $ini_asset_poi_video = array('Canvasion');
+    $ini_asset_poi_video = array('--- !u!1001 &___[poi_v_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: ___[poi_v_pos_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: ___[poi_v_pos_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: ___[poi_v_pos_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: ___[poi_v_rot_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: ___[poi_v_rot_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: ___[poi_v_rot_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: ___[poi_v_rot_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1848443769047974, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: ___[poi_v_title]___
+      value: poi_video_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalScale.x
+      value: ___[poi_v_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalScale.y
+      value: ___[poi_v_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_LocalScale.z
+      value: ___[poi_v_scale_z]___
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+  m_IsPrefabParent: 0
+--- !u!4 &___[poi_v_trans_fid]___ stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076,
+    type: 2}
+  m_PrefabInternal: {fileID: ___[poi_v_fid]___}
+--- !u!1001 &___[poi_v_obj_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: ___[poi_v_trans_fid]___}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[poi_v_obj_guid]___, type: 3}
+  m_IsPrefabParent: 0
+  ');
 
     wp_insert_term(
         'Artifact', // the term
