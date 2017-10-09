@@ -15,6 +15,8 @@ var raycasterPick = new THREE.Raycaster();
  */
 function onMouseDownSelect( event ) {
 
+
+
     var i;
 
     // calculate mouse position in normalized device coordinates
@@ -153,12 +155,17 @@ function onMouseDownSelect( event ) {
     // If only one object is intersected
     if (Object.keys(arrNameObjInter).length == 1) {
         nameL = Object.keys(arrNameObjInter)[0];
-
         transform_controls.attach(arrNameObjInter[nameL]);
 
         // highlight
         envir.outlinePass.selectedObjects = [arrNameObjInter[nameL].children[0]];
         envir.renderer.setClearColor( 0xffffff, 0.9 );
+
+
+
+        if(event.button == 1 && arrNameObjInter[nameL].categoryName == 'Door') // Middle button show also properties
+            displayDoorProperties(event, nameL);
+
 
         // If more than 2 objects are intersected
     } else if (Object.keys(arrNameObjInter).length > 1) {
@@ -219,11 +226,94 @@ function onMouseDownSelect( event ) {
                 // highlight
                 envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
                 envir.renderer.setClearColor( 0xffffff, 0.9 );
+
+                // Name of door should be added
+                if (event.button == 1 && arrNameObjInter[nameL].categoryName == 'Door')
+                    displayDoorProperties(event, nameL);
+
             }
             jQuery("#popUpDiv").hide();
+
+
+
         });
+
+
     }
 }// onMouseDown
+
+/**
+ * Selecting a DoorTarget for the DoorSource
+ *
+ * @param event
+ * @param nameDoorSource
+ */
+function displayDoorProperties(event, nameDoorSource){
+
+    var popupDoorSelect = document.getElementById("popupDoorSelect");
+
+    // Clear past options
+    for (var i = popupDoorSelect.options.length; i-->0;)
+        popupDoorSelect.options[i] = null;
+
+    // Auto open Selection
+    popupDoorSelect.dispatchEvent(new MouseEvent('click', {
+        'view': window,
+        'bubbles': true,
+        'cancelable': true
+    }));
+
+    // Add options
+    var option;
+
+    // Prompt "Select"
+    option = document.createElement("option");
+    option.text = "Select";
+    option.value = "Select";
+    popupDoorSelect.add(option);
+
+    // ToDo: Stathis retries all doors from all jsons
+    var doorsFromOtherScenes = ['doorGreen at SecondScene', 'doorBlue at SecondScene'];
+
+    // Add options for each intersected object
+    for (var doorName of doorsFromOtherScenes ) {
+        option = document.createElement("option");
+        option.text = doorName;
+        option.value = doorName;
+        option.style.background = "#aaaa00";
+        popupDoorSelect.add(option);
+    }
+
+    // Prompt "Cancel"
+    option = document.createElement("option");
+    option.text = "Cancel";
+    option.value = "Cancel";
+    option.style.background = "#f59";
+    popupDoorSelect.add(option);
+
+
+    // Show Selection
+    jQuery("#popUpObjectPropertiesDiv").show();
+    var ppPropertiesDiv = document.getElementById("popUpObjectPropertiesDiv");
+
+    ppPropertiesDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // On popup change
+    jQuery("#popupDoorSelect").change(function(e) {
+        var nameDoorTarget = jQuery("#popupDoorSelect").val();
+
+        if (nameDoorTarget != "Cancel" && nameDoorTarget != "Select") {
+
+            // ToDo: Stathis Put in the json the nameDoor
+            console.log(nameDoorSource);
+            console.log(nameDoorTarget);
+        }
+        jQuery("#popUpObjectPropertiesDiv").hide();
+    });
+
+
+}
 
 
 /**
@@ -459,7 +549,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
 
     //console.log("val", val);
 
-    if (val != 0) {
+    if (val > 0) {
         gui_controls_funs.dg_scale = val;
         transform_controls.object.scale.set( val, val, val);
     }

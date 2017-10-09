@@ -286,6 +286,15 @@ echo '</script>';
     </div>
 
 
+    <!-- Interface for Changing the door properties -->
+    <!-- Todo: Tasos make it more beautiful -->
+    <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapPropertiesSelectStyle">
+        Door properties <br />
+        <select title="Select an door for teleporting" id="popupDoorSelect" class="mdc-select"></select>
+    </div>
+
+
+
 </div>
 
 
@@ -597,9 +606,7 @@ $formRes->init($sceneToLoad);
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
 
-
-
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect );
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, true );
 
     animate();
 </script>

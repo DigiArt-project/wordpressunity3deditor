@@ -101,9 +101,18 @@ canvas { pointer-events:none; z-index:10; }
 .EditorObjOverlapSelectStyle {
     z-index: 1000;
     position: absolute;
-
     display: none;
 }
+
+
+.EditorObjOverlapPropertiesSelectStyle {
+    z-index: 1000;
+    position: absolute;
+    background: #fa0;
+    padding: 5px;
+    display: none;
+}
+
 
 .EditorObjOverlapSelectStyle select {
     background-color: rgba(255,255,255,.87);
