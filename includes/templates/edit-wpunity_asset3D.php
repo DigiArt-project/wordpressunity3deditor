@@ -202,6 +202,20 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 				update_post_meta($asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal);
 				update_post_meta($asset_id, 'wpunity_producerOptCosts', $producerOptCosts);
 				update_post_meta($asset_id, 'wpunity_producerOptGen', $producerOptGen);
+			}elseif ($assetCatTerm->slug == 'pois_imagetext') {
+				//upload the featured image for POI image-text
+				$asset_featured_image =  $_FILES['poi-img-featured-image'];
+				$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+				set_post_thumbnail( $asset_id, $attachment_id );
+			}elseif ($assetCatTerm->slug == 'pois_video') {
+				//upload the featured image for POI video
+				$asset_featured_image =  $_FILES['poi-video-featured-image'];
+				$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+				set_post_thumbnail( $asset_id, $attachment_id );
+
+				//upload video file for POI video
+				$asset_video = $_FILES['videoFileInput'];
+
 			}
 
 
