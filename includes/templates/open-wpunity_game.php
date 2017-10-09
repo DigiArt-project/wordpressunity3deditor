@@ -63,9 +63,9 @@ $user_id = get_current_user_id();
 <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
 <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new game project or edit an existing one</h2>
 
-<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?
-    <a target="_blank" href="http://augreal.mklab.iti.gr/envisage/authortool/help/" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">Read usage scenarios</a>
-</p>
+<!--<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?-->
+<!--    <a target="_blank" href="--><?php //echo plugin_dir_url( __DIR__ ); ?><!--files/usage-scenario.pdf" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>-->
+<!--</p>-->
 
 
 <div class="mdc-layout-grid FrontPageStyle">
@@ -205,7 +205,7 @@ $user_id = get_current_user_id();
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" name="gameTypeRadio" value="1">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -216,7 +216,7 @@ $user_id = get_current_user_id();
                         </li>
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"  name="gameTypeRadio" value="2">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>

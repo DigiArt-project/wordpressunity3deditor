@@ -111,8 +111,6 @@ echo '</script>';
 
         });
 
-
-
         wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit);
     });
 
@@ -219,13 +217,17 @@ echo '</script>';
 
     <div id="double-sided-switch" style="display: none;">
         <div class="mdc-switch DoubleSidedObjectToggle">
-            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle double sided object" />
+            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle rendering of the inside of the selected object" />
             <div class="mdc-switch__background">
                 <div class="mdc-switch__knob"></div>
             </div>
         </div>
         <label for="double-sided-switch-input" class="mdc-switch-label DoubleSidedObjectToggleLabel" title="Double sided object"><i class="material-icons mdc-theme--text-hint-on-light">compare_arrows</i></label>
     </div>
+
+    <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">delete</i>
+    </a>
 
     <!--Canvas center-->
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle interface">
@@ -256,13 +258,6 @@ echo '</script>';
         <div id="result_download"></div>
     </div>
 
-    <!--Moved this to outer php file-->
-    <!--<div id="saveSceneBtn" class="SaveBtnContainerStyle">
-        <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
-           type="button" id="save-scene-button"
-           class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
-    </div>-->
-
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
@@ -289,6 +284,15 @@ echo '</script>';
     <div id="popUpDiv" class="EditorObjOverlapSelectStyle">
         <select title="Select an object" id="popupSelect" class="mdc-select"></select>
     </div>
+
+
+    <!-- Interface for Changing the door properties -->
+    <!-- Todo: Tasos make it more beautiful -->
+    <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapPropertiesSelectStyle">
+        Door properties <br />
+        <select title="Select an door for teleporting" id="popupDoorSelect" class="mdc-select"></select>
+    </div>
+
 
 
 </div>
@@ -502,6 +506,7 @@ echo '</script>';
         jQuery("#object-manipulation-toggle").show();
         jQuery("#axis-manipulation-buttons").show();
         jQuery("#double-sided-switch").show();
+        jQuery("#removeAssetBtn").show();
         jQuery("#fullScreenBtn").show();
         jQuery("#blocker").show();
         isComposerOn = true;
@@ -514,6 +519,7 @@ echo '</script>';
         jQuery("#object-manipulation-toggle").hide();
         jQuery("#axis-manipulation-buttons").hide();
         jQuery("#double-sided-switch").hide();
+        jQuery("#removeAssetBtn").hide();
         jQuery("#fullScreenBtn").hide();
         jQuery("#blocker").hide();
         isComposerOn = false;
@@ -600,9 +606,7 @@ $formRes->init($sceneToLoad);
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
 
-
-
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect );
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, true );
 
     animate();
 </script>

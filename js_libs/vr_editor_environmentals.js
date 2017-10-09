@@ -419,12 +419,12 @@ class vr_editor_environmentals {
      */
     setLight() {
 
-        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 1.2 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.9 ); //THREE.DirectionalLight( 0xffffff, 1 );
         this.lightOrbit.position.copy( this.cameraOrbit.position ); //.set( 500, 500, 500 );
         this.lightOrbit.name = "mylightOrbit";
         this.scene.add(this.lightOrbit);
 
-        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.1, 1000, 2 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.01, 1000, 2 ); //THREE.DirectionalLight( 0xffffff, 1 );
 
         this.lightAvatar.name = "mylightAvatar";
 

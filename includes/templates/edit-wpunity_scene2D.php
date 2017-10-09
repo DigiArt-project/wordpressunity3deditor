@@ -276,11 +276,11 @@ get_header(); ?>
         });
 
         jQuery("#sceneFeaturedImgInput").change(function() {
-            readURL(this, "#featuredImgPreview");
+            wpunity_read_url(this, "#featuredImgPreview");
         });
 
         jQuery("#sceneHelpImgInput").change(function() {
-            readURL(this, "#helpImgPreview");
+            wpunity_read_url(this, "#helpImgPreview");
         });
     </script>
 

@@ -981,9 +981,120 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
                 $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
             }
+            if ($value['categoryName'] == 'Site'){
+                $site_id = $value['assetid'];
+                $asset_type = get_the_terms( $site_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
 
+                $site_obj = get_post_meta($site_id,'wpunity_asset3d_obj',true);
 
+                $site_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $site_fid = wpunity_create_fids($current_fid++);
+                $site_obj_guid = wpunity_create_guids('obj', $site_obj);
+                $site_position_x = - $value['position'][0]; // x is in the opposite site in unity
+                $site_position_y = $value['position'][1];
+                $site_position_z = $value['position'][2];
+                $site_rotation_x = $value['quaternion'][0];
+                $site_rotation_y = $value['quaternion'][1];
+                $site_rotation_z = $value['quaternion'][2];
+                $site_rotation_w = $value['quaternion'][3];
+                $site_scale_x = $value['scale'][0];
+                $site_scale_y = $value['scale'][1];
+                $site_scale_z = $value['scale'][2];
+                $site_title = get_the_title($site_id);
+
+                $site_finalyaml = wpunity_replace_site_unity($site_yaml,$site_fid,$site_obj_guid,$site_position_x,$site_position_y,$site_position_z,$site_rotation_x,$site_rotation_y,$site_rotation_z,$site_rotation_w,$site_scale_x,$site_scale_y,$site_scale_z,$site_title);
+                $allObjectsYAML = $allObjectsYAML . $LF . $site_finalyaml;
             }
+            if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
+                $poi_img_id = $value['assetid'];
+                $asset_type = get_the_terms( $poi_img_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $poi_img_obj = get_post_meta($poi_img_id,'wpunity_asset3d_obj',true);
+                $poi_img_sprite = get_post_meta($poi_img_id,'wpunity_asset3d_screenimage',true);
+
+                $poi_img_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $poi_it_fid = wpunity_create_fids($current_fid++);
+                $poi_it_pos_x = - $value['position'][0]; // x is in the opposite site in unity
+                $poi_it_pos_y = $value['position'][1];
+                $poi_it_pos_z = $value['position'][2];
+                $poi_it_rot_x = $value['quaternion'][0];
+                $poi_it_rot_y = $value['quaternion'][1];
+                $poi_it_rot_z = $value['quaternion'][2];
+                $poi_it_rot_w = $value['quaternion'][3];
+                $poi_it_scale_x = $value['scale'][0];
+                $poi_it_scale_y = $value['scale'][1];
+                $poi_it_scale_z = $value['scale'][2];
+                $poi_it_title = get_the_title($poi_img_id);
+                $poi_it_sprite_guid = ''; // CHECK (poio ap' ola)
+                $poi_it_text = ''; // CHECK
+                $poi_it_connector_fid = wpunity_create_fids($current_fid++);
+                $poi_it_obj_fid = wpunity_create_fids($current_fid++);
+                $poi_it_obj_guid = wpunity_create_guids('obj', $poi_img_obj);
+
+                $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,$poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
+                $allObjectsYAML = $allObjectsYAML . $LF . $poi_img_finalyaml;
+            }
+            if ($value['categoryName'] == 'Points of Interest (Video)'){
+                $poi_vid_id = $value['assetid'];
+                $asset_type = get_the_terms( $poi_vid_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_obj',true);
+
+                $poi_vid_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $poi_v_fid = wpunity_create_fids($current_fid++);
+                $poi_v_pos_x = - $value['position'][0]; // x is in the opposite site in unity
+                $poi_v_pos_y = $value['position'][1];
+                $poi_v_pos_z = $value['position'][2];
+                $poi_v_rot_x = $value['quaternion'][0];
+                $poi_v_rot_y = $value['quaternion'][1];
+                $poi_v_rot_z = $value['quaternion'][2];
+                $poi_v_rot_w = $value['quaternion'][3];
+                $poi_v_scale_x = $value['scale'][0];
+                $poi_v_scale_y = $value['scale'][1];
+                $poi_v_scale_z = $value['scale'][2];
+                $poi_v_title = get_the_title($poi_vid_id);
+                $poi_v_trans_fid = wpunity_create_fids($current_fid++);
+                $poi_v_obj_fid = wpunity_create_fids($current_fid++);
+                $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
+
+                $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid);
+                $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
+            }
+            if ($value['categoryName'] == '	Door'){
+                $door_id = $value['assetid'];
+                $asset_type = get_the_terms( $door_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $door_obj = get_post_meta($door_id,'wpunity_asset3d_obj',true);
+
+                $door_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $door_fid = wpunity_create_fids($current_fid++);
+                $door_pos_x = - $value['position'][0]; // x is in the opposite site in unity
+                $door_pos_y = $value['position'][1];
+                $door_pos_z = $value['position'][2];
+                $door_rot_x = $value['quaternion'][0];
+                $door_rot_y = $value['quaternion'][1];
+                $door_rot_z = $value['quaternion'][2];
+                $door_rot_w = $value['quaternion'][3];
+                $door_scale_x = $value['scale'][0];
+                $door_scale_y = $value['scale'][1];
+                $door_scale_z = $value['scale'][2];
+                $door_title = get_the_title($door_id);
+                $door_scene_arrival = '';
+                $door_door_arrival = '';
+                $door_transform_fid = wpunity_create_fids($current_fid++);
+                $door_obj_fid = wpunity_create_fids($current_fid++);
+                $door_guid = wpunity_create_guids('obj', $door_obj);
+
+                $door_finalyaml = wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,$door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid);
+                $allObjectsYAML = $allObjectsYAML . $LF . $door_finalyaml;
+            }
+
+
+        }
     }
 
     //return all objects
@@ -1360,6 +1471,88 @@ function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_dec
     $file_content_return = str_replace("___[x_scale_decorator]___",$x_scale_decorator,$file_content_return);
     $file_content_return = str_replace("___[y_scale_decorator]___",$y_scale_decorator,$file_content_return);
     $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_site_unity($site_yaml,$site_fid,$site_obj_guid,$site_position_x,$site_position_y,$site_position_z,$site_rotation_x,$site_rotation_y,$site_rotation_z,$site_rotation_w,$site_scale_x,$site_scale_y,$site_scale_z,$site_title){
+    $file_content_return = str_replace("___[site_fid]___",$site_fid,$site_yaml);
+    $file_content_return = str_replace("___[site_obj_guid]___",$site_obj_guid,$file_content_return);
+    $file_content_return = str_replace("___[site_position_x]___",$site_position_x,$file_content_return);
+    $file_content_return = str_replace("___[site_position_y]___",$site_position_y,$file_content_return);
+    $file_content_return = str_replace("___[site_position_z]___",$site_position_z,$file_content_return);
+    $file_content_return = str_replace("___[site_rotation_x]___",$site_rotation_x,$file_content_return);
+    $file_content_return = str_replace("___[site_rotation_y]___",$site_rotation_y,$file_content_return);
+    $file_content_return = str_replace("___[site_rotation_z]___",$site_rotation_z,$file_content_return);
+    $file_content_return = str_replace("___[site_rotation_w]___",$site_rotation_w,$file_content_return);
+    $file_content_return = str_replace("___[site_scale_x]___",$site_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[site_scale_y]___",$site_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[site_scale_z]___",$site_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[site_title]___",$site_title,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,$poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid){
+    $file_content_return = str_replace("___[poi_it_fid]___",$poi_it_fid,$poi_img_yaml);
+    $file_content_return = str_replace("___[poi_it_pos_x]___",$poi_it_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_pos_y]___",$poi_it_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_pos_z]___",$poi_it_pos_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_rot_x]___",$poi_it_rot_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_rot_y]___",$poi_it_rot_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_rot_z]___",$poi_it_rot_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_rot_w]___",$poi_it_rot_w,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_scale_x]___",$poi_it_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_scale_y]___",$poi_it_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_scale_z]___",$poi_it_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_title]___",$poi_it_title,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_sprite_guid]___",$poi_it_sprite_guid,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_text]___",$poi_it_text,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_connector_fid]___",$poi_it_connector_fid,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_obj_fid]___",$poi_it_obj_fid,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_obj_guid]___",$poi_it_obj_guid,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid){
+    $file_content_return = str_replace("___[poi_v_fid]___",$poi_v_fid,$poi_vid_yaml);
+    $file_content_return = str_replace("___[poi_v_pos_x]___",$poi_v_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_pos_y]___",$poi_v_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_pos_z]___",$poi_v_pos_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_rot_x]___",$poi_v_rot_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_rot_y]___",$poi_v_rot_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_rot_z]___",$poi_v_rot_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_rot_w]___",$poi_v_rot_w,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_scale_x]___",$poi_v_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_scale_y]___",$poi_v_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_scale_z]___",$poi_v_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_title]___",$poi_v_title,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_trans_fid]___",$poi_v_trans_fid,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_obj_fid]___",$poi_v_obj_fid,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_obj_guid]___",$poi_v_obj_guid,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,$door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid){
+    $file_content_return = str_replace("___[door_fid]___",$door_fid,$door_yaml);
+    $file_content_return = str_replace("___[door_pos_x]___",$door_pos_x,$file_content_return);
+    $file_content_return = str_replace("___[door_pos_y]___",$door_pos_y,$file_content_return);
+    $file_content_return = str_replace("___[door_pos_z]___",$door_pos_z,$file_content_return);
+    $file_content_return = str_replace("___[door_rot_x]___",$door_rot_x,$file_content_return);
+    $file_content_return = str_replace("___[door_rot_y]___",$door_rot_y,$file_content_return);
+    $file_content_return = str_replace("___[door_rot_z]___",$door_rot_z,$file_content_return);
+    $file_content_return = str_replace("___[door_rot_w]___",$door_rot_w,$file_content_return);
+    $file_content_return = str_replace("___[door_scale_x]___",$door_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[door_scale_y]___",$door_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[door_scale_z]___",$door_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[door_title]___",$door_title,$file_content_return);
+    $file_content_return = str_replace("___[door_scene_arrival]___",$door_scene_arrival,$file_content_return);
+    $file_content_return = str_replace("___[door_door_arrival]___",$door_door_arrival,$file_content_return);
+    $file_content_return = str_replace("___[door_transform_fid]___",$door_transform_fid,$file_content_return);
+    $file_content_return = str_replace("___[door_obj_fid]___",$door_obj_fid,$file_content_return);
+    $file_content_return = str_replace("___[door_guid]___",$door_guid,$file_content_return);
 
     return $file_content_return;
 }

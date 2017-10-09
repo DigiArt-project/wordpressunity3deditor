@@ -1511,6 +1511,40 @@ UnityConnectSettings:
   update_term_meta($inserted_term->term_id, 'wpunity_time_manager_term', $TimeManager_asset[0], true);
   update_term_meta($inserted_term->term_id, 'wpunity_unity_connect_settings_term', $UnityConnect_asset[0], true);
 
+
+
+  /************************************************************************************************************/
+
+
+  wp_insert_term(
+      'Archaeology', // the term
+      'wpunity_game_type', // the taxonomy
+      array(
+          'description'=> 'Archaeology Games',
+          'slug' => 'archaeology_games',
+      )
+  );
+
+  $inserted_term2 = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+
+  update_term_meta($inserted_term2->term_id, 'wpunity_audio_manager_term', $AudioManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_cluster_input_manager_term', $ClusterInputManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_dynamics_manager_term', $DynamicsManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_editor_build_settings_term', $EditorBuildSettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_editor_settings_term', $EditorSettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_graphics_settings_term', $GraphicsSettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_input_manager_term', $InputManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_nav_mesh_areas_term', $NavMeshAreas_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_network_manager_term', $NetworkManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_physics2d_settings_term', $Physics2DSettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_project_settings_term', $ProjectSettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_project_version_term', $ProjectVersion_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_quality_settings_term', $QualitySettings_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_tag_manager_term', $TagManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_time_manager_term', $TimeManager_asset[0], true);
+  update_term_meta($inserted_term2->term_id, 'wpunity_unity_connect_settings_term', $UnityConnect_asset[0], true);
+
+
 }
 
 add_action( 'init', 'wpunity_games_taxtype_fill_energy' );

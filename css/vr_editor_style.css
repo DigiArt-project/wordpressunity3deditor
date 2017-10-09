@@ -101,9 +101,18 @@ canvas { pointer-events:none; z-index:10; }
 .EditorObjOverlapSelectStyle {
     z-index: 1000;
     position: absolute;
-
     display: none;
 }
+
+
+.EditorObjOverlapPropertiesSelectStyle {
+    z-index: 1000;
+    position: absolute;
+    background: #fa0;
+    padding: 5px;
+    display: none;
+}
+
 
 .EditorObjOverlapSelectStyle select {
     background-color: rgba(255,255,255,.87);
@@ -113,7 +122,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .VrWalkInButtonStyle {
     position: absolute;
-    right: 320px;
+    right: 180px;
     top: 10px;
 
 }
@@ -132,20 +141,34 @@ canvas { pointer-events:none; z-index:10; }
 
 .VrEditorFullscreenBtnStyle {
     position: absolute;
-    right: 150px;
+    right: 20px;
     top: 10px;
 }
 
 .ToggleUIButtonStyle {
     position: absolute;
     left: calc(50% - 72px);
-    top: 8px;
+    top: 2px;
     background: transparent;
 }
 
 .ToggleUIButtonStyle i {
     font-size: 48px;
     cursor: pointer;
+}
+
+.RemoveAssetFromSceneBtnStyle {
+    position: absolute;
+    left: 430px;
+    top: 10px;
+    width: 48px;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.RemoveAssetFromSceneBtnStyle i {
+    padding-top: 4px;
 }
 
 .ObjectManipulationToggle {

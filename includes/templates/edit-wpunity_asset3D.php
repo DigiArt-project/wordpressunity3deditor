@@ -1,17 +1,31 @@
 <?php
 
-// Three js : for simple rendering
-wp_enqueue_script('wpunity_scripts');
-wp_enqueue_script('wpunity_load_threejs');
-wp_enqueue_script('wpunity_load_objloader');
-wp_enqueue_script('wpunity_load_mtlloader');
-wp_enqueue_script('wpunity_load_orbitcontrols');
-wp_enqueue_script('wu_3d_view');
-wp_enqueue_script('wpunity_asset_editor_scripts');
-wp_enqueue_script('flot');
-wp_enqueue_script('flot-axis-labels');
+function loadAsset3DManagerScripts() {
+	// Three js : for simple rendering
+	wp_enqueue_script('wpunity_scripts');
 
-//Default Values
+	/*wp_enqueue_script('wpunity_load_threejs');
+	wp_enqueue_script('wpunity_load_objloader');
+	wp_enqueue_script('wpunity_load_mtlloader');
+	wp_enqueue_script('wpunity_load_orbitcontrols');*/
+
+	wp_enqueue_script('wpunity_load87_threejs');
+	wp_enqueue_script('wpunity_load87_objloader2');
+	wp_enqueue_script('wpunity_load87_wwobjloader2');
+	wp_enqueue_script('wpunity_load87_mtlloader');
+	wp_enqueue_script('wpunity_load87_orbitcontrols');
+	wp_enqueue_script('wpunity_load87_trackballcontrols');
+
+	wp_enqueue_script('wu_webw_3d_view');
+
+	wp_enqueue_script('wpunity_asset_editor_scripts');
+	wp_enqueue_script('flot');
+	wp_enqueue_script('flot-axis-labels');
+}
+add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
+
+
+// Default Values
 $mean_speed_wind = 14;
 $var_speed_wind = 30;
 $min_speed_wind = 0;
@@ -34,6 +48,7 @@ $optCosts_repaid = 1;
 $optGen_class = 'A';
 $optGen_speed = 10;
 $optGen_power = 3;
+$optProductionVal = null;
 
 $create_new = 1; //1=NEW ASSET 0=EDIT ASSET
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -42,10 +57,9 @@ $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
-
-$project_id = sanitize_text_field( intval( $_GET['wpunity_game'] ));
-$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-$scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
+$project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET['wpunity_game'] )) : null ;
+$asset_inserted_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
+$scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['wpunity_scene'] )) : null ;
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -57,13 +71,21 @@ $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->post_name;
 
 $asset_post = get_post($asset_inserted_id);
-if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
+
+$asset_checked_id = 0;
+if($asset_post->post_type == 'wpunity_asset3d') {
+	$create_new = 0;
+	$asset_checked_id = $asset_inserted_id;
+}
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+
+
 	$assetCatID = intval($_POST['term_id']);
 	if($create_new == 1){
 
@@ -180,35 +202,45 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 				update_post_meta($asset_id, 'wpunity_producerPowerProductionVal', $producerPowerProductionVal);
 				update_post_meta($asset_id, 'wpunity_producerOptCosts', $producerOptCosts);
 				update_post_meta($asset_id, 'wpunity_producerOptGen', $producerOptGen);
+			}elseif ($assetCatTerm->slug == 'pois_imagetext') {
+				//upload the featured image for POI image-text
+				$asset_featured_image =  $_FILES['poi-img-featured-image'];
+				$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+				set_post_thumbnail( $asset_id, $attachment_id );
+			}elseif ($assetCatTerm->slug == 'pois_video') {
+				//upload the featured image for POI video
+				$asset_featured_image =  $_FILES['poi-video-featured-image'];
+				$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+				set_post_thumbnail( $asset_id, $attachment_id );
+
+				//upload video file for POI video
+				$asset_video = $_FILES['videoFileInput'];
+
 			}
 
 
 			//$objFile = $_FILES['objFileInput'];
-			$textureFile = $_FILES['textureFileInput'];
+			$textureContent = $_POST['textureFileInput'];
 
-			//Upload All files as attachments of asset
-			//first upload jpg and get the filename for input at mtl
-			$textureFile_id = wpunity_upload_Assetimg($textureFile, $asset_id, $gameSlug);
+			// TEXTURE: first upload jpg and get the filename for input at mtl
+			$textureFile_id = wpunity_upload_Assetimg64($textureContent, 'texture'.$asset_information['post_title'], $asset_id, $gameSlug);
 			$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-			//open mtl file and replace jpg filename
-			$mtl_content = file_get_contents($_FILES['mtlFileInput']['tmp_name']);
+			// MTL : Open mtl file and replace jpg filename
+			$mtl_content = $_POST['mtlFileInput'];
 			$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
-			file_put_contents($_FILES['mtlFileInput']['tmp_name'], $mtl_content);
-			$mtlFile = $_FILES['mtlFileInput'];
-			//upload mtl and get the filename for input at obj
-			$mtlFile_id = wpunity_upload_Assetimg($mtlFile, $asset_id, $gameSlug);
+			$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$asset_information['post_title'], $asset_id, $gameSlug);
 			$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
-			$obj_content = file_get_contents($_FILES['objFileInput']['tmp_name']);
+			// OBJ
+			$obj_content = $_POST['objFileInput']; //file_get_contents($_FILES['objFileInput']['tmp_name']);
 			$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
-			file_put_contents($_FILES['objFileInput']['tmp_name'], $obj_content);
-			$objFile = $_FILES['objFileInput'];
-			$objFile_id = wpunity_upload_Assetimg($objFile, $asset_id, $gameSlug);
+			$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$asset_information['post_title'], $asset_id, $gameSlug);
 
+			// SCREENSHOT
 			$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $asset_information['post_title'], $asset_id, $gameSlug);
 
-			//Set value of attachment IDs at custom fields
+			// Set value of attachment IDs at custom fields
 			update_post_meta($asset_id, 'wpunity_asset3d_mtl', $mtlFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_obj', $objFile_id);
 			update_post_meta($asset_id, 'wpunity_asset3d_diffimage', $textureFile_id);
@@ -221,7 +253,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}
 			exit;
 		}
-	}else {
+	}else { // Edit an existing asset
 
 		$asset_new_info = array(
 			'ID' => $asset_inserted_id,
@@ -472,12 +504,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 			$asset_title_saved = "";
 			$asset_title_label = "Enter a title for your asset";
 			$asset_desc_saved = "";
-			$asset_desc_label = "Add a description";
+			$asset_desc_label = "Add a small description for your asset.";
 		}else{
 			$asset_title_saved = get_the_title( $asset_checked_id );
 			$asset_title_label = "Edit the title of your asset";
 			$asset_desc_saved = get_post_field('post_content', $asset_checked_id);
-			$asset_desc_label = "Edit description";
+			$asset_desc_label = "Edit the description of your asset";
 		}
 		?>
 
@@ -574,7 +606,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     </li>
                 </ul>
 
-                <div class="mdc-layout-grid">
+
+                <!--<div class="mdc-layout-grid">
+
 
                     <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
                         <label for="fbxFileInput"> Select an FBX file</label>
@@ -590,35 +624,77 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <label  for="objFileInput" > Select an OBJ file</label>
                         <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
                     </div>
-                </div>
+                </div>-->
 
-                <h3 class="mdc-typography--title" id="objectPreviewTitle" style="display: none;">Object Preview</h3>
-                <div id="assetPreviewContainer" style="margin:auto;"></div>
 
-                <div class="mdc-layout-grid">
+                <!--<div id="assetPreviewContainer" style="margin:auto;"></div>-->
+
+                <!--<div class="mdc-layout-grid">
 
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="textureFileInput"> Select a texture</label><br>
-                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); ?>">
+                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); */?>">
                         <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg"/>
                     </div>
 
                     <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="sshotFileInput"> Screenshot</label><br>
-                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); */?>">
                         <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
                         <a style="display: none;" id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
 
+                </div>-->
+
+
+                <div class="mdc-layout-grid">
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <h3 class="mdc-typography--title">Object Preview</h3>
+
+                        <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                            <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                            <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+                            <div class="progressSlider" style="top:5px;">
+                                <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                            </div>
+                        </div>
+
+                        <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+
+
+
+
+
+                        <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                        <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+
+                        <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                        <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                        <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                        <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
+
+
+
+                    </div>
+
+                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <h3 class="mdc-typography--title">Screenshot</h3>
+
+                        <img id="sshotPreviewImg" style="width: 100px; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                    </div>
+
                 </div>
-
             </div>
-
         </div>
 
 		<?php //Check if its new/saved and get data for Terrain Options
-		if($create_new != 1){
+		if($create_new != 1) {
 			$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
 			if($saved_term[0]->slug == 'terrain'){
 				$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
@@ -663,6 +739,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 					$optGen_speed = $optGen['speed'];
 					$optGen_power = $optGen['power'];
 				}
+
+				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
 			}
 
 
@@ -818,8 +896,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <div class="CenterContents">
                     <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
                 </div>
-                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle">
-                </div>
+                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle"></div>
 
                 <div class="PowerProductionGroupStyle">
                     <span>0</span>
@@ -855,7 +932,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
 
 
-                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="">
+                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="<?php echo $optProductionVal ?>">
             </div>
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
@@ -927,7 +1004,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
 		<?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
-        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
+                data-mdc-auto-init="MDCRipple" type="submit">
 			<?php echo $buttonTitleText; ?>
         </button>
 
@@ -945,26 +1023,24 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         var mdc = window.mdc;
         mdc.autoInit();
 
-        wpunity_reset_panels();
+        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
 
-        var fbxInputContainer = jQuery('#fbxFileInputContainer');
-        var fbxInput = jQuery('#fbxFileInput');
-        var mtlInputContainer = jQuery('#mtlFileInputContainer');
+        wpunity_reset_panels(previewCanvas);
+
+        var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
+        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
+
+        //resizeCanvas('previewCanvas');
+
         var mtlInput = jQuery('#mtlFileInput');
-        var objInputContainer = jQuery('#objFileInputContainer');
         var objInput = jQuery('#objFileInput');
-        var textureInputContainer = jQuery('#textureFileInputContainer');
         var textureInput = jQuery('#textureFileInput');
-        var texturePreviewDefaultImg = document.getElementById("texturePreviewImg").src;
+
         var sshotInput = jQuery('#sshotFileInput');
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
 
-        var mtlFileContent = '';
-        var objFileContent = '';
-        var textureFileContent = '';
-        var fbxFileContent = '';
-        var previewRenderer;
+
         //        var preview_3d_vars;
         //        var preview_scene;
         //        var preview_camera;
@@ -973,12 +1049,12 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         createScreenshotBtn.click(function() {
 
+            previewCanvas.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(previewCanvas);
+
 
 //            preview_axisHelper.visible = false;
 //            preview_gridHelper.visible = false;
-
-            wpunity_create_model_sshot(previewRenderer);
-
 //            preview_axisHelper.visible = true;
 //            preview_gridHelper.visible = true;
 
@@ -1030,15 +1106,17 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             var categoryDropdown = document.getElementById('category-select');
 
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
+            var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
 
             // This fires on EDIT
-            if (jQuery('#currently-selected').attr("data-cat-id")) {
+            jQuery( document ).ready(function() {
 
-                var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
-                jQuery('#'+ selectedCatId).attr("aria-selected", true);
-                jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
-                loadLayout(false);
-            }
+                if (jQuery('#currently-selected').attr("data-cat-id")) {
+                    jQuery('#'+ selectedCatId).attr("aria-selected", true);
+                    jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
+                    loadLayout(false);
+                }
+            });
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
@@ -1053,7 +1131,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
-                wpunity_reset_panels();
+                previewCanvas.resizeDisplayGL();
+
+                wpunity_reset_panels(previewCanvas);
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
@@ -1106,7 +1186,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     case 'producer':
                         jQuery("#producerPanel").show();
 
-                        createPowerProductionValues();
+                        createPowerProductionValues(createAsset);
                         spanProducerChartLabels();
 
                         break;
@@ -1116,77 +1196,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             }
         })();
 
-        fbxInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(fbxInput.val()) === 'fbx') {
-
-            } else {
-                document.getElementById("fbxFileInput").value = "";
-            }
-        });
-
-        mtlInput.click(function() {
-            document.getElementById("mtlFileInput").value = "";
-            wpunity_read_file('', 'mtl', wpunity_load_file_callback);
-            wpunity_reset_sshot_field();
-        });
-        mtlInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(mtlInput.val()) === 'mtl') {
-                wpunity_read_file(document.getElementById('mtlFileInput').files[0], 'mtl', wpunity_load_file_callback);
-            }
-        });
-
-        objInput.click(function() {
-            document.getElementById("objFileInput").value = "";
-            wpunity_read_file('', 'obj', wpunity_load_file_callback);
-            wpunity_reset_sshot_field();
-        });
-        objInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(objInput.val()) === 'obj') {
-                wpunity_read_file(document.getElementById('objFileInput').files[0], 'obj', wpunity_load_file_callback);
-            }
-        });
-
-        textureInput.click(function() {
-            document.getElementById("textureFileInput").value = "";
-            jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
-            textureFileContent = '';
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, '', document.getElementById('assetTitle').value, 'assetPreviewContainer');
-//            previewRenderer = preview_3d_vars[0];
-//            preview_scene = preview_3d_vars[1];
-//            preview_camera = preview_3d_vars[2];
-//            preview_gridHelper = preview_3d_vars[3];
-//            preview_axisHelper = preview_3d_vars[4];
-
-
-            //console.log("preview_axisHelper", preview_axisHelper);
-
-        });
-        textureInput.change(function() {
-            document.getElementById("assetPreviewContainer").innerHTML = "";
-
-            if (wpunity_extract_file_extension(textureInput.val()) === 'jpg') {
-                wpunity_read_file(document.getElementById('textureFileInput').files[0], 'texture', wpunity_load_file_callback);
-            }
-        });
-
-        function wpunity_create_model_sshot(renderer) {
-            document.getElementById("sshotPreviewImg").src = renderer.domElement.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = renderer.domElement.toDataURL("image/jpeg");
-        }
-
-        function wpunity_reset_sshot_field() {
-            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
-            document.getElementById("sshotFileInput").value = "";
-            createScreenshotBtn.hide();
-            jQuery("#objectPreviewTitle").hide();
-        }
 
         jQuery( function() {
 
@@ -1195,7 +1204,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                 var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
-                if (objectType === 'fbx') {
+                /*if (objectType === 'fbx') {
                     wpunity_clear_asset_files();
                     fbxInputContainer.show();
                     mtlInputContainer.hide();
@@ -1206,14 +1215,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     fbxInputContainer.hide();
                     mtlInputContainer.show();
                     objInputContainer.show();
-                }
+                }*/
             });
-
-
-            // Sliders OLD
-            //var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[0, 40], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
-            //var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: 14, valId:"#physicsWindMeanVal", units:"m/sec"});
-            //var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: 30, valId:"#physicsWindVarianceVal", units:""});
 
             var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
             var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
@@ -1274,8 +1277,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             var opt_speed = <?php echo json_encode($optGen_speed);?>;
             var opt_power = <?php echo json_encode($optGen_power);?>;
 
-            /*var producerAirSpeedSlider = wpunity_create_slider_component("#producer-air-speed-slider", false, {min: 0, max: 27, value: 5, valId:"#producerAirSpeedVal", step: 1, units:"m/sec"});
-             var producerPowerProductionSlider = wpunity_create_slider_component("#producer-power-production-slider", false, {min: 0, max: 6, value: 1, valId:"#producerPowerProductionVal", step: 1, units:"MW"});*/
             var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: opt_size, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
             var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: opt_dmg, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
             var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: opt_cost, valId:"#producerCostVal", step: 1, units:"$"});
@@ -1317,44 +1318,58 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
             })
         } );
 
-        function createPowerProductionValues() {
+        function createPowerProductionValues(createAsset) {
             var index = 0;
+            var previousValues = null;
+            var elements = [];
 
-            jQuery ("#powerProductionValuesGroup").html('').append('' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
-                '<span>1</span>\n' +
+            if (createAsset) {
 
-                '<span>2</span>\n' +
-                '<span>2</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
+                elements = '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
+                    '<span>1</span>\n' +
 
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>5</span>\n' +
-                '<span>0</span>\n' +
-                '<span>0</span>');
+                    '<span>2</span>\n' +
+                    '<span>2</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
 
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>5</span>\n' +
+                    '<span>0</span>\n' +
+                    '<span>0</span>';
+
+                jQuery ("#powerProductionValuesGroup").html('').append(elements);
+
+            } else {
+                previousValues = JSON.parse(document.getElementById('producerPowerProductionVal').value) ;
+
+                var i;
+                for (i=0; i < previousValues.length; i++) {
+                    elements.push('<span>'+ String(previousValues[i][1]) +'</span>\n');
+                }
+                jQuery("#powerProductionValuesGroup").html('').append(elements);
+            }
 
             jQuery( "#powerProductionValuesGroup > span" ).each(function() {
-                // read initial values from markup and remove that
+                // Read initial values from markup and remove that
                 var value = parseInt( jQuery( this ).text(), 10 );
 
                 jQuery( this ).empty().slider({
@@ -1429,12 +1444,27 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         }
 
         jQuery("#poiImgFeaturedImgInput").change(function() {
-            readURL(this, "#poiImgFeaturedImgPreview");
+            wpunity_read_url(this, "#poiImgFeaturedImgPreview");
         });
 
         jQuery("#poiVideoFeaturedImgInput").change(function() {
-            readURL(this, "#poiVideoFeaturedImgPreview");
+            wpunity_read_url(this, "#poiVideoFeaturedImgPreview");
         });
+
+
+        function wpunity_create_model_sshot(canvas) {
+
+            canvas.render();
+            document.getElementById("sshotPreviewImg").src = canvas.renderer.domElement.toDataURL("image/jpeg");
+            document.getElementById("sshotFileInput").value = canvas.renderer.domElement.toDataURL("image/jpeg");
+        }
+
+        function wpunity_reset_sshot_field() {
+            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+            document.getElementById("sshotFileInput").value = "";
+            /*createScreenshotBtn.hide();*/
+            /*jQuery("#objectPreviewTitle").hide();*/
+        }
 
     </script>
 <?php  get_footer(); ?>

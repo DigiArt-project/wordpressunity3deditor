@@ -121,6 +121,18 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
 	return false;
 }
 
+
+/**
+ *
+ * Immitation of $_FILE through $_POST . This works only for jpgs and pngs
+ *
+ * @param $imagefile
+ * @param $imgTitle
+ * @param $parent_post_id
+ * @param $parentGameSlug
+ * @return bool|int|WP_Error
+ *
+ */
 function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug) {
 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
@@ -132,9 +144,10 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 
 	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.png';
 
-	$image_upload = file_put_contents($upload_path . $hashed_filename, base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
+	$image_upload = file_put_contents($upload_path . $hashed_filename,
+        base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
 
-	//HANDLE UPLOADED FILE
+	// HANDLE UPLOADED FILE
 	if( !function_exists( 'wp_handle_sideload' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}
@@ -194,6 +207,91 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 
 	return false;
 }
+
+
+
+/**
+ *
+ * Immitation of $_FILE through $_POST . This is for objs and mtls
+ *
+ * @param $textContent
+ * @param $textTitle
+ * @param $parent_post_id
+ * @param $parentGameSlug
+ * @return bool|int|WP_Error
+ *
+ */
+function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $parentGameSlug) {
+
+    // Filters the image sizes automatically generated when uploading an image.
+    add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
+    require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+
+    // Upload dir
+    $upload_dir = wp_upload_dir();
+    $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+    $hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
+
+    $image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
+        //base64_decode(substr($textContent, strpos($textContent, ",")+1)));
+
+    // HANDLE UPLOADED FILE
+    if( !function_exists( 'wp_handle_sideload' ) ) {
+        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    }
+
+    // Without that I'm getting a debug error!?
+    if( !function_exists( 'wp_get_current_user' ) ) {
+        require_once( ABSPATH . 'wp-includes/pluggable.php' );
+    }
+
+    $file = array (
+        'name'     => $hashed_filename,
+        'type'     => 'text/plain',
+        'tmp_name' => $upload_path.$hashed_filename,
+        'error'    => 0,
+        'size'     => filesize( $upload_path.$hashed_filename ),
+    );
+
+    add_filter( 'upload_dir', 'wpunity_upload_filter');
+    // upload file to server
+    // @new use $file instead of $image_upload
+    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
+
+    $filename = $file_return['file'];
+
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $upload_dir .= "/" . $parentGameSlug;
+    $upload_dir .= "/" . 'Models';
+    $upload_dir = str_replace('\\','/',$upload_dir);
+    $attachment = array(
+        'post_mime_type' => $file_return['type'],
+        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+        'post_content' => '',
+        'post_status' => 'inherit',
+        'guid' => $file_return['url']
+    );
+
+    $attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
+
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+    wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+    remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
+    if( 0 < intval( $attachment_id, 10 ) ) {
+        return $attachment_id;
+    }
+
+    return false;
+}
+
+
 
 //==========================================================================================================================================
 

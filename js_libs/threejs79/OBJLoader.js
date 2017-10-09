@@ -44,14 +44,16 @@ THREE.OBJLoader.prototype = {
 		var scope = this;
 
 		var loader = new THREE.XHRLoader( scope.manager );
+
 		loader.setPath( this.path );
 
 		if(modeBeforeOrAfterSave=='after') { // get from url_or_text: available after obj is uploaded
-            loader.load(url_or_text, function (text) {
-                onLoad(scope.parse(text));
-            }, onProgress, onError);
+
+			loader.load(url_or_text, function (text) {onLoad(scope.parse(text));}, onProgress, onError);
+
         } else { // it is already given as text
-            onLoad(scope.parse(url_or_text));
+			var sc = scope.parse(url_or_text); // REM HERE : This causes the big delay.
+            onLoad(sc);
         }
 
 	},
@@ -420,6 +422,7 @@ THREE.OBJLoader.prototype = {
 		}
 
 		var lines = text.split( '\n' );
+
 		var line = '', lineFirstChar = '', lineSecondChar = '';
 		var lineLength = 0;
 		var result = [];
@@ -427,7 +430,16 @@ THREE.OBJLoader.prototype = {
 		// Faster to just trim left side of the line. Use if available.
 		var trimLeft = ( typeof ''.trimLeft === 'function' );
 
+
+        //var viewprc = document.getElementById("parse_obj_line_by_line");
+
+
 		for ( var i = 0, l = lines.length; i < l; i ++ ) {
+
+			if (i%30000==0) { // REM HERE
+				console.log("LINE: " + i);
+                // viewprc.innerHTML = Math.round(i / l * 100) + "%"; // Not updating due to sync mode
+            }
 
 			line = lines[ i ];
 

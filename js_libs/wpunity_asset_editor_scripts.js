@@ -1,6 +1,13 @@
 /**
  * Created by tpapazoglou on 11/7/2017.
  */
+'use strict';
+
+var mtlFileContent = '';
+var objFileContent = '';
+var textureFileContent = '';
+var fbxFileContent = '';
+var previewRenderer;
 
 function wpunity_read_file(file, type, callback) {
     var content = '';
@@ -8,11 +15,9 @@ function wpunity_read_file(file, type, callback) {
 
     if (file) {
         reader.readAsDataURL(file);
-
         // Closure to capture the file information.
         reader.onload = (function(reader) {
             return function() {
-
                 content = reader.result;
 
                 var isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -24,6 +29,7 @@ function wpunity_read_file(file, type, callback) {
                     if (isFirefox) { content = content.replace('data:application/octet-stream;base64,', ''); }
 
                     content = window.atob(content);
+
                 }
 
                 callback(content, type);
@@ -44,25 +50,43 @@ function wpunity_load_file_callback(content, type) {
 
     if(type === 'mtl') {
         mtlFileContent = content ? content : '';
+        document.getElementById('mtlFileInput').value = mtlFileContent;
     }
 
     if(type === 'obj') {
         objFileContent = content ? content : '';
+        document.getElementById('objFileInput').value = objFileContent;
     }
 
     if (content) {
 
         if(type === 'texture') {
-            jQuery("#texturePreviewImg").attr('src', '').attr('src', content);
+            /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
             textureFileContent = content;
+            document.getElementById('textureFileInput').value = textureFileContent;
+
+            // if the obj is already loaded, then load texture on the fly
+            /*if (typeof view3d !== 'undefined') {
+                view3d.newTexture(textureFileContent);
+            }*/
         }
 
         if (objFileContent && mtlFileContent) {
-            jQuery("#objectPreviewTitle").show();
+            /*jQuery("#objectPreviewTitle").show();*/
+            /*createScreenshotBtn.show();*/
 
-            createScreenshotBtn.show();
+            /*if (typeof view3d == 'undefined') {
 
-            previewRenderer = wu_3d_view_main('before', '', mtlFileContent, objFileContent, textureFileContent, document.getElementById('assetTitle').value, 'assetPreviewContainer');
+                view3d = new wu_3d_view('before',
+                    '',
+                    mtlFileContent,
+                    objFileContent,
+                    textureFileContent,
+                    document.getElementById('assetTitle').value,
+                    'assetPreviewContainer');
+
+                previewRenderer = view3d.renderer;
+            }*/
 
         } else {
             wpunity_reset_sshot_field();
@@ -70,7 +94,6 @@ function wpunity_load_file_callback(content, type) {
 
     } else {
         document.getElementById("assetPreviewContainer").innerHTML = "";
-
     }
 
     if (jQuery('#producerPanel').is(':visible')) {
@@ -136,13 +159,21 @@ function wpunity_create_slider_component(elemId, range, options) {
     return jQuery( elemId ).slider;
 }
 
-function wpunity_clear_asset_files() {
+function wpunity_clear_asset_files(previewCanvas) {
+
+    if (previewCanvas.renderer) {
+        previewCanvas.clearAllAssets();
+    }
+
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("textureFileInput").value = "";
+
+    document.getElementById("fileUploadInput").value = "";
+
     document.getElementById("sshotFileInput").value = "";
-    jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);
+    /*jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);*/
     jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
     jQuery("#objectPreviewTitle").hide();
 
@@ -150,13 +181,11 @@ function wpunity_clear_asset_files() {
     textureFileContent = '';
     fbxFileContent = '';
     mtlFileContent = '';
-    previewRenderer = '';
-
-    document.getElementById("assetPreviewContainer").innerHTML = "";
 }
 
-function wpunity_reset_panels() {
-    wpunity_clear_asset_files();
+function wpunity_reset_panels(previewCanvas) {
+
+    wpunity_clear_asset_files(previewCanvas);
 
     if (jQuery("ProducerPlotTooltip")) {
         jQuery("div.ProducerPlotTooltip").remove();
@@ -170,4 +199,109 @@ function wpunity_reset_panels() {
     jQuery("#poiImgDetailsPanel").hide();
     jQuery("#poiVideoDetailsPanel").hide();
     jQuery("#objectPreviewTitle").hide();
+}
+
+
+function loadAssetPreviewer(canvas, multipleFilesInputElem) {
+
+    var _handleFileSelect = function ( event  ) {
+        var fileObj = null;
+        var fileMtl = null;
+        var fileJpg = null;
+        var files = event.target.files;
+
+        for ( var i = 0, file; file = files[ i ]; i++) {
+            if ( file.name.indexOf( '\.obj' ) > 0 && fileObj === null ) {
+                fileObj = file;
+                wpunity_read_file(fileObj, 'obj', wpunity_load_file_callback);
+
+            }
+            if ( file.name.indexOf( '\.mtl' ) > 0 && fileMtl === null ) {
+                fileMtl = file;
+                wpunity_read_file(fileMtl, 'mtl', wpunity_load_file_callback);
+            }
+            if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg === null ) {
+                fileJpg = file;
+                wpunity_read_file(fileJpg, 'texture', wpunity_load_file_callback);
+            }
+        }
+
+        var Validator = THREE.OBJLoader2.prototype._getValidator();
+
+        if ( ! Validator.isValid( fileObj ) ) {
+
+            // Add object reset here
+            alert( 'Unable to load OBJ file from given files.' );
+
+            wpunity_clear_asset_files(canvas);
+
+            return;
+        }
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function( fileDataObj ) {
+
+            // Add loader
+            jQuery('#previewProgressSlider').show();
+
+            var uint8Array = new Uint8Array( fileDataObj.target.result );
+
+            var objectDefinition = {
+                name: 'userObj',
+                objAsArrayBuffer: uint8Array,
+                pathTexture: "",
+                mtlAsString: null
+            };
+
+            if ( fileMtl === null ) {
+                previewCanvas.loadFilesUser(objectDefinition);
+
+            } else {
+
+                fileReader.onload = function (fileDataMtl) {
+
+                    objectDefinition.mtlAsString = fileDataMtl.target.result;
+
+                    if ( fileJpg === null ) {
+                        previewCanvas.loadFilesUser(objectDefinition);
+
+                    } else {
+                        fileReader.onload = function (fileDataJpg) {
+
+                            objectDefinition.pathTexture = fileDataJpg.target.result;
+                            canvas.loadFilesUser(objectDefinition);
+
+                        };
+                        fileReader.readAsDataURL(fileJpg);
+                    }
+                };
+                fileReader.readAsText(fileMtl);
+            }
+        };
+        fileReader.readAsArrayBuffer( fileObj );
+    };
+    multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
+
+//Clear all
+//previewCanvas.clearAllAssets();
+
+// init three.js example application
+    var resizeWindow = function () {
+        canvas.resizeDisplayGL();
+    };
+
+    var render = function () {
+        requestAnimationFrame( render );
+        canvas.render();
+    };
+
+    window.addEventListener( 'resize', resizeWindow, false );
+
+    canvas.initGL();
+    canvas.resizeDisplayGL();
+    canvas.initPostGL();
+
+    // kick render loop
+    render();
 }
