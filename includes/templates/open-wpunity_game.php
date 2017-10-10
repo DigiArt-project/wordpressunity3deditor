@@ -23,17 +23,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
 	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
 	$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
-    $chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
+	$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
 
 	$game_type_chosen_id = '';
 
 	if($game_type_radioButton == 1){
-	    $game_type_chosen_id = $archaeology_tax->term_id;
+		$game_type_chosen_id = $archaeology_tax->term_id;
 	}else if($game_type_radioButton == 2){
-	    $game_type_chosen_id = $energy_tax->term_id;
-    }else if($game_type_radioButton == 3){
-        $game_type_chosen_id = $chemistry_tax->term_id;
-    }
+		$game_type_chosen_id = $energy_tax->term_id;
+	}else if($game_type_radioButton == 3){
+		$game_type_chosen_id = $chemistry_tax->term_id;
+	}
 
 	$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
 	$virtualplace_tax = get_term_by('slug', 'virtual_place', 'wpunity_game_cat');
@@ -247,7 +247,7 @@ $user_id = get_current_user_id();
 
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"  name="gameTypeRadio" value="2">
+                                <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio"  name="gameTypeRadio" value="3">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
