@@ -1164,7 +1164,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         break;
                     case 'pois_imagetext':
 
-                        jQuery("#assetDescription").hide();
                         jQuery("#poiImgDetailsPanel").show();
 
                         break;
