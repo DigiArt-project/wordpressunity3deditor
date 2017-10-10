@@ -13,10 +13,15 @@ function wpunity_return_game_type($id) {
 
 	// Default is Archaeology
 	$game_type_icon = "account_balance"; // Archaeology
+
 	// Set game type icon
-	if ( $game_category === 'Energy' ) {
+	if ( $game_category === 'Energy' )
 		$game_type_icon = "blur_on";
-	}
+
+
+    if ( $game_category === 'Chemistry' )
+        $game_type_icon = "";
+
 
 	$obj = new stdClass();
 	$obj->string = $game_category;
