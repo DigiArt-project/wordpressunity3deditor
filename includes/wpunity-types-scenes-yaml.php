@@ -2,12 +2,13 @@
 
 // VALUES OF UNITY PATTERNS
 
-global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy;
+global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy,$ini_scene_chemistry_unity_pattern;
 global $ini_scene_main_menu_unity_pattern;
 global $ini_scene_credentials_unity_pattern;
 global $ini_scene_options_unity_pattern;
 global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
 global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
+global $ini_scene_main_menu_chem_unity_pattern,$ini_scene_credentials_chem_unity_pattern,$ini_scene_options_chem_unity_pattern,$ini_scene_help_chem_unity_pattern,$ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 
 
 $ini_scene_wonder_around_unity_pattern = array('%YAML 1.1
@@ -971,6 +972,972 @@ $ini_scene_selector_arch_unity_pattern = array('ADD HERE');
 $ini_scene_selector_arch_unity_pattern2 = array('ADD HERE');
 
 $ini_scene_selector_arch_text = 'ADD HERE';
+
+/************************************************************************/
+
+$ini_scene_chemistry_unity_pattern = array('%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 7
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 0
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 7
+  m_GIWorkflowMode: 0
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_TemporalCoherenceThreshold: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 1
+    m_EnableRealtimeLightmaps: 1
+  m_LightmapEditorSettings:
+    serializedVersion: 4
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
+    m_ReflectionCompression: 2
+  m_LightingDataAsset: {fileID: 0}
+  m_RuntimeCPUUsage: 25
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    accuratePlacement: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &___[wa_eventsys_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_eventsys_transform_fid]___}
+  - component: {fileID: ___[wa_eventsys_monob1_fid]___}
+  - component: {fileID: ___[wa_eventsys_monob2_fid]___}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &___[wa_eventsys_monob2_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_eventsys_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &___[wa_eventsys_monob1_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_eventsys_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 5
+--- !u!4 &___[wa_eventsys_transform_fid]___
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_eventsys_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &___[wa_ovrplayer_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: ___[wa_ovrplayer_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: ___[wa_ovrplayer_position_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: ___[wa_ovrplayer_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: ___[wa_ovrplayer_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: ___[wa_ovrplayer_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: ___[wa_ovrplayer_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: ___[wa_ovrplayer_rotation_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400012, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 462068, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: usePerEyeCameras
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_Name
+      value: OVRPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 462066, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &___[wa_ovrplayer_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100008, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+  m_PrefabInternal: {fileID: ___[wa_ovrplayer_prefab_fid]___}
+--- !u!1 &___[wa_ovrplayer_lefteyeanchor_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100014, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+  m_PrefabInternal: {fileID: ___[wa_ovrplayer_prefab_fid]___}
+--- !u!1 &___[wa_ovrplayer_righteyeanchor_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100010, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 2}
+  m_PrefabInternal: {fileID: ___[wa_ovrplayer_prefab_fid]___}
+--- !u!54 &___[wa_ovrplayer_rigidbody_fid]___
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_ovrplayer_fid]___}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!20 &___[wa_ovrplayer_leftcamera_fid]___
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_ovrplayer_lefteyeanchor_fid]___}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 2
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!20 &___[wa_ovrplayer_rightcamera_fid]___
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_ovrplayer_righteyeanchor_fid]___}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 1
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!1001 &___[wa_player_prefab_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: ___[wa_player_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: ___[wa_player_position_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: ___[wa_player_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: ___[wa_player_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: ___[wa_player_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: ___[wa_player_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: ___[wa_player_rotation_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_UseFovKick
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_MouseLook.lockCursor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: far clip plane
+      value: 20000
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+  m_IsPrefabParent: 0
+--- !u!20 &___[wa_player_camera_fid]___ stripped
+Camera:
+  m_PrefabParentObject: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+  m_PrefabInternal: {fileID: ___[wa_player_prefab_fid]___}
+--- !u!1 &___[wa_exitBt_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_exitBt_recttrans_fid]___}
+  - component: {fileID: ___[wa_exitBt_canvrenderer_fid]___}
+  - component: {fileID: ___[wa_exitBt_monobehaviour1_fid]___}
+  - component: {fileID: ___[wa_exitBt_monobehaviour2_fid]___}
+  m_Layer: 5
+  m_Name: exitBt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[wa_exitBt_recttrans_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBt_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: ___[wa_exitBt_recttrans_child_fid]___}
+  m_Father: {fileID: ___[wa_exitBt_recttrans_father_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -100, y: -50}
+  m_SizeDelta: {x: 160, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[wa_exitBt_monobehaviour2_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBt_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: ___[wa_exitBt_monobehaviour1_fid]___}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: ___[wa_scene_manager_script_fid]___}
+        m_MethodName: onExitBtScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &___[wa_exitBt_monobehaviour1_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBt_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &___[wa_exitBt_canvrenderer_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBt_fid]___}
+--- !u!1 &___[wa_scene_manager_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_scene_manager_transform_fid]___}
+  - component: {fileID: ___[wa_scene_manager_script_fid]___}
+  m_Layer: 0
+  m_Name: sceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &___[wa_scene_manager_script_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scene_manager_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14696386bd1c5da488902a2ff751bc79, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!4 &___[wa_scene_manager_transform_fid]___
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scene_manager_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &___[wa_camera2_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_camera2_transform_fid]___}
+  - component: {fileID: ___[wa_camera2_camera_fid]___}
+  - component: {fileID: ___[wa_camera2_behaviour_fid]___}
+  - component: {fileID: ___[wa_camera2_behaviour2_fid]___}
+  - component: {fileID: ___[wa_camera2_audiolistener_fid]___}
+  m_Layer: 0
+  m_Name: camera2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &___[wa_camera2_camera_fid]___
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2_fid]___}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!81 &___[wa_camera2_audiolistener_fid]___
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2_fid]___}
+  m_Enabled: 0
+--- !u!92 &___[wa_camera2_behaviour2_fid]___
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2_fid]___}
+  m_Enabled: 1
+--- !u!124 &___[wa_camera2_behaviour_fid]___
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2_fid]___}
+  m_Enabled: 1
+--- !u!4 &___[wa_camera2_transform_fid]___
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 90, z: -40}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: ___[wa_camera2_children_transform_fid]___}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &___[wa_camera2anchor_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_camera2_children_transform_fid]___}
+  m_Layer: 0
+  m_Name: camera2Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &___[wa_camera2_children_transform_fid]___
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_camera2anchor_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: ___[wa_camera2_transform_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &___[wa_exitBtText_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_exitBt_recttrans_child_fid]___}
+  - component: {fileID: ___[wa_exitBtText_canvasrenderer_fid]___}
+  - component: {fileID: ___[wa_exitBtText_monobehaviour_fid]___}
+  m_Layer: 5
+  m_Name: exitBtText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &___[wa_exitBt_recttrans_child_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBtText_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: ___[wa_exitBt_recttrans_fid]___}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &___[wa_exitBtText_monobehaviour_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBtText_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Exit
+--- !u!222 &___[wa_exitBtText_canvasrenderer_fid]___
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_exitBtText_fid]___}
+--- !u!1 &___[wa_scenecanvas_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_exitBt_recttrans_father_fid]___}
+  - component: {fileID: ___[wa_scenecanvas_canvas_fid]___}
+  - component: {fileID: ___[wa_scenecanvas_monob1_fid]___}
+  - component: {fileID: ___[wa_scenecanvas_monob2_fid]___}
+  m_Layer: 5
+  m_Name: sCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &___[wa_scenecanvas_monob2_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scenecanvas_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &___[wa_scenecanvas_monob1_fid]___
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scenecanvas_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &___[wa_scenecanvas_canvas_fid]___
+Canvas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scenecanvas_fid]___}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &___[wa_exitBt_recttrans_father_fid]___
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_scenecanvas_fid]___}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: ___[wa_exitBt_recttrans_fid]___}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!1 &___[wa_light_fid]___
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: ___[wa_light_transform_fid]___}
+  - component: {fileID: ___[wa_light_light_fid]___}
+  m_Layer: 0
+  m_Name: Directional Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &___[wa_light_light_fid]___
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_light_fid]___}
+  m_Enabled: 1
+  serializedVersion: 7
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &___[wa_light_transform_fid]___
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[wa_light_fid]___}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+');
+
+$ini_scene_main_menu_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_credentials_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_options_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_help_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_login_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_reward_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_chem_unity_pattern2 = array('ADD HERE');
+
+$ini_scene_selector_chem_text = 'ADD HERE';
+
+/************************************************************************/
 
 //Copied from Github
 $ini_scene_main_menu_unity_pattern = array('%YAML 1.1
@@ -16046,6 +17013,8 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 	// Check for existing taxonomy meta for the term you're editing
 	$term_meta_wonderaround_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_wonderaround_pat', true );
 	$term_meta_educational_energy = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_educational_energy', true );
+    $term_meta_chemistry_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_chemistry_pat', true );
+
 	$term_meta_s_mainmenu = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu', true );
 	$term_meta_s_credentials = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials', true );
 	$term_meta_s_options = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options', true );
@@ -16065,6 +17034,16 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 	$term_meta_s_selector_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_arch', true );
 	$term_meta_s_selector2_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector2_arch', true );
 	$term_meta_s_selector_title_arch = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_title_arch', true );
+
+    $term_meta_s_mainmenu_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu_chem', true );
+    $term_meta_s_credentials_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials_chem', true );
+    $term_meta_s_options_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_options_chem', true );
+    $term_meta_s_help_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_help_chem', true );
+    $term_meta_s_login_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_login_chem', true );
+    $term_meta_s_reward_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_reward_chem', true );
+    $term_meta_s_selector_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_chem', true );
+    $term_meta_s_selector2_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector2_chem', true );
+    $term_meta_s_selector_title_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_selector_title_chem', true );
 
 	?>
     <tr class="form-field">
@@ -16359,6 +17338,156 @@ function wpunity_scenes_taxyaml_customFields($tag) {
         </td>
     </tr>
 
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------------------------------------------------------->
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>------------------------------------------------------------------------------------</h3></td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Chemistry Scenes</h3></td>
+    </tr>
+
+    <tr class="form-field term-chemistry_energy">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_chemistry_energy">Chemistry Scenes .unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_chemistry_energy" id="wpunity_yamlmeta_chemistry_energy"><?php echo $term_meta_chemistry_pat ? $term_meta_chemistry_pat : ''; ?></textarea>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Main Menu Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_mainmenu_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_mainmenu_chem">The S_MainMenu.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_mainmenu_chem" id="wpunity_yamlmeta_s_mainmenu_chem"><?php echo $term_meta_s_mainmenu_chem ? $term_meta_s_mainmenu_chem : ''; ?></textarea>
+        <p class="description">scene-main-menu-unity-pattern</p>
+      </td>
+    </tr>
+
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Credits Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_credentials_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_credentials_chem">The S_Credits.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_credentials_chem" id="wpunity_yamlmeta_s_credentials_chem"><?php echo $term_meta_s_credentials_chem ? $term_meta_s_credentials_chem : ''; ?></textarea>
+        <p class="description">scene-credentials-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Options/Settings Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_options_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_options_chem">The S_Options.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_options_chem" id="wpunity_yamlmeta_s_options_chem"><?php echo $term_meta_s_options_chem ? $term_meta_s_options_chem : ''; ?></textarea>
+        <p class="description">scene-options-unity-pattern</p>
+      </td>
+    </tr>
+
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Help Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_options_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_help_chem">The S_Help.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_help_chem" id="wpunity_yamlmeta_s_help_chem"><?php echo $term_meta_s_help_chem ? $term_meta_s_help_chem : ''; ?></textarea>
+        <p class="description">scene-help-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Login Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_login_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_login_chem">The S_Login.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_login_chem" id="wpunity_yamlmeta_s_login_chem"><?php echo $term_meta_s_login_chem ? $term_meta_s_login_chem : ''; ?></textarea>
+        <p class="description">scene-login-unity-pattern</p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Reward Scene</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_reward_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_reward_chem">The S_Reward.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_reward_chem" id="wpunity_yamlmeta_s_reward_chem"><?php echo $term_meta_s_reward_chem ? $term_meta_s_reward_chem : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field">
+      <th scope="row" valign="top"></th>
+      <td><h3>Scene Selector</h3></td>
+    </tr>
+
+    <tr class="form-field term-s_selector_chem">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector_chem">The S_SceneSelector.unity pattern</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector_chem" id="wpunity_yamlmeta_s_selector_chem"><?php echo $term_meta_s_selector_chem ? $term_meta_s_selector_chem : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field term-s_selector2">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector2_chem">The S_SceneSelector.unity pattern (each tile yaml)</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector2_chem" id="wpunity_yamlmeta_s_selector2_chem"><?php echo $term_meta_s_selector2_chem ? $term_meta_s_selector2_chem : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
+    <tr class="form-field term-s_selector_title">
+      <th scope="row" valign="top">
+        <label for="wpunity_yamlmeta_s_selector_title_chem">The S_SceneSelector.unity pattern (TITLE)</label>
+      </th>
+      <td>
+        <textarea name="wpunity_yamlmeta_s_selector_title_chem" id="wpunity_yamlmeta_s_selector_title_chem"><?php echo $term_meta_s_selector_title_chem ? $term_meta_s_selector_title_chem : ''; ?></textarea>
+        <p class="description"></p>
+      </td>
+    </tr>
+
 	<?php
 }
 
@@ -16367,7 +17496,7 @@ function wpunity_scenes_taxyaml_customFields($tag) {
 // Save our extra taxonomy fields
 
 function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
-	global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy;
+	global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy,$ini_scene_chemistry_unity_pattern;
 	global $ini_scene_main_menu_unity_pattern;
 	global $ini_scene_credentials_unity_pattern;
 	global $ini_scene_options_unity_pattern;
@@ -16375,6 +17504,7 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
 	global $ini_scene_login_unity_pattern;
 	global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
 	global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
+    global $ini_scene_main_menu_chem_unity_pattern,$ini_scene_credentials_chem_unity_pattern,$ini_scene_options_chem_unity_pattern,$ini_scene_help_chem_unity_pattern,$ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 
 
 	if ( isset( $_POST['wpunity_yamlmeta_wonderaround_pat'] ) ) {
@@ -16471,6 +17601,100 @@ function wpunity_scenes_taxyaml_customFields_save( $term_id ) {
 	/********************************************************************************************************************/
 	/********************************************************************************************************************/
 	/********************************************************************************************************************/
+
+    if ( isset( $_POST['wpunity_yamlmeta_chemistry_energy'] ) ) {
+      $term_meta_wonderaround_pat = $_POST['wpunity_yamlmeta_chemistry_energy'];
+      if($term_meta_wonderaround_pat == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', $ini_scene_chemistry_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', $term_meta_wonderaround_pat);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_mainmenu_chem'] ) ) {
+      $term_meta_scene_s_mainmenu = $_POST['wpunity_yamlmeta_s_mainmenu_chem'];
+      if($term_meta_scene_s_mainmenu == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_mainmenu_chem', $ini_scene_main_menu_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_mainmenu_chem', $term_meta_scene_s_mainmenu);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_credentials_chem'] ) ) {
+      $term_meta_scene_s_credentials = $_POST['wpunity_yamlmeta_s_credentials_chem'];
+      if($term_meta_scene_s_credentials == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials_chem', $ini_scene_credentials_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_credentials_chem', $term_meta_scene_s_credentials);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_options_chem'] ) ) {
+      $term_meta_scene_s_options = $_POST['wpunity_yamlmeta_s_options_chem'];
+      if($term_meta_scene_s_options == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_options_chem', $ini_scene_options_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_options_chem', $term_meta_scene_s_options);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_help_chem'] ) ) {
+      $term_meta_scene_s_help = $_POST['wpunity_yamlmeta_s_help_chem'];
+      if($term_meta_scene_s_help == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_help_chem', $ini_scene_help_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_help_chem', $term_meta_scene_s_help);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_login_chem'] ) ) {
+      $term_meta_scene_s_login = $_POST['wpunity_yamlmeta_s_login_chem'];
+      if($term_meta_scene_s_login == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_login_chem', $ini_scene_login_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_login_chem', $term_meta_scene_s_login);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_reward_chem'] ) ) {
+      $term_meta_scene_s_reward = $_POST['wpunity_yamlmeta_s_reward_chem'];
+      if($term_meta_scene_s_reward == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_reward_chem', $ini_scene_reward_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_reward_chem', $term_meta_scene_s_reward);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector_chem'] ) ) {
+      $term_meta_scene_s_selector = $_POST['wpunity_yamlmeta_s_selector_chem'];
+      if($term_meta_scene_s_selector == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_chem', $ini_scene_selector_chem_unity_pattern[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_chem', $term_meta_scene_s_selector);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector2_chem'] ) ) {
+      $term_meta_scene_s_selector2 = $_POST['wpunity_yamlmeta_s_selector2_chem'];
+      if($term_meta_scene_s_selector2 == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector2_chem', $ini_scene_selector_chem_unity_pattern2[0]);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector2_chem', $term_meta_scene_s_selector2);
+      }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_s_selector_title_chem'] ) ) {
+      $term_meta_scene_s_selector_title = $_POST['wpunity_yamlmeta_s_selector_title_chem'];
+      if($term_meta_scene_s_selector_title == ''){
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_title_chem', $ini_scene_selector_chem_text);
+      }else{
+        update_term_meta($term_id, 'wpunity_yamlmeta_s_selector_title_chem', $term_meta_scene_s_selector_title);
+      }
+    }
+
+    /********************************************************************************************************************/
+    /********************************************************************************************************************/
+    /********************************************************************************************************************/
 
 	if ( isset( $_POST['wpunity_yamlmeta_educational_energy'] ) ) {
 		$term_meta_educational_energy = $_POST['wpunity_yamlmeta_educational_energy'];
@@ -16599,26 +17823,26 @@ function wpunity_scenes_taxyaml_standard_cre(){
 	}
 
 	if (!term_exists('Main Menu Archaeology Template', 'wpunity_scene_yaml')) {
-		wp_insert_term(
-			'Main Menu Archaeology Template', // the term
-			'wpunity_scene_yaml', // the taxonomy
-			array(
-				'description' => 'YAML Template for Main Menu (Archaeology) scenes',
-				'slug' => 'mainmenu-arch-yaml',
-			)
-		);
-	}
+    wp_insert_term(
+        'Main Menu Archaeology Template', // the term
+        'wpunity_scene_yaml', // the taxonomy
+        array(
+            'description' => 'YAML Template for Main Menu (Archaeology) scenes',
+            'slug' => 'mainmenu-arch-yaml',
+        )
+    );
+  }
 
-	if (!term_exists('Credits Archaeology Template', 'wpunity_scene_yaml')) {
-		wp_insert_term(
-			'Credits Archaeology Template', // the term
-			'wpunity_scene_yaml', // the taxonomy
-			array(
-				'description' => 'YAML Template for Credits (Archaeology) scenes',
-				'slug' => 'credentials-arch-yaml',
-			)
-		);
-	}
+  if (!term_exists('Credits Archaeology Template', 'wpunity_scene_yaml')) {
+    wp_insert_term(
+        'Credits Archaeology Template', // the term
+        'wpunity_scene_yaml', // the taxonomy
+        array(
+            'description' => 'YAML Template for Credits (Archaeology) scenes',
+            'slug' => 'credentials-arch-yaml',
+        )
+    );
+  }
 
 	if (!term_exists('Wonder Around Default Template', 'wpunity_scene_yaml')) {
 		wp_insert_term(
@@ -16630,6 +17854,39 @@ function wpunity_scenes_taxyaml_standard_cre(){
 			)
 		);
 	}
+
+    if (!term_exists('Main Menu Chemistry Template', 'wpunity_scene_yaml')) {
+      wp_insert_term(
+          'Main Menu Chemistry Template', // the term
+          'wpunity_scene_yaml', // the taxonomy
+          array(
+              'description' => 'YAML Template for Main Menu (Chemistry) scenes',
+              'slug' => 'mainmenu-chem-yaml',
+          )
+      );
+    }
+
+    if (!term_exists('Credits Chemistry Template', 'wpunity_scene_yaml')) {
+      wp_insert_term(
+          'Credits Chemistry Template', // the term
+          'wpunity_scene_yaml', // the taxonomy
+          array(
+              'description' => 'YAML Template for Credits (Chemistry) scenes',
+              'slug' => 'credentials-chem-yaml',
+          )
+      );
+    }
+
+    if (!term_exists('Chemistry Template', 'wpunity_scene_yaml')) {
+      wp_insert_term(
+          'Chemistry Template', // the term
+          'wpunity_scene_yaml', // the taxonomy
+          array(
+              'description' => 'YAML Template for Chemistry scenes',
+              'slug' => 'wonderaround-chem-yaml',
+          )
+      );
+    }
 
 	if (!term_exists('Educational Energy Template', 'wpunity_scene_yaml')) {
 		wp_insert_term(
@@ -16651,7 +17908,7 @@ add_action( 'init', 'wpunity_scenes_taxyaml_standard_cre' );
 // Add default values to Templates (fill term metas), use empty for non-usable metas
 
 function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
-	global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy;
+	global $ini_scene_wonder_around_unity_pattern,$ini_educational_energy,$ini_scene_chemistry_unity_pattern;
 	global $ini_scene_main_menu_unity_pattern;
 	global $ini_scene_credentials_unity_pattern;
 	global $ini_scene_options_unity_pattern;
@@ -16659,8 +17916,10 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 	global $ini_scene_login_unity_pattern;
 	global $ini_scene_reward_unity_pattern,$ini_scene_selector_unity_pattern,$ini_scene_selector_unity_pattern2,$ini_scene_selector_text;
 	global $ini_scene_main_menu_arch_unity_pattern,$ini_scene_credentials_arch_unity_pattern,$ini_scene_options_arch_unity_pattern,$ini_scene_help_arch_unity_pattern,$ini_scene_login_arch_unity_pattern,$ini_scene_reward_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern,$ini_scene_selector_arch_unity_pattern2,$ini_scene_selector_arch_text;
+    global $ini_scene_main_menu_chem_unity_pattern,$ini_scene_credentials_chem_unity_pattern,$ini_scene_options_chem_unity_pattern,$ini_scene_help_chem_unity_pattern,$ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 
-	$term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
+
+  $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
 
 	if($term_insterted->slug == 'mainmenu-yaml'){
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
@@ -16683,6 +17942,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
 	}elseif($term_insterted->slug == 'credentials-yaml'){
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16704,6 +17974,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
 	}elseif($term_insterted->slug == 'wonderaround-yaml') {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16725,6 +18006,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
 	}elseif($term_insterted->slug == 'mainmenu-arch-yaml'){
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16746,6 +18038,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', $ini_scene_selector_arch_unity_pattern[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', $ini_scene_selector_arch_unity_pattern2[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', $ini_scene_selector_arch_text);
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
 	}elseif($term_insterted->slug == 'credentials-arch-yaml'){
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
@@ -16767,6 +18070,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
 	}elseif($term_insterted->slug == 'educational-energy'){
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', $ini_educational_energy[0]);
@@ -16788,7 +18102,114 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
-	}else{
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
+	}elseif($term_insterted->slug == 'wonderaround-chem-yaml'){
+      update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+      update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', $ini_scene_wonder_around_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
+    }elseif($term_insterted->slug == 'credentials-chem-yaml'){
+      update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+      update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', $ini_scene_credentials_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
+    }elseif($term_insterted->slug == 'mainmenu-chem-yaml'){
+      update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
+
+      update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', $ini_scene_main_menu_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', $ini_scene_options_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', $ini_scene_help_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', $ini_scene_login_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', $ini_scene_reward_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', $ini_scene_selector_chem_unity_pattern[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', $ini_scene_selector_chem_unity_pattern2[0]);
+      update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', $ini_scene_selector_chem_text[0]);
+    }else{
 		update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', $ini_scene_wonder_around_unity_pattern[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', $ini_educational_energy[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', $ini_scene_main_menu_unity_pattern[0]);
@@ -16809,6 +18230,17 @@ function wpunity_scenes_taxyaml_standard_fields_cre($tt_id) {
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', $ini_scene_selector_arch_unity_pattern[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', $ini_scene_selector_arch_unity_pattern2[0]);
 		update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', $ini_scene_selector_arch_text);
+
+        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', $ini_scene_chemistry_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', $ini_scene_main_menu_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', $ini_scene_credentials_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', $ini_scene_options_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', $ini_scene_help_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', $ini_scene_login_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', $ini_scene_reward_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', $ini_scene_selector_chem_unity_pattern[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', $ini_scene_selector_chem_unity_pattern2[0]);
+        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', $ini_scene_selector_chem_text[0]);
 	}
 }
 
