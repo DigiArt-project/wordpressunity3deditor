@@ -1053,6 +1053,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
   m_IsPrefabParent: 0
+  - target: {fileID: 114895655547013306, guid: 007c17ee709168148aa4aa7afd9e1076,
+    type: 2}
+  propertyPath: videoToShow
+  value: ___[poi_v_v_name]___
+  objectReference: {fileID: 0}
 --- !u!4 &___[poi_v_trans_fid]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076,

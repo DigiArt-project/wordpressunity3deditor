@@ -1059,8 +1059,9 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $poi_v_trans_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
+                $poi_v_v_name = '';
 
-                $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid);
+                $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name);
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
             }
             if ($value['categoryName'] == '	Door'){
@@ -1515,7 +1516,7 @@ function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$
     return $file_content_return;
 }
 
-function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid){
+function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name){
     $file_content_return = str_replace("___[poi_v_fid]___",$poi_v_fid,$poi_vid_yaml);
     $file_content_return = str_replace("___[poi_v_pos_x]___",$poi_v_pos_x,$file_content_return);
     $file_content_return = str_replace("___[poi_v_pos_y]___",$poi_v_pos_y,$file_content_return);
@@ -1531,6 +1532,7 @@ function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$po
     $file_content_return = str_replace("___[poi_v_trans_fid]___",$poi_v_trans_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_v_obj_fid]___",$poi_v_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_v_obj_guid]___",$poi_v_obj_guid,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_v_name]___",$poi_v_v_name,$file_content_return);
 
     return $file_content_return;
 }
