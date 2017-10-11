@@ -189,6 +189,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handl
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-project-settings.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-project-settings.php' );
+
 // ===================== Obsolete ===================================
 
 /**

@@ -814,6 +814,18 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
 
     }elseif($scene_type_slug == 'wonderaround-yaml'){
         //DATA of Wonder Around Scene
+
+        /* to be replaced:
+            ___[player_position_x]___
+            ___[player_position_y]___
+            ___[player_position_z]___
+            ___[player_rotation_x]___
+            ___[player_rotation_y]___
+            ___[player_rotation_z]___
+            ___[player_rotation_w]___
+        */
+
+
     }
 
     return $scenes_counter;
