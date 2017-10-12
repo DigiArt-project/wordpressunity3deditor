@@ -215,7 +215,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 				//upload video file for POI video
 				$asset_video = $_FILES['videoFileInput'];
-
+				$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
+				update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
 			}
 
 
