@@ -389,6 +389,25 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_inserted_id, 'wpunity_producerPowerProductionVal', $new_producerPowerProductionVal);
 			update_post_meta($asset_inserted_id, 'wpunity_producerOptCosts', $new_producerOptCosts);
 			update_post_meta($asset_inserted_id, 'wpunity_producerOptGen', $new_producerOptGen);
+		}elseif ($assetCatTerm->slug == 'pois_imagetext') {
+			//upload the featured image for POI image-text
+			$new_asset_featured_image =  $_FILES['poi-img-featured-image'];
+			if($new_asset_featured_image){
+				$attachment_new_id = wpunity_upload_img( $new_asset_featured_image, $asset_inserted_id);
+				update_post_meta( $asset_inserted_id, '_thumbnail_id', $attachment_new_id );
+				//set_post_thumbnail( ,  );
+			}
+
+		}elseif ($assetCatTerm->slug == 'pois_video') {
+			//upload the featured image for POI video
+			//$asset_featured_image =  $_FILES['poi-video-featured-image'];
+			//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+			//set_post_thumbnail( $asset_id, $attachment_id );
+
+			//upload video file for POI video
+			//$asset_video = $_FILES['videoFileInput'];
+			//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
+			//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
 		}
 
 		if($scene_id == 0){
@@ -512,6 +531,74 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 			$asset_desc_saved = get_post_field('post_content', $asset_checked_id);
 			$asset_desc_label = "Edit the description of your asset";
 		}
+
+		//Check if its new/saved and get data for Terrain Options
+		if($create_new != 1) {
+			$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+			if($saved_term[0]->slug == 'terrain'){
+				$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
+				if($physics) {
+					$mean_speed_wind = $physics['mean'];
+					$var_speed_wind = $physics['variance'];
+					$min_speed_wind = $physics['min'];
+					$max_speed_wind = $physics['max'];
+				}
+				$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
+				if($energy_income) {
+					$income_when_overpower = $energy_income['over'];
+					$income_when_correct_power = $energy_income['correct'];
+					$income_when_under_power = $energy_income['under'];
+				}
+				$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
+				if($constr_pen){
+					$access_penalty = $constr_pen['access'];
+					$archaeology_penalty = $constr_pen['arch'];
+					$natural_reserve_penalty = $constr_pen['natural'];
+					$hvdistance_penalty = $constr_pen['hiVolt'];
+				}
+			}elseif($saved_term[0]->slug == 'consumer'){
+				$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
+				if($consumptions) {
+					$min_consumption = $consumptions['min'];
+					$max_consumption = $consumptions['max'];
+					$mean_consumption = $consumptions['mean'];
+					$var_consumption = $consumptions['var'];
+				}
+			}elseif($saved_term[0]->slug == 'producer') {
+				$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
+				if($optCosts) {
+					$optCosts_size = $optCosts['size'];
+					$optCosts_dmg = $optCosts['dmg'];
+					$optCosts_cost = $optCosts['cost'];
+					$optCosts_repaid = $optCosts['repaid'];
+				}
+				$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
+				if($optGen) {
+					$optGen_class = $optGen['class'];
+					$optGen_speed = $optGen['speed'];
+					$optGen_power = $optGen['power'];
+				}
+
+				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
+			}elseif ($saved_term[0]->slug == 'pois_imagetext') {
+				//load the already saved featured image for POI image-text
+				$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
+				$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
+			}elseif ($saved_term[0]->slug == 'pois_video') {
+				//upload the featured image for POI video
+				//$asset_featured_image =  $_FILES['poi-video-featured-image'];
+				//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+				//set_post_thumbnail( $asset_id, $attachment_id );
+
+				//upload video file for POI video
+				//$asset_video = $_FILES['videoFileInput'];
+				//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
+				//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
+			}
+
+
+		}
+
 		?>
 
         <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
@@ -545,8 +632,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 <div id="poiImgDetailsPanel" style="display: none;">
 
                     <h3 class="mdc-typography--title">Featured Image</h3>
-
-                    <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+					<?php if($create_new == 1){ ?>
+                    	<img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+					<?php }else{ ?>
+						<img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
+					<?php } ?>
                     <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                     <hr class="WhiteSpaceSeparator">
@@ -693,60 +783,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>
             </div>
         </div>
-
-		<?php //Check if its new/saved and get data for Terrain Options
-		if($create_new != 1) {
-			$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-			if($saved_term[0]->slug == 'terrain'){
-				$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
-				if($physics) {
-					$mean_speed_wind = $physics['mean'];
-					$var_speed_wind = $physics['variance'];
-					$min_speed_wind = $physics['min'];
-					$max_speed_wind = $physics['max'];
-				}
-				$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
-				if($energy_income) {
-					$income_when_overpower = $energy_income['over'];
-					$income_when_correct_power = $energy_income['correct'];
-					$income_when_under_power = $energy_income['under'];
-				}
-				$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
-				if($constr_pen){
-					$access_penalty = $constr_pen['access'];
-					$archaeology_penalty = $constr_pen['arch'];
-					$natural_reserve_penalty = $constr_pen['natural'];
-					$hvdistance_penalty = $constr_pen['hiVolt'];
-				}
-			}elseif($saved_term[0]->slug == 'consumer'){
-				$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
-				if($consumptions) {
-					$min_consumption = $consumptions['min'];
-					$max_consumption = $consumptions['max'];
-					$mean_consumption = $consumptions['mean'];
-					$var_consumption = $consumptions['var'];
-				}
-			}elseif($saved_term[0]->slug == 'producer') {
-				$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
-				if($optCosts) {
-					$optCosts_size = $optCosts['size'];
-					$optCosts_dmg = $optCosts['dmg'];
-					$optCosts_cost = $optCosts['cost'];
-					$optCosts_repaid = $optCosts['repaid'];
-				}
-				$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
-				if($optGen) {
-					$optGen_class = $optGen['class'];
-					$optGen_speed = $optGen['speed'];
-					$optGen_power = $optGen['power'];
-				}
-
-				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
-			}
-
-
-		}
-		?>
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
