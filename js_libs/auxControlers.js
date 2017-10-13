@@ -165,8 +165,7 @@ function onMouseDownSelect( event ) {
         envir.renderer.setClearColor( 0xffffff, 0.9 );
 
 
-
-        if(event.button == 1 && arrNameObjInter[nameL].categoryName == 'Door') // Middle button show also properties
+        if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
             displayDoorProperties(event, nameL);
 
 
@@ -274,8 +273,8 @@ function displayDoorProperties(event, nameDoorSource){
 
     // Prompt "Select"
     option = document.createElement("option");
-    option.text = "Select";
-    option.value = "Select";
+    option.text = "Select a destination";
+    option.value = null;
     popupDoorSelect.add(option);
 
     // ToDo: Stathis retrieve all doors from all jsons
@@ -327,6 +326,7 @@ function displayDoorProperties(event, nameDoorSource){
     jQuery("#popupDoorSelect").change(function(e) {
         var valDoorScene = jQuery("#popupDoorSelect").val();
 
+        if (nameDoorTarget !== "Cancel" && nameDoorTarget !== "Select") {
         if (valDoorScene != "Cancel" && valDoorScene != "Select") {
 
             var nameDoor_Target = valDoorScene.split("at")[0];
