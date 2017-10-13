@@ -191,8 +191,10 @@ get_header(); ?>
 
             </div>
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
+
                 <div style="min-height: 780px;">
-                    <iframe src="http://52.59.219.11/" style="min-width: 100%; min-height: inherit;"></iframe>
+
+                    <iframe src="http://52.59.219.11/?wpunity_game=<?php echo $project_id; ?>&wpunity_scene=<?php echo $scene_id; ?>&scene_type=scene&game_type=<?php echo strtolower($game_type_obj->string);?>" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
             </div>
         </div>
