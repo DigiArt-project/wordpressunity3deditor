@@ -115,6 +115,12 @@ class LoaderMulti {
                                 object.image1id = resources3D[name]['image1id'];
 
 
+                                object.doorName_source = resources3D[name]['doorName_source'];
+                                object.doorName_target = resources3D[name]['doorName_target'];
+                                object.sceneName_target = resources3D[name]['sceneName_target'];
+
+
+
                                 object.type_behavior = resources3D[name]['type_behavior'];
 
                                 envir.scene.add(object);

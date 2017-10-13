@@ -1,5 +1,6 @@
 function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
                           categoryName, categoryID, diffImage, diffImageID, image1id,
+                          doorName_source, doorName_target, sceneName_target,
                           x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
@@ -21,6 +22,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "diffImage": diffImage,
         "diffImageID": diffImageID,
         "image1id": image1id,
+        "doorName_source":doorName_source,
+        "doorName_target":doorName_target,
+        "sceneName_target":sceneName_target,
         "trs": selected_object_trs
     };
 
@@ -95,8 +99,6 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
             transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
             transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
-
-
 
             selected_object_name = nameModel3D;
         };

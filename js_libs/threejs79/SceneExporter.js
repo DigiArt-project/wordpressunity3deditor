@@ -327,6 +327,9 @@ THREE.SceneExporter.prototype = {
                     '	"diffImage" : ' + '"' + o.diffImage  + '"' + ',',
                     '	"diffImageID" : ' + '"' + o.diffImageID  + '"' + ',',
                     '	"image1id" : ' + '"' + o.image1id  + '"' + ',',
+                    '   "doorName_source" : ' + '"' + o.doorName_source  + '"' + ',',
+                    '   "doorName_target" : ' + '"' + o.doorName_target  + '"' + ',',
+                    '   "sceneName_target" : ' + '"' + o.sceneName_target  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',
                     '	"fnMtlID" : ' + '"' + o.fnMtlID + '"' + ( o.children.length ? ',' : '' )
 

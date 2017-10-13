@@ -1,8 +1,6 @@
 //  AJAX: FETCH Assets 3d
 function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit){
 
-
-
     jQuery.ajax({
         url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
         type : 'POST',
@@ -94,7 +92,10 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
-                "image1id":e.target.attributes.getNamedItem("data-image1id").value
+                "image1id":e.target.attributes.getNamedItem("data-image1id").value,
+                "doorName_source":e.target.attributes.getNamedItem("data-doorName_source").value,
+                "doorName_target":e.target.attributes.getNamedItem("data-doorName_target").value,
+                "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value
             };
 
             var jsonDataDrag = JSON.stringify(dragData);
@@ -156,6 +157,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     f.screenImagePath = f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) + 'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
                 }
 
+
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item" style="height: 96px; position: relative;">' +
@@ -172,6 +174,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +
+                    '" data-doorName_source="'+ f.doorName_source +
+                    '" data-doorName_target="'+ f.doorName_target +
+                    '" data-sceneName_target="'+ f.sceneName_target +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +

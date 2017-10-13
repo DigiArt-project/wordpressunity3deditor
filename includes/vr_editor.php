@@ -131,7 +131,6 @@ echo '</script>';
 
     function drop_handler(ev) {
         var dataDrag = JSON.parse( ev.dataTransfer.getData("text"));
-
         var path =     dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
 
         var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/")+1);
@@ -150,6 +149,10 @@ echo '</script>';
 
         var image1id = dataDrag.image1id;
 
+        var doorName_source = dataDrag.doorName_source;
+        var doorName_target = dataDrag.doorName_target;
+        var sceneName_target = dataDrag.sceneName_target;
+
         // we take the behavior type from the path of the obj
         var slashesArr = allIndexOf("/", path);
 
@@ -157,7 +160,7 @@ echo '</script>';
 
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
-            categoryName, categoryID, diffImage, diffImageID, image1id,
+            categoryName, categoryID, diffImage, diffImageID, image1id, doorName_source, doorName_target, sceneName_target,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

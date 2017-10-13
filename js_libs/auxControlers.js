@@ -116,6 +116,9 @@ function onMouseDownSelect( event ) {
                 delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
                 delArchive[nameToRestore]["diffImage"], delArchive[nameToRestore]["diffImageID"],
                 delArchive[nameToRestore]["image1id"],
+                delArchive[nameToRestore]["doorName_source"],
+                delArchive[nameToRestore]["doorName_target"],
+                delArchive[nameToRestore]["sceneName_target"],
                 trs["translation"][0], trs["translation"][1], trs["translation"][2],
                 trs["rotation"][0], trs["rotation"][1], trs["rotation"][2],
                 trs["scale"]);
@@ -251,8 +254,11 @@ function onMouseDownSelect( event ) {
 function displayDoorProperties(event, nameDoorSource){
 
     var popupDoorSelect = document.getElementById("popupDoorSelect");
+    var doorid = document.getElementById("doorid");
 
     // Clear past options
+    doorid = "";
+
     for (var i = popupDoorSelect.options.length; i-->0;)
         popupDoorSelect.options[i] = null;
 
@@ -272,7 +278,7 @@ function displayDoorProperties(event, nameDoorSource){
     option.value = "Select";
     popupDoorSelect.add(option);
 
-    // ToDo: Stathis retries all doors from all jsons
+    // ToDo: Stathis retrieve all doors from all jsons
     var doorsFromOtherScenes = ['doorGreen at SecondScene', 'doorBlue at SecondScene'];
 
     // Add options for each intersected object
@@ -292,6 +298,12 @@ function displayDoorProperties(event, nameDoorSource){
     popupDoorSelect.add(option);
 
 
+    console.log(nameDoorSource, envir.scene.getObjectByName(nameDoorSource).doorName_source);
+
+    jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
+    jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
+                                     envir.scene.getObjectByName(nameDoorSource).sceneName_target );
+
     // Show Selection
     jQuery("#popUpObjectPropertiesDiv").show();
     var ppPropertiesDiv = document.getElementById("popUpObjectPropertiesDiv");
@@ -299,15 +311,29 @@ function displayDoorProperties(event, nameDoorSource){
     ppPropertiesDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     ppPropertiesDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
+
+
+
+
+    jQuery("#doorid").keyup(function(e) {
+        var nameDoorSource_simple = jQuery("#doorid").val();
+
+        // nameDoorSource is the scene object generated automatically e.g.    "mydoora_1231214515"
+        // doorName_source is more simplified given by the user  e.g.  "doorToCave"
+        envir.scene.getObjectByName(nameDoorSource).doorName_source = nameDoorSource_simple;
+    });
+
     // On popup change
     jQuery("#popupDoorSelect").change(function(e) {
-        var nameDoorTarget = jQuery("#popupDoorSelect").val();
+        var valDoorScene = jQuery("#popupDoorSelect").val();
 
-        if (nameDoorTarget != "Cancel" && nameDoorTarget != "Select") {
+        if (valDoorScene != "Cancel" && valDoorScene != "Select") {
 
-            // ToDo: Stathis Put in the json the nameDoor
-            console.log(nameDoorSource);
-            console.log(nameDoorTarget);
+            var nameDoor_Target = valDoorScene.split("at")[0];
+            var sceneName_Target = valDoorScene.split("at")[1];
+
+            envir.scene.getObjectByName(nameDoorSource).doorName_target = nameDoor_Target.trim();
+            envir.scene.getObjectByName(nameDoorSource).sceneName_target = sceneName_Target.trim();
         }
         jQuery("#popUpObjectPropertiesDiv").hide();
     });

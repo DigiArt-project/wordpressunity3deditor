@@ -8,8 +8,6 @@ class ParseJSON {
 
     public function init($sceneToLoad)
     {
-
-
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
 
@@ -41,6 +39,11 @@ class ParseJSON {
                 $categoryID = $value->categoryID;
                 $image1id = $value->image1id;
 
+                $doorName_source = $value->doorName_source;
+                $doorName_target = $value->doorName_target;
+                $sceneName_target = $value->sceneName_target;
+
+
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = $value->rotation[2];
@@ -56,7 +59,8 @@ class ParseJSON {
             echo 'selected_object_trs={"translation":['.$t_x.','.$t_y.','.$t_z.'],"rotation":['.
                 $r_x .','.$r_y .','.$r_z .'],'.'"scale":'.$scale.'};';
 
-            echo 'resources3D["'.$name.'"]= {"path":"'.$path.
+            echo 'resources3D["'.$name.'"]= {'.
+                                            '"path":"'.$path.
                                             '","assetid":"'.$assetid.
                                             '","obj":"'.$obj.
                                             '","objID":"'.$objID.
@@ -67,7 +71,10 @@ class ParseJSON {
                                             '","categoryName":"'.$categoryName.
                                             '","categoryID":"'.$categoryID.
                                             '","image1id":"'.$image1id.
-                '","trs":selected_object_trs};'; // fpath_obj.push("'.end($resources3D)['obj'].'");';
+                                            '","doorName_source":"'.$doorName_source.
+                                            '","doorName_target":"'.$doorName_target.
+                                            '","sceneName_target":"'.$sceneName_target.
+                                            '","trs":selected_object_trs};';
 
             echo '</script>';
         }
