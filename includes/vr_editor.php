@@ -289,8 +289,8 @@ echo '</script>';
     <!-- Interface for Changing the door properties -->
     <!-- Todo: Tasos make it more beautiful -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapPropertiesSelectStyle">
-        Door properties <br />
-        <select title="Select an door for teleporting" id="popupDoorSelect" class="mdc-select"></select>
+        Door name:  <input type="text" id="doorid" name="doorid" value="" /><br />
+        Door to go: <select title="Select an door for teleporting" id="popupDoorSelect" class="mdc-select"></select>
     </div>
 
 
