@@ -302,7 +302,7 @@ function displayDoorProperties(event, nameDoorSource){
     jQuery("#popupDoorSelect").change(function(e) {
         var nameDoorTarget = jQuery("#popupDoorSelect").val();
 
-        if (nameDoorTarget != "Cancel" && nameDoorTarget != "Select") {
+        if (nameDoorTarget !== "Cancel" && nameDoorTarget !== "Select") {
 
             // ToDo: Stathis Put in the json the nameDoor
             console.log(nameDoorSource);

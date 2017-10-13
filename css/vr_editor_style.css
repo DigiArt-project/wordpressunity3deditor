@@ -102,7 +102,7 @@ canvas { pointer-events:none; z-index:10; }
     z-index: 1000;
     position: absolute;
     display: none;
-    padding: 6px;
+    padding: 12px;
 }
 
 .EditorObjOverlapSelectStyle select {

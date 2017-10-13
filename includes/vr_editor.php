@@ -290,15 +290,13 @@ echo '</script>';
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background">
 
         <p class="mdc-typography--title"> Door options </p>
-
         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
             <input id="door" name="door" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" style="box-shadow: none; border-color:transparent;">
             <label for="door" class="mdc-textfield__label">
                 Enter a door name
         </div>
-
         <br />
-        <select title="Select a door for teleporting" id="popupDoorSelect" class="mdc-select"></select>
+        <select title="Select a door for teleporting" id="popupDoorSelect" class="mdc-select" style="border: none;"></select>
     </div>
 </div>
 
