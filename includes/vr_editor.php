@@ -291,15 +291,21 @@ echo '</script>';
 
     <!-- Interface for Changing the door properties -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background">
+        <span id='close_overwrite' onclick='this.parentNode.style.display = "none"; hideDoorProperties(); return false;'>x</span>
 
         <p class="mdc-typography--title"> Door options </p>
         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-            <input id="door" name="door" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" aria-controls="title-validation-msg" style="box-shadow: none; border-color:transparent;">
-            <label for="door" class="mdc-textfield__label">
-                Enter a door name
+            <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                   aria-controls="title-validation-msg" style="box-shadow: none; border-color:transparent;">
+<!--            <label for="doorid" class="mdc-textfield__label">-->
+<!--                Enter a door name-->
+<!--            </label>-->
+
+
+
         </div>
         <br />
-        <select title="Select a door for teleporting" id="popupDoorSelect" class="mdc-select" style="border: none;"></select>
+        <select title="Select a door for teleporting" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="border: none;"></select>
     </div>
 </div>
 

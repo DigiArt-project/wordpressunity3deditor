@@ -437,7 +437,6 @@ THREE.OBJLoader.prototype = {
 		for ( var i = 0, l = lines.length; i < l; i ++ ) {
 
 			if (i%30000==0) { // REM HERE
-				console.log("LINE: " + i);
                 // viewprc.innerHTML = Math.round(i / l * 100) + "%"; // Not updating due to sync mode
             }
 

@@ -101,7 +101,7 @@ canvas { pointer-events:none; z-index:10; }
 .EditorObjOverlapSelectStyle {
     z-index: 1000;
     position: absolute;
-    display: none;
+    /*display: none;*/
     padding: 12px;
 }
 
@@ -245,4 +245,21 @@ canvas { pointer-events:none; z-index:10; }
     position: absolute;
     left: 390px;
     top: 1px;
+}
+
+
+#close_overwrite {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+}
+
+
+#close_overwrite:hover {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    color:#fff;
 }

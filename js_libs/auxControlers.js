@@ -252,15 +252,6 @@ function onMouseDownSelect( event ) {
  */
 function displayDoorProperties(event, nameDoorSource){
 
-    var popupDoorSelect = document.getElementById("popupDoorSelect");
-    var doorid = document.getElementById("doorid");
-
-    // Clear past options
-    doorid = "";
-
-    for (var i = popupDoorSelect.options.length; i-->0;)
-        popupDoorSelect.options[i] = null;
-
     // Auto open Selection
     popupDoorSelect.dispatchEvent(new MouseEvent('click', {
         'view': window,
@@ -297,8 +288,6 @@ function displayDoorProperties(event, nameDoorSource){
     popupDoorSelect.add(option);
 
 
-    console.log(nameDoorSource, envir.scene.getObjectByName(nameDoorSource).doorName_source);
-
     jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
     jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
                                      envir.scene.getObjectByName(nameDoorSource).sceneName_target );
@@ -311,12 +300,8 @@ function displayDoorProperties(event, nameDoorSource){
     ppPropertiesDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
 
-
-
-
-    jQuery("#doorid").keyup(function(e) {
+    jQuery("#doorid").change(function(e) {
         var nameDoorSource_simple = jQuery("#doorid").val();
-
         // nameDoorSource is the scene object generated automatically e.g.    "mydoora_1231214515"
         // doorName_source is more simplified given by the user  e.g.  "doorToCave"
         envir.scene.getObjectByName(nameDoorSource).doorName_source = nameDoorSource_simple;
@@ -335,8 +320,25 @@ function displayDoorProperties(event, nameDoorSource){
             envir.scene.getObjectByName(nameDoorSource).sceneName_target = sceneName_Target.trim();
         }
         jQuery("#popUpObjectPropertiesDiv").hide();
+        hideDoorProperties();
     });
+}
 
+function hideDoorProperties(){
+    // Clear past options
+
+    // door target
+    var popupDoorSelect = document.getElementById("popupDoorSelect");
+    for (var i = popupDoorSelect.options.length; i-->0;)
+        popupDoorSelect.options[i] = null;
+
+    // door source title
+    jQuery("#doorid").val( null );
+
+
+    // remove listeners
+    jQuery("#doorid").unbind('change');
+    jQuery("#popupDoorSelect").unbind('change');
 
 }
 
