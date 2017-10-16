@@ -614,7 +614,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                     <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                         <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
-                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;"
+                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
                                value="<?php echo $asset_title_saved; ?>">
                         <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                         <div class="mdc-textfield__bottom-line"></div>
@@ -624,7 +624,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         Between 3 - 25 characters
                     </p>
 
-                    <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield">
+                    <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
                         <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"><?php echo $asset_desc_saved; ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
                     </div>
@@ -865,7 +865,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                                 <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
-                                       aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                                       aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="accessCostPenalty" class="mdc-textfield__label"> Access Cost</label>
                                 <div class="mdc-textfield__bottom-line"></div>
                             </div>
@@ -873,7 +873,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                                 <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
-                                       aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                                       aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="archProximityPenalty" class="mdc-textfield__label"> Arch. site proximity </label>
                                 <div class="mdc-textfield__bottom-line"></div>
                             </div>
@@ -882,7 +882,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                                 <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
-                                       aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                                       aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="naturalReserveProximityPenalty" class="mdc-textfield__label"> Natural reserve proximity </label>
                                 <div class="mdc-textfield__bottom-line"></div>
                             </div>
@@ -890,7 +890,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                                 <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
-                                       aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                                       aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label"> Hi-Voltage line distance </label>
                                 <div class="mdc-textfield__bottom-line"></div>
                             </div>
@@ -992,7 +992,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                     <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                         <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
-                               aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                               aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                         <label for="producerClassVal" class="mdc-textfield__label"> Producer class </label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
@@ -1351,7 +1351,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">' +
+                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">' +
                         '<div class="mdc-textfield__bottom-line"></div>' +
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +

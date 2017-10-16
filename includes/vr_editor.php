@@ -299,7 +299,7 @@ echo '</script>';
         <p class="mdc-typography--title"> Door options </p>
         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
             <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
             <label for="doorid" class="mdc-textfield__label">
                 Enter a door name </label>
             <div class="mdc-textfield__bottom-line"></div>
