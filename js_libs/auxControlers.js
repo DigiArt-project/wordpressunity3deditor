@@ -251,12 +251,11 @@ function onMouseDownSelect( event ) {
  */
 function displayDoorProperties(event, nameDoorSource){
 
-    // Auto open Selection
-    popupDoorSelect.dispatchEvent(new MouseEvent('click', {
-        'view': window,
-        'bubbles': true,
-        'cancelable': true
-    }));
+    // Save the previous door values (in case of  direct mouse click on another door)
+    jQuery("#doorid").trigger("change");
+    jQuery("#popupDoorSelect").trigger("change");
+
+    clearAndUnbindDoorProperties();
 
     // Add options
     var option;
@@ -302,6 +301,7 @@ function displayDoorProperties(event, nameDoorSource){
 
     jQuery("#doorid").change(function(e) {
         var nameDoorSource_simple = jQuery("#doorid").val();
+
         // nameDoorSource is the scene object generated automatically e.g.    "mydoora_1231214515"
         // doorName_source is more simplified given by the user  e.g.  "doorToCave"
         envir.scene.getObjectByName(nameDoorSource).doorName_source = nameDoorSource_simple;
@@ -320,11 +320,11 @@ function displayDoorProperties(event, nameDoorSource){
             envir.scene.getObjectByName(nameDoorSource).sceneName_target = sceneName_Target.trim();
         }
         jQuery("#popUpObjectPropertiesDiv").hide();
-        hideDoorProperties();
+        clearAndUnbindDoorProperties();
     });
 }
 
-function hideDoorProperties() {
+function clearAndUnbindDoorProperties() {
     // Clear past options
 
     // door target
@@ -339,9 +339,7 @@ function hideDoorProperties() {
     // remove listeners
     jQuery("#doorid").unbind('change');
     jQuery("#popupDoorSelect").unbind('change');
-
 }
-
 
 /**
  *
