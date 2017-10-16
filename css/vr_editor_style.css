@@ -118,7 +118,7 @@ canvas { pointer-events:none; z-index:10; }
 
 }
 
-.VrWalkInButtonStyle a {
+.VrWalkInButtonStyle a, .EditorObjOverlapSelectStyle a {
     width: 48px;
     min-width: 0;
     padding: 0;
@@ -126,7 +126,7 @@ canvas { pointer-events:none; z-index:10; }
 }
 
 
-.VrWalkInButtonStyle a i {
+.VrWalkInButtonStyle a i, .EditorObjOverlapSelectStyle a i {
     padding-top: 4px;
 }
 
@@ -245,21 +245,4 @@ canvas { pointer-events:none; z-index:10; }
     position: absolute;
     left: 390px;
     top: 1px;
-}
-
-
-#close_overwrite {
-    float:right;
-    display:inline-block;
-    padding:2px 5px;
-    background:#ccc;
-}
-
-
-#close_overwrite:hover {
-    float:right;
-    display:inline-block;
-    padding:2px 5px;
-    background:#ccc;
-    color:#fff;
 }

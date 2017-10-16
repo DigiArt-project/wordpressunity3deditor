@@ -266,6 +266,7 @@ function displayDoorProperties(event, nameDoorSource){
     option = document.createElement("option");
     option.text = "Select a destination";
     option.value = null;
+    option.disabled = true;
     popupDoorSelect.add(option);
 
     // ToDo: Stathis retrieve all doors from all jsons
@@ -322,9 +323,11 @@ function displayDoorProperties(event, nameDoorSource){
         jQuery("#popUpObjectPropertiesDiv").hide();
         hideDoorProperties();
     });
+
+    mdc.autoInit(document, () => {});
 }
 
-function hideDoorProperties(){
+function hideDoorProperties() {
     // Clear past options
 
     // door target
