@@ -201,9 +201,9 @@ get_header(); ?>
 					<?php if ($scene_type === 'credits') { ?>
 
                         <h2 class="mdc-typography--title">Insert information about the people that created the project or acknowledgements</h2>
-                        <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                            <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;"><?php echo $scene_post->post_content; ?></textarea>
-                            <label for="creditsTextarea" class="mdc-textfield__label">Edit Credits text</label>
+                        <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield">
+                            <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
+                            <label for="creditsTextarea" class="mdc-textfield__label" style="background: none;">Edit Credits text</label>
                         </div>
 
 
@@ -215,9 +215,9 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
                                     <h2 class="mdc-typography--title">Help description</h2>
-                                    <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                                    <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield">
                                         <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
-                                        <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
+                                        <label for="helpTextarea" class="mdc-textfield__label" style="background: none;">Edit help description</label>
                                     </div>
                                 </div>
 
