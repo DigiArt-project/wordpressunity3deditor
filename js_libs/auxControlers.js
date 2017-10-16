@@ -217,7 +217,6 @@ function onMouseDownSelect( event ) {
         ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
         ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
-
         // On popup change
         jQuery("#popupSelect").change(function(e) {
             var nameL = jQuery("#popupSelect").val();
@@ -323,8 +322,6 @@ function displayDoorProperties(event, nameDoorSource){
         jQuery("#popUpObjectPropertiesDiv").hide();
         hideDoorProperties();
     });
-
-    mdc.autoInit(document, () => {});
 }
 
 function hideDoorProperties() {
