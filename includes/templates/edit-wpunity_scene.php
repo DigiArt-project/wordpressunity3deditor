@@ -130,7 +130,7 @@ get_header(); ?>
             <div class="mdc-toolbar__section mdc-toolbar__section--align-end">
                 <div id="saveSceneBtn" class="SaveBtnContainerStyle">
                     <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
-                       id="save-scene-button" 
+                       id="save-scene-button"
                        class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
                 </div>
             </div>

@@ -291,18 +291,19 @@ echo '</script>';
 
     <!-- Interface for Changing the door properties -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2">
-        <a style="float: right; width: 48px" type="button" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+        <a style="float: right; width: 48px" type="button" class="mdc-button mdc-button--dense mdc-button--raised"
            onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons">close</i>
         </a>
 
         <p class="mdc-typography--title"> Door options </p>
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
             <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                   style="box-shadow: none; border-color:transparent;">
+                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
             <label for="doorid" class="mdc-textfield__label">
-                Enter a door name
-            </label>
+                Enter a door name </label>
+            <div class="mdc-textfield__bottom-line"></div>
+
         </div>
         <br />
         <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="border: none;"></select>
