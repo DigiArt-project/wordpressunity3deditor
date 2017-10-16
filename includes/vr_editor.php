@@ -372,7 +372,7 @@ echo '</script>';
 
         if (btn.data('toggle') === 'on') {
             btn.addClass('mdc-theme--text-hint-on-light');
-            btn.removeClass('mdc-theme--accent');
+            btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
 
@@ -380,7 +380,7 @@ echo '</script>';
 
         } else {
             btn.removeClass('mdc-theme--text-hint-on-light');
-            btn.addClass('mdc-theme--accent');
+            btn.addClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility</i>');
             btn.data('toggle', 'on');
 
