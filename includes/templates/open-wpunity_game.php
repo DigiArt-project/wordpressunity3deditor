@@ -80,7 +80,7 @@ $user_id = get_current_user_id();
 
     <div class="DisplayBlock CenterContents">
         <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">account_circle</i>
-        <p class="mdc-typography--title"> Please <a class="mdc-theme--accent" href="<?php echo wp_login_url( get_permalink() ); ?>">login</a> to use platform</p>
+        <p class="mdc-typography--title"> Please <a class="mdc-theme--secondary" href="<?php echo wp_login_url( get_permalink() ); ?>">login</a> to use platform</p>
     </div>
 
     <hr class="WhiteSpaceSeparator">

@@ -233,7 +233,7 @@ echo '</script>';
     </a>
 
     <!--Canvas center-->
-    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle interface">
+    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
 
