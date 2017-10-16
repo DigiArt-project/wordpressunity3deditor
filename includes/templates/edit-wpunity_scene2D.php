@@ -93,7 +93,7 @@ get_header(); ?>
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
             <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-            <?php echo $game_post->post_title; ?>
+			<?php echo $game_post->post_title; ?>
         </h1>
 
     </div>
@@ -117,148 +117,151 @@ get_header(); ?>
     <form name="edit_scene_form" action="" id="edit_scene_form" method="POST" enctype="multipart/form-data">
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell--span-5">
+            <div class="mdc-layout-grid__inner">
 
-				<?php $featuredImgUrl = get_the_post_thumbnail_url( $scene_id ); ?>
+                <div class="mdc-layout-grid__cell--span-5">
+
+					<?php $featuredImgUrl = get_the_post_thumbnail_url( $scene_id ); ?>
 
 
 
-                <h2 class="mdc-typography--title">Set a background for <?php echo $scene_title; ?></h2>
+                    <h2 class="mdc-typography--title">Set a background for <?php echo $scene_title; ?></h2>
 
-				<?php if ($featuredImgUrl) { ?>
+					<?php if ($featuredImgUrl) { ?>
 
-                    <div class="ImageContainer">
-                        <img id="featuredImgPreview" src="<?php echo $featuredImgUrl; ?>">
-                    </div>
-
-				<?php } else { ?>
-
-                    <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-
-				<?php } ?>
-
-                <input type="file" name="scene-featured-image" title="Featured image" value="" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
-
-                <hr class="WhiteSpaceSeparator">
-
-				<?php if ($scene_type !== 'credits') { ?>
-
-                    <h2 class="mdc-typography--title">Enable Main Menu entries</h2>
-					<?php
-
-					$optionsFlag = get_post_meta($scene_id,'wpunity_menu_has_options',true);
-					$optionsEnabled = $optionsFlag ? 'true' : 'false';
-					$optionsChecked = $optionsFlag ? 'checked' : '';
-
-					$loginFlag = get_post_meta($scene_id,'wpunity_menu_has_login',true);
-					$loginEnabled = $loginFlag ? 'true' : 'false';
-					$loginChecked = $loginFlag ? 'checked' : '';
-
-					$helpFlag = get_post_meta($scene_id,'wpunity_menu_has_help',true);
-					$helpEnabled = $helpFlag ? 'true' : 'false';
-					$helpChecked = $helpFlag ? 'checked' : '';
-
-					?>
-                    <div class="SectionSwitchItemStyle">
-                        <div class="mdc-switch">
-                            <input type="checkbox" name="options" value="<?php echo $optionsEnabled; ?>" id="options-switch" class="mdc-switch__native-control" <?php echo $optionsChecked; ?> />
-                            <div class="mdc-switch__background">
-                                <div class="mdc-switch__knob"></div>
-                            </div>
+                        <div class="ImageContainer">
+                            <img id="featuredImgPreview" src="<?php echo $featuredImgUrl; ?>">
                         </div>
-                        <label for="options-switch" class="mdc-switch-label">Options</label>
-                    </div>
 
-                    <div class="SectionSwitchItemStyle">
-                        <div class="mdc-switch">
-                            <input type="checkbox" name="login" value="<?php echo $loginEnabled; ?>" id="login-switch" class="mdc-switch__native-control" <?php echo $loginChecked; ?>/>
-                            <div class="mdc-switch__background">
-                                <div class="mdc-switch__knob"></div>
-                            </div>
-                        </div>
-                        <label for="login-switch" class="mdc-switch-label">Login</label>
-                    </div>
+					<?php } else { ?>
 
-                    <div class="SectionSwitchItemStyle">
-                        <div class="mdc-switch">
-                            <input type="checkbox" name="help" value="<?php echo $helpEnabled; ?>" id="help-switch" class="mdc-switch__native-control" <?php echo $helpChecked; ?>/>
-                            <div class="mdc-switch__background">
-                                <div class="mdc-switch__knob"></div>
-                            </div>
-                        </div>
-                        <label for="help-switch" class="mdc-switch-label">Help</label>
-                    </div>
+                        <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
 
-				<?php } ?>
-
-            </div>
-
-            <div class="mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell--span-6">
-
-				<?php if ($scene_type === 'credits') { ?>
-
-                    <h2 class="mdc-typography--title">Insert information about the people that created the project or acknowledgements</h2>
-                    <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                        <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
-                        <label for="creditsTextarea" class="mdc-textfield__label">Edit Credits text</label>
-                    </div>
-
-
-				<?php } else { ?>
-
-
-					<?php if ($helpEnabled === 'true') { ?>
-                        <div class="mdc-layout-grid" id="helpDetailsSection">
-
-                            <div class="mdc-layout-grid__cell--span-12">
-                                <h2 class="mdc-typography--title">Help description</h2>
-                                <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                                    <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
-                                    <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
-                                </div>
-                            </div>
-
-                            <div class="mdc-layout-grid__cell--span-12">
-
-                                <h2 class="mdc-typography--title">Help image</h2>
-
-								<?php
-								$help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
-								$help_imgURL = wp_get_attachment_url( $help_imgID );
-
-								if ($help_imgURL) { ?>
-
-                                    <div class="ImageContainer">
-                                        <img id="helpImgPreview" src="<?php echo $help_imgURL; ?>">
-                                    </div>
-
-								<?php } else { ?>
-
-                                    <img id="helpImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-
-								<?php } ?>
-
-                                <input type="file" name="help-image" title="Help image" value="" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
-
-                            </div>
-
-                        </div>
 					<?php } ?>
 
-				<?php } ?>
+                    <input type="file" name="scene-featured-image" title="Featured image" value="" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
-                <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                <input type="hidden" name="submitted" id="submitted" value="true" />
-            </div>
+					<?php if ($scene_type !== 'credits') { ?>
 
-            <div class="mdc-layout-grid__cell--span-12">
+                        <h2 class="mdc-typography--title">Enable Main Menu entries</h2>
+						<?php
 
-                <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                    Submit changes
-                </button>
+						$optionsFlag = get_post_meta($scene_id,'wpunity_menu_has_options',true);
+						$optionsEnabled = $optionsFlag ? 'true' : 'false';
+						$optionsChecked = $optionsFlag ? 'checked' : '';
+
+						$loginFlag = get_post_meta($scene_id,'wpunity_menu_has_login',true);
+						$loginEnabled = $loginFlag ? 'true' : 'false';
+						$loginChecked = $loginFlag ? 'checked' : '';
+
+						$helpFlag = get_post_meta($scene_id,'wpunity_menu_has_help',true);
+						$helpEnabled = $helpFlag ? 'true' : 'false';
+						$helpChecked = $helpFlag ? 'checked' : '';
+
+						?>
+                        <div class="SectionSwitchItemStyle">
+                            <div class="mdc-switch">
+                                <input type="checkbox" name="options" value="<?php echo $optionsEnabled; ?>" id="options-switch" class="mdc-switch__native-control" <?php echo $optionsChecked; ?> />
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
+                                </div>
+                            </div>
+                            <label for="options-switch" class="mdc-switch-label">Options</label>
+                        </div>
+
+                        <div class="SectionSwitchItemStyle">
+                            <div class="mdc-switch">
+                                <input type="checkbox" name="login" value="<?php echo $loginEnabled; ?>" id="login-switch" class="mdc-switch__native-control" <?php echo $loginChecked; ?>/>
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
+                                </div>
+                            </div>
+                            <label for="login-switch" class="mdc-switch-label">Login</label>
+                        </div>
+
+                        <div class="SectionSwitchItemStyle">
+                            <div class="mdc-switch">
+                                <input type="checkbox" name="help" value="<?php echo $helpEnabled; ?>" id="help-switch" class="mdc-switch__native-control" <?php echo $helpChecked; ?>/>
+                                <div class="mdc-switch__background">
+                                    <div class="mdc-switch__knob"></div>
+                                </div>
+                            </div>
+                            <label for="help-switch" class="mdc-switch-label">Help</label>
+                        </div>
+
+					<?php } ?>
+
+                </div>
+
+                <div class="mdc-layout-grid__cell--span-1"></div>
+                <div class="mdc-layout-grid__cell--span-6">
+
+					<?php if ($scene_type === 'credits') { ?>
+
+                        <h2 class="mdc-typography--title">Insert information about the people that created the project or acknowledgements</h2>
+                        <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                            <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;"><?php echo $scene_post->post_content; ?></textarea>
+                            <label for="creditsTextarea" class="mdc-textfield__label">Edit Credits text</label>
+                        </div>
+
+
+					<?php } else { ?>
+
+
+						<?php if ($helpEnabled === 'true') { ?>
+                            <div class="mdc-layout-grid" id="helpDetailsSection">
+
+                                <div class="mdc-layout-grid__cell--span-12">
+                                    <h2 class="mdc-typography--title">Help description</h2>
+                                    <div class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
+                                        <textarea id="helpTextarea" name="help-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo get_post_meta($scene_id, 'wpunity_scene_help_text', true); ?></textarea>
+                                        <label for="helpTextarea" class="mdc-textfield__label">Edit help description</label>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Help image</h2>
+
+									<?php
+									$help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
+									$help_imgURL = wp_get_attachment_url( $help_imgID );
+
+									if ($help_imgURL) { ?>
+
+                                        <div class="ImageContainer">
+                                            <img id="helpImgPreview" src="<?php echo $help_imgURL; ?>">
+                                        </div>
+
+									<?php } else { ?>
+
+                                        <img id="helpImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+
+									<?php } ?>
+
+                                    <input type="file" name="help-image" title="Help image" value="" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
+
+                                </div>
+
+                            </div>
+						<?php } ?>
+
+					<?php } ?>
+
+                    <hr class="WhiteSpaceSeparator">
+
+					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                    <input type="hidden" name="submitted" id="submitted" value="true" />
+                </div>
+
+                <div class="mdc-layout-grid__cell--span-12">
+
+                    <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                        Submit changes
+                    </button>
+                </div>
             </div>
         </div>
     </form>

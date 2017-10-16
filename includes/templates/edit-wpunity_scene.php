@@ -110,7 +110,8 @@ get_header(); ?>
 
 
                 <div class="mdc-textfield mdc-textfield--fullwidth--theme-dark mdc-form-field" data-mdc-auto-init="MDCTextfield" style="margin-top: 0; margin-bottom:0;">
-                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title" aria-controls="title-validation-msg" minlength="3" required style="box-shadow: none; border-color:transparent;">
+                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title"
+                           aria-controls="title-validation-msg" minlength="3" required style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
                     <p class="mdc-textfield-helptext mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
                         Must be at least 3 characters long
@@ -145,7 +146,8 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell--span-12">
 
                         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" minlength="3" style="box-shadow: none; border-color:transparent;">
+                            <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                   minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
                             <label for="sceneDescriptionInput" class="mdc-textfield__label">
                                 Scene description
                             </label>

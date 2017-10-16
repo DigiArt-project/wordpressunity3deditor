@@ -13,8 +13,8 @@ if( isset($_GET['wpunity_asset']) ) {
 	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 	$asset_post = get_post($asset_inserted_id);
 	if($asset_post->post_type == 'wpunity_asset3d') {
-	    $create_new = 0;
-	    $asset_checked_id = $asset_inserted_id;
+		$create_new = 0;
+		$asset_checked_id = $asset_inserted_id;
 	}
 }
 
@@ -179,41 +179,44 @@ get_header();
         <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
             <div class="mdc-layout-grid">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">
-                        <label for="title" class="mdc-textfield__label">
-                            Enter a scene title
-                    </div>
-                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                       id="title-validation-msg">
-                        Between 3 - 25 characters
-                    </p>
-                </div>
+                <div class="mdc-layout-grid__inner">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-
-                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                               maxlength="50" aria-controls="desc-validation-msg" style="box-shadow: none; border-color:transparent;">
-                        <label for="desc" class="mdc-textfield__label">
-                            Enter a scene description
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                   aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                            <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
+                            <div class="mdc-textfield__bottom-line"></div>
+                        </div>
+                        <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                           id="title-validation-msg">
+                            Between 3 - 25 characters
+                        </p>
                     </div>
 
-                </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                    <input type="hidden" name="submitted" id="submitted" value="true" />
-                    <button style="float:right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
-                        ADD SCENE
-                    </button>
+                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                   maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.5); box-shadow: none; border-radius: 0;">
+                            <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
+                            <div class="mdc-textfield__bottom-line"></div>
+                        </div>
 
+                    </div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+
+						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                        <input type="hidden" name="submitted" id="submitted" value="true" />
+                        <button style="float:right;" class="mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                            ADD SCENE
+                        </button>
+
+                    </div>
                 </div>
             </div>
         </form>
@@ -258,184 +261,184 @@ if ( $custom_query->have_posts() ) :?>
 
     <div class="mdc-layout-grid">
 
-		<?php while ( $custom_query->have_posts() ) :
-			$custom_query->the_post();
-			$scene_id = get_the_ID();
-			$scene_title = get_the_title();
-			$scene_desc = get_the_content();
+        <div class="mdc-layout-grid__inner">
 
-			?>
+			<?php while ( $custom_query->have_posts() ) :
+				$custom_query->the_post();
+				$scene_id = get_the_ID();
+				$scene_title = get_the_title();
+				$scene_desc = get_the_content();
 
-            <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
-                <div class="mdc-card mdc-theme--background">
-                    <div class="SceneThumbnail">
-						<?php
+				?>
 
-						$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-						$scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
+                <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
+                    <div class="mdc-card mdc-theme--background">
+                        <div class="SceneThumbnail">
+							<?php
 
-						//create permalink depending the scene yaml category
-						$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-						$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-						?>
-                        <a href="<?php echo $edit_page_link; ?>">
+							$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
+							$scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
 
-							<?php if(has_post_thumbnail($scene_id)) { ?>
-								<?php echo get_the_post_thumbnail( $scene_id ); ?>
+							//create permalink depending the scene yaml category
+							$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+							$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
+							?>
+                            <a href="<?php echo $edit_page_link; ?>">
 
-							<?php } else { ?>
+								<?php if(has_post_thumbnail($scene_id)) { ?>
+									<?php echo get_the_post_thumbnail( $scene_id ); ?>
 
-                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                    <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                </div>
+								<?php } else { ?>
 
+                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
+                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
+                                    </div>
+
+								<?php } ?>
+                            </a>
+                        </div>
+                        <section class="mdc-card__primary">
+                            <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
+                                style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
+								<?php echo $scene_title; ?>
+                            </h1>
+                            <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
+                                &#8203;<?php echo $scene_desc; ?>
+                            </h2>
+
+                        </section>
+                        <section class="mdc-card__actions">
+							<?php if (!$default_scene) { ?>
+                                <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
 							<?php } ?>
-                        </a>
+                            <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
+                        </section>
                     </div>
-                    <section class="mdc-card__primary">
-                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
-                            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-							<?php echo $scene_title; ?>
-                        </h1>
-                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
-                            &#8203;<?php echo $scene_desc; ?>
+                </div>
+
+			<?php endwhile;?>
+
+            <!--Delete Scene Dialog-->
+            <aside id="delete-dialog"
+                   class="mdc-dialog"
+                   role="alertdialog"
+                   aria-labelledby="Delete scene dialog"
+                   aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
+                <div class="mdc-dialog__surface">
+                    <header class="mdc-dialog__header">
+                        <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                            Delete scene?
+                        </h2>
+                    </header>
+                    <section id="delete-dialog-description" class="mdc-dialog__body">
+                        Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+                    </section>
+
+                    <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
+                        <h3 class="mdc-typography--title">Deleting...</h3>
+
+                        <div class="progressSlider">
+                            <div class="progressSliderLine"></div>
+                            <div class="progressSliderSubLine progressIncrease"></div>
+                            <div class="progressSliderSubLine progressDecrease"></div>
+                        </div>
+                    </section>
+
+                    <footer class="mdc-dialog__footer">
+                        <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
+                        <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
+                    </footer>
+                </div>
+                <div class="mdc-dialog__backdrop"></div>
+            </aside>
+
+            <!--Compile Dialog-->
+            <aside id="compile-dialog"
+                   class="mdc-dialog"
+                   role="alertdialog"
+                   data-game-slug="<?php echo $gameSlug; ?>"
+                   data-project-id="<?php echo $project_id; ?>"
+                   aria-labelledby="my-mdc-dialog-label"
+                   aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
+                <div class="mdc-dialog__surface">
+
+                    <header class="mdc-dialog__header">
+                        <h2 class="mdc-dialog__header__title">
+                            Compile game
+                        </h2>
+                    </header>
+
+                    <section class="mdc-dialog__body">
+
+                        <h3 class="mdc-typography--subheading2"> Platform </h3>
+
+                        <div id="platform-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 40%;">
+                            <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
+                            <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
+                                <ul class="mdc-list mdc-simple-menu__items">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;">
+                                        Select a platform
+                                    </li>
+                                    <li class="mdc-list-item" role="option" id="platform-windows" tabindex="0">
+                                        Windows
+                                    </li>
+                                    <li class="mdc-list-item" role="option" id="platform-linux" tabindex="0">
+                                        Linux
+                                    </li>
+                                    <li class="mdc-list-item" role="option" id="platform-mac" tabindex="0">
+                                        Mac OS
+                                    </li>
+                                    <li class="mdc-list-item" role="option" id="platform-web" tabindex="0">
+                                        Web
+                                    </li>
+                                    <li class="mdc-list-item" role="option" id="platform-android" tabindex="0">
+                                        Android
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <input id="platformInput" type="hidden">
+
+
+                        <div class="mdc-typography--caption mdc-theme--text-primary-on-background" style="float: right;"> <i title="Memory Usage" class="material-icons AlignIconToBottom">memory</i> <span  id="unityTaskMemValue">0</span> KB </div>
+
+                        <hr class="WhiteSpaceSeparator">
+
+                        <h2 id="compileProgressTitle" style="display: none" class="CenterContents mdc-typography--headline">
+                            Step: 1/4
                         </h2>
 
-                    </section>
-                    <section class="mdc-card__actions">
-						<?php if (!$default_scene) { ?>
-                            <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-						<?php } ?>
-                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
-                    </section>
-                </div>
-            </div>
-
-		<?php endwhile;?>
-
-        <!--Delete Scene Dialog-->
-        <aside id="delete-dialog"
-               style="visibility:hidden"
-               class="mdc-dialog"
-               role="alertdialog"
-               aria-labelledby="Delete scene dialog"
-               aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
-            <div class="mdc-dialog__surface">
-                <header class="mdc-dialog__header">
-                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
-                        Delete scene?
-                    </h2>
-                </header>
-                <section id="delete-dialog-description" class="mdc-dialog__body">
-                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
-                </section>
-
-                <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
-                    <h3 class="mdc-typography--title">Deleting...</h3>
-
-                    <div class="progressSlider">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLine progressIncrease"></div>
-                        <div class="progressSliderSubLine progressDecrease"></div>
-                    </div>
-                </section>
-
-                <footer class="mdc-dialog__footer">
-                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
-                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
-                </footer>
-            </div>
-            <div class="mdc-dialog__backdrop"></div>
-        </aside>
-
-        <!--Compile Dialog-->
-        <aside id="compile-dialog"
-               style="visibility:hidden"
-               class="mdc-dialog"
-               role="alertdialog"
-               data-game-slug="<?php echo $gameSlug; ?>"
-               data-project-id="<?php echo $project_id; ?>"
-               aria-labelledby="my-mdc-dialog-label"
-               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
-            <div class="mdc-dialog__surface">
-
-                <header class="mdc-dialog__header">
-                    <h2 class="mdc-dialog__header__title">
-                        Compile game
-                    </h2>
-                </header>
-
-                <section class="mdc-dialog__body">
-
-                    <h3 class="mdc-typography--subheading2"> Platform </h3>
-
-                    <div id="platform-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 40%;">
-                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
-                        <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
-                            <ul class="mdc-list mdc-simple-menu__items">
-                                <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;">
-                                    Select a platform
-                                </li>
-                                <li class="mdc-list-item" role="option" id="platform-windows" tabindex="0">
-                                    Windows
-                                </li>
-                                <li class="mdc-list-item" role="option" id="platform-linux" tabindex="0">
-                                    Linux
-                                </li>
-                                <li class="mdc-list-item" role="option" id="platform-mac" tabindex="0">
-                                    Mac OS
-                                </li>
-                                <li class="mdc-list-item" role="option" id="platform-web" tabindex="0">
-                                    Web
-                                </li>
-                                <li class="mdc-list-item" role="option" id="platform-android" tabindex="0">
-                                    Android
-                                </li>
-
-                            </ul>
+                        <div class="progressSlider" id="compileProgressDeterminate" style="display: none;">
+                            <div class="progressSliderLine"></div>
+                            <div class="progressSliderSubLineDeterminate" id="progressSliderSubLineDeterminateValue"></div>
                         </div>
-                    </div>
-                    <input id="platformInput" type="hidden">
+
+                        <div class="progressSlider" id="compileProgressSlider" style="display: none;">
+                            <div class="progressSliderLine"></div>
+                            <div class="progressSliderSubLine progressIncrease"></div>
+                            <div class="progressSliderSubLine progressDecrease"></div>
+                        </div>
 
 
-                    <div class="mdc-typography--caption mdc-theme--text-primary-on-background" style="float: right;"> <i title="Memory Usage" class="material-icons AlignIconToBottom">memory</i> <span  id="unityTaskMemValue">0</span> KB </div>
+                        <div id="compilationProgressText" class="CenterContents mdc-typography--title"></div>
 
-                    <hr class="WhiteSpaceSeparator">
+                        <div class="CenterContents">
+                            <a class="mdc-typography--title" href="" id="wpunity-ziplink" style="display:none;"> <i style="vertical-align: text-bottom" class="material-icons">file_download</i> Download Zip</a>
+                            <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;margin-left:30px" target="_blank">Web link</a>
+                        </div>
 
-                    <h2 id="compileProgressTitle" style="display: none" class="CenterContents mdc-typography--headline">
-                        Step: 1/4
-                    </h2>
+                    </section>
 
-                    <div class="progressSlider" id="compileProgressDeterminate" style="display: none;">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLineDeterminate" id="progressSliderSubLineDeterminateValue"></div>
-                    </div>
+                    <footer class="mdc-dialog__footer">
+                        <a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                        <a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised LinkDisabled">Proceed</a>
+                    </footer>
+                </div>
+                <div class="mdc-dialog__backdrop"></div>
+            </aside>
 
-                    <div class="progressSlider" id="compileProgressSlider" style="display: none;">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLine progressIncrease"></div>
-                        <div class="progressSliderSubLine progressDecrease"></div>
-                    </div>
-
-
-                    <div id="compilationProgressText" class="CenterContents mdc-typography--title"></div>
-
-                    <div class="CenterContents">
-                        <a class="mdc-typography--title" href="" id="wpunity-ziplink" style="display:none;"> <i style="vertical-align: text-bottom" class="material-icons">file_download</i> Download Zip</a>
-                        <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;margin-left:30px" target="_blank">Web link</a>
-                    </div>
-
-                </section>
-
-                <footer class="mdc-dialog__footer">
-                    <a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
-                    <a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised LinkDisabled">Proceed</a>
-                </footer>
-            </div>
-            <div class="mdc-dialog__backdrop"></div>
-        </aside>
-
-
+        </div>
     </div>
 
 <?php else : ?>

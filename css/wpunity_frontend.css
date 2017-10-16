@@ -5,7 +5,7 @@ input[type="text"].mdc-textfield__input,
 textarea.mdc-textfield__input,
 .mdc-textfield__input
 {
-    background-color: transparent; !important
+background-color: transparent; !important
 -webkit-box-shadow: none; !important
 -moz-box-shadow: none; !important
 -box-shadow: none; !important
