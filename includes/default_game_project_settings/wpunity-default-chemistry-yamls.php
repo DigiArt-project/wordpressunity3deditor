@@ -1,20 +1,28 @@
 <?php
 
+/***************************************************************************************************************/
+// YAMLS for ASSETS' TYPES default values (CHEMISTRY GAMES)
+/***************************************************************************************************************/
+
+//To be added
+
+
+/***************************************************************************************************************/
+// YAMLS for GAMES' TYPES Project Settings default values (CHEMISTRY GAMES)
+/***************************************************************************************************************/
+
+global $AudioManager_asset3,$ClusterInputManager_asset3,$DynamicsManager_asset3,$EditorBuildSettings_asset3,$EditorSettings_asset3,$GraphicsSettings_asset3;
+global $InputManager_asset3,$NavMeshAreas_asset3,$NetworkManager_asset3,$Physics2DSettings_asset3,$ProjectSettings_asset3,$ProjectVersion_asset3;
+global $QualitySettings_asset3,$TagManager_asset3,$TimeManager_asset3,$UnityConnect_asset3;
+
 //4th alphabetically:  EditorBuildSettings.asset   : It is the only that should change across compilations
 // Each scene should be added with
 //$sceneToAddPattern = array("  - enabled: 1
 //    path: Assets/scenes/S_MainMenu.unity");
 // Line change with character: chr(10)
 
-
-function wpunity_games_taxtype_fill_chemistry(){
-    // All the others Alphabetically
-    global $AudioManager_asset,$ClusterInputManager_asset,$DynamicsManager_asset,$EditorBuildSettings_asset,$EditorSettings_asset,$GraphicsSettings_asset;
-    global $InputManager_asset,$NavMeshAreas_asset,$NetworkManager_asset,$Physics2DSettings_asset,$ProjectSettings_asset,$ProjectVersion_asset;
-    global $QualitySettings_asset,$TagManager_asset,$TimeManager_asset,$UnityConnect_asset;
-
 //1. AudioManager.asset
-    $AudioManager_asset = array("%YAML 1.1
+$AudioManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!11 &1
 AudioManager:
@@ -32,7 +40,7 @@ AudioManager:
   m_VirtualizeEffects: 1");
 
 //2. ClusterInputManager.asset
-    $ClusterInputManager_asset = array("%YAML 1.1
+$ClusterInputManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!236 &1
 ClusterInputManager:
@@ -41,7 +49,7 @@ ClusterInputManager:
 ");
 
 //3. DynamicsManager.asset
-    $DynamicsManager_asset = array("%YAML 1.1
+$DynamicsManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!55 &1
 PhysicsManager:
@@ -62,7 +70,7 @@ PhysicsManager:
 ");
 
 //4. EditorBuildSettings.asset
-    $EditorBuildSettings_asset = array("%YAML 1.1
+$EditorBuildSettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1045 &1
 EditorBuildSettings:
@@ -72,7 +80,7 @@ EditorBuildSettings:
 ");
 
 //5. EditorSettings.asset
-    $EditorSettings_asset = array("%YAML 1.1
+$EditorSettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!159 &1
 EditorSettings:
@@ -89,7 +97,7 @@ EditorSettings:
 ");
 
 //6. GraphicsSettings.asset
-    $GraphicsSettings_asset = array("%YAML 1.1
+$GraphicsSettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!30 &1
 GraphicsSettings:
@@ -171,7 +179,7 @@ GraphicsSettings:
 ");
 
 //7. InputManager.asset
-    $InputManager_asset = array("%YAML 1.1
+$InputManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!13 &1
 InputManager:
@@ -469,7 +477,7 @@ InputManager:
 ");
 
 //8. NavMeshAreas.asset
-    $NavMeshAreas_asset = array("%YAML 1.1
+$NavMeshAreas_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!126 &1
 NavMeshProjectSettings:
@@ -543,7 +551,7 @@ NavMeshProjectSettings:
 ");
 
 //9. NetworkManager.asset
-    $NetworkManager_asset = array("%YAML 1.1
+$NetworkManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!149 &1
 NetworkManager:
@@ -554,7 +562,7 @@ NetworkManager:
 ");
 
 //10. Physics2DSettings.asset
-    $Physics2DSettings_asset = array("%YAML 1.1
+$Physics2DSettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!19 &1
 Physics2DSettings:
@@ -591,7 +599,7 @@ Physics2DSettings:
 ");
 
 //11. ProjectSettings.asset
-    $ProjectSettings_asset = array("%YAML 1.1
+$ProjectSettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!129 &1
 PlayerSettings:
@@ -1203,11 +1211,11 @@ PlayerSettings:
 ");
 
 //12. ProjectVersion.asset
-    $ProjectVersion_asset = array("m_EditorVersion: 5.6.0f3
+$ProjectVersion_asset3 = array("m_EditorVersion: 5.6.0f3
 ");
 
 //13. QualitySettings.asset
-    $QualitySettings_asset = array("%YAML 1.1
+$QualitySettings_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!47 &1
 QualitySettings:
@@ -1390,7 +1398,7 @@ QualitySettings:
 ");
 
 //14. TagManager.asset
-    $TagManager_asset = array("%YAML 1.1
+$TagManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
@@ -1440,7 +1448,7 @@ TagManager:
 ");
 
 //15. TimeManager.asset
-    $TimeManager_asset = array("%YAML 1.1
+$TimeManager_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!5 &1
 TimeManager:
@@ -1452,7 +1460,7 @@ TimeManager:
 ");
 
 //16. UnityConnect.asset
-    $UnityConnect_asset = array("%YAML 1.1
+$UnityConnect_asset3 = array("%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!310 &1
 UnityConnectSettings:
@@ -1483,38 +1491,170 @@ UnityConnectSettings:
     m_AndroidGameId:
 ");
 
-
-    wp_insert_term(
-        'Chemistry', // the term
-        'wpunity_game_type', // the taxonomy
-        array(
-            'description'=> 'Chemistry Games',
-            'slug' => 'chemistry_games',
-        )
-    );
-
-    $inserted_term = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
-
-    update_term_meta($inserted_term->term_id, 'wpunity_audio_manager_term', $AudioManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_cluster_input_manager_term', $ClusterInputManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_dynamics_manager_term', $DynamicsManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_editor_build_settings_term', $EditorBuildSettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_editor_settings_term', $EditorSettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_graphics_settings_term', $GraphicsSettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_input_manager_term', $InputManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_nav_mesh_areas_term', $NavMeshAreas_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_network_manager_term', $NetworkManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_physics2d_settings_term', $Physics2DSettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_project_settings_term', $ProjectSettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_project_version_term', $ProjectVersion_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_quality_settings_term', $QualitySettings_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_tag_manager_term', $TagManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_time_manager_term', $TimeManager_asset[0], true);
-    update_term_meta($inserted_term->term_id, 'wpunity_unity_connect_settings_term', $UnityConnect_asset[0], true);
-
+function wpunity_default_value_AudioManager_chemistry_get(){
+    global $AudioManager_asset3;
+    return $AudioManager_asset3[0];
 }
 
-add_action( 'init', 'wpunity_games_taxtype_fill_chemistry' );
+function wpunity_default_value_ClusterInputManager_chemistry_get(){
+    global $ClusterInputManager_asset3;
+    return $ClusterInputManager_asset3[0];
+}
+
+function wpunity_default_value_DynamicsManager_chemistry_get(){
+    global $DynamicsManager_asset3;
+    return $DynamicsManager_asset3[0];
+}
+
+function wpunity_default_value_EditorBuildSettings_chemistry_get(){
+    global $EditorBuildSettings_asset3;
+    return $EditorBuildSettings_asset3[0];
+}
+
+function wpunity_default_value_EditorSettings_chemistry_get(){
+    global $EditorSettings_asset3;
+    return $EditorSettings_asset3[0];
+}
+
+function wpunity_default_value_GraphicsSettings_chemistry_get(){
+    global $GraphicsSettings_asset3;
+    return $GraphicsSettings_asset3[0];
+}
+
+function wpunity_default_value_InputManager_chemistry_get(){
+    global $InputManager_asset3;
+    return $InputManager_asset3[0];
+}
+
+function wpunity_default_value_NavMeshAreas_chemistry_get(){
+    global $NavMeshAreas_asset3;
+    return $NavMeshAreas_asset3[0];
+}
+
+function wpunity_default_value_NetworkManager_chemistry_get(){
+    global $NetworkManager_asset3;
+    return $NetworkManager_asset3[0];
+}
+
+function wpunity_default_value_Physics2DSettings_chemistry_get(){
+    global $Physics2DSettings_asset3;
+    return $Physics2DSettings_asset3[0];
+}
+
+function wpunity_default_value_ProjectSettings_chemistry_get(){
+    global $ProjectSettings_asset3;
+    return $ProjectSettings_asset3[0];
+}
+
+function wpunity_default_value_ProjectVersion_chemistry_get(){
+    global $ProjectVersion_asset3;
+    return $ProjectVersion_asset3[0];
+}
+
+function wpunity_default_value_QualitySettings_chemistry_get(){
+    global $QualitySettings_asset3;
+    return $QualitySettings_asset3[0];
+}
+
+function wpunity_default_value_TagManager_chemistry_get(){
+    global $TagManager_asset3;
+    return $TagManager_asset3[0];
+}
+
+function wpunity_default_value_TimeManager_chemistry_get(){
+    global $TimeManager_asset3;
+    return $TimeManager_asset3[0];
+}
+
+function wpunity_default_value_unityConnect_chemistry_get(){
+    global $UnityConnect_asset3;
+    return $UnityConnect_asset3[0];
+}
 
 
- ?>
+/***************************************************************************************************************/
+// YAMLS for SCENES default values (CHEMISTRY GAMES)
+/***************************************************************************************************************/
+
+global $ini_scene_chemistry_unity_pattern,$ini_scene_main_menu_chem_unity_pattern,$ini_scene_credits_chem_unity_pattern,$ini_scene_options_chem_unity_pattern,$ini_scene_help_chem_unity_pattern;
+global $ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
+
+$ini_scene_chemistry_unity_pattern = array('ADD HERE');
+
+$ini_scene_main_menu_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_credits_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_options_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_help_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_login_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_reward_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_chem_unity_pattern = array('ADD HERE');
+
+$ini_scene_selector_chem_unity_pattern2 = array('ADD HERE');
+
+$ini_scene_selector_chem_text = 'ADD HERE';
+
+
+function wpunity_default_value_chemwonderaround_unity_chemistry_get(){
+  global $ini_scene_chemistry_unity_pattern;
+  return $ini_scene_chemistry_unity_pattern[0];
+}
+
+function wpunity_default_value_mmenu_unity_chemistry_get(){
+  global $ini_scene_main_menu_chem_unity_pattern;
+  return $ini_scene_main_menu_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_credits_unity_chemistry_get(){
+  global $ini_scene_credits_chem_unity_pattern;
+  return $ini_scene_credits_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_options_unity_chemistry_get(){
+  global $ini_scene_options_chem_unity_pattern;
+  return $ini_scene_options_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_help_unity_chemistry_get(){
+  global $ini_scene_help_chem_unity_pattern;
+  return $ini_scene_help_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_login_unity_chemistry_get(){
+  global $ini_scene_login_chem_unity_pattern;
+  return $ini_scene_login_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_reward_unity_chemistry_get(){
+  global $ini_scene_reward_chem_unity_pattern;
+  return $ini_scene_reward_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_selector_unity_chemistry_get(){
+  global $ini_scene_selector_chem_unity_pattern;
+  return $ini_scene_selector_chem_unity_pattern[0];
+}
+
+function wpunity_default_value_selector2_unity_chemistry_get(){
+  global $ini_scene_selector_chem_unity_pattern2;
+  return $ini_scene_selector_chem_unity_pattern2[0];
+}
+
+function wpunity_default_value_selectortext_unity_chemistry_get(){
+  global $ini_scene_selector_chem_text;
+  return $ini_scene_selector_chem_text;
+}
+
+/***************************************************************************************************************/
+//
+/***************************************************************************************************************/
+
+
+
+
+?>
