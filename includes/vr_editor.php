@@ -267,6 +267,7 @@ echo '</script>';
         <div class="mdc-textfield search">
             <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
+            <div class="mdc-textfield__bottom-line"></div>
         </div>
 
         <div class="breadcrumbs"></div>
@@ -291,9 +292,8 @@ echo '</script>';
 
     <!-- Interface for Changing the door properties -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2">
-        <a style="float: right; width: 48px" type="button" class="mdc-button mdc-button--dense mdc-button--raised"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
-            <i class="material-icons">close</i>
+        <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
+            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
         <p class="mdc-typography--title"> Door options </p>

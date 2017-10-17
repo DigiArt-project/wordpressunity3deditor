@@ -182,8 +182,8 @@ get_header();
                 <div class="mdc-layout-grid__inner">
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                        <div class="mdc-textfield  mdc-textfield--theme-dark FullWidth" data-mdc-auto-init="MDCTextfield">
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input FullWidth"
                                    aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
                             <div class="mdc-textfield__bottom-line"></div>
@@ -300,7 +300,7 @@ if ( $custom_query->have_posts() ) :?>
                         <section class="mdc-card__primary">
                             <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
                                 style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-								<?php echo $scene_title; ?>
+								<a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
                             </h1>
                             <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
                                 &#8203;<?php echo $scene_desc; ?>
