@@ -69,7 +69,7 @@ function wpunity_assets_taxcategory_archaeology_fill(){
     update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
 
     wp_insert_term(
-        'Decoration', // the term
+        'Decoration (Archaeology)', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
             'description'=> 'A Decoration (for Archaeology Games) is a game object that can improve the immersiveness such as Archaeological site, Power lines, Trees, etc.',
