@@ -134,17 +134,17 @@ get_header(); ?>
 
 					<?php if ($featuredImgUrl) { ?>
 
-                        <div class="ImageContainer">
+                        <div id="featureImgContainer" class="ImageContainer">
                             <img id="featuredImgPreview" src="<?php echo $featuredImgUrl; ?>">
                         </div>
 
 					<?php } else { ?>
-
-                        <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-
+                        <div id="featureImgContainer">
+                            <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        </div>
 					<?php } ?>
 
-                    <input type="file" name="scene-featured-image" title="Featured image" value="" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+                    <input type="file" name="scene-featured-image" title="Featured image" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                     <hr class="WhiteSpaceSeparator">
 
@@ -231,22 +231,22 @@ get_header(); ?>
                                     <h2 class="mdc-typography--title">Help image</h2>
 
 									<?php
-									$help_imgID = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
-									$help_imgURL = wp_get_attachment_url( $help_imgID );
+									$helpImgId  = get_post_meta($scene_id, 'wpunity_scene_helpimg', true);
+									$helpImgUrl = wp_get_attachment_url( $helpImgId );
 
-									if ($help_imgURL) { ?>
+									if ($helpImgUrl) { ?>
 
-                                        <div class="ImageContainer">
-                                            <img id="helpImgPreview" src="<?php echo $help_imgURL; ?>">
+                                        <div id="helpImgContainer" class="ImageContainer">
+                                            <img id="helpImgPreview" src="<?php echo $helpImgUrl; ?>">
                                         </div>
 
 									<?php } else { ?>
-
-                                        <img id="helpImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-
+                                        <div id="helpImgContainer">
+                                            <img id="helpImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                                        </div>
 									<?php } ?>
 
-                                    <input type="file" name="help-image" title="Help image" value="" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
+                                    <input type="file" name="help-image" title="Help image" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                                 </div>
 
@@ -288,15 +288,42 @@ get_header(); ?>
             });
 
             jQuery("#sceneFeaturedImgInput").change(function() {
-                wpunity_read_url(this, "#featuredImgPreview");
+
+                if(this.value.length === 0) {
+                    jQuery('#featureImgContainer').removeClass('ImageContainer');
+                    document.getElementById('featuredImgPreview').src = '<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>';
+                } else {
+                    jQuery('#featureImgContainer').addClass('ImageContainer');
+                    wpunity_read_url(this, "#featuredImgPreview");
+                }
             });
 
+            jQuery("#sceneFeaturedImgInput").click(function() {
+                if (this.value.length === 0) {
+                    jQuery('#featureImgContainer').removeClass('ImageContainer');
+                    document.getElementById('featuredImgPreview').src = '<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>';
+                }
+            });
+
+
             jQuery("#sceneHelpImgInput").change(function() {
-                wpunity_read_url(this, "#helpImgPreview");
+                if(this.value.length === 0) {
+                    jQuery('#helpImgContainer').removeClass('ImageContainer');
+                    document.getElementById('helpImgPreview').src = '<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>';
+                } else {
+                    jQuery('#helpImgContainer').addClass('ImageContainer');
+                    wpunity_read_url(this, "#helpImgPreview");
+                }
+            });
+
+            jQuery("#sceneHelpImgInput").click(function() {
+                if (this.value.length === 0) {
+                    jQuery('#helpImgContainer').removeClass('ImageContainer');
+                    document.getElementById('helpImgPreview').src = '<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>';
+                }
             });
 
         })();
-
 
     </script>
 
