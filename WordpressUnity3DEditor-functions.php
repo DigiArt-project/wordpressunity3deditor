@@ -149,9 +149,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.p
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-yaml.php' );
-
-
 //===================================== Assets ============================================
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
@@ -168,7 +165,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functi
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-file-creations.php' );
 //3.01 Create Initial Asset Categories
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
@@ -186,9 +182,19 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' )
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-project-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-project-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-yamls.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-settings.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
+
+
 
 // ===================== Obsolete ===================================
 
