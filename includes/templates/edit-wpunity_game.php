@@ -183,7 +183,7 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                         <div class="mdc-textfield  mdc-textfield--theme-dark FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input FullWidth"
                                    aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
                             <div class="mdc-textfield__bottom-line"></div>
