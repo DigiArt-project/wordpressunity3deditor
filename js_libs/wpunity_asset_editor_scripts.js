@@ -6,6 +6,7 @@
 var mtlFileContent = '';
 var objFileContent = '';
 var textureFileContent = '';
+var textureFileContent2 = '';
 var fbxFileContent = '';
 var previewRenderer;
 
@@ -24,12 +25,12 @@ function wpunity_read_file(file, type, callback) {
                 var isFirefox = typeof InstallTrigger !== 'undefined';
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
 
-                if (type !== 'texture') {
+                if (type === 'obj' || type === 'mtl') {
+
                     if (isChrome || isIE) { content = content.replace('data:;base64,', ''); }
                     if (isFirefox) { content = content.replace('data:application/octet-stream;base64,', ''); }
 
                     content = window.atob(content);
-
                 }
 
                 callback(content, type);
@@ -70,6 +71,18 @@ function wpunity_load_file_callback(content, type) {
                 view3d.newTexture(textureFileContent);
             }*/
         }
+
+        if(type === 'texture2') {
+            /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
+            textureFileContent2 = content;
+            document.getElementById('textureFileInput2').value = textureFileContent2;
+
+            // if the obj is already loaded, then load texture on the fly
+            /*if (typeof view3d !== 'undefined') {
+             view3d.newTexture(textureFileContent);
+             }*/
+        }
+
 
         if (objFileContent && mtlFileContent) {
             /*jQuery("#objectPreviewTitle").show();*/
@@ -169,6 +182,7 @@ function wpunity_clear_asset_files(previewCanvas) {
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("textureFileInput").value = "";
+    document.getElementById("textureFileInput2").value = "";
 
     document.getElementById("fileUploadInput").value = "";
 
@@ -179,6 +193,7 @@ function wpunity_clear_asset_files(previewCanvas) {
 
     objFileContent = '';
     textureFileContent = '';
+    textureFileContent2 = '';
     fbxFileContent = '';
     mtlFileContent = '';
 }
@@ -208,13 +223,13 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
         var fileObj = null;
         var fileMtl = null;
         var fileJpg = null;
+        var fileJpg2 = null;
         var files = event.target.files;
 
         for ( var i = 0, file; file = files[ i ]; i++) {
             if ( file.name.indexOf( '\.obj' ) > 0 && fileObj === null ) {
                 fileObj = file;
                 wpunity_read_file(fileObj, 'obj', wpunity_load_file_callback);
-
             }
             if ( file.name.indexOf( '\.mtl' ) > 0 && fileMtl === null ) {
                 fileMtl = file;
@@ -223,6 +238,10 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
             if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg === null ) {
                 fileJpg = file;
                 wpunity_read_file(fileJpg, 'texture', wpunity_load_file_callback);
+            }
+            if ( file.name.indexOf( '\.jpg' ) > 0 && fileJpg !== null ) {
+                fileJpg2 = file;
+                wpunity_read_file(fileJpg2, 'texture2', wpunity_load_file_callback);
             }
         }
 

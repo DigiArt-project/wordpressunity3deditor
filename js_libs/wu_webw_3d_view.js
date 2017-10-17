@@ -34,14 +34,10 @@ var wu_webw_3d_view = (function () {
         // Check for the various File API support.
         this.fileApiAvailable = true;
         if ( window.File && window.FileReader && window.FileList && window.Blob ) {
-
             console.log( 'File API is supported! Enabling all features.' );
-
         } else {
-
             this.fileApiAvailable = false;
             console.warn( 'File API is not supported! Disabling file loading.' );
-
         }
     }
 
@@ -52,7 +48,9 @@ var wu_webw_3d_view = (function () {
         } );
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color( 0x999999 );
+        this.scene.background = new THREE.Color( 0xddb59b );
+
+
 
         this.camera = new THREE.PerspectiveCamera( this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far );
@@ -70,7 +68,7 @@ var wu_webw_3d_view = (function () {
         this.scene.add( directionalLight2 );
         this.scene.add( ambientLight );
 
-        var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0x404040 );
+        var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
         this.scene.add( helper );
 
         this.createPivot();
@@ -86,17 +84,20 @@ var wu_webw_3d_view = (function () {
         var scope = this;
 
         var materialsLoaded = function ( materials ) {
+
+            // REM : Check the materials here
             console.log("materials", materials);
-            var count = Validator.isValid( materials ) ? materials.length : 0;
-
-            console.log("materials count", count);
-
-            console.log( 'Loaded #' + count + ' materials.' );
         };
 
         var meshLoaded = function ( name, bufferGeometry, material ) {
-            console.log( 'Loaded mesh: ' + name + ' Material name: ' + material.name );
+            console.log("----- Report of mesh loaded -------");
+            console.log('Loaded mesh: ' + name );
+            for (var i=0; i<material.length; i++)
+                console.log('Material ', i, material[i]);
+
+            console.log("----------------------------------")
         };
+
         var completedLoading = function () {
             console.log( 'Loading complete!' );
 
@@ -117,7 +118,7 @@ var wu_webw_3d_view = (function () {
     WWOBJLoader2Example.prototype._reportProgress = function( text ) {
         console.log( 'Progress: ' + text );
         /*document.getElementById( 'feedback' ).innerHTML = Validator.isValid( text ) ? text : '';*/
-        console.log(Validator.isValid( text ) ? text : '');
+        //console.log(Validator.isValid( text ) ? text : '');
     };
 
     WWOBJLoader2Example.prototype.loadFiles = function ( prepData ) {
@@ -127,9 +128,8 @@ var wu_webw_3d_view = (function () {
         this.wwObjLoader2.run();
     };
 
-
-
     WWOBJLoader2Example.prototype.loadFilesUser = function ( objDef ) {
+
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
             objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString
         );
@@ -209,22 +209,14 @@ var wu_webw_3d_view = (function () {
     };
 
     WWOBJLoader2Example.prototype.traverseScene = function ( object3d ) {
-
         if ( object3d.material instanceof THREE.MultiMaterial ) {
-
             var materials = object3d.material.materials;
             for ( var name in materials ) {
-
                 if ( materials.hasOwnProperty( name ) )	this.traversalFunction( materials[ name ] );
-
             }
-
         } else if ( object3d.material ) {
-
             this.traversalFunction( object3d.material );
-
         }
-
     };
 
     WWOBJLoader2Example.prototype.clearAllAssets = function () {

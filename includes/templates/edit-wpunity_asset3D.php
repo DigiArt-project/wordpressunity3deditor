@@ -766,7 +766,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                         <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                         <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
-
+                        <input type="hidden" name="textureFileInput2" value="" id="textureFileInput2"/>
 
 
                     </div>
@@ -777,7 +777,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <img id="sshotPreviewImg" style="width: 100px; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
                         <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
-                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary"
+                           data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
 
                 </div>
