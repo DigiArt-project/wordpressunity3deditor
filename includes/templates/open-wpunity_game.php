@@ -130,7 +130,7 @@ $user_id = get_current_user_id();
 			// Output custom query loop
 			if ($custom_query->have_posts()) : ?>
 
-                <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list" style="max-height: 460px; overflow-y: auto">
 					<?php while ($custom_query->have_posts()) :
 						$custom_query->the_post();
 
