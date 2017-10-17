@@ -264,7 +264,7 @@ echo '</script>';
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
-        <div class="mdc-textfield search">
+        <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield">
             <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
             <div class="mdc-textfield__bottom-line"></div>
