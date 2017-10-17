@@ -116,6 +116,7 @@ get_header(); ?>
                        id="title-validation-msg">
                         Must be at least 3 characters long
                     </p>
+                    <div class="mdc-textfield__bottom-line"></div>
                 </div>
 
             </div>
@@ -151,6 +152,7 @@ get_header(); ?>
                             <label for="sceneDescriptionInput" class="mdc-textfield__label">
                                 Scene description
                             </label>
+                            <div class="mdc-textfield__bottom-line"></div>
                         </div>
 
                     </div>

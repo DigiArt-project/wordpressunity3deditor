@@ -267,6 +267,7 @@ echo '</script>';
         <div class="mdc-textfield search">
             <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
+            <div class="mdc-textfield__bottom-line"></div>
         </div>
 
         <div class="breadcrumbs"></div>

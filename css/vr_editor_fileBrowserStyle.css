@@ -10,6 +10,7 @@
 	right: 0;
 	top: 60px;
 	background-color: rgba(0, 0, 0, 0.12);
+	padding: 6px;
 }
 
 /*  For Mobiles
@@ -120,19 +121,19 @@
 /* The container of the folders */
 .filemanager .data {
 	z-index: -3;
-	overflow-y: scroll;
+	overflow-y: auto;
 	margin: 0;
-	padding: 0 0 0 6px;
+	padding: 0;
 }
 
 .filemanager .data li {
 
-	border-radius: 2%;
+	border-radius: 2px;
 	background-color: #fff;
 	overflow: hidden;
 	z-index: 1;
 
-	margin: 4px 0 4px 0;
+	margin: 6px 0 6px 0;
 	transition: 0.3s background-color;
 }
 
