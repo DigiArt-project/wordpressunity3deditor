@@ -1,6 +1,11 @@
 <?php
 
-wp_enqueue_script('wpunity_scripts');
+function load2DSceneEditorScripts() {
+	wp_enqueue_script('wpunity_scripts');
+}
+add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
+
+
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
@@ -258,7 +263,7 @@ get_header(); ?>
 
                 <div class="mdc-layout-grid__cell--span-12">
 
-                    <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                    <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
                         Submit changes
                     </button>
                 </div>
@@ -270,21 +275,29 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        jQuery('#help-switch').click(function() {
-            if (jQuery("#help-switch").is(":checked")) {
-                jQuery("#helpDetailsSection").show();
-            } else {
-                jQuery("#helpDetailsSection").hide();
-            }
-        });
+        (function() {
+            // your page initialization code here
+            // the DOM will be available here
 
-        jQuery("#sceneFeaturedImgInput").change(function() {
-            wpunity_read_url(this, "#featuredImgPreview");
-        });
+            jQuery('#help-switch').click(function() {
+                if (jQuery("#help-switch").is(":checked")) {
+                    jQuery("#helpDetailsSection").show();
+                } else {
+                    jQuery("#helpDetailsSection").hide();
+                }
+            });
 
-        jQuery("#sceneHelpImgInput").change(function() {
-            wpunity_read_url(this, "#helpImgPreview");
-        });
+            jQuery("#sceneFeaturedImgInput").change(function() {
+                wpunity_read_url(this, "#featuredImgPreview");
+            });
+
+            jQuery("#sceneHelpImgInput").change(function() {
+                wpunity_read_url(this, "#helpImgPreview");
+            });
+
+        })();
+
+
     </script>
 
 <?php get_footer(); ?>
