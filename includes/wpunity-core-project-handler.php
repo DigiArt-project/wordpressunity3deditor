@@ -527,14 +527,19 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
     //Copy files of the Model
     $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
     if(is_numeric($objID)){
+        $asset_type = get_the_terms( $asset_id, 'wpunity_asset3d_cat' );
+
         $attachment_post = get_post($objID);
         $attachment_file = $attachment_post->guid;
         $attachment_tempname = str_replace('\\', '/', $attachment_file);
         $attachment_name = pathinfo($attachment_tempname);
         $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
+        if($asset_type[0]->name == 'Site'){$new_file = $folder .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';}
         copy($attachment_file,$new_file);
         wpunity_compile_objmeta_cre($folder,$attachment_name['filename'],$objID);
         $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
+
+        if($asset_type[0]->name == 'Site'){$new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';}
         wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
