@@ -1864,10 +1864,9 @@ $TagManager_asset2 = array("%YAML 1.1
 TagManager:
   serializedVersion: 2
   tags:
-  - consumer
-  - producer
-  - terrain
-  - producer_mesh
+  - poi_imagetext
+  - poi_video
+  - poi_artefact
   layers:
   - Default
   - TransparentFX
