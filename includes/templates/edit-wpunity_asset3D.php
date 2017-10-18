@@ -381,7 +381,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                                 <i class="material-icons ButtonIcon">add</i> Add Field
                             </a>
 
-                            <hr class="WhiteSpaceSeparator">
+
                         </div>
                     </div>
 
@@ -1073,8 +1073,9 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 if(i < poiMaxFields) { // Max input box allowed
                     i++; // Text box increment
                     poiImgDetailsWrapper.append(
-                        '<div class="mdc-layout-grid">'+
+                        '<div class="mdc-layout-grid"><div class="mdc-layout-grid__inner">'+
                         '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
+                            '<label for="poi-input-file-'+i+'"> Select an image</label>'+
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
@@ -1083,7 +1084,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
                         '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div></div>'
+                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div>' +
+                        '</div></div>'
                     ); // Add input box
                 }
                 // Run autoInit with noop to suppress warnings.
