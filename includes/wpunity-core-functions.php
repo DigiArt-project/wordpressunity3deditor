@@ -149,9 +149,16 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm,$gameSlug){
 
 	$textureContent = $_POST['textureFileInput'];
-	$screenShotFile = $_POST['sshotFileInput'];
+    $screenShotFile = $_POST['sshotFileInput'];
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
+
+
+	$fh = fopen('output_post.txt', 'w' );
+    fwrite($fh, print_r($_POST, true));
+    fclose($fh);
+
+
 
 	// TEXTURE: first upload jpg and get the filename for input at mtl
 	$textureFile_id = wpunity_upload_Assetimg64($textureContent, 'texture'.$assetTitleForm, $asset_newID, $gameSlug);

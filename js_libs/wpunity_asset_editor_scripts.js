@@ -71,16 +71,19 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
 
             /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
 
-            var textureFileInput = document.getElementsByName('textureFileInput[]');
 
-            textureFileInput[filename] = document.createElement("INPUT"); // clone with spread operator
-            textureFileInput[filename].setAttribute("type", "hidden");
-            textureFileInput[filename].value = content;
+            jQuery('#3dAssetForm').append('<input type="hidden" name="textureFileInput['+filename+']" id="textureFileInput" value="' + content + '" />');
 
-            // if the obj is already loaded, then load texture on the fly
-            /*if (typeof view3d !== 'undefined') {
-             view3d.newTexture(textureFileContent);
-             }*/
+            //var textureFileInput = document.getElementsByName('textureFileInput[]');
+
+
+            // textureFileInput[0] = document.createElement("INPUT");
+            // textureFileInput[filename].setAttribute("type", "hidden");
+            //textureFileInput[filename].value = content;
+
+
+
+
 
             checkerCompleteReading(type, canvas, filename);
         }
@@ -247,17 +250,25 @@ function checkerCompleteReading(type, canvas, filename){
                     // Start without Textures
                     previewCanvas.loadFilesUser(objectDefinition);
                 } else {
-                    var textureFileInput = document.getElementsByName('textureFileInput[]');
 
-                    if ( nJpg === Object.keys(textureFileInput).length) {
+                    if ( nJpg === jQuery("input[id='textureFileInput']").length) {
+
+                        // Get textureFileInput array with jQuery
+                        var textFil = jQuery("input[id='textureFileInput']");
+
+                        // Store here the raw image textures
                         objectDefinition.pathTexture = [];
 
-                        console.log(textureFileInput);
-                        for (var fn in textureFileInput ) {
-                            if ( fn.indexOf('.jpg') > 0) {
-                                objectDefinition.pathTexture[fn] = textureFileInput[fn].value;
-                            }
+                        for (var k = 0; k < textFil.length; k++){
+                            var myname = textFil[k].name;
+
+                            // do some text processing on the names to remove textureFileInput[ and ] from name
+                            myname = myname.replace('textureFileInput[','');
+                            myname = myname.replace(']','');
+
+                            objectDefinition.pathTexture[myname] = textFil[k].value;
                         }
+
                         // Start with textures
                         canvas.loadFilesUser(objectDefinition);
                     }
