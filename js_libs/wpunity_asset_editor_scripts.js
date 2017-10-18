@@ -56,8 +56,12 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
 
     if(type === 'obj') {
 
+        // Obj as ArrayBuffer (needed for ObjLoader2 and webworkers)
         objFileContent = content ? content : '';
-        document.getElementById('objFileInput').value = objFileContent;
+
+        // Obj as text (needed for ObjLoader in 3D editor)
+        var dec = new TextDecoder();
+        document.getElementById('objFileInput').value = dec.decode(objFileContent);
 
         checkerCompleteReading(type, canvas, filename);
     }

@@ -107,6 +107,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         extraResource[nameModel3D] = resources3D[nameModel3D];
 
         var loaderMulti = new LoaderMulti();
+        
+        console.log(extraResource);
+        
         loaderMulti.load(manager, extraResource);
     }
 
