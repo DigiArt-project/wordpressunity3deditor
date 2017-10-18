@@ -53,7 +53,7 @@ function wpunity_register_scripts() {
 	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_asset_editor_scripts.js');
 	wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
 	wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
-
+	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
 	//wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
 //	null, null, false);
 //
@@ -79,8 +79,7 @@ function wpunity_register_scripts() {
 	wp_register_script( 'wpunity_fetch_asset_scenes_request', plugin_dir_url( __FILE__ ) . 'js_libs/scriptFileBrowserToolbarWPway.js',
 		null, null, false);
 
-	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js',
-		null, null, false);
+
 
 
 //=========================== THREE js scripts ============================================
@@ -150,9 +149,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.p
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-yaml.php' );
-
-
 //===================================== Assets ============================================
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
@@ -169,7 +165,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functi
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-file-creations.php' );
 //3.01 Create Initial Asset Categories
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-insertData.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
@@ -187,9 +182,19 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' )
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-project-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-project-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-yamls.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-settings.php' );
+
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
+
+
 
 // ===================== Obsolete ===================================
 

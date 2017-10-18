@@ -1,3 +1,5 @@
+'use strict';
+
 function wpunity_read_url(input, id) {
 
     if (input.files && input.files[0]) {

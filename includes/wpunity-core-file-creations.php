@@ -15,10 +15,6 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
 	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 
-//    $mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
-//    $mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
-//    $credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
-//    $credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
 	if($game_category == 'energy_games'){
 		$firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
