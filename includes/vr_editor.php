@@ -233,7 +233,7 @@ echo '</script>';
     </a>
 
     <!--Canvas center-->
-    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--accent" title="Toggle interface">
+    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
 
@@ -291,18 +291,19 @@ echo '</script>';
 
     <!-- Interface for Changing the door properties -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2">
-        <a style="float: right; width: 48px" type="button" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+        <a style="float: right; width: 48px" type="button" class="mdc-button mdc-button--dense mdc-button--raised"
            onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons">close</i>
         </a>
 
         <p class="mdc-typography--title"> Door options </p>
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
             <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                   style="box-shadow: none; border-color:transparent;">
+                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
             <label for="doorid" class="mdc-textfield__label">
-                Enter a door name
-            </label>
+                Enter a door name </label>
+            <div class="mdc-textfield__bottom-line"></div>
+
         </div>
         <br />
         <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="border: none;"></select>
@@ -372,7 +373,7 @@ echo '</script>';
 
         if (btn.data('toggle') === 'on') {
             btn.addClass('mdc-theme--text-hint-on-light');
-            btn.removeClass('mdc-theme--accent');
+            btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
 
@@ -380,7 +381,7 @@ echo '</script>';
 
         } else {
             btn.removeClass('mdc-theme--text-hint-on-light');
-            btn.addClass('mdc-theme--accent');
+            btn.addClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility</i>');
             btn.data('toggle', 'on');
 

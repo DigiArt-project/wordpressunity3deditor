@@ -434,9 +434,9 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-button--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-button--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
@@ -457,65 +457,68 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div class="mdc-layout-grid__inner">
 
-                <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
-                <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                    <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-					<?php
-					$myGameType = 1;
-					$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
-					$game_type_slug = $all_game_types[0]->slug;
+                    <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
+                    <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                        <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
 
-					if($game_type_slug == 'energy_games'){
-						$myGameType=2;
-					}
+						<?php
+						$myGameType = 1;
+						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
+						$game_type_slug = $all_game_types[0]->slug;
 
-					$args = array(
-						'hide_empty' => false,
-						'meta_query' => array(
-							array(
-								'key'       => 'wpunity_assetcat_gamecat',
-								'value'     => $myGameType,
-								'compare'   => '='
-							)
-						));
+						if($game_type_slug == 'energy_games'){
+							$myGameType=2;
+						}
 
-					$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-					$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-					?>
+						$args = array(
+							'hide_empty' => false,
+							'meta_query' => array(
+								array(
+									'key'       => 'wpunity_assetcat_gamecat',
+									'value'     => $myGameType,
+									'compare'   => '='
+								)
+							));
 
-					<?php if($create_new == 1) { ?>
-                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
-					<?php } else { ?>
-                        <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
-					<?php } ?>
+						$cat_terms = get_terms('wpunity_asset3d_cat', $args);
+						$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+						?>
+
+						<?php if($create_new == 1) { ?>
+                            <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
+						<?php } else { ?>
+                            <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
+						<?php } ?>
 
 
-                    <div class="mdc-simple-menu mdc-select__menu">
-                        <ul class="mdc-list mdc-simple-menu__items">
+                        <div class="mdc-simple-menu mdc-select__menu">
+                            <ul class="mdc-list mdc-simple-menu__items">
 
-                            <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
-                                No category selected
-                            </li>
-
-							<?php foreach ( $cat_terms as $term ) { ?>
-
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
-									<?php echo $term->name; ?>
+                                <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
+                                    No category selected
                                 </li>
 
-							<?php } ?>
+								<?php foreach ( $cat_terms as $term ) { ?>
 
-                        </ul>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+										<?php echo $term->name; ?>
+                                    </li>
+
+								<?php } ?>
+
+                            </ul>
+                        </div>
                     </div>
+
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
                 </div>
+                <input id="termIdInput" type="hidden" name="term_id" value="">
 
-                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
             </div>
-            <input id="termIdInput" type="hidden" name="term_id" value="">
-
 
         </div>
 
@@ -603,124 +606,127 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+            <div class="mdc-layout-grid__inner">
 
-                <h3 class="mdc-typography--title">Information</h3>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
-                           aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;" value="<?php echo $asset_title_saved; ?>">
-                    <label for="assetTitle" class="mdc-textfield__label">
-						<?php echo $asset_title_label; ?>
-                </div>
-                <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                   id="title-validation-msg">
-                    Between 3 - 25 characters
-                </p>
+                    <h3 class="mdc-typography--title">Information</h3>
 
-                <div id="assetDescription" class="mdc-textfield mdc-textfield--multiline" data-mdc-auto-init="MDCTextfield">
-                    <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"><?php echo $asset_desc_saved; ?></textarea>
-                    <label for="multi-line" class="mdc-textfield__label"><?php echo $asset_desc_label; ?></label>
-                </div>
+                    <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                        <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
+                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
+                               value="<?php echo $asset_title_saved; ?>">
+                        <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
+                        <div class="mdc-textfield__bottom-line"></div>
+                    </div>
+                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                       id="title-validation-msg">
+                        Between 3 - 25 characters
+                    </p>
 
-                <hr class="WhiteSpaceSeparator">
-
-                <!--<div id="doorDetailsPanel">
-                    <h3 class="mdc-typography--title">Door options</h3>
-                </div>-->
-
-                <div id="poiImgDetailsPanel" style="display: none;">
-
-                    <h3 class="mdc-typography--title">Featured Image</h3>
-					<?php if($create_new == 1){ ?>
-                    	<img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-					<?php }else{ ?>
-						<img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
-					<?php } ?>
-                    <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+                    <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
+                        <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"><?php echo $asset_desc_saved; ?></textarea>
+                        <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
+                    </div>
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <h3 class="mdc-typography--title">Image POI Details</h3>
+                    <!--<div id="doorDetailsPanel">
+						<h3 class="mdc-typography--title">Door options</h3>
+					</div>-->
 
-                    <div id="poiImgDetailsWrapper">
-                        <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
-                            <i class="material-icons ButtonIcon">add</i> Add Field
-                        </a>
+                    <div id="poiImgDetailsPanel" style="display: none;">
+
+                        <h3 class="mdc-typography--title">Featured Image</h3>
+						<?php if($create_new == 1){ ?>
+                            <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+						<?php }else{ ?>
+                            <img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
+						<?php } ?>
+                        <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                         <hr class="WhiteSpaceSeparator">
+
+                        <h3 class="mdc-typography--title">Image POI Details</h3>
+
+                        <div id="poiImgDetailsWrapper">
+                            <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                                <i class="material-icons ButtonIcon">add</i> Add Field
+                            </a>
+
+                            <hr class="WhiteSpaceSeparator">
+                        </div>
+                    </div>
+
+                    <div id="poiVideoDetailsPanel" style="display: none;">
+
+                        <h3 class="mdc-typography--title">Featured Image</h3>
+
+                        <img id="poiVideoFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+
+                        <hr class="WhiteSpaceSeparator">
+
+                        <h3 class="mdc-typography--title">Video POI Details</h3>
+
+                        <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <label for="videoFileInput"> Select a video</label>
+                            <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
+                        </div>
                     </div>
                 </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
 
-                <div id="poiVideoDetailsPanel" style="display: none;">
+                    <h3 class="mdc-typography--title">Object Properties</h3>
 
-                    <h3 class="mdc-typography--title">Featured Image</h3>
-
-                    <img id="poiVideoFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
-
-                    <hr class="WhiteSpaceSeparator">
-
-                    <h3 class="mdc-typography--title">Video POI Details</h3>
-
-                    <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="videoFileInput"> Select a video</label>
-                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
-                    </div>
-                </div>
-            </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
-
-                <h3 class="mdc-typography--title">Object Properties</h3>
-
-                <ul class="RadioButtonList">
-                    <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
-                        <div class="mdc-radio" >
-                            <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
+                    <ul class="RadioButtonList">
+                        <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
+							<div class="mdc-radio" >
+								<input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
+								<div class="mdc-radio__background">
+									<div class="mdc-radio__outer-circle"></div>
+									<div class="mdc-radio__inner-circle"></div>
+								</div>
+							</div>
+							<label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+						</li>-->
+                        <li class="mdc-form-field">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
                             </div>
-                        </div>
-                        <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
-                    </li>-->
-                    <li class="mdc-form-field">
-                        <div class="mdc-radio">
-                            <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
-                            <div class="mdc-radio__background">
-                                <div class="mdc-radio__outer-circle"></div>
-                                <div class="mdc-radio__inner-circle"></div>
-                            </div>
-                        </div>
-                        <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
-                    </li>
-                </ul>
+                            <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
+                        </li>
+                    </ul>
 
 
-                <!--<div class="mdc-layout-grid">
+                    <!--<div class="mdc-layout-grid">
 
 
-                    <div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
-                        <label for="fbxFileInput"> Select an FBX file</label>
-                        <input class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput"/>
-                    </div>
+						<div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
+							<label for="fbxFileInput"> Select an FBX file</label>
+							<input class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput"/>
+						</div>
 
-                    <div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="mtlFileInput"> Select an MTL file</label>
-                        <input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl" required/>
-                    </div>
+						<div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+							<label for="mtlFileInput"> Select an MTL file</label>
+							<input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl" required/>
+						</div>
 
-                    <div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label  for="objFileInput" > Select an OBJ file</label>
-                        <input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
-                    </div>
-                </div>-->
+						<div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+							<label  for="objFileInput" > Select an OBJ file</label>
+							<input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
+						</div>
+					</div>-->
 
 
-                <!--<div id="assetPreviewContainer" style="margin:auto;"></div>-->
+                    <!--<div id="assetPreviewContainer" style="margin:auto;"></div>-->
 
-                <!--<div class="mdc-layout-grid">
+                    <!--<div class="mdc-layout-grid">
 
                     <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <label for="textureFileInput"> Select a texture</label><br>
@@ -739,28 +745,28 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                 </div>-->
 
 
-                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                        <h3 class="mdc-typography--title">Object Preview</h3>
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            <h3 class="mdc-typography--title">Object Preview</h3>
 
-                        <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
-                            <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-                            <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+                            <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                                <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                                <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
 
-                            <div class="progressSlider" style="top:5px;">
-                                <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                <div class="progressSlider" style="top:5px;">
+                                    <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                </div>
                             </div>
-                        </div>
 
-                        <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
-
+                            <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
 
 
 
-                        <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                        <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+
+                            <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
 
                         <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                         <input type="hidden" name="objFileInput" value="" id="objFileInput" />
@@ -769,271 +775,278 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         <input type="hidden" name="textureFileInput2" value="" id="textureFileInput2"/>
 
 
+                        </div>
+
+                        <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            <h3 class="mdc-typography--title">Screenshot</h3>
+
+                            <img id="sshotPreviewImg" style="width: 100px; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                            <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                            <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                        </div>
+
                     </div>
-
-                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                        <h3 class="mdc-typography--title">Screenshot</h3>
-
-                        <img id="sshotPreviewImg" style="width: 100px; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
-
-                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary"
-                           data-mdc-auto-init="MDCRipple">Create screenshot</a>
-                    </div>
-
                 </div>
             </div>
         </div>
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+            <div class="mdc-layout-grid__inner">
 
-                <h3 class="mdc-typography--title">Physics</h3>
-                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+
+                    <h3 class="mdc-typography--title">Physics</h3>
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                     Change the terrain physics properties.
                 </span>
 
-                <br>
+                    <br>
 
-                <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="wind-speed-range"></div>
-                <input type="hidden" id="physicsWindMinVal" name="physicsWindMinVal" value="">
-                <input type="hidden" id="physicsWindMaxVal" name="physicsWindMaxVal" value="">
+                    <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-speed-range"></div>
+                    <input type="hidden" id="physicsWindMinVal" name="physicsWindMinVal" value="">
+                    <input type="hidden" id="physicsWindMaxVal" name="physicsWindMaxVal" value="">
 
-                <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-                <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="wind-mean-slider"></div>
-                <input type="hidden" id="physicsWindMeanVal" name="physicsWindMeanVal" value="">
+                    <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-mean-slider"></div>
+                    <input type="hidden" id="physicsWindMeanVal" name="physicsWindMeanVal" value="">
 
-                <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-                <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="wind-variance-slider"></div>
-                <input type="hidden" id="physicsWindVarianceVal" name="physicsWindVarianceVal" value="">
+                    <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="wind-variance-slider"></div>
+                    <input type="hidden" id="physicsWindVarianceVal" name="physicsWindVarianceVal" value="">
 
-            </div>
+                </div>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
-                <h3 class="mdc-typography--title">Income</h3>
+                    <h3 class="mdc-typography--title">Income</h3>
 
-                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                     Applied to all producer components that are placed on this terrain.
                 </span>
 
-                <br>
+                    <br>
 
-                <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="over-power-income-slider"></div>
-                <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="">
+                    <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="over-power-income-slider"></div>
+                    <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="">
 
-                <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-                <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="correct-power-income-slider"></div>
-                <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="">
+                    <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="correct-power-income-slider"></div>
+                    <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="">
 
-                <hr class="WhiteSpaceSeparator">
+                    <hr class="WhiteSpaceSeparator">
 
-                <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="under-power-income-slider"></div>
-                <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="">
+                    <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="under-power-income-slider"></div>
+                    <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="">
 
-                <h3 class="mdc-typography--title">Construction Penalties (in $)</h3>
+                    <h3 class="mdc-typography--title">Construction Penalties (in $)</h3>
 
-                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                     Construction penalties apply for consumers and producers that are placed on this terrain.
                 </span>
-                <div class="mdc-layout-grid">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
-                                   aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
-                            <label for="accessCostPenalty" class="mdc-textfield__label">
-                                Access Cost
+                    <div class="mdc-layout-grid">
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                                <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
+                                       aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                <label for="accessCostPenalty" class="mdc-textfield__label"> Access Cost</label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
-                                   aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
-                            <label for="archProximityPenalty" class="mdc-textfield__label">
-                                Arch. site proximity
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                                <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
+                                       aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                <label for="archProximityPenalty" class="mdc-textfield__label"> Arch. site proximity </label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                                <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
+                                       aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                <label for="naturalReserveProximityPenalty" class="mdc-textfield__label"> Natural reserve proximity </label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                                <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
+                                       aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label"> Hi-Voltage line distance </label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
-                                   aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
-                            <label for="naturalReserveProximityPenalty" class="mdc-textfield__label">
-                                Natural reserve proximity
-                        </div>
-                    </div>
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
-                                   aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="box-shadow: none; border-color:transparent;">
-                            <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label">
-                                Hi-Voltage line distance
-                        </div>
-                    </div>
+
                 </div>
-
-
             </div>
         </div>
 
         <div id="consumerPanel" class="mdc-layout-grid" style="display: none;">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div class="mdc-layout-grid__inner">
 
-                <h3 class="mdc-typography--title">Energy Consumption</h3>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="energy-consumption-range"></div>
-                <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>">
-                <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>">
+                    <h3 class="mdc-typography--title">Energy Consumption</h3>
 
-                <hr class="WhiteSpaceSeparator">
+                    <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="energy-consumption-range"></div>
+                    <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>">
+                    <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>">
 
-                <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="energy-consumption-mean-slider"></div>
-                <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>">
+                    <hr class="WhiteSpaceSeparator">
 
-                <hr class="WhiteSpaceSeparator">
+                    <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="energy-consumption-mean-slider"></div>
+                    <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>">
 
-                <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="energy-consumption-variance-slider"></div>
-                <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>">
+                    <hr class="WhiteSpaceSeparator">
 
+                    <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="energy-consumption-variance-slider"></div>
+                    <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>">
+
+                </div>
             </div>
         </div>
 
         <div id="producerPanel" class="mdc-layout-grid" style="display: none;">
+            <div class="mdc-layout-grid__inner">
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                <h3 class="mdc-typography--title">Power Production Chart</h3>
+                    <h3 class="mdc-typography--title">Power Production Chart</h3>
 
-                <div class="PlotContainerStyle">
-                    <div id="producer-chart" class="ProducerChartStyle"></div>
+                    <div class="PlotContainerStyle">
+                        <div id="producer-chart" class="ProducerChartStyle"></div>
+                    </div>
+                    <div class="CenterContents">
+                        <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
+                    </div>
+                    <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle"></div>
+
+                    <div class="PowerProductionGroupStyle">
+                        <span>0</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                        <span>9</span>
+                        <span>10</span>
+
+                        <span>11</span>
+                        <span>12</span>
+                        <span>13</span>
+                        <span>14</span>
+                        <span>15</span>
+                        <span>16</span>
+                        <span>17</span>
+                        <span>18</span>
+                        <span>19</span>
+                        <span>20</span>
+                        <span>21</span>
+
+                        <span>22</span>
+                        <span>23</span>
+                        <span>24</span>
+                        <span>25</span>
+                        <span>26</span>
+                        <span>27</span>
+                    </div>
+
+
+                    <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="<?php echo $optProductionVal ?>">
                 </div>
-                <div class="CenterContents">
-                    <label class="mdc-typography--subheading2">Select a <b>Power Production</b> value for each <b>Wind Speed</b> value</label>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                    <h3 class="mdc-typography--title">Producer Options</h3>
+
+                    <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                        <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
+                               aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                        <label for="producerClassVal" class="mdc-textfield__label"> Producer class </label>
+                        <div class="mdc-textfield__bottom-line"></div>
+                    </div>
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="producer-wind-speed-class-slider-label" class="mdc-typography--subheading2">Wind Speed Class:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-wind-speed-class-slider"></div>
+                    <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="producer-max-power-slider-label" class="mdc-typography--subheading2">Max Power:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-max-power-slider"></div>
+                    <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-turbine-size-slider"></div>
+                    <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-damage-coeff-slider"></div>
+                    <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="">
+
                 </div>
-                <div id="powerProductionValuesGroup" class="PowerProductionGroupStyle"></div>
 
-                <div class="PowerProductionGroupStyle">
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                    <span>6</span>
-                    <span>7</span>
-                    <span>8</span>
-                    <span>9</span>
-                    <span>10</span>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
-                    <span>11</span>
-                    <span>12</span>
-                    <span>13</span>
-                    <span>14</span>
-                    <span>15</span>
-                    <span>16</span>
-                    <span>17</span>
-                    <span>18</span>
-                    <span>19</span>
-                    <span>20</span>
-                    <span>21</span>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-                    <span>22</span>
-                    <span>23</span>
-                    <span>24</span>
-                    <span>25</span>
-                    <span>26</span>
-                    <span>27</span>
+                    <h3 class="mdc-typography--title">Producer Costs</h3>
+
+                    <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-cost-slider"></div>
+                    <input type="hidden" id="producerCostVal" name="producerCostVal" value="">
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repair Cost:</label>
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <div id="producer-repair-cost-slider"></div>
+                    <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="">
+
                 </div>
-
-
-                <input type="hidden" id="producerPowerProductionVal" name="producerPowerProductionVal" value="<?php echo $optProductionVal ?>">
             </div>
-
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
-                <h3 class="mdc-typography--title">Producer Options</h3>
-
-                <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
-                           aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="box-shadow: none; border-color:transparent;">
-                    <label for="producerClassVal" class="mdc-textfield__label">
-                        Producer class
-                </div>
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-wind-speed-class-slider-label" class="mdc-typography--subheading2">Wind Speed Class:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-wind-speed-class-slider"></div>
-                <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="">
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-max-power-slider-label" class="mdc-typography--subheading2">Max Power:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-max-power-slider"></div>
-                <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="">
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-turbine-size-slider"></div>
-                <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="">
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-damage-coeff-slider"></div>
-                <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="">
-
-            </div>
-
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-
-                <h3 class="mdc-typography--title">Producer Costs</h3>
-
-                <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-cost-slider"></div>
-                <input type="hidden" id="producerCostVal" name="producerCostVal" value="">
-
-                <hr class="WhiteSpaceSeparator">
-
-                <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repair Cost:</label>
-                <input class="mdc-textfield mdc-textfield__input mdc-theme--accent" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
-                <div id="producer-repair-cost-slider"></div>
-                <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="">
-
-            </div>
-
         </div>
 
 
@@ -1338,7 +1351,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="box-shadow: none; border-color:transparent;">' +
+                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">' +
+                        '<div class="mdc-textfield__bottom-line"></div>' +
                         '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
                         '</div>' +
                         '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +

@@ -96,9 +96,9 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-button--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-button--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Scene Editor</span></li>
     </ul>
@@ -110,7 +110,8 @@ get_header(); ?>
 
 
                 <div class="mdc-textfield mdc-textfield--fullwidth--theme-dark mdc-form-field" data-mdc-auto-init="MDCTextfield" style="margin-top: 0; margin-bottom:0;">
-                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title" aria-controls="title-validation-msg" minlength="3" required style="box-shadow: none; border-color:transparent;">
+                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title"
+                           aria-controls="title-validation-msg" minlength="3" required style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                     <p class="mdc-textfield-helptext mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
                         Must be at least 3 characters long
@@ -119,7 +120,7 @@ get_header(); ?>
 
             </div>
             <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
-                <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-accent" role="tablist">
+                <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
                     <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" >Analytics</a>
                     <span class="mdc-tab-bar__indicator"></span>
@@ -129,8 +130,8 @@ get_header(); ?>
             <div class="mdc-toolbar__section mdc-toolbar__section--align-end">
                 <div id="saveSceneBtn" class="SaveBtnContainerStyle">
                     <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
-                       type="button" id="save-scene-button"
-                       class="SaveSceneBtnStyle mdc-button--dense mdc-button mdc-button--raised mdc-button--accent">Save scene</a>
+                       id="save-scene-button"
+                       class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
                 </div>
             </div>
         </div>
@@ -145,7 +146,8 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell--span-12">
 
                         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" minlength="3" style="box-shadow: none; border-color:transparent;">
+                            <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                   minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="sceneDescriptionInput" class="mdc-textfield__label">
                                 Scene description
                             </label>
