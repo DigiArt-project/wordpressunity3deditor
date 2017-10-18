@@ -50,8 +50,6 @@ var wu_webw_3d_view = (function () {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color( 0xddb59b );
 
-
-
         this.camera = new THREE.PerspectiveCamera( this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far );
         this.resetCamera();
@@ -86,7 +84,18 @@ var wu_webw_3d_view = (function () {
         var materialsLoaded = function ( materials ) {
 
             // REM : Check the materials here
-            console.log("materials", materials);
+            console.log("+++ Report on the materials loaded +++")
+
+            console.log( materials);
+
+            // for (var key in materials) {
+            //     if (materials.hasOwnProperty(key)) {
+            //         if (materials[key].map != null)
+            //             console.log( materials[key].map.image);
+            //     }
+            // }
+
+            console.log("++++++++++++++++++++++++++++");
         };
 
         var meshLoaded = function ( name, bufferGeometry, material ) {
@@ -131,7 +140,10 @@ var wu_webw_3d_view = (function () {
     WWOBJLoader2Example.prototype.loadFilesUser = function ( objDef ) {
 
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
-            objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString
+            objDef.name,
+            objDef.objAsArrayBuffer,
+            objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
+            objDef.mtlAsString,
         );
         prepData.setSceneGraphBaseNode( this.pivot );
         prepData.setStreamMeshes( this.streamMeshes );
@@ -239,9 +251,7 @@ var wu_webw_3d_view = (function () {
 
                     var materials = mat.materials;
                     for ( var name in materials ) {
-
                         if ( materials.hasOwnProperty( name ) ) materials[ name ].dispose();
-
                     }
                 }
             }
@@ -256,5 +266,4 @@ var wu_webw_3d_view = (function () {
     };
 
     return WWOBJLoader2Example;
-
 })();
