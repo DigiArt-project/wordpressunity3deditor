@@ -1094,7 +1094,8 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
             poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
                 e.preventDefault();
-                jQuery(this).parent('div').parent('div').remove(); i--;
+                jQuery(this).parent('div').parent('div').parent('div').remove();
+                i--;
             })
         } );
 
