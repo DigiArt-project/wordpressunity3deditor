@@ -556,7 +556,7 @@ $wp_query = $temp_query;
 
             var dialogTitle = document.getElementById("delete-dialog-title");
             var dialogDescription = document.getElementById("delete-dialog-description");
-            var sceneTitle = document.getElementById(id+"-title").innerHTML;
+            var sceneTitle = document.getElementById(id+"-title").textContent.trim();
 
             dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
             dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
