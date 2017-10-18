@@ -32,7 +32,11 @@ THREE.MTLLoader.prototype = {
         var scope = this;
 
         var loader = new THREE.FileLoader( this.manager );
+
         loader.setPath( this.path );
+
+
+
         loader.load( url, function ( text ) {
 
             onLoad( scope.parse( text ) );
@@ -53,9 +57,7 @@ THREE.MTLLoader.prototype = {
      *     mtlLoader.load( 'my.mtl', ... );
      */
     setPath: function ( path ) {
-
         this.path = path;
-
     },
 
     /**
@@ -78,6 +80,7 @@ THREE.MTLLoader.prototype = {
     },
 
     setBaseUrl: function ( path ) {
+
 
         console.warn( 'THREE.MTLLoader: .setBaseUrl() is deprecated. Use .setTexturePath( path ) for texture path or .setPath( path ) for general base path instead.' );
 
@@ -160,6 +163,8 @@ THREE.MTLLoader.prototype = {
 
         }
 
+
+        console.log("materialCreator", materialCreator);
 
         var materialCreator = new THREE.MTLLoader.MaterialCreator( this.texturePath || this.path, this.materialOptions );
 
@@ -301,11 +306,11 @@ THREE.MTLLoader.MaterialCreator.prototype = {
     },
 
     preload: function () {
+        var index = 0;
 
-        for ( var mn in this.materialsInfo ) {
-
-            this.create( mn );
-
+        for ( var mn in this.materialsInfo ){
+            this.create( mn, index );
+            index ++;
         }
 
     },
@@ -321,49 +326,36 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         var index = 0;
 
         for ( var mn in this.materialsInfo ) {
-
-            this.materialsArray[ index ] = this.create( mn );
+            this.materialsArray[ index ] = this.create( mn, index );
             this.nameLookup[ mn ] = index;
             index ++;
-
         }
 
         return this.materialsArray;
-
     },
 
-    create: function ( materialName ) {
-
-
+    create: function ( materialName, iMaterial ) {
 
         if ( this.materials[ materialName ] === undefined ) {
-
-            this.createMaterial_( materialName );
-
+            this.createMaterial_( materialName, iMaterial );
         }
 
         return this.materials[ materialName ];
-
     },
 
-    createMaterial_: function ( materialName ) {
 
-
+    createMaterial_: function ( materialName, iMaterial ) {
 
         // Create material
 
         var scope = this;
         var mat = this.materialsInfo[ materialName ];
         var params = {
-
             name: materialName,
             side: this.side
-
         };
 
         function resolveURL( baseUrl, url ) {
-
-            console.log("resolve 1");
 
             if ( typeof url !== 'string' || url === '' )
                 return '';
@@ -371,31 +363,20 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             // Absolute URL
             if ( /^https?:\/\//i.test( url ) ) return url;
 
-            console.log("resolve 2");
-
             return baseUrl + url;
-
         }
 
         function setMapForType( mapType, value ) {
-
-            console.log("setMapForType",  mapType, value);
 
             if ( params[ mapType ] ) return; // Keep the first encountered texture
 
             var texParams = scope.getTextureParams( value, params );
 
-            console.log(scope.baseUrl.substr(0,15));
-            console.log(texParams.url);
-
-            if (scope.baseUrl.substr(0,15)!="data:image/jpeg") {
-
-                var map = scope.loadTexture(resolveURL(scope.baseUrl, texParams.url));
-            } else {
-                var map = scope.loadTexture2( scope.baseUrl ) ;
+            if (typeof scope.baseUrl === 'string') // check if it is the url path
+                var map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
+             else { // if it is array then we have multiple raw images (preview on client mode)
+                var map = scope.loadTextureAsRawImage(scope.baseUrl[value]);
             }
-
-            console.log(map);
 
             map.repeat.copy( texParams.scale );
             map.offset.copy( texParams.offset );
@@ -404,15 +385,18 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             map.wrapT = scope.wrap;
 
             params[ mapType ] = map;
-
         }
+
+
 
         for ( var prop in mat ) {
 
             var value = mat[ prop ];
             var n;
 
-            if ( value === '' ) continue;
+            if ( value === '' ) {
+                continue;
+            }
 
             switch ( prop.toLowerCase() ) {
 
@@ -439,13 +423,13 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
                     setMapForType( "map", value );
 
+
                     break;
 
                 case 'map_ks':
 
                     // Specular map
-
-                    setMapForType( "specularMap", value );
+                    setMapForType( "specularMap", value);
 
                     break;
 
@@ -459,7 +443,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
                 case 'bump':
 
                     // Bump texture map
-
                     setMapForType( "bumpMap", value );
 
                     break;
@@ -504,9 +487,9 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
         }
 
+
         this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
         return this.materials[ materialName ];
-
     },
 
     getTextureParams: function ( value, matParams ) {
@@ -560,9 +543,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 
         if ( loader === null ) {
-
-            loader = new THREE.TextureLoader( manager );
-
+            loader = new THREE.TextureLoader(manager);
         }
 
         if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
@@ -574,9 +555,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
     },
 
-
-    loadTexture2: function ( textureFileContent, mapping, onLoad, onProgress, onError ) {
-
+    /* For the loading of texture at client side (before upload), the textures are loaded are raw images */
+    loadTextureAsRawImage: function (textureFileContent, mapping, onLoad, onProgress, onError ) {
 
         var texture = new THREE.Texture();
         texture.format = THREE.RGBFormat; // isJPEG ? RGBFormat : RGBAFormat;
@@ -586,25 +566,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         texture.image = image;
         texture.needsUpdate = true;
 
-
-
-        // var loader = THREE.Loader.Handlers.get( url );
-        // var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
-        //
-        // if ( loader === null ) {
-        //
-        //     loader = new THREE.TextureLoader( manager );
-        //
-        // }
-        //
-        // if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
-        // texture = loader.load( url, onLoad, onProgress, onError );
-
         if ( mapping !== undefined ) texture.mapping = mapping;
-
         return texture;
-
     }
-
 
 };

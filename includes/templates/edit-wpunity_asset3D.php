@@ -488,18 +488,15 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                             <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
-
-
-
-
                             <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg" required/>
+                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
-                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="textureFileInput" value="" id="textureFileInput"/>
+                            
+                        <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                        <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                        <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
 
+                        <input type="hidden" name="textureFileInput" id="textureFileInput" value=""/>
 
 
                         </div>
@@ -806,6 +803,11 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
         wpunity_reset_panels(previewCanvas);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
+
+//        multipleFilesInputElem.onclick = function (){//Clear all on click
+//            previewCanvas.clearAllAssets();}
+
+
         loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
 
         //resizeCanvas('previewCanvas');

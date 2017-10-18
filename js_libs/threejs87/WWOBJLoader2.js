@@ -7,9 +7,7 @@
 'use strict';
 
 if ( THREE.OBJLoader2 === undefined ) {
-
     THREE.OBJLoader2 = {};
-
 }
 
 /**
@@ -25,9 +23,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
     var Validator = THREE.OBJLoader2.prototype._getValidator();
 
     function WWOBJLoader2() {
-
         this._init();
-
     }
 
     WWOBJLoader2.prototype._init = function () {
@@ -70,7 +66,6 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
         this.materials = [];
         this.counter = 0;
-
     };
 
     /**
@@ -197,12 +192,9 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
             var scope = this;
             var scopeFunction = function ( e ) {
-
                 scope._receiveWorkerMessage( e );
-
             };
             this.worker.addEventListener( 'message', scopeFunction, false );
-
         }
 
         this.sceneGraphBaseNode = null;
@@ -256,9 +248,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
             // fast-fail on bad type
             if ( ! ( params.objAsArrayBuffer instanceof Uint8Array ) ) {
-
                 throw 'Provided input is not of type arraybuffer! Aborting...';
-
             }
 
             this.worker.postMessage( {
@@ -293,7 +283,6 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
         this.sceneGraphBaseNode = params.sceneGraphBaseNode;
         this.streamMeshes = params.streamMeshes;
         if ( ! this.streamMeshes ) this.meshStore = [];
-
     };
 
     /**
@@ -303,26 +292,27 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
     WWOBJLoader2.prototype.run = function () {
 
         var scope = this;
+
         var processLoadedMaterials = function ( materialCreator ) {
 
             var materialCreatorMaterials = [];
             var materialNames = [];
+
             if ( Validator.isValid( materialCreator ) ) {
 
                 materialCreator.preload();
+
                 materialCreatorMaterials = materialCreator.materials;
+
                 for ( var materialName in materialCreatorMaterials ) {
-
                     if ( materialCreatorMaterials.hasOwnProperty( materialName ) ) {
-
                         materialNames.push( materialName );
                         scope.materials[ materialName ] = materialCreatorMaterials[ materialName ];
-
                     }
-
                 }
-
             }
+
+
 
 
             scope.worker.postMessage( {
@@ -332,13 +322,14 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
             var materialsFromCallback;
             var callbackMaterialsLoaded;
+
             for ( var index in scope.callbacks.materialsLoaded ) {
 
                 callbackMaterialsLoaded = scope.callbacks.materialsLoaded[ index ];
                 materialsFromCallback = callbackMaterialsLoaded( scope.materials );
                 if ( Validator.isValid( materialsFromCallback ) ) scope.materials = materialsFromCallback;
-
             }
+
             if ( scope.dataAvailable && scope.objAsArrayBuffer ) {
 
                 scope.worker.postMessage( {
@@ -347,9 +338,9 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 }, [ scope.objAsArrayBuffer.buffer ] );
 
             } else {
-
                 var refPercentComplete = 0;
                 var percentComplete = 0;
+
                 var onLoad = function ( objAsArrayBuffer ) {
 
                     scope._announceProgress( 'Running web worker!' );
@@ -370,7 +361,6 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
                         refPercentComplete = percentComplete;
                         var output = 'Download of "' + scope.fileObj + '": ' + percentComplete + '%';
-                        console.log( output );
                         scope._announceProgress( output );
 
                     }
@@ -397,12 +387,11 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
 
         this.mtlLoader.setPath( this.pathTexture );
-        if ( this.dataAvailable ) {
 
+        if ( this.dataAvailable ) {
             processLoadedMaterials( Validator.isValid( this.mtlAsString ) ? this.mtlLoader.parse( this.mtlAsString ) : null );
 
         } else {
-
             if ( Validator.isValid( this.fileMtl ) ) {
 
                 var onError = function ( event ) {
@@ -413,17 +402,9 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                     scope._finalize( 'error' );
 
                 };
-
-
-                this.mtlLoader.load( this.fileMtl, processLoadedMaterials, undefined, onError );
-
-
-
-
+               this.mtlLoader.load( this.fileMtl, processLoadedMaterials, undefined, onError );
             } else {
-
                 processLoadedMaterials();
-
             }
 
         }
@@ -514,12 +495,9 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                     var materialGroups = payload.materialGroups;
                     var materialGroup;
                     for ( key in materialGroups ) {
-
                         materialGroup = materialGroups[ key ];
                         bufferGeometry.addGroup( materialGroup.start, materialGroup.count, materialGroup.index );
-
                     }
-
                 }
 
                 var callbackMeshLoaded;
@@ -1180,7 +1158,7 @@ THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer = function ( modelName, objAsA
         modelName: Validator.verifyInput( modelName, '' ),
         dataAvailable: true,
         objAsArrayBuffer: Validator.verifyInput( objAsArrayBuffer, null ),
-        pathTexture: Validator.verifyInput( pathTexture, null ),
+        pathTexture: pathTexture,
         mtlAsString: Validator.verifyInput( mtlAsString, null ),
         sceneGraphBaseNode: null,
         streamMeshes: true,
@@ -1259,7 +1237,7 @@ THREE.OBJLoader2.WWOBJLoader2.PrepDataFile = function ( modelName, pathObj, file
         dataAvailable: false,
         pathObj: Validator.verifyInput( pathObj, null ),
         fileObj: Validator.verifyInput( fileObj, null ),
-        pathTexture: Validator.verifyInput( pathTexture, null ),
+        pathTexture: pathTexture,
         fileMtl: Validator.verifyInput( fileMtl, null ),
         sceneGraphBaseNode: null,
         streamMeshes: true,
