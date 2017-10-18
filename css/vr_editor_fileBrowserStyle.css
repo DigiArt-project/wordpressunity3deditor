@@ -351,20 +351,3 @@
 .icon.file.f-scss:after {
 	border-bottom-color: #30837c;
 }
-
-
-
-/*.filemanager ::-webkit-scrollbar {
-	width: 0.6vw;
-	height: 0.6vw;
-}
-
-.filemanager ::-webkit-scrollbar-button {
-	background: #fff;
-}
-.filemanager ::-webkit-scrollbar-track-piece {
-	background: #000;
-}
-.filemanager ::-webkit-scrollbar-thumb {
-	background: #eee;
-}​*/
