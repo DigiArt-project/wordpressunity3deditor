@@ -486,13 +486,13 @@ function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileNa
     if($fileName === 'ProjectSettings.asset'){
 
         // get from db the last version of the game
-        $game_version_number = '1'; // wpunity_get_last_version_of_game($game_project_id);
+        $game_version_number = wpunity_get_last_version_of_game($game_project_id);
 
         // increment for the new game
         $game_version_number += 1;
 
         // append new vn to db
-        //wpunity_append_version_game($game_project_id, $game_version_number);
+        wpunity_append_version_game($game_project_id, $game_version_number);
 
         // Zero pad to 4 digits
         $game_version_number_padded = str_pad($game_version_number, 4, '0', STR_PAD_LEFT);
