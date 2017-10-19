@@ -1361,7 +1361,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 0
-  bundleVersion: 2.0.1
+  bundleVersion: ___[game_version_number_dotted]___
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -1385,8 +1385,9 @@ PlayerSettings:
     iOS: com.Company.ProductName
     tvOS: com.Company.ProductName
   buildNumber:
-    iOS: 0
-  AndroidBundleVersionCode: 1
+    Standalone: ___[game_version_number]___
+    iOS: ___[game_version_number]___
+  AndroidBundleVersionCode: ___[game_version_number]___
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -1764,7 +1765,7 @@ PlayerSettings:
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Wind Farm Simulator
-  metroPackageVersion:
+  metroPackageVersion: ___[game_version_number_dotted]___
   metroCertificatePath:
   metroCertificatePassword:
   metroCertificateSubject:
