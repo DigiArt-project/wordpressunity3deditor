@@ -1,6 +1,5 @@
 <?php
 
-
 function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
     $sceneIds = [];
@@ -52,8 +51,6 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
     return $doorInfoGathered;
 }
-
-
 /**
  *
  * Get all door info for all scenes of a game
@@ -86,8 +83,6 @@ function wpunity_get_all_doors_of_game($gameId)
     }
     return $doorInfoGathered;
 }
-
-
 /**
  *
  * Get all scene ids of a game
@@ -129,10 +124,6 @@ function wpunity_get_all_sceneids_of_game($allScenePGameID){
     return $sceneIds;
 }
 
-
-
-
-
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug){
 	$asset_taxonomies = array(
 		'wpunity_asset3d_pgame' => array(
@@ -165,7 +156,7 @@ function wpunity_update_asset_frontend($asset_inserted_id,$assetTitleForm,$asset
 	);
 
 	wp_update_post($asset_new_info);
-	return true;
+	return 1;
 }
 
 function wpunity_create_asset_consumerExtra_frontend($asset_newID){

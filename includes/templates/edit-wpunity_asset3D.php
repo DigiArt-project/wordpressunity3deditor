@@ -118,18 +118,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		//Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($asset_inserted_id,$assetTitleForm,$assetDescForm);
 
-		if($asset_updatedConf) {
+		if($asset_updatedConf == 1) {
 			$saved_assetCatTerm = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-			if($saved_assetCatTerm->slug == 'consumer') {
-				wpunity_create_asset_consumerExtra_frontend($asset_newID);
-			}elseif($saved_assetCatTerm->slug == 'terrain') {
-				wpunity_create_asset_terrainExtra_frontend($asset_newID);
-			}elseif ($saved_assetCatTerm->slug == 'producer') {
-				wpunity_create_asset_producerExtra_frontend($asset_newID);
-			}elseif ($saved_assetCatTerm->slug == 'pois_imagetext') {
-				wpunity_create_asset_poisITExtra_frontend($asset_newID);//change it to update
-			}elseif ($saved_assetCatTerm->slug == 'pois_video') {
-				wpunity_create_asset_poisVideoExtra_frontend($asset_newID);//change it to update
+			if($saved_assetCatTerm[0]->slug == 'consumer') {
+				wpunity_create_asset_consumerExtra_frontend($asset_checked_id);
+			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
+				wpunity_create_asset_terrainExtra_frontend($asset_checked_id);
+			}elseif ($saved_assetCatTerm[0]->slug == 'producer') {
+                wpunity_create_asset_producerExtra_frontend($asset_checked_id);
+			}elseif ($saved_assetCatTerm[0]->slug == 'pois_imagetext') {
+				wpunity_create_asset_poisITExtra_frontend($asset_checked_id);//change it to update
+			}elseif ($saved_assetCatTerm[0]->slug == 'pois_video') {
+				wpunity_create_asset_poisVideoExtra_frontend($asset_checked_id);//change it to update
 			}
 
 			//upload the featured image for POI image-text
@@ -140,13 +140,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				//set_post_thumbnail( ,  );
 //			}
 		}
-		if($scene_id == 0){wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));}
-		else{wp_redirect(esc_url(get_permalink($editscenePage[0]->ID) . $parameter_scenepass . $scene_id));}
+        wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
 		exit;
 	}
 }
 
-get_header(); ?>
+get_header();
+print_r($asset_checked_id);?>
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
