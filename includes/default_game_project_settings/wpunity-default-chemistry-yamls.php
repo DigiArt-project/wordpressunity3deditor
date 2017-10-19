@@ -612,7 +612,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: CERTH/ITI
-  productName: Wind Farm Simulator
+  productName: Chemistry template
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21176471, a: 1}
@@ -719,7 +719,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 0
-  bundleVersion: 2.0.1
+  bundleVersion: ___[game_version_number_dotted]___
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -738,13 +738,14 @@ PlayerSettings:
   useHDRDisplay: 0
   applicationIdentifier:
     Android: com.Company.ProductName
-    Standalone: unity.CERTH/ITI.Wind Farm Simulator
+    Standalone: unity.CERTH/ITI.ChemistrySimulator
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
     tvOS: com.Company.ProductName
   buildNumber:
-    iOS: 0
-  AndroidBundleVersionCode: 1
+    Standalone: ___[game_version_number]___
+    iOS: ___[game_version_number]___
+  AndroidBundleVersionCode: ___[game_version_number]___
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -1121,14 +1122,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Wind Farm Simulator
-  metroPackageVersion:
+  metroPackageName: Chemistry template
+  metroPackageVersion: ___[game_version_number_dotted]___
   metroCertificatePath:
   metroCertificatePassword:
   metroCertificateSubject:
   metroCertificateIssuer:
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Wind Farm Simulator
+  metroApplicationDescription: Chemistry template
   wsaImages: {}
   metroTileShortName:
   metroCommandLineArgsFile:
@@ -1204,7 +1205,7 @@ PlayerSettings:
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
   cloudProjectId: c0e995de-3a89-4b34-be1b-6cfa969e7463
-  projectName: Wind Farm Simulator
+  projectName: Chemistry template
   organizationId: pan_migo
   cloudEnabled: 0
   enableNewInputSystem: 0

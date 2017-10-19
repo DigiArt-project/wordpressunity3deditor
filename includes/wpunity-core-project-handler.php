@@ -483,11 +483,18 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
 
 function wpunity_compile_settings_files_gen($game_path,$fileName,$fileYaml){
 
+    if($fileName === 'ProjectSettings.asset'){
+       $game_version_number = "1";
+       $version_number_dotted = "0.0.0.1";
+
+        $fileYaml   = str_replace("___[game_version_number]___",        $game_version_number  , $fileYaml);
+        $fileYaml   = str_replace("___[game_version_number_dotted]___", $version_number_dotted, $fileYaml);
+    }
+
     $file = $game_path . '/ProjectSettings/' . $fileName;
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $fileYaml);
     fclose($create_file);
-
 }
 
 /**
