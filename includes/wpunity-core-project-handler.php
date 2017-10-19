@@ -975,17 +975,33 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
 
     }elseif($scene_type_slug == 'wonderaround-yaml'){
         //DATA of Wonder Around Scene
+        $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
+        //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+        $scene_name = $scene_post->post_name;
+        $scene_title = $scene_post->post_title;
+        $scene_desc = $scene_post->post_content;
 
-        /* to be replaced:
-            ___[player_position_x]___
-            ___[player_position_y]___
-            ___[player_position_z]___
-            ___[player_rotation_x]___
-            ___[player_rotation_y]___
-            ___[player_rotation_z]___
-            ___[player_rotation_w]___
-        */
+        $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+        $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
+        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
 
+        $file_contentA = wpunity_replace_wonderaround_unity($term_meta_wonder_around,$scene_id); //empty energy scene with Avatar!
+        $file_contentAb = wpunity_addAssets_wonderaround_unity($scene_id);//add objects from json
+        $fileA = $game_path . '/' . $scene_name . '.unity';
+        $create_fileA = fopen($fileA, "w") or die("Unable to open file!");
+        fwrite($create_fileA, $file_contentA);
+        fwrite($create_fileA,$file_contentAb);
+        fclose($create_fileA);
+
+        if($scenes_counter<7) {
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            $scenes_counter = $scenes_counter + 1;
+        }
+
+        $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+        $fileApath_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
 
     }
 
@@ -1154,6 +1170,29 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
                 $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
             }
+        }
+    }
+
+    //return all objects
+    return $allObjectsYAML;
+
+}
+
+function wpunity_addAssets_wonderaround_unity($scene_id){
+    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+
+    $jsonScene = htmlspecialchars_decode ( $scene_json );
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    $current_fid = 51;
+    $allObjectsYAML = '';
+    $LF = chr(10) ;// line break
+
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+        if ($key == 'avatarYawObject') {
+            //do something about AVATAR
+
+        }else{
             if ($value['categoryName'] == 'Site'){
                 $site_id = $value['assetid'];
                 $asset_type = get_the_terms( $site_id, 'wpunity_asset3d_cat' );
@@ -1379,6 +1418,34 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
     $file_content_return = str_replace("___[avatar_rotation_y]___",$y_rot,$file_content_return);
     $file_content_return = str_replace("___[avatar_rotation_z]___",$z_rot,$file_content_return);
     $file_content_return = str_replace("___[avatar_rotation_w]___",$w_rot,$file_content_return);
+    return $file_content_return;
+}
+
+function wpunity_replace_wonderaround_unity($term_meta_wonder_around,$scene_id){
+
+    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+
+    $jsonScene = htmlspecialchars_decode ( $scene_json );
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+        if ($key == 'avatarYawObject') {
+            $x_pos = - $value['position'][0]; // x is in the opposite site in unity
+            $y_pos = $value['position'][1];
+            $z_pos = $value['position'][2];
+            $x_rot = $value['quaternion'][0];
+            $y_rot = $value['quaternion'][1];
+            $z_rot = $value['quaternion'][2];
+            $w_rot = $value['quaternion'][3];
+        }
+    }
+    $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_wonder_around);
+    $file_content_return = str_replace("___[player_position_y]___",$y_pos,$file_content_return);
+    $file_content_return = str_replace("___[player_position_z]___",$z_pos,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_x]___",$x_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_y]___",$y_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_z]___",$z_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_w]___",$w_rot,$file_content_return);
     return $file_content_return;
 }
 

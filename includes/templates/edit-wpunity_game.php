@@ -74,7 +74,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
 	$menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
 	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
-	$educational_energy_yaml_tax = get_term_by('slug', '	educational-energy', 'wpunity_scene_yaml');
+
+    $thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
+    if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');}
+    elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');}
 
 	$default_json = '{
 	"metadata": {
@@ -100,13 +103,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 }
 ';
-
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
 		),
 		'wpunity_scene_yaml' => array(
-			$educational_energy_yaml_tax->term_id,
+            $newscene_yaml_tax->term_id,
 		)
 	);
 
@@ -127,12 +129,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_id = wp_insert_post($scene_information);
 
-	//$scene_image = $_FILES['scene-featured-image'];
-
 	if($scene_id){
-		//$attachment_id = wpunity_upload_img( $scene_image, $scene_id);
-		//set_post_thumbnail( $scene_id, $attachment_id );
-
 		$newpost = get_post($scene_id);
 
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
