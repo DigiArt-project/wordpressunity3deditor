@@ -100,13 +100,9 @@ function wpunity_getYaml_mat_dotmeta_pattern(){
 
 function wpunity_fetch_game_assets_action_callback(){
 
+
 	// Output the directory listing as JSON
 	header('Content-type: application/json');
-
-	$DS = DIRECTORY_SEPARATOR;
-
-	// if you change this, be sure to change line 440 in scriptFileBrowserToolbarWPway.js
-	//$dir = '..'.$DS.'wp-content'.$DS.'uploads'.$DS.$_GET['gamefolder']; //.$DS.$_GET['scenefolder'];
 
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug']);
 
@@ -158,7 +154,14 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 	if ( $custom_query->have_posts() ) :
 		while ( $custom_query->have_posts() ) :
 
+
+
+
+
 			$custom_query->the_post();
+
+
+
 			$asset_id = get_the_ID();
 			$asset_name = get_the_title();
 
@@ -178,8 +181,6 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 			$image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true);
 
 			$categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
-
-
 
 			$allAssets[] = [
 				'assetName'=>$asset_name,
@@ -203,6 +204,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 
 		endwhile;
 	endif;
+
+
 
 	// Reset postdata
 	wp_reset_postdata();
