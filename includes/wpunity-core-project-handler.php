@@ -463,32 +463,46 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity';
 
-    wpunity_compile_settings_files_gen($game_path,'AudioManager.asset',get_term_meta($game_category,'wpunity_audio_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'ClusterInputManager.asset',get_term_meta($game_category,'wpunity_cluster_input_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'DynamicsManager.asset',get_term_meta($game_category,'wpunity_dynamics_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'EditorBuildSettings.asset',get_term_meta($game_category,'wpunity_editor_build_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'EditorSettings.asset',get_term_meta($game_category,'wpunity_editor_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'GraphicsSettings.asset',get_term_meta($game_category,'wpunity_graphics_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'InputManager.asset',get_term_meta($game_category,'wpunity_input_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'NavMeshAreas.asset',get_term_meta($game_category,'wpunity_nav_mesh_areas_term',true));
-    wpunity_compile_settings_files_gen($game_path,'NetworkManager.asset',get_term_meta($game_category,'wpunity_network_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'Physics2DSettings.asset',get_term_meta($game_category,'wpunity_physics2d_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'ProjectSettings.asset',get_term_meta($game_category,'wpunity_project_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'ProjectVersion.asset',get_term_meta($game_category,'wpunity_project_version_term',true));
-    wpunity_compile_settings_files_gen($game_path,'QualitySettings.asset',get_term_meta($game_category,'wpunity_quality_settings_term',true));
-    wpunity_compile_settings_files_gen($game_path,'TagManager.asset',get_term_meta($game_category,'wpunity_tag_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'TimeManager.asset',get_term_meta($game_category,'wpunity_time_manager_term',true));
-    wpunity_compile_settings_files_gen($game_path,'UnityConnectSettings.asset',get_term_meta($game_category,'wpunity_unity_connect_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'AudioManager.asset',get_term_meta($game_category,'wpunity_audio_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ClusterInputManager.asset',get_term_meta($game_category,'wpunity_cluster_input_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'DynamicsManager.asset',get_term_meta($game_category,'wpunity_dynamics_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorBuildSettings.asset',get_term_meta($game_category,'wpunity_editor_build_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorSettings.asset',get_term_meta($game_category,'wpunity_editor_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'GraphicsSettings.asset',get_term_meta($game_category,'wpunity_graphics_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'InputManager.asset',get_term_meta($game_category,'wpunity_input_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'NavMeshAreas.asset',get_term_meta($game_category,'wpunity_nav_mesh_areas_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'NetworkManager.asset',get_term_meta($game_category,'wpunity_network_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'Physics2DSettings.asset',get_term_meta($game_category,'wpunity_physics2d_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectSettings.asset',get_term_meta($game_category,'wpunity_project_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectVersion.asset',get_term_meta($game_category,'wpunity_project_version_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'QualitySettings.asset',get_term_meta($game_category,'wpunity_quality_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'TagManager.asset',get_term_meta($game_category,'wpunity_tag_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'TimeManager.asset',get_term_meta($game_category,'wpunity_time_manager_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'UnityConnectSettings.asset',get_term_meta($game_category,'wpunity_unity_connect_settings_term',true));
 }
 
-function wpunity_compile_settings_files_gen($game_path,$fileName,$fileYaml){
+function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileYaml){
 
     if($fileName === 'ProjectSettings.asset'){
-       $game_version_number = "1";
-       $version_number_dotted = "0.0.0.1";
 
+        // get from db the last version of the game
+        $game_version_number = '1'; // wpunity_get_last_version_of_game($game_project_id);
+
+        // increment for the new game
+        $game_version_number += 1;
+
+        // append new vn to db
+        //wpunity_append_version_game($game_project_id, $game_version_number);
+
+        // Zero pad to 4 digits
+        $game_version_number_padded = str_pad($game_version_number, 4, '0', STR_PAD_LEFT);
+
+        // implode with dots
+        $game_version_number_dotted = implode(str_split($game_version_number_padded), '.');
+
+        // Replace
         $fileYaml   = str_replace("___[game_version_number]___",        $game_version_number  , $fileYaml);
-        $fileYaml   = str_replace("___[game_version_number_dotted]___", $version_number_dotted, $fileYaml);
+        $fileYaml   = str_replace("___[game_version_number_dotted]___", $game_version_number_dotted, $fileYaml);
     }
 
     $file = $game_path . '/ProjectSettings/' . $fileName;
