@@ -168,9 +168,77 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
 
-<?php
-$breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
-$dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
+	<?php
+	$breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
+	$dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
+	$asset_title_saved = ($create_new == 1 ? "" : get_the_title( $asset_checked_id ));
+	$asset_title_label = ($create_new == 1 ? "Enter a title for your asset" : "Edit the title of your asset");
+	$asset_desc_saved = ($create_new == 1 ? "" : get_post_field('post_content', $asset_checked_id));
+	$asset_desc_label = ($create_new == 1 ? "Add a small description for your asset" : "Edit the description of your asset");
+
+	//Check if its new/saved and get data for Terrain Options
+	if($create_new == 0) {
+		$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+		if($saved_term[0]->slug == 'terrain'){
+			$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
+			if($physics) {
+				$mean_speed_wind = $physics['mean'];
+				$var_speed_wind = $physics['variance'];
+				$min_speed_wind = $physics['min'];
+				$max_speed_wind = $physics['max'];
+			}
+			$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
+			if($energy_income) {
+				$income_when_overpower = $energy_income['over'];
+				$income_when_correct_power = $energy_income['correct'];
+				$income_when_under_power = $energy_income['under'];
+			}
+			$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
+			if($constr_pen){
+				$access_penalty = $constr_pen['access'];
+				$archaeology_penalty = $constr_pen['arch'];
+				$natural_reserve_penalty = $constr_pen['natural'];
+				$hvdistance_penalty = $constr_pen['hiVolt'];
+			}
+		}elseif($saved_term[0]->slug == 'consumer'){
+			$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
+			if($consumptions) {
+				$min_consumption = $consumptions['min'];
+				$max_consumption = $consumptions['max'];
+				$mean_consumption = $consumptions['mean'];
+				$var_consumption = $consumptions['var'];
+			}
+		}elseif($saved_term[0]->slug == 'producer') {
+			$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
+			if($optCosts) {
+				$optCosts_size = $optCosts['size'];
+				$optCosts_dmg = $optCosts['dmg'];
+				$optCosts_cost = $optCosts['cost'];
+				$optCosts_repaid = $optCosts['repaid'];
+			}
+			$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
+			if($optGen) {
+				$optGen_class = $optGen['class'];
+				$optGen_speed = $optGen['speed'];
+				$optGen_power = $optGen['power'];
+			}
+			$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
+		}elseif ($saved_term[0]->slug == 'pois_imagetext') {
+			//load the already saved featured image for POI image-text
+			$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
+			$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
+		}elseif ($saved_term[0]->slug == 'pois_video') {
+			//upload the featured image for POI video
+			//$asset_featured_image =  $_FILES['poi-video-featured-image'];
+			//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+			//set_post_thumbnail( $asset_id, $attachment_id );
+
+			//upload video file for POI video
+			//$asset_video = $_FILES['videoFileInput'];
+			//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
+			//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
+		}
+	}
 
 ?>
     <div class="PageHeaderStyle">
@@ -249,88 +317,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
         </div>
 
-		<?php //Check if its new/saved and get data for TITLE/DESCRIPTION
-		if($create_new == 1){
-			$asset_title_saved = "";
-			$asset_title_label = "Enter a title for your asset";
-			$asset_desc_saved = "";
-			$asset_desc_label = "Add a small description for your asset.";
-		}else{
-			$asset_title_saved = get_the_title( $asset_checked_id );
-			$asset_title_label = "Edit the title of your asset";
-			$asset_desc_saved = get_post_field('post_content', $asset_checked_id);
-			$asset_desc_label = "Edit the description of your asset";
-		}
-
-		//Check if its new/saved and get data for Terrain Options
-		if($create_new != 1) {
-			$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-			if($saved_term[0]->slug == 'terrain'){
-				$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
-				if($physics) {
-					$mean_speed_wind = $physics['mean'];
-					$var_speed_wind = $physics['variance'];
-					$min_speed_wind = $physics['min'];
-					$max_speed_wind = $physics['max'];
-				}
-				$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
-				if($energy_income) {
-					$income_when_overpower = $energy_income['over'];
-					$income_when_correct_power = $energy_income['correct'];
-					$income_when_under_power = $energy_income['under'];
-				}
-				$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
-				if($constr_pen){
-					$access_penalty = $constr_pen['access'];
-					$archaeology_penalty = $constr_pen['arch'];
-					$natural_reserve_penalty = $constr_pen['natural'];
-					$hvdistance_penalty = $constr_pen['hiVolt'];
-				}
-			}elseif($saved_term[0]->slug == 'consumer'){
-				$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
-				if($consumptions) {
-					$min_consumption = $consumptions['min'];
-					$max_consumption = $consumptions['max'];
-					$mean_consumption = $consumptions['mean'];
-					$var_consumption = $consumptions['var'];
-				}
-			}elseif($saved_term[0]->slug == 'producer') {
-				$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
-				if($optCosts) {
-					$optCosts_size = $optCosts['size'];
-					$optCosts_dmg = $optCosts['dmg'];
-					$optCosts_cost = $optCosts['cost'];
-					$optCosts_repaid = $optCosts['repaid'];
-				}
-				$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
-				if($optGen) {
-					$optGen_class = $optGen['class'];
-					$optGen_speed = $optGen['speed'];
-					$optGen_power = $optGen['power'];
-				}
-
-				$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
-			}elseif ($saved_term[0]->slug == 'pois_imagetext') {
-				//load the already saved featured image for POI image-text
-				$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
-				$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
-			}elseif ($saved_term[0]->slug == 'pois_video') {
-				//upload the featured image for POI video
-				//$asset_featured_image =  $_FILES['poi-video-featured-image'];
-				//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
-				//set_post_thumbnail( $asset_id, $attachment_id );
-
-				//upload video file for POI video
-				//$asset_video = $_FILES['videoFileInput'];
-				//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
-				//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
-			}
-
-
-		}
-
-		?>
-
         <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
 
             <div class="mdc-layout-grid__inner">
@@ -357,10 +343,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     </div>
 
                     <hr class="WhiteSpaceSeparator">
-
-                    <!--<div id="doorDetailsPanel">
-						<h3 class="mdc-typography--title">Door options</h3>
-					</div>-->
 
                     <div id="poiImgDetailsPanel" style="display: none;">
 
@@ -408,16 +390,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                     <h3 class="mdc-typography--title">Object Properties</h3>
 
                     <ul class="RadioButtonList">
-                        <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
-							<div class="mdc-radio" >
-								<input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
-								<div class="mdc-radio__background">
-									<div class="mdc-radio__outer-circle"></div>
-									<div class="mdc-radio__inner-circle"></div>
-								</div>
-							</div>
-							<label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
-						</li>-->
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
                                 <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
@@ -430,50 +402,7 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
                         </li>
                     </ul>
 
-
-                    <!--<div class="mdc-layout-grid">
-
-
-						<div id="fbxFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="display: none;">
-							<label for="fbxFileInput"> Select an FBX file</label>
-							<input class="FullWidth" type="file" name="fbxFileInput" value="" id="fbxFileInput"/>
-						</div>
-
-						<div id="mtlFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-							<label for="mtlFileInput"> Select an MTL file</label>
-							<input class="FullWidth" type="file" name="mtlFileInput" value="" id="mtlFileInput" accept=".mtl" required/>
-						</div>
-
-						<div id="objFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-							<label  for="objFileInput" > Select an OBJ file</label>
-							<input class="FullWidth" type="file" name="objFileInput" value="" id="objFileInput" accept=".obj" required/>
-						</div>
-					</div>-->
-
-
-                    <!--<div id="assetPreviewContainer" style="margin:auto;"></div>-->
-
-                    <!--<div class="mdc-layout-grid">
-
-                    <div id="textureFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="textureFileInput"> Select a texture</label><br>
-                        <img id="texturePreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_texture.png', dirname(__FILE__)  ); */?>">
-                        <input class="FullWidth" type="file" name="textureFileInput" value="" id="textureFileInput" accept="image/jpeg"/>
-                    </div>
-
-                    <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <label for="sshotFileInput"> Screenshot</label><br>
-                        <img id="sshotPreviewImg" style="width:100px; height:100px" src="<?php /*echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); */?>">
-                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
-
-                        <a style="display: none;" id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
-                    </div>
-
-                </div>-->
-
-
                     <div class="mdc-layout-grid">
-
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                             <h3 class="mdc-typography--title">Object Preview</h3>
 
@@ -500,7 +429,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
 
                         </div>
-
                         <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                             <h3 class="mdc-typography--title">Screenshot</h3>
 
@@ -509,7 +437,6 @@ $dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
 
                             <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                         </div>
-
                     </div>
                 </div>
             </div>
