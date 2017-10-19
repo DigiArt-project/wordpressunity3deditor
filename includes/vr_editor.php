@@ -296,7 +296,7 @@ echo '</script>';
 
 
     <!-- Interface for Changing the door properties -->
-    <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2">
+    <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
@@ -310,8 +310,9 @@ echo '</script>';
             <div class="mdc-textfield__bottom-line"></div>
 
         </div>
-        <br />
-        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="border: none;"></select>
+        <div class="WhiteSpaceSeparator"></div>
+        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>
+        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="min-width: 91%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);"></select>
     </div>
 </div>
 

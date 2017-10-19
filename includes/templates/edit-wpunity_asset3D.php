@@ -168,77 +168,77 @@ get_header(); ?>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
 
-	<?php
-	$breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
-	$dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
-	$asset_title_saved = ($create_new == 1 ? "" : get_the_title( $asset_checked_id ));
-	$asset_title_label = ($create_new == 1 ? "Enter a title for your asset" : "Edit the title of your asset");
-	$asset_desc_saved = ($create_new == 1 ? "" : get_post_field('post_content', $asset_checked_id));
-	$asset_desc_label = ($create_new == 1 ? "Add a small description for your asset" : "Edit the description of your asset");
+<?php
+$breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
+$dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
+$asset_title_saved = ($create_new == 1 ? "" : get_the_title( $asset_checked_id ));
+$asset_title_label = ($create_new == 1 ? "Enter a title for your asset" : "Edit the title of your asset");
+$asset_desc_saved = ($create_new == 1 ? "" : get_post_field('post_content', $asset_checked_id));
+$asset_desc_label = ($create_new == 1 ? "Add a small description for your asset" : "Edit the description of your asset");
 
-	//Check if its new/saved and get data for Terrain Options
-	if($create_new == 0) {
-		$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-		if($saved_term[0]->slug == 'terrain'){
-			$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
-			if($physics) {
-				$mean_speed_wind = $physics['mean'];
-				$var_speed_wind = $physics['variance'];
-				$min_speed_wind = $physics['min'];
-				$max_speed_wind = $physics['max'];
-			}
-			$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
-			if($energy_income) {
-				$income_when_overpower = $energy_income['over'];
-				$income_when_correct_power = $energy_income['correct'];
-				$income_when_under_power = $energy_income['under'];
-			}
-			$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
-			if($constr_pen){
-				$access_penalty = $constr_pen['access'];
-				$archaeology_penalty = $constr_pen['arch'];
-				$natural_reserve_penalty = $constr_pen['natural'];
-				$hvdistance_penalty = $constr_pen['hiVolt'];
-			}
-		}elseif($saved_term[0]->slug == 'consumer'){
-			$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
-			if($consumptions) {
-				$min_consumption = $consumptions['min'];
-				$max_consumption = $consumptions['max'];
-				$mean_consumption = $consumptions['mean'];
-				$var_consumption = $consumptions['var'];
-			}
-		}elseif($saved_term[0]->slug == 'producer') {
-			$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
-			if($optCosts) {
-				$optCosts_size = $optCosts['size'];
-				$optCosts_dmg = $optCosts['dmg'];
-				$optCosts_cost = $optCosts['cost'];
-				$optCosts_repaid = $optCosts['repaid'];
-			}
-			$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
-			if($optGen) {
-				$optGen_class = $optGen['class'];
-				$optGen_speed = $optGen['speed'];
-				$optGen_power = $optGen['power'];
-			}
-			$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
-		}elseif ($saved_term[0]->slug == 'pois_imagetext') {
-			//load the already saved featured image for POI image-text
-			$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
-			$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
-		}elseif ($saved_term[0]->slug == 'pois_video') {
-			//upload the featured image for POI video
-			//$asset_featured_image =  $_FILES['poi-video-featured-image'];
-			//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
-			//set_post_thumbnail( $asset_id, $attachment_id );
-
-			//upload video file for POI video
-			//$asset_video = $_FILES['videoFileInput'];
-			//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
-			//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
+//Check if its new/saved and get data for Terrain Options
+if($create_new == 0) {
+	$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+	if($saved_term[0]->slug == 'terrain'){
+		$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
+		if($physics) {
+			$mean_speed_wind = $physics['mean'];
+			$var_speed_wind = $physics['variance'];
+			$min_speed_wind = $physics['min'];
+			$max_speed_wind = $physics['max'];
 		}
+		$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
+		if($energy_income) {
+			$income_when_overpower = $energy_income['over'];
+			$income_when_correct_power = $energy_income['correct'];
+			$income_when_under_power = $energy_income['under'];
+		}
+		$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
+		if($constr_pen){
+			$access_penalty = $constr_pen['access'];
+			$archaeology_penalty = $constr_pen['arch'];
+			$natural_reserve_penalty = $constr_pen['natural'];
+			$hvdistance_penalty = $constr_pen['hiVolt'];
+		}
+	}elseif($saved_term[0]->slug == 'consumer'){
+		$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
+		if($consumptions) {
+			$min_consumption = $consumptions['min'];
+			$max_consumption = $consumptions['max'];
+			$mean_consumption = $consumptions['mean'];
+			$var_consumption = $consumptions['var'];
+		}
+	}elseif($saved_term[0]->slug == 'producer') {
+		$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
+		if($optCosts) {
+			$optCosts_size = $optCosts['size'];
+			$optCosts_dmg = $optCosts['dmg'];
+			$optCosts_cost = $optCosts['cost'];
+			$optCosts_repaid = $optCosts['repaid'];
+		}
+		$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
+		if($optGen) {
+			$optGen_class = $optGen['class'];
+			$optGen_speed = $optGen['speed'];
+			$optGen_power = $optGen['power'];
+		}
+		$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
+	}elseif ($saved_term[0]->slug == 'pois_imagetext') {
+		//load the already saved featured image for POI image-text
+		$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
+		$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
+	}elseif ($saved_term[0]->slug == 'pois_video') {
+		//upload the featured image for POI video
+		//$asset_featured_image =  $_FILES['poi-video-featured-image'];
+		//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
+		//set_post_thumbnail( $asset_id, $attachment_id );
+
+		//upload video file for POI video
+		//$asset_video = $_FILES['videoFileInput'];
+		//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
+		//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
 	}
+}
 
 ?>
     <div class="PageHeaderStyle">
@@ -390,6 +390,16 @@ get_header(); ?>
                     <h3 class="mdc-typography--title">Object Properties</h3>
 
                     <ul class="RadioButtonList">
+                        <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
+						  <div class="mdc-radio" >
+							  <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
+							  <div class="mdc-radio__background">
+								  <div class="mdc-radio__outer-circle"></div>
+								  <div class="mdc-radio__inner-circle"></div>
+							  </div>
+						  </div>
+						  <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
+					  </li>-->
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
                                 <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
@@ -420,12 +430,12 @@ get_header(); ?>
                             <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                             <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
-                            
-                        <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                        <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                        <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
 
-<!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
+                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+
+                            <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 
 
                         </div>
@@ -731,8 +741,8 @@ get_header(); ?>
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
-//        multipleFilesInputElem.onclick = function (){//Clear all on click
-//            previewCanvas.clearAllAssets();}
+        //        multipleFilesInputElem.onclick = function (){//Clear all on click
+        //            previewCanvas.clearAllAssets();}
 
 
         loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
@@ -905,24 +915,10 @@ get_header(); ?>
 
         jQuery( function() {
 
-            // FBX / MTL Toggles
-            jQuery( "input[name=objectTypeRadio]" ).click(function() {
-
+            // FBX / MTL Toggles TODO
+            /*jQuery( "input[name=objectTypeRadio]" ).click(function() {
                 var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-
-                /*if (objectType === 'fbx') {
-                    wpunity_clear_asset_files();
-                    fbxInputContainer.show();
-                    mtlInputContainer.hide();
-                    objInputContainer.hide();
-                }
-                else if (objectType === 'mtl') {
-                    wpunity_clear_asset_files();
-                    fbxInputContainer.hide();
-                    mtlInputContainer.show();
-                    objInputContainer.show();
-                }*/
-            });
+            });*/
 
             var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
             var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
@@ -1004,7 +1000,7 @@ get_header(); ?>
                     poiImgDetailsWrapper.append(
                         '<div class="mdc-layout-grid"><div class="mdc-layout-grid__inner">'+
                         '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
-                            '<label for="poi-input-file-'+i+'"> Select an image</label>'+
+                        '<label for="poi-input-file-'+i+'"> Select an image</label>'+
                         '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
                         '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
                         '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
