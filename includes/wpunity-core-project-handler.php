@@ -106,6 +106,7 @@ function wpunity_delete_scene_frontend_callback(){
 }
 
 //DELETE Asset with files
+// ToDo: check why not send to trash
 function wpunity_delete_asset3d_frontend_callback(){
 
     $asset_id = $_POST['asset_id'];
@@ -420,7 +421,7 @@ function wpunity_compile_folders_gen($gameSlug){
 
 /**
  *
- * Generate HandyBuilder.cs
+ * Generate HandyBuilder.cs and OBJImportSettings.cs
  *
  * @param $gameSlug
  * @param $targetPlatform
@@ -429,10 +430,28 @@ function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
+
     //--Uploads/myGameProjectUnity--
+
+    // HandyBuilder.cs
     $filepath =$filepath = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
     wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform);
+
+    // OBJImportSettings.cs
+    $pluginpath = dirname ( dirname (get_template_directory()));
+    $pluginpath = str_replace('\\','/',$pluginpath);
+    $pluginSlug = plugin_basename(__FILE__);
+    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
+    $filepath_source_file = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/Editor_Commons/OBJImportSettings.cs';
+
+    $filepath_target_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/OBJImportSettings.cs';
+
+    if (!copy($filepath_source_file, $filepath_target_file)) {
+        echo "failed to copy $filepath_source_file to $filepath_target_file...\n";
+    }
 }
+
+
 
 function wpunity_compile_settings_gen($gameID,$gameSlug){
 

@@ -105,7 +105,9 @@ function wpunity_assepileAjax() {
 
                     if (!completedFlag) {
 
-                        var counterLines = logfile.split(/\r\n|\r|\n/).length;
+                        var counterLines = 0;
+                        if (logfile.length > 0)
+                            counterLines = logfile.split(/\r\n|\r|\n/).length;
 
                         console.log("Ajax 2: Log file:" + counterLines + " lines at " + (new Date().getTime() - start_time) / 1000 + " seconds");
 

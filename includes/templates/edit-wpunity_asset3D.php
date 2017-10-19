@@ -425,7 +425,7 @@ get_header(); ?>
                         <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                         <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
 
-                        <input type="hidden" name="textureFileInput" id="textureFileInput" value=""/>
+<!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 
 
                         </div>
