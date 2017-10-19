@@ -334,12 +334,9 @@ function clearAndUnbindDoorProperties() {
     for (var i = popupDoorSelect.options.length; i-->0;)
         popupDoorSelect.options[i] = null;
 
-    // door source title
-    jQuery("#doorid").val( null );
+    // door source title & remove listeners
+    jQuery("#doorid").val( null ).unbind('change');
 
-
-    // remove listeners
-    jQuery("#doorid").unbind('change');
     jQuery("#popupDoorSelect").unbind('change');
 }
 
