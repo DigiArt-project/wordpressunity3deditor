@@ -145,8 +145,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-get_header();
-print_r($asset_checked_id);?>
+get_header(); ?>
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">

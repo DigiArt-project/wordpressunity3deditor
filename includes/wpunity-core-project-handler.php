@@ -1141,8 +1141,8 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $door_scale_y = $value['scale'][1];
                 $door_scale_z = $value['scale'][2];
                 $door_title = get_the_title($door_id);
-                $door_scene_arrival = '';
-                $door_door_arrival = '';
+                $door_scene_arrival = $value['sceneName_target'];
+                $door_door_arrival = $value['doorName_target'];
                 $door_transform_fid = wpunity_create_fids($current_fid++);
                 $door_obj_fid = wpunity_create_fids($current_fid++);
                 $door_guid = wpunity_create_guids('obj', $door_obj);
