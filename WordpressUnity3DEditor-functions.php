@@ -26,16 +26,7 @@ echo ini_get('max_input_time').chr(10);
 // @ini_set( 'memory_limit', '512M');
 @ini_set( 'max_execution_time', '2400' );
 
-// TODO: The following necessary things to maintain folders structure
 
-// TODO: Do not allow Games to contain posts with the same name
-// TODO: Do not allow Scenes to contain posts with the same name
-// TODO: Do not allow Assets3D to contain posts with the same name
-
-
-// TODO: Do not allow Scenes to be saved if they do not have a category selected (Game they belong to)
-// TODO: Do not allow Assets3D to be saved if they do not have a category selected (Asset3d Type they belong to)
-// TODO: Do not allow Assets3D to be saved if they do not have a category selected (Scene they belong to)
 
 
 //===================================== Styles & Scripts ====================================
@@ -175,6 +166,13 @@ register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
 register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
+
+
+// Make the games versions table on activating the plugin
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-db-table-creations.php' );
+register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
+
+
 
 // Add helper functions file
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
