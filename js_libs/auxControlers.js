@@ -260,6 +260,7 @@ function displayDoorProperties(event, nameDoorSource){
     option.text = "Select a destination";
     option.value = "Select a destination";
     option.selected = true;
+    option.disabled = true;
 
         // //option.disabled = true;
     popupDoorSelect.add(option);
@@ -275,7 +276,7 @@ function displayDoorProperties(event, nameDoorSource){
         option = document.createElement("option");
         option.text = doorName;
         option.value = doorName;
-        //option.style.background = "#aaaa00";
+        option.style.background = "#fff";
         popupDoorSelect.add(option);
     }
 
