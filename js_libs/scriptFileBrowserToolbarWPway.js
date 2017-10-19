@@ -120,13 +120,10 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         // Empty the old result and make the new one
         fileList.empty().hide();
 
-        if (!enlistData.length) {
+        if (!enlistData) {
             filemanager.find('.nothingfound').show();
-        }else{
+        } else  {
             filemanager.find('.nothingfound').hide();
-        }
-
-        if(enlistData.length) {
 
             for (i = 0; i < enlistData.length; i++) {
 
