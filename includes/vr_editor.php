@@ -312,7 +312,9 @@ echo '</script>';
         </div>
         <div class="WhiteSpaceSeparator"></div>
         <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>
-        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect" class="mdc-select" style="min-width: 91%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);"></select>
+        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
+                class="mdc-select" style="min-width: 91%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
+        </select>
     </div>
 </div>
 

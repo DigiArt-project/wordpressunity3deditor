@@ -255,11 +255,13 @@ function displayDoorProperties(event, nameDoorSource){
     // Add options
     var option;
 
-    // Prompt "Select"
+    // // Prompt "Select"
     option = document.createElement("option");
     option.text = "Select a destination";
-    option.value = null;
-    option.disabled = true;
+    option.value = "Select a destination";
+    option.selected = true;
+
+        // //option.disabled = true;
     popupDoorSelect.add(option);
 
     var doorsFromOtherScenes = [];
@@ -273,7 +275,7 @@ function displayDoorProperties(event, nameDoorSource){
         option = document.createElement("option");
         option.text = doorName;
         option.value = doorName;
-        option.style.background = "#aaaa00";
+        //option.style.background = "#aaaa00";
         popupDoorSelect.add(option);
     }
 
@@ -281,12 +283,15 @@ function displayDoorProperties(event, nameDoorSource){
     option = document.createElement("option");
     option.text = "Cancel";
     option.value = "Cancel";
-    option.style.background = "#f59";
+    option.style.background = "#b7afaa";
     popupDoorSelect.add(option);
 
 
-    jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
-    jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
+    if (envir.scene.getObjectByName(nameDoorSource).doorName_source)
+        jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
+
+    if(envir.scene.getObjectByName(nameDoorSource).doorName_target)
+        jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
                                      envir.scene.getObjectByName(nameDoorSource).sceneName_target );
 
     // Show Selection

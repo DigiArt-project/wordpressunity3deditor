@@ -50,25 +50,34 @@ function wpunity_append_version_game($game_project_id, $new_version_number) {
 	);
 }
 
-
-function wpunity_get_all_versions_of_game($game_project_id){
-	global $wpdb;
-	$table_name = $wpdb->prefix . "_games_versions";
-
-	$arrayObjectOfVersions = $wpdb->get_results( 'SELECT * FROM $table_name WHERE game_project_id = $game_project_id', OBJECT );
-
-	return $arrayObjectOfVersions;
-}
-
-
+/**
+ * Get the last version of the game
+ *
+ * @param $game_project_id
+ * @return array|int|null|object
+ */
 function wpunity_get_last_version_of_game($game_project_id){
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . "_games_versions";
 
-	$lastverion = -1;
+	$lastverion = $wpdb->get_results(
+        'SELECT max(version_number) FROM '.$table_name.' WHERE game_project_id='.$game_project_id,
+        ARRAY_N );
 
-	$lastverion = $wpdb->get_results( 'SELECT max(version_number) FROM $table_name WHERE game_project_id = $game_project_id', OBJECT );
 
-	return $lastverion;
+	return $lastverion[0][0];
+}
+
+/**
+ * Get all versions of a game
+ *
+ * @param $game_project_id
+ * @return array|null|object
+ */
+function wpunity_get_all_versions_of_game($game_project_id){
+    global $wpdb;
+    $table_name = $wpdb->prefix . "_games_versions";
+
+    return $wpdb->get_results( 'SELECT * FROM '.$table_name.' WHERE game_project_id='.$game_project_id, OBJECT );
 }

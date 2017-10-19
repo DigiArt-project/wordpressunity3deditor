@@ -168,6 +168,10 @@ register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
 
 
+
+
+
+
 // Make the games versions table on activating the plugin
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-db-table-creations.php' );
 register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
