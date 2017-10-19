@@ -2,54 +2,54 @@
 
 function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
-    $sceneIds = [];
+	$sceneIds = [];
 
-    // Define custom query parameters
-    $custom_query_args = array(
-        'post_type' => 'wpunity_scene',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_scene_pgame',
-                'field'    => 'term_id',
-                'terms'    => $allScenePGameID,
-            ),
-        ),
-        'orderby' => 'ID',
-        'order' => 'DESC',
-    );
+	// Define custom query parameters
+	$custom_query_args = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field'    => 'term_id',
+				'terms'    => $allScenePGameID,
+			),
+		),
+		'orderby' => 'ID',
+		'order' => 'DESC',
+	);
 
-    $custom_query = new WP_Query( $custom_query_args );
+	$custom_query = new WP_Query( $custom_query_args );
 
-    $doorInfoGathered = [];
+	$doorInfoGathered = [];
 
-    // Output custom query loop
-    if ( $custom_query->have_posts() ) {
-        while ($custom_query->have_posts()) {
-            $custom_query->the_post();
+	// Output custom query loop
+	if ( $custom_query->have_posts() ) {
+		while ($custom_query->have_posts()) {
+			$custom_query->the_post();
 
-            $scene_id = get_the_ID();
-            $sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
+			$scene_id = get_the_ID();
+			$sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
 
-            $scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
-            $jsonScene = htmlspecialchars_decode($scene_json);
-            $sceneJsonARR = json_decode($jsonScene, TRUE);
+			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+			$jsonScene = htmlspecialchars_decode($scene_json);
+			$sceneJsonARR = json_decode($jsonScene, TRUE);
 
-            if (count($sceneJsonARR['objects']) > 0)
-                foreach ($sceneJsonARR['objects'] as $key => $value) {
-                    if ($key !== 'avatarYawObject') {
-                        if ($value['categoryName'] === 'Door') {
-                            $doorInfoGathered[] = ['door' => $value['doorName_source'], 'scene' => $sceneTitle];
-                        }
-                    }
-                }
-        }
-    }
+			if (count($sceneJsonARR['objects']) > 0)
+				foreach ($sceneJsonARR['objects'] as $key => $value) {
+					if ($key !== 'avatarYawObject') {
+						if ($value['categoryName'] === 'Door') {
+							$doorInfoGathered[] = ['door' => $value['doorName_source'], 'scene' => $sceneTitle];
+						}
+					}
+				}
+		}
+	}
 
-    wp_reset_postdata();
-    $wp_query = NULL;
+	wp_reset_postdata();
+	$wp_query = NULL;
 
-    return $doorInfoGathered;
+	return $doorInfoGathered;
 }
 /**
  *
@@ -60,28 +60,28 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
  */
 function wpunity_get_all_doors_of_game($gameId)
 {
-    $scenesIds = wpunity_get_all_sceneids_of_game($gameId);
+	$scenesIds = wpunity_get_all_sceneids_of_game($gameId);
 
-    $doorInfoGathered = array();
+	$doorInfoGathered = array();
 
-    foreach ($scenesIds as $scene_id){
+	foreach ($scenesIds as $scene_id){
 
-        $sceneTitle = get_post($scene_id)->post_title;
+		$sceneTitle = get_post($scene_id)->post_title;
 
-        $scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
-        $jsonScene = htmlspecialchars_decode($scene_json);
-        $sceneJsonARR = json_decode($jsonScene, TRUE);
+		$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+		$jsonScene = htmlspecialchars_decode($scene_json);
+		$sceneJsonARR = json_decode($jsonScene, TRUE);
 
-        if(count($sceneJsonARR['objects'])>0)
-            foreach ($sceneJsonARR['objects'] as $key => $value) {
-                if ($key !== 'avatarYawObject') {
-                    if ($value['categoryName'] === 'Door') {
-                        $doorInfoGathered[] = ['door'=>$value['doorName_source'], 'scene'=>$sceneTitle ];
-                    }
-                }
-            }
-    }
-    return $doorInfoGathered;
+		if(count($sceneJsonARR['objects'])>0)
+			foreach ($sceneJsonARR['objects'] as $key => $value) {
+				if ($key !== 'avatarYawObject') {
+					if ($value['categoryName'] === 'Door') {
+						$doorInfoGathered[] = ['door'=>$value['doorName_source'], 'scene'=>$sceneTitle ];
+					}
+				}
+			}
+	}
+	return $doorInfoGathered;
 }
 /**
  *
@@ -92,36 +92,36 @@ function wpunity_get_all_doors_of_game($gameId)
  */
 function wpunity_get_all_sceneids_of_game($allScenePGameID){
 
-    $sceneIds = [];
+	$sceneIds = [];
 
-    // Define custom query parameters
-    $custom_query_args = array(
-        'post_type' => 'wpunity_scene',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_scene_pgame',
-                'field'    => 'term_id',
-                'terms'    => $allScenePGameID,
-            ),
-        ),
-        'orderby' => 'ID',
-        'order' => 'DESC',
-    );
+	// Define custom query parameters
+	$custom_query_args = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field'    => 'term_id',
+				'terms'    => $allScenePGameID,
+			),
+		),
+		'orderby' => 'ID',
+		'order' => 'DESC',
+	);
 
-    $custom_query = new WP_Query( $custom_query_args );
+	$custom_query = new WP_Query( $custom_query_args );
 
 
 
-    // Output custom query loop
-    if ( $custom_query->have_posts() )
-        while ( $custom_query->have_posts() ) {
-            $custom_query->the_post();
-            $scene_id = get_the_ID();
-            $sceneIds[] = $scene_id;
-        }
+	// Output custom query loop
+	if ( $custom_query->have_posts() )
+		while ( $custom_query->have_posts() ) {
+			$custom_query->the_post();
+			$scene_id = get_the_ID();
+			$sceneIds[] = $scene_id;
+		}
 
-    return $sceneIds;
+	return $sceneIds;
 }
 
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug){
@@ -273,14 +273,14 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm,$gameSlug){
 
 	$textureContent = $_POST['textureFileInput'];
-    $screenShotFile = $_POST['sshotFileInput'];
+	$screenShotFile = $_POST['sshotFileInput'];
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
 
 
 	$fh = fopen('output_post.txt', 'w' );
-    fwrite($fh, print_r($_POST, true));
-    fclose($fh);
+	fwrite($fh, print_r($_POST, true));
+	fclose($fh);
 
 
 
@@ -384,15 +384,15 @@ function wpunity_upload_img($file = array(), $parent_post_id, $orientation = nul
 
 function wpunity_upload_filter( $args  ) {
 
-    $newdir =  '/Models';
+	$newdir =  '/Models';
 
-    $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-    $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-    $args['subdir']  = $newdir;
-    $args['path']   .= $newdir;
-    $args['url']    .= $newdir;
+	$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+	$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+	$args['subdir']  = $newdir;
+	$args['path']   .= $newdir;
+	$args['url']    .= $newdir;
 
-    return $args;
+	return $args;
 
 }
 
@@ -402,9 +402,9 @@ function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSl
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
-    add_filter( 'upload_dir', 'wpunity_upload_filter');
+	add_filter( 'upload_dir', 'wpunity_upload_filter');
 	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
-    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
+	remove_filter( 'upload_dir', 'wpunity_upload_filter' );
 
 	if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
 		return false;
@@ -460,7 +460,7 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.png';
 
 	$image_upload = file_put_contents($upload_path . $hashed_filename,
-        base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
+		base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
 
 	// HANDLE UPLOADED FILE
 	if( !function_exists( 'wp_handle_sideload' ) ) {
@@ -538,72 +538,72 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
  */
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $parentGameSlug) {
 
-    // Filters the image sizes automatically generated when uploading an image.
-    add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+	// Filters the image sizes automatically generated when uploading an image.
+	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
-    require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
-    // Upload dir
-    $upload_dir = wp_upload_dir();
-    $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+	// Upload dir
+	$upload_dir = wp_upload_dir();
+	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
-    $hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
+	$hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
 
-    $image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
-        //base64_decode(substr($textContent, strpos($textContent, ",")+1)));
+	$image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
+	//base64_decode(substr($textContent, strpos($textContent, ",")+1)));
 
-    // HANDLE UPLOADED FILE
-    if( !function_exists( 'wp_handle_sideload' ) ) {
-        require_once( ABSPATH . 'wp-admin/includes/file.php' );
-    }
+	// HANDLE UPLOADED FILE
+	if( !function_exists( 'wp_handle_sideload' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	}
 
-    // Without that I'm getting a debug error!?
-    if( !function_exists( 'wp_get_current_user' ) ) {
-        require_once( ABSPATH . 'wp-includes/pluggable.php' );
-    }
+	// Without that I'm getting a debug error!?
+	if( !function_exists( 'wp_get_current_user' ) ) {
+		require_once( ABSPATH . 'wp-includes/pluggable.php' );
+	}
 
-    $file = array (
-        'name'     => $hashed_filename,
-        'type'     => 'text/plain',
-        'tmp_name' => $upload_path.$hashed_filename,
-        'error'    => 0,
-        'size'     => filesize( $upload_path.$hashed_filename ),
-    );
+	$file = array (
+		'name'     => $hashed_filename,
+		'type'     => 'text/plain',
+		'tmp_name' => $upload_path.$hashed_filename,
+		'error'    => 0,
+		'size'     => filesize( $upload_path.$hashed_filename ),
+	);
 
-    add_filter( 'upload_dir', 'wpunity_upload_filter');
-    // upload file to server
-    // @new use $file instead of $image_upload
-    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
-    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
+	add_filter( 'upload_dir', 'wpunity_upload_filter');
+	// upload file to server
+	// @new use $file instead of $image_upload
+	$file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+	remove_filter( 'upload_dir', 'wpunity_upload_filter' );
 
-    $filename = $file_return['file'];
+	$filename = $file_return['file'];
 
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir .= "/" . $parentGameSlug;
-    $upload_dir .= "/" . 'Models';
-    $upload_dir = str_replace('\\','/',$upload_dir);
-    $attachment = array(
-        'post_mime_type' => $file_return['type'],
-        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-        'post_content' => '',
-        'post_status' => 'inherit',
-        'guid' => $file_return['url']
-    );
+	$upload = wp_upload_dir();
+	$upload_dir = $upload['basedir'];
+	$upload_dir .= "/" . $parentGameSlug;
+	$upload_dir .= "/" . 'Models';
+	$upload_dir = str_replace('\\','/',$upload_dir);
+	$attachment = array(
+		'post_mime_type' => $file_return['type'],
+		'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+		'post_content' => '',
+		'post_status' => 'inherit',
+		'guid' => $file_return['url']
+	);
 
-    $attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
+	$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
 
-    require_once(ABSPATH . 'wp-admin/includes/image.php');
-    $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
-    wp_update_attachment_metadata( $attachment_id, $attachment_data );
+	require_once(ABSPATH . 'wp-admin/includes/image.php');
+	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+	wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
-    remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+	remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
-    if( 0 < intval( $attachment_id, 10 ) ) {
-        return $attachment_id;
-    }
+	if( 0 < intval( $attachment_id, 10 ) ) {
+		return $attachment_id;
+	}
 
-    return false;
+	return false;
 }
 
 
@@ -864,58 +864,58 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-    $DS = DIRECTORY_SEPARATOR;
-    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+	$DS = DIRECTORY_SEPARATOR;
+	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-    $gameFormat = $_REQUEST['gameFormat'];
+	$gameFormat = $_REQUEST['gameFormat'];
 
-    switch($gameFormat){
-        case 'platform-windows':
-            $targetPlatform =  'StandaloneWindows'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
-            break;
-        case 'platform-mac':
-            $targetPlatform = 'StandaloneOSXUniversal'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
-            break;
-        case 'platform-linux':
-            $targetPlatform = 'StandaloneLinux'; // ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
-            break;
-        case 'platform-web':
-            $targetPlatform =  'WebGL'; //' -executeMethod WebGLBuilder.build';
-            break;
-        default:
-            echo "you must select an output format";
-            wp_die();
-            break;
-    }
+	switch($gameFormat){
+		case 'platform-windows':
+			$targetPlatform =  'StandaloneWindows'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+			break;
+		case 'platform-mac':
+			$targetPlatform = 'StandaloneOSXUniversal'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+			break;
+		case 'platform-linux':
+			$targetPlatform = 'StandaloneLinux'; // ' -buildOSXUniversalPlayer "builds'.$DS.'linux"';
+			break;
+		case 'platform-web':
+			$targetPlatform =  'WebGL'; //' -executeMethod WebGLBuilder.build';
+			break;
+		default:
+			echo "you must select an output format";
+			wp_die();
+			break;
+	}
 
 	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug'], $targetPlatform);
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
-    // to avoiding erroneously take previous files. This is not safe with sleep however.
-    // Do not delete library folder if it takes too long
-    sleep(4);
+	// to avoiding erroneously take previous files. This is not safe with sleep however.
+	// Do not delete library folder if it takes too long
+	sleep(4);
 
 	if ($assemply_success == 'true') {
 
-        $init_gcwd = getcwd(); // get cwd (wp-admin probably)
-        //-----------------------------
+		$init_gcwd = getcwd(); // get cwd (wp-admin probably)
+		//-----------------------------
 
-        //--Uploads/myGameProjectUnity--
-        $upload_dir = wp_upload_dir()['basedir'];
-        $upload_dir = str_replace('\\','/',$upload_dir);
-        $game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
+		//--Uploads/myGameProjectUnity--
+		$upload_dir = wp_upload_dir()['basedir'];
+		$upload_dir = str_replace('\\','/',$upload_dir);
+		$game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
 
-        if ($os === 'win') {
-            $os_bin = 'bat';
-            $txt = '@echo off'."\n"; // change line always with double quote
-            $txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
+		if ($os === 'win') {
+			$os_bin = 'bat';
+			$txt = '@echo off'."\n"; // change line always with double quote
+			$txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
 
-            $txt .= "\n";
-            $txt .= 'ECHO %PID%';
-            $txt .= "\n";
-            $txt .= 'exit'; // exit command useful for not showing again the command prompt
-            $txt .= "\n";
-$txt .= '
+			$txt .= "\n";
+			$txt .= 'ECHO %PID%';
+			$txt .= "\n";
+			$txt .= 'exit'; // exit command useful for not showing again the command prompt
+			$txt .= "\n";
+			$txt .= '
 :spawn command args
 :: sets %PID% on completion
 @echo off
@@ -933,46 +933,46 @@ endlocal & set "PID=%return: =%"
 goto :EOF
 @echo on';
 
-            $compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
+			$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
-        } else { // LINUX SERVER
-            $os_bin = 'sh';
-            $txt = "#/bin/bash"."\n".
-                "projectPath=`pwd`"."\n".
-                "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-                "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -executeMethod HandyBuilder.build";// " -executeMethod HandyBuilder.build";  //;  //. ; "-buildWindowsPlayer ' build/mygame.exe'"; //
+		} else { // LINUX SERVER
+			$os_bin = 'sh';
+			$txt = "#/bin/bash"."\n".
+			       "projectPath=`pwd`"."\n".
+			       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
+			       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -executeMethod HandyBuilder.build";// " -executeMethod HandyBuilder.build";  //;  //. ; "-buildWindowsPlayer ' build/mygame.exe'"; //
 
-            // 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-            $compile_command = 'nohup sh starter_artificial.sh> /dev/null 2>/dev/null & echo $! >>pid.txt';
-        }
+			// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+			$compile_command = 'nohup sh starter_artificial.sh> /dev/null 2>/dev/null & echo $! >>pid.txt';
+		}
 
-        // 1 : Generate bat or sh
-        $myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
-        fwrite($myfile, $txt);
-        fclose($myfile);
-        chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
+		// 1 : Generate bat or sh
+		$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
+		fwrite($myfile, $txt);
+		fclose($myfile);
+		chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
 
-        chdir($game_dirpath);
+		chdir($game_dirpath);
 
-        if ($os === 'win') {
-            $unity_pid = shell_exec($compile_command);
-            $fga = fopen("output2.txt", "w");
-            fwrite($fga, $compile_command);
-            fclose($fga);
-        } else {
-            $res = putenv("HOME=/home/jimver04");
-            shell_exec($compile_command);
-            $fpid = fopen("pid.txt","r");
-            $unity_pid = fgets($fpid);
-            fclose($fpid);
-        }
-        //---------------------------------------
-        chdir($init_gcwd);
+		if ($os === 'win') {
+			$unity_pid = shell_exec($compile_command);
+			$fga = fopen("output2.txt", "w");
+			fwrite($fga, $compile_command);
+			fclose($fga);
+		} else {
+			$res = putenv("HOME=/home/jimver04");
+			shell_exec($compile_command);
+			$fpid = fopen("pid.txt","r");
+			$unity_pid = fgets($fpid);
+			fclose($fpid);
+		}
+		//---------------------------------------
+		chdir($init_gcwd);
 
-        echo $unity_pid;
-    }
+		echo $unity_pid;
+	}
 
-    wp_die();
+	wp_die();
 }
 
 
@@ -988,33 +988,33 @@ function wpunity_monitor_compiling_action_callback(){
 	if ($os === 'lin') {
 
 
-        //pid is the sh process id. First get the xvfbrun process ID
-        $phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
+		//pid is the sh process id. First get the xvfbrun process ID
+		$phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
 
-        // from the xvfbrun process ID get the Unity process ID
-        $phpcomd2 = exec("ps -ef | grep Unity | awk -v myvar=".$phpcomd1." '$3==myvar {print $2;}';");
+		// from the xvfbrun process ID get the Unity process ID
+		$phpcomd2 = exec("ps -ef | grep Unity | awk -v myvar=".$phpcomd1." '$3==myvar {print $2;}';");
 
-        $processUnityCSV = exec('ps --no-headers -p ' . $phpcomd2 . ' -o size'); // ,%cpu
+		$processUnityCSV = exec('ps --no-headers -p ' . $phpcomd2 . ' -o size'); // ,%cpu
 
-        // Write to wp-admin dir the shell_exec cmd result
+		// Write to wp-admin dir the shell_exec cmd result
 //        $hf = fopen('output.txt', 'w');
 //        fwrite($hf, $phpcomd1);
 //        fwrite($hf, $phpcomd2);
 //        fclose($hf);
 
-        $processUnityCSV = round(((float)($processUnityCSV))/1000,0);
+		$processUnityCSV = round(((float)($processUnityCSV))/1000,0);
 
-        if ($processUnityCSV==0)
-            $processUnityCSV = "";
-        else
-            $processUnityCSV = "".$processUnityCSV."";
+		if ($processUnityCSV==0)
+			$processUnityCSV = "";
+		else
+			$processUnityCSV = "".$processUnityCSV."";
 
 
-    } else {
-	     //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
-         $phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
-         $processUnityCSV = exec($phpcomd);
-     }
+	} else {
+		//$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
+		$phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
+		$processUnityCSV = exec($phpcomd);
+	}
 
 	echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 
@@ -1024,28 +1024,28 @@ function wpunity_monitor_compiling_action_callback(){
 
 //---- AJAX KILL TASK: KILL COMPILE PROCESS ------
 function wpunity_killtask_compiling_action_callback(){
-    $DS = DIRECTORY_SEPARATOR;
+	$DS = DIRECTORY_SEPARATOR;
 
-    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
-    if ($os === 'lin') {
-        //pid is the sh process id. First get the xvfbrun process ID
-        $phpcomd  = "xvfbrun_ID=$(ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}');";
+	if ($os === 'lin') {
+		//pid is the sh process id. First get the xvfbrun process ID
+		$phpcomd  = "xvfbrun_ID=$(ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}');";
 
-        // from the xvfbrun process ID get the Unity process ID
-        $phpcomd .= "unity_pid=$(ps -ef | grep Unity | awk -v myvar=\"\$xvfbrun_ID\" '$3==myvar {print $2;}');";
+		// from the xvfbrun process ID get the Unity process ID
+		$phpcomd .= "unity_pid=$(ps -ef | grep Unity | awk -v myvar=\"\$xvfbrun_ID\" '$3==myvar {print $2;}');";
 
-        // kill Unity
-        $phpcomd .= "kill `echo \"\$unity_pid\"`";
-        $killres = exec($phpcomd);
+		// kill Unity
+		$phpcomd .= "kill `echo \"\$unity_pid\"`";
+		$killres = exec($phpcomd);
 
-    }else {
-        $phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
-        $killres = exec($phpcomd);
-    }
+	}else {
+		$phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
+		$killres = exec($phpcomd);
+	}
 
-    echo $killres;
-    wp_die();
+	echo $killres;
+	wp_die();
 }
 
 
@@ -1053,50 +1053,50 @@ function wpunity_killtask_compiling_action_callback(){
 //---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
 {
-    $DS = DIRECTORY_SEPARATOR;
+	$DS = DIRECTORY_SEPARATOR;
 
-    // TEST
-    //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+	// TEST
+	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
 
-    // Real
-    $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+	// Real
+	$game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
 
-    $rootPath = realpath($game_dirpath) . '/builds';
-    $zip_file = realpath($game_dirpath) . '/game.zip';
+	$rootPath = realpath($game_dirpath) . '/builds';
+	$zip_file = realpath($game_dirpath) . '/game.zip';
 
-    // Initialize archive object
-    $zip = new ZipArchive();
-    $resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+	// Initialize archive object
+	$zip = new ZipArchive();
+	$resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-    if ($resZip === TRUE) {
+	if ($resZip === TRUE) {
 
-        // Create recursive directory iterator
-        /** @var SplFileInfo[] $files */
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
+		// Create recursive directory iterator
+		/** @var SplFileInfo[] $files */
+		$files = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($rootPath),
+			RecursiveIteratorIterator::LEAVES_ONLY
+		);
 
-        foreach ($files as $name => $file) {
-            // Skip directories (they would be added automatically)
-            if (!$file->isDir()) {
-                // Get real and relative path for current file
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
+		foreach ($files as $name => $file) {
+			// Skip directories (they would be added automatically)
+			if (!$file->isDir()) {
+				// Get real and relative path for current file
+				$filePath = $file->getRealPath();
+				$relativePath = substr($filePath, strlen($rootPath) + 1);
 
-                // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
-            }
-        }
+				// Add current file to archive
+				$zip->addFile($filePath, $relativePath);
+			}
+		}
 
-        // Zip archive will be created only after closing object
-        $zip->close();
-        echo 'Zip successfully finished [2]';
-        wp_die();
-    } else {
-        echo 'Failed to zip, code:' . $resZip;
-        wp_die();
-    }
+		// Zip archive will be created only after closing object
+		$zip->close();
+		echo 'Zip successfully finished [2]';
+		wp_die();
+	} else {
+		echo 'Failed to zip, code:' . $resZip;
+		wp_die();
+	}
 }
 
 
@@ -1108,43 +1108,43 @@ function wpunity_game_zip_action_callback()
 // $scenepath : The scene to add as path : "Assets/scenes/S_Settings.unity"
 function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scenepath){
 
-        //a. open file for append
-        $fhandle = fopen($filepath, "a");
+	//a. open file for append
+	$fhandle = fopen($filepath, "a");
 
-        //b. create what to append
-        $newcontent = "  - enabled: 1".chr(10)."    path: ".$scenepath.chr(10);
+	//b. create what to append
+	$newcontent = "  - enabled: 1".chr(10)."    path: ".$scenepath.chr(10);
 
-        //c. append and close
-        fwrite($fhandle, $newcontent);
-        fclose($fhandle);
+	//c. append and close
+	fwrite($fhandle, $newcontent);
+	fclose($fhandle);
 
-        //d. read test
-        //    $fhandle = fopen($filepath, "r");
-        //    echo fread($fhandle, filesize($filepath));
+	//d. read test
+	//    $fhandle = fopen($filepath, "r");
+	//    echo fread($fhandle, filesize($filepath));
 }
 
 
 
-    /* Create an empty WebGLBuilder.cs in a certain $filepath */
-    function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
+/* Create an empty WebGLBuilder.cs in a certain $filepath */
+function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
 
-        $handle = fopen($filepath, 'w');
+	$handle = fopen($filepath, 'w');
 
-        $targetFileFormat = ''; // WebGL and Linux are blank
+	$targetFileFormat = ''; // WebGL and Linux are blank
 
-        switch($targetPlatform)
-        {
-            case 'StandaloneWindows':
-                $targetFileFormat =  'mygame.exe'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
-                break;
-            case 'StandaloneOSXUniversal':
-                $targetFileFormat = 'mygame.app'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
-                break;
-        }
+	switch($targetPlatform)
+	{
+		case 'StandaloneWindows':
+			$targetFileFormat =  'mygame.exe'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+			break;
+		case 'StandaloneOSXUniversal':
+			$targetFileFormat = 'mygame.app'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+			break;
+	}
 
 
 
-        $content = 'using UnityEditor;
+	$content = 'using UnityEditor;
 class HandyBuilder {
 static void build() {
 
@@ -1159,9 +1159,9 @@ static void build() {
     }
 }';
 
-        fwrite($handle, $content);
-        fclose($handle);
-    }
+	fwrite($handle, $content);
+	fclose($handle);
+}
 
 
 // Add  assets (obj) for import
@@ -1172,94 +1172,94 @@ static void build() {
 //    WebGLBuilder.cs
 function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 
-    $LF = chr(10); // line change
+	$LF = chr(10); // line change
 
-    if ($assetpath){
-        //add assets (obj)
+	if ($assetpath){
+		//add assets (obj)
 
-        // Clear previous size of filepath
-        clearstatcache();
+		// Clear previous size of filepath
+		clearstatcache();
 
-        // a. Read
-        $handle = fopen($filepath, 'r');
-        $content = fread($handle, filesize($filepath));
-        fclose($handle);
+		// a. Read
+		$handle = fopen($filepath, 'r');
+		$content = fread($handle, filesize($filepath));
+		fclose($handle);
 
-        // b. add obj
-        $content = str_replace('// AddAssetsToImportHere','// AddAssetsToImportHere'.$LF.
-            '          AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);', $content
-        );
+		// b. add obj
+		$content = str_replace('// AddAssetsToImportHere','// AddAssetsToImportHere'.$LF.
+		                                                  '          AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);', $content
+		);
 
-        // c. Write to file
-        $fhandle = fopen($filepath, 'w');
-        fwrite($fhandle, $content, strlen($content));
-        fclose($fhandle);
+		// c. Write to file
+		$fhandle = fopen($filepath, 'w');
+		fwrite($fhandle, $content, strlen($content));
+		fclose($fhandle);
 
 //    // d. Read for testing
 //    clearstatcache();
 //    $handle = fopen($filepath, 'r');
 //    echo fread($handle, filesize($filepath));
 //    fclose($handle);
-    }
+	}
 
 
-    if ($scenepath){
+	if ($scenepath){
 
-        // Clear previous size of filepath
-        clearstatcache();
+		// Clear previous size of filepath
+		clearstatcache();
 
-        // a. Read
-        $handle = fopen($filepath, 'r');
-        $content = fread($handle, filesize($filepath));
-        fclose($handle);
+		// a. Read
+		$handle = fopen($filepath, 'r');
+		$content = fread($handle, filesize($filepath));
+		fclose($handle);
 
 
-        $scenewebgl = '          "'.$scenepath.'",'.chr(10).'// AddScenesHere '            ;
-        
-        // b. Extend certain string
-        $content = str_replace('// AddScenesHere', $scenewebgl, $content);
+		$scenewebgl = '          "'.$scenepath.'",'.chr(10).'// AddScenesHere '            ;
 
-        // first comma remove
-        $content = str_replace(','.chr(10).'}','}', $content);
+		// b. Extend certain string
+		$content = str_replace('// AddScenesHere', $scenewebgl, $content);
 
-        // c. Write to old
-        $fhandle = fopen($filepath, 'w');
+		// first comma remove
+		$content = str_replace(','.chr(10).'}','}', $content);
 
-        fwrite($fhandle, $content, strlen($content));
-        fclose($fhandle);
+		// c. Write to old
+		$fhandle = fopen($filepath, 'w');
 
-        //  d. Read for testing
-        //    $handle = fopen($filepath, 'r');
-        //    echo fread($handle, strlen($content));
-        //    fclose($handle);
-    }
+		fwrite($fhandle, $content, strlen($content));
+		fclose($fhandle);
+
+		//  d. Read for testing
+		//    $handle = fopen($filepath, 'r');
+		//    echo fread($handle, strlen($content));
+		//    fclose($handle);
+	}
 }
 
 
 function wpunity_save_scene_async_action_callback()
 {
-  // put meta in scene. True, false, or id of meta if does not exist
-  $res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
+	// put meta in scene. True, false, or id of meta if does not exist
+	$res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
 
-   $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
-       $_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
+	$attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
+		$_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
 
-  set_post_thumbnail( $_POST['scene_id'], $attachment_id );
-
-
-    $scene_new_info = array(
-        'ID' => $_POST['scene_id'],
-        'post_title' => $_POST['scene_title'],
-        'post_content' => $_POST['scene_description']
-    );
-
-    wp_update_post($scene_new_info);
+	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
 
 
+	$scene_new_info = array(
+		'ID' => $_POST['scene_id'],
+		'post_title' => $_POST['scene_title'],
+		'post_content' => $_POST['scene_description']
+	);
+
+	wp_update_post($scene_new_info);
 
 
-  echo $res ? 'true' : 'false';
-  wp_die();
+
+
+	echo $res ? 'true' : 'false';
+	wp_die();
 }
 
 /**
@@ -1267,24 +1267,24 @@ function wpunity_save_scene_async_action_callback()
  */
 function fake_compile_for_a_test_project()
 {
-    // 1. Start the compile
-    $gcwd = getcwd(); // get cwd (wp-admin probably)
+	// 1. Start the compile
+	$gcwd = getcwd(); // get cwd (wp-admin probably)
 
-    chdir("../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
+	chdir("../wp-content/plugins/wordpressunity3deditor/test_compiler/game_windows/");
 
-    // Windows
-    $output = shell_exec('start /b starter.bat /c');
+	// Windows
+	$output = shell_exec('start /b starter.bat /c');
 
-    // WebGL
-    //$output = shell_exec('start /b starterWebGL.bat /c');
+	// WebGL
+	//$output = shell_exec('start /b starterWebGL.bat /c');
 
-    // go back to previous directory (wp-admin probably)
-    chdir($gcwd);
+	// go back to previous directory (wp-admin probably)
+	chdir($gcwd);
 
-    // Write to wp-admin dir the shell_exec cmd result
-    $h = fopen('output.txt', 'w');
-    fwrite($h, $output);
-    fclose($h);
+	// Write to wp-admin dir the shell_exec cmd result
+	$h = fopen('output.txt', 'w');
+	fwrite($h, $output);
+	fclose($h);
 }
 
 
@@ -1404,7 +1404,7 @@ function fake_compile_for_a_test_project()
 //}
 
 
-    // OLD COMPILE: DO NOT DELETE
+// OLD COMPILE: DO NOT DELETE
 
 //// ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
 //function wpunity_compile_action_callback() {
