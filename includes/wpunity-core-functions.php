@@ -1,5 +1,138 @@
 <?php
 
+
+function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
+
+    $sceneIds = [];
+
+    // Define custom query parameters
+    $custom_query_args = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $allScenePGameID,
+            ),
+        ),
+        'orderby' => 'ID',
+        'order' => 'DESC',
+    );
+
+    $custom_query = new WP_Query( $custom_query_args );
+
+    $doorInfoGathered = [];
+
+    // Output custom query loop
+    if ( $custom_query->have_posts() ) {
+        while ($custom_query->have_posts()) {
+            $custom_query->the_post();
+
+            $scene_id = get_the_ID();
+            $sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
+
+            $scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+            $jsonScene = htmlspecialchars_decode($scene_json);
+            $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+            if (count($sceneJsonARR['objects']) > 0)
+                foreach ($sceneJsonARR['objects'] as $key => $value) {
+                    if ($key !== 'avatarYawObject') {
+                        if ($value['categoryName'] === 'Door') {
+                            $doorInfoGathered[] = ['door' => $value['doorName_source'], 'scene' => $sceneTitle];
+                        }
+                    }
+                }
+        }
+    }
+
+    wp_reset_postdata();
+    $wp_query = NULL;
+
+    return $doorInfoGathered;
+}
+
+
+/**
+ *
+ * Get all door info for all scenes of a game
+ *
+ * @param $gameId
+ * @return array
+ */
+function wpunity_get_all_doors_of_game($gameId)
+{
+    $scenesIds = wpunity_get_all_sceneids_of_game($gameId);
+
+    $doorInfoGathered = array();
+
+    foreach ($scenesIds as $scene_id){
+
+        $sceneTitle = get_post($scene_id)->post_title;
+
+        $scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+        $jsonScene = htmlspecialchars_decode($scene_json);
+        $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+        if(count($sceneJsonARR['objects'])>0)
+            foreach ($sceneJsonARR['objects'] as $key => $value) {
+                if ($key !== 'avatarYawObject') {
+                    if ($value['categoryName'] === 'Door') {
+                        $doorInfoGathered[] = ['door'=>$value['doorName_source'], 'scene'=>$sceneTitle ];
+                    }
+                }
+            }
+    }
+    return $doorInfoGathered;
+}
+
+
+/**
+ *
+ * Get all scene ids of a game
+ *
+ * @param $allScenePGameID
+ * @return array
+ */
+function wpunity_get_all_sceneids_of_game($allScenePGameID){
+
+    $sceneIds = [];
+
+    // Define custom query parameters
+    $custom_query_args = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $allScenePGameID,
+            ),
+        ),
+        'orderby' => 'ID',
+        'order' => 'DESC',
+    );
+
+    $custom_query = new WP_Query( $custom_query_args );
+
+
+
+    // Output custom query loop
+    if ( $custom_query->have_posts() )
+        while ( $custom_query->have_posts() ) {
+            $custom_query->the_post();
+            $scene_id = get_the_ID();
+            $sceneIds[] = $scene_id;
+        }
+
+    return $sceneIds;
+}
+
+
+
+
+
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug){
 	$asset_taxonomies = array(
 		'wpunity_asset3d_pgame' => array(

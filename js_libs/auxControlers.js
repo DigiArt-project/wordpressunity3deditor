@@ -262,8 +262,11 @@ function displayDoorProperties(event, nameDoorSource){
     option.disabled = true;
     popupDoorSelect.add(option);
 
-    // ToDo: Stathis retrieve all doors from all jsons
-    var doorsFromOtherScenes = ['doorGreen at SecondScene', 'doorBlue at SecondScene'];
+    var doorsFromOtherScenes = [];
+
+    for (var l=0; l<doorsAll.length; l++){
+        doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene );
+    }
 
     // Add options for each intersected object
     for (var doorName of doorsFromOtherScenes ) {

@@ -43,9 +43,12 @@ echo 'var gameProjectID="'.$project_id.'";';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
+echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo '</script>';
 
 ?>
+
+
 
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
@@ -71,6 +74,8 @@ echo '</script>';
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/addRemoveOne.js"></script>
 
 <script type="text/javascript">
+
+
 
     isComposerOn = true;
 

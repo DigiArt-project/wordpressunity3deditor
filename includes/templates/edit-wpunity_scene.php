@@ -171,8 +171,10 @@ get_header(); ?>
 
 							// Find scene dir string
 							$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
+                            $parentGameId = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->term_id;
+                            $projectGameSlug = $parentGameSlug;
 
-							$projectGameSlug = $parentGameSlug;
+                            $doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
 
 							$scenefolder = $sceneTitle;
 							$gamefolder = $parentGameSlug;
