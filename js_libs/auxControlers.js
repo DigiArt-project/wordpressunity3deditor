@@ -310,7 +310,10 @@ function displayDoorProperties(event, nameDoorSource){
     jQuery("#popupDoorSelect").change(function(e) {
         var valDoorScene = jQuery("#popupDoorSelect").val();
 
-        if (valDoorScene != "Cancel" && valDoorScene != "Select") {
+        if (!valDoorScene)
+            return;
+
+        if (valDoorScene && valDoorScene != "Cancel" && valDoorScene != "Select") {
 
             var nameDoor_Target = valDoorScene.split("at")[0];
             var sceneName_Target = valDoorScene.split("at")[1];
