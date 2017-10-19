@@ -1,13 +1,5 @@
 <?php
 
-// load script from js_libs
-function loadJSScripts() {
-	wp_enqueue_script( 'wpunity_fetch_asset_scenes_request');
-}
-add_action('wp_enqueue_scripts', 'loadJSScripts' );
-
-//==========================================================================================================================================
-
 // Create metabox with Custom Fields for Scene -($wpunity_databox4)
 
 //This imc_prefix will be added before all of our custom fields
@@ -87,40 +79,6 @@ function wpunity_scenes_databox_show(){
 
     // Use nonce for verification
     echo '<input type="hidden" name="wpunity_scenes_databox_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-
-    echo '<label for="scene-vr-editor">VR Web Editor</label>';
-    echo '<div name="scene-vr-editor" id="scene-vr-editor" style="margin-bottom:30px;">';
-        $meta_json = get_post_meta(get_post()->ID, 'wpunity_scene_json_input', true);
-
-        // do not put esc_attr, crashes the universe in 3D
-        $sceneToLoad = $meta_json ? $meta_json : $wpunity_databox4['fields'][0]['std'];
-
-        //Find scene dir string
-        $sceneSlug = $post->post_name;
-        $parentGameSlug = wp_get_object_terms( $post->ID, 'wpunity_scene_pgame')[0]->slug;
-
-        $scenefolder = $sceneSlug;
-        $gamefolder = $parentGameSlug;
-        $sceneID = $post->ID;
-
-        $project_id =   get_page_by_path( $parentGameSlug, OBJECT, 'wpunity_game')->ID;
-        $projectGameSlug = $parentGameSlug;
-
-        $isAdmin = is_admin() ? 'back' : 'front';
-
-
-        wp_enqueue_script( 'wpunity_savescene_request');
-
-        wp_localize_script('wpunity_savescene_request', 'phpmyvarC',
-            array('scene_id'=> $sceneID
-            ));
-
-
-
-    // vr_editor loads the $sceneToLoad
-        require( 'vr_editor.php' );
-
-    echo '</div>';
 
     //$categoryAsset = wp_get_post_terms($assetID, 'wpunity_asset3d_cat');
     //echo $categoryAssetSlug = $categoryAsset[0]->name;
@@ -220,14 +178,5 @@ function wpunity_scenes_databox_save($post_id) {
 add_action('save_post', 'wpunity_scenes_databox_save');
 
 //==========================================================================================================================================
-
-// Ajax for fetching game's assets within asset browser widget at vr_editor
-add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
-
-// Ajax for saving scene asynchronoysly
-add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
-
-// Ajax for deleting scene
-add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
 
 ?>
