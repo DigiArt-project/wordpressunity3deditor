@@ -172,7 +172,7 @@ i.ButtonIcon {
 
 .SceneThumbnail a img, .ImageContainer img {
     position: absolute;
-    min-height: 225px;
+    /*min-height: 225px;*/
     min-width: 100%;
     left: 50%;
     top: 50%;
