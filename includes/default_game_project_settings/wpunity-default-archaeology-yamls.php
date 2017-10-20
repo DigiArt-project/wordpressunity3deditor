@@ -10815,7 +10815,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter school name
+  m_Text: Organization name
 --- !u!222 &231395814
 CanvasRenderer:
   m_ObjectHideFlags: 0
