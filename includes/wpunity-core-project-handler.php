@@ -642,6 +642,9 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
 
     wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
 
+    $gameTypeTerm = wp_get_post_terms( $gameID, 'wpunity_game_type' );
+    $gameType = $gameTypeTerm[0]->name;
+
     $queryargs = array(
         'post_type' => 'wpunity_scene',
         'posts_per_page' => -1,
@@ -662,7 +665,8 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             $custom_query->the_post();
             $scene_id = get_the_ID();
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$handybuilder_file);
+            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,
+                $scenes_counter,$handybuilder_file, $gameType);
         endwhile;
     endif;
     wp_reset_postdata();
@@ -720,12 +724,14 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
  * @param $handybuilder_file
  * @return mixed
  */
-function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,$scenes_counter,$handybuilder_file){
+function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path, $scenes_counter, $handybuilder_file, $gameType){
     $scene_post = get_post($scene_id);
 
     $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
     $scene_type_ID = $scene_type[0]->term_id;
     $scene_type_slug = $scene_type[0]->slug;
+
+
 
     if($scene_type_slug == 'mainmenu-yaml'){
         //DATA of mainmenu
@@ -965,7 +971,8 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
 //        fclose($create_tempfile);
 
         if($scenes_counter<7) {
-            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
+                $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
             $scenes_counter = $scenes_counter + 1;
         }
 
@@ -995,7 +1002,9 @@ function wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_pat
         fclose($create_fileA);
 
         if($scenes_counter<7) {
-            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid);
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
+                $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
+
             $scenes_counter = $scenes_counter + 1;
         }
 
@@ -1533,9 +1542,22 @@ function wpunity_replace_login_unity($term_meta_s_login){
     return $term_meta_s_login;
 }
 
-function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene_title,$scene_desc,$scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid){
+function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
+                                                    $scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid, $gameType){
+
     $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
-    $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2',true);
+
+
+
+    $taxnamemeta_suffix = '';
+    
+    if ($gameType == 'Archaeology')
+        $taxnamemeta_suffix = '_arch';
+    else if ($gameType == 'Chemistry')
+        $taxnamemeta_suffix = '_chem';
+
+
+    $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2'.$taxname,true);
 
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
@@ -1543,6 +1565,7 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
     $guid_tile_sceneselector = wpunity_create_fids($scene_id);
 
     $guid_tile_recttransform = wpunity_create_fids_rect($scene_id);
+
     //Add Scene to initial part of Scene Selector
     wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform);
 
@@ -1564,6 +1587,7 @@ function wpunity_compile_append_scene_to_s_selector($scene_id,$scene_name,$scene
 
     $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load,$guid_tile_recttransform);
     $LF = chr(10); // line change
+
     file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
 
 }
