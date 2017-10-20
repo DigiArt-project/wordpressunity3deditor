@@ -888,7 +888,11 @@ function wpunity_assepile_action_callback(){
 			break;
 	}
 
-	$assemply_success = wpunity_assemble_the_unity_game_project($_REQUEST['gameId'], $_REQUEST['gameSlug'], $targetPlatform);
+    $gameId = $_REQUEST['gameId'];
+    $gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
+
+
+    $assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.

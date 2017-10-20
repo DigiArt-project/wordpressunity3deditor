@@ -66,8 +66,8 @@ var wu_webw_3d_view = (function () {
         this.scene.add( directionalLight2 );
         this.scene.add( ambientLight );
 
-        var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
-        this.scene.add( helper );
+        // var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
+        // this.scene.add( helper );
 
         this.createPivot();
     };
