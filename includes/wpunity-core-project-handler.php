@@ -318,7 +318,7 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 
 //==========================================================================================================================================
 
-function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlatform){
+function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlatform, $gameType){
 
     wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
 
@@ -332,7 +332,8 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
 
-    wpunity_compile_copy_StandardAssets($gameSlug,$gameType='Energy');//5. Copy StandardAssets depending the Game Type
+
+    wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
 
     return 'true';
 }
@@ -1627,11 +1628,14 @@ function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
             \RecursiveIteratorIterator::SELF_FIRST) as $item
     ) {
         if ($item->isDir()) {
-            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            $sbpath = $iterator->getSubPathName();
+            $dirtomake = $dest . DIRECTORY_SEPARATOR . $sbpath;
+            mkdir($dirtomake);
         } else {
             copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
         }
     }
+
 
 }
 
