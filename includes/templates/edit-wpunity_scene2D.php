@@ -2,6 +2,7 @@
 
 function load2DSceneEditorScripts() {
 	wp_enqueue_script('wpunity_scripts');
+	/*wp_enqueue_script( 'tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php', array( 'jquery' ), false, true );*/
 }
 add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
 
@@ -91,6 +92,7 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = $scene_type === 'credits' ? 'Credits' : 'Main Menu' ;
+$image_size_label = $scene_type === 'credits' ? '512x256' : '350x200' ;
 
 get_header(); ?>
 
@@ -128,8 +130,6 @@ get_header(); ?>
 
 					<?php $featuredImgUrl = get_the_post_thumbnail_url( $scene_id ); ?>
 
-
-
                     <h2 class="mdc-typography--title">Set a background for <?php echo $scene_title; ?></h2>
 
 					<?php if ($featuredImgUrl) { ?>
@@ -145,7 +145,7 @@ get_header(); ?>
 					<?php } ?>
 
                     <input type="file" name="scene-featured-image" title="Featured image" id="sceneFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
-
+                    <label class="mdc-typography--caption">Preferred image size: <?php echo $image_size_label;?> pixels.</label>
                     <hr class="WhiteSpaceSeparator">
 
 					<?php if ($scene_type !== 'credits') { ?>
@@ -211,6 +211,8 @@ get_header(); ?>
                             <label for="creditsTextarea" class="mdc-textfield__label" style="background: none;">Edit Credits text</label>
                         </div>
 
+                        <!--<textarea placeholder="Edit Credits text" title="Credits text" rows="6" cols="40"></textarea>-->
+
 
 					<?php } else { ?>
 
@@ -247,7 +249,7 @@ get_header(); ?>
 									<?php } ?>
 
                                     <input type="file" name="help-image" title="Help image" id="sceneHelpImgInput" accept="image/x-png,image/gif,image/jpeg">
-
+                                    <label class="mdc-typography--caption">Preferred image size: 1200x600 pixels.</label>
                                 </div>
 
                             </div>
@@ -323,6 +325,17 @@ get_header(); ?>
                 }
             });
 
+            /*jQuery( document ).ready( function( ) {
+                tinymce.init({
+                    mode : "textareas",
+                    theme : "modern",
+                    plugins: "textcolor",
+                    resize: false,
+                    menu: {},
+                    toolbar: 'undo redo | fontsizeselect | forecolor | bold italic',
+                    skin: "lightgray"
+                });
+            });*/
         })();
 
     </script>
