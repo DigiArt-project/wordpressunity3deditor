@@ -12971,7 +12971,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}');
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+');
 
 $ini_scene_selector_arch_unity_pattern2 = array('--- !u!1001 &___[guid_tile_sceneselector]___
 Prefab:
@@ -13052,7 +13053,7 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-	- target: {fileID: 1286309294367780, guid: a0340f4cf6f38a54e9b75a54111fc8da, type: 2}
+    - target: {fileID: 1286309294367780, guid: a0340f4cf6f38a54e9b75a54111fc8da, type: 2}
       propertyPath: m_Name
       value: ___[name_of_panel]___
       objectReference: {fileID: 0}

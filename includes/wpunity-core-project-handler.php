@@ -1064,10 +1064,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
 
-
                 $quats = transform_minusx_radiansToquaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
-
-
 
                 $x_rotation_terrain = $quats[0]; //$value['quaternion'][0];
                 $y_rotation_terrain = $quats[1]; //$value['quaternion'][1];
@@ -1545,19 +1542,36 @@ function wpunity_replace_login_unity($term_meta_s_login){
 function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
                                                     $scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid, $gameType){
 
-    $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
 
 
 
+    $taxterm_suffix = '';
     $taxnamemeta_suffix = '';
     
-    if ($gameType == 'Archaeology')
+    if ($gameType == 'Archaeology') {
+        $taxterm_suffix = '-arch';
         $taxnamemeta_suffix = '_arch';
-    else if ($gameType == 'Chemistry')
+    }else if ($gameType == 'Chemistry') {
+        $taxterm_suffix = '-chem';
         $taxnamemeta_suffix = '_chem';
+    }
+
+    $mainMenuTerm = get_term_by('slug', 'mainmenu'.$taxterm_suffix.'-yaml',
+        'wpunity_scene_yaml');
 
 
-    $term_meta_s_selector2 = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector2'.$taxname,true);
+    $termid  = $mainMenuTerm->term_id;
+    $metaname = 'wpunity_yamlmeta_s_selector2'.$taxnamemeta_suffix;
+
+//    $fh = fopen("output_archtype.txt","w");
+//    fwrite($fh, "1. ". $metaname. PHP_EOL);
+//    fwrite($fh, "2. ". $termid . PHP_EOL);
+
+    $term_meta_s_selector2 = get_term_meta($termid, $metaname,true);
+
+//    fwrite($fh, "3. ". $term_meta_s_selector2 . PHP_EOL);
+//    fclose($fh);
+
 
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
