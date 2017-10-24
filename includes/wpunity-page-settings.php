@@ -61,7 +61,9 @@ class ImcSettingsPage {
 guid: ___[obj_guid]___
 timeCreated: ___[unx_time_created]___
 licenseType: Free
-');//obj.meta Pattern
+');        //obj.meta Pattern
+
+
         $ini_jpg_meta_pat = array('fileFormatVersion: 2
 guid: ___[jpg_guid]___
 timeCreated: ___[unx_time_created]___
