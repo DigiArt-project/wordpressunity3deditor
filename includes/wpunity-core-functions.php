@@ -894,6 +894,8 @@ function wpunity_assepile_action_callback(){
 
     $assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
 
+
+
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
 	// Do not delete library folder if it takes too long
@@ -1148,6 +1150,10 @@ function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
 
 
 
+
+
+
+
 	$content = 'using UnityEditor;
 class HandyBuilder {
 static void build() {
@@ -1188,6 +1194,27 @@ function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 		$handle = fopen($filepath, 'r');
 		$content = fread($handle, filesize($filepath));
 		fclose($handle);
+
+
+		// TODO: Dimitrios REM
+
+//      string assetFile = "Assets/models/test/building2.obj";
+//		string assetFileMeta = assetFile + ".meta";
+//
+//		// Get our GUID (line)
+//		string[] linesBefore = System.IO.File.ReadAllLines(assetFileMeta);
+//		string php_gui_line = linesBefore[1];
+//
+//		// Import at Unity3D
+//		AssetDatabase.ImportAsset( assetFile, ImportAssetOptions.Default);
+//
+//		// Replace the generated unity3d guid with our guid
+//		string[] linesAfter = System.IO.File.ReadAllLines( assetFileMeta);
+//		linesAfter[1] = php_gui_line;
+//
+//		// Write the .meta file
+//		System.IO.File.WriteAllLines( assetFileMeta, linesAfter);
+
 
 		// b. add obj
 		$content = str_replace('// AddAssetsToImportHere','// AddAssetsToImportHere'.$LF.
