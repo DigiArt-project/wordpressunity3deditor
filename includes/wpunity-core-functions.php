@@ -894,7 +894,7 @@ function wpunity_assepile_action_callback(){
 
     $assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
 
-
+    //wp_die();
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
@@ -1154,10 +1154,16 @@ function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
 
 
 
-	$content = 'using UnityEditor;
+	$content = 'using UnityEngine;
+using UnityEditor;
+using System.IO;
+using System;
+	
 class HandyBuilder {
 static void build() {
+        
 
+        Debug.Log("Hi jimverinko");
         // AddAssetsToImportHere
 
         string[] scenes = { // AddScenesHere
@@ -1196,29 +1202,28 @@ function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 		fclose($handle);
 
 
-		// TODO: Dimitrios REM
+		$smartline =  '   AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);'; // .$LF.
+//                      '   Debug.Log("SMARTSEE: '.$assetpath.'");' .$LF.
+//                      '   Debug.Log("SM25" + AssetDatabase.AssetPathToGUID("'.$assetpath.'"));';
 
-//      string assetFile = "Assets/models/test/building2.obj";
-//		string assetFileMeta = assetFile + ".meta";
-//
-//		// Get our GUID (line)
-//		string[] linesBefore = System.IO.File.ReadAllLines(assetFileMeta);
-//		string php_gui_line = linesBefore[1];
-//
-//		// Import at Unity3D
-//		AssetDatabase.ImportAsset( assetFile, ImportAssetOptions.Default);
-//
-//		// Replace the generated unity3d guid with our guid
-//		string[] linesAfter = System.IO.File.ReadAllLines( assetFileMeta);
-//		linesAfter[1] = php_gui_line;
-//
-//		// Write the .meta file
-//		System.IO.File.WriteAllLines( assetFileMeta, linesAfter);
 
+//		$smartline=
+//       'assetFile = "'.$assetpath.'";'.$LF.'
+//		assetFileMeta = assetFile + ".meta"; '.$LF.'
+//		linesBefore = System.IO.File.ReadAllLines(assetFileMeta);'.$LF.'
+//		php_gui_line = linesBefore[1];'.$LF.'
+//		Debug.Log("php_gui_line" + php_gui_line);'.$LF.'
+//		AssetDatabase.ImportAsset( assetFile, ImportAssetOptions.Default); '.$LF.'
+//		linesAfter = System.IO.File.ReadAllLines( assetFileMeta);'.$LF.'
+//		linesAfter[1] = php_gui_line;'.$LF.'
+//		Debug.Log("linesAfter:" + linesAfter);'.$LF.'
+//		System.IO.File.WriteAllLines( assetFileMeta, linesAfter);'.$LF;
 
 		// b. add obj
-		$content = str_replace('// AddAssetsToImportHere','// AddAssetsToImportHere'.$LF.
-		                                                  '          AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);', $content
+		$content = str_replace('// AddAssetsToImportHere',
+            '// AddAssetsToImportHere'.$LF.
+            $smartline,
+            $content
 		);
 
 		// c. Write to file

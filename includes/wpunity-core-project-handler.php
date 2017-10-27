@@ -577,12 +577,22 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
         $attachment_tempname = str_replace('\\', '/', $attachment_file);
         $attachment_name = pathinfo($attachment_tempname);
         $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
-        if($asset_type[0]->name == 'Site'){$new_file = $folder .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';}
-        copy($attachment_file,$new_file);
-        wpunity_compile_objmeta_cre($folder,$attachment_name['filename'],$objID);
+
+        if($asset_type[0]->name == 'Site'){
+            $new_file = $folder .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
+        }
+
+        copy($attachment_file, $new_file);
+
+        wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
+
         $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
 
-        if($asset_type[0]->name == 'Site'){$new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';}
+        if($asset_type[0]->name == 'Site'){
+            $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .
+                '/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
+        }
+
         wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
@@ -616,8 +626,8 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
  * @param $objName
  * @param $objID
  */
-function wpunity_compile_objmeta_cre($folder,$objName,$objID){
-    $file = $folder . '/' . $objName . '.obj.meta';
+function wpunity_compile_objmeta_cre($folder,$objName,$objID, $suffix = ""){
+    $file = $folder . '/' . $objName . $suffix. '.obj.meta';
     $create_file = fopen($file, "w") or die("Unable to open file!");
     $objMetaPattern = wpunity_getYaml_obj_dotmeta_pattern();
     $objMetaContent = wpunity_replace_objmeta($objMetaPattern,$objID);
@@ -1369,7 +1379,6 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
     //return all objects
     return $allObjectsYAML;
-
 }
 
 function wpunity_replace_mainmenu_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active){
@@ -1413,9 +1422,6 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
 //
 //            fwrite($fg, print_r($newquats,true));
 //            fclose($fg);
-
-
-
         }
     }
     $file_content_return = str_replace("___[avatar_position_x]___",$x_pos,$term_meta_educational_energy);
@@ -1541,9 +1547,6 @@ function wpunity_replace_login_unity($term_meta_s_login){
 
 function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
                                                     $scene_type_ID,$game_path,$scenes_counter,$featured_image_edu_sprite_guid, $gameType){
-
-
-
 
     $taxterm_suffix = '';
     $taxnamemeta_suffix = '';

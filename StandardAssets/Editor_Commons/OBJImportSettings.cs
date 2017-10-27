@@ -5,6 +5,9 @@ using System;
 
 class OBJImportSettings : AssetPostprocessor
 {
+
+
+
    void OnPreprocessModel(){
 		ModelImporter modImport = assetImporter as ModelImporter;
 
@@ -13,6 +16,14 @@ class OBJImportSettings : AssetPostprocessor
 
 		if (modImport.assetPath.Contains ("NoOptimization"))
 			modImport.optimizeMesh = false;
+
+        if (modImport.assetPath.Contains (".obj")) {
+           		Debug.Log("PP:" + modImport.assetPath);
+           		string[] linesBefore = System.IO.File.ReadAllLines(modImport.assetPath + ".meta");
+           		Debug.Log("MM:" + linesBefore[1]);
+        }
+
+
 	}
 
 	void OnPreprocessTexture()

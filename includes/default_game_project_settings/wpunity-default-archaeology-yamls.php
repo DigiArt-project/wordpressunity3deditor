@@ -128,7 +128,7 @@ Prefab:
       propertyPath: m_Name
       value: ___[site_title]___
       objectReference: {fileID: 0}
-   - target: {fileID: 400000, guid: ___[site_obj_guid]___, type: 3}
+    - target: {fileID: 400000, guid: ___[site_obj_guid]___, type: 3}
       propertyPath: m_LocalScale.x
       value: ___[site_scale_x]___
       objectReference: {fileID: 0}
@@ -3158,7 +3158,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.x
-      value: ___[player_rotation_x]___
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.y
@@ -3166,11 +3166,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.z
-      value: ___[player_rotation_z]___
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalRotation.w
-      value: ___[player_rotation_w]___
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_RootOrder
