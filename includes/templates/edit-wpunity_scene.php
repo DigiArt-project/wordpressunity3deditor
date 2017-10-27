@@ -82,7 +82,7 @@ get_header(); ?>
     <div class="EditPageHeader">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
             <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-            <?php echo $game_post->post_title; ?>
+			<?php echo $game_post->post_title; ?>
         </h1>
 
         <a class="HeaderButtonStyle mdc-button mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $scene_id); ?>">
@@ -144,48 +144,55 @@ get_header(); ?>
 
                 <div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__cell--span-12">
+                    <div class="mdc-layout-grid__inner">
 
-                        <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                            <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                                   minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                            <label for="sceneDescriptionInput" class="mdc-textfield__label">
-                                Scene description
-                            </label>
-                            <div class="mdc-textfield__bottom-line"></div>
+                        <div class="mdc-layout-grid__cell--span-12">
+
+                            <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
+                                <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                       minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                <label for="sceneDescriptionInput" class="mdc-textfield__label">
+                                    Scene description
+                                </label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
+
                         </div>
-
                     </div>
                 </div>
                 <div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__cell--span-12">
+                    <div class="mdc-layout-grid__inner">
 
-                        <div id="scene-vr-editor">
-							<?php
+                        <div class="mdc-layout-grid__cell--span-12">
 
-							$meta_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+                            <div id="scene-vr-editor">
+								<?php
 
-							// Do not put esc_attr, crashes the universe in 3D
-							$sceneToLoad = $meta_json ? $meta_json : file_get_contents( plugins_url()."/wordpressunity3deditor/assets/standard_scene.json");
+								$meta_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 
-							// Find scene dir string
-							$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
-                            $parentGameId = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->term_id;
-                            $projectGameSlug = $parentGameSlug;
+								// Do not put esc_attr, crashes the universe in 3D
+								$sceneToLoad = $meta_json ? $meta_json : file_get_contents( plugins_url()."/wordpressunity3deditor/assets/standard_scene.json");
 
-                            $doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
+								// Find scene dir string
+								$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
+								$parentGameId = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->term_id;
+								$projectGameSlug = $parentGameSlug;
 
-							$scenefolder = $sceneTitle;
-							$gamefolder = $parentGameSlug;
-							$sceneID = $scene_id;
+								$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
+
+								$scenefolder = $sceneTitle;
+								$gamefolder = $parentGameSlug;
+								$sceneID = $scene_id;
 
 
-							$isAdmin = is_admin() ? 'back' : 'front';
+								$isAdmin = is_admin() ? 'back' : 'front';
 
-							// vr_editor loads the $sceneToLoad
-							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
+								// vr_editor loads the $sceneToLoad
+								require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -198,17 +205,76 @@ get_header(); ?>
             </div>
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
-                <div style="min-height: 780px;">
 
-                    <iframe src="http://52.59.219.11/?wpunity_game=<?php echo $project_id; ?>&wpunity_scene=<?php echo $scene_id; ?>&scene_type=scene&game_type=<?php echo strtolower($game_type_obj->string);?>" style="min-width: 100%; min-height: inherit;"></iframe>
+                <div class="mdc-layout-grid">
+
+                    <div class="mdc-layout-grid__inner CenterContents">
+
+                        <div class="mdc-layout-grid__cell--span-6">
+                            <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
+                                <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
+                                <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
+                            </select>
+                        </div>
+                        <div class="mdc-layout-grid__cell--span-6">
+                            <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
+                                <option value="Greece" selected>Greece</option>
+                                <option value="England">England</option>
+                                <option value="Italy">Italy</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="min-height: 780px;">
+                    <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
 
-
     <script type="text/javascript">
+
+        var project_id = <?php echo $project_id; ?>;
+        var scene_id = <?php echo $scene_id; ?>;
+        var game_type = "<?php echo strtolower($game_type_obj->string);?>";
+        var versionSelector = document.getElementById("analyticsVersionSelector");
+        var locationSelector = document.getElementById("analyticsLocationSelector");
+
+        var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
+        var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
+
+        loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+
+        jQuery('#analyticsVersionSelector').on('change', function() {
+            analyticsVersionValue = this.value;
+            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+        });
+
+        jQuery('#analyticsLocationSelector').on('change', function() {
+            analyticsLocationValue = this.value;
+            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+        });
+
+        function loadAnalyticsIframe(version, location) {
+            var url = "http://52.59.219.11/?" +
+                "wpunity_game="+ project_id +
+                "&wpunity_scene="+scene_id+
+                "&scene_type=scene"+
+                "&game_type="+game_type+
+                "&version="+ version +
+                "&location="+ location;
+
+            var $iframe = jQuery('#analyticsIframeContent');
+            if ( $iframe.length ) {
+                $iframe.attr('src', url);
+                return false;
+            }
+            return true;
+
+        }
+
         var mdc = window.mdc;
         mdc.autoInit();
 
@@ -217,6 +283,7 @@ get_header(); ?>
         var panels = document.querySelector('.panels');
 
         dynamicTabBar.preventDefaultOnClick = true;
+
 
         dynamicTabBar.listen('MDCTabBar:change', function (t) {
             var dynamicTabBar = t.detail;
