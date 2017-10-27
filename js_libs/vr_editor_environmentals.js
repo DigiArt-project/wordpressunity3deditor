@@ -424,7 +424,7 @@ class vr_editor_environmentals {
         this.lightOrbit.name = "mylightOrbit";
         this.scene.add(this.lightOrbit);
 
-        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.01, 1000, 2 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.1, 1000, 2 ); //THREE.DirectionalLight( 0xffffff, 1 );
 
         this.lightAvatar.name = "mylightAvatar";
 
