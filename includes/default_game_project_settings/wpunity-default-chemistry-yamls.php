@@ -4,7 +4,42 @@
 // YAMLS for ASSETS' TYPES default values (CHEMISTRY GAMES)
 /***************************************************************************************************************/
 
-//To be added
+global $ini_asset_room,$ini_asset_textbook,$ini_asset_microscope,$ini_asset_box,$ini_asset_molecule;
+
+$ini_asset_room = array('');
+
+$ini_asset_textbook = array('');
+
+$ini_asset_microscope = array('');
+
+$ini_asset_box = array('');
+
+$ini_asset_molecule = array('');
+
+function wpunity_default_value_room_get(){
+  global $ini_asset_room;
+  return $ini_asset_room[0];
+}
+
+function wpunity_default_value_textbook_get(){
+  global $ini_asset_textbook;
+  return $ini_asset_textbook[0];
+}
+
+function wpunity_default_value_microscope_get(){
+  global $ini_asset_microscope;
+  return $ini_asset_microscope[0];
+}
+
+function wpunity_default_value_box_get(){
+  global $ini_asset_box;
+  return $ini_asset_box[0];
+}
+
+function wpunity_default_value_molecule_get(){
+  global $ini_asset_molecule;
+  return $ini_asset_molecule[0];
+}
 
 
 /***************************************************************************************************************/
