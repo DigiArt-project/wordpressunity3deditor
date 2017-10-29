@@ -6,15 +6,15 @@
 
 global $ini_asset_room,$ini_asset_textbook,$ini_asset_microscope,$ini_asset_box,$ini_asset_molecule;
 
-$ini_asset_room = array('');
+$ini_asset_room = array('TO BE ADDED');
 
-$ini_asset_textbook = array('');
+$ini_asset_textbook = array('TO BE ADDED');
 
-$ini_asset_microscope = array('');
+$ini_asset_microscope = array('TO BE ADDED');
 
-$ini_asset_box = array('');
+$ini_asset_box = array('TO BE ADDED');
 
-$ini_asset_molecule = array('');
+$ini_asset_molecule = array('TO BE ADDED');
 
 function wpunity_default_value_room_get(){
   global $ini_asset_room;

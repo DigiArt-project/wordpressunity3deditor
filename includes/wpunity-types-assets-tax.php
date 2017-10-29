@@ -193,7 +193,7 @@ function wpunity_assets_category_yamlFields($tag) {
         </th>
         <td>
             <textarea name="wpunity_assetcat_gamecat" id="wpunity_assetcat_gamecat" readonly><?php echo get_term_meta( $tag->term_id, 'wpunity_assetcat_gamecat', true ); ?></textarea>
-            <p class="description">1=Archaeology - 2=Energy</p>
+            <p class="description">1=Archaeology - 2=Energy - 3=Chemistry</p>
         </td>
     </tr>
 
