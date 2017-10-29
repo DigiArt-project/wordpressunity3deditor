@@ -165,6 +165,8 @@ function wpunity_scenes_types_energy_fields_cre($tt_id){
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
@@ -196,6 +198,8 @@ function wpunity_scenes_types_energy_fields_cre($tt_id){
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
@@ -227,6 +231,8 @@ function wpunity_scenes_types_energy_fields_cre($tt_id){
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
+    update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
     update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
