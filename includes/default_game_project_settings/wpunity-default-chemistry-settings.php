@@ -355,6 +355,8 @@ add_action( 'wpunity_scene_yaml_edit_form_fields', 'wpunity_scenes_taxyaml_custo
 function wpunity_scenes_taxyaml_customFields_chemistry($tag) {
 
     $term_meta_chemistry_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_chemistry_pat', true );
+    $term_meta_exam_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_exam_pat', true );
+    $term_meta_microworld_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_microworld_pat', true );
 
     $term_meta_s_mainmenu_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu_chem', true );
     $term_meta_s_credentials_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials_chem', true );
@@ -380,10 +382,28 @@ function wpunity_scenes_taxyaml_customFields_chemistry($tag) {
 
     <tr class="form-field term-chemistry_energy">
         <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_chemistry_energy">Chemistry Scenes .unity pattern</label>
+            <label for="wpunity_yamlmeta_chemistry_energy">Chemistry Scenes LAB .unity pattern</label>
         </th>
         <td>
             <textarea name="wpunity_yamlmeta_chemistry_energy" id="wpunity_yamlmeta_chemistry_energy"><?php echo $term_meta_chemistry_pat ? $term_meta_chemistry_pat : ''; ?></textarea>
+        </td>
+    </tr>
+
+    <tr class="form-field term-exam_chem">
+        <th scope="row" valign="top">
+            <label for="wpunity_yamlmeta_exam_pat">Exam .unity pattern</label>
+        </th>
+        <td>
+            <textarea name="wpunity_yamlmeta_exam_pat" id="wpunity_yamlmeta_exam_pat"><?php echo $term_meta_exam_pat ? $term_meta_exam_pat : ''; ?></textarea>
+        </td>
+    </tr>
+
+    <tr class="form-field term-microworld_chem">
+        <th scope="row" valign="top">
+            <label for="wpunity_yamlmeta_microworld_pat">Microworld .unity pattern</label>
+        </th>
+        <td>
+            <textarea name="wpunity_yamlmeta_microworld_pat" id="wpunity_yamlmeta_microworld_pat"><?php echo $term_meta_microworld_pat ? $term_meta_microworld_pat : ''; ?></textarea>
         </td>
     </tr>
 
@@ -531,6 +551,24 @@ function wpunity_scenes_taxyaml_customFields_chemistry_save( $term_id ) {
             update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', wpunity_default_value_chemwonderaround_unity_chemistry_get());
         }else{
             update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', $term_meta_wonderaround_pat);
+        }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_exam_pat'] ) ) {
+        $term_meta_exam_pat = $_POST['wpunity_yamlmeta_exam_pat'];
+        if($term_meta_exam_pat == ''){
+            update_term_meta($term_id, 'wpunity_yamlmeta_exam_pat', wpunity_default_value_exam_unity_chemistry_get());
+        }else{
+            update_term_meta($term_id, 'wpunity_yamlmeta_exam_pat', $term_meta_exam_pat);
+        }
+    }
+
+    if ( isset( $_POST['wpunity_yamlmeta_microworld_pat'] ) ) {
+        $term_meta_microworld_pat = $_POST['wpunity_yamlmeta_microworld_pat'];
+        if($term_meta_microworld_pat == ''){
+            update_term_meta($term_id, 'wpunity_yamlmeta_microworld_pat', wpunity_default_value_microworld_unity_chemistry_get());
+        }else{
+            update_term_meta($term_id, 'wpunity_yamlmeta_microworld_pat', $term_meta_microworld_pat);
         }
     }
 
