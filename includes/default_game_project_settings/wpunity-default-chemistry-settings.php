@@ -138,13 +138,35 @@ function wpunity_scenes_types_chemistry_standard_cre(){
         );
     }
 
-    if (!term_exists('Chemistry Template', 'wpunity_scene_yaml')) {
+    if (!term_exists('Lab', 'wpunity_scene_yaml')) {
         wp_insert_term(
-            'Chemistry Template', // the term
+            'Lab', // the term
             'wpunity_scene_yaml', // the taxonomy
             array(
-                'description' => 'YAML Template for Chemistry scenes',
-                'slug' => 'wonderaround-chem-yaml',
+                'description' => 'YAML Template for Chemistry scenes (WonderAround style)',
+                'slug' => 'wonderaround-lab-yaml',
+            )
+        );
+    }
+
+    if (!term_exists('Exam', 'wpunity_scene_yaml')) {
+        wp_insert_term(
+            'Exam', // the term
+            'wpunity_scene_yaml', // the taxonomy
+            array(
+                'description' => 'YAML Template for Chemistry Exam scenes',
+                'slug' => 'exam-chem-yaml',
+            )
+        );
+    }
+
+    if (!term_exists('Microworld', 'wpunity_scene_yaml')) {
+        wp_insert_term(
+            'Microworld', // the term
+            'wpunity_scene_yaml', // the taxonomy
+            array(
+                'description' => 'YAML Template for Chemistry Exam scenes',
+                'slug' => 'microworld-chem-yaml',
             )
         );
     }
@@ -156,7 +178,7 @@ function wpunity_scenes_types_chemistry_fields_cre($tt_id){
 
     $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
 
-    if($term_insterted->slug == 'wonderaround-chem-yaml'){
+    if($term_insterted->slug == 'wonderaround-lab-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', wpunity_default_value_chemwonderaround_unity_chemistry_get());
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');

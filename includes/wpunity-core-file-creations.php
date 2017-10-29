@@ -30,7 +30,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
 	}elseif($game_category == 'chemistry_games'){
-		$firstSceneYAML = get_term_by('slug', 'wonderaround-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene (Chemistry)
+		$firstSceneYAML = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene (Chemistry)
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
 		$mainmenuSceneYAML = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu (Chemistry)
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
