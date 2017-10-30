@@ -20,7 +20,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	//wpunity_compile_the_game($gameID,$gameSlug);
 
-	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy
+	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy , 3 = Chemistry
 	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
 	$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
 	$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
