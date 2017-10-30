@@ -409,6 +409,19 @@ if($create_new == 0) {
                             </div>
                             <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
                         </li>
+                        <?php if ($game_type_slug == 'chemistry_games') { ?>
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio" >
+                                    <input class="mdc-radio__native-control" type="radio" id="pdbRadio"  name="objectTypeRadio" value="pdb">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
+                            </li>
+                        <?php } ?>
+
                     </ul>
 
                     <div class="mdc-layout-grid">
@@ -426,13 +439,14 @@ if($create_new == 0) {
 
                             <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
-                            <label for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                            <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                             <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
 
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                             <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                             <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                            <input type="hidden" name="mtlFileInput" value="" id="pdbFileInput" />
 
                             <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 
@@ -864,7 +878,6 @@ if($create_new == 0) {
 
                 }
 
-
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
                 switch(cat) {
@@ -914,10 +927,10 @@ if($create_new == 0) {
 
         jQuery( function() {
 
-            // FBX / MTL Toggles TODO
-            /*jQuery( "input[name=objectTypeRadio]" ).click(function() {
-                var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-            });*/
+            // Object type Toggle
+            jQuery( "input[name=objectTypeRadio]" ).click(function() {
+                loadFileInputLabel();
+            });
 
             var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
             var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
@@ -1169,6 +1182,22 @@ if($create_new == 0) {
             document.getElementById("sshotFileInput").value = "";
             /*createScreenshotBtn.hide();*/
             /*jQuery("#objectPreviewTitle").hide();*/
+        }
+
+
+        function loadFileInputLabel() {
+
+            var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
+
+            var inputLabel = document.getElementById('fileUploadInputLabel');
+            var input = document.getElementById('fileUploadInput');
+            if (objectType === 'pdb') {
+                inputLabel.innerHTML = 'Select a pdb file';
+                input.accept = ".pdb";
+            } else {
+                inputLabel.innerHTML = 'Select an a) obj, b) mtl, & c) optional texture file';
+                input.accept = ".obj,.mtl,.jpg";
+            }
         }
 
     </script>

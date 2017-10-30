@@ -7,6 +7,8 @@
 var mtlFileContent = '';
 var objFileContent = '';
 var fbxFileContent = '';
+var pdbFileContent = '';
+
 var previewRenderer;
 
 var nObj = 0;
@@ -42,28 +44,36 @@ function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
 // We can expand this for 'fbx' files too.
 function wpunity_load_file_callback(content, type, canvas, filename) {
 
-    if(type === 'fbx') {
-        fbxFileContent = content ? content : '';
-    }
+    switch (type) {
+        case 'fbx':
+            fbxFileContent = content ? content : '';
+            break;
 
-    if(type === 'mtl') {
+        case 'mtl':
+            mtlFileContent = content ? content : '';
+            document.getElementById('mtlFileInput').value = mtlFileContent;
+            checkerCompleteReading(type, canvas, filename);
 
-        mtlFileContent = content ? content : '';
-        document.getElementById('mtlFileInput').value = mtlFileContent;
+            break;
 
-        checkerCompleteReading(type, canvas, filename);
-    }
+        case 'obj':
+            // Obj as ArrayBuffer (needed for ObjLoader2 and webworkers)
+            objFileContent = content ? content : '';
 
-    if(type === 'obj') {
+            // Obj as text (needed for ObjLoader in 3D editor)
+            var dec = new TextDecoder();
+            document.getElementById('objFileInput').value = dec.decode(objFileContent);
 
-        // Obj as ArrayBuffer (needed for ObjLoader2 and webworkers)
-        objFileContent = content ? content : '';
+            checkerCompleteReading(type, canvas, filename);
 
-        // Obj as text (needed for ObjLoader in 3D editor)
-        var dec = new TextDecoder();
-        document.getElementById('objFileInput').value = dec.decode(objFileContent);
+            break;
 
-        checkerCompleteReading(type, canvas, filename);
+        case 'pdb':
+            pdbFileContent = content ? content : '';
+
+            console.log("loaded pdb file");
+            break;
+
     }
 
     if (content) {
@@ -71,24 +81,17 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
 
             /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
 
-
             jQuery('#3dAssetForm').append('<input type="hidden" name="textureFileInput['+filename+']" id="textureFileInput" value="' + content + '" />');
 
             //var textureFileInput = document.getElementsByName('textureFileInput[]');
-
-
             // textureFileInput[0] = document.createElement("INPUT");
             // textureFileInput[filename].setAttribute("type", "hidden");
             //textureFileInput[filename].value = content;
 
-
-
-
-
             checkerCompleteReading(type, canvas, filename);
         }
 
-        if (objFileContent && mtlFileContent) {
+        if (objFileContent && mtlFileContent || pdbFileContent) {
 
         } else {
             wpunity_reset_sshot_field();
@@ -118,6 +121,7 @@ function wpunity_clear_asset_files(previewCanvas) {
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
+    document.getElementById("pdbFileInput").value = "";
 
     for (var iTexture = 0; iTexture<document.getElementsByName('textureFileInput[]').length; iTexture++)
         document.getElementsByName('textureFileInput[]')[iTexture].value = '';
@@ -132,6 +136,7 @@ function wpunity_clear_asset_files(previewCanvas) {
     objFileContent = '';
     fbxFileContent = '';
     mtlFileContent = '';
+    pdbFileContent = '';
 
     nObj = 0;
     nMtl = 0;
@@ -276,8 +281,6 @@ function checkerCompleteReading(type, canvas, filename){
             }
         }
     }
-
-
 }
 
 
