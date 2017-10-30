@@ -279,12 +279,8 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 	//print_r(array_keys($_POST['textureFileInput']));die;
 	//$textureContent = $_POST['textureFileInput'];
 	$screenShotFile = $_POST['sshotFileInput'];
-	$mtl_content = $_POST['mtlFileInput'];
+
 	$obj_content = $_POST['objFileInput'];
-	
-	$fh = fopen('output_post.txt', 'w' );
-	fwrite($fh, print_r($_POST, true));
-	fclose($fh);
 
 	for($i=0; $i<$totalTextures; $i++) {
 		// TEXTURE: first upload jpg and get the filename for input at mtl
@@ -309,6 +305,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 
 	// Set value of attachment IDs at custom fields
 	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
+
 	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
 	//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
 	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
@@ -316,11 +313,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 }
 
 /****************************************************************************************************/
-
-
-
-
-
 
 add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
 

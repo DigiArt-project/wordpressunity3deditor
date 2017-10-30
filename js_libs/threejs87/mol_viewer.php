@@ -80,12 +80,14 @@
     var MOLECULES = {
         "Water": "water.pdb",
         "Ethanol": "ethanol.pdb",
+        "Salt": "salt.pdb",
         "Ammonia": "ammonia.pdb",
         "Methane": "methane.pdb",
         "Methanol": "methanol.pdb",
-        "Propane": "propane.pdb",
-        "Salt": "salt.pdb",
-        "Ethylene": "ethylene.pdb"
+        "MethylChloride": "MethylChloride.pdb",
+        "propane": "propane.pdb",
+        "Ethylene": "ethylene.pdb",
+        "AluminumOxide": "AluminumOxide.pdb",
     };
 
     var loader = new THREE.PDBLoader();
@@ -137,7 +139,7 @@
 
         //
 
-        loadMolecule( '../../assets/molecules/ammonia.pdb' );
+        loadMolecule( '../../assets/molecules/ethylene.pdb' );
         createMenu();
 
         //
@@ -186,6 +188,8 @@
         }
 
         loader.load( url, function ( pdb ) {
+
+            console.log("pdb", pdb);
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;

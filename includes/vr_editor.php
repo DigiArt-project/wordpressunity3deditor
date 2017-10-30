@@ -150,6 +150,9 @@ echo '</script>';
         var categoryID = dataDrag.categoryID;
         var diffImage = dataDrag.diffImage;
 
+        console.log("A vr_editor diffImage", diffImage);
+
+
         var diffImageID = dataDrag.diffImageID;
 
         var image1id = dataDrag.image1id;

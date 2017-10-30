@@ -81,6 +81,11 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         },
 
         dragstart: function(e) {
+
+
+            console.log('e.target.attributes.getNamedItem("data-diffImage").value',
+                e.target.attributes.getNamedItem("data-diffImage").value);
+
             var dragData = {
                 "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                 "assetid": e.target.attributes.getNamedItem("data-assetid").value,

@@ -109,6 +109,9 @@ class LoaderMulti {
 
                                 object.categoryID = resources3D[name]['categoryID'];
                                 object.categoryName = resources3D[name]['categoryName'];
+
+
+
                                 object.diffImage = resources3D[name]['diffImage'];
                                 object.diffImageID = resources3D[name]['diffImageID'];
 

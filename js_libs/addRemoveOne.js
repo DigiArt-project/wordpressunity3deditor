@@ -10,6 +10,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "scale": s
     };
 
+
+    console.log("C diffImage, diffImageID", diffImage, diffImageID);
+
     resources3D[nameModel3D] = {
         "path": path,
         "assetid": assetid,

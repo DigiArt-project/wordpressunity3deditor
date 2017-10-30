@@ -446,7 +446,7 @@ if($create_new == 0) {
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                             <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                             <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="pdbFileInput" />
+                            <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
 
                             <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 
