@@ -383,7 +383,7 @@ if($create_new == 0) {
                         </div>
                     </div>
 
-                    <div id="moleculePanel">
+                    <div id="moleculeOptionsPanel">
 
                         <h3 class="mdc-typography--title">Molecule Options</h3>
 
@@ -429,17 +429,10 @@ if($create_new == 0) {
                         <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                             1 = Water like viscosity, bigger values mean thicker liquid.</span>
                         <input type="hidden" id="moleculeFluidViscosityVal" name="moleculeFluidViscosityVal" value="">
-
-                        <hr class="WhiteSpaceSeparator">
-
-                        <h3 class="mdc-typography--title">Fluid Options</h3>
-
-
                     </div>
 
-
-
                 </div>
+
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
 
@@ -482,40 +475,69 @@ if($create_new == 0) {
                     </ul>
 
                     <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                            <h3 class="mdc-typography--title">Object Preview</h3>
+                        <div class="mdc-layout-grid__inner">
 
-                            <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
-                                <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-                                <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                <h3 class="mdc-typography--title">Object Preview</h3>
 
-                                <div class="progressSlider" style="top:5px;">
-                                    <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                                    <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                                    <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+                                    <div class="progressSlider" style="top:5px;">
+                                        <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                    </div>
                                 </div>
+
+                                <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+
+                                <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                                <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
+
+
+                                <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                                <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                                <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                                <input type="hidden" name="mtlFileInput" value="" id="pdbFileInput" />
+
+                                <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
+
+
+                            </div>
+                            <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                <h3 class="mdc-typography--title">Screenshot</h3>
+
+                                <img id="sshotPreviewImg" style="width: auto; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                                <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                                <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
 
-                            <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+                            <div id="moleculeOptionsPanel2" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                            <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
+                                <hr class="WhiteSpaceSeparator">
 
+                                <h3 class="mdc-typography--title">Fluid Color</h3>
 
-                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="pdbFileInput" />
+                                <div class="mdc-layout-grid__inner">
 
-                            <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+                                        <div id="fluidColorRedSlider" class="ColorPickerSliderRed"></div>
+                                        <div id="fluidColorGreenSlider" class="ColorPickerSliderGreen"></div>
+                                        <div id="fluidColorBlueSlider" class="ColorPickerSliderBlue"></div>
+                                    </div>
 
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                                        <div id="fluidColorPreview" class="ui-widget-content ui-corner-all"></div>
+                                    </div>
 
-                        </div>
-                        <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                            <h3 class="mdc-typography--title">Screenshot</h3>
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                        <div id="fluidColorAlphaSlider" class="ColorPickerSliderAlpha"></div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="moleculeFluidColorVal" ></input>
 
-                            <img id="sshotPreviewImg" style="width: auto; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                            <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
-
-                            <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1098,8 +1120,54 @@ if($create_new == 0) {
                 e.preventDefault();
                 jQuery(this).parent('div').parent('div').parent('div').remove();
                 i--;
-            })
-        } );
+            });
+
+            // Color picker based on sliders
+            jQuery( "#fluidColorRedSlider, #fluidColorGreenSlider, #fluidColorBlueSlider" ).slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 255,
+                value: 127,
+                slide: refreshSwatch,
+                change: refreshSwatch
+            });
+
+            jQuery( "#fluidColorAlphaSlider" ).slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 1,
+                value: 1,
+                step: 0.01,
+                slide: refreshSwatch,
+                change: refreshSwatch
+            });
+
+            jQuery( "#fluidColorRedSlider" ).slider( "value", 255 );
+            jQuery( "#fluidColorGreenSlider" ).slider( "value", 140 );
+            jQuery( "#fluidColorBlueSlider" ).slider( "value", 60 );
+
+            function getFluidColor(r, g, b, a) {
+                return [r,g,b,a];
+            }
+
+            function refreshSwatch() {
+                var red = jQuery( "#fluidColorRedSlider" ).slider( "value" ),
+                    green = jQuery( "#fluidColorGreenSlider" ).slider( "value" ),
+                    blue = jQuery( "#fluidColorBlueSlider" ).slider( "value" ),
+                    alpha = jQuery( "#fluidColorAlphaSlider" ).slider( "value" ),
+                    color = getFluidColor( red, green, blue, alpha );
+
+                jQuery( "#fluidColorPreview" ).css( "background-color", "rgba(" + color +");");
+
+                console.log(color.toString());
+
+                document.getElementById('moleculeFluidColorVal').value = "["+color+"]".toString();
+
+
+
+            }
+
+        });
 
         function createPowerProductionValues(createAsset) {
             var index = 0;
@@ -1264,6 +1332,5 @@ if($create_new == 0) {
                 input.accept = ".obj,.mtl,.jpg";
             }
         }
-
     </script>
 <?php  get_footer(); ?>
