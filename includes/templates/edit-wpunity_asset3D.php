@@ -440,7 +440,7 @@ if($create_new == 0) {
                             <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
                             <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg,.pdb"/>
+                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
 
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
@@ -1190,10 +1190,13 @@ if($create_new == 0) {
             var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
 
             var inputLabel = document.getElementById('fileUploadInputLabel');
+            var input = document.getElementById('fileUploadInput');
             if (objectType === 'pdb') {
                 inputLabel.innerHTML = 'Select a pdb file';
+                input.accept = ".pdb";
             } else {
                 inputLabel.innerHTML = 'Select an a) obj, b) mtl, & c) optional texture file';
+                input.accept = ".obj,.mtl,.jpg";
             }
         }
 
