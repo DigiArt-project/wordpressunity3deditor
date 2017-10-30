@@ -272,21 +272,28 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
 
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm,$gameSlug){
 
-	$textureContent = $_POST['textureFileInput'];
+	$totalTextures = 0; //counter in order to know how much textures we have
+	foreach(array_keys($_POST['textureFileInput']) as $texture){
+		${"textureContent" . ++$totalTextures} = $_POST['textureFileInput'][$texture];
+	}
+	//print_r(array_keys($_POST['textureFileInput']));die;
+	//$textureContent = $_POST['textureFileInput'];
 	$screenShotFile = $_POST['sshotFileInput'];
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
-
-
+	
 	$fh = fopen('output_post.txt', 'w' );
 	fwrite($fh, print_r($_POST, true));
 	fclose($fh);
 
+	for($i=0; $i<$totalTextures; $i++) {
+		// TEXTURE: first upload jpg and get the filename for input at mtl
+		$textureFile_id = wpunity_upload_Assetimg64(${"textureContent" . $totalTextures}, 'texture'.$assetTitleForm, $asset_newID, $gameSlug);
+		$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-
-	// TEXTURE: first upload jpg and get the filename for input at mtl
-	$textureFile_id = wpunity_upload_Assetimg64($textureContent, 'texture'.$assetTitleForm, $asset_newID, $gameSlug);
-	$textureFile_filename = basename(get_attached_file($textureFile_id));
+		add_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
+		//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
+	}
 
 	// MTL : Open mtl file and replace jpg filename
 	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
@@ -303,7 +310,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 	// Set value of attachment IDs at custom fields
 	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
 	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
-	update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
+	//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
 	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
 }
