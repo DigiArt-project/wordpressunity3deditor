@@ -149,7 +149,7 @@ get_header(); ?>
                         <div class="mdc-layout-grid__cell--span-12">
 
                             <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                                <input value="<?php echo $scene_post->post_content; ?>" id="sceneDescriptionInput" name="sceneDescriptionInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                        minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="sceneDescriptionInput" class="mdc-textfield__label">
                                     Scene description

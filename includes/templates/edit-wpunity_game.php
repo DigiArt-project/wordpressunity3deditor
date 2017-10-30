@@ -181,7 +181,7 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input FullWidth"
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input"
                                    aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
                             <div class="mdc-textfield__bottom-line"></div>
@@ -197,7 +197,7 @@ get_header();
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
                             <div class="mdc-textfield__bottom-line"></div>
@@ -374,22 +374,22 @@ if ( $custom_query->have_posts() ) :?>
                             <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
                             <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
                                 <ul class="mdc-list mdc-simple-menu__items">
-                                    <li class="mdc-list-item mdc-theme--text-primary-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;">
+                                    <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;" tabindex="-1">
                                         Select a platform
                                     </li>
-                                    <li class="mdc-list-item" role="option" id="platform-windows" tabindex="0">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-windows" tabindex="0">
                                         Windows
                                     </li>
-                                    <li class="mdc-list-item" role="option" id="platform-linux" tabindex="0">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-linux" tabindex="0">
                                         Linux
                                     </li>
-                                    <li class="mdc-list-item" role="option" id="platform-mac" tabindex="0">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-mac" tabindex="0">
                                         Mac OS
                                     </li>
-                                    <li class="mdc-list-item" role="option" id="platform-web" tabindex="0">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-web" tabindex="0">
                                         Web
                                     </li>
-                                    <li class="mdc-list-item" role="option" id="platform-android" tabindex="0">
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-android" tabindex="0">
                                         Android
                                     </li>
 
