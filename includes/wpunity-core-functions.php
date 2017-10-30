@@ -281,7 +281,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 	$screenShotFile = $_POST['sshotFileInput'];
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
-	
+
 	$fh = fopen('output_post.txt', 'w' );
 	fwrite($fh, print_r($_POST, true));
 	fclose($fh);

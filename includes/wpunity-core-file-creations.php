@@ -14,6 +14,12 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 	$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
 	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
 	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
+	if($game_category == 'chemistry_games'){
+		$examSceneTitle = 'Exam'; //Title for Exam Scene
+		$examSceneSlug = $gameSlug . '-exam'; //Slug for Exam Scene
+		$microworldSceneTitle = 'Microworld'; //Title for Microworld Scene
+		$microworldSceneSlug = $gameSlug . '-microworld'; //Slug for Microworld Scene
+	}
 
 	if($game_category == 'energy_games'){
 		$firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
@@ -36,6 +42,10 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene (Chemistry)
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$examSceneYAML = get_term_by('slug', 'exam-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam Scene (Chemistry)
+		$examSceneYAMLID = $examSceneYAML->term_id;
+		$microworldSceneYAML = get_term_by('slug', 'microworld-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Microworld Scene (Chemistry)
+		$microworldSceneYAMLID = $microworldSceneYAML->term_id;
 	}
 
 	$default_json = '{
@@ -114,6 +124,45 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 			'wpunity_scene_metatype' => 'credits',
 		),
 	);
+
+	if($game_category == 'chemistry_games'){
+		// Create Exam Scene Data
+		$examSceneData = array(
+			'post_title'    => $examSceneTitle,
+			'post_content' => 'Auto-created scene',
+			'post_name' => $examSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status'   => 'publish',
+			'tax_input'    => array(
+				'wpunity_scene_pgame'     => array( $allScenePGameID ),
+				'wpunity_scene_yaml'     => array( $examSceneYAMLID ),
+			),'meta_input'   => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+			),
+		);
+
+		// Create Microworld Scene Data
+		$microworldSceneData = array(
+			'post_title'    => $microworldSceneTitle,
+			'post_content' => 'Auto-created scene',
+			'post_name' => $microworldSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status'   => 'publish',
+			'tax_input'    => array(
+				'wpunity_scene_pgame'     => array( $allScenePGameID ),
+				'wpunity_scene_yaml'     => array( $microworldSceneYAMLID ),
+			),'meta_input'   => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+			),
+		);
+
+		wp_insert_post( $examSceneData );
+		wp_insert_post( $microworldSceneData );
+	}
 
 	// Insert posts 1-1 into the database
 	wp_insert_post( $mainmenuSceneData );
