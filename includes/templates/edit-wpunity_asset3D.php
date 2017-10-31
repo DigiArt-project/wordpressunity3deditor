@@ -125,7 +125,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
 				wpunity_create_asset_terrainExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'producer') {
-                wpunity_create_asset_producerExtra_frontend($asset_checked_id);
+				wpunity_create_asset_producerExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_imagetext') {
 				wpunity_create_asset_poisITExtra_frontend($asset_checked_id);//change it to update
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_video') {
@@ -140,7 +140,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				//set_post_thumbnail( ,  );
 //			}
 		}
-        wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
+		wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
 		exit;
 	}
 }
@@ -260,12 +260,20 @@ if($create_new == 0) {
                         <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
 
 						<?php
-						$myGameType = 1;
+						$myGameType = 0;
 						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
 						$game_type_slug = $all_game_types[0]->slug;
 
-						if($game_type_slug == 'energy_games'){
-							$myGameType=2;
+						switch ($game_type_slug) {
+							case 'archaeology_games':
+								$myGameType=1;
+								break;
+							case 'energy_games':
+								$myGameType=2;
+								break;
+							case 'chemistry_games':
+								$myGameType=3;
+								break;
 						}
 
 						$args = array(
@@ -383,7 +391,7 @@ if($create_new == 0) {
                         </div>
                     </div>
 
-                    <div id="moleculeOptionsPanel">
+                    <div id="moleculeOptionsPanel" style="display: none;">
 
                         <h3 class="mdc-typography--title">Molecule Options</h3>
 
@@ -496,10 +504,10 @@ if($create_new == 0) {
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
 
-                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
+                                <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                                <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                                <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                                <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
 
                                 <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 
@@ -1031,6 +1039,13 @@ if($create_new == 0) {
                         spanProducerChartLabels();
 
                         break;
+
+                    // Chemistry cases
+                    case 'molecule':
+                        jQuery("#moleculeOptionsPanel").show();
+                        jQuery("#moleculeFluidPanel").show();
+                        break;
+
                     default:
 
                 }
