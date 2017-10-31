@@ -429,6 +429,7 @@ if($create_new == 0) {
                         <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                             1 = Water like viscosity, bigger values mean thicker liquid.</span>
                         <input type="hidden" id="moleculeFluidViscosityVal" name="moleculeFluidViscosityVal" value="">
+
                     </div>
 
                 </div>
@@ -513,36 +514,62 @@ if($create_new == 0) {
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
 
-                            <div id="moleculeOptionsPanel2" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-
-                                <hr class="WhiteSpaceSeparator">
-
-                                <h3 class="mdc-typography--title">Fluid Color</h3>
-
-                                <div class="mdc-layout-grid__inner">
-
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
-                                        <div id="fluidColorRedSlider" class="ColorPickerSliderRed"></div>
-                                        <div id="fluidColorGreenSlider" class="ColorPickerSliderGreen"></div>
-                                        <div id="fluidColorBlueSlider" class="ColorPickerSliderBlue"></div>
-                                    </div>
-
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-                                        <div id="fluidColorPreview" class="ui-widget-content ui-corner-all"></div>
-                                    </div>
-
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                                        <div id="fluidColorAlphaSlider" class="ColorPickerSliderAlpha"></div>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="moleculeFluidColorVal" ></input>
-
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="mdc-layout-grid" id="moleculeFluidPanel">
+            <div class="mdc-layout-grid__inner">
+
+                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                    <h3 class="mdc-typography--title">Fluid Color</h3>
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                        Create a color for the fluid that will be displayed inside the vial.
+                    </span>
+                    <div class="mdc-layout-grid__inner">
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div id="fluidColorRedSlider" class="ColorPickerSliderRed"></div>
+                            <div id="fluidColorGreenSlider" class="ColorPickerSliderGreen"></div>
+                            <div id="fluidColorBlueSlider" class="ColorPickerSliderBlue"></div>
+                            <div id="fluidColorAlphaSlider" class="ColorPickerSliderAlpha"></div>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                            <ul class="mdc-list">
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorRedVal" class="mdc-typography--subheading2">Red:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorRedVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorGreenVal" class="mdc-typography--subheading2">Green:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorGreenVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorBlueVal" class="mdc-typography--subheading2">Blue:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorBlueVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorAlphaVal" class="mdc-typography--subheading2">Alpha:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorAlphaVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <div id="fluidColorPreview" class="ui-widget-content ui-corner-all ColorPickerPreview"></div>
+                        </div>
+
+                    </div>
+                    <input type="hidden" id="moleculeFluidColorVal">
+                </div>
+            </div>
+
+        </div>
+
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
@@ -1128,8 +1155,9 @@ if($create_new == 0) {
                 range: "min",
                 max: 255,
                 value: 127,
+                change: refreshSwatch,
                 slide: refreshSwatch,
-                change: refreshSwatch
+                stop: refreshSwatch
             });
 
             jQuery( "#fluidColorAlphaSlider" ).slider({
@@ -1138,33 +1166,30 @@ if($create_new == 0) {
                 max: 1,
                 value: 1,
                 step: 0.01,
+                change: refreshSwatch,
                 slide: refreshSwatch,
-                change: refreshSwatch
+                stop: refreshSwatch
             });
 
             jQuery( "#fluidColorRedSlider" ).slider( "value", 255 );
             jQuery( "#fluidColorGreenSlider" ).slider( "value", 140 );
             jQuery( "#fluidColorBlueSlider" ).slider( "value", 60 );
 
-            function getFluidColor(r, g, b, a) {
-                return [r,g,b,a];
-            }
-
             function refreshSwatch() {
                 var red = jQuery( "#fluidColorRedSlider" ).slider( "value" ),
                     green = jQuery( "#fluidColorGreenSlider" ).slider( "value" ),
                     blue = jQuery( "#fluidColorBlueSlider" ).slider( "value" ),
                     alpha = jQuery( "#fluidColorAlphaSlider" ).slider( "value" ),
-                    color = getFluidColor( red, green, blue, alpha );
+                    color = [red, green, blue, alpha ];
+
+                jQuery('#fluidColorRedVal').val(red);
+                jQuery('#fluidColorGreenVal').val(green);
+                jQuery('#fluidColorBlueVal').val(blue);
+                jQuery('#fluidColorAlphaVal').val(alpha);
 
                 jQuery( "#fluidColorPreview" ).css( "background-color", "rgba(" + color +");");
 
-                console.log(color.toString());
-
                 document.getElementById('moleculeFluidColorVal').value = "["+color+"]".toString();
-
-
-
             }
 
         });

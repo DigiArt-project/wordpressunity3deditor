@@ -343,12 +343,12 @@ i.ButtonIcon {
 .ColorPickerSliderAlpha {
     clear: left;
     width: 100%;
-    margin: 15px;
+    margin: 25px 15px 34px 15px;
 }
 
-#fluidColorPreview {
-    height: 100px;
-    margin-left: 25px;
+.ColorPickerPreview {
+    height: 170px;
+    margin-top: 18px;
     background-image: none;
     width: 100%;
 }
