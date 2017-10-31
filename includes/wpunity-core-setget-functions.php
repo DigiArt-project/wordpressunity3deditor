@@ -100,16 +100,15 @@ function wpunity_getYaml_mat_dotmeta_pattern(){
 
 function wpunity_fetch_game_assets_action_callback(){
 
-
 	// Output the directory listing as JSON
 	header('Content-type: application/json');
 
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug']);
 
 	for ($i=0; $i<count($response); $i++){
-		$response[$i][name] =$response[$i][assetName];
-		$response[$i][type] ='file';
-		$response[$i][path] =$response[$i][objPath];
+		$response[$i][name] = $response[$i][assetName];
+		$response[$i][type] = 'file';
+		$response[$i][path] = $response[$i][objPath];
 
 		// Find kb size
 		$ch = curl_init($response[$i][objPath]);
@@ -154,14 +153,7 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 	if ( $custom_query->have_posts() ) :
 		while ( $custom_query->have_posts() ) :
 
-
-
-
-
 			$custom_query->the_post();
-
-
-
 			$asset_id = get_the_ID();
 			$asset_name = get_the_title();
 
@@ -172,8 +164,12 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 			$mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
 			$mtlPath = $mtlID ? wp_get_attachment_url( $mtlID ) : '';                   // MTL PATH
 
-			$difImageID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true);  // Diffusion Image ID
-			$difImagePath = $difImageID ? wp_get_attachment_url( $difImageID ) : '';                // Diffusion Image PATH
+			$difImageIDs = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);  // Diffusion Image ID
+
+            $difImagePaths = [];
+
+            foreach ($difImageIDs as $diffid)
+                $difImagePaths[] = wp_get_attachment_url( $diffid );                // Diffusion Image PATH
 
 			$screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); // Screenshot Image ID
 			$screenImagePath = $screenImageID ? wp_get_attachment_url( $screenImageID ) : '';           // Screenshot Image PATH
@@ -191,8 +187,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 				'objID'=>$objID,
 				'objPath'=>$objPath,
 				'mtlID'=>$mtlID,
-				'diffImageID'=>$difImageID,
-				'diffImage'=>$difImagePath,
+				'diffImageIDs'=>$difImageIDs,
+				'diffImages'=>$difImagePaths,
 				'screenImageID'=>$screenImageID,
 				'screenImagePath'=>$screenImagePath,
 				'mtlPath'=>$mtlPath,

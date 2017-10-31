@@ -125,7 +125,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
 				wpunity_create_asset_terrainExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'producer') {
-				wpunity_create_asset_producerExtra_frontend($asset_checked_id);
+                wpunity_create_asset_producerExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_imagetext') {
 				wpunity_create_asset_poisITExtra_frontend($asset_checked_id);//change it to update
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_video') {
@@ -140,7 +140,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				//set_post_thumbnail( ,  );
 //			}
 		}
-		wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
+        wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
 		exit;
 	}
 }
@@ -377,7 +377,7 @@ if($create_new == 0) {
 
                         <h3 class="mdc-typography--title">Video POI Details</h3>
 
-                        <div id="videoFileInputContainer" >
+                        <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <label for="videoFileInput"> Select a video</label>
                             <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
                         </div>
@@ -496,10 +496,10 @@ if($create_new == 0) {
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
 
 
-                                <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                                <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                                <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                                <input type="hidden" name="mtlFileInput" value="" id="pdbFileInput" />
+                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                            <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
 
                                 <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
 

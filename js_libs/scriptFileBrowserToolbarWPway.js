@@ -81,6 +81,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         },
 
         dragstart: function(e) {
+
+
             var dragData = {
                 "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                 "assetid": e.target.attributes.getNamedItem("data-assetid").value,
@@ -88,8 +90,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "objID": e.target.attributes.getNamedItem("data-objID").value,
                 "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,
                 "mtlID": e.target.attributes.getNamedItem("data-mtlID").value,
-                "diffImage": e.target.attributes.getNamedItem("data-diffImage").value,
-                "diffImageID": e.target.attributes.getNamedItem("data-diffImageID").value,
+                "diffImages": e.target.attributes.getNamedItem("data-diffImages").value,
+                "diffImageIDs": e.target.attributes.getNamedItem("data-diffImageIDs").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
                 "image1id":e.target.attributes.getNamedItem("data-image1id").value,
@@ -166,8 +168,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-objID="'+ f.objID +
                     '" data-mtlPath="'+ f.mtlPath +
                     '" data-mtlID="'+ f.mtlID +
-                    '" data-diffImage="'+ f.diffImage +
-                    '" data-diffImageID="'+ f.diffImageID +
+                    '" data-diffImages="'+ f.diffImages +
+                    '" data-diffImageIDs="'+ f.diffImageIDs +
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
                     '" data-image1id="'+ f.image1id +

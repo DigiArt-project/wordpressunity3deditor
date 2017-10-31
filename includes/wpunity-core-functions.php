@@ -270,11 +270,16 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
 	update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
 }
 
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm,$gameSlug){
+function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
 	$totalTextures = 0; //counter in order to know how much textures we have
+    $textureNamesIn = [];
+    $tContent = [];
 	foreach(array_keys($_POST['textureFileInput']) as $texture){
-		${"textureContent" . ++$totalTextures} = $_POST['textureFileInput'][$texture];
+	    $tname = str_replace('.jpg','', $texture);
+
+        $tContent[$tname] = $_POST['textureFileInput'][$texture];
+        $textureNamesIn[] = $tname;
 	}
 	//print_r(array_keys($_POST['textureFileInput']));die;
 	//$textureContent = $_POST['textureFileInput'];
@@ -282,21 +287,31 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
 
-	$fh = fopen('output_post.txt', 'w' );
-	fwrite($fh, print_r($_POST, true));
-	fclose($fh);
+    $textureNamesOut = [];
 
-	for($i=0; $i<$totalTextures; $i++) {
-		// TEXTURE: first upload jpg and get the filename for input at mtl
-		$textureFile_id = wpunity_upload_Assetimg64(${"textureContent" . $totalTextures}, 'texture'.$assetTitleForm, $asset_newID, $gameSlug);
+	for($i=0; $i < count($tContent); $i++) {
+
+		$textureFile_id = wpunity_upload_Assetimg64(
+            $tContent[$textureNamesIn[$i]],
+         'texture_'.$textureNamesIn[$i].'_'.$assetTitleForm,
+                $asset_newID,
+                $gameSlug);
+
 		$textureFile_filename = basename(get_attached_file($textureFile_id));
+
+        $textureNamesOut[] = $textureFile_filename;
 
 		add_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
 		//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
 	}
 
 	// MTL : Open mtl file and replace jpg filename
-	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+    for ($k = 0; $k < count($textureNamesIn); $k++) {
+        $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg",
+                                   "map_Kd ".$textureNamesOut[$k],
+                                                    $mtl_content);
+    }
+
 	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
 	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
@@ -316,10 +331,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm
 }
 
 /****************************************************************************************************/
-
-
-
-
 
 
 add_action( 'admin_menu', 'wpunity_remove_menus', 999 );

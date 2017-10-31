@@ -51,9 +51,12 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
 
         case 'mtl':
             mtlFileContent = content ? content : '';
+
+            // Replace quotes because they create a bug in input form
+            mtlFileContent = mtlFileContent.replace(/'/g, "");
+
             document.getElementById('mtlFileInput').value = mtlFileContent;
             checkerCompleteReading(type, canvas, filename);
-
             break;
 
         case 'obj':

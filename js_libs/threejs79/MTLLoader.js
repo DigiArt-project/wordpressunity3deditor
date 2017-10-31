@@ -427,7 +427,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
                 case 'map_kd':
 
                     // Diffuse texture map
-
                     setMapForType( "map", value );
 
                     break;

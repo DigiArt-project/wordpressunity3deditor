@@ -148,9 +148,8 @@ echo '</script>';
 
         var categoryName = dataDrag.categoryName;
         var categoryID = dataDrag.categoryID;
-        var diffImage = dataDrag.diffImage;
-
-        var diffImageID = dataDrag.diffImageID;
+        var diffImages = dataDrag.diffImages;
+        var diffImageIDs = dataDrag.diffImageIDs;
 
         var image1id = dataDrag.image1id;
 
@@ -165,7 +164,7 @@ echo '</script>';
 
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
-            categoryName, categoryID, diffImage, diffImageID, image1id, doorName_source, doorName_target, sceneName_target,
+            categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

@@ -1,5 +1,5 @@
 function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
-                          categoryName, categoryID, diffImage, diffImageID, image1id,
+                          categoryName, categoryID, diffImages, diffImageIDs, image1id,
                           doorName_source, doorName_target, sceneName_target,
                           x, y, z, r1=0, r2=0, r3=0, s=1){
 
@@ -10,6 +10,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "scale": s
     };
 
+
+
+
     resources3D[nameModel3D] = {
         "path": path,
         "assetid": assetid,
@@ -19,8 +22,8 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "mtlID": mtlID,
         "categoryName": categoryName,
         "categoryID": categoryID,
-        "diffImage": diffImage,
-        "diffImageID": diffImageID,
+        "diffImages": diffImages,
+        "diffImageIDs": diffImageIDs,
         "image1id": image1id,
         "doorName_source":doorName_source,
         "doorName_target":doorName_target,
