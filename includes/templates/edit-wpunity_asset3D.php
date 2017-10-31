@@ -268,6 +268,9 @@ if($create_new == 0) {
 						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
 						$game_type_slug = $all_game_types[0]->slug;
 
+						$mtlRadioChecked = 'checked=""';
+						$pdbRadioChecked = '';
+
 						switch ($game_type_slug) {
 							case 'archaeology_games':
 								$myGameType=1;
@@ -277,6 +280,10 @@ if($create_new == 0) {
 								break;
 							case 'chemistry_games':
 								$myGameType=3;
+
+								$mtlRadioChecked = '';
+								$pdbRadioChecked = 'checked=""';
+
 								break;
 						}
 
@@ -462,9 +469,10 @@ if($create_new == 0) {
 						  </div>
 						  <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
 					  </li>-->
+
                         <li class="mdc-form-field">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" checked="" name="objectTypeRadio" value="mtl">
+                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" <?php echo $mtlRadioChecked;?> name="objectTypeRadio" value="mtl">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -475,7 +483,7 @@ if($create_new == 0) {
 						<?php if ($game_type_slug == 'chemistry_games') { ?>
                             <li class="mdc-form-field">
                                 <div class="mdc-radio" >
-                                    <input class="mdc-radio__native-control" type="radio" id="pdbRadio"  name="objectTypeRadio" value="pdb">
+                                    <input class="mdc-radio__native-control" type="radio" id="pdbRadio" <?php echo $pdbRadioChecked;?> name="objectTypeRadio" value="pdb">
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>
@@ -968,6 +976,8 @@ if($create_new == 0) {
             moleculeFunctionalGroupDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#moleculeFunctionalGroupInput").attr( "value", moleculeFunctionalGroupSelect.selectedOptions[0].getAttribute("id") );
             });
+
+            loadFileInputLabel();
 
 
             function loadLayout(createAsset) {
