@@ -2,97 +2,140 @@
 
 class wu_3d_view_pdb {
 
-    constructor(url_or_text_pdb, post_title, canvas_id) {
+    constructor(elementToBindTo) {
 
-        var ctx = this;
+        this.renderer = null;
+        this.canvas = elementToBindTo;
+        this.aspectRatio = 1;
+        this.recalcAspectRatio();
 
-        this.loader = new THREE.PDBLoader();
-        this.root = THREE.Group();
-        this.root.name = post_title;
+        this.scene = null;
+        this.cameraDefaults = {
+            posCamera: new THREE.Vector3( 0.0, 175.0, 500.0 ),
+            posCameraTarget: new THREE.Vector3( 0, 0, 0 ),
+            near: 0.1,
+            far: 10000,
+            fov: 45
+        };
+        this.camera = null;
+        this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
-        // get the dom
-        this.container3d_previewer = document.getElementById(canvas_id);
-        this.container3d_previewer.style.height = "256px";
-        this.container3d_previewer.style.width = "256px";
+        this.controls = null;
 
-        // sizes
-        this.windowW = this.container3d_previewer.clientWidth;
-        this.windowH = this.windowW;
+        this.flatShading = false;
+        this.doubleSide = false;
+        this.streamMeshes = true;
 
-        // Camera position and view
-        this.camera = new THREE.PerspectiveCamera(45, this.windowW / this.windowH, 0.5, 20000);
-
-        this.camera.position.z = 10;
-        this.camera.position.x = 0;
-        this.camera.position.y = 10;
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-        // scene
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xaaaaaa);
-
-        // Light
-        this.directionalLight = new THREE.DirectionalLight(0xffffff);
-        this.directionalLight.position.set(0, 120, 0);
-        this.scene.add(this.directionalLight);
-
-        // Add Grid
-        this.gridHelper = new THREE.GridHelper(2000, 40);
-        this.gridHelper.name = "myGridHelper";
-        //this.scene.add(this.gridHelper);
-
-        // Add Axes helper
-        this.axisHelper = new THREE.AxisHelper(100);
-        this.axisHelper.name = "myAxisHelper";
-        //this.scene.add(this.axisHelper);
-
-        this.renderer = new THREE.WebGLRenderer({
-            preserveDrawingBuffer: true
-        });
-
-        this.renderer.setSize(this.windowW - 14, this.windowH);
-        this.container3d_previewer.appendChild(this.renderer.domElement);
+        this.pivot = null;
 
 
+        // Here all chemistry 3D and 2D labels items are stored
         this.root = new THREE.Group();
-        this.scene.add(root);
+
+    }
 
 
+    initGL(){
+
+        this.renderer = new THREE.WebGLRenderer( {
+            canvas: this.canvas,
+            antialias: true
+        } );
+
+        // Scene
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color( 0xddb59b );
+        this.scene.add(this.root);
+
+        // Label renderer
         this.labelRenderer = new THREE.CSS2DRenderer();
-        this.labelRenderer.setSize(this.window.innerWidth, this.window.innerHeight);
+        this.labelRenderer.setSize(this.windowW, this.windowH);
         this.labelRenderer.domElement.style.position = 'absolute';
         this.labelRenderer.domElement.style.top = '0';
         this.labelRenderer.domElement.style.pointerEvents = 'none';
-        this.container3d_previewer.appendChild(this.labelRenderer.domElement);
+        this.canvas.appendChild(this.labelRenderer.domElement);
 
+        // Camera
+        this.camera = new THREE.PerspectiveCamera( this.cameraDefaults.fov,
+            this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far );
+
+        this.resetCamera();
 
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-        this.controls.minDistance = 500;
-        this.controls.maxDistance = 2000;
+        // this.controls.minDistance = 500;
+        // this.controls.maxDistance = 2000;
 
-        // Resize callback
-        window.addEventListener('resize', this.onWindowResize, false);
+        var ambientLight = new THREE.AmbientLight( 0x404040 );
+        var directionalLight1 = new THREE.DirectionalLight( 0xffffff, 0.8 );
+        directionalLight1.position.set( 1, 1, 1 );
 
+        var directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight2.position.set( -1, -1, 1 );
 
+        this.scene.add( directionalLight1 );
+        this.scene.add( directionalLight2 );
+        this.scene.add( ambientLight );
 
-        this.animate();
+        // var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
+        // this.scene.add( helper );
 
-        loadMolecule(url_or_text_pdb);
+        this.createPivot();
     }
 
 
-    onWindowResize() {
-        this.windowW = this.container3d_previewer.clientWidth;
-        this.windowH = this.windowW;
+    createPivot(){
+        this.pivot = new THREE.Object3D();
+        this.pivot.name = 'Pivot';
+        this.scene.add( this.pivot );
+    }
 
-        this.camera.aspect = this.windowW / this.windowH;
+    initPostGL(){
+    }
+
+    recalcAspectRatio () {
+        this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+    }
+
+
+    clearAllAssets(){
+
+        var ctx = this;
+
+        // Clear Previous
+        while (ctx.root.children.length > 0) {
+            var object = ctx.root.children[0];
+            object.parent.remove(object);
+        }
+
+    }
+
+    resetCamera(){
+
+        this.camera.position.copy( this.cameraDefaults.posCamera );
+        this.cameraTarget.copy( this.cameraDefaults.posCameraTarget );
+
+        this.updateCamera();
+
+    }
+
+    updateCamera(){
+
+        this.camera.aspect = this.aspectRatio;
+        this.camera.lookAt( this.cameraTarget );
         this.camera.updateProjectionMatrix();
-
-        this.renderer.setSize(this.windowW, this.windowH, true);
-        this.labelRenderer.setSize(this.windowW, this.windowHt);
-
-        this.render();
     }
+
+    resizeDisplayGL(){
+        this.controls.handleResize();
+
+        this.recalcAspectRatio();
+        this.renderer.setSize( this.canvas.offsetWidth, this.canvas.offsetHeight, false );
+
+        this.updateCamera();
+
+    }
+
+
 
     animate() {
         var id_animation_frame = requestAnimationFrame(this.animate.bind(this));
@@ -101,11 +144,16 @@ class wu_3d_view_pdb {
     }
 
     render() {
-        this.renderer.render(this.scene, this.camera);
+
+        if ( ! this.renderer.autoClear ) this.renderer.clear();
+        this.controls.update();
+        this.renderer.render( this.scene, this.camera );
         this.labelRenderer.render(this.scene, this.camera);
     }
 
-    loadMolecule(url_or_text_pdb) {
+
+    loadMolecule(url_or_text_pdb, post_title) {
+
 
         // Clear Previous
         while (this.root.children.length > 0) {
@@ -113,8 +161,17 @@ class wu_3d_view_pdb {
             object.parent.remove(object);
         }
 
+        this.root.name = post_title;
+
+        var loader = new THREE.PDBLoader();
+
+        var ctx = this;
+
         // Load new
         loader.load(url_or_text_pdb, function (pdb) {
+
+
+            console.log("pdb", pdb);
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;
@@ -149,7 +206,7 @@ class wu_3d_view_pdb {
                 object.position.copy(position);
                 object.position.multiplyScalar(75);
                 object.scale.multiplyScalar(25);
-                this.root.add(object);
+                ctx.root.add(object);
 
                 // Make the label of the atom
                 var atom = json.atoms[i];
@@ -161,7 +218,10 @@ class wu_3d_view_pdb {
 
                 var label = new THREE.CSS2DObject(text);
                 label.position.copy(object.position);
-                this.root.add(label);
+
+                console.log(label);
+
+                ctx.root.add(label);
 
             }
 
@@ -189,11 +249,11 @@ class wu_3d_view_pdb {
                 object.position.lerp(end, 0.5);
                 object.scale.set(5, 5, start.distanceTo(end));
                 object.lookAt(end);
-                this.root.add(object);
+                ctx.root.add(object);
 
             }
 
-            this.render();
+            ctx.render();
 
         });
 

@@ -9,11 +9,10 @@ var objFileContent = '';
 var fbxFileContent = '';
 var pdbFileContent = '';
 
-var previewRenderer;
-
 var nObj = 0;
 var nMtl = 0;
 var nJpg = 0;
+var nPdb = 0;
 
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
@@ -75,6 +74,11 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             pdbFileContent = content ? content : '';
 
             console.log("loaded pdb file");
+
+            // TODO: "AAAA" should be replaced with post_title ???
+            // TODO: Check if 3d viewer is remove from back-end in types-assets-data.php
+            canvas.loadMolecule(content, "AAAA");
+
             break;
 
     }
@@ -144,6 +148,7 @@ function wpunity_clear_asset_files(previewCanvas) {
     nObj = 0;
     nMtl = 0;
     nJpg = 0;
+    nPdb = 0;
 }
 
 function wpunity_reset_panels(previewCanvas) {
@@ -180,6 +185,12 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
         //  Read each file and put the string content in an input dom
         for ( var i = 0, file; file = files[ i ]; i++) {
+
+            if ( file.name.indexOf( '\.pdb' ) > 0 ) {
+                nPdb = 1;
+                wpunity_read_file('Text' , file, 'pdb', wpunity_load_file_callback, canvas);
+            }
+
             if ( file.name.indexOf( '\.obj' ) > 0 ) {
                 nObj = 1;
                 wpunity_read_file('ArrayBuffer' , file, 'obj', wpunity_load_file_callback, canvas);
@@ -193,19 +204,6 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
                 wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
             }
         }
-
-        // var Validator = THREE.OBJLoader2.prototype._getValidator();
-        //
-        // if ( ! Validator.isValid( fileObj ) ) {
-        //
-        //     // Add object reset here
-        //     alert( 'Unable to load OBJ file from given files.' );
-        //
-        //     wpunity_clear_asset_files(canvas);
-        //
-        //     return;
-        // }
-
 
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );

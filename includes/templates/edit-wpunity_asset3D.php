@@ -11,12 +11,16 @@ function loadAsset3DManagerScripts() {
 
 	wp_enqueue_script('wpunity_load87_threejs');
 	wp_enqueue_script('wpunity_load87_objloader2');
+    wp_enqueue_script('wpunity_load87_pdbloader');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
 	wp_enqueue_script('wpunity_load87_mtlloader');
 	wp_enqueue_script('wpunity_load87_orbitcontrols');
 	wp_enqueue_script('wpunity_load87_trackballcontrols');
 
+    wp_enqueue_script('wpunity_CSS2DRenderer');
+
 	wp_enqueue_script('wu_webw_3d_view');
+    wp_enqueue_script('wu_3d_view_pdb');
 
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 	wp_enqueue_script('flot');
@@ -861,46 +865,38 @@ if($create_new == 0) {
         var mdc = window.mdc;
         mdc.autoInit();
 
-        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+
+        var game_type_slug = "<?php echo $game_type_slug; ?>";
+
+        console.log(game_type_slug);
+
+        if (game_type_slug !== 'chemistry_games')
+            var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+        else
+            var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
 
         wpunity_reset_panels(previewCanvas);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
-        //        multipleFilesInputElem.onclick = function (){//Clear all on click
-        //            previewCanvas.clearAllAssets();}
-
-
         loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
 
         //resizeCanvas('previewCanvas');
 
-        var mtlInput = jQuery('#mtlFileInput');
-        var objInput = jQuery('#objFileInput');
-        var textureInput = jQuery('#textureFileInput');
+//        var mtlInput = jQuery('#mtlFileInput');
+//        var objInput = jQuery('#objFileInput');
+//        var textureInput = jQuery('#textureFileInput');
+//
+//        var sshotInput = jQuery('#sshotFileInput');
 
-        var sshotInput = jQuery('#sshotFileInput');
+
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
-
-
-        //        var preview_3d_vars;
-        //        var preview_scene;
-        //        var preview_camera;
-        //        var preview_gridHelper;
-        //        var preview_axisHelper;
 
         createScreenshotBtn.click(function() {
 
             previewCanvas.renderer.preserveDrawingBuffer = true;
             wpunity_create_model_sshot(previewCanvas);
-
-
-//            preview_axisHelper.visible = false;
-//            preview_gridHelper.visible = false;
-//            preview_axisHelper.visible = true;
-//            preview_gridHelper.visible = true;
-
         });
 
         // Flot options

@@ -52,7 +52,9 @@ var wu_webw_3d_view = (function () {
 
         this.camera = new THREE.PerspectiveCamera( this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far );
+
         this.resetCamera();
+
         this.controls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
 
         var ambientLight = new THREE.AmbientLight( 0x404040 );

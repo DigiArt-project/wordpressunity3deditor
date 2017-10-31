@@ -31,7 +31,7 @@ THREE.PDBLoader.prototype = {
 
         } else { // it is text, parse it directly
 
-            scope.parse( url_or_text_pdb );
+            onLoad( scope.parse( url_or_text_pdb ) );
 
         }
 
