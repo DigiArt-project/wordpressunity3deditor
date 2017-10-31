@@ -13,16 +13,27 @@ THREE.PDBLoader.prototype = {
 
     constructor: THREE.PDBLoader,
 
-    load: function ( url, onLoad, onProgress, onError ) {
+    load: function ( url_or_text_pdb, onLoad, onProgress, onError ) {
 
         var scope = this;
 
-        var loader = new THREE.FileLoader( scope.manager );
-        loader.load( url, function ( text ) {
+        // Check if is a url or string already read
+        if (url_or_text_pdb.substr(0,4)==='http'){ // it is url, read it first, parse it after
 
-            onLoad( scope.parse( text ) );
+            var loader = new THREE.FileLoader( scope.manager );
 
-        }, onProgress, onError );
+            loader.load( url_or_text_pdb, function ( text ) {
+
+                onLoad( scope.parse( text ) );
+
+            }, onProgress, onError );
+
+
+        } else { // it is text, parse it directly
+
+            scope.parse( url_or_text_pdb );
+
+        }
 
     },
 
