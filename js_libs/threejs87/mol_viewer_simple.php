@@ -11,7 +11,12 @@
 <script src="PDBLoader.js"></script>
 <script src="CSS2DRenderer.js"></script>
 
-<div id="container" style="width:256px; height:256px; background:#f00; margin:200px"></div>
+
+<div id="container" style="width:256px; height:256px; background:#f00; margin:200px">
+    <canvas id="myCanvas" style="height: 256px; width: background:#0f0;"></canvas>
+</div>
+
+
 
 <script>
 
@@ -46,17 +51,23 @@
         root = new THREE.Group();
         scene.add( root );
 
-        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        var myCanvas = document.getElementById("myCanvas");
+
+        renderer = new THREE.WebGLRenderer( { canvas: myCanvas, antialias: true } );
+
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( 256, 256); //window.innerWidth, window.innerHeight );
-        document.getElementById( 'container' ).appendChild( renderer.domElement );
+        //document.getElementById( 'container' ).appendChild( renderer.domElement );
+        //console.log("renderer.domElement", renderer.domElement );
 
         labelRenderer = new THREE.CSS2DRenderer();
         labelRenderer.setSize( 256, 256); //window.innerWidth, window.innerHeight );
         labelRenderer.domElement.style.position = 'absolute';
         labelRenderer.domElement.style.top = '180px';
         labelRenderer.domElement.style.pointerEvents = 'none';
+
         document.getElementById( 'container' ).appendChild( labelRenderer.domElement );
+
 
         controls = new THREE.TrackballControls( camera, renderer.domElement );
         controls.minDistance = 200;
@@ -76,7 +87,6 @@
 
         // Load new
         loader.load( url, function ( pdb ) {
-
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;

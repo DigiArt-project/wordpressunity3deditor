@@ -213,12 +213,14 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
         canvas.resizeDisplayGL();
     };
 
+    window.addEventListener( 'resize', resizeWindow, false );
+
     var render = function () {
         requestAnimationFrame( render );
         canvas.render();
     };
 
-    window.addEventListener( 'resize', resizeWindow, false );
+
 
     canvas.initGL();
     canvas.resizeDisplayGL();

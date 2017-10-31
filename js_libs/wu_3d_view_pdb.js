@@ -49,11 +49,13 @@ class wu_3d_view_pdb {
 
         // Label renderer
         this.labelRenderer = new THREE.CSS2DRenderer();
-        this.labelRenderer.setSize(this.windowW, this.windowH);
+        //this.labelRenderer.setSize(this.windowW, this.windowH);
+        //this.labelRenderer.setSize( this.canvas.offsetWidth, this.canvas.offsetHeight); //window.innerWidth, window.innerHeight );
         this.labelRenderer.domElement.style.position = 'absolute';
         this.labelRenderer.domElement.style.top = '0';
         this.labelRenderer.domElement.style.pointerEvents = 'none';
-        this.canvas.appendChild(this.labelRenderer.domElement);
+
+        document.getElementById("previewCanvasDiv").appendChild(this.labelRenderer.domElement);
 
         // Camera
         this.camera = new THREE.PerspectiveCamera( this.cameraDefaults.fov,
@@ -126,13 +128,14 @@ class wu_3d_view_pdb {
     }
 
     resizeDisplayGL(){
+
         this.controls.handleResize();
 
         this.recalcAspectRatio();
         this.renderer.setSize( this.canvas.offsetWidth, this.canvas.offsetHeight, false );
+        this.labelRenderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
 
         this.updateCamera();
-
     }
 
 
@@ -145,8 +148,10 @@ class wu_3d_view_pdb {
 
     render() {
 
-        if ( ! this.renderer.autoClear ) this.renderer.clear();
+        if ( ! this.renderer.autoClear )
+            this.renderer.clear();
         this.controls.update();
+
         this.renderer.render( this.scene, this.camera );
         this.labelRenderer.render(this.scene, this.camera);
     }
@@ -170,8 +175,6 @@ class wu_3d_view_pdb {
         // Load new
         loader.load(url_or_text_pdb, function (pdb) {
 
-
-            console.log("pdb", pdb);
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;
@@ -219,10 +222,7 @@ class wu_3d_view_pdb {
                 var label = new THREE.CSS2DObject(text);
                 label.position.copy(object.position);
 
-                console.log(label);
-
                 ctx.root.add(label);
-
             }
 
             // Make the bonds

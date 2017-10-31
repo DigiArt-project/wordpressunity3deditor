@@ -18,7 +18,7 @@ THREE.PDBLoader.prototype = {
         var scope = this;
 
         // Check if is a url or string already read
-        if (url_or_text_pdb.substr(0,4)==='http'){ // it is url, read it first, parse it after
+        if (url_or_text_pdb.substr(0,4)==='http' || url_or_text_pdb.substr(0,1)==='.' ||  url_or_text_pdb.substr(0,1)==='/' ){ // it is url, read it first, parse it after
 
             var loader = new THREE.FileLoader( scope.manager );
 

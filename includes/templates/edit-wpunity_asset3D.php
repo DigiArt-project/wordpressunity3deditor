@@ -501,16 +501,22 @@ if($create_new == 0) {
                             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                                 <h3 class="mdc-typography--title">Object Preview</h3>
 
+
+
                                 <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
-                                    <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-                                    <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+                                    <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                                    <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
 
                                     <div class="progressSlider" style="top:5px;">
                                         <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
                                     </div>
                                 </div>
 
-                                <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+                                <div id="previewCanvasDiv" style="height: 300px; width:100%; background:#0f0; position:relative; top:80px; margin-bottom: 80px;">
+                                    <canvas id="previewCanvas" style="height: 300px; width:100%; position:absolute; top:0;">
+                                    </canvas>
+                                </div>
+
 
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
