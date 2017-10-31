@@ -163,6 +163,8 @@ function wpunity_reset_panels(previewCanvas) {
     jQuery("#poiImgDetailsPanel").hide();
     jQuery("#poiVideoDetailsPanel").hide();
     jQuery("#objectPreviewTitle").hide();
+    jQuery("#moleculeOptionsPanel").hide();
+    jQuery("#moleculeFluidPanel").hide();
 }
 
 

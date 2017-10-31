@@ -5,7 +5,7 @@ input[type="text"].mdc-textfield__input,
 textarea.mdc-textfield__input,
 .mdc-textfield__input
 {
-background-color: transparent; !important
+    background-color: transparent; !important
 -webkit-box-shadow: none; !important
 -moz-box-shadow: none; !important
 -box-shadow: none; !important
@@ -334,7 +334,31 @@ i.ButtonIcon {
     margin-left: -.6em !important;
 }
 
+.ui-slider .ui-slider-handle:last-child { cursor: pointer; }
 
+
+.ColorPickerSliderRed,
+.ColorPickerSliderGreen,
+.ColorPickerSliderBlue,
+.ColorPickerSliderAlpha {
+    clear: left;
+    width: 100%;
+    margin: 25px 15px 34px 15px;
+}
+
+.ColorPickerPreview {
+    height: 170px;
+    margin-top: 18px;
+    background-image: none;
+    width: 100%;
+}
+
+.ColorPickerSliderRed .ui-slider-range { background: #ef2929; }
+.ColorPickerSliderRed .ui-slider-handle { border-color: #ef2929; }
+.ColorPickerSliderGreen .ui-slider-range { background: #8ae234; }
+.ColorPickerSliderGreen .ui-slider-handle { border-color: #8ae234; }
+.ColorPickerSliderBlue .ui-slider-range { background: #729fcf; }
+.ColorPickerSliderBlue .ui-slider-handle { border-color: #729fcf; }
 
 
 /* jimver04 additions */

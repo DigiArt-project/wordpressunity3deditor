@@ -125,7 +125,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
 				wpunity_create_asset_terrainExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'producer') {
-                wpunity_create_asset_producerExtra_frontend($asset_checked_id);
+				wpunity_create_asset_producerExtra_frontend($asset_checked_id);
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_imagetext') {
 				wpunity_create_asset_poisITExtra_frontend($asset_checked_id);//change it to update
 			}elseif ($saved_assetCatTerm[0]->slug == 'pois_video') {
@@ -140,7 +140,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				//set_post_thumbnail( ,  );
 //			}
 		}
-        wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
+		wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
 		exit;
 	}
 }
@@ -260,12 +260,20 @@ if($create_new == 0) {
                         <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
 
 						<?php
-						$myGameType = 1;
+						$myGameType = 0;
 						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
 						$game_type_slug = $all_game_types[0]->slug;
 
-						if($game_type_slug == 'energy_games'){
-							$myGameType=2;
+						switch ($game_type_slug) {
+							case 'archaeology_games':
+								$myGameType=1;
+								break;
+							case 'energy_games':
+								$myGameType=2;
+								break;
+							case 'chemistry_games':
+								$myGameType=3;
+								break;
 						}
 
 						$args = array(
@@ -325,7 +333,7 @@ if($create_new == 0) {
                     <h3 class="mdc-typography--title">Information</h3>
 
                     <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                        <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="assetTitle"
+                        <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
                                aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
                                value="<?php echo $asset_title_saved; ?>">
                         <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
@@ -361,8 +369,6 @@ if($create_new == 0) {
                             <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
                                 <i class="material-icons ButtonIcon">add</i> Add Field
                             </a>
-
-
                         </div>
                     </div>
 
@@ -371,6 +377,8 @@ if($create_new == 0) {
                         <h3 class="mdc-typography--title">Featured Image</h3>
 
                         <img id="poiVideoFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <br>
+                        <label for="poiVideoFeaturedImgInput"> Select a featured image</label>
                         <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
                         <hr class="WhiteSpaceSeparator">
@@ -382,7 +390,58 @@ if($create_new == 0) {
                             <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
                         </div>
                     </div>
+
+                    <div id="moleculeOptionsPanel" style="display: none;">
+
+                        <h3 class="mdc-typography--title">Molecule Options</h3>
+
+                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                            <input id="moleculeChemicalType" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                                   required style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                            <label for="moleculeChemicalType" class="mdc-textfield__label"> Chemical Type (e.g.: H20)</label>
+                            <div class="mdc-textfield__bottom-line"></div>
+                        </div>
+
+                        <hr class="WhiteSpaceSeparator">
+
+                        <h3 class="mdc-typography--title">Functional Group</h3>
+
+                        <div id="moleculeFunctionalGroupSelect" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                            <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a functional group</span>
+                            <div class="mdc-simple-menu mdc-select__menu">
+                                <ul class="mdc-list mdc-simple-menu__items">
+                                    <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" style="pointer-events: none;" tabindex="-1">
+                                        Select a functional group
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="functionalGroupNone" tabindex="0">
+                                        None
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="functionalGroupAlcohol" tabindex="0">
+                                        Alcohol
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="functionalGroupKetone" tabindex="0">
+                                        Ketone
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input id="moleculeFunctionalGroupInput" type="hidden">
+
+                        <hr class="WhiteSpaceSeparator">
+
+                        <h3 class="mdc-typography--title">Fluid Options</h3>
+
+                        <label for="molecule-fluid-viscosity-slider-label" class="mdc-typography--subheading2">Viscosity: </label>
+                        <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="molecule-fluid-viscosity-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
+                        <div id="molecule-fluid-viscosity-slider"></div>
+                        <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                            1 = Water like viscosity, bigger values mean thicker liquid.</span>
+                        <input type="hidden" id="moleculeFluidViscosityVal" name="moleculeFluidViscosityVal" value="">
+
+                    </div>
+
                 </div>
+
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
 
@@ -409,7 +468,7 @@ if($create_new == 0) {
                             </div>
                             <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
                         </li>
-                        <?php if ($game_type_slug == 'chemistry_games') { ?>
+						<?php if ($game_type_slug == 'chemistry_games') { ?>
                             <li class="mdc-form-field">
                                 <div class="mdc-radio" >
                                     <input class="mdc-radio__native-control" type="radio" id="pdbRadio"  name="objectTypeRadio" value="pdb">
@@ -420,50 +479,105 @@ if($create_new == 0) {
                                 </div>
                                 <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
                             </li>
-                        <?php } ?>
+						<?php } ?>
 
                     </ul>
 
                     <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                            <h3 class="mdc-typography--title">Object Preview</h3>
+                        <div class="mdc-layout-grid__inner">
 
-                            <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
-                                <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-                                <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                <h3 class="mdc-typography--title">Object Preview</h3>
 
-                                <div class="progressSlider" style="top:5px;">
-                                    <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                                    <h6 class="mdc-theme--text-primary-on-dark mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+                                    <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-dark mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+                                    <div class="progressSlider" style="top:5px;">
+                                        <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+                                    </div>
                                 </div>
+
+                                <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
+
+                                <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+                                <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
+
+
+                                <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                                <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+                                <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+                                <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
+
+                                <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
+
+
+                            </div>
+                            <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                <h3 class="mdc-typography--title">Screenshot</h3>
+
+                                <img id="sshotPreviewImg" style="width: auto; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                                <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+
+                                <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
 
-                            <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
-
-                            <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
-                            <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>
-
-
-                            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                            <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
-
-                            <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
-
-
-                        </div>
-                        <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                            <h3 class="mdc-typography--title">Screenshot</h3>
-
-                            <img id="sshotPreviewImg" style="width: auto; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                            <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
-
-                            <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="mdc-layout-grid" id="moleculeFluidPanel">
+            <div class="mdc-layout-grid__inner">
+
+                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                    <h3 class="mdc-typography--title">Fluid Color</h3>
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                        Create a color for the fluid that will be displayed inside the vial.
+                    </span>
+                    <div class="mdc-layout-grid__inner">
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                            <div id="fluidColorRedSlider" class="ColorPickerSliderRed"></div>
+                            <div id="fluidColorGreenSlider" class="ColorPickerSliderGreen"></div>
+                            <div id="fluidColorBlueSlider" class="ColorPickerSliderBlue"></div>
+                            <div id="fluidColorAlphaSlider" class="ColorPickerSliderAlpha"></div>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                            <ul class="mdc-list">
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorRedVal" class="mdc-typography--subheading2">Red:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorRedVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorGreenVal" class="mdc-typography--subheading2">Green:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorGreenVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorBlueVal" class="mdc-typography--subheading2">Blue:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorBlueVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                                <li class="mdc-list-item">
+                                    <label for="fluidColorAlphaVal" class="mdc-typography--subheading2">Alpha:</label>
+                                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="fluidColorAlphaVal" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;"
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <div id="fluidColorPreview" class="ui-widget-content ui-corner-all ColorPickerPreview"></div>
+                        </div>
+
+                    </div>
+                    <input type="hidden" id="moleculeFluidColorVal">
+                </div>
+            </div>
+
+        </div>
+
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
@@ -479,7 +593,7 @@ if($create_new == 0) {
                     <br>
 
                     <label for="wind-speed-range-label" class="mdc-typography--subheading2">Wind Speed Range:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-speed-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="wind-speed-range"></div>
                     <input type="hidden" id="physicsWindMinVal" name="physicsWindMinVal" value="">
                     <input type="hidden" id="physicsWindMaxVal" name="physicsWindMaxVal" value="">
@@ -487,14 +601,14 @@ if($create_new == 0) {
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="wind-mean-slider-label" class="mdc-typography--subheading2">Wind Speed Mean:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="wind-mean-slider"></div>
                     <input type="hidden" id="physicsWindMeanVal" name="physicsWindMeanVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="wind-variance-slider-label" class="mdc-typography--subheading2">Wind Variance:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="wind-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="wind-variance-slider"></div>
                     <input type="hidden" id="physicsWindVarianceVal" name="physicsWindVarianceVal" value="">
 
@@ -512,21 +626,21 @@ if($create_new == 0) {
                     <br>
 
                     <label for="over-power-income-slider-label" class="mdc-typography--subheading2">Over Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="over-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="over-power-income-slider"></div>
                     <input type="hidden" id="overPowerIncomeVal" name="overPowerIncomeVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="correct-power-income-slider-label" class="mdc-typography--subheading2">Correct Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="correct-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="correct-power-income-slider"></div>
                     <input type="hidden" id="correctPowerIncomeVal" name="correctPowerIncomeVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="under-power-income-slider-label" class="mdc-typography--subheading2">Under Power Income:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="under-power-income-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="under-power-income-slider"></div>
                     <input type="hidden" id="underPowerIncomeVal" name="underPowerIncomeVal" value="">
 
@@ -538,7 +652,7 @@ if($create_new == 0) {
                     <div class="mdc-layout-grid">
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="accessCostPenalty"
+                                <input title="Access cost penalty" id="accessCostPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="accessCostPenalty"
                                        aria-controls="accessCostPenalty-validation-msg" value="<?php echo $access_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="accessCostPenalty" class="mdc-textfield__label"> Access Cost</label>
                                 <div class="mdc-textfield__bottom-line"></div>
@@ -546,7 +660,7 @@ if($create_new == 0) {
                         </div>
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="archProximityPenalty"
+                                <input title="Archaeological site proximity penalty" id="archProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="archProximityPenalty"
                                        aria-controls="archProximityPenalty-validation-msg" value="<?php echo $archaeology_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="archProximityPenalty" class="mdc-textfield__label"> Arch. site proximity </label>
                                 <div class="mdc-textfield__bottom-line"></div>
@@ -555,7 +669,7 @@ if($create_new == 0) {
 
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="naturalReserveProximityPenalty"
+                                <input title="Natural reserve proximity penalty" id="naturalReserveProximityPenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="naturalReserveProximityPenalty"
                                        aria-controls="naturalReserveProximityPenalty-validation-msg" value="<?php echo $natural_reserve_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="naturalReserveProximityPenalty" class="mdc-textfield__label"> Natural reserve proximity </label>
                                 <div class="mdc-textfield__bottom-line"></div>
@@ -563,7 +677,7 @@ if($create_new == 0) {
                         </div>
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                                <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="hiVoltLineDistancePenalty"
+                                <input title="Distance from High Voltage lines penalty" id="hiVoltLineDistancePenalty" type="number" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="hiVoltLineDistancePenalty"
                                        aria-controls="hiVoltLineDistancePenalty-validation-msg" value="<?php echo $hvdistance_penalty; ?>" required min="0" max="10" minlength="1" maxlength="2" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                                 <label for="hiVoltLineDistancePenalty" class="mdc-textfield__label"> Hi-Voltage line distance </label>
                                 <div class="mdc-textfield__bottom-line"></div>
@@ -585,7 +699,7 @@ if($create_new == 0) {
                     <h3 class="mdc-typography--title">Energy Consumption</h3>
 
                     <label for="energy-consumption-range-label" class="mdc-typography--subheading2">Energy Consumption Range:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-range-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="energy-consumption-range"></div>
                     <input type="hidden" id="energyConsumptionMinVal" name="energyConsumptionMinVal" value="<?php echo $min_consumption; ?>">
                     <input type="hidden" id="energyConsumptionMaxVal" name="energyConsumptionMaxVal" value="<?php echo $max_consumption; ?>">
@@ -593,14 +707,14 @@ if($create_new == 0) {
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="energy-consumption-mean-slider-label" class="mdc-typography--subheading2">Energy Consumption Mean:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-mean-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="energy-consumption-mean-slider"></div>
                     <input type="hidden" id="energyConsumptionMeanVal" name="energyConsumptionMeanVal" value="<?php echo $mean_consumption; ?>">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="energy-consumption-variance-slider-label" class="mdc-typography--subheading2">Energy Consumption Variance:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" type="text" id="energy-consumption-variance-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="energy-consumption-variance-slider"></div>
                     <input type="hidden" id="energyConsumptionVarianceVal" name="energyConsumptionVarianceVal" value="<?php echo $var_consumption; ?>">
 
@@ -665,7 +779,7 @@ if($create_new == 0) {
                     <h3 class="mdc-typography--title">Producer Options</h3>
 
                     <div class="mdc-textfield mdc-textfield--dense FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                        <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="producerClassVal"
+                        <input title="Producer class" id="producerClassVal" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="producerClassVal"
                                aria-controls="producer-class-validation-msg" value="<?php echo $optGen_class; ?>" required minlength="1" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                         <label for="producerClassVal" class="mdc-textfield__label"> Producer class </label>
                         <div class="mdc-textfield__bottom-line"></div>
@@ -674,28 +788,28 @@ if($create_new == 0) {
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="producer-wind-speed-class-slider-label" class="mdc-typography--subheading2">Wind Speed Class:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-wind-speed-class-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-wind-speed-class-slider"></div>
                     <input type="hidden" id="producerWindSpeedClassVal" name="producerWindSpeedClassVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="producer-max-power-slider-label" class="mdc-typography--subheading2">Max Power:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-max-power-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-max-power-slider"></div>
                     <input type="hidden" id="producerMaxPowerVal" name="producerMaxPowerVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-turbine-size-slider"></div>
                     <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="producer-damage-coeff-slider-label" class="mdc-typography--subheading2">Damage Coefficient:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-damage-coeff-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;  width: auto;">
                     <div id="producer-damage-coeff-slider"></div>
                     <input type="hidden" id="producerDmgCoeffVal" name="producerDmgCoeffVal" value="">
 
@@ -708,21 +822,20 @@ if($create_new == 0) {
                     <h3 class="mdc-typography--title">Producer Costs</h3>
 
                     <label for="producer-cost-slider-label" class="mdc-typography--subheading2">Producer Cost:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-cost-slider"></div>
                     <input type="hidden" id="producerCostVal" name="producerCostVal" value="">
 
                     <hr class="WhiteSpaceSeparator">
 
                     <label for="producer-repair-cost-slider-label" class="mdc-typography--subheading2">Producer Repair Cost:</label>
-                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold;">
+                    <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-repair-cost-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-repair-cost-slider"></div>
                     <input type="hidden" id="producerRepairCostVal" name="producerRepairCostVal" value="">
 
                 </div>
             </div>
         </div>
-
 
         <hr class="WhiteSpaceSeparator">
 
@@ -838,6 +951,10 @@ if($create_new == 0) {
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
             var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
 
+            var moleculeFunctionalGroupDropdown = document.getElementById('moleculeFunctionalGroupSelect');
+            var moleculeFunctionalGroupSelect = MDCSelect.attachTo(moleculeFunctionalGroupDropdown);
+
+
             // This fires on EDIT
             jQuery( document ).ready(function() {
 
@@ -850,6 +967,10 @@ if($create_new == 0) {
 
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
+            });
+
+            moleculeFunctionalGroupDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery("#moleculeFunctionalGroupInput").attr( "value", moleculeFunctionalGroupSelect.selectedOptions[0].getAttribute("id") );
             });
 
 
@@ -918,6 +1039,13 @@ if($create_new == 0) {
                         spanProducerChartLabels();
 
                         break;
+
+                    // Chemistry cases
+                    case 'molecule':
+                        jQuery("#moleculeOptionsPanel").show();
+                        jQuery("#moleculeFluidPanel").show();
+                        break;
+
                     default:
 
                 }
@@ -998,6 +1126,7 @@ if($create_new == 0) {
             var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: opt_speed, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
             var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: opt_power, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
 
+            var moleculeFluidViscositySlider = wpunity_create_slider_component("#molecule-fluid-viscosity-slider", false, {min: 0, max: 2000, value: 1, valId:"#moleculeFluidViscosityVal", step: 1, units:""});
 
             // POI Image panels - Add/remove POI inputs
             var poiMaxFields      = 3; // max input boxes allowed
@@ -1033,8 +1162,52 @@ if($create_new == 0) {
                 e.preventDefault();
                 jQuery(this).parent('div').parent('div').parent('div').remove();
                 i--;
-            })
-        } );
+            });
+
+            // Color picker based on sliders
+            jQuery( "#fluidColorRedSlider, #fluidColorGreenSlider, #fluidColorBlueSlider" ).slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 255,
+                value: 127,
+                change: refreshSwatch,
+                slide: refreshSwatch,
+                stop: refreshSwatch
+            });
+
+            jQuery( "#fluidColorAlphaSlider" ).slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 1,
+                value: 1,
+                step: 0.01,
+                change: refreshSwatch,
+                slide: refreshSwatch,
+                stop: refreshSwatch
+            });
+
+            jQuery( "#fluidColorRedSlider" ).slider( "value", 255 );
+            jQuery( "#fluidColorGreenSlider" ).slider( "value", 140 );
+            jQuery( "#fluidColorBlueSlider" ).slider( "value", 60 );
+
+            function refreshSwatch() {
+                var red = jQuery( "#fluidColorRedSlider" ).slider( "value" ),
+                    green = jQuery( "#fluidColorGreenSlider" ).slider( "value" ),
+                    blue = jQuery( "#fluidColorBlueSlider" ).slider( "value" ),
+                    alpha = jQuery( "#fluidColorAlphaSlider" ).slider( "value" ),
+                    color = [red, green, blue, alpha ];
+
+                jQuery('#fluidColorRedVal').val(red);
+                jQuery('#fluidColorGreenVal').val(green);
+                jQuery('#fluidColorBlueVal').val(blue);
+                jQuery('#fluidColorAlphaVal').val(alpha);
+
+                jQuery( "#fluidColorPreview" ).css( "background-color", "rgba(" + color +");");
+
+                document.getElementById('moleculeFluidColorVal').value = "["+color+"]".toString();
+            }
+
+        });
 
         function createPowerProductionValues(createAsset) {
             var index = 0;
@@ -1199,6 +1372,5 @@ if($create_new == 0) {
                 input.accept = ".obj,.mtl,.jpg";
             }
         }
-
     </script>
 <?php  get_footer(); ?>
