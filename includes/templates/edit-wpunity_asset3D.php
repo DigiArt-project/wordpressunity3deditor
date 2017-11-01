@@ -526,9 +526,6 @@ if($create_new == 0) {
                                 <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                                 <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
 
-                                <!--                        <input type="hidden" name="textureFileInput[]" id="textureFileInput" value=""/>-->
-
-
                             </div>
                             <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                                 <h3 class="mdc-typography--title">Screenshot</h3>
@@ -879,28 +876,22 @@ if($create_new == 0) {
         mdc.autoInit();
 
 
+
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
         console.log(game_type_slug);
 
-        if (game_type_slug !== 'chemistry_games')
+        // TODO: Remove also from register and enquire
+        //if (game_type_slug !== 'chemistry_games')
             var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
-        else
-            var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
+        //else
+        //   var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
 
         wpunity_reset_panels(previewCanvas);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
         loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
-
-        //resizeCanvas('previewCanvas');
-
-//        var mtlInput = jQuery('#mtlFileInput');
-//        var objInput = jQuery('#objFileInput');
-//        var textureInput = jQuery('#textureFileInput');
-//
-//        var sshotInput = jQuery('#sshotFileInput');
 
 
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;

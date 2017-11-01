@@ -312,9 +312,6 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 }
             }
 
-
-
-
             scope.worker.postMessage( {
                 cmd: 'setMaterials',
                 materialNames: materialNames
