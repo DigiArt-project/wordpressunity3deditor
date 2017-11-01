@@ -320,22 +320,58 @@ function wpunity_create_slider_component(elemId, range, options) {
 
     } else {
 
-        jQuery( elemId ).slider({
-            min: options.min,
-            max: options.max,
-            value: options.value,
-            create: function() {
-                jQuery( options.valId ).val(options.value);
-            },
-            slide: function( event, ui ) {
-                jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
-            },
-            stop: function( event, ui ) {
-                jQuery( options.valId ).val(ui.value);
-            }
-        });
-        jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ) + " " + options.units );
+        if (options.inputText) {
 
+            jQuery( elemId ).slider({
+                min: options.min,
+                max: options.max,
+                value: options.value,
+                create: function() {
+                    jQuery( options.valId ).val(options.value);
+                },
+                slide: function( event, ui ) {
+                    jQuery( elemId+"-label" ).val( ui.value );
+
+                },
+                stop: function( event, ui ) {
+                    jQuery( options.valId ).val(ui.value);
+                }
+            });
+            jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ));
+
+
+            jQuery(elemId+"-label").change(function () {
+                var value = this.value;
+                jQuery( elemId ).slider("value", parseInt(value));
+
+            });
+
+            jQuery(elemId+"-label").on('input', function() {
+                var value = this.value;
+                jQuery( elemId ).slider("value", parseInt(value));
+            });
+
+
+        } else {
+
+            jQuery( elemId ).slider({
+                min: options.min,
+                max: options.max,
+                value: options.value,
+                create: function() {
+                    jQuery( options.valId ).val(options.value);
+                },
+                slide: function( event, ui ) {
+
+                    jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
+                },
+                stop: function( event, ui ) {
+                    jQuery( options.valId ).val(ui.value);
+                }
+            });
+            jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ) + " " + options.units );
+
+        }
     }
 
     if (options.step) {
