@@ -287,6 +287,16 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
 
+	// TODO: Stathi continue from here to store pdb into asset CPT metadata
+    $pdb_content = $_POST['pdbFileInput'];
+
+    // Remove this debugging piece of code in the end
+    $fh = fopen("output_pdbContent.txt", "w");
+    fwrite($fh, $pdb_content);
+    fclose($fh);
+    // - until here
+
+
     $textureNamesOut = [];
 
 	for($i=0; $i < count($tContent); $i++) {

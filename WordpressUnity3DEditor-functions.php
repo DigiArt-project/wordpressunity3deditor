@@ -100,7 +100,7 @@ function wpunity_register_scripts() {
 	//wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
 
 	wp_register_script( 'wu_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_webw_3d_view.js', null, null, false);
-    wp_register_script( 'wu_3d_view_pdb', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view_pdb.js', null, null, false);
+
 //================================= Scene YAML Templates ===================================
 }
 add_action('wp_enqueue_scripts', 'wpunity_register_scripts' );

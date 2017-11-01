@@ -55,7 +55,7 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             mtlFileContent = mtlFileContent.replace(/'/g, "");
 
             document.getElementById('mtlFileInput').value = mtlFileContent;
-            checkerCompleteReading(type, canvas, filename);
+            checkerCompleteReading( canvas);
             break;
 
         case 'obj':
@@ -66,18 +66,19 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             var dec = new TextDecoder();
             document.getElementById('objFileInput').value = dec.decode(objFileContent);
 
-            checkerCompleteReading(type, canvas, filename);
+            checkerCompleteReading(canvas);
 
             break;
 
         case 'pdb':
             pdbFileContent = content ? content : '';
 
-            console.log("loaded pdb file");
+            console.log("loaded pdb file", pdbFileContent);
 
-            // TODO: "AAAA" should be replaced with post_title ???
-            // TODO: Check if 3d viewer is remove from back-end in types-assets-data.php
-            canvas.loadMolecule(content, "AAAA");
+            // set the input value
+            document.getElementById('pdbFileInput').value = pdbFileContent;
+
+            canvas.loadMolecule(content);
 
             break;
 
@@ -231,7 +232,7 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 }
 
 
-function checkerCompleteReading(type, canvas, filename){
+function checkerCompleteReading(canvas){
 
     if (nObj==1 && objFileContent!=='' ){
 
