@@ -502,21 +502,20 @@ if($create_new == 0) {
                                 <h3 class="mdc-typography--title">Object Preview</h3>
 
 
-
-                                <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents" >
+                                <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents">
                                     <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
                                     <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
 
-                                    <div class="progressSlider" style="top:5px;">
+                                    <div class="progressSlider">
                                         <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
                                     </div>
                                 </div>
 
-                                <div id="previewCanvasDiv" style="height: 300px; width:100%; background:#0f0; position:relative; top:80px; margin-bottom: 80px;">
-                                    <canvas id="previewCanvas" style="height: 300px; width:100%; position:absolute; top:0;">
-                                    </canvas>
+                                <div style="position: absolute;">
+                                    <div id="previewCanvasDiv" style="height: 300px; width:100%; position: relative"></div>
                                 </div>
 
+                                <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value="" multiple accept=".obj,.mtl,.jpg"/>

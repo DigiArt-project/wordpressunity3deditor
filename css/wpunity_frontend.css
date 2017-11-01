@@ -240,6 +240,7 @@ i.ButtonIcon {
     width: 100%;
     height: 4px;
     overflow: hidden;
+    top: 5px;
 }
 
 .progressSliderLine{
