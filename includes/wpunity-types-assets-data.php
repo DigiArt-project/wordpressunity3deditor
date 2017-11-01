@@ -396,62 +396,7 @@ function wpunity_assets_databox_show(){
     <input type="hidden" name="wpunity_assets_databox_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>" />
     <table class="form-table" id="wpunity-custom-fields-table">
         <tbody>
-        <tr><th style="width:20%">Asset 3D Preview</label></th>
-			<?php
-			$curr_path =  wp_upload_dir()['baseurl'].'/'.get_post_meta($post->ID, 'wpunity_asset3d_pathData', true) . '/Models/';
-			$mtl_obj = get_post_meta($post->ID, 'wpunity_asset3d_mtl', true);
 
-			if (wp_get_attachment_url( $mtl_obj ))
-				$textmtl = file_get_contents(wp_get_attachment_url( $mtl_obj ));
-			else
-				$textmtl = '';
-
-			//    '    characters because they cause conflict
-			$textmtl = str_replace("'", "", $textmtl);
-			$textmtl = str_replace("\'", "", $textmtl);
-
-			$obj_id = get_post_meta($post->ID, 'wpunity_asset3d_obj', true);
-			$url_obj = wp_get_attachment_url( $obj_id );
-			?>
-            <td>
-                <div name="vr-preview-progress-content" id="vr-preview-progress-content"
-                     style="position: absolute; top:10%; background: #af0; color: #fff; margin-left: auto; margin-right: auto;  width:100px; left:50%; text-align:center; z-index:1">
-                    0%
-                </div>
-
-                <div name="vr-preview" id="vr-preview" style="position:relative; width:95%; border: 1px solid #aaa; margin-left:5px">
-
-					<?php
-					if ($curr_path != "" && $textmtl != "" && $url_obj != "") {
-
-						//wp_enqueue_script("wu_3d_view");
-						?>
-
-                        <script>
-//                            jQuery('document').ready(function(){
-//                                var view3d_back = new wu_3d_view(
-//                                    "after",
-//                                    "<?php //echo $curr_path;?>//",
-//									<?php //echo json_encode($textmtl);?>//,
-//                                    "<?php //echo $url_obj;?>//",
-//                                    "-1",
-//                                    "<?php //echo $post_title;?>//",
-//                                    "vr-preview" );
-//                            });
-                        </script>
-
-						<?php
-
-					}else {
-						echo "Rendering is not possible because:<br />";
-						if ($curr_path == ""){echo "- Current path is not defined<br />";}
-						if ($textmtl == ""){echo "- mtl is not defined<br />";}
-						if ($url_obj == ""){echo "- obj url is not defined<br />";}
-					}
-					?>
-                </div>
-            </td>
-        </tr>
 		<?php
 		//Hide-Show custom fields purpose
 		$categoryAsset = wp_get_post_terms($post->ID, 'wpunity_asset3d_cat');
