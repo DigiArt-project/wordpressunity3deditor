@@ -878,15 +878,8 @@ if($create_new == 0) {
         var mdc = window.mdc;
         mdc.autoInit();
 
-
         var game_type_slug = "<?php echo $game_type_slug; ?>";
-
-        console.log(game_type_slug);
-
-        if (game_type_slug !== 'chemistry_games')
-            var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
-        else
-            var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
+        var previewCanvas = (game_type_slug !== 'chemistry_games') ? new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) ) : new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) ) ;
 
         wpunity_reset_panels(previewCanvas);
 
