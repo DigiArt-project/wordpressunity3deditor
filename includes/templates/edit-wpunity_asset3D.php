@@ -11,16 +11,16 @@ function loadAsset3DManagerScripts() {
 
 	wp_enqueue_script('wpunity_load87_threejs');
 	wp_enqueue_script('wpunity_load87_objloader2');
-    wp_enqueue_script('wpunity_load87_pdbloader');
+	wp_enqueue_script('wpunity_load87_pdbloader');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
 	wp_enqueue_script('wpunity_load87_mtlloader');
 	wp_enqueue_script('wpunity_load87_orbitcontrols');
 	wp_enqueue_script('wpunity_load87_trackballcontrols');
 
-    wp_enqueue_script('wpunity_CSS2DRenderer');
+	wp_enqueue_script('wpunity_CSS2DRenderer');
 
 	wp_enqueue_script('wu_webw_3d_view');
-    wp_enqueue_script('wu_3d_view_pdb');
+	wp_enqueue_script('wu_3d_view_pdb');
 
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 	wp_enqueue_script('flot');
@@ -268,9 +268,6 @@ if($create_new == 0) {
 						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
 						$game_type_slug = $all_game_types[0]->slug;
 
-						$mtlRadioChecked = 'checked=""';
-						$pdbRadioChecked = '';
-
 						switch ($game_type_slug) {
 							case 'archaeology_games':
 								$myGameType=1;
@@ -280,10 +277,6 @@ if($create_new == 0) {
 								break;
 							case 'chemistry_games':
 								$myGameType=3;
-
-								$mtlRadioChecked = '';
-								$pdbRadioChecked = 'checked=""';
-
 								break;
 						}
 
@@ -470,9 +463,9 @@ if($create_new == 0) {
 						  <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
 					  </li>-->
 
-                        <li class="mdc-form-field">
+                        <li class="mdc-form-field" id="mtlRadioListItem">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" <?php echo $mtlRadioChecked;?> name="objectTypeRadio" value="mtl">
+                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -480,18 +473,16 @@ if($create_new == 0) {
                             </div>
                             <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
                         </li>
-						<?php if ($game_type_slug == 'chemistry_games') { ?>
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio" >
-                                    <input class="mdc-radio__native-control" type="radio" id="pdbRadio" <?php echo $pdbRadioChecked;?> name="objectTypeRadio" value="pdb">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
-                                    </div>
+                        <li class="mdc-form-field" style="display: none;" id="pdbRadioListItem">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="pdbRadio" name="objectTypeRadio" value="pdb">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
                                 </div>
-                                <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
-                            </li>
-						<?php } ?>
+                            </div>
+                            <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
+                        </li>
 
                     </ul>
 
@@ -889,11 +880,11 @@ if($create_new == 0) {
 
         //resizeCanvas('previewCanvas');
 
-//        var mtlInput = jQuery('#mtlFileInput');
-//        var objInput = jQuery('#objFileInput');
-//        var textureInput = jQuery('#textureFileInput');
-//
-//        var sshotInput = jQuery('#sshotFileInput');
+        //        var mtlInput = jQuery('#mtlFileInput');
+        //        var objInput = jQuery('#objFileInput');
+        //        var textureInput = jQuery('#textureFileInput');
+        //
+        //        var sshotInput = jQuery('#sshotFileInput');
 
 
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
@@ -1004,6 +995,25 @@ if($create_new == 0) {
                 }
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
+                if (cat === 'molecule') {
+                    jQuery("#mtlRadio").prop("checked", false);
+                    jQuery("#mtlRadioListItem").hide();
+                    jQuery("#pdbRadio").prop("checked", true);
+                    jQuery("#pdbRadioListItem").show();
+
+                } else {
+                    jQuery("#mtlRadio").prop("checked", true);
+                    jQuery("#mtlRadioListItem").show();
+                    jQuery("#pdbRadio").prop("checked", false);
+                    jQuery("#pdbRadioListItem").hide();
+                }
+
+                mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
+                console.log(jQuery("input[name=objectTypeRadio]:checked").val());
+
+                loadFileInputLabel();
+
 
                 switch(cat) {
                     // Archaeology cases
