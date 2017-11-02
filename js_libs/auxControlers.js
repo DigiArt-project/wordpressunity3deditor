@@ -165,8 +165,20 @@ function onMouseDownSelect( event ) {
         envir.renderer.setClearColor( 0xffffff, 0.9 );
 
 
+
+
         if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
             displayDoorProperties(event, nameL);
+
+
+        if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
+                                  arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
+            displayMicroscopeTextbookProperties(event, nameL);
+
+
+
+
+
 
 
         // If more than 2 objects are intersected
@@ -238,6 +250,88 @@ function onMouseDownSelect( event ) {
     }
 }// onMouseDown
 
+
+
+
+function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource) {
+
+    clearAndUnbindMicroscopeTextbookProperties();
+
+    var ppDiv = document.getElementById("chemistrySceneSelectPopupDiv");
+    var ppSelect = document.getElementById("chemistrySceneSelectComponent");
+
+
+    // Show Selection
+    jQuery("#chemistrySceneSelectPopupDiv").show();
+
+    ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add options
+    var option;
+
+    // Prompt "Select"
+    option = document.createElement("option");
+    option.text = "Select a scene";
+    option.value = "Select a scene";
+    option.selected = true;
+    option.disabled = true;
+    ppSelect.add(option);
+
+
+    // Add doors from other scenes
+    var OtherExamMicroScenesNames = ['First ExamMicro Scene'];
+
+
+    // Add options for each intersected object
+    for (var sceneName of OtherExamMicroScenesNames ) {
+        option = document.createElement("option");
+        option.text = sceneName;
+        option.value = sceneName;
+        option.style.background = "#fff";
+        ppSelect.add(option);
+    }
+
+    // - Prompt "Cancel" -
+    option = document.createElement("option");
+    option.text = "Cancel";
+    option.value = "Cancel";
+    option.style.background = "#b7afaa";
+    ppSelect.add(option);
+    // -------------------
+
+
+
+    // On popup change
+    jQuery("#chemistrySceneSelectComponent").change(function(e) {
+
+        console.log("1");
+
+        // Get the value
+        var valTargetScene = jQuery("#chemistrySceneSelectComponent").val();
+
+        if (!valTargetScene)
+            return;
+
+        console.log("2");
+
+        if (valTargetScene && valTargetScene != "Cancel" && valTargetScene != "Select") {
+
+            envir.scene.getObjectByName(nameMicroscopeTextbookSource).sceneName_target = sceneName_Target.trim();
+        }
+        jQuery("#chemistrySceneSelectPopupDiv").hide();
+
+        console.log("3");
+
+        clearAndUnbindMicroscopeTextbookProperties();
+    });
+
+
+
+
+
+}
+
 /**
  * Selecting a DoorTarget for the DoorSource
  *
@@ -257,14 +351,13 @@ function displayDoorProperties(event, nameDoorSource){
 
     // // Prompt "Select"
     option = document.createElement("option");
-    option.text = "Select a destination";
-    option.value = "Select a destination";
+    option.text = "Select a scene";
+    option.value = "Select a scene";
     option.selected = true;
     option.disabled = true;
-
-        // //option.disabled = true;
     popupDoorSelect.add(option);
 
+    // Add doors from other scenes
     var doorsFromOtherScenes = [];
 
     for (var l=0; l<doorsAll.length; l++){
@@ -288,6 +381,7 @@ function displayDoorProperties(event, nameDoorSource){
     popupDoorSelect.add(option);
 
 
+    // Set doorid from existing values
     if (envir.scene.getObjectByName(nameDoorSource).doorName_source)
         jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
 
@@ -332,6 +426,9 @@ function displayDoorProperties(event, nameDoorSource){
     });
 }
 
+/**
+ * Clear Door properties
+ */
 function clearAndUnbindDoorProperties() {
     // Clear past options
 
@@ -344,6 +441,18 @@ function clearAndUnbindDoorProperties() {
     jQuery("#doorid").val( null ).unbind('change');
 
     jQuery("#popupDoorSelect").unbind('change');
+}
+
+
+function clearAndUnbindMicroscopeTextbookProperties(){
+
+
+    var ppSelect = document.getElementById("chemistrySceneSelectComponent");
+
+    for (var i = ppSelect.options.length; i-->0;)
+        ppSelect.options[i] = null;
+
+
 }
 
 /**

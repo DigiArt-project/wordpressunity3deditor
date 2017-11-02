@@ -184,8 +184,6 @@ function putInRecyleBin(nameToRemove){
         scale_factor_z = 1;
 
 
-    console.log(scale_factor_x, scale_factor_y, scale_factor_z);
-
     objectSelected.scale.set(scale_factor_x, scale_factor_y, scale_factor_z);
     objectSelected.isInRecycleBin = true;
 
