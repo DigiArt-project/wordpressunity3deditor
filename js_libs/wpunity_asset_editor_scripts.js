@@ -171,6 +171,7 @@ function wpunity_reset_panels(previewCanvas) {
     jQuery("#objectPreviewTitle").hide();
     jQuery("#moleculeOptionsPanel").hide();
     jQuery("#moleculeFluidPanel").hide();
+    jQuery("#chemistryBoxOptionsPanel").hide();
 }
 
 

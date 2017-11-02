@@ -448,8 +448,35 @@ if($create_new == 0) {
                         <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                             1 = Water like viscosity, bigger values mean thicker liquid.</span>
                         <input type="hidden" id="moleculeFluidViscosityVal" name="moleculeFluidViscosityVal" value="">
+                    </div>
+
+
+                    <div id="chemistryBoxOptionsPanel" style="display: none;">
+                        <h3 class="mdc-typography--title">Known Group</h3>
+
+                        <div id="boxKnownGroupSelect" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                            <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a known group</span>
+                            <div class="mdc-simple-menu mdc-select__menu">
+                                <ul class="mdc-list mdc-simple-menu__items">
+                                    <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" style="pointer-events: none;" tabindex="-1">
+                                        Select a known group
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="knownGroupAlcohol" tabindex="0">
+                                        Alcohol
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="knownGroupKetone" tabindex="0">
+                                        Ketone
+                                    </li>
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="knownGroupVarious" tabindex="0">
+                                        Various
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input id="boxKnownGroupInput" type="hidden">
 
                     </div>
+
 
                 </div>
 
@@ -599,8 +626,7 @@ if($create_new == 0) {
 
                     <h3 class="mdc-typography--title">Physics</h3>
                     <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
-                    Change the terrain physics properties.
-                </span>
+                    Change the terrain physics properties.</span>
 
                     <br>
 
@@ -880,7 +906,7 @@ if($create_new == 0) {
 
         // TODO: Remove also from register and enquire
         //if (game_type_slug !== 'chemistry_games')
-            var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
         //else
         //   var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
 
@@ -951,6 +977,9 @@ if($create_new == 0) {
             var moleculeFunctionalGroupDropdown = document.getElementById('moleculeFunctionalGroupSelect');
             var moleculeFunctionalGroupSelect = MDCSelect.attachTo(moleculeFunctionalGroupDropdown);
 
+            var boxKnownGroupDropdown = document.getElementById('boxKnownGroupSelect');
+            var boxKnownGroupSelect = MDCSelect.attachTo(boxKnownGroupDropdown);
+
 
             // This fires on EDIT
             jQuery( document ).ready(function() {
@@ -968,6 +997,10 @@ if($create_new == 0) {
 
             moleculeFunctionalGroupDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#moleculeFunctionalGroupInput").attr( "value", moleculeFunctionalGroupSelect.selectedOptions[0].getAttribute("id") );
+            });
+
+            boxKnownGroupDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery("#boxKnownGroupInput").attr( "value", boxKnownGroupSelect.selectedOptions[0].getAttribute("id") );
             });
 
             loadFileInputLabel();
@@ -1014,8 +1047,6 @@ if($create_new == 0) {
                 }
 
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
-                console.log(jQuery("input[name=objectTypeRadio]:checked").val());
-
                 loadFileInputLabel();
 
 
@@ -1062,6 +1093,10 @@ if($create_new == 0) {
                     case 'molecule':
                         jQuery("#moleculeOptionsPanel").show();
                         jQuery("#moleculeFluidPanel").show();
+                        break;
+
+                    case 'box':
+                        jQuery("#chemistryBoxOptionsPanel").show();
                         break;
 
                     default:
