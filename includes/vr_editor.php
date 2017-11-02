@@ -315,6 +315,14 @@ echo '</script>';
                 class="mdc-select" style="min-width: 91%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
         </select>
     </div>
+
+    <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
+    <div id="chemistrySceneSelectPopup" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+        <select title="Select a scene to load" id="chemistrySceneSelectComponent" class="mdc-select">
+            <option>First ExamMicro scene</option>
+        </select>
+    </div>
+
 </div>
 
 
@@ -429,8 +437,6 @@ echo '</script>';
             envir.scene.getObjectByName("myTransformControls").visible=true;
 
         envir.scene.getObjectByName("recycleBin").visible=true;
-
-
 
         wpunity_saveSceneAjax();
 
