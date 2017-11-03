@@ -77,6 +77,7 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
+$allMoleculesOfGame = wpunity_get_all_molecules_of_game($project_id);
 
 get_header(); ?>
 

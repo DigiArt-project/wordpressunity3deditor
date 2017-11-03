@@ -1,5 +1,54 @@
 <?php
 
+function wpunity_get_all_molecules_of_game($project_id){
+
+	$game_post = get_post($project_id);
+	$gameSlug = $game_post->post_name;
+	$assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
+	$assetPGameID = $assetPGame->term_id;
+
+	$moleculesIds = array();
+
+	// Define custom query parameters
+	$custom_query_args = array(
+		'post_type' => 'wpunity_asset3d',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'wpunity_asset3d_pgame',
+				'field'    => 'term_id',
+				'terms'    => $assetPGameID,
+			),
+			array(
+				'taxonomy' => 'wpunity_asset3d_cat',
+				'field'    => 'slug',
+				'terms'    => 'molecule',
+			),
+		),
+		'orderby' => 'ID',
+		'order' => 'DESC',
+	);
+
+	$custom_query = new WP_Query( $custom_query_args );
+
+	// Output custom query loop
+	if ( $custom_query->have_posts() ) {
+		while ($custom_query->have_posts()) {
+			$custom_query->the_post();
+			$molecule_id = get_the_ID();
+			$molecule_title = get_the_title();
+
+			$moleculesIds[] = ['moleculeID'=>$molecule_id, 'moleculeName'=>$molecule_title ];
+		}
+	}
+
+	wp_reset_postdata();
+	$wp_query = NULL;
+
+	return $moleculesIds;
+}
+
 function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
 	$sceneIds = [];
