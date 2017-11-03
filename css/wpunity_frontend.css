@@ -192,6 +192,19 @@ i.ButtonIcon {
     float: right;
 }
 
+.ToggleMoleculeBtnStyle {
+    height: 48px;
+    width: 48px;
+    margin: 24px;
+    display: block;
+}
+
+.ToggleMoleculeBtnStyle i {
+    vertical-align: text-top;
+    font-size: 32px;
+}
+
+
 @media screen and (max-width: 479px) {
     .SceneCardDescriptionStyle {
         min-height: 40px;

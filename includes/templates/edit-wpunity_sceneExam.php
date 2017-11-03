@@ -57,7 +57,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			exit;
 		}
 
-	}elseif($scene_type == 'menu'){
+	}elseif($scene_type == 'menu') {
 
 		$post_image =  $_FILES['scene-featured-image'];
 
@@ -65,34 +65,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		$post_login_choice =  esc_attr(strip_tags($_POST['login']));
 		$post_help_choice =  esc_attr(strip_tags($_POST['help']));
 
-		if($post_options_choice){update_post_meta($scene_id, 'wpunity_menu_has_options', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_options', 0);}
-		if($post_login_choice){update_post_meta($scene_id, 'wpunity_menu_has_login', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_login', 0);}
-		if($post_help_choice){update_post_meta($scene_id, 'wpunity_menu_has_help', 1);}else{update_post_meta($scene_id, 'wpunity_menu_has_help', 0);}
-
-		if($post_help_choice){
-			$help_desc = esc_attr(strip_tags($_POST['help-description']));
-			update_post_meta($scene_id, 'wpunity_scene_help_text', $help_desc);
-			$help_image =  $_FILES['help-image'];
-			if($help_image['size']!=0){
-				$attachment_help_id = wpunity_upload_img( $help_image, $scene_id);
-				update_post_meta($scene_id, 'wpunity_scene_helpimg', $attachment_help_id);
-			}
-		}
-
 		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
 		set_post_thumbnail( $scene_id, $attachment_id );
 
 		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
 		exit;
 	}
-
 }
 
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
-$image_size_label = $scene_type === 'credits' ? '512x256' : '350x200' ;
 
 get_header(); ?>
 
@@ -121,12 +105,71 @@ get_header(); ?>
 
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
-    <form name="edit_scene_form" action="" id="edit_scene_form" method="POST" enctype="multipart/form-data">
+    <form name="edit_exam_scene_form" action="" id="edit_exam_scene_form" method="POST" enctype="multipart/form-data">
         <div class="mdc-layout-grid">
 
             <div class="mdc-layout-grid__inner">
 
                 <div class="mdc-layout-grid__cell--span-12">
+
+                    <h2 class="mdc-typography--title">Molecule selector</h2>
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                            Select molecules to insert them into the Exam. The imported items order is reflected to Unity.</span>
+                    <br>
+
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-4">
+
+                            <h2 class="mdc-typography--title">Available molecules</h2>
+
+                            <select multiple size="6" class="mdc-multi-select mdc-list">
+                                <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
+                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
+                                        Molecule 1
+                                    </option>
+                                    <option class="mdc-list-item" id="<?php echo 'molecule-name2' ?>-molecule">
+                                        Molecule 2
+                                    </option>
+                                    <option class="mdc-list-item" id="<?php echo 'molecule-name3' ?>-molecule">
+                                        Molecule 3
+                                    </option>
+
+                                </optgroup>
+                                <option class="mdc-list-divider" role="presentation" disabled />
+                            </select>
+
+                        </div>
+                        <div class="mdc-layout-grid__cell--span-2">
+
+                            <div style="position: relative">
+
+                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
+                                    <i class="material-icons">arrow_forward</i>
+                                </a>
+
+                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
+                                    <i class="material-icons">arrow_back</i>
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <div class="mdc-layout-grid__cell--span-6">
+
+                            <h2 class="mdc-typography--title">Active molecules</h2>
+
+                            <select multiple size="6" class="mdc-multi-select mdc-list">
+                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
+                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
+                                        1. ...
+                                    </option>
+                                </optgroup>
+                                <option class="mdc-list-divider" role="presentation" disabled />
+                            </select>
+                        </div>
+                    </div>
+
+
 
                 </div>
 
