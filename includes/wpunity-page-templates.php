@@ -54,6 +54,7 @@ class wpUnityTemplate {
             '/templates/edit-wpunity_game.php'     => 'WPUnity-Edit Project',
             '/templates/edit-wpunity_scene.php'     => 'WPUnity-Edit 3D Scene',
             '/templates/edit-wpunity_scene2D.php'     => 'WPUnity-Edit 2D Scene',
+            '/templates/edit-wpunity_sceneExam.php'     => 'WPUnity-Edit Exam Scene',
             '/templates/edit-wpunity_asset3D.php'     => 'WPUnity-3D Asset Creator',
         );
 
@@ -221,6 +222,30 @@ function wpunity_create_editScene2DPage() {
         ));
         if ($new_page_id && !is_wp_error($new_page_id)) {
             update_post_meta($new_page_id, '_wp_page_template', '/templates/edit-wpunity_scene2D.php');
+        }
+
+        update_option('hclpage', $new_page_id);
+    }
+}
+
+//==========================================================================================================================================
+
+function wpunity_create_editSceneExamPage() {
+
+    if (! wpunity_get_page_by_slug('wpunity-edit-exam-scene')) {
+        $new_page_id = wp_insert_post(array(
+            'post_title' => 'WPUnity-Edit Exam Scene',
+            'post_type' => 'page',
+            'post_name' => 'wpunity-edit-exam-scene',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_content' => '',
+            'post_status' => 'publish',
+            'post_author' => get_user_by('id', 1)->user_id,
+            'menu_order' => 0,
+        ));
+        if ($new_page_id && !is_wp_error($new_page_id)) {
+            update_post_meta($new_page_id, '_wp_page_template', '/templates/edit-wpunity_sceneExam.php');
         }
 
         update_option('hclpage', $new_page_id);

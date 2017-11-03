@@ -168,6 +168,7 @@ register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
 register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
+register_activation_hook(__FILE__,'wpunity_create_editSceneExamPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
 
 
