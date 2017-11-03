@@ -114,11 +114,12 @@ get_header(); ?>
 
                     <h2 class="mdc-typography--title">Molecule selector</h2>
                     <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
-                            Select molecules to insert them into the Exam. The imported items order is reflected to Unity.</span>
-                    <br>
+                            Select molecules to insert them into the Exam. The active molecules order dictates the sequence of appearance in the Unity game.</span>
+
+                    <div class="WhiteSpaceSeparator"></div>
 
                     <div class="mdc-layout-grid__inner">
-                        <div class="mdc-layout-grid__cell--span-4">
+                        <div class="mdc-layout-grid__cell--span-5">
 
                             <h2 class="mdc-typography--title">Available molecules</h2>
 
@@ -139,22 +140,23 @@ get_header(); ?>
                             </select>
 
                         </div>
-                        <div class="mdc-layout-grid__cell--span-2">
+                        <div class="mdc-layout-grid__cell--span-2" style="position: relative">
 
-                            <div style="position: relative">
 
-                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
+                            <div style="position: absolute; top:120px; width: 100%;">
+
+                                <a type="button" id="moleculeAddBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
                                     <i class="material-icons">arrow_forward</i>
                                 </a>
 
-                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
+                                <a type="button" id="moleculeRemoveBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
                                     <i class="material-icons">arrow_back</i>
                                 </a>
 
-                            </div>
 
+                            </div>
                         </div>
-                        <div class="mdc-layout-grid__cell--span-6">
+                        <div class="mdc-layout-grid__cell--span-5">
 
                             <h2 class="mdc-typography--title">Active molecules</h2>
 
@@ -169,11 +171,10 @@ get_header(); ?>
                         </div>
                     </div>
 
-
-
                 </div>
 
 
+                <input type="hidden" name="active-molecules-input" id="active-molecules-input" value="[]" />
 
                 <div class="mdc-layout-grid__cell--span-12">
 

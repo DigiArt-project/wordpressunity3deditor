@@ -194,8 +194,9 @@ i.ButtonIcon {
 
 .ToggleMoleculeBtnStyle {
     height: 48px;
-    width: 48px;
-    margin: 24px;
+    width: 100%;
+    min-width: 100%;
+    margin: 24px 0 24px 0;
     display: block;
 }
 
@@ -204,6 +205,9 @@ i.ButtonIcon {
     font-size: 32px;
 }
 
+select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-list {
+    width: 100%;
+}
 
 @media screen and (max-width: 479px) {
     .SceneCardDescriptionStyle {
