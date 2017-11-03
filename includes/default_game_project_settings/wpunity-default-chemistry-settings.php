@@ -149,9 +149,9 @@ function wpunity_scenes_types_chemistry_standard_cre(){
         );
     }
 
-    if (!term_exists('Exam', 'wpunity_scene_yaml')) {
+    if (!term_exists('ExamMicro', 'wpunity_scene_yaml')) {
         wp_insert_term(
-            'Exam', // the term
+            'ExamMicro', // the term
             'wpunity_scene_yaml', // the taxonomy
             array(
                 'description' => 'YAML Template for Chemistry Exam scenes',
@@ -160,16 +160,6 @@ function wpunity_scenes_types_chemistry_standard_cre(){
         );
     }
 
-    if (!term_exists('Microworld', 'wpunity_scene_yaml')) {
-        wp_insert_term(
-            'Microworld', // the term
-            'wpunity_scene_yaml', // the taxonomy
-            array(
-                'description' => 'YAML Template for Chemistry Exam scenes',
-                'slug' => 'microworld-chem-yaml',
-            )
-        );
-    }
 }
 
 add_action('create_wpunity_scene_yaml', 'wpunity_scenes_types_chemistry_fields_cre' , $tt_id);
@@ -181,7 +171,6 @@ function wpunity_scenes_types_chemistry_fields_cre($tt_id){
     if($term_insterted->slug == 'wonderaround-lab-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', wpunity_default_value_chemwonderaround_unity_chemistry_get());
         update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
@@ -214,7 +203,6 @@ function wpunity_scenes_types_chemistry_fields_cre($tt_id){
     }elseif($term_insterted->slug == 'credentials-chem-yaml'){
         update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', wpunity_default_value_credits_unity_chemistry_get());
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
@@ -247,7 +235,6 @@ function wpunity_scenes_types_chemistry_fields_cre($tt_id){
     }elseif($term_insterted->slug == 'mainmenu-chem-yaml') {
         update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', wpunity_default_value_mmenu_unity_chemistry_get());
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', wpunity_default_value_options_unity_chemistry_get());
@@ -280,40 +267,6 @@ function wpunity_scenes_types_chemistry_fields_cre($tt_id){
     }elseif($term_insterted->slug == 'exam-chem-yaml') {
         update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', wpunity_default_value_exam_unity_chemistry_get());
-        update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_chem', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_educational_energy', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_wonderaround_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_help_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_login_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_reward_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector2_arch', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_s_selector_title_arch', 'empty');
-    }elseif($term_insterted->slug == 'microworld-chem-yaml') {
-        update_term_meta($tt_id, 'wpunity_yamlmeta_chemistry_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_exam_pat', 'empty');
-        update_term_meta($tt_id, 'wpunity_yamlmeta_microworld_pat', wpunity_default_value_microworld_unity_chemistry_get());
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_mainmenu_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_credentials_chem', 'empty');
         update_term_meta($tt_id, 'wpunity_yamlmeta_s_options_chem', 'empty');
@@ -356,7 +309,6 @@ function wpunity_scenes_taxyaml_customFields_chemistry($tag) {
 
     $term_meta_chemistry_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_chemistry_pat', true );
     $term_meta_exam_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_exam_pat', true );
-    $term_meta_microworld_pat = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_microworld_pat', true );
 
     $term_meta_s_mainmenu_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_mainmenu_chem', true );
     $term_meta_s_credentials_chem = get_term_meta( $tag->term_id, 'wpunity_yamlmeta_s_credentials_chem', true );
@@ -395,15 +347,6 @@ function wpunity_scenes_taxyaml_customFields_chemistry($tag) {
         </th>
         <td>
             <textarea name="wpunity_yamlmeta_exam_pat" id="wpunity_yamlmeta_exam_pat"><?php echo $term_meta_exam_pat ? $term_meta_exam_pat : ''; ?></textarea>
-        </td>
-    </tr>
-
-    <tr class="form-field term-microworld_chem">
-        <th scope="row" valign="top">
-            <label for="wpunity_yamlmeta_microworld_pat">Microworld .unity pattern</label>
-        </th>
-        <td>
-            <textarea name="wpunity_yamlmeta_microworld_pat" id="wpunity_yamlmeta_microworld_pat"><?php echo $term_meta_microworld_pat ? $term_meta_microworld_pat : ''; ?></textarea>
         </td>
     </tr>
 
@@ -560,15 +503,6 @@ function wpunity_scenes_taxyaml_customFields_chemistry_save( $term_id ) {
             update_term_meta($term_id, 'wpunity_yamlmeta_exam_pat', wpunity_default_value_exam_unity_chemistry_get());
         }else{
             update_term_meta($term_id, 'wpunity_yamlmeta_exam_pat', $term_meta_exam_pat);
-        }
-    }
-
-    if ( isset( $_POST['wpunity_yamlmeta_microworld_pat'] ) ) {
-        $term_meta_microworld_pat = $_POST['wpunity_yamlmeta_microworld_pat'];
-        if($term_meta_microworld_pat == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_microworld_pat', wpunity_default_value_microworld_unity_chemistry_get());
-        }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_microworld_pat', $term_meta_microworld_pat);
         }
     }
 

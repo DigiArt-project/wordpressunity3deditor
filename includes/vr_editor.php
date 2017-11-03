@@ -294,8 +294,10 @@ echo '</script>';
     </div>
 
 
+
     <!-- Interface for Changing the door properties -->
     <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
@@ -317,9 +319,15 @@ echo '</script>';
     </div>
 
     <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
-    <div id="chemistrySceneSelectPopup" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
-        <select title="Select a scene to load" id="chemistrySceneSelectComponent" class="mdc-select">
-            <option>First ExamMicro scene</option>
+    <div id="chemistrySceneSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbindMicroscopeTextbookProperties(); return false;'>
+            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+        </a>
+
+        <i title="Select a scene to load" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>
+        <select title="Select a scene" id="chemistrySceneSelectComponent" class="mdc-select">
         </select>
     </div>
 

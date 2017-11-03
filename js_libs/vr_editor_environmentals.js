@@ -419,24 +419,30 @@ class vr_editor_environmentals {
      */
     setLight() {
 
-        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.9 ); //THREE.DirectionalLight( 0xffffff, 1 );
+
+        this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightSun.position.set( 0, 500, 0 );
+        this.lightSun.name = "mylightSun";
+        this.scene.add(this.lightSun);
+        //this.scene.add( new THREE.DirectionalLightHelper( this.lightSun, 1 ));
+
+
+        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 ); //THREE.DirectionalLight( 0xffffff, 1 );
         this.lightOrbit.position.copy( this.cameraOrbit.position ); //.set( 500, 500, 500 );
         this.lightOrbit.name = "mylightOrbit";
         this.scene.add(this.lightOrbit);
+        //this.scene.add( new THREE.DirectionalLightHelper( this.lightOrbit, 150 ));
 
-        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.1, 1000, 2 ); //THREE.DirectionalLight( 0xffffff, 1 );
 
+        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.8, 1000, 0.1 ); //THREE.DirectionalLight( 0xffffff, 1 );
         this.lightAvatar.name = "mylightAvatar";
-
         this.lightAvatar.position.x =  this.cameraAvatar.position.x;
         this.lightAvatar.position.y =  this.cameraAvatar.position.y;
         this.lightAvatar.position.z =  this.cameraAvatar.position.z;
-
-
         this.scene.add(this.lightAvatar);
+        //this.scene.add( new THREE.PointLightHelper( this.lightAvatar, 1 ));
 
 
-        //this.scene.add( new THREE.PointLightHelper( this.lightAvatar, 0.2 ));
 
 
     }
