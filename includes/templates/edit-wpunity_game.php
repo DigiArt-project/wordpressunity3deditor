@@ -65,6 +65,7 @@ $game_type_obj = wpunity_return_game_type($project_id);
 
 $editscenePage = wpunity_getEditpage('scene');
 $editscene2DPage = wpunity_getEditpage('scene2D');
+$editsceneExamPage = wpunity_getEditpage('sceneExam');
 $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
 $allGamesPage = wpunity_getEditpage('allgames');
@@ -279,6 +280,7 @@ if ( $custom_query->have_posts() ) :?>
 
 							//create permalink depending the scene yaml category
 							$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+                            if($scene_type == 'sceneExam' ){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 							$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
 							?>
                             <a href="<?php echo $edit_page_link; ?>">
