@@ -99,9 +99,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 		//If the Asset has created (doesnt returns 0) -> Gather Info for extra fields
 		if($asset_newID != 0) {
-			wpunity_create_asset_3DFilesExtra_frontend($asset_newID,$assetTitleForm,$gameSlug);
+            $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+            if($assetCatTerm->slug == 'molecule') {
+                wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
+            }else{
+                wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
+            }
 
-			$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
 			if($assetCatTerm->slug == 'consumer') {
 				wpunity_create_asset_consumerExtra_frontend($asset_newID);
 			}elseif($assetCatTerm->slug == 'terrain') {
@@ -112,7 +116,9 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 				wpunity_create_asset_poisITExtra_frontend($asset_newID);
 			}elseif ($assetCatTerm->slug == 'pois_video') {
 				wpunity_create_asset_poisVideoExtra_frontend($asset_newID);
-			}
+			}elseif ($assetCatTerm->slug == 'molecule') {
+                wpunity_create_asset_moleculeExtra_frontend($asset_newID);
+            }
 		}
 		if($scene_id == 0){wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));}
 		else{wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );}
@@ -429,7 +435,7 @@ if($create_new == 0) {
                                 </ul>
                             </div>
                         </div>
-                        <input id="moleculeFunctionalGroupInput" type="hidden">
+                        <input id="moleculeFunctionalGroupInput" name="moleculeFunctionalGroupInput" type="hidden">
 
                         <hr class="WhiteSpaceSeparator">
 
@@ -611,7 +617,7 @@ if($create_new == 0) {
                         </div>
 
                     </div>
-                    <input type="hidden" id="moleculeFluidColorVal">
+                    <input type="hidden" id="moleculeFluidColorVal" name="moleculeFluidColorVal">
                 </div>
             </div>
 
