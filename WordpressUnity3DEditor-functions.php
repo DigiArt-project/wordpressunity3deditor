@@ -218,6 +218,7 @@ function my_myme_types($mime_types){
 	$mime_types['ogv'] = 'video/ogv';
 	$mime_types['mtl'] = 'text/plain';
 	$mime_types['mat'] = 'text/plain';
+	$mime_types['pdb'] = 'text/plain';
 	return $mime_types;
 }
 

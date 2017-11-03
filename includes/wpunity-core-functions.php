@@ -270,6 +270,19 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
 	update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
 }
 
+function wpunity_create_asset_moleculeExtra_frontend($asset_newID){
+	$moleculeChemicalType = $_POST['moleculeChemicalType'];
+	$moleculeFunctionalGroupInput = $_POST['moleculeFunctionalGroupInput'];
+	$moleculeFluidViscosity = floatval($_POST['molecule-fluid-viscosity-slider-label']);
+	$moleculeFluidColorVal = $_POST['moleculeFluidColorVal'];
+
+	update_post_meta($asset_newID, 'wpunity_molecule_ChemicalTypeVal', $moleculeChemicalType);
+	update_post_meta($asset_newID, 'wpunity_molecule_FunctionalGroupVal', $moleculeFunctionalGroupInput);
+	update_post_meta($asset_newID, 'wpunity_molecule_FluidViscosityVal', $moleculeFluidViscosity);
+	update_post_meta($asset_newID, 'wpunity_molecule_FluidColorVal', $moleculeFluidColorVal);
+
+}
+
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
 	$totalTextures = 0; //counter in order to know how much textures we have
@@ -286,10 +299,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 	$screenShotFile = $_POST['sshotFileInput'];
 	$mtl_content = $_POST['mtlFileInput'];
 	$obj_content = $_POST['objFileInput'];
-
-	// TODO: Stathi continue from here to store pdb into asset CPT metadata
-    $pdb_content = $_POST['pdbFileInput'];
-
 
     // Remove this debugging piece of code in the end
     $fh = fopen("output_mtlContent.txt", "w");
@@ -339,6 +348,20 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 	//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
 	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
+}
+
+function wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug){
+	$pdb_content = $_POST['pdbFileInput'];
+	$screenShotFile = $_POST['sshotFileInput'];
+
+	// PDB
+	$pdbFile_id = wpunity_upload_AssetText($pdb_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
+
+	// SCREENSHOT
+	$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $assetTitleForm, $asset_newID, $gameSlug);
+
+	update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
+	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 }
 
 /****************************************************************************************************/
