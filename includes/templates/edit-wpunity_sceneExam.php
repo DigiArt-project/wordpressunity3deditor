@@ -43,6 +43,8 @@ require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
 $molecules = wpunity_get_all_molecules_of_game($project_id);
+$moleculesSavedfield = get_post_meta($scene_id, 'wpunity_input_molecules');
+$moleculesSaved = json_decode($moleculesSavedfield[0]);
 
 get_header(); ?>
 
