@@ -331,6 +331,22 @@ echo '</script>';
         </select>
     </div>
 
+
+    <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
+<!--    <div id="chemistryBoxSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">-->
+<!---->
+<!--        <a style="float: right;" type="button" class="mdc-theme--primary"-->
+<!--           onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>-->
+<!--            <i class="material-icons" style="cursor: pointer; float: right;">close</i>-->
+<!--        </a>-->
+<!---->
+<!--        <i title="Select a functional Category label" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>-->
+<!--        <select title="Select a functional category label" id="chemistryBoxSelectComponent" class="mdc-select">-->
+<!--        </select>-->
+<!--    </div>-->
+
+
+
 </div>
 
 

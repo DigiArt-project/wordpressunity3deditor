@@ -305,30 +305,20 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     // On popup change
     jQuery("#chemistrySceneSelectComponent").change(function(e) {
 
-        console.log("1");
-
         // Get the value
         var valTargetScene = jQuery("#chemistrySceneSelectComponent").val();
 
         if (!valTargetScene)
             return;
 
-        console.log("2");
-
         if (valTargetScene && valTargetScene != "Cancel" && valTargetScene != "Select") {
 
-            envir.scene.getObjectByName(nameMicroscopeTextbookSource).sceneName_target = sceneName_Target.trim();
+            envir.scene.getObjectByName(nameMicroscopeTextbookSource).sceneName_target = valTargetScene.trim();
         }
         jQuery("#chemistrySceneSelectPopupDiv").hide();
 
-        console.log("3");
-
         clearAndUnbindMicroscopeTextbookProperties();
     });
-
-
-
-
 
 }
 
@@ -454,6 +444,14 @@ function clearAndUnbindMicroscopeTextbookProperties(){
 
 
 }
+
+
+function clearAndUnbindBoxProperties(){
+
+
+
+}
+
 
 /**
  *
