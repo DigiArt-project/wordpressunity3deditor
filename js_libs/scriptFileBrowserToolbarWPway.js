@@ -13,6 +13,8 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit)
 
             responseRecords = responseRecords.items;
 
+
+
             file_Browsing_By_DB(responseRecords, gameProjectSlug, urlforAssetEdit);
         },
         error : function(xhr, ajaxOptions, thrownError){
@@ -127,6 +129,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         } else  {
             filemanager.find('.nothingfound').hide();
 
+            console.log(enlistData);
+
             for (i = 0; i < enlistData.length; i++) {
 
                 f = enlistData[i];
@@ -135,8 +139,11 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                 name = escapeHTML(f.name);
 
+                if(f.categoryName=="Molecule")
+                    continue;
+
                 if(!f.objPath)
-                    return;
+                     continue;
 
                 var fileType = f.objPath.split('.').pop();
 
@@ -147,6 +154,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 if (fileType.toUpperCase() === 'JPG' || fileType.toUpperCase()==='PNG') {
                     imgFileExtension = '';
                 }
+
                 // Check if icon of obj exists  file.obj.png or file.obj.jpg
                 else if (fileType.toUpperCase() === 'OBJ') {
                     imgFileExtension = '.jpg';
@@ -155,7 +163,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 if (!f.screenImagePath) {
                     f.screenImagePath = f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) + 'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
                 }
-
 
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
