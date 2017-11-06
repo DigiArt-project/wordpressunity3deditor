@@ -77,7 +77,7 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
-$allMoleculesOfGame = wpunity_get_all_molecules_of_game($project_id);
+$molecules = wpunity_get_all_molecules_of_game($project_id);
 
 get_header(); ?>
 
@@ -115,66 +115,67 @@ get_header(); ?>
 
                     <h2 class="mdc-typography--title">Molecule selector</h2>
                     <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
-                            Select molecules to insert them into the Exam. The imported items order is reflected to Unity.</span>
-                    <br>
+                            Select molecules to insert them into the Exam. The active molecules order dictates the sequence of appearance in the Unity game.</span>
+
+                    <div class="WhiteSpaceSeparator"></div>
 
                     <div class="mdc-layout-grid__inner">
-                        <div class="mdc-layout-grid__cell--span-4">
+                        <div class="mdc-layout-grid__cell--span-5">
 
                             <h2 class="mdc-typography--title">Available molecules</h2>
 
-                            <select multiple size="6" class="mdc-multi-select mdc-list">
-                                <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
-                                        Molecule 1
-                                    </option>
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name2' ?>-molecule">
-                                        Molecule 2
-                                    </option>
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name3' ?>-molecule">
-                                        Molecule 3
-                                    </option>
+                            <div class="select-manager">
 
-                                </optgroup>
-                                <option class="mdc-list-divider" role="presentation" disabled />
-                            </select>
+                                <select title="Available Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="allMoleculesSelectManager">
+                                    <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
 
-                        </div>
-                        <div class="mdc-layout-grid__cell--span-2">
+										<?php foreach ($molecules as $molecule) { ?>
 
-                            <div style="position: relative">
+                                            <option class="mdc-list-item" data-molecule-id="<?php echo $molecule['moleculeID']; ?>" id="<?php echo 'molecule-'.$molecule['moleculeID']; ?>">
+												<?php echo $molecule['moleculeName']; ?>
+                                            </option>
 
-                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
-                                    <i class="material-icons">arrow_forward</i>
-                                </a>
+										<?php } ?>
 
-                                <a type="button" id="" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
-                                    <i class="material-icons">arrow_back</i>
-                                </a>
-
+                                    </optgroup>
+                                    <option class="mdc-list-divider" role="presentation" disabled />
+                                </select>
                             </div>
 
                         </div>
-                        <div class="mdc-layout-grid__cell--span-6">
+                        <div class="mdc-layout-grid__cell--span-2" style="position: relative">
+
+
+                            <div style="position: absolute; top:120px; width: 100%;">
+
+                                <a type="button" id="moleculeAddBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
+                                    <i class="material-icons">arrow_forward</i>
+                                </a>
+
+                                <a type="button" id="moleculeRemoveBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
+                                    <i class="material-icons">arrow_back</i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="mdc-layout-grid__cell--span-5">
 
                             <h2 class="mdc-typography--title">Active molecules</h2>
 
-                            <select multiple size="6" class="mdc-multi-select mdc-list">
+                            <select title="Active Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="selectedMoleculesSelectManager">
                                 <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
-                                        1. ...
-                                    </option>
+
                                 </optgroup>
                                 <option class="mdc-list-divider" role="presentation" disabled />
                             </select>
                         </div>
                     </div>
 
-
-
                 </div>
 
 
+                <input type="hidden" name="active-molecules-input" id="active-molecules-input" value="[]" />
 
                 <div class="mdc-layout-grid__cell--span-12">
 
@@ -197,8 +198,25 @@ get_header(); ?>
 
         (function() {
 
+            jQuery( "#moleculeAddBtn" ).click(function() {
+                jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
+                updateSelectedMolecules();
 
+            });
 
+            jQuery( "#moleculeRemoveBtn" ).click(function() {
+                jQuery('#selectedMoleculesSelectManager option:selected').remove();
+                updateSelectedMolecules();
+            });
+
+            function updateSelectedMolecules() {
+
+                var values = jQuery.map(jQuery('#activeMoleculesGroup option'), function(el) {
+                    return {name: jQuery(el).val(), id: jQuery(el).data('molecule-id')}
+                });
+
+                jQuery('#active-molecules-input').val(JSON.stringify(values));
+            }
         })();
 
     </script>
