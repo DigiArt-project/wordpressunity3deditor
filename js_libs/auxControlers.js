@@ -165,18 +165,8 @@ function onMouseDownSelect( event ) {
         envir.renderer.setClearColor( 0xffffff, 0.9 );
 
 
-
-
-        if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
-            displayDoorProperties(event, nameL);
-
-
-        if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
-                                  arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
-            displayMicroscopeTextbookProperties(event, nameL);
-
-
-
+        //  Check for Door, MicroscopeTextbook, Box
+        activeOverides(event, arrNameObjInter, nameL );
 
 
 
@@ -240,9 +230,8 @@ function onMouseDownSelect( event ) {
                 envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
                 envir.renderer.setClearColor( 0xffffff, 0.9 );
 
-                // Name of door should be added
-                if (event.button == 1 && arrNameObjInter[nameL].categoryName == 'Door')
-                    displayDoorProperties(event, nameL);
+                //  Check for Door, MicroscopeTextbook, Box
+                activeOverides(event, arrNameObjInter, nameL );
 
             }
             jQuery("#popUpDiv").hide();
@@ -251,9 +240,117 @@ function onMouseDownSelect( event ) {
 }// onMouseDown
 
 
+function activeOverides(event, arrNameObjInter, nameL ){
 
 
+    if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
+        displayDoorProperties(event, nameL);
+
+    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
+        arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
+        displayMicroscopeTextbookProperties(event, nameL);
+
+    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Box') ) // Middle button show also properties
+        displayBoxProperties(event, nameL);
+
+}
+
+
+/**
+ *  Box label set
+ *
+ */
+function displayBoxProperties(event, nameBoxSource){
+
+    // Save the previous Box values (in case of  direct mouse click on another Box)
+    jQuery("#chemistryBoxComponent").trigger("change");
+
+
+    clearAndUnbindBoxProperties();
+
+    var ppDiv = document.getElementById("chemistryBoxPopupDiv");
+    var ppSelect = document.getElementById("chemistryBoxComponent");
+
+    // Show Selection
+    jQuery("#chemistryBoxPopupDiv").show();
+
+    ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add options
+    var option;
+
+    // Prompt "Select"
+    option = document.createElement("option");
+    option.text = "Select a functional group";
+    option.value = "Select a functional group";
+    option.selected = true;
+    option.disabled = true;
+    ppSelect.add(option);
+
+    // Add available Functional Groups from database
+    var availFunctionalGroups = ['None', 'Alcohol', 'Ketone'];
+
+
+    // Add options for each intersected object
+    for (var fgroup of availFunctionalGroups ) {
+        option = document.createElement("option");
+        option.text = fgroup;
+        option.value = fgroup;
+        option.style.background = "#fff";
+        ppSelect.add(option);
+    }
+
+    // - Prompt "Cancel" -
+    option = document.createElement("option");
+    option.text = "Cancel";
+    option.value = "Cancel";
+    option.style.background = "#b7afaa";
+    ppSelect.add(option);
+    // -------------------
+
+    // Set from saved value
+    // if(envir.scene.getObjectByName(nameDoorSource).doorName_target)
+    //     jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
+    //         envir.scene.getObjectByName(nameDoorSource).sceneName_target );
+
+    // mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
+
+    // On popup change
+    jQuery("#chemistryBoxComponent").change(function(e) {
+
+        // Get the value
+        var valfgroup = jQuery("#chemistryBoxComponent").val();
+
+        if (!valfgroup)
+            return;
+
+        if (valfgroup && valfgroup != "Cancel" && valfgroup != "Select") {
+
+            envir.scene.getObjectByName(nameBoxSource).chemical_functional_group = valfgroup.trim();
+        }
+        jQuery("#chemistryBoxPopupDiv").hide();
+
+        clearAndUnbindBoxProperties();
+    });
+
+
+
+
+}
+
+
+/**
+ *  Microscope and Textbook
+ *
+ * @param event
+ * @param nameMicroscopeTextbookSource
+ */
 function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource) {
+
+
+    // Save the previous MicroscopeTextbook values (in case of  direct mouse click on another microscope or textbook)
+    jQuery("#chemistrySceneSelectComponent").trigger("change");
 
     clearAndUnbindMicroscopeTextbookProperties();
 
@@ -299,6 +396,13 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     option.style.background = "#b7afaa";
     ppSelect.add(option);
     // -------------------
+
+    // Set from saved value
+    // if(envir.scene.getObjectByName(nameDoorSource).doorName_target)
+    //     jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
+    //         envir.scene.getObjectByName(nameDoorSource).sceneName_target );
+
+    // mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
 
 
@@ -436,18 +540,24 @@ function clearAndUnbindDoorProperties() {
 
 function clearAndUnbindMicroscopeTextbookProperties(){
 
-
     var ppSelect = document.getElementById("chemistrySceneSelectComponent");
 
     for (var i = ppSelect.options.length; i-->0;)
         ppSelect.options[i] = null;
 
-
+    jQuery("#chemistrySceneSelectComponent").unbind('change');
 }
 
 
 function clearAndUnbindBoxProperties(){
 
+    var ppSelect = document.getElementById("chemistryBoxComponent");
+
+    for (var i = ppSelect.options.length; i-->0;)
+        ppSelect.options[i] = null;
+
+
+    jQuery("#chemistryBoxComponent").unbind('change');
 
 
 }

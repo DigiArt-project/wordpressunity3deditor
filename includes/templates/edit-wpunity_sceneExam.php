@@ -30,47 +30,12 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+    $input_molecules = $_POST['active-molecules-input'];
+    update_post_meta($scene_id, 'wpunity_input_molecules', $input_molecules);
 
-	if($scene_type == 'credits'){
-		$post_content = esc_attr(strip_tags($_POST['scene-description']));
-		$post_image =  $_FILES['scene-featured-image'];
-
-		$scene_information = array(
-			'ID' => $scene_id,
-			'post_content' => $post_content,
-		);
-
-		$post_id = wp_update_post( $scene_information, true );
-
-		if (is_wp_error($post_id)) {
-			$errors = $post_id->get_error_messages();
-			foreach ($errors as $error) {
-				echo $error;
-			}
-		}
-
-		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
-		set_post_thumbnail( $scene_id, $attachment_id );
-
-		if($post_id){
-			wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-			exit;
-		}
-
-	}elseif($scene_type == 'menu') {
-
-		$post_image =  $_FILES['scene-featured-image'];
-
-		$post_options_choice =  esc_attr(strip_tags($_POST['options']));
-		$post_login_choice =  esc_attr(strip_tags($_POST['login']));
-		$post_help_choice =  esc_attr(strip_tags($_POST['help']));
-
-		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
-		set_post_thumbnail( $scene_id, $attachment_id );
-
-		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-		exit;
-	}
+    wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+    exit;
+	
 }
 
 wp_enqueue_media($scene_post->ID);
