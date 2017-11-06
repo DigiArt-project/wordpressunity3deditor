@@ -165,18 +165,8 @@ function onMouseDownSelect( event ) {
         envir.renderer.setClearColor( 0xffffff, 0.9 );
 
 
-
-
-        if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
-            displayDoorProperties(event, nameL);
-
-
-        if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
-                                  arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
-            displayMicroscopeTextbookProperties(event, nameL);
-
-
-
+        //  Check for Door, MicroscopeTextbook, Box
+        activeOverides(event, arrNameObjInter, nameL );
 
 
 
@@ -240,15 +230,30 @@ function onMouseDownSelect( event ) {
                 envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
                 envir.renderer.setClearColor( 0xffffff, 0.9 );
 
-                // Name of door should be added
-                if (event.button == 1 && arrNameObjInter[nameL].categoryName == 'Door')
-                    displayDoorProperties(event, nameL);
+                //  Check for Door, MicroscopeTextbook, Box
+                activeOverides(event, arrNameObjInter, nameL );
 
             }
             jQuery("#popUpDiv").hide();
         });
     }
 }// onMouseDown
+
+
+function activeOverides(event, arrNameObjInter, nameL ){
+
+
+    if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
+        displayDoorProperties(event, nameL);
+
+    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
+        arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
+        displayMicroscopeTextbookProperties(event, nameL);
+
+    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Box') ) // Middle button show also properties
+        displayBoxProperties(event, nameL);
+
+}
 
 
 /**
@@ -398,6 +403,7 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     //         envir.scene.getObjectByName(nameDoorSource).sceneName_target );
 
     // mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
+
 
 
     // On popup change
