@@ -136,7 +136,6 @@ get_header(); ?>
                                             </option>
 
 										<?php } ?>
-
                                     </optgroup>
                                     <option class="mdc-list-divider" role="presentation" disabled />
                                 </select>
@@ -199,8 +198,28 @@ get_header(); ?>
         (function() {
 
             jQuery( "#moleculeAddBtn" ).click(function() {
-                jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
-                updateSelectedMolecules();
+
+                var availableMolecules = [];
+                var activeMolecules = [];
+
+                // Populate the two lists;
+                jQuery("#allMoleculesSelectManager option").each(function() {
+                    if(this.dataset.moleculeId) {
+                        availableMolecules.push(parseInt(this.dataset.moleculeId, 10));
+                    }
+                });
+                jQuery("#selectedMoleculesSelectManager option").each(function() {
+                    if(this.dataset.moleculeId) {
+                        activeMolecules.push(parseInt(this.dataset.moleculeId, 10));
+                    }
+                });
+
+                // Intersect 2 arrays in destructive manner (faster)
+                // If no intersection in all xchecks, then add item
+                if (intersection_destructive(availableMolecules, activeMolecules).length === 0) {
+                    jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
+                    updateSelectedMolecules();
+                }
 
             });
 
@@ -212,12 +231,35 @@ get_header(); ?>
             function updateSelectedMolecules() {
 
                 var values = jQuery.map(jQuery('#activeMoleculesGroup option'), function(el) {
-                    return {name: jQuery(el).val(), id: jQuery(el).data('molecule-id')}
+
+                    var id = jQuery(el).data('molecule-id');
+
+                    return {
+                        name: jQuery(el).val(),
+                        id: id
+                    }
                 });
 
                 jQuery('#active-molecules-input').val(JSON.stringify(values));
             }
         })();
+
+        function intersection_destructive(a, b)
+        {
+            var result = [];
+            while( a.length > 0 && b.length > 0 )
+            {
+                if      (a[0] < b[0] ){ a.shift(); }
+                else if (a[0] > b[0] ){ b.shift(); }
+                else /* they're equal */
+                {
+                    result.push(a.shift());
+                    b.shift();
+                }
+            }
+
+            return result;
+        }
 
     </script>
 
