@@ -77,7 +77,7 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
-$allMoleculesOfGame = wpunity_get_all_molecules_of_game($project_id);
+$molecules = wpunity_get_all_molecules_of_game($project_id);
 
 get_header(); ?>
 
@@ -124,21 +124,23 @@ get_header(); ?>
 
                             <h2 class="mdc-typography--title">Available molecules</h2>
 
-                            <select multiple size="6" class="mdc-multi-select mdc-list">
-                                <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
-                                        Molecule 1
-                                    </option>
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name2' ?>-molecule">
-                                        Molecule 2
-                                    </option>
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name3' ?>-molecule">
-                                        Molecule 3
-                                    </option>
+                            <div class="select-manager">
 
-                                </optgroup>
-                                <option class="mdc-list-divider" role="presentation" disabled />
-                            </select>
+                                <select title="Available Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="allMoleculesSelectManager">
+                                    <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
+
+										<?php foreach ($molecules as $molecule) { ?>
+
+                                            <option class="mdc-list-item" data-molecule-id="<?php echo $molecule['moleculeID']; ?>" id="<?php echo 'molecule-'.$molecule['moleculeID']; ?>">
+												<?php echo $molecule['moleculeName']; ?>
+                                            </option>
+
+										<?php } ?>
+
+                                    </optgroup>
+                                    <option class="mdc-list-divider" role="presentation" disabled />
+                                </select>
+                            </div>
 
                         </div>
                         <div class="mdc-layout-grid__cell--span-2" style="position: relative">
@@ -161,11 +163,9 @@ get_header(); ?>
 
                             <h2 class="mdc-typography--title">Active molecules</h2>
 
-                            <select multiple size="6" class="mdc-multi-select mdc-list">
+                            <select title="Active Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="selectedMoleculesSelectManager">
                                 <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
-                                    <option class="mdc-list-item" id="<?php echo 'molecule-name' ?>-molecule">
-                                        1. ...
-                                    </option>
+
                                 </optgroup>
                                 <option class="mdc-list-divider" role="presentation" disabled />
                             </select>
@@ -198,8 +198,25 @@ get_header(); ?>
 
         (function() {
 
+            jQuery( "#moleculeAddBtn" ).click(function() {
+                jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
+                updateSelectedMolecules();
 
+            });
 
+            jQuery( "#moleculeRemoveBtn" ).click(function() {
+                jQuery('#selectedMoleculesSelectManager option:selected').remove();
+                updateSelectedMolecules();
+            });
+
+            function updateSelectedMolecules() {
+
+                var values = jQuery.map(jQuery('#activeMoleculesGroup option'), function(el) {
+                    return {name: jQuery(el).val(), id: jQuery(el).data('molecule-id')}
+                });
+
+                jQuery('#active-molecules-input').val(JSON.stringify(values));
+            }
         })();
 
     </script>
