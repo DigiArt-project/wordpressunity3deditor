@@ -30,12 +30,12 @@ $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-    $input_molecules = $_POST['active-molecules-input'];
-    update_post_meta($scene_id, 'wpunity_input_molecules', $input_molecules);
+	$input_molecules = $_POST['active-molecules-input'];
+	update_post_meta($scene_id, 'wpunity_input_molecules', $input_molecules);
 
-    wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-    exit;
-	
+	wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+	exit;
+
 }
 
 wp_enqueue_media($scene_post->ID);
@@ -89,22 +89,16 @@ get_header(); ?>
 
                             <h2 class="mdc-typography--title">Available molecules</h2>
 
-                            <div class="select-manager">
-
-                                <select title="Available Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="allMoleculesSelectManager">
-                                    <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
-
-										<?php foreach ($molecules as $molecule) { ?>
-
-                                            <option class="mdc-list-item" data-molecule-id="<?php echo $molecule['moleculeID']; ?>" id="<?php echo 'molecule-'.$molecule['moleculeID']; ?>">
-												<?php echo $molecule['moleculeName']; ?>
-                                            </option>
-
-										<?php } ?>
-                                    </optgroup>
-                                    <option class="mdc-list-divider" role="presentation" disabled />
-                                </select>
-                            </div>
+                            <select title="Available Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="allMoleculesSelectManager">
+                                <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
+									<?php foreach ($molecules as $molecule) { ?>
+                                        <option class="mdc-list-item" data-molecule-id="<?php echo $molecule['moleculeID']; ?>" id="<?php echo 'molecule-'.$molecule['moleculeID']; ?>">
+											<?php echo $molecule['moleculeName']; ?>
+                                        </option>
+									<?php } ?>
+                                </optgroup>
+                                <option class="mdc-list-divider" role="presentation" disabled />
+                            </select>
 
                         </div>
                         <div class="mdc-layout-grid__cell--span-2" style="position: relative">
@@ -128,9 +122,7 @@ get_header(); ?>
                             <h2 class="mdc-typography--title">Active molecules</h2>
 
                             <select title="Active Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="selectedMoleculesSelectManager">
-                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
-
-                                </optgroup>
+                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup"></optgroup>
                                 <option class="mdc-list-divider" role="presentation" disabled />
                             </select>
                         </div>
