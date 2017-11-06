@@ -43,8 +43,8 @@ require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
 $molecules = wpunity_get_all_molecules_of_game($project_id);
-$moleculesSavedfield = get_post_meta($scene_id, 'wpunity_input_molecules');
-$moleculesSaved = json_decode($moleculesSavedfield[0]);
+$savedMolecules = get_post_meta($scene_id, 'wpunity_input_molecules');
+$savedMolecules = json_decode($savedMolecules[0]);
 
 get_header(); ?>
 
@@ -124,7 +124,16 @@ get_header(); ?>
                             <h2 class="mdc-typography--title">Active molecules</h2>
 
                             <select title="Active Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="selectedMoleculesSelectManager">
-                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup"></optgroup>
+                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
+									<?php if(!empty($savedMolecules)) {
+										foreach ($savedMolecules as $savedMolecule) { ?>
+                                            <option class="mdc-list-item" data-molecule-id="<?php echo $savedMolecule->id; ?>" id="<?php echo 'molecule-'.$savedMolecule->id; ?>">
+												<?php echo $savedMolecule->name; ?>
+                                            </option>
+
+										<?php } ?>
+									<?php } ?>
+                                </optgroup>
                                 <option class="mdc-list-divider" role="presentation" disabled />
                             </select>
                         </div>
@@ -158,29 +167,24 @@ get_header(); ?>
 
             jQuery( "#moleculeAddBtn" ).click(function() {
 
-                var availableMolecules = [];
-                var activeMolecules = [];
+                /*var activeMolecules = [];
+                var selectedMolecules = [];
 
-                // Populate the two lists;
-                jQuery("#allMoleculesSelectManager option").each(function() {
+                jQuery("#allMoleculesSelectManager option:selected").each(function() {
                     if(this.dataset.moleculeId) {
-                        availableMolecules.push(parseInt(this.dataset.moleculeId, 10));
+                        selectedMolecules.push(parseInt(this.dataset.moleculeId, 10));
                     }
                 });
                 jQuery("#selectedMoleculesSelectManager option").each(function() {
                     if(this.dataset.moleculeId) {
                         activeMolecules.push(parseInt(this.dataset.moleculeId, 10));
                     }
-                });
+                });*/
 
-                // Intersect 2 arrays in destructive manner (faster)
-                // If no intersection in all xchecks, then add item
-                if (intersection_destructive(availableMolecules, activeMolecules).length === 0) {
-                    jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
-                    updateSelectedMolecules();
-                }
-
+                jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
+                updateSelectedMolecules();
             });
+
 
             jQuery( "#moleculeRemoveBtn" ).click(function() {
                 jQuery('#selectedMoleculesSelectManager option:selected').remove();
@@ -202,23 +206,6 @@ get_header(); ?>
                 jQuery('#active-molecules-input').val(JSON.stringify(values));
             }
         })();
-
-        function intersection_destructive(a, b)
-        {
-            var result = [];
-            while( a.length > 0 && b.length > 0 )
-            {
-                if      (a[0] < b[0] ){ a.shift(); }
-                else if (a[0] > b[0] ){ b.shift(); }
-                else /* they're equal */
-                {
-                    result.push(a.shift());
-                    b.shift();
-                }
-            }
-
-            return result;
-        }
 
     </script>
 
