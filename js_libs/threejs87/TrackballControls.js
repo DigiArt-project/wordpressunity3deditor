@@ -217,7 +217,10 @@ THREE.TrackballControls = function ( object, domElement ) {
 
             if ( factor !== 1.0 && factor > 0.0 ) {
 
+
+
                 _eye.multiplyScalar( factor );
+
 
             }
 
@@ -226,6 +229,8 @@ THREE.TrackballControls = function ( object, domElement ) {
                 _zoomStart.copy( _zoomEnd );
 
             } else {
+
+
 
                 _zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor;
 

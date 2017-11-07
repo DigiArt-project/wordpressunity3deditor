@@ -14,7 +14,7 @@ class wu_webw_3d_view {
         this.cameraDefaults = {
             posCamera: new THREE.Vector3(0.0, 175.0, 500.0),
             posCameraTarget: new THREE.Vector3(0, 0, 0),
-            near: 0.1,
+            near: 0.01,
             far: 10000,
             fov: 45
         };
@@ -88,12 +88,15 @@ class wu_webw_3d_view {
         var ambientLight = new THREE.AmbientLight(0x404040);
         var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        var directionalLight3 = new THREE.DirectionalLight(0xC0C090);
 
-        directionalLight1.position.set(-1000, -50, 1000);
-        directionalLight2.position.set(1000, 50, -1000);
+        directionalLight1.position.set(-1000,  -50,  1000);
+        directionalLight2.position.set( 1000,   50, -1000);
+        directionalLight3.position.set(    0,   50,     0);
 
         this.scene.add(directionalLight1);
         this.scene.add(directionalLight2);
+        this.scene.add(directionalLight3);
         this.scene.add(ambientLight);
 
         // var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
@@ -431,72 +434,46 @@ class wu_webw_3d_view {
 
         myGroupObj.traverse( function (object)
         {
-
-
              if (object instanceof THREE.Mesh)
              {
+                 object.geometry.computeBoundingSphere();
 
-                 console.log("c1", object.geometry);
-                 var bs = object.geometry.computeBoundingSphere();
-                 console.log("c2", bs);
+                 // Object radius
+                 var radius = object.geometry.boundingSphere.radius;
 
-            //     // Object radius
-                 var radius = bs.radius;
-            //
-            //     // Object center in world space
-
+                 // Object center in world space
                  var objectCenterLocal = object.position.clone();
-
-                 // if(objectCenterLocal==null)
-                 //     continue;
 
                 var objectCenterWorld = object.localToWorld( objectCenterLocal );
 
                 // // New center in world space
                 var newCenter = new THREE.Vector3();
 
-
-
-
                 newCenter.addVectors(sceneBSCenter, objectCenterWorld);
-
                 newCenter.divideScalar(2.0);
 
-
-
                 // New radius in world space
-
                 var dCenter = newCenter.distanceTo(sceneBSCenter);
 
-
-
                 var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
-
                 //sceneBSCenter = dCenter;
                 sceneBSCenter = newCenter;
                 sceneBSRadius = newRadius;
             }
         } );
 
-
-
         return [sceneBSCenter, sceneBSRadius];
 
     }
 
+    /**
+     * Zoom to the whole object
+     */
     zoomer(){
+          // child 4 is the added object
+          var totalradius = this.computeSceneBoundingSphereAll( this.scene.children[5] )[1];
 
-        console.log("B116", this.scene.children);
-
-        console.log("C663", previewCanvas.scene.children[4].children[0].geometry);
-
-         var bbInfo = previewCanvas.scene.children[4].children[0].geometry.boundingSphere.radius; //this.computeSceneBoundingSphereAll( this.scene.children[4] );
-        //
-         console.log( "A115:", bbInfo );
-        //
-        // // ToDo: Zoom to sphere with diameters bbInfo[1]
-         this.camera.fov = bbInfo; //bbInfo[1]
-         this.camera.updateProjectionMatrix();
-
+          this.controls.minDistance = 0.5*totalradius;
+          this.controls.maxDistance = 8*totalradius;
     }
 }
