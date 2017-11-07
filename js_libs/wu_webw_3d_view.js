@@ -139,6 +139,7 @@ class wu_webw_3d_view {
             for (var i = 0; i < material.length; i++)
                 console.log('Material ', i, material[i]);
 
+
             console.log("----------------------------------")
         };
 
@@ -149,7 +150,11 @@ class wu_webw_3d_view {
             document.getElementById('previewProgressSliderLine').style.width = 0;
             document.getElementById('previewProgressLabel').innerHTML = "";
 
+
             scope._reportProgress('');
+
+            scope.zoomer();
+
         };
         this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
         this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
@@ -419,7 +424,7 @@ class wu_webw_3d_view {
 
 
 
-    computeSceneBoundingSphere(myGroupObj)
+    computeSceneBoundingSphereAll(myGroupObj)
     {
         var sceneBSCenter = new THREE.Vector3(0,0,0);
         var sceneBSRadius = 0;
@@ -431,12 +436,19 @@ class wu_webw_3d_view {
              if (object instanceof THREE.Mesh)
              {
 
+                 console.log("c1", object.geometry);
+                 var bs = object.geometry.computeBoundingSphere();
+                 console.log("c2", bs);
+
             //     // Object radius
-                 var radius = object.geometry.boundingSphere.radius;
+                 var radius = bs.radius;
             //
             //     // Object center in world space
 
                  var objectCenterLocal = object.position.clone();
+
+                 // if(objectCenterLocal==null)
+                 //     continue;
 
                 var objectCenterWorld = object.localToWorld( objectCenterLocal );
 
@@ -474,14 +486,17 @@ class wu_webw_3d_view {
 
     zoomer(){
 
-        var bbInfo = this.computeSceneBoundingSphere( this.scene.children[4] );
+        console.log("B116", this.scene.children);
 
-        //console.log( bbInfo );
+        console.log("C663", previewCanvas.scene.children[4].children[0].geometry);
 
-        // ToDo: Zoom to sphere with diameters bbInfo[1]
-        // this.controls.zoomCamera()
-
-
+         var bbInfo = previewCanvas.scene.children[4].children[0].geometry.boundingSphere.radius; //this.computeSceneBoundingSphereAll( this.scene.children[4] );
+        //
+         console.log( "A115:", bbInfo );
+        //
+        // // ToDo: Zoom to sphere with diameters bbInfo[1]
+         this.camera.fov = bbInfo; //bbInfo[1]
+         this.camera.updateProjectionMatrix();
 
     }
 }
