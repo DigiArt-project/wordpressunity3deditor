@@ -409,8 +409,79 @@ class wu_webw_3d_view {
 
             scope.render();
 
+
+
+
         });
 
     }
 
+
+
+
+    computeSceneBoundingSphere(myGroupObj)
+    {
+        var sceneBSCenter = new THREE.Vector3(0,0,0);
+        var sceneBSRadius = 0;
+
+        myGroupObj.traverse( function (object)
+        {
+
+
+             if (object instanceof THREE.Mesh)
+             {
+
+            //     // Object radius
+                 var radius = object.geometry.boundingSphere.radius;
+            //
+            //     // Object center in world space
+
+                 var objectCenterLocal = object.position.clone();
+
+                var objectCenterWorld = object.localToWorld( objectCenterLocal );
+
+                // // New center in world space
+                var newCenter = new THREE.Vector3();
+
+
+
+
+                newCenter.addVectors(sceneBSCenter, objectCenterWorld);
+
+                newCenter.divideScalar(2.0);
+
+
+
+                // New radius in world space
+
+                var dCenter = newCenter.distanceTo(sceneBSCenter);
+
+
+
+                var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
+
+                //sceneBSCenter = dCenter;
+                sceneBSCenter = newCenter;
+                sceneBSRadius = newRadius;
+            }
+        } );
+
+
+
+        return [sceneBSCenter, sceneBSRadius];
+
+    }
+
+    zoomer(){
+
+        var bbInfo = this.computeSceneBoundingSphere( this.scene.children[4] );
+
+        //console.log( bbInfo );
+
+        // ToDo: Zoom to sphere with diameters bbInfo[1]
+        // this.controls.zoomCamera()
+
+
+
+    }
 }
