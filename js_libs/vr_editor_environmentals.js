@@ -12,7 +12,7 @@ class vr_editor_environmentals {
         this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
-        this.NEAR = 0.1;
+        this.NEAR = 0.01;
         this.FAR = 20000;
         this.scene;
 
@@ -209,7 +209,7 @@ class vr_editor_environmentals {
      *
      */
     setAvatarCamera() {
-        this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 1.2, 3000);
+        this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 3000);
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
 
@@ -420,21 +420,28 @@ class vr_editor_environmentals {
     setLight() {
 
 
-        this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 ); //THREE.DirectionalLight( 0xffffff, 1 );
-        this.lightSun.position.set( 0, 500, 0 );
+        this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightSun.position.set( 500, 500, 100 );
         this.lightSun.name = "mylightSun";
         this.scene.add(this.lightSun);
-        //this.scene.add( new THREE.DirectionalLightHelper( this.lightSun, 1 ));
+
+        this.lightSun2 = new THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightSun2.position.set( -500, 500, 100 );
+        this.lightSun2.name = "mylightSun2";
+        this.scene.add(this.lightSun2);
 
 
-        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 ); //THREE.DirectionalLight( 0xffffff, 1 );
-        this.lightOrbit.position.copy( this.cameraOrbit.position ); //.set( 500, 500, 500 );
+
+
+
+        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 );
+        this.lightOrbit.position.copy( this.cameraOrbit.position );
         this.lightOrbit.name = "mylightOrbit";
         this.scene.add(this.lightOrbit);
         //this.scene.add( new THREE.DirectionalLightHelper( this.lightOrbit, 150 ));
 
 
-        this.lightAvatar = new THREE.PointLight( 0xffffff, 0.8, 1000, 0.1 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        this.lightAvatar = new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 ); //THREE.DirectionalLight( 0xffffff, 1 );
         this.lightAvatar.name = "mylightAvatar";
         this.lightAvatar.position.x =  this.cameraAvatar.position.x;
         this.lightAvatar.position.y =  this.cameraAvatar.position.y;

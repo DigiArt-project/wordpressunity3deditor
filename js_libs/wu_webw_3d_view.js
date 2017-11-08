@@ -14,7 +14,7 @@ class wu_webw_3d_view {
         this.cameraDefaults = {
             posCamera: new THREE.Vector3(0.0, 175.0, 500.0),
             posCameraTarget: new THREE.Vector3(0, 0, 0),
-            near: 0.1,
+            near: 0.01,
             far: 10000,
             fov: 45
         };
@@ -84,16 +84,21 @@ class wu_webw_3d_view {
         this.resetCamera();
 
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls.zoomSpeed = 1.02;
+        this.controls.dynamicDampingFactor = 0.3;
 
         var ambientLight = new THREE.AmbientLight(0x404040);
-        var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-        var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
+        var directionalLight2 = new THREE.DirectionalLight(0x909050);
+        var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
 
-        directionalLight1.position.set(-1000, -50, 1000);
-        directionalLight2.position.set(1000, 50, -1000);
+        directionalLight1.position.set(-1000,  -550,  1000);
+        directionalLight2.position.set( 1000,   550, -1000);
+        directionalLight3.position.set(    0,   550,     0);
 
         this.scene.add(directionalLight1);
         this.scene.add(directionalLight2);
+        this.scene.add(directionalLight3);
         this.scene.add(ambientLight);
 
         // var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
@@ -139,6 +144,7 @@ class wu_webw_3d_view {
             for (var i = 0; i < material.length; i++)
                 console.log('Material ', i, material[i]);
 
+
             console.log("----------------------------------")
         };
 
@@ -149,7 +155,11 @@ class wu_webw_3d_view {
             document.getElementById('previewProgressSliderLine').style.width = 0;
             document.getElementById('previewProgressLabel').innerHTML = "";
 
+
             scope._reportProgress('');
+
+            scope.zoomer();
+
         };
         this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
         this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
@@ -307,6 +317,7 @@ class wu_webw_3d_view {
 
         scope.scene.remove(scope.pivot);
         scope.pivot.traverse(remover);
+
         scope.createPivot();
     }
 
@@ -323,6 +334,8 @@ class wu_webw_3d_view {
         this.clearAllAssets();
 
         var loader = new THREE.PDBLoader();
+
+
 
         var scope = this;
 
@@ -409,8 +422,63 @@ class wu_webw_3d_view {
 
             scope.render();
 
+
+
+
         });
 
     }
 
+
+
+
+    computeSceneBoundingSphereAll(myGroupObj)
+    {
+        var sceneBSCenter = new THREE.Vector3(0,0,0);
+        var sceneBSRadius = 0;
+
+        myGroupObj.traverse( function (object)
+        {
+             if (object instanceof THREE.Mesh)
+             {
+                 object.geometry.computeBoundingSphere();
+
+                 // Object radius
+                 var radius = object.geometry.boundingSphere.radius;
+
+                 // Object center in world space
+                 var objectCenterLocal = object.position.clone();
+
+                var objectCenterWorld = object.localToWorld( objectCenterLocal );
+
+                // // New center in world space
+                var newCenter = new THREE.Vector3();
+
+                newCenter.addVectors(sceneBSCenter, objectCenterWorld);
+                newCenter.divideScalar(2.0);
+
+                // New radius in world space
+                var dCenter = newCenter.distanceTo(sceneBSCenter);
+
+                var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
+                //sceneBSCenter = dCenter;
+                sceneBSCenter = newCenter;
+                sceneBSRadius = newRadius;
+            }
+        } );
+
+        return [sceneBSCenter, sceneBSRadius];
+
+    }
+
+    /**
+     * Zoom to the whole object
+     */
+    zoomer(){
+          // child 4 is the added object
+          var totalradius = this.computeSceneBoundingSphereAll( this.scene.children[5] )[1];
+
+          this.controls.minDistance = 0.5*totalradius;
+          this.controls.maxDistance = 8*totalradius;
+    }
 }

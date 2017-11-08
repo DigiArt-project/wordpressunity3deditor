@@ -20,7 +20,7 @@ THREE.TrackballControls = function ( object, domElement ) {
     this.screen = { left: 0, top: 0, width: 0, height: 0 };
 
     this.rotateSpeed = 1.0;
-    this.zoomSpeed = 1.2;
+    this.zoomSpeed = 1.05;
     this.panSpeed = 0.3;
 
     this.noRotate = false;
@@ -217,7 +217,10 @@ THREE.TrackballControls = function ( object, domElement ) {
 
             if ( factor !== 1.0 && factor > 0.0 ) {
 
+
+
                 _eye.multiplyScalar( factor );
+
 
             }
 
@@ -226,6 +229,8 @@ THREE.TrackballControls = function ( object, domElement ) {
                 _zoomStart.copy( _zoomEnd );
 
             } else {
+
+
 
                 _zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor;
 

@@ -157,6 +157,7 @@ function wpunity_reset_panels(previewCanvas) {
     // Clear all
     wpunity_clear_asset_files(previewCanvas);
 
+
     if (jQuery("ProducerPlotTooltip")) {
         jQuery("div.ProducerPlotTooltip").remove();
     }

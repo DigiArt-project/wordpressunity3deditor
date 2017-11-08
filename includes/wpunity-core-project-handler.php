@@ -569,8 +569,16 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
 
     //Copy files of the Model
     $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
+
+    $fg = fopen("output_objreplace.txt", "w");
+    fwrite($fg, $objID);
+
+
     if(is_numeric($objID)){
+
         $asset_type = get_the_terms( $asset_id, 'wpunity_asset3d_cat' );
+
+        fwrite($fg, print_r($asset_type, true));
 
         $attachment_post = get_post($objID);
         $attachment_file = $attachment_post->guid;
@@ -584,7 +592,13 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
 
         copy($attachment_file, $new_file);
 
-        wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
+        fwrite($fg, $new_file);
+
+        if($asset_type[0]->name == 'Site')
+             wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
+        else
+            wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, '');
+
 
         $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
 
@@ -595,6 +609,8 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
 
         wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
+
+    fclose($fg);
 
     $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
     if(is_numeric($mtlID)){
@@ -626,13 +642,27 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
  * @param $objName
  * @param $objID
  */
-function wpunity_compile_objmeta_cre($folder,$objName,$objID, $suffix = ""){
+function wpunity_compile_objmeta_cre($folder, $objName, $objID, $suffix = ""){
+    $fh = fopen("output_metameta.txt","w");
+
     $file = $folder . '/' . $objName . $suffix. '.obj.meta';
+
+    fwrite($fh, $file);
+
     $create_file = fopen($file, "w") or die("Unable to open file!");
+
+    fwrite($fh, $create_file);
+
     $objMetaPattern = wpunity_getYaml_obj_dotmeta_pattern();
     $objMetaContent = wpunity_replace_objmeta($objMetaPattern,$objID);
+
+    fwrite($fh, $objMetaPattern );
+    fwrite($fh, $objMetaContent );
+
     fwrite($create_file, $objMetaContent);
     fclose($create_file);
+
+    fclose($fh);
 }
 
 /**

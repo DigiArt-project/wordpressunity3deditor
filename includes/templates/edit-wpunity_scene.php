@@ -262,8 +262,7 @@ get_header(); ?>
                 "wpunity_game="+ project_id +
                 "&wpunity_scene="+scene_id+
                 "&scene_type=scene"+
-                "&game_type="+game_type+
-                "&lab="+game_type+
+                "&lab="+game_type+ //"&game_type="+game_type+
                 "&version="+ version +
                 "&location="+ location;
 

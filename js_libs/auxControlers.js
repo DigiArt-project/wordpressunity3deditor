@@ -289,7 +289,7 @@ function displayBoxProperties(event, nameBoxSource){
     ppSelect.add(option);
 
     // Add available Functional Groups from database
-    var availFunctionalGroups = ['None', 'Alcohol', 'Ketone'];
+    var availFunctionalGroups = ['Various', 'Alcohol', 'Ketone'];
 
 
     // Add options for each intersected object
