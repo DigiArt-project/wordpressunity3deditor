@@ -226,7 +226,7 @@ get_header(); ?>
                     </div>
                 </div>
 
-                <div style="min-height: 780px;">
+                <div style="min-height: 950px;">
                     <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
             </div>
