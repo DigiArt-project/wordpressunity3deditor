@@ -36,7 +36,8 @@ function wpunity_load_jquery_scripts() {
 	wp_enqueue_script('jquery-ui-slider');
 	wp_enqueue_script('jquery-ui-draggable');
 	wp_enqueue_script('jquery-effects-core');
-	wp_enqueue_style( 'jquery-ui-css' , plugin_dir_url( __FILE__ ) . 'node_modules/jquery_ui_css/jquery_ui.css '); // 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/flick/jquery-ui.css' );
+	wp_enqueue_style( 'jquery-ui-css' , plugin_dir_url( __FILE__ ) . 'css/jquery-ui.min.css' );
+	wp_enqueue_style( 'jquery-ui-theme-css' , plugin_dir_url( __FILE__ ) . 'css/jquery-ui.theme.min.css' );
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
@@ -117,7 +118,7 @@ function wpunity_register_styles() {
 	// Material & Frontend CSS & Scripts
 	wp_enqueue_style('wpunity_material_stylesheet');
 	wp_enqueue_script('wpunity_material_scripts');
-	wp_enqueue_style( 'wpunity_material_icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
+	wp_enqueue_style( 'wpunity_material_icons', plugin_dir_url( __FILE__ ) . 'css/material-icons/material-icons.css' );
 	wp_enqueue_style('wpunity_frontend_stylesheet');
 }
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );

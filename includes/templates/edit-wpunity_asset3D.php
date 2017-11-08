@@ -908,8 +908,6 @@ if($create_new == 0) {
 
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
-        console.log(game_type_slug);
-
         // TODO: Remove also from register and enquire
         //if (game_type_slug !== 'chemistry_games')
         var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
