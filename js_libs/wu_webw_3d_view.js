@@ -84,15 +84,17 @@ class wu_webw_3d_view {
         this.resetCamera();
 
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls.zoomSpeed = 1.02;
+        this.controls.dynamicDampingFactor = 0.3;
 
         var ambientLight = new THREE.AmbientLight(0x404040);
-        var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-        var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-        var directionalLight3 = new THREE.DirectionalLight(0xC0C090);
+        var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
+        var directionalLight2 = new THREE.DirectionalLight(0x909050);
+        var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
 
-        directionalLight1.position.set(-1000,  -50,  1000);
-        directionalLight2.position.set( 1000,   50, -1000);
-        directionalLight3.position.set(    0,   50,     0);
+        directionalLight1.position.set(-1000,  -550,  1000);
+        directionalLight2.position.set( 1000,   550, -1000);
+        directionalLight3.position.set(    0,   550,     0);
 
         this.scene.add(directionalLight1);
         this.scene.add(directionalLight2);
@@ -315,6 +317,7 @@ class wu_webw_3d_view {
 
         scope.scene.remove(scope.pivot);
         scope.pivot.traverse(remover);
+
         scope.createPivot();
     }
 
@@ -331,6 +334,8 @@ class wu_webw_3d_view {
         this.clearAllAssets();
 
         var loader = new THREE.PDBLoader();
+
+
 
         var scope = this;
 
