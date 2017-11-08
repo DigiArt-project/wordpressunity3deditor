@@ -385,7 +385,9 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
 	// OBJ
-	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename . "\n", $obj_content);
+	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
+	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
+	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
 	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
 
 	// SCREENSHOT
