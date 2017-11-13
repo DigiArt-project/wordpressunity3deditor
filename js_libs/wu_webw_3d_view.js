@@ -76,8 +76,6 @@ class wu_webw_3d_view {
 
         // - End of PDB specific -
 
-
-
         this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
 
@@ -112,10 +110,6 @@ class wu_webw_3d_view {
         this.pivot.name = 'Pivot';
         this.scene.add(this.pivot);
     }
-
-
-
-
 
     initPostGL() {
 
@@ -154,12 +148,8 @@ class wu_webw_3d_view {
             jQuery('#previewProgressSlider').hide();
             document.getElementById('previewProgressSliderLine').style.width = 0;
             document.getElementById('previewProgressLabel').innerHTML = "";
-
-
             scope._reportProgress('');
-
             scope.zoomer();
-
         };
         this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
         this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
@@ -279,7 +269,6 @@ class wu_webw_3d_view {
     // Clear Previous
     clearAllAssets() {
         var scope = this;
-
 
         // PDB Specific
         while (scope.root.children.length > 0) {
@@ -421,17 +410,16 @@ class wu_webw_3d_view {
             }
 
             scope.render();
-
-
-
-
         });
-
     }
 
 
-
-
+    /**
+     * Auto zoom on obj with multiple meshes
+     *
+     * @param myGroupObj
+     * @returns {[*,*]}
+     */
     computeSceneBoundingSphereAll(myGroupObj)
     {
         var sceneBSCenter = new THREE.Vector3(0,0,0);

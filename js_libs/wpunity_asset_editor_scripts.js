@@ -131,8 +131,10 @@ function wpunity_clear_asset_files(previewCanvas) {
     document.getElementById("objFileInput").value = "";
     document.getElementById("pdbFileInput").value = "";
 
-    for (var iTexture = 0; iTexture<document.getElementsByName('textureFileInput[]').length; iTexture++)
-        document.getElementsByName('textureFileInput[]')[iTexture].value = '';
+    for (var iTexture = 0; iTexture < jQuery("[id^=textureFileInput]").length; iTexture++) {
+        jQuery("[id^=textureFileInput]")[iTexture].remove();
+    }
+
 
     document.getElementById("fileUploadInput").value = "";
 
@@ -263,6 +265,9 @@ function checkerCompleteReading(canvas){
                     // Start without Textures
                     previewCanvas.loadFilesUser(objectDefinition);
                 } else {
+
+
+                    console.log("nJpg", nJpg , jQuery("input[id='textureFileInput']").length);
 
                     if ( nJpg === jQuery("input[id='textureFileInput']").length) {
 
