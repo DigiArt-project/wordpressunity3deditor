@@ -239,6 +239,7 @@ get_header(); ?>
         var project_id = <?php echo $project_id; ?>;
         var scene_id = <?php echo $scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
+        var game_master_id = "<?php echo get_current_user_id();?>";
         var versionSelector = document.getElementById("analyticsVersionSelector");
         var locationSelector = document.getElementById("analyticsLocationSelector");
 
@@ -264,6 +265,7 @@ get_header(); ?>
                 "&scene_type=scene"+
                 "&lab="+game_type+ //"&game_type="+game_type+
                 "&version="+ version +
+                "&gamemaster_id="+ game_master_id +
                 "&location="+ location;
 
             var $iframe = jQuery('#analyticsIframeContent');
