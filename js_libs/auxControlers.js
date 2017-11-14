@@ -8,6 +8,21 @@
 // Raycasting on mouse down for selecting object
 var raycasterPick = new THREE.Raycaster();
 
+
+function findDimensions(grouObj){
+
+    var box = new THREE.BoxHelper( grouObj, 0xff00ff );
+    box.geometry.computeBoundingBox();
+
+    var finalVec = new THREE.Vector3().subVectors(box.geometry.boundingBox.min, box.geometry.boundingBox.max);
+
+    var x = Math.abs(finalVec.x);
+    var y = Math.abs(finalVec.y);
+    var z = Math.abs(finalVec.z);
+
+    console.log("Dims", x,y,z);
+}
+
 /**
  * Detect mouse events
  *
@@ -160,6 +175,8 @@ function onMouseDownSelect( event ) {
         nameL = Object.keys(arrNameObjInter)[0];
         transform_controls.attach(arrNameObjInter[nameL]);
 
+        findDimensions(transform_controls.object);
+
         // highlight
         envir.outlinePass.selectedObjects = [arrNameObjInter[nameL].children[0]];
         envir.renderer.setClearColor( 0xffffff, 0.9 );
@@ -225,6 +242,9 @@ function onMouseDownSelect( event ) {
 
             if (nameL != "Cancel" && nameL != "Select") {
                 transform_controls.attach(arrNameObjInter[nameL]);
+
+                findDimensions(transform_controls.object);
+
 
                 // highlight
                 envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
@@ -694,6 +714,9 @@ function controllerDatGuiOnChange() {
     dg_controller_sc.onChange(function(value) {
             cancelAnimationFrame( id_animation_frame );
             transform_controls.object.scale.set(gui_controls_funs.dg_scale, gui_controls_funs.dg_scale, gui_controls_funs.dg_scale);
+
+            findDimensions(transform_controls.object);
+
             animate();
         }
     );
@@ -799,6 +822,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
     if (val > 0) {
         gui_controls_funs.dg_scale = val;
         transform_controls.object.scale.set( val, val, val);
+        findDimensions(transform_controls.object);
     }
     //--------- end of scale ------------------------
 }

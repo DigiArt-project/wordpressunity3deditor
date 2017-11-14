@@ -129,8 +129,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         } else  {
             filemanager.find('.nothingfound').hide();
 
-            console.log(enlistData);
-
             for (i = 0; i < enlistData.length; i++) {
 
                 f = enlistData[i];

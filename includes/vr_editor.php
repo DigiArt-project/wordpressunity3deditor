@@ -77,6 +77,11 @@ echo '</script>';
 
 
 
+
+
+
+
+
     isComposerOn = true;
 
     //  Save Button implemented with Ajax
@@ -520,6 +525,8 @@ echo '</script>';
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
+
+            findDimensions(transform_controls.object);
 
             // highlight
             envir.outlinePass.selectedObjects = [objItem];
