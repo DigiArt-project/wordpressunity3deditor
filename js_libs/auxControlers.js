@@ -20,7 +20,7 @@ function findDimensions(grouObj){
     var y = Math.abs(finalVec.y);
     var z = Math.abs(finalVec.z);
 
-    console.log("Dims", x,y,z);
+    //console.log("Dims", x,y,z);
 }
 
 /**

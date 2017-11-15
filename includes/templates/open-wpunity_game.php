@@ -223,28 +223,28 @@ $user_id = get_current_user_id();
                         <label class="mdc-typography--title NewGameLabel">Choose project type</label>
                         <ul class="RadioButtonList">
 
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" checked="" name="gameTypeRadio" value="3">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
-                                    </div>
-                                </div>
-                                <label id="gameTypeChemistryRadio-label" for="gameTypeChemistryRadio">Chemistry</label>
-                            </li>
-
-
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"   name="gameTypeRadio" value="2">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
-                                    </div>
-                                </div>
-                                <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
-                            </li>
+<!--                            <li class="mdc-form-field">-->
+<!--                                <div class="mdc-radio">-->
+<!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" checked="" name="gameTypeRadio" value="3">-->
+<!--                                    <div class="mdc-radio__background">-->
+<!--                                        <div class="mdc-radio__outer-circle"></div>-->
+<!--                                        <div class="mdc-radio__inner-circle"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <label id="gameTypeChemistryRadio-label" for="gameTypeChemistryRadio">Chemistry</label>-->
+<!--                            </li>-->
+<!---->
+<!---->
+<!--                            <li class="mdc-form-field">-->
+<!--                                <div class="mdc-radio">-->
+<!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"   name="gameTypeRadio" value="2">-->
+<!--                                    <div class="mdc-radio__background">-->
+<!--                                        <div class="mdc-radio__outer-circle"></div>-->
+<!--                                        <div class="mdc-radio__inner-circle"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>-->
+<!--                            </li>-->
 
 
 
