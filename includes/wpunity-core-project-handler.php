@@ -573,7 +573,6 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
     $fg = fopen("output_objreplace.txt", "w");
     fwrite($fg, $objID);
 
-
     if(is_numeric($objID)){
 
         $asset_type = get_the_terms( $asset_id, 'wpunity_asset3d_cat' );
@@ -622,15 +621,18 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
         copy($attachment_file,$new_file);
     }
 
-    $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true); // Diffusion Image ID
-    if(is_numeric($difimgID)){
-        $attachment_post = get_post($difimgID);
-        $attachment_file = $attachment_post->guid;
-        $attachment_tempname = str_replace('\\', '/', $attachment_file);
-        $attachment_name = pathinfo($attachment_tempname);
-        $new_file = $folder .'/' . $attachment_name['filename'] . '.jpg';
-        copy($attachment_file,$new_file);
+    $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false); // Diffusion Image ID MULTIPLE
+    foreach($difimgID as $difimg_ID) {
+        if(is_numeric($difimg_ID)){
+            $attachment_post = get_post($difimg_ID);
+            $attachment_file = $attachment_post->guid;
+            $attachment_tempname = str_replace('\\', '/', $attachment_file);
+            $attachment_name = pathinfo($attachment_tempname);
+            $new_file = $folder .'/' . $attachment_name['filename'] . '.jpg';
+            copy($attachment_file,$new_file);
+        }
     }
+
 
 
 }
