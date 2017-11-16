@@ -364,6 +364,10 @@ Prefab:
       propertyPath: m_Name
       value: ___[poi_a_title]___
       objectReference: {fileID: 0}
+    - target: {fileID: 114805744082175224, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
+      propertyPath: textToShow
+      value: ___[poi_a_text]___
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
   m_IsPrefabParent: 0

@@ -1238,8 +1238,12 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
     $LF = chr(10) ;// line break
 
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
+
+
         if ($key == 'avatarYawObject') {
             //do something about AVATAR
+
+
 
         }else{
             if ($value['categoryName'] == 'Site'){
@@ -1295,7 +1299,10 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_guid = wpunity_create_guids('obj', $poi_img_obj);
 
-                $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,$poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
+                $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,
+                    $poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,
+                    $poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
+
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_img_finalyaml;
             }
             if ($value['categoryName'] == 'Points of Interest (Video)'){
@@ -1323,7 +1330,10 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
                 $poi_v_v_name = '';
 
-                $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name);
+                $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
+                    $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
+                    $poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name);
+
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
             }
             if ($value['categoryName'] == 'Door'){
@@ -1356,12 +1366,12 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $allObjectsYAML = $allObjectsYAML . $LF . $door_finalyaml;
             }
             if ($value['categoryName'] == 'Artifact'){
+
                 $artifact_id = $value['assetid'];
-                $asset_type = get_the_terms( $door_id, 'wpunity_asset3d_cat' );
+                $asset_type = get_the_terms( $artifact_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
                 $artifact_obj = get_post_meta($artifact_id,'wpunity_asset3d_obj',true);
-
                 $artifact_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_a_fid = wpunity_create_fids($current_fid++);
                 $poi_a_pos_x = - $value['position'][0]; // x is in the opposite site in unity
@@ -1379,7 +1389,14 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_a_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_a_obj_guid = wpunity_create_guids('obj', $artifact_obj);
 
-                $artifact_finalyaml = wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$poi_a_pos_y,$poi_a_pos_z,$poi_a_rot_x,$poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,$poi_a_scale_x,$poi_a_scale_y,$poi_a_scale_z,$poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid);
+                $content_post = get_post($artifact_id);
+                $poi_a_text = $content_post->post_content;
+
+                $artifact_finalyaml = wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$poi_a_pos_y,$poi_a_pos_z,
+                    $poi_a_rot_x,$poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,
+                    $poi_a_scale_x,$poi_a_scale_y,$poi_a_scale_z,
+                    $poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text);
+
                 $allObjectsYAML = $allObjectsYAML . $LF . $artifact_finalyaml;
             }
             if ($value['categoryName'] == 'Decoration (Archaeology)'){
@@ -1926,7 +1943,9 @@ function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y
     return $file_content_return;
 }
 
-function wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$poi_a_pos_y,$poi_a_pos_z,$poi_a_rot_x,$poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,$poi_a_scale_x,$poi_a_scale_y,$poi_a_scale_z,$poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid){
+function wpunity_replace_artifact_unity($artifact_yaml, $poi_a_fid, $poi_a_pos_x, $poi_a_pos_y, $poi_a_pos_z, $poi_a_rot_x,
+                                        $poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,$poi_a_scale_x,$poi_a_scale_y,
+                                        $poi_a_scale_z,$poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text){
 
     $file_content_return = str_replace("___[poi_a_fid]___",$poi_a_fid,$artifact_yaml);
     $file_content_return = str_replace("___[poi_a_pos_x]___",$poi_a_pos_x,$file_content_return);
@@ -1943,6 +1962,7 @@ function wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$
     $file_content_return = str_replace("___[poi_a_transform_fid]___",$poi_a_transform_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_obj_fid]___",$poi_a_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_obj_guid]___",$poi_a_obj_guid,$file_content_return);
+    $file_content_return = str_replace("___[poi_a_text]___", $poi_a_text , $file_content_return);
 
     return $file_content_return;
 }
