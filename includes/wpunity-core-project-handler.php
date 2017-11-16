@@ -1269,6 +1269,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
             }
             if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
                 $poi_img_id = $value['assetid'];
+                $content_post = get_post($poi_img_id);
                 $asset_type = get_the_terms( $poi_img_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
@@ -1288,8 +1289,8 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_scale_y = $value['scale'][1];
                 $poi_it_scale_z = $value['scale'][2];
                 $poi_it_title = get_the_title($poi_img_id);
-                $poi_it_sprite_guid = ''; // CHECK (poio ap' ola)
-                $poi_it_text = ''; // CHECK
+                $poi_it_sprite_guid = wpunity_create_guids('jpg', $poi_img_sprite);
+                $poi_it_text = $content_post->post_content; // CHECK
                 $poi_it_connector_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_guid = wpunity_create_guids('obj', $poi_img_obj);
