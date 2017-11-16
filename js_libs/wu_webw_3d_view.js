@@ -434,24 +434,27 @@ class wu_webw_3d_view {
                  // Object radius
                  var radius = object.geometry.boundingSphere.radius;
 
-                 // Object center in world space
-                 var objectCenterLocal = object.position.clone();
+                 if (radius) {
 
-                var objectCenterWorld = object.localToWorld( objectCenterLocal );
+                     // Object center in world space
+                     var objectCenterLocal = object.position.clone();
 
-                // // New center in world space
-                var newCenter = new THREE.Vector3();
+                     var objectCenterWorld = object.localToWorld(objectCenterLocal);
 
-                newCenter.addVectors(sceneBSCenter, objectCenterWorld);
-                newCenter.divideScalar(2.0);
+                     // // New center in world space
+                     var newCenter = new THREE.Vector3();
 
-                // New radius in world space
-                var dCenter = newCenter.distanceTo(sceneBSCenter);
+                     newCenter.addVectors(sceneBSCenter, objectCenterWorld);
+                     newCenter.divideScalar(2.0);
 
-                var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
-                //sceneBSCenter = dCenter;
-                sceneBSCenter = newCenter;
-                sceneBSRadius = newRadius;
+                     // New radius in world space
+                     var dCenter = newCenter.distanceTo(sceneBSCenter);
+
+                     var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
+                     //sceneBSCenter = dCenter;
+                     sceneBSCenter = newCenter;
+                     sceneBSRadius = newRadius;
+                 }
             }
         } );
 

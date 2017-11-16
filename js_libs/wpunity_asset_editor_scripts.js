@@ -96,7 +96,7 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             // textureFileInput[filename].setAttribute("type", "hidden");
             //textureFileInput[filename].value = content;
 
-            checkerCompleteReading(type, canvas, filename);
+            checkerCompleteReading(canvas);
         }
 
         if (objFileContent && mtlFileContent || pdbFileContent) {
@@ -206,6 +206,7 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
             }
             if ( file.name.indexOf( '\.jpg' ) > 0 ) {
                 nJpg ++;
+
                 wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
             }
         }
