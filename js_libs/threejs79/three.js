@@ -20939,7 +20939,6 @@
 			materialProperties.fog = fog;
 
 			// store the light setup it was created for
-
 			materialProperties.lightsHash = _lights.hash;
 
 			if ( material.lights ) {
