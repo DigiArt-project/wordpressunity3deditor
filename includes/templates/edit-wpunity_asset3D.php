@@ -553,12 +553,15 @@ if($create_new == 0) {
                                        multiple accept=".obj,.mtl,.jpg"/>
 
 
+
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                                 <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                                 <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                                 <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
 
                             </div>
+
+
                             <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                                 <h3 class="mdc-typography--title">Screenshot</h3>
 
@@ -567,6 +570,7 @@ if($create_new == 0) {
 
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
+
 
                         </div>
                     </div>
