@@ -1402,6 +1402,11 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $asset_type_ID = $asset_type[0]->term_id;
 
                 $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_obj',true);
+                $attachment_video_post = get_post($poi_vid_obj);
+                $attachment_file = $attachment_video_post->guid;
+                $attachment_tempname = str_replace('\\', '/', $attachment_file);
+                $attachment_name = pathinfo($attachment_tempname);
+
 
                 $poi_vid_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_v_fid = wpunity_create_fids($current_fid++);
@@ -1419,7 +1424,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_trans_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
-                $poi_v_v_name = '';
+                $poi_v_v_name = $attachment_name['filename'];
 
                 $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
                     $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
