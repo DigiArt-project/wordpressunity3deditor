@@ -1469,8 +1469,9 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $allObjectsYAML = $allObjectsYAML . $LF . $artifact_finalyaml;
             }
             if ($value['categoryName'] == 'Decoration (Archaeology)'){
+
                 $decoarch_id = $value['assetid'];
-                $asset_type = get_the_terms( $door_id, 'wpunity_asset3d_cat' );
+                $asset_type = get_the_terms( $decoarch_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
                 $decoarch_obj = get_post_meta($decoarch_id,'wpunity_asset3d_obj',true);
