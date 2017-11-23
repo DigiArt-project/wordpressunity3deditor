@@ -259,6 +259,7 @@ get_header(); ?>
         });
 
         function loadAnalyticsIframe(version, location) {
+
             var url = "http://52.59.219.11/?" +
                 "wpunity_game="+ project_id +
                 "&wpunity_scene="+scene_id+
@@ -273,6 +274,7 @@ get_header(); ?>
                 $iframe.attr('src', url);
                 return false;
             }
+
             return true;
 
         }
