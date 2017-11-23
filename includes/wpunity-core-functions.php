@@ -1252,11 +1252,6 @@ function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
 	}
 
 
-
-
-
-
-
 	$content = 'using UnityEngine;
 using UnityEditor;
 using System.IO;

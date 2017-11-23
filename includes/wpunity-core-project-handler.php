@@ -151,6 +151,87 @@ function wpunity_delete_asset3d_noscenes_frontend($asset_id){
 
 }
 
+/**
+ *
+ * Fetch all assets in game's scenes
+ *
+ * When compiling we need all the assets in the scenes, (not all in the game) to be included in Handy_Builder.cs
+ * This is for parsimony reasons. The assets that are not in any scene do not need to be inserted in the compiling process
+ *
+ * @param $asset_id
+ * @param $gameSlug
+ */
+function wpunity_fetch_assetids_in_scenes($gameSlug){
+
+    // output is the ids of all the objs in the scenes
+    $assetsids = [];
+
+    $scenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    $scenePGameID = $scenePGame->term_id;
+
+    $custom_query_args2 = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $scenePGameID,
+            ),
+        ),
+    );
+
+    // Get the scenes
+    $custom_query2 = new WP_Query( $custom_query_args2 );
+
+//    $fko = fopen("output_alljsonassets.txt","w");
+//    fwrite($fko, "custom_query2". print_r($custom_query2, true));
+//    fwrite($fko, "HAS POSTS : " . $custom_query2->have_posts() . ( $custom_query2->have_posts()?'t':'f'));
+
+    // Output custom query loop
+    if ( $custom_query2->have_posts() ) :
+        while ( $custom_query2->have_posts() ) :
+
+            $custom_query2->the_post();
+            $scene_id = get_the_ID();
+            $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
+
+            $jsonScene = htmlspecialchars_decode ( $scene_json );
+            $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+            //fwrite($fko, $sceneJsonARR . print_r($sceneJsonARR, true));
+
+            $tempScenearr = $sceneJsonARR;
+            foreach ($tempScenearr['objects'] as $key => $value ) {
+                if ($key != 'avatarYawObject') {
+                    //fwrite($fko, $key . PHP_EOL);
+                    //fwrite($fko, print_r($value, true) . PHP_EOL);
+                    //fwrite($fko, $value['assetid'] . PHP_EOL);
+                    $assetsids[] =  $value['assetid'];
+                }
+            }
+
+
+        endwhile;
+    endif;
+
+    $assetsids = array_unique($assetsids);
+//    fwrite($fko, print_r($assetsids,true));
+//    fclose($fko);
+
+    wp_reset_postdata();
+
+    return $assetsids;
+}
+
+/**
+ *
+ * Delete asset
+ *
+ * @param $asset_id
+ * @param $gameSlug
+ *
+ */
 function wpunity_delete_asset3d_from_games_and_scenes($asset_id, $gameSlug){
 
 //    $fko = fopen("output_second_ajax.txt","w");
@@ -264,7 +345,6 @@ add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
  * Upload files with the same namew, without uploading copy with unique filename
  *
  */
-
 function wpunity_overwrite_uploads( $name ){
 
     if( isset($_REQUEST['post_id']) ) {
@@ -521,7 +601,7 @@ function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileNa
  * @param $gameID
  * @param $gameSlug
  */
-function wpunity_compile_models_gen($gameID,$gameSlug){
+function wpunity_compile_models_gen($gameID, $gameSlug){
 
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
@@ -529,39 +609,22 @@ function wpunity_compile_models_gen($gameID,$gameSlug){
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
     $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
 
-    $queryargs = array(
-        'post_type' => 'wpunity_asset3d',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_asset3d_pgame',
-                'field' => 'slug',
-                'terms' => $gameSlug
-            )
-        )
-    );
-    $custom_query = new WP_Query( $queryargs );
-    if ( $custom_query->have_posts() ) :
-        while ( $custom_query->have_posts() ) :
-            $custom_query->the_post();
-            $asset_id = get_the_ID();
-            wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file);
-        endwhile;
-    endif;
-    wp_reset_postdata();
+    $assetIds = wpunity_fetch_assetids_in_scenes($gameSlug);
 
+    foreach ($assetIds as $asset_id)
+        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file);
 }
 
 /**
  *
- * Import all objs to HandyBuilder (function internal)
+ * Import assets to HandyBuilder (function internal)
  *
  * @param $game_path
  * @param $asset_id
  * @param $handybuilder_file
  */
-
 function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
+
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
     $folder = $game_path . '/' . $asset_post->post_name;
@@ -1985,32 +2048,5 @@ function wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor
     return $file_content_return;
 }
 
-function transform_minusx_radiansToquaternions($ax, $ay, $az){
-
-    $ay = Math.PI - $ay;
-
-    $t0 = cos($ay * 0.5);  // yaw
-    $t1 = sin($ay * 0.5);
-    $t2 = cos($az * 0.5);  // roll
-    $t3 = sin($az * 0.5);
-    $t4 = cos($ax * 0.5);  // pitch
-    $t5 = sin($ax * 0.5);
-
-    $t024 = $t0 * $t2 * $t4;
-    $t025 = $t0 * $t2 * $t5;
-    $t034 = $t0 * $t3 * $t4;
-    $t035 = $t0 * $t3 * $t5;
-    $t124 = $t1 * $t2 * $t4;
-    $t125 = $t1 * $t2 * $t5;
-    $t134 = $t1 * $t3 * $t4;
-    $t135 = $t1 * $t3 * $t5;
-
-    $x = $t025 + $t134;
-    $y =-$t035 + $t124;
-    $z = $t034 + $t125;
-    $w = $t024 - $t135;
-
-    return [$x,$y,$z,$w];
-}
 
 ?>
