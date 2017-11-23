@@ -305,20 +305,20 @@ function wpunity_create_asset_producerExtra_frontend($asset_newID){
 }
 
 function wpunity_create_asset_poisITExtra_frontend($asset_newID){
-	$asset_featured_imageForm =  $_POST['poi-img-featured-image'];
+	$asset_featured_imageForm =  $_FILES['poi-img-featured-image'];
 
-	$attachment_id = wpunity_upload_img( $asset_featured_imageForm, $asset_newID);
+	$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
 	set_post_thumbnail( $asset_newID, $attachment_id );
 }
 
 function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
-	$asset_featured_imageForm =  $_POST['poi-video-featured-image'];
-	$asset_videoForm = $_POST['videoFileInput'];
+	$asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
+	$asset_videoForm = $_FILES['videoFileInput'];
 
-	$attachment_id = wpunity_upload_img( $asset_featured_imageForm, $asset_newID);
+	$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
 	set_post_thumbnail( $asset_newID, $attachment_id );
 
-	$attachment_video_id = wpunity_upload_img( $asset_videoForm, $asset_newID);
+	$attachment_video_id = wpunity_upload_img_vid( $asset_videoForm, $asset_newID);
 	update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
 }
 
@@ -453,6 +453,48 @@ function wpunity_remove_menus() {
 }
 
 //==========================================================================================================================================
+
+function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
+
+	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
+	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+
+	$upload_dir = wp_upload_dir();
+	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
+
+	if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
+		return false;
+	} else {
+		$filename = $file_return['file'];
+		$attachment = array(
+			'post_mime_type' => $file_return['type'],
+			'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+			'post_content' => '',
+			'post_status' => 'inherit',
+			'guid' => $file_return['url']
+		);
+
+		$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
+
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+		wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+
+		remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
+
+		if( 0 < intval( $attachment_id, 10 ) ) {
+			return $attachment_id;
+		}
+
+	}
+	return false;
+
+}
+
 
 function wpunity_upload_img($file = array(), $parent_post_id, $orientation = null) {
 
