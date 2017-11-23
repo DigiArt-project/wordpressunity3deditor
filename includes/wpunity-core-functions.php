@@ -79,6 +79,7 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
 			$scene_id = get_the_ID();
 			$sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
+            $sceneSlug = get_post()->post_name;
 
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
@@ -88,7 +89,9 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 				foreach ($sceneJsonARR['objects'] as $key => $value) {
 					if ($key !== 'avatarYawObject') {
 						if ($value['categoryName'] === 'Door') {
-							$doorInfoGathered[] = ['door' => $value['doorName_source'], 'scene' => $sceneTitle];
+							$doorInfoGathered[] = ['door' => $value['doorName_source'],
+                                                   'scene' => $sceneTitle,
+                                                   'sceneSlug'=> $sceneSlug];
 						}
 					}
 				}

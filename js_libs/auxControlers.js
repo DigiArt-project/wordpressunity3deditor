@@ -465,8 +465,8 @@ function displayDoorProperties(event, nameDoorSource){
 
     // // Prompt "Select"
     option = document.createElement("option");
-    option.text = "Select a scene";
-    option.value = "Select a scene";
+    option.text = "Select a door";
+    option.value = "Select a door";
     option.selected = true;
     option.disabled = true;
     popupDoorSelect.add(option);
@@ -474,8 +474,14 @@ function displayDoorProperties(event, nameDoorSource){
     // Add doors from other scenes
     var doorsFromOtherScenes = [];
 
-    for (var l=0; l<doorsAll.length; l++){
-        doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene );
+
+
+    for (var l=0; l < doorsAll.length; l++){
+
+        console.log(l, envir.scene.getObjectByName(nameDoorSource).doorName_source , doorsAll[l].door);
+
+        if (envir.scene.getObjectByName(nameDoorSource).doorName_source !== doorsAll[l].door)
+            doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene + " (" + doorsAll[l].sceneSlug + ")" );
     }
 
     // Add options for each intersected object

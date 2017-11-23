@@ -250,7 +250,7 @@ $user_id = get_current_user_id();
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>

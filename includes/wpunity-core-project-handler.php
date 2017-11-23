@@ -1446,14 +1446,20 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $door_scale_x = $value['scale'][0];
                 $door_scale_y = $value['scale'][1];
                 $door_scale_z = $value['scale'][2];
-                $door_title = get_the_title($door_id);
-                $door_scene_arrival = $value['sceneName_target'];
+                $door_title = $value['doorName_source'];
+
+                $door_scene_arrival =  explode("(", $value['sceneName_target'])[1]; // After ( is the slug. Before is the name
+                $door_scene_arrival = rtrim($door_scene_arrival, ")"); // remove also the last parenthesis
+
                 $door_door_arrival = $value['doorName_target'];
                 $door_transform_fid = wpunity_create_fids($current_fid++);
                 $door_obj_fid = wpunity_create_fids($current_fid++);
                 $door_guid = wpunity_create_guids('obj', $door_obj);
 
-                $door_finalyaml = wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,$door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid);
+                $door_finalyaml = wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,
+                    $door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,
+                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid);
+
                 $allObjectsYAML = $allObjectsYAML . $LF . $door_finalyaml;
             }
             if ($value['categoryName'] == 'Artifact'){
@@ -2012,7 +2018,11 @@ function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$po
     return $file_content_return;
 }
 
-function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,$door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid){
+function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,
+                                    $door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,
+                                    $door_title,
+                                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid){
+
     $file_content_return = str_replace("___[door_fid]___",$door_fid,$door_yaml);
     $file_content_return = str_replace("___[door_pos_x]___",$door_pos_x,$file_content_return);
     $file_content_return = str_replace("___[door_pos_y]___",$door_pos_y,$file_content_return);
@@ -2024,7 +2034,7 @@ function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y
     $file_content_return = str_replace("___[door_scale_x]___",$door_scale_x,$file_content_return);
     $file_content_return = str_replace("___[door_scale_y]___",$door_scale_y,$file_content_return);
     $file_content_return = str_replace("___[door_scale_z]___",$door_scale_z,$file_content_return);
-    $file_content_return = str_replace("___[door_title]___",$door_title,$file_content_return);
+    $file_content_return = str_replace("___[door_title]___", $door_title, $file_content_return);
     $file_content_return = str_replace("___[door_scene_arrival]___",$door_scene_arrival,$file_content_return);
     $file_content_return = str_replace("___[door_door_arrival]___",$door_door_arrival,$file_content_return);
     $file_content_return = str_replace("___[door_transform_fid]___",$door_transform_fid,$file_content_return);
