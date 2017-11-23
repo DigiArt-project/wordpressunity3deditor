@@ -194,6 +194,8 @@ class vr_editor_environmentals {
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
         this.orbitControls.target.set( 0, 0, 0);
+        this.orbitControls.object.zoom = 1.7;
+        this.orbitControls.object.updateProjectionMatrix();
         this.orbitControls.name = "orbitControls";
 
         // Add a helper for debug purpose

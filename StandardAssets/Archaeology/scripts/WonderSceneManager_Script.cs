@@ -13,6 +13,10 @@ public class WonderSceneManager_Script : MonoBehaviour
 	void Awake() // Awake is important for oculus to take changes
 	{
 
+	    // ingame debug console with backquote
+        var goDebug = new GameObject();
+        goDebug.AddComponent<Console2> ();
+
 		// Zoom: find camera 
 		camera = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera> (); // ms.ovrMode ? GameObject.Find ("CenterEyeAnchor").GetComponent<Camera> () : GameObject.Find ("FirstPersonCharacter").GetComponent<Camera> ();
 

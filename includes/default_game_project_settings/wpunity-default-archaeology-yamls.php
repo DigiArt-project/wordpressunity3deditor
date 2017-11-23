@@ -61,14 +61,13 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[poi_v_scale_z]___
       objectReference: {fileID: 0}
+    - target: {fileID: 114895655547013306, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: videoToShow
+      value: ___[poi_v_v_name]___
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
   m_IsPrefabParent: 0
-  - target: {fileID: 114895655547013306, guid: 007c17ee709168148aa4aa7afd9e1076,
-    type: 2}
-  propertyPath: videoToShow
-  value: ___[poi_v_v_name]___
-  objectReference: {fileID: 0}
 --- !u!4 &___[poi_v_trans_fid]___ stripped
 Transform:
   m_PrefabParentObject: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076,
@@ -3226,7 +3225,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.8
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_LocalPosition.x
@@ -3239,6 +3238,14 @@ Prefab:
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: field of view
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: m_Height
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
       propertyPath: m_IsActive
