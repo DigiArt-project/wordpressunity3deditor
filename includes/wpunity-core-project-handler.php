@@ -328,6 +328,16 @@ function wpunity_upload_dir_forAssets( $args ) {
             $args['subdir']  = $newdir;
             $args['path']   .= $newdir;
             $args['url']    .= $newdir;
+        }else{
+            $pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+
+            $newdir =  '/' . $pathofPost . '/Models';
+
+            $args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+            $args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+            $args['subdir']  = $newdir;
+            $args['path']   .= $newdir;
+            $args['url']    .= $newdir;
         }
 
 
@@ -696,7 +706,25 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
         }
     }
 
+    $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true); // Video ID
+    if(is_numeric($videoID)){
+        $attachment_post = get_post($videoID);
+        $attachment_file = $attachment_post->guid;
+        $attachment_tempname = str_replace('\\', '/', $attachment_file);
+        $attachment_name = pathinfo($attachment_tempname);
+        $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        copy($attachment_file,$new_file);
+    }
 
+    $featImageID = get_post_thumbnail_id($asset_id); // featured Image ID
+    if(is_numeric($featImageID)){
+        $attachment_post = get_post($featImageID);
+        $attachment_file = $attachment_post->guid;
+        $attachment_tempname = str_replace('\\', '/', $attachment_file);
+        $attachment_name = pathinfo($attachment_tempname);
+        $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        copy($attachment_file,$new_file);
+    }
 
 }
 

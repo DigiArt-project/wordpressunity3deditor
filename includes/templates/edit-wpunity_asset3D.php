@@ -87,7 +87,6 @@ $allGamesPage = wpunity_getEditpage('allgames');
 $editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
 	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'])); //Description of the Asset (Form value)
 
@@ -155,7 +154,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-get_header(); ?>
+get_header();
+?>
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
@@ -397,7 +397,7 @@ if($create_new == 0) {
 
                         <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <label for="videoFileInput"> Select a video</label>
-                            <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
+                            <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4,video/ogv"/>
                         </div>
                     </div>
 
