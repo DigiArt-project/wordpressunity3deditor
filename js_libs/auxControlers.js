@@ -125,7 +125,11 @@ function onMouseDownSelect( event ) {
 
             var trs = delArchive[nameToRestore]["trs"];
 
-            addAssetToCanvas(nameToRestore, delArchive[nameToRestore]["path"],
+            console.log("delArchive", delArchive);
+
+
+            addAssetToCanvas(nameToRestore, delArchive[nameToRestore]["assetid"],
+                delArchive[nameToRestore]["path"],
                 delArchive[nameToRestore]["obj"], delArchive[nameToRestore]["objID"],
                 delArchive[nameToRestore]["mtl"], delArchive[nameToRestore]["mtlID"],
                 delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
