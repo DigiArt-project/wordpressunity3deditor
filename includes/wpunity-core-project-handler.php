@@ -1365,11 +1365,20 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
             if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
                 $poi_img_id = $value['assetid'];
                 $content_post = get_post($poi_img_id);
+
+
+
                 $asset_type = get_the_terms( $poi_img_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
                 $poi_img_obj = get_post_meta($poi_img_id,'wpunity_asset3d_obj',true);
+
+
+
                 $poi_img_sprite = get_post_meta($poi_img_id,'wpunity_asset3d_screenimage',true);
+
+
+
 
                 $poi_img_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_it_fid = wpunity_create_fids($current_fid++);
@@ -1384,7 +1393,11 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_scale_y = $value['scale'][1];
                 $poi_it_scale_z = $value['scale'][2];
                 $poi_it_title = get_the_title($poi_img_id);
-                $poi_it_sprite_guid = wpunity_create_guids('jpg', $poi_img_sprite);
+
+
+                $post_featuredimage_url = get_the_post_thumbnail_url($poi_img_id, 'full'); // http:// ..... /image.jpg
+                $poi_it_sprite_name = pathinfo($post_featuredimage_url)['filename']; // image
+
                 $poi_it_text = $content_post->post_content; // CHECK
                 $poi_it_connector_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_fid = wpunity_create_fids($current_fid++);
@@ -1392,7 +1405,8 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,
                     $poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,
-                    $poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
+                    $poi_it_sprite_name,
+                    $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_img_finalyaml;
             }
@@ -1981,7 +1995,12 @@ function wpunity_replace_site_unity($site_yaml,$site_fid,$site_obj_guid,$site_po
     return $file_content_return;
 }
 
-function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,$poi_it_sprite_guid,$poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid){
+function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,
+                                       $poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,
+                                       $poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,
+                                       $poi_it_title,$poi_it_sprite_name,
+                                       $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid){
+
     $file_content_return = str_replace("___[poi_it_fid]___",$poi_it_fid,$poi_img_yaml);
     $file_content_return = str_replace("___[poi_it_pos_x]___",$poi_it_pos_x,$file_content_return);
     $file_content_return = str_replace("___[poi_it_pos_y]___",$poi_it_pos_y,$file_content_return);
@@ -1994,7 +2013,7 @@ function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$
     $file_content_return = str_replace("___[poi_it_scale_y]___",$poi_it_scale_y,$file_content_return);
     $file_content_return = str_replace("___[poi_it_scale_z]___",$poi_it_scale_z,$file_content_return);
     $file_content_return = str_replace("___[poi_it_title]___",$poi_it_title,$file_content_return);
-    $file_content_return = str_replace("___[poi_it_sprite_guid]___",$poi_it_sprite_guid,$file_content_return);
+    $file_content_return = str_replace("___[poi_it_sprite_name]___",$poi_it_sprite_name,$file_content_return);
     $file_content_return = str_replace("___[poi_it_text]___",$poi_it_text,$file_content_return);
     $file_content_return = str_replace("___[poi_it_connector_fid]___",$poi_it_connector_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_it_obj_fid]___",$poi_it_obj_fid,$file_content_return);
