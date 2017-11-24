@@ -1411,16 +1411,38 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_img_finalyaml;
             }
             if ($value['categoryName'] == 'Points of Interest (Video)'){
+
+
+                $fgh = fopen("output_video.txt","w");
+
                 $poi_vid_id = $value['assetid'];
+
+
                 $asset_type = get_the_terms( $poi_vid_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
 
-                $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_video',true);
-                $attachment_video_post = get_post($poi_vid_obj);
+
+                fwrite($fgh, $poi_vid_id . PHP_EOL);
+
+
+                $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_obj',true);
+
+                fwrite($fgh, $poi_vid_obj . PHP_EOL);
+
+
+                $poi_vid_video = get_post_meta($poi_vid_id,'wpunity_asset3d_video',true);
+
+                fwrite($fgh, $poi_vid_video . PHP_EOL);
+
+                $attachment_video_post = get_post($poi_vid_video);
+
+                fwrite($fgh, print_r($attachment_video_post,true). PHP_EOL);
+
                 $attachment_file = $attachment_video_post->guid;
                 $attachment_tempname = str_replace('\\', '/', $attachment_file);
                 $attachment_name = pathinfo($attachment_tempname);
 
+                fwrite($fgh, print_r($attachment_name,true). PHP_EOL);
 
                 $poi_vid_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_v_fid = wpunity_create_fids($current_fid++);
@@ -1437,12 +1459,22 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_title = get_the_title($poi_vid_id);
                 $poi_v_trans_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
+
+
+
+
+
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
+
+
                 $poi_v_v_name = $attachment_name['filename'];
+
+                fwrite($fgh, $poi_v_v_name);
+                fclose($fgh);
 
                 $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
                     $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
-                    $poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name);
+                    $poi_v_trans_fid,$poi_v_obj_fid, $poi_v_obj_guid, $poi_v_v_name);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
             }
@@ -2022,7 +2054,10 @@ function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,
     return $file_content_return;
 }
 
-function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,$poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name){
+function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,
+                                       $poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,
+                                       $poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name){
+
     $file_content_return = str_replace("___[poi_v_fid]___",$poi_v_fid,$poi_vid_yaml);
     $file_content_return = str_replace("___[poi_v_pos_x]___",$poi_v_pos_x,$file_content_return);
     $file_content_return = str_replace("___[poi_v_pos_y]___",$poi_v_pos_y,$file_content_return);

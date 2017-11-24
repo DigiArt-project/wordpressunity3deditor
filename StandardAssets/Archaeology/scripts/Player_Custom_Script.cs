@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityStandardAssets.Characters.FirstPerson;
+using System;
 
 public class Player_Custom_Script : MonoBehaviour {
 
@@ -22,7 +23,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		// camera 2 is a camera on a separate place for viewing the selected 3D model
 		camera2 = GameObject.Find ("camera2").GetComponent<Camera> ();
 	}
-	
+
 
 	void OnTriggerEnter(Collider other)
 	{
@@ -32,19 +33,32 @@ public class Player_Custom_Script : MonoBehaviour {
 			string spriteName = other.gameObject.GetComponent<DisplayPOI_Script> ().imageSpriteNameToShow;
 
 			// Set sprite and text in panel
-			GameObject.Find ("img_ti").GetComponent<Image> ().sprite = Resources.Load<Sprite> (spriteName);
+			Sprite image_sprite = Resources.Load<Sprite> (spriteName);
+
+			if (image_sprite){
+                GameObject.Find ("img_ti").GetComponent<Image> ().sprite = image_sprite;
+			} else {
+			    Debug.Log( spriteName + " was not found. Are you sure you have imported it in Resources folder?" );
+			}
+
 			GameObject.Find ("txt_ti").GetComponent<Text> ().text = other.gameObject.GetComponent<DisplayPOI_Script> ().textToShow;
 
-			canvas_ti.enabled = true;
+            canvas_ti.enabled = true;
 
 		} else if (other.gameObject.tag == "poi_video") {
 
 			// Get the name of the sprite from the collided object
 			string videoName = other.gameObject.GetComponent<DisplayPOI_Script> ().videoToShow;
 
-			GameObject.Find("panel_v").GetComponent<VideoPlayer>().clip = Resources.Load<VideoClip> (videoName);
+			VideoClip videoClip = Resources.Load<VideoClip> (videoName);
 
-			canvas_v.enabled = true;
+			if (videoClip) {
+				GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().clip = videoClip;
+				canvas_v.enabled = true;
+			} else {
+				Debug.Log (videoName + " video file was not found. Have you imported it in Resources folder?");
+			}
+
 		} else if (other.gameObject.tag == "poi_artefact") {
 
 			canvas_a.enabled = true;

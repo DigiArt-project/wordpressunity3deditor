@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//  EVERYTHING MOVED TO PLAYER_CUSTOM_SCRIPT.CS
+
 public class DisplayVideo_Script : MonoBehaviour {
 //
 //	private MovieTexture movie;

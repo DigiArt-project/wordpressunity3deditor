@@ -4,7 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
+
+//  EVERYTHING MOVED TO PLAYER_CUSTOM_SCRIPT.CS
+
 public class DisplayPOI_Script : MonoBehaviour {
+
+
 
 
 	public string imageSpriteNameToShow = "";

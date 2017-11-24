@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//  EVERYTHING MOVED TO PLAYER_CUSTOM_SCRIPT.CS
+
 public class Display3DViewer_Script : MonoBehaviour {
 
 	private Camera camera2;
