@@ -3835,6 +3835,8 @@ CanvasRenderer:
   m_GameObject: {fileID: 2040773552}
 ");
 
+
+
 $ini_scene_main_menu_arch_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
@@ -4592,6 +4594,49 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 651176152}
+--- !u!1 &724718817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 724718819}
+  - component: {fileID: 724718818}
+  m_Layer: 0
+  m_Name: GameObject_Analytics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &724718818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 724718817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b641ab8cd6194d7da1e51fef12eee7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  app_key: 
+  api_key: 
+  disable: To enable look at tracking_enabled field
+--- !u!4 &724718819
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 724718817}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}  
 --- !u!1 &925752999
 GameObject:
   m_ObjectHideFlags: 0
@@ -5578,7 +5623,6 @@ GameObject:
   - component: {fileID: 1940476102}
   - component: {fileID: 1940476101}
   - component: {fileID: 1940476100}
-  - component: {fileID: 1940476099}
   m_Layer: 0
   m_Name: mainmenu_Camera
   m_TagString: MainCamera
@@ -5586,20 +5630,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1940476099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1940476098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b641ab8cd6194d7da1e51fef12eee7b, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  app_key: 1
-  api_key: secret
-  disable: False
 --- !u!124 &1940476100
 Behaviour:
   m_ObjectHideFlags: 0
