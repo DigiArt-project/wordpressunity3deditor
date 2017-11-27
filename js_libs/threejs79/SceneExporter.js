@@ -300,6 +300,8 @@ THREE.SceneExporter.prototype = {
             if (o.name != 'avatarYawObject'){
 
                 var quatR = new THREE.Quaternion();
+
+
                 var eulerR = new THREE.Euler( o.rotation._x,  -o.rotation.y , - o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
                 quatR.setFromEuler(eulerR);
 
@@ -313,10 +315,13 @@ THREE.SceneExporter.prototype = {
                     '	"rotation" : ' + "[" + o.rotation.x  + "," +
                                                o.rotation.y  + "," +
                                                o.rotation.z  + "]" + ',', //+ Vector3String(o.rotation) + ',',
+
                     '	"quaternion" : ' + "[" + quatR._x + "," +
                                                 quatR._y + "," +
                                                 quatR._z + "," +
                                                 quatR._w + "]" + ',',
+
+
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"assetid" : ' + '"' + o.assetid  + '"' + ',',
@@ -344,6 +349,22 @@ THREE.SceneExporter.prototype = {
                 var camEulerCombined = new THREE.Euler(- o.children[0].rotation._x, (Math.PI - o.rotation.y)%(2*Math.PI), 0, 'YXZ');
                 quatCombined.setFromEuler(camEulerCombined);
 
+                // player is only around y
+                var quatR_player = new THREE.Quaternion();
+                var eulerR_player = new THREE.Euler( 0, (Math.PI - o.rotation._y)%(2*Math.PI) , 0, 'YXZ')   ; // (Math.PI - o.rotation.y)%(2*Math.PI)
+                quatR_player.setFromEuler(eulerR_player);
+
+
+                console.log("o.rotation", o.rotation);
+
+                // camera is only around x
+                var quatR_camera = new THREE.Quaternion();
+                var eulerR_camera = new THREE.Euler( -o.children[0].rotation._x,  0 , 0, 'YXZ');
+                quatR_camera.setFromEuler(eulerR_camera);
+
+
+
+
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
                     '	"position" : ' + Vector3String(o.position) + ',',
@@ -354,10 +375,24 @@ THREE.SceneExporter.prototype = {
                                                  quatCombined._y.toFixed(4) + "," +
                                                  quatCombined._z.toFixed(4) + "," +
                                                  quatCombined._w.toFixed(4) + "]" + ',',
+                    '	"quaternion_player" : ' + "[" + quatR_player._x.toFixed(4) + "," +
+                    quatR_player._y.toFixed(4) + "," +
+                    quatR_player._z.toFixed(4) + "," +
+                    quatR_player._w.toFixed(4) + "]" + ',',
+                    '	"quaternion_camera" : ' + "[" + quatR_camera._x.toFixed(4) + "," +
+                    quatR_camera._y.toFixed(4) + "," +
+                    quatR_camera._z.toFixed(4) + "," +
+                    quatR_camera._w.toFixed(4) + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
+
+
+                console.log(output);
             }
+
+
+
 
             return generateMultiLineString( output, '\n\t\t', n );
         }

@@ -1633,7 +1633,7 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
     return $file_content_return;
 }
 
-function wpunity_replace_wonderaround_unity($term_meta_wonder_around,$scene_id){
+function wpunity_replace_wonderaround_unity($term_meta_wonder_around, $scene_id){
 
     $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
 
@@ -1645,19 +1645,38 @@ function wpunity_replace_wonderaround_unity($term_meta_wonder_around,$scene_id){
             $x_pos = - $value['position'][0]; // x is in the opposite site in unity
             $y_pos = $value['position'][1];
             $z_pos = $value['position'][2];
-            $x_rot = $value['quaternion'][0];
-            $y_rot = $value['quaternion'][1];
-            $z_rot = $value['quaternion'][2];
-            $w_rot = $value['quaternion'][3];
+
+
+            // In FPV: Chemistry, Archaeology we have two quaternions (player around y only, firstpersonchar around x only)
+            // In RTS: Windenergy we have one quaternion
+
+            $x_player_rot = $value['quaternion_player'][0];
+            $y_player_rot = $value['quaternion_player'][1];
+            $z_player_rot = $value['quaternion_player'][2];
+            $w_player_rot = $value['quaternion_player'][3];
+
+            $x_camera_rot = $value['quaternion_camera'][0];
+            $y_camera_rot = $value['quaternion_camera'][1];
+            $z_camera_rot = $value['quaternion_camera'][2];
+            $w_camera_rot = $value['quaternion_camera'][3];
+
         }
     }
     $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_wonder_around);
     $file_content_return = str_replace("___[player_position_y]___",$y_pos,$file_content_return);
     $file_content_return = str_replace("___[player_position_z]___",$z_pos,$file_content_return);
-    $file_content_return = str_replace("___[player_rotation_x]___",$x_rot,$file_content_return);
-    $file_content_return = str_replace("___[player_rotation_y]___",$y_rot,$file_content_return);
-    $file_content_return = str_replace("___[player_rotation_z]___",$z_rot,$file_content_return);
-    $file_content_return = str_replace("___[player_rotation_w]___",$w_rot,$file_content_return);
+
+    $file_content_return = str_replace("___[player_rotation_x]___",$x_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_y]___",$y_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_z]___",$z_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_w]___",$w_player_rot,$file_content_return);
+
+    $file_content_return = str_replace("___[camera_rotation_x]___", $x_camera_rot, $file_content_return);
+    $file_content_return = str_replace("___[camera_rotation_y]___", $y_camera_rot, $file_content_return);
+    $file_content_return = str_replace("___[camera_rotation_z]___", $z_camera_rot, $file_content_return);
+    $file_content_return = str_replace("___[camera_rotation_w]___", $w_camera_rot, $file_content_return);
+
+
     return $file_content_return;
 }
 
