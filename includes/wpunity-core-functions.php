@@ -1,5 +1,147 @@
 <?php
 
+add_action( 'user_register', 'wpunity_registrationhook_createGame', 10, 1 );
+
+function wpunity_registrationhook_createGame( $user_id ) {
+
+	$user_info = get_userdata($user_id);
+	$username = $user_info->user_login;
+
+	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+	$game_type_chosen_id = $archaeology_tax->term_id;
+	$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
+
+	$game_taxonomies = array(
+		'wpunity_game_type' => array(
+			$game_type_chosen_id,
+		),
+		'wpunity_game_cat' => array(
+			$realplace_tax->term_id,
+		)
+	);
+
+	$game_title = $username . ' Sample Game';
+
+	$game_information = array(
+		'post_title' => $game_title,
+		'post_content' => '',
+		'post_type' => 'wpunity_game',
+		'post_status' => 'publish',
+		'tax_input' => $game_taxonomies,
+		'post_author' => $user_id,
+	);
+
+	$game_id = wp_insert_post($game_information);
+
+	wpunity_registrationhook_createAssets($user_id,$username,$game_id);
+
+}
+
+function wpunity_registrationhook_createAssets($user_id,$username,$game_id){
+	$game_post = get_post($game_id);
+	$game_slug = $game_post->post_name;
+
+	$parentGame_tax = get_term_by('slug', $game_slug, 'wpunity_asset3d_pgame');
+	$parentGame_tax_id = $parentGame_tax->term_id;
+
+	$artifact_tax = get_term_by('slug', 'artifact', 'wpunity_asset3d_cat');
+	$artifact_tax_id = $artifact_tax->term_id;
+	$artifactTitle = $username . ' Sample Artifact';
+	$artifactDesc = 'Artifact item created as sample';
+
+	$door_tax = get_term_by('slug', 'door', 'wpunity_asset3d_cat');
+	$door_tax_id = $door_tax->term_id;
+	$doorTitle = $username . ' Sample Door';
+	$doorDesc = 'Door item created as sample';
+
+	$poiImage_tax = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
+	$poiImage_tax_id = $poiImage_tax->term_id;
+	$poiImageTitle = $username . ' Sample POI Image';
+	$poiImageDesc = 'POI Image item created as sample';
+
+	$poiVideo_tax = get_term_by('slug', 'pois_video', 'wpunity_asset3d_cat');
+	$poiVideo_tax_id = $poiVideo_tax->term_id;
+	$poiVideoTitle = $username . ' Sample POI Video';
+	$poiVideoDesc = 'POI Video item created as sample';
+
+	$site_tax = get_term_by('slug', 'site', 'wpunity_asset3d_cat');
+	$site_tax_id = $site_tax->term_id;
+	$siteTitle = $username . ' Sample Site';
+	$siteDesc = 'Site item created as sample';
+
+	$newArtifact_ID = wpunity_create_asset_frontend($parentGame_tax_id,$artifact_tax_id,$artifactTitle,$artifactDesc,$game_slug);
+	$newDoor_ID = wpunity_create_asset_frontend($parentGame_tax_id,$door_tax_id,$doorTitle,$doorDesc,$game_slug);
+	$newPOIimage_ID = wpunity_create_asset_frontend($parentGame_tax_id,$poiImage_tax_id,$poiImageTitle,$poiImageDesc,$game_slug);
+	$newPOIvideo_ID = wpunity_create_asset_frontend($parentGame_tax_id,$poiVideo_tax_id,$poiVideoTitle,$poiVideoDesc,$game_slug);
+	$newSite_ID = wpunity_create_asset_frontend($parentGame_tax_id,$site_tax_id,$siteTitle,$siteDesc,$game_slug);
+
+	wpunity_registrationhook_uploadAssets_noTexture($artifactTitle,$newArtifact_ID,$game_slug,'artifact');
+	wpunity_registrationhook_uploadAssets_noTexture($doorTitle,$newDoor_ID,$game_slug,'door');
+	wpunity_registrationhook_uploadAssets_noTexture($poiImageTitle,$newPOIimage_ID,$game_slug,'poi_image');
+	wpunity_registrationhook_uploadAssets_noTexture($poiVideoTitle,$newPOIvideo_ID,$game_slug,'poi_video');
+	wpunity_registrationhook_uploadAssets_withTexture($siteTitle,$newSite_ID,$game_slug,'site');
+}
+
+function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
+	$has_image = false; $has_video = false;
+	if($assetTypeNumber == 'artifact'){
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/artifact/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/artifact/star_yellow.obj");
+	}elseif($assetTypeNumber == 'door') {
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/door/door_green.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/door/door_green.obj");
+	}elseif($assetTypeNumber == 'poi_image') {
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star_blue.obj");
+		$has_image = true;
+		$image_content = '';
+	}elseif($assetTypeNumber == 'poi_video') {
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star_red.obj");
+		$has_video = true;
+		$video_content = '';
+	}
+
+	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
+	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
+
+	// OBJ
+	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
+	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
+	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
+	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
+
+	// Set value of attachment IDs at custom fields
+	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
+	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
+
+}
+
+function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
+
+	$texture_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.jpg";
+	$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
+	$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
+
+	$textureFile_id = wpunity_upload_Assetimg64($texture_content, 'texture_'.$assetTitleForm, $asset_newID, $gameSlug);
+	$textureFile_filename = basename(get_attached_file($textureFile_id));
+
+	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
+	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
+
+	// OBJ
+	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
+	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
+	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
+	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
+
+	// Set value of attachment IDs at custom fields
+	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
+	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
+	update_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
+}
+
 function wpunity_get_all_molecules_of_game($project_id){
 
 	$game_post = get_post($project_id);
