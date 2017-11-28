@@ -63,11 +63,16 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			canvas_a.enabled = true;
 
-			// show text on canvas
+			// show text on canvas by fetching it from the collided object
 			GameObject.Find ("txt_a").GetComponent<Text> ().text = other.gameObject.GetComponent<DisplayPOI_Script> ().textToShow;
 
-			// Copy mesh 
-			Instantiate(other.gameObject.transform.GetChild(0), GameObject.Find ("meshcontainer").transform);
+			Transform collidedObjectTransform = other.gameObject.transform.GetChild (0);
+
+
+			GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (10, 10, 10);
+
+			// Copy mesh
+			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
 
 			camera.enabled = false;
 			camera2.enabled = true;
@@ -85,7 +90,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 		} else if (other.gameObject.tag == "poi_artefact") {
-			
+
 			// It is not possible because FPS is disabled. Done with button that calls closeArtefactView
 
 		}
@@ -112,14 +117,14 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			// Rotation
 			GameObject.Find ("meshcontainer").transform.Rotate (
-				new Vector3 (Input.GetAxis ("Mouse Y") * Time.deltaTime * 200, Input.GetAxis ("Mouse X") * Time.deltaTime * 200, 0)
+				new Vector3 (- Input.GetAxis ("Mouse Y") * Time.deltaTime * 200, - Input.GetAxis ("Mouse X") * Time.deltaTime * 200, 0)
 			);
 
 
 			// Scaling
 			if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-				Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale - 
-					7 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
+				Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale -
+					30 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
 				
 				if (targetScale.x > 0)
 					GameObject.Find ("meshcontainer").transform.localScale = 
