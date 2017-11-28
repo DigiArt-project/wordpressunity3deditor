@@ -79,7 +79,7 @@ function wpunity_registrationhook_createAssets($user_id,$username,$game_id){
 	wpunity_registrationhook_uploadAssets_noTexture($doorTitle,$newDoor_ID,$game_slug,'door');
 	wpunity_registrationhook_uploadAssets_noTexture($poiImageTitle,$newPOIimage_ID,$game_slug,'poi_image');
 	wpunity_registrationhook_uploadAssets_noTexture($poiVideoTitle,$newPOIvideo_ID,$game_slug,'poi_video');
-	wpunity_registrationhook_uploadAssets_withTexture($siteTitle,$newSite_ID,$game_slug,'site');
+	wpunity_registrationhook_uploadAssets_noTexture($siteTitle,$newSite_ID,$game_slug,'site');
 }
 
 function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
@@ -100,6 +100,9 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star_red.obj");
 		$has_video = true;
 		$video_content = '';
+	}elseif($assetTypeNumber == 'site') {
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
 	}
 
 	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
