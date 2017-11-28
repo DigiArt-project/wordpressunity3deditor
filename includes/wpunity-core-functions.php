@@ -94,12 +94,12 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star.mtl");
 		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star_blue.obj");
 		$has_image = true;
-		$image_content = '';
+		$image_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/image.jpg";
 	}elseif($assetTypeNumber == 'poi_video') {
 		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star.mtl");
 		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star_red.obj");
 		$has_video = true;
-		$video_content = '';
+		$video_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/bunny.mp4";
 	}elseif($assetTypeNumber == 'site') {
 		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
 		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
@@ -113,6 +113,16 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
 	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
 	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
+
+	if($has_image){
+		$attachment_id = wpunity_upload_img_vid( $image_content, $asset_newID);
+		set_post_thumbnail( $asset_newID, $attachment_id );
+	}
+
+	if($has_video){
+		$attachment_video_id = wpunity_upload_img_vid( $video_content, $asset_newID);
+		update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
+	}
 
 	// Set value of attachment IDs at custom fields
 	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
