@@ -48,10 +48,21 @@ class OBJImportSettings : AssetPostprocessor
 		string[] assetPaths = AssetDatabase.GetAllAssetPaths();
 		foreach (string path in assetPaths)
 		{
-			if (path.Contains ("NoGlossy")) {
-				Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
-				mat.SetFloat ("_Glossiness", 0);
-			}
+            Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
+            if (mat) {
+                if (path.Contains ("NoGlossy")) {
+
+                    mat.SetFloat ("_Glossiness", 0);
+
+                } else if (path.Contains ("TwoSided")) {
+
+                    Debug.Log ("mat.name" + mat.name);
+                    Debug.Log ("TwoSided");
+
+                    mat.shader = Shader.Find ("Standard (Two Sided)");
+
+                }
+            }
 		}
 	}
 }
