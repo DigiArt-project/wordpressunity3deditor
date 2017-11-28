@@ -373,25 +373,25 @@ if($create_new == 0) {
 
                         <hr class="WhiteSpaceSeparator">
 
-                        <h3 class="mdc-typography--title">Image POI Details</h3>
+                        <!--<h3 class="mdc-typography--title">Image POI Details</h3>
 
                         <div id="poiImgDetailsWrapper">
                             <a id="poiAddFieldBtn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
                                 <i class="material-icons ButtonIcon">add</i> Add Field
                             </a>
-                        </div>
+                        </div>-->
                     </div>
 
                     <div id="poiVideoDetailsPanel" style="display: none;">
 
-                        <h3 class="mdc-typography--title">Featured Image</h3>
+                        <!--<h3 class="mdc-typography--title">Featured Image</h3>
 
-                        <img id="poiVideoFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                        <img id="poiVideoFeaturedImgPreview" src="<?php /*echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); */?>">
                         <br>
                         <label for="poiVideoFeaturedImgInput"> Select a featured image</label>
                         <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
 
-                        <hr class="WhiteSpaceSeparator">
+                        <hr class="WhiteSpaceSeparator">-->
 
                         <h3 class="mdc-typography--title">Video POI Details</h3>
 
