@@ -27,59 +27,7 @@ public class Player_Custom_Script : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "poi_imagetext") {
-
-			// Get the name of the sprite from the collided object
-			string spriteName = other.gameObject.GetComponent<DisplayPOI_Script> ().imageSpriteNameToShow;
-
-			// Set sprite and text in panel
-			Sprite image_sprite = Resources.Load<Sprite> (spriteName);
-
-			if (image_sprite){
-                GameObject.Find ("img_ti").GetComponent<Image> ().sprite = image_sprite;
-			} else {
-			    Debug.Log( spriteName + " was not found. Are you sure you have imported it in Resources folder?" );
-			}
-
-			GameObject.Find ("txt_ti").GetComponent<Text> ().text = other.gameObject.GetComponent<DisplayPOI_Script> ().textToShow;
-
-            canvas_ti.enabled = true;
-
-		} else if (other.gameObject.tag == "poi_video") {
-
-			// Get the name of the sprite from the collided object
-			string videoName = other.gameObject.GetComponent<DisplayPOI_Script> ().videoToShow;
-
-			VideoClip videoClip = Resources.Load<VideoClip> (videoName);
-
-			if (videoClip) {
-				GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().clip = videoClip;
-				canvas_v.enabled = true;
-			} else {
-				Debug.Log (videoName + " video file was not found. Have you imported it in Resources folder?");
-			}
-
-		} else if (other.gameObject.tag == "poi_artefact") {
-
-			canvas_a.enabled = true;
-
-			// show text on canvas by fetching it from the collided object
-			GameObject.Find ("txt_a").GetComponent<Text> ().text = other.gameObject.GetComponent<DisplayPOI_Script> ().textToShow;
-
-			Transform collidedObjectTransform = other.gameObject.transform.GetChild (0);
-
-
-			GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (10, 10, 10);
-
-			// Copy mesh
-			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
-
-			camera.enabled = false;
-			camera2.enabled = true;
-
-			gameObject.GetComponent<FirstPersonController> ().enabled = false;
-		}
-
+		checkTag (other.gameObject);
 	}
 
 
@@ -90,9 +38,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 		} else if (other.gameObject.tag == "poi_artefact") {
-
 			// It is not possible because FPS is disabled. Done with button that calls closeArtefactView
-
 		}
 	}
 
@@ -112,6 +58,7 @@ public class Player_Custom_Script : MonoBehaviour {
 	}
 
 
+
 	void Update(){
 		if (camera2.isActiveAndEnabled) {
 
@@ -125,14 +72,113 @@ public class Player_Custom_Script : MonoBehaviour {
 			if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
 				Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale -
 					30 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
-				
+
 				if (targetScale.x > 0)
-					GameObject.Find ("meshcontainer").transform.localScale = 
+					GameObject.Find ("meshcontainer").transform.localScale =
 						Vector3.Lerp (GameObject.Find ("meshcontainer").transform.localScale, targetScale, 10 * Time.deltaTime);
 			}
-		
-		
+
+
 		}
+
+
+		if (camera.isActiveAndEnabled) {
+
+			// Scroll wheel zoom
+			if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
+				if (camera != null) {
+					if (camera.fieldOfView <= 60)
+						camera.fieldOfView -= 10 * Input.GetAxis ("Mouse ScrollWheel");
+					else
+						camera.fieldOfView = 60;
+				}
+			}
+
+
+			if (Input.GetMouseButtonDown(0)) {
+//				RaycastHit  hit;
+//				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+//
+//				if (Physics.RaycastAll (ray, out hit)) {
+//					checkTag (hit.transform.gameObject);
+//				}
+
+
+				RaycastHit[] hits;
+
+				hits = Physics.RaycastAll(camera.ScreenPointToRay(Input.mousePosition), 100.0F);
+
+				for (int i = 0 ; i < hits.Length; i++) {
+					if (hits [i].transform.gameObject.tag != "Untagged") {
+						checkTag (hits [i].transform.gameObject);
+						break;
+					}
+				}
+
+
+			}
+
+		}
+
+	}
+
+
+	/* Check the tag of the clicked or collided object */
+	void checkTag(GameObject go){
+
+		if (go.tag == "poi_imagetext") {
+
+			// Get the name of the sprite from the collided object
+			string spriteName = go.GetComponent<DisplayPOI_Script> ().imageSpriteNameToShow;
+
+			// Set sprite and text in panel
+			Sprite image_sprite = Resources.Load<Sprite> (spriteName);
+
+			if (image_sprite){
+				GameObject.Find ("img_ti").GetComponent<Image> ().sprite = image_sprite;
+			} else {
+				Debug.Log( spriteName + " was not found. Are you sure you have imported it in Resources folder?" );
+			}
+
+			GameObject.Find ("txt_ti").GetComponent<Text> ().text = go.GetComponent<DisplayPOI_Script> ().textToShow;
+
+			canvas_ti.enabled = true;
+
+		} else if (go.tag == "poi_video") {
+
+			// Get the name of the sprite from the collided object
+			string videoName = go.GetComponent<DisplayPOI_Script> ().videoToShow;
+
+			VideoClip videoClip = Resources.Load<VideoClip> (videoName);
+
+			if (videoClip) {
+				GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().clip = videoClip;
+				canvas_v.enabled = true;
+			} else {
+				Debug.Log (videoName + " video file was not found. Have you imported it in Resources folder?");
+			}
+
+		} else if (go.tag == "poi_artefact") {
+
+			canvas_a.enabled = true;
+
+			// show text on canvas by fetching it from the collided object
+			GameObject.Find ("txt_a").GetComponent<Text> ().text = go.GetComponent<DisplayPOI_Script> ().textToShow;
+
+			Transform collidedObjectTransform = go.transform.GetChild (0);
+
+
+			GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (10, 10, 10);
+
+			// Copy mesh
+			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
+
+			camera.enabled = false;
+			camera2.enabled = true;
+
+			gameObject.GetComponent<FirstPersonController> ().enabled = false;
+		}
+
 
 	}
 }

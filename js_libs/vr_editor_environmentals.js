@@ -234,7 +234,9 @@ class vr_editor_environmentals {
 
         this.scene.add(avatarControlsYawObject);
 
-        this.orbitControls.target = avatarControlsYawObject.position;
+        this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
+
+
 
 
 

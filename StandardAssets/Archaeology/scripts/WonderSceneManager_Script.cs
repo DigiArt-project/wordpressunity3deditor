@@ -59,15 +59,5 @@ public class WonderSceneManager_Script : MonoBehaviour
 	}
 
 	void Update(){
-
-		// Scroll wheel zoom
-		if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-			if (camera != null) {
-				if (camera.fieldOfView <= 60)
-					camera.fieldOfView -= 10 * Input.GetAxis ("Mouse ScrollWheel");
-				else
-					camera.fieldOfView = 60;
-			} 
-		}
 	}
 }

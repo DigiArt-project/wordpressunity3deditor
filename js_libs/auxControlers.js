@@ -73,7 +73,8 @@ function onMouseDownSelect( event ) {
 
 
     var activMeshAndFloor = getActiveMeshes().concat(
-        [envir.cameraOrbit.children[0], transform_controls.getObjectByName('trs_modeChanger')]);
+        [  //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+            envir.cameraOrbit.children[0], transform_controls.getObjectByName('trs_modeChanger')]);
 
     // add the recycle bin and the mode change cube
     var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
@@ -171,6 +172,8 @@ function onMouseDownSelect( event ) {
 
     var nameL;
 
+
+
     // If only one object is intersected
     if (Object.keys(arrNameObjInter).length == 1) {
         nameL = Object.keys(arrNameObjInter)[0];
@@ -185,8 +188,6 @@ function onMouseDownSelect( event ) {
 
         //  Check for Door, MicroscopeTextbook, Box
         activeOverides(event, arrNameObjInter, nameL );
-
-
 
 
         // If more than 2 objects are intersected
