@@ -706,7 +706,9 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$g
         }
     }
 
+
     $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true); // Video ID
+
     if(is_numeric($videoID)){
         $attachment_post = get_post($videoID);
         $attachment_file = $attachment_post->guid;
@@ -716,7 +718,9 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$g
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
         $upload_dir = str_replace('\\','/',$upload_dir);
-        $new_file = $upload_dir .'/' .$gameSlug . "/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        $new_file = $upload_dir .'/' .$gameSlug . "Unity/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+
+
         copy($attachment_file,$new_file);
 
         $new_file_path_forCS = 'Assets/Resources' .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
