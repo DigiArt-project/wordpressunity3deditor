@@ -609,6 +609,14 @@ function wpunity_remove_menus() {
 
 //==========================================================================================================================================
 
+function wpunity_upload_img_vid_directory( $dir ) {
+	return array(
+		'path'   => $dir['basedir'] . '/Models',
+		'url'    => $dir['baseurl'] . '/Models',
+		'subdir' => '/Models',
+	) + $dir;
+}
+
 function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
@@ -618,7 +626,9 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation =
 	$upload_dir = wp_upload_dir();
 	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
+	add_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
 	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
+	remove_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
 
 	if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
 		return false;
