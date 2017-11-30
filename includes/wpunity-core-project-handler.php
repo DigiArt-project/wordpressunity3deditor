@@ -622,7 +622,7 @@ function wpunity_compile_models_gen($gameID, $gameSlug){
     $assetIds = wpunity_fetch_assetids_in_scenes($gameSlug);
 
     foreach ($assetIds as $asset_id)
-        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file);
+        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$gameSlug);
 }
 
 /**
@@ -633,7 +633,7 @@ function wpunity_compile_models_gen($gameID, $gameSlug){
  * @param $asset_id
  * @param $handybuilder_file
  */
-function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
+function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$gameSlug){
 
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
@@ -712,8 +712,15 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
         $attachment_file = $attachment_post->guid;
         $attachment_tempname = str_replace('\\', '/', $attachment_file);
         $attachment_name = pathinfo($attachment_tempname);
-        $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        $new_file = $upload_dir .'/' .$gameSlug . "/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
         copy($attachment_file,$new_file);
+
+        $new_file_path_forCS = 'Assets/Resources' .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
     $featImageID = get_post_thumbnail_id($asset_id); // featured Image ID
@@ -722,8 +729,15 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file){
         $attachment_file = $attachment_post->guid;
         $attachment_tempname = str_replace('\\', '/', $attachment_file);
         $attachment_name = pathinfo($attachment_tempname);
-        $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        //$new_file = $folder .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir = str_replace('\\','/',$upload_dir);
+        $new_file = $upload_dir . "/313112-sample-gameUnity/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];;
         copy($attachment_file,$new_file);
+
+        $new_file_path_forCS = 'Assets/Resources' .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
 }
@@ -1365,21 +1379,10 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
             if ($value['categoryName'] == 'Points of Interest (Image-Text)'){
                 $poi_img_id = $value['assetid'];
                 $content_post = get_post($poi_img_id);
-
-
-
                 $asset_type = get_the_terms( $poi_img_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
-
                 $poi_img_obj = get_post_meta($poi_img_id,'wpunity_asset3d_obj',true);
-
-
-
                 $poi_img_sprite = get_post_meta($poi_img_id,'wpunity_asset3d_screenimage',true);
-
-
-
-
                 $poi_img_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_it_fid = wpunity_create_fids($current_fid++);
                 $poi_it_pos_x = - $value['position'][0]; // x is in the opposite site in unity
@@ -1393,7 +1396,6 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_scale_y = $value['scale'][1];
                 $poi_it_scale_z = $value['scale'][2];
                 $poi_it_title = get_the_title($poi_img_id);
-
 
                 $post_featuredimage_url = get_the_post_thumbnail_url($poi_img_id, 'full'); // http:// ..... /image.jpg
                 $poi_it_sprite_name = pathinfo($post_featuredimage_url)['filename']; // image
@@ -1412,38 +1414,15 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
             }
             if ($value['categoryName'] == 'Points of Interest (Video)'){
 
-
-                $fgh = fopen("output_video.txt","w");
-
                 $poi_vid_id = $value['assetid'];
-
-
                 $asset_type = get_the_terms( $poi_vid_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
-
-
-                fwrite($fgh, $poi_vid_id . PHP_EOL);
-
-
                 $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_obj',true);
-
-                fwrite($fgh, $poi_vid_obj . PHP_EOL);
-
-
                 $poi_vid_video = get_post_meta($poi_vid_id,'wpunity_asset3d_video',true);
-
-                fwrite($fgh, $poi_vid_video . PHP_EOL);
-
                 $attachment_video_post = get_post($poi_vid_video);
-
-                fwrite($fgh, print_r($attachment_video_post,true). PHP_EOL);
-
                 $attachment_file = $attachment_video_post->guid;
                 $attachment_tempname = str_replace('\\', '/', $attachment_file);
                 $attachment_name = pathinfo($attachment_tempname);
-
-                fwrite($fgh, print_r($attachment_name,true). PHP_EOL);
-
                 $poi_vid_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
                 $poi_v_fid = wpunity_create_fids($current_fid++);
                 $poi_v_pos_x = - $value['position'][0]; // x is in the opposite site in unity
@@ -1459,18 +1438,8 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_title = get_the_title($poi_vid_id);
                 $poi_v_trans_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
-
-
-
-
-
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
-
-
                 $poi_v_v_name = $attachment_name['filename'];
-
-                fwrite($fgh, $poi_v_v_name);
-                fclose($fgh);
 
                 $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
                     $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
