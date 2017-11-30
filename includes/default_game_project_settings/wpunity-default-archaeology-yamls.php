@@ -202,7 +202,7 @@ Prefab:
     - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17,
         type: 2}
       propertyPath: imageSpriteNameToShow
-      value: ___[poi_it_sprite_guid]___
+      value: ___[poi_it_sprite_name]___
       objectReference: {fileID: 0}
     - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17,
         type: 2}
