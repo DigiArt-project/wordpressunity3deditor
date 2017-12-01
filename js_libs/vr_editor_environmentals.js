@@ -224,28 +224,16 @@ class vr_editor_environmentals {
 
         var avatarControlsYawObject = this.avatarControls.getObject();
 
-
-
-
-
-
-
         avatarControlsYawObject.position.set(this.initAvatarPosition.x, this.initAvatarPosition.y, this.initAvatarPosition.z);
 
         this.scene.add(avatarControlsYawObject);
 
         this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
-
-
-
-
         // Add a helper for this camera
         this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
         this.cameraAvatarHelper.name = "cameraAvatarHelper";
         this.scene.add( this.cameraAvatarHelper );
-
-
     }
 
 

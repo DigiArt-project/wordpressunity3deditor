@@ -5,9 +5,6 @@ using System;
 
 class OBJImportSettings : AssetPostprocessor
 {
-
-
-
    void OnPreprocessModel(){
 		ModelImporter modImport = assetImporter as ModelImporter;
 
@@ -22,8 +19,6 @@ class OBJImportSettings : AssetPostprocessor
            		string[] linesBefore = System.IO.File.ReadAllLines(modImport.assetPath + ".meta");
            		Debug.Log("MM:" + linesBefore[1]);
         }
-
-
 	}
 
 	void OnPreprocessTexture()
@@ -42,12 +37,19 @@ class OBJImportSettings : AssetPostprocessor
 			textureImporter.textureCompression = TextureImporterCompression.CompressedLQ;
 			textureImporter.maxTextureSize = 256;
 		}
+
+
+		if (assetPath.Contains ("_sprite")) {
+        	textureImporter.textureType = TextureImporterType.Sprite;
+        	textureImporter.spriteImportMode = SpriteImportMode.Single;
+        }
 	}
 
 	static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths){
 		string[] assetPaths = AssetDatabase.GetAllAssetPaths();
 		foreach (string path in assetPaths)
 		{
+
             Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
             if (mat) {
                 if (path.Contains ("NoGlossy")) {

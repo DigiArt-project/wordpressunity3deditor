@@ -720,7 +720,6 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$g
         $upload_dir = str_replace('\\','/',$upload_dir);
         $new_file = $upload_dir .'/' .$gameSlug . "Unity/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
 
-
         copy($attachment_file,$new_file);
 
         $new_file_path_forCS = 'Assets/Resources' .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
@@ -737,11 +736,12 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$g
         $upload = wp_upload_dir();
         $upload_dir = $upload['basedir'];
         $upload_dir = str_replace('\\','/',$upload_dir);
-        $new_file = $upload_dir . "/313112-sample-gameUnity/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];;
-        copy($attachment_file,$new_file);
+        $new_file = $upload_dir .'/' .$gameSlug . "Unity/Assets/Resources" .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];;
+        copy($attachment_file, $new_file);
 
         $new_file_path_forCS = 'Assets/Resources' .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
-        wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
+
+        //wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
 }
@@ -1104,7 +1104,8 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
 
         $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
         $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
-        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
+        if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid =
+            wpunity_compile_sprite_upload($featured_image_edu_sprite_id, $gameSlug, $scene_id);}
 
         $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
         $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
@@ -1793,7 +1794,13 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
     $name_of_scene_to_load = $scene_name;//without .unity (we generate unity files with post slug as name)
 
 
-    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x,$tile_pos_y,$guid_tile_sceneselector,$seq_index_of_scene,$name_of_panel,$guid_sprite_scene_featured_img,$text_title_tile,$text_description_tile,$name_of_scene_to_load,$guid_tile_recttransform);
+    $fileData = wpunity_compile_s_selector_replace_tile_gen($term_meta_s_selector2,$tile_pos_x, $tile_pos_y,
+        $guid_tile_sceneselector,
+        $seq_index_of_scene,$name_of_panel,
+        $guid_sprite_scene_featured_img,$text_title_tile,
+        $text_description_tile,$name_of_scene_to_load,
+        $guid_tile_recttransform);
+
     $LF = chr(10); // line change
 
     file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
