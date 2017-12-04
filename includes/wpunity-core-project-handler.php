@@ -388,6 +388,110 @@ function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
     }
 }
 
+/* Create an empty WebGLBuilder.cs in a certain $filepath */
+function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
+    $handle = fopen($filepath, 'w');
+    $targetFileFormat = ''; // WebGL and Linux are blank
+
+    switch($targetPlatform)
+    {
+        case 'StandaloneWindows':
+            $targetFileFormat =  'mygame.exe'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
+            break;
+        case 'StandaloneOSXUniversal':
+            $targetFileFormat = 'mygame.app'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
+            break;
+    }
+
+    $content = 'using UnityEngine;
+using UnityEditor;
+using System.IO;
+using System;
+
+class HandyBuilder {
+static void build() {
+
+
+        Debug.Log("Hi jimverinko");
+        // AddAssetsToImportHere
+
+        string[] scenes = { // AddScenesHere
+};
+
+        string pathToDeploy = "builds/'.$targetPlatform.'/'.$targetFileFormat.'";
+
+        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.'.$targetPlatform.', BuildOptions.None);
+    }
+}';
+
+    fwrite($handle, $content);
+    fclose($handle);
+}
+
+
+/* Add  assets (obj) for import
+*    $assetpath = "Assets/models/building1/building1.obj"
+* or scenes for compile
+*    $scenepath = "Assets/scenes/S_SceneSelector.unity"
+* to
+*    WebGLBuilder.cs
+* */
+function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
+
+    $LF = chr(10); // line change
+
+    if ($assetpath){
+        //add assets (obj)
+
+        // Clear previous size of filepath
+        clearstatcache();
+
+        // a. Read
+        $handle = fopen($filepath, 'r');
+        $content = fread($handle, filesize($filepath));
+        fclose($handle);
+
+        $smartline =  '   AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);'; // .$LF.
+        // b. add obj
+        $content = str_replace('// AddAssetsToImportHere',
+            '// AddAssetsToImportHere'.$LF.
+            $smartline,
+            $content
+        );
+
+        // c. Write to file
+        $fhandle = fopen($filepath, 'w');
+        fwrite($fhandle, $content, strlen($content));
+        fclose($fhandle);
+    }
+
+
+    if ($scenepath){
+        // Clear previous size of filepath
+        clearstatcache();
+
+        // a. Read
+        $handle = fopen($filepath, 'r');
+        $content = fread($handle, filesize($filepath));
+        fclose($handle);
+
+        $scenewebgl = '          "'.$scenepath.'",'.chr(10).'// AddScenesHere '            ;
+
+        // b. Extend certain string
+        $content = str_replace('// AddScenesHere', $scenewebgl, $content);
+
+        // first comma remove
+        $content = str_replace(','.chr(10).'}','}', $content);
+
+        // c. Write to old
+        $fhandle = fopen($filepath, 'w');
+
+        fwrite($fhandle, $content, strlen($content));
+        fclose($fhandle);
+
+    }
+}
+
 //==========================================================================================================================================
 //==========================================================================================================================================
 //2. Create Project Settings files (16 files)
