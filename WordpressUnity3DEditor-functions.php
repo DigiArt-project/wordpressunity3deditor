@@ -158,7 +158,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-file-creations.php' );
 //3.01 Create Initial Asset Categories
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
