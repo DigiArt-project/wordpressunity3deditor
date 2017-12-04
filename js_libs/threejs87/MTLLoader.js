@@ -164,7 +164,7 @@ THREE.MTLLoader.prototype = {
         }
 
 
-        console.log("materialCreator", materialCreator);
+
 
         var materialCreator = new THREE.MTLLoader.MaterialCreator( this.texturePath || this.path, this.materialOptions );
 
@@ -174,7 +174,6 @@ THREE.MTLLoader.prototype = {
         materialCreator.setMaterials( materialsInfo );
 
         return materialCreator;
-
     }
 
 };
@@ -487,8 +486,12 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
         }
 
-
         this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
+
+        // Ververidis
+        if (materialName.indexOf("TwoSided")!==-1)
+            this.materials[ materialName ].side  = THREE.DoubleSide;
+
         return this.materials[ materialName ];
     },
 
