@@ -14,6 +14,9 @@ var nMtl = 0;
 var nJpg = 0;
 var nPdb = 0;
 
+
+jQuery('#3dAssetForm').remove
+
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
     var reader = new FileReader();
@@ -131,9 +134,9 @@ function wpunity_clear_asset_files(previewCanvas) {
     document.getElementById("objFileInput").value = "";
     document.getElementById("pdbFileInput").value = "";
 
-    for (var iTexture = 0; iTexture < jQuery("[id^=textureFileInput]").length; iTexture++) {
-        jQuery("[id^=textureFileInput]")[iTexture].remove();
-    }
+    while ( jQuery("[id^=textureFileInput]").length > 0) {
+         jQuery("[id^=textureFileInput]")[0].remove();
+   }
 
 
     document.getElementById("fileUploadInput").value = "";
@@ -267,8 +270,7 @@ function checkerCompleteReading(canvas){
                     previewCanvas.loadFilesUser(objectDefinition);
                 } else {
 
-
-                    console.log("nJpg", nJpg , jQuery("input[id='textureFileInput']").length);
+                    console.log("nJpg", nJpg, jQuery("input[id='textureFileInput']").length);
 
                     if ( nJpg === jQuery("input[id='textureFileInput']").length) {
 
