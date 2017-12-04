@@ -227,15 +227,6 @@ echo '</script>';
         <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
     </div>
 
-    <div id="double-sided-switch" style="display: none;">
-        <div class="mdc-switch DoubleSidedObjectToggle">
-            <input type="checkbox" name="double-sided-switch-input" id="double-sided-switch-input" class="mdc-switch__native-control" title="Toggle rendering of the inside of the selected object" />
-            <div class="mdc-switch__background">
-                <div class="mdc-switch__knob"></div>
-            </div>
-        </div>
-        <label for="double-sided-switch-input" class="mdc-switch-label DoubleSidedObjectToggleLabel" title="Double sided object"><i class="material-icons mdc-theme--text-hint-on-light">compare_arrows</i></label>
-    </div>
 
     <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">delete</i>
@@ -394,21 +385,6 @@ echo '</script>';
 
     jQuery("#axis-size-decrease-btn").click(function() {
         transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
-    });
-
-    jQuery('#double-sided-switch-input').change(function() {
-        if (jQuery("#double-sided-switch-input").is(":checked")) {
-            var sel_obj = envir.scene.getObjectByName(selected_object_name);
-            sel_obj.traverse(function (node) {
-
-                if (node.material)
-                    if (node.material.side === THREE.DoubleSide)
-                        node.material.side = THREE.SingleSide;
-                    else
-                        node.material.side = THREE.DoubleSide;
-
-            });
-        }
     });
 
     jQuery('#toggleUIBtn').click(function() {
