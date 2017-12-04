@@ -396,6 +396,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             map.wrapS = scope.wrap;
             map.wrapT = scope.wrap;
 
+
+
             params[ mapType ] = map;
         }
 
@@ -487,6 +489,13 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         }
 
         this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
+
+
+
+        // Ververidis
+        if (materialName.indexOf("TwoSided")!==-1)
+            this.materials[ materialName ].side  = THREE.DoubleSide;
+
         return this.materials[ materialName ];
     },
 

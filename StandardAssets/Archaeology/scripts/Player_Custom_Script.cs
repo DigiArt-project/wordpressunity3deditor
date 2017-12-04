@@ -12,6 +12,7 @@ public class Player_Custom_Script : MonoBehaviour {
 	private Canvas canvas_v;
 	private Canvas canvas_a;
 	private Camera camera, camera2;
+	private GameObject active;
 
 	void Start () {
 		canvas_ti = GameObject.Find ("canvas_ti").GetComponent<Canvas> ();
@@ -35,8 +36,15 @@ public class Player_Custom_Script : MonoBehaviour {
 	{
 		if (other.gameObject.tag == "poi_imagetext") {
 			canvas_ti.enabled = false;
+
+			// Make the obj to appear
+			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
+
+			// Make the obj to appear
+			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+
 		} else if (other.gameObject.tag == "poi_artefact") {
 			// It is not possible because FPS is disabled. Done with button that calls closeArtefactView
 		}
@@ -95,15 +103,8 @@ public class Player_Custom_Script : MonoBehaviour {
 			}
 
 
+			// Pick by raycasting
 			if (Input.GetMouseButtonDown(0)) {
-//				RaycastHit  hit;
-//				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-//
-//				if (Physics.RaycastAll (ray, out hit)) {
-//					checkTag (hit.transform.gameObject);
-//				}
-
-
 				RaycastHit[] hits;
 
 				hits = Physics.RaycastAll(camera.ScreenPointToRay(Input.mousePosition), 100.0F);
@@ -114,9 +115,18 @@ public class Player_Custom_Script : MonoBehaviour {
 						break;
 					}
 				}
-
-
 			}
+
+
+
+			if (Input.GetKeyDown ("s") || Input.GetKeyDown ("w") ) {
+				canvas_ti.enabled = false;
+				canvas_v.enabled = false;
+
+				active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+			}
+
+
 
 		}
 
@@ -127,6 +137,11 @@ public class Player_Custom_Script : MonoBehaviour {
 	void checkTag(GameObject go){
 
 		if (go.tag == "poi_imagetext") {
+
+			active = go;
+
+			// Make the obj to dissapper in order not to overlay on canvas
+			go.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
 
 			// Get the name of the sprite from the collided object
 			string spriteName = go.GetComponent<DisplayPOI_Script> ().imageSpriteNameToShow;
@@ -145,6 +160,11 @@ public class Player_Custom_Script : MonoBehaviour {
 			canvas_ti.enabled = true;
 
 		} else if (go.tag == "poi_video") {
+
+			active = go;
+
+			// Make the obj to dissapper in order not to overlay on canvas
+			go.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
 
 			// Get the name of the sprite from the collided object
 			string videoName = go.GetComponent<DisplayPOI_Script> ().videoToShow;
