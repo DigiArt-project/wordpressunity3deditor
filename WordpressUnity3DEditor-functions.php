@@ -190,17 +190,16 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' )
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
-
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
-
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-compile.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-yamls.php' );
-
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-compile.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
-
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-compile.php' );
 
 
 // ===================== Obsolete ===================================
