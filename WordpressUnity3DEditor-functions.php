@@ -158,7 +158,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-file-creations.php' );
 //3.01 Create Initial Asset Categories
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
@@ -171,7 +170,7 @@ register_activation_hook(__FILE__,'wpunity_create_editScenePage');
 register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editSceneExamPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
-
+include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_asset3D-saveData.php' );
 
 
 

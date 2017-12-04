@@ -1,119 +1,218 @@
 <?php
 
-//ABOUT MEDIA HANDLE
-function wpunity_upload_dir_forAssets( $args ) {
+//==========================================================================================================================================
+//==========================================================================================================================================
 
-	// Get the current post_id
-	$id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
-	if( $id ) {
+	$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+	$allScenePGameID = $allScenePGame->term_id;
 
-		if ( get_post_type( $id ) == 'wpunity_asset3d' ) {
+	$all_game_category = get_the_terms( $gameID, 'wpunity_game_type' );
+	$game_category  = $all_game_category[0]->slug;
 
-			$pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+	$mainmenuSceneTitle = 'Main Menu'; //Title for Main Menu
+	$mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
+	$firstSceneTitle = 'First Scene'; //Title for First Menu
+	$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
+	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
+	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
+	if($game_category == 'chemistry_games'){
+		$examSceneTitle = 'First Exam'; //Title for Exam Scene
+		$examSceneSlug = $gameSlug . '-exam'; //Slug for Exam Scene
+	}
 
-			$newdir =  '/' . $pathofPost . '/Models';
+	if($game_category == 'energy_games'){
+		$firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
+		$firstSceneYAMLID = $firstSceneYAML->term_id;
+		$mainmenuSceneYAML = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+		$credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+	}elseif($game_category == 'archaeology_games'){
+		$firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
+		$firstSceneYAMLID = $firstSceneYAML->term_id;
+		$mainmenuSceneYAML = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu
+		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+		$credentialsSceneYAML = get_term_by('slug', 'credentials-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
+		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+	}elseif($game_category == 'chemistry_games'){
+		$firstSceneYAML = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene (Chemistry)
+		$firstSceneYAMLID = $firstSceneYAML->term_id;
+		$mainmenuSceneYAML = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Main Menu (Chemistry)
+		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
+		$credentialsSceneYAML = get_term_by('slug', 'credentials-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene (Chemistry)
+		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$examSceneYAML = get_term_by('slug', 'exam-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam Scene (Chemistry)
+		$examSceneYAMLID = $examSceneYAML->term_id;
+	}
 
-			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-			$args['subdir']  = $newdir;
-			$args['path']   .= $newdir;
-			$args['url']    .= $newdir;
+	$default_json = '{
+	"metadata": {
+		"formatVersion" : 4.0,
+		"type"		    : "scene",
+		"generatedBy"	: "SceneExporter.js",
+		"objects"       : 1},
 
-		}elseif(get_post_type( $id ) == 'wpunity_scene'){
+	"urlBaseType": "relativeToScene",
 
-			$gameterms = get_the_terms( $id , 'wpunity_scene_pgame' );
-			$projectSlug = $gameterms[0]->slug;
-			// Set the new path depends on current post_type
-			$newdir = '/' . $projectSlug . '/Scenes';
-
-			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-			$args['subdir']  = $newdir;
-			$args['path']   .= $newdir;
-			$args['url']    .= $newdir;
-		}else{
-			$pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
-
-			$newdir =  '/' . $pathofPost . '/Models';
-
-			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
-			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
-			$args['subdir']  = $newdir;
-			$args['path']   .= $newdir;
-			$args['url']    .= $newdir;
+	"objects" :
+	{
+		"avatarYawObject" : {
+			"position" : [0,0,0],
+			"rotation" : [0,0,0],
+			"scale"	   : [1,1,1],
+			"visible"  : true,
+			"children" : {
+			}
 		}
 
-
 	}
-	return $args;
+
 }
+';
 
-add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
-
-
-/**
- * 1.01
- * Overwrite Uploads
- *
- * Upload files with the same namew, without uploading copy with unique filename
- *
- */
-function wpunity_overwrite_uploads( $name ){
-
-	if( isset($_REQUEST['post_id']) ) {
-		$post_id =  (int)$_REQUEST['post_id'];
-	}else{
-		$post_id=0;
-	}
-
-	$args = array(
-		'numberposts'   => -1,
-		'post_type'     => 'attachment',
-		'meta_query' => array(
-			array(
-				'key' => '_wp_attached_file',
-				'value' => $name,
-				'compare' => 'LIKE'
-			)
-		)
+	// Create Main Menu Scene Data
+	$mainmenuSceneData = array(
+		'post_title'    => $mainmenuSceneTitle,
+		'post_content' => 'Main Menu of the Game',
+		'post_name' => $mainmenuSceneSlug,
+		'post_type' => 'wpunity_scene',
+		'post_status'   => 'publish',
+		'tax_input'    => array(
+			'wpunity_scene_pgame'     => array( $allScenePGameID ),
+			'wpunity_scene_yaml'     => array( $mainmenuSceneYAMLID ),
+		),'meta_input'   => array(
+			'wpunity_scene_default' => 1,
+			'wpunity_scene_metatype' => 'menu',
+			'wpunity_menu_has_help' => 1,
+			'wpunity_menu_has_login' => 1,
+			'wpunity_menu_has_options' => 1,
+		),
 	);
-	$attachments_to_remove = get_posts( $args );
 
-	foreach( $attachments_to_remove as $attach ){
-		if($attach->post_parent == $post_id) {
-			wp_delete_attachment($attach->ID, true);
-		}
+	// Create First Scene Data
+	$firstSceneData = array(
+		'post_title'    => $firstSceneTitle,
+		'post_content' => 'Auto-created scene',
+		'post_name' => $firstSceneSlug,
+		'post_type' => 'wpunity_scene',
+		'post_status'   => 'publish',
+		'tax_input'    => array(
+			'wpunity_scene_pgame'     => array( $allScenePGameID ),
+			'wpunity_scene_yaml'     => array( $firstSceneYAMLID ),
+		),'meta_input'   => array(
+			'wpunity_scene_default' => 1,
+			'wpunity_scene_metatype' => 'scene',
+			'wpunity_scene_json_input' => $default_json,
+		),
+	);
+
+	// Create Credentials Scene Data
+	$credentialsSceneData = array(
+		'post_title'    => $credentialsSceneTitle,
+		'post_content' => 'Credits of the Game',
+		'post_name' => $credentialsSceneSlug,
+		'post_type' => 'wpunity_scene',
+		'post_status'   => 'publish',
+		'tax_input'    => array(
+			'wpunity_scene_pgame'     => array( $allScenePGameID ),
+			'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
+		),'meta_input'   => array(
+			'wpunity_scene_default' => 1,
+			'wpunity_scene_metatype' => 'credits',
+		),
+	);
+
+	if($game_category == 'chemistry_games'){
+		// Create Exam Scene Data
+		$examSceneData = array(
+			'post_title'    => $examSceneTitle,
+			'post_content' => 'Auto-created scene',
+			'post_name' => $examSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status'   => 'publish',
+			'tax_input'    => array(
+				'wpunity_scene_pgame'     => array( $allScenePGameID ),
+				'wpunity_scene_yaml'     => array( $examSceneYAMLID ),
+			),'meta_input'   => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'sceneExam',
+				'wpunity_scene_json_input' => $default_json,
+			),
+		);
+
+		wp_insert_post( $examSceneData );
 	}
 
-	return $name;
+	// Insert posts 1-1 into the database
+	wp_insert_post( $mainmenuSceneData );
+	wp_insert_post( $credentialsSceneData );
+	wp_insert_post( $firstSceneData );
+
 }
-
-add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
-
-
-
-//DISABLE ALL AUTO-CREATED THUMBS for Assets3D
-function wpunity_disable_imgthumbs_assets( $image_sizes ){
-
-	// extra sizes
-	$slider_image_sizes = array(  );
-	// for ex: $slider_image_sizes = array( 'thumbnail', 'medium' );
-
-	// instead of unset sizes, return your custom size (nothing)
-	if( isset($_REQUEST['post_id']) && 'wpunity_asset3d' === get_post_type( $_REQUEST['post_id'] ) )
-		return $slider_image_sizes;
-
-	return $image_sizes;
-}
-
-add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
-
 
 //==========================================================================================================================================
 //==========================================================================================================================================
+//GUIDs & FIDs
 
+// 32 chars Hex (identifier for the resource)
+function wpunity_create_guids($objTypeSTR, $objID, $extra_id_material=null){
 
+	switch ($objTypeSTR) {
+		case 'unity':  $objType = "1"; break;
+		case 'folder': $objType = "2"; break;
+		case 'obj': $objType = "3"; break;
+		case 'mat': $objType = "4".$extra_id_material; break; // an obj can have two or more mat
+		case 'jpg': $objType = "5".$extra_id_material; break; // an obj can have multiple textures jpg
+		//case 'tile': $objType = "6".$extra_id_material; break; // an obj can have multiple textures jpg
+	}
+
+	return str_pad($objType, 4, "0", STR_PAD_LEFT) . str_pad($objID, 28, "0", STR_PAD_LEFT);
+}
+
+// 10 chars Decimal (identifier for the GameObject) (e.g. dino1, dino2 have different fid but share the same guid)
+function wpunity_create_fids($id){
+	return str_pad($id, 10, "0", STR_PAD_LEFT);
+}
+
+function wpunity_create_fids_rect($id){
+	return '1' . str_pad($id, 9, "0", STR_PAD_LEFT);
+}
+
+function wpunity_replace_objmeta($file_content,$objID){
+	$unix_time = time();
+	$guid_id = wpunity_create_guids('obj',$objID);
+
+	$file_content_return = str_replace("___[obj_guid]___",$guid_id,$file_content);
+	$file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+	return $file_content_return;
+}
+
+function wpunity_replace_foldermeta($file_content,$folderID){
+	$unix_time = time();
+	$guid_id = wpunity_create_guids('folder',$folderID);
+
+	$file_content_return = str_replace("___[folder_guid]___",$guid_id,$file_content);
+	$file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+	return $file_content_return;
+}
+
+function wpunity_replace_jpgmeta($file_content,$objID){
+	$unix_time = time();
+	$guid_id = wpunity_create_guids('jpg',$objID);
+
+	$file_content_return = str_replace("___[jpg_guid]___",$guid_id,$file_content);
+	$file_content_return = str_replace("___[unx_time_created]___",$unix_time,$file_content_return);
+
+	return $file_content_return;
+}
+
+//==========================================================================================================================================
+//==========================================================================================================================================
+//Create sample data when a user is registered
 
 add_action( 'user_register', 'wpunity_registrationhook_createGame', 10, 1 );
 
@@ -270,6 +369,11 @@ function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asse
 	update_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
 }
 
+//==========================================================================================================================================
+//==========================================================================================================================================
+//Important GET functions
+
+//Get All MOLECULES of specific game by given project ID
 function wpunity_get_all_molecules_of_game($project_id){
 
 	$game_post = get_post($project_id);
@@ -319,6 +423,7 @@ function wpunity_get_all_molecules_of_game($project_id){
 	return $moleculesIds;
 }
 
+//Get All DOORS of specific game (from all scenes) by given project ID (parent game ID)
 function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
 	$sceneIds = [];
@@ -349,7 +454,7 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
 			$scene_id = get_the_ID();
 			$sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
-            $sceneSlug = get_post()->post_name;
+			$sceneSlug = get_post()->post_name;
 
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
@@ -360,8 +465,8 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 					if ($key !== 'avatarYawObject') {
 						if ($value['categoryName'] === 'Door') {
 							$doorInfoGathered[] = ['door' => $value['doorName_source'],
-                                                   'scene' => $sceneTitle,
-                                                   'sceneSlug'=> $sceneSlug];
+								'scene' => $sceneTitle,
+								'sceneSlug'=> $sceneSlug];
 						}
 					}
 				}
@@ -373,45 +478,8 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 
 	return $doorInfoGathered;
 }
-/**
- *
- * Get all door info for all scenes of a game
- *
- * @param $gameId
- * @return array
- */
-function wpunity_get_all_doors_of_game($gameId)
-{
-	$scenesIds = wpunity_get_all_sceneids_of_game($gameId);
 
-	$doorInfoGathered = array();
-
-	foreach ($scenesIds as $scene_id){
-
-		$sceneTitle = get_post($scene_id)->post_title;
-
-		$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
-		$jsonScene = htmlspecialchars_decode($scene_json);
-		$sceneJsonARR = json_decode($jsonScene, TRUE);
-
-		if(count($sceneJsonARR['objects'])>0)
-			foreach ($sceneJsonARR['objects'] as $key => $value) {
-				if ($key !== 'avatarYawObject') {
-					if ($value['categoryName'] === 'Door') {
-						$doorInfoGathered[] = ['door'=>$value['doorName_source'], 'scene'=>$sceneTitle ];
-					}
-				}
-			}
-	}
-	return $doorInfoGathered;
-}
-/**
- *
- * Get all scene ids of a game
- *
- * @param $allScenePGameID
- * @return array
- */
+//Get All SCENES (ids) of specific game by given project ID (parent game ID)
 function wpunity_get_all_sceneids_of_game($allScenePGameID){
 
 	$sceneIds = [];
@@ -446,283 +514,9 @@ function wpunity_get_all_sceneids_of_game($allScenePGameID){
 	return $sceneIds;
 }
 
-function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug){
-	$asset_taxonomies = array(
-		'wpunity_asset3d_pgame' => array(
-			$assetPGameID,
-		),
-		'wpunity_asset3d_cat' => array(
-			$assetCatID,
-		)
-	);
-
-	$asset_information = array(
-		'post_title' => $assetTitleForm,
-		'post_content' => $assetDescForm,
-		'post_type' => 'wpunity_asset3d',
-		'post_status' => 'publish',
-		'tax_input' => $asset_taxonomies,
-	);
-
-	$asset_id = wp_insert_post($asset_information);
-	update_post_meta($asset_id, 'wpunity_asset3d_pathData', $gameSlug);
-
-	if($asset_id){return $asset_id;}else{return 0;}
-}
-
-function wpunity_update_asset_frontend($asset_inserted_id,$assetTitleForm,$assetDescForm){
-	$asset_new_info = array(
-		'ID' => $asset_inserted_id,
-		'post_title' => $assetTitleForm,
-		'post_content' => $assetDescForm,
-	);
-
-	wp_update_post($asset_new_info);
-	return 1;
-}
-
-function wpunity_create_asset_consumerExtra_frontend($asset_newID){
-	//Energy Consumption
-	$safe_cons_values = range(0, 2000, 5);
-	$safe_cons_values2 = range(0, 1000, 5);
-
-	$energyConsumptionMinValForm = intval($_POST['energyConsumptionMinVal']);
-	$energyConsumptionMaxValForm = intval($_POST['energyConsumptionMaxVal']);
-	$energyConsumptionMeanValForm = intval($_POST['energyConsumptionMeanVal']);
-	$energyConsumptionVarianceValForm = intval($_POST['energyConsumptionVarianceVal']);
-
-	if (!in_array($energyConsumptionMinValForm, $safe_cons_values, true)) {$energyConsumptionMinValForm = '';}
-	if (!in_array($energyConsumptionMaxValForm, $safe_cons_values, true)) {$energyConsumptionMaxValForm = '';}
-	if (!in_array($energyConsumptionMeanValForm, $safe_cons_values, true)) {$energyConsumptionMeanValForm = '';}
-	if (!in_array($energyConsumptionVarianceValForm, $safe_cons_values2, true)) {$energyConsumptionVarianceValForm = '';}
-
-	$energyConsumption = array('min' => $energyConsumptionMinValForm, 'max' => $energyConsumptionMaxValForm, 'mean' => $energyConsumptionMeanValForm, 'var' => $energyConsumptionVarianceValForm);
-
-	update_post_meta($asset_newID, 'wpunity_energyConsumption', $energyConsumption);
-}
-
-function wpunity_create_asset_terrainExtra_frontend($asset_newID){
-	$underPowerIncomeValForm = floatval($_POST['underPowerIncomeVal']);
-	$correctPowerIncomeValForm = floatval($_POST['correctPowerIncomeVal']);
-	$overPowerIncomeValForm = floatval($_POST['overPowerIncomeVal']);
-	$accessCostPenaltyForm = intval($_POST['accessCostPenalty']);
-	$archProximityPenaltyForm = intval($_POST['archProximityPenalty']);
-	$naturalReserveProximityPenaltyForm = intval($_POST['naturalReserveProximityPenalty']);
-	$hiVoltLineDistancePenaltyForm = intval($_POST['hiVoltLineDistancePenalty']);
-	$physicsWindMinValForm = intval($_POST['physicsWindMinVal']);
-	$physicsWindMaxValForm = intval($_POST['physicsWindMaxVal']);
-	$physicsWindMeanValForm = intval($_POST['physicsWindMeanVal']);
-	$physicsWindVarianceValForm = intval($_POST['physicsWindVarianceVal']);
-
-	//Income (in $)
-	$safe_income_values = range(-5, 5, 0.5);
-	if (!in_array($underPowerIncomeValForm, $safe_income_values, true)) {$underPowerIncomeValForm = '';}
-	if (!in_array($correctPowerIncomeValForm, $safe_income_values, true)) {$correctPowerIncomeValForm = '';}
-	if (!in_array($overPowerIncomeValForm, $safe_income_values, true)) {$overPowerIncomeValForm = '';}
-
-	$energyConsumptionIncome = array('under' => $underPowerIncomeValForm, 'correct' => $correctPowerIncomeValForm, 'over' => $overPowerIncomeValForm);
-
-	//Construction Penalties (in $)
-	$safe_penalty_values = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	if (!in_array($accessCostPenaltyForm, $safe_penalty_values, true)) {$accessCostPenaltyForm = '';}
-	if (!in_array($archProximityPenaltyForm, $safe_penalty_values, true)) {$archProximityPenaltyForm = '';}
-	if (!in_array($naturalReserveProximityPenaltyForm, $safe_penalty_values, true)) {$naturalReserveProximityPenaltyForm = '';}
-	if (!in_array($hiVoltLineDistancePenaltyForm, $safe_penalty_values, true)) {$hiVoltLineDistancePenaltyForm = '';}
-
-	$constructionPenalties = array('access' => $accessCostPenaltyForm, 'arch' => $archProximityPenaltyForm, 'natural' => $naturalReserveProximityPenaltyForm, 'hiVolt' => $hiVoltLineDistancePenaltyForm);
-
-	//Physics
-	$safe_physics_values = range(0, 40, 1);
-	$safe_physics_values2 = range(1, 100, 1);//for Wind Variance
-	if (!in_array($physicsWindMinValForm, $safe_physics_values, true)) {$physicsWindMinValForm = '';}
-	if (!in_array($physicsWindMaxValForm, $safe_physics_values, true)) {$physicsWindMaxValForm = '';}
-	if (!in_array($physicsWindMeanValForm, $safe_physics_values, true)) {$physicsWindMeanValForm = '';}
-	if (!in_array($physicsWindVarianceValForm, $safe_physics_values2, true)) {$physicsWindVarianceValForm = '';}
-
-	$physicsValues = array('min' => $physicsWindMinValForm, 'max' => $physicsWindMaxValForm, 'mean' => $physicsWindMeanValForm, 'variance' => $physicsWindVarianceValForm);
-
-	update_post_meta($asset_newID, 'wpunity_energyConsumptionIncome', $energyConsumptionIncome);
-	update_post_meta($asset_newID, 'wpunity_physicsValues', $physicsValues);
-	update_post_meta($asset_newID, 'wpunity_constructionPenalties', $constructionPenalties);
-}
-
-function wpunity_create_asset_producerExtra_frontend($asset_newID){
-	$producerTurbineSizeValForm = intval($_POST['producerTurbineSizeVal']);
-	$producerDmgCoeffValForm = floatval($_POST['producerDmgCoeffVal']);
-	$producerCostValForm = intval($_POST['producerCostVal']);
-	$producerRepairCostValForm = floatval($_POST['producerRepairCostVal']);
-	$producerClassValForm = $_POST['producerClassVal'];
-	$producerWindSpeedClassValForm = floatval($_POST['producerWindSpeedClassVal']);
-	$producerMaxPowerValForm = floatval($_POST['producerMaxPowerVal']);
-	$producerPowerProductionValForm = $_POST['producerPowerProductionVal'];
-
-	//Producer Options-Costs
-	$safe_opt_val = range(3, 250, 1);
-	$safe_opt_dmg = range(0.001, 0.02, 0.001);
-	$safe_opt_cost = range(1, 10, 1);
-	$safe_opt_repaid = range(0.5, 5, 0.5);
-	if (!in_array($producerTurbineSizeValForm, $safe_opt_val, true)) {$producerTurbineSizeValForm = '';}
-	if (!in_array($producerDmgCoeffValForm, $safe_opt_dmg, true)) {$producerDmgCoeffValForm = '';}
-	if (!in_array($producerCostValForm, $safe_opt_cost, true)) {$producerCostValForm = '';}
-	if (!in_array($producerRepairCostValForm, $safe_opt_repaid, true)) {$producerRepairCostValForm = '';}
-
-	$producerOptCosts = array('size' => $producerTurbineSizeValForm, 'dmg' => $producerDmgCoeffValForm, 'cost' => $producerCostValForm, 'repaid' => $producerRepairCostValForm);
-	$producerOptGen = array('class' => $producerClassValForm, 'speed' => $producerWindSpeedClassValForm, 'power' => $producerMaxPowerValForm);
-
-	update_post_meta($asset_newID, 'wpunity_producerPowerProductionVal', $producerPowerProductionValForm);
-	update_post_meta($asset_newID, 'wpunity_producerOptCosts', $producerOptCosts);
-	update_post_meta($asset_newID, 'wpunity_producerOptGen', $producerOptGen);
-}
-
-function wpunity_create_asset_poisITExtra_frontend($asset_newID){
-	$asset_featured_imageForm =  $_FILES['poi-img-featured-image'];
-
-	$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
-	set_post_thumbnail( $asset_newID, $attachment_id );
-}
-
-function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
-	$asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
-	$asset_videoForm = $_FILES['videoFileInput'];
-
-	$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
-	set_post_thumbnail( $asset_newID, $attachment_id );
-
-	$attachment_video_id = wpunity_upload_img_vid( $asset_videoForm, $asset_newID);
-	update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
-}
-
-function wpunity_create_asset_moleculeExtra_frontend($asset_newID){
-	$moleculeChemicalType = $_POST['moleculeChemicalType'];
-	$moleculeFunctionalGroupInput = $_POST['moleculeFunctionalGroupInput'];
-	$moleculeFluidViscosity = floatval($_POST['molecule-fluid-viscosity-slider-label']);
-	$moleculeFluidColorVal = $_POST['moleculeFluidColorVal'];
-
-	update_post_meta($asset_newID, 'wpunity_molecule_ChemicalTypeVal', $moleculeChemicalType);
-	update_post_meta($asset_newID, 'wpunity_molecule_FunctionalGroupVal', $moleculeFunctionalGroupInput);
-	update_post_meta($asset_newID, 'wpunity_molecule_FluidViscosityVal', $moleculeFluidViscosity);
-	update_post_meta($asset_newID, 'wpunity_molecule_FluidColorVal', $moleculeFluidColorVal);
-
-}
-
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
-
-	$totalTextures = 0; //counter in order to know how much textures we have
-    $textureNamesIn = [];
-    $tContent = [];
-	foreach(array_keys($_POST['textureFileInput']) as $texture){
-	    $tname = str_replace('.jpg','', $texture);
-
-        $tContent[$tname] = $_POST['textureFileInput'][$texture];
-        $textureNamesIn[] = $tname;
-	}
-	//print_r(array_keys($_POST['textureFileInput']));die;
-	//$textureContent = $_POST['textureFileInput'];
-	$screenShotFile = $_POST['sshotFileInput'];
-	$mtl_content = $_POST['mtlFileInput'];
-	$obj_content = $_POST['objFileInput'];
-
-    // Remove this debugging piece of code in the end
-    $fh = fopen("output_mtlContent.txt", "w");
-    fwrite($fh, $mtl_content);
-    fclose($fh);
-    // - until here
-
-
-    $textureNamesOut = [];
-
-	for($i=0; $i < count($tContent); $i++) {
-
-		$textureFile_id = wpunity_upload_Assetimg64(
-            $tContent[$textureNamesIn[$i]],
-         'texture_'.$textureNamesIn[$i].'_'.$assetTitleForm,
-                $asset_newID,
-                $gameSlug);
-
-		$textureFile_filename = basename(get_attached_file($textureFile_id));
-
-        $textureNamesOut[] = $textureFile_filename;
-
-		add_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
-		//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-	}
-
-	// MTL : Open mtl file and replace jpg filename
-    for ($k = 0; $k < count($textureNamesIn); $k++) {
-        $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg",
-                                   "map_Kd ".$textureNamesOut[$k],
-                                                    $mtl_content);
-    }
-
-	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
-	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
-
-	// OBJ
-	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
-	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
-	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
-	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
-
-	// SCREENSHOT
-	$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $assetTitleForm, $asset_newID, $gameSlug);
-
-	// Set value of attachment IDs at custom fields
-	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
-	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
-	//update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
-
-}
-
-function wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug){
-	$pdb_content = $_POST['pdbFileInput'];
-	$screenShotFile = $_POST['sshotFileInput'];
-
-	// PDB
-	$pdbFile_id = wpunity_upload_AssetText($pdb_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
-
-	// SCREENSHOT
-	$screenShotFile_id = wpunity_upload_Assetimg64($screenShotFile, $assetTitleForm, $asset_newID, $gameSlug);
-
-	update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
-	update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
-}
-
-/****************************************************************************************************/
-
-
-add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
-
-function wpunity_remove_menus() {
-
-// INSERT MENU ITEMS TO REMOVE FOR EVERYONE
-
-	$current_user_id = get_current_user_id();
-
-	//remove only for author and below
-	if ( current_user_can('administrator') && $current_user_id != 1 ) {
-		remove_menu_page('tools.php'); // Tools
-		remove_menu_page('upload.php'); // Media
-		remove_menu_page( 'edit-comments.php' ); // Comments
-		remove_menu_page( 'edit.php' ); //Posts
-		remove_menu_page( 'edit.php?post_type=page' ); //Pages
-		remove_menu_page( 'plugins.php' ); //Plugins
-		remove_menu_page( 'users.php' ); //Users
-		remove_menu_page( 'themes.php' ); //Appearance
-
-		remove_menu_page( 'options-general.php' ); //Appearance
-		remove_menu_page( 'index.php' ); //dashboard
-
-		remove_menu_page( 'duplicator' );
-		remove_menu_page( 'geodirectory' );
-		remove_menu_page( 'edit.php?post_type=gd_place' );
-
-		remove_menu_page('wpcf7');
-
-	}
-}
-
 //==========================================================================================================================================
+//==========================================================================================================================================
+//UPLOAD images/files
 
 function wpunity_upload_img_vid_directory( $dir ) {
 	return array(
@@ -775,7 +569,6 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation =
 
 }
 
-
 function wpunity_upload_img($file = array(), $parent_post_id, $orientation = null) {
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
@@ -823,47 +616,6 @@ function wpunity_upload_filter( $args  ) {
 	return $args;
 
 }
-
-function wpunity_upload_Assetimg($file = array(), $parent_post_id, $parentGameSlug) {
-
-	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
-
-	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
-
-	add_filter( 'upload_dir', 'wpunity_upload_filter');
-	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
-	remove_filter( 'upload_dir', 'wpunity_upload_filter' );
-
-	if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
-		return false;
-	} else {
-
-		$filename = $file_return['file'];
-
-		$attachment = array(
-			'post_mime_type' => $file_return['type'],
-			'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-			'post_content' => '',
-			'post_status' => 'inherit',
-			'guid' => $file_return['url']
-		);
-		$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-		$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
-
-		wp_update_attachment_metadata( $attachment_id, $attachment_data );
-
-		remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
-
-		if( 0 < intval( $attachment_id, 10 ) ) {
-			return $attachment_id;
-		}
-
-	}
-	return false;
-}
-
 
 /**
  *
@@ -951,8 +703,6 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 	return false;
 }
 
-
-
 /**
  *
  * Immitation of $_FILE through $_POST . This is for objs and mtls
@@ -1034,119 +784,154 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $pa
 	return false;
 }
 
-
-
-//==========================================================================================================================================
-
 function wpunity_remove_allthumbs_sizes( $sizes, $metadata ) {
 	return [];
 }
 
-//==========================================================================================================================================
+//ABOUT MEDIA HANDLE
+function wpunity_upload_dir_forAssets( $args ) {
 
-//FORCE TITLE ON OUR CUSTOM POST TYPES
-function force_post_title_init(){
-	wp_enqueue_script('jquery');
+	// Get the current post_id
+	$id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+
+	if( $id ) {
+
+		if ( get_post_type( $id ) == 'wpunity_asset3d' ) {
+
+			$pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+
+			$newdir =  '/' . $pathofPost . '/Models';
+
+			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+			$args['subdir']  = $newdir;
+			$args['path']   .= $newdir;
+			$args['url']    .= $newdir;
+
+		}elseif(get_post_type( $id ) == 'wpunity_scene'){
+
+			$gameterms = get_the_terms( $id , 'wpunity_scene_pgame' );
+			$projectSlug = $gameterms[0]->slug;
+			// Set the new path depends on current post_type
+			$newdir = '/' . $projectSlug . '/Scenes';
+
+			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+			$args['subdir']  = $newdir;
+			$args['path']   .= $newdir;
+			$args['url']    .= $newdir;
+		}else{
+			$pathofPost = get_post_meta($id,'wpunity_asset3d_pathData',true);
+
+			$newdir =  '/' . $pathofPost . '/Models';
+
+			$args['path']    = str_replace( $args['subdir'], '', $args['path'] ); //remove default subdir
+			$args['url']     = str_replace( $args['subdir'], '', $args['url'] );
+			$args['subdir']  = $newdir;
+			$args['path']   .= $newdir;
+			$args['url']    .= $newdir;
+		}
+
+
+	}
+	return $args;
 }
 
-function force_post_title(){
-	global $post;
-	$post_type = get_post_type($post->ID);
-	if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game') {
-		echo "<script type='text/javascript'>\n";
-		echo "
-            jQuery('#publish').click(function(){
-            var testervar = jQuery('[id^=\"titlediv\"]')
-            .find('#title');
-            if (testervar.val().length < 1)
-            {
-                jQuery('[id^=\"titlediv\"]').css('background', '#F96');
-                setTimeout(\"jQuery('#ajax-loading').css('visibility', 'hidden');\", 100);
-                alert('TITLE is required');
-                setTimeout(\"jQuery('#publish').removeClass('button-primary-disabled');\", 100);
-                return false;
-            }
-  	    });
-        ";
-		echo "</script>\n";
+add_filter( 'upload_dir', 'wpunity_upload_dir_forAssets' );
+
+/**
+ * 1.01
+ * Overwrite Uploads
+ *
+ * Upload files with the same namew, without uploading copy with unique filename
+ *
+ */
+function wpunity_overwrite_uploads( $name ){
+
+	if( isset($_REQUEST['post_id']) ) {
+		$post_id =  (int)$_REQUEST['post_id'];
+	}else{
+		$post_id=0;
+	}
+
+	$args = array(
+		'numberposts'   => -1,
+		'post_type'     => 'attachment',
+		'meta_query' => array(
+			array(
+				'key' => '_wp_attached_file',
+				'value' => $name,
+				'compare' => 'LIKE'
+			)
+		)
+	);
+	$attachments_to_remove = get_posts( $args );
+
+	foreach( $attachments_to_remove as $attach ){
+		if($attach->post_parent == $post_id) {
+			wp_delete_attachment($attach->ID, true);
+		}
+	}
+
+	return $name;
+}
+
+add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
+
+
+//DISABLE ALL AUTO-CREATED THUMBS for Assets3D
+function wpunity_disable_imgthumbs_assets( $image_sizes ){
+
+	// extra sizes
+	$slider_image_sizes = array(  );
+	// for ex: $slider_image_sizes = array( 'thumbnail', 'medium' );
+
+	// instead of unset sizes, return your custom size (nothing)
+	if( isset($_REQUEST['post_id']) && 'wpunity_asset3d' === get_post_type( $_REQUEST['post_id'] ) )
+		return $slider_image_sizes;
+
+	return $image_sizes;
+}
+
+add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
+//==========================================================================================================================================
+//==========================================================================================================================================
+
+add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
+
+function wpunity_remove_menus() {
+
+// INSERT MENU ITEMS TO REMOVE FOR EVERYONE
+
+	$current_user_id = get_current_user_id();
+
+	//remove only for author and below
+	if ( current_user_can('administrator') && $current_user_id != 1 ) {
+		remove_menu_page('tools.php'); // Tools
+		remove_menu_page('upload.php'); // Media
+		remove_menu_page( 'edit-comments.php' ); // Comments
+		remove_menu_page( 'edit.php' ); //Posts
+		remove_menu_page( 'edit.php?post_type=page' ); //Pages
+		remove_menu_page( 'plugins.php' ); //Plugins
+		remove_menu_page( 'users.php' ); //Users
+		remove_menu_page( 'themes.php' ); //Appearance
+
+		remove_menu_page( 'options-general.php' ); //Appearance
+		remove_menu_page( 'index.php' ); //dashboard
+
+		remove_menu_page( 'duplicator' );
+		remove_menu_page( 'geodirectory' );
+		remove_menu_page( 'edit.php?post_type=gd_place' );
+
+		remove_menu_page('wpcf7');
+
 	}
 }
 
-add_action('admin_init', 'force_post_title_init');
-add_action('edit_form_advanced', 'force_post_title');
 
 //==========================================================================================================================================
-
-function wpunity_mediaLibrary_default() {
-	?>
-    <script type="text/javascript">
-        jQuery(document).ready(function($){ wp.media.controller.Library.prototype.defaults.contentUserSetting=false; });
-    </script>
-	<?php
-}
-
-add_action( 'admin_footer-post-new.php', 'wpunity_mediaLibrary_default' );
-add_action( 'admin_footer-post.php', 'wpunity_mediaLibrary_default' );
-
-//==========================================================================================================================================
-
-function wpunity_change_publish_button( $translation, $text ) {
-	global $post;
-	$post_type = get_post_type($post->ID);
-	if($post_type == 'wpunity_asset3d' || $post_type == 'wpunity_scene' || $post_type == 'wpunity_game') {
-		if ($text == 'Publish')
-			return 'Create';
-		if ($text == 'Update')
-			return 'Save';
-	}
-
-	return $translation;
-}
-
-add_filter( 'gettext', 'wpunity_change_publish_button', 10, 2 );
-
-//==========================================================================================================================================
-
-function wpunity_aftertitle_info($post) {
-
-	$post_type = get_post_type($post->ID);
-	if($post_type == 'wpunity_game'){
-		$gameSlug = $post->post_name;
-//        $upload = wp_upload_dir();
-//        $upload_dir = $upload['basedir'];
-//        $upload_dir .= "/" . $gameSlug;
-//        $upload_dir = str_replace('\\','/',$upload_dir);
-		echo '<b>Slug:</b> ' . $gameSlug;
-//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
-	}
-    elseif($post_type == 'wpunity_scene'){
-		$sceneSlug = $post->post_name;
-//        $terms = wp_get_post_terms( $post->ID, 'wpunity_scene_pgame');
-//        $gameSlug = $terms[0]->slug;
-//        $upload = wp_upload_dir();
-//        $upload_dir = $upload['basedir'];
-//        $upload_dir .= "/" . $gameSlug . "/" . $sceneSlug;
-//        $upload_dir = str_replace('\\','/',$upload_dir);
-		echo '<b>Slug:</b> ' . $sceneSlug;
-//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
-	}
-    elseif($post_type == 'wpunity_asset3d'){
-		$assetSlug = $post->post_name;
-//        $upload = wp_upload_dir();
-//        $upload_dir = $upload['basedir'];
-//        $pathofPost = get_post_meta($post->ID,'wpunity_asset3d_pathData',true);
-//        $upload_dir .= "/" . $pathofPost;
-//        $upload_dir = str_replace('\\','/',$upload_dir);
-		echo '<b>Slug:</b> ' . $assetSlug;
-//        echo '<br/><b>Upload Folder:</b>' . $upload_dir;
-	}
-
-}
-
-add_action( 'edit_form_after_title', 'wpunity_aftertitle_info' );
-
-//==========================================================================================================================================
-
 // ================ SEMANTICS ON 3D ============================================================
 
 // ---- AJAX SEMANTICS 1: run segmentation ----------
@@ -1409,7 +1194,6 @@ goto :EOF
 	wp_die();
 }
 
-
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
 	$DS = DIRECTORY_SEPARATOR;
@@ -1455,7 +1239,6 @@ function wpunity_monitor_compiling_action_callback(){
 	wp_die();
 }
 
-
 //---- AJAX KILL TASK: KILL COMPILE PROCESS ------
 function wpunity_killtask_compiling_action_callback(){
 	$DS = DIRECTORY_SEPARATOR;
@@ -1481,8 +1264,6 @@ function wpunity_killtask_compiling_action_callback(){
 	echo $killres;
 	wp_die();
 }
-
-
 
 //---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
@@ -1536,7 +1317,6 @@ function wpunity_game_zip_action_callback()
 
 // NEW ASSEMBLY FUNCTIONS OF JULY 2017
 
-
 // -- Append scene paths in EditorBuildSettings.asset file --
 // $filepath : The path of the already written EditorBuildSettings.asset file
 // $scenepath : The scene to add as path : "Assets/scenes/S_Settings.unity"
@@ -1556,144 +1336,6 @@ function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scen
 	//    $fhandle = fopen($filepath, "r");
 	//    echo fread($fhandle, filesize($filepath));
 }
-
-
-
-/* Create an empty WebGLBuilder.cs in a certain $filepath */
-function wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform){
-
-	$handle = fopen($filepath, 'w');
-
-	$targetFileFormat = ''; // WebGL and Linux are blank
-
-	switch($targetPlatform)
-	{
-		case 'StandaloneWindows':
-			$targetFileFormat =  'mygame.exe'; //' -buildWindowsPlayer "builds'.$DS.'windows'.$DS.'mygame.exe"';
-			break;
-		case 'StandaloneOSXUniversal':
-			$targetFileFormat = 'mygame.app'; //' -buildOSXUniversalPlayer "builds'.$DS.'mac'.$DS.'mygame.app"';
-			break;
-	}
-
-
-	$content = 'using UnityEngine;
-using UnityEditor;
-using System.IO;
-using System;
-	
-class HandyBuilder {
-static void build() {
-        
-
-        Debug.Log("Hi jimverinko");
-        // AddAssetsToImportHere
-
-        string[] scenes = { // AddScenesHere
-}; 
-        
-        string pathToDeploy = "builds/'.$targetPlatform.'/'.$targetFileFormat.'";		
-                
-        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.'.$targetPlatform.', BuildOptions.None);
-    }
-}';
-
-	fwrite($handle, $content);
-	fclose($handle);
-}
-
-
-// Add  assets (obj) for import
-//    $assetpath = "Assets/models/building1/building1.obj"
-// or scenes for compile
-//    $scenepath = "Assets/scenes/S_SceneSelector.unity"
-// to
-//    WebGLBuilder.cs
-function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
-
-	$LF = chr(10); // line change
-
-	if ($assetpath){
-		//add assets (obj)
-
-		// Clear previous size of filepath
-		clearstatcache();
-
-		// a. Read
-		$handle = fopen($filepath, 'r');
-		$content = fread($handle, filesize($filepath));
-		fclose($handle);
-
-
-		$smartline =  '   AssetDatabase.ImportAsset("'.$assetpath.'", ImportAssetOptions.Default);'; // .$LF.
-//                      '   Debug.Log("SMARTSEE: '.$assetpath.'");' .$LF.
-//                      '   Debug.Log("SM25" + AssetDatabase.AssetPathToGUID("'.$assetpath.'"));';
-
-
-//		$smartline=
-//       'assetFile = "'.$assetpath.'";'.$LF.'
-//		assetFileMeta = assetFile + ".meta"; '.$LF.'
-//		linesBefore = System.IO.File.ReadAllLines(assetFileMeta);'.$LF.'
-//		php_gui_line = linesBefore[1];'.$LF.'
-//		Debug.Log("php_gui_line" + php_gui_line);'.$LF.'
-//		AssetDatabase.ImportAsset( assetFile, ImportAssetOptions.Default); '.$LF.'
-//		linesAfter = System.IO.File.ReadAllLines( assetFileMeta);'.$LF.'
-//		linesAfter[1] = php_gui_line;'.$LF.'
-//		Debug.Log("linesAfter:" + linesAfter);'.$LF.'
-//		System.IO.File.WriteAllLines( assetFileMeta, linesAfter);'.$LF;
-
-		// b. add obj
-		$content = str_replace('// AddAssetsToImportHere',
-            '// AddAssetsToImportHere'.$LF.
-            $smartline,
-            $content
-		);
-
-		// c. Write to file
-		$fhandle = fopen($filepath, 'w');
-		fwrite($fhandle, $content, strlen($content));
-		fclose($fhandle);
-
-//    // d. Read for testing
-//    clearstatcache();
-//    $handle = fopen($filepath, 'r');
-//    echo fread($handle, filesize($filepath));
-//    fclose($handle);
-	}
-
-
-	if ($scenepath){
-
-		// Clear previous size of filepath
-		clearstatcache();
-
-		// a. Read
-		$handle = fopen($filepath, 'r');
-		$content = fread($handle, filesize($filepath));
-		fclose($handle);
-
-
-		$scenewebgl = '          "'.$scenepath.'",'.chr(10).'// AddScenesHere '            ;
-
-		// b. Extend certain string
-		$content = str_replace('// AddScenesHere', $scenewebgl, $content);
-
-		// first comma remove
-		$content = str_replace(','.chr(10).'}','}', $content);
-
-		// c. Write to old
-		$fhandle = fopen($filepath, 'w');
-
-		fwrite($fhandle, $content, strlen($content));
-		fclose($fhandle);
-
-		//  d. Read for testing
-		//    $handle = fopen($filepath, 'r');
-		//    echo fread($handle, strlen($content));
-		//    fclose($handle);
-	}
-}
-
 
 function wpunity_save_scene_async_action_callback()
 {
@@ -1746,180 +1388,6 @@ function fake_compile_for_a_test_project()
 	fclose($h);
 }
 
+//==========================================================================================================================================
 
-
-
-//// ---- OLD AJAX ASSEMBLE : DO NOT DELETE UNTIL WE FINISH LINUX server ------
-//function wpunity_assemble_action_callback() {
-//
-//    $DS = DIRECTORY_SEPARATOR;
-//    // Windows or Linux server variable
-//    $os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
-//
-//    // Check if target folder exist from a previous assemble
-//    $target_exists = file_exists ( $_POST['target'] );
-//    echo '1. Target Folder exists? '.($target_exists?'true':'false');
-//
-//    // if exists then remove the whole game target folder
-//    if ($target_exists) {
-//        //echo '<br /><span>Removing:' . $_POST['target'] . '</span><br />';
-//        shell_exec($os === 'win' ? 'rmdir /s/q ' . $_POST['target'] : 'rm -rf '. $_POST['target']);
-//
-//        if (file_exists($_POST['target'])) {
-//            echo '<span style="color:yellowgreen"><br />Delete: Can not delete. Used by another process? Skipping delete, I will overwrite.</span>';
-//        }else
-//            echo '<br />2. Deleted target folder: Success';
-//    }
-//
-//    shell_exec('mkdir '. ($os==='lin'?'--parents':'')  . ' '.$_POST['target']);
-//
-//    echo '<br />3. Create target folder: '.(file_exists ( $_POST['target'] )?'Success':'Error 5');
-//
-//    // Copy the pre-written windows game libraries. The same are working for linux as well.
-//    if ($os === 'win')
-//        $copy_command = 'xcopy /s /Q '.$_POST['game_libraries_path'].$DS.'windows '.$_POST['target'];
-//    else
-//        $copy_command = 'cp --verbose -rf '.$_POST['game_libraries_path'].$DS.'windows'.$DS.'. '.$_POST['target'];
-//
-//    $res_copy = shell_exec($copy_command);
-//
-//    echo '<br />4. Copy unity3d libraries: '. ($os==='win'?$res_copy: ($res_copy==0?'Success':'Failure 15'));
-//
-//    //------ Modify /ProjectSettings/EditorBuildSettings.asset and Main_Menu.cs to include all scenes ---
-//    $scenes_Arr = wpunity_getAllscenes_unityfiles_byGame($_POST['game_id']);
-//
-//    // === Assets/General_Scripts/Menu_Script.cs =====
-//    $path_cs_MainMenu = $_POST['target']."/Assets/General_Scripts/Menu_Script.cs";
-//
-//    // first read content
-//    $fhandle = fopen($path_cs_MainMenu, "r");
-//    $fcontents_cs_MainMenu = fread($fhandle, filesize($path_cs_MainMenu));
-//    fclose($fhandle);
-//
-//    //echo htmlspecialchars($fcontents_cs_MainMenu);
-//
-//    // then write
-//    $fhandle = fopen($path_cs_MainMenu, "w");
-//    $fcontents_cs_MainMenu = str_replace(['___[mainmenu_scene_basename]___',
-//        '___[initialwonderaround_scene_basename]___',
-//        '___[options_scene_basename]___',
-//        '___[credentials_scene_basename]___'],
-//        [
-//            basename($scenes_Arr[0][sceneUnityPath],".unity"),
-//            basename($scenes_Arr[1][sceneUnityPath],".unity"),
-//            basename($scenes_Arr[2][sceneUnityPath],".unity"),
-//            basename($scenes_Arr[3][sceneUnityPath],".unity")
-//        ],
-//        $fcontents_cs_MainMenu);
-//
-//    //echo htmlspecialchars($fcontents_cs_MainMenu);
-//
-//    fwrite($fhandle, $fcontents_cs_MainMenu);
-//    fclose($fhandle);
-//
-//    // === EditorBuildSettings.asset ===
-//
-//    // replace
-//    $needle_str ='  m_Scenes: []'.chr(10);
-//
-//    // with
-//    $target_str= '  m_Scenes:'.chr(10);
-//
-//    foreach ($scenes_Arr as $cs)
-//        $target_str .= '  - enabled: 1' . chr(10) .
-//            '    path: '.$cs['sceneUnityPath']  . chr(10);
-//
-//
-//    //  Possible bug is the LF character in the end of lines
-//    echo '<br />5. Include Scenes in EditorBuildSettings.asset: ';
-//
-//    $path_eba = $_POST['target']."/ProjectSettings/EditorBuildSettings.asset";
-//
-//    // first read
-//    $fhandle = fopen($path_eba, "r");
-//    $fcontents = fread($fhandle, filesize($path_eba));
-//    fclose($fhandle);
-//
-//    // then write
-//    $fhandle = fopen($path_eba, "w");
-//    $fcontents = str_replace($needle_str, $target_str, $fcontents);
-//    fwrite($fhandle, $fcontents);
-//    fclose($fhandle);
-//
-//    echo '<span style="font-size:8pt"><pre>'.$fcontents.'</pre></span>';
-//
-//    // Copy source assets to target assets
-//    if ($os === 'win')
-//        $copy_assets_command = 'xcopy /s /Q '.$_POST['source'].' '.$_POST['target'].$DS.'Assets';
-//    else
-//        $copy_assets_command = 'cp -rf '.$_POST['source'].$DS.'. '.$_POST['target'].$DS.'Assets';
-//
-//    $res_copy_assets = shell_exec($copy_assets_command);
-//
-//    echo '<br />6. Copy Game Instance Assets to target Assets: '. ($os==='win'?$res_copy_assets:($res_copy_assets==0?'Success':'Failure 16'));
-//    echo '<br /><br /> Finished assemble';
-//
-//    wp_die();
-//}
-
-
-// OLD COMPILE: DO NOT DELETE
-
-//// ---- AJAX COMPILE 1: compile game, i.e. make a bat file and run it
-//function wpunity_compile_action_callback() {
-//	$DS = DIRECTORY_SEPARATOR;
-//
-//	// TEST PHASE
-//	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows'; //$_GET['game_dirpath'];
-//	// TEST PHASE
-//	//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_linux'; //$_GET['game_dirpath'];
-//
-//	// REAL
-//	$game_dirpath = $_POST['dirpath']; //  realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
-//	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-//		$os_bin = 'bat';
-//		$txt = '"C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.
-//		       $game_dirpath.'\stdout.log -projectPath '. $game_dirpath .' -buildWindowsPlayer "builds\mygame.exe"';
-//
-//		$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
-//
-//	} else { // LINUX SERVER
-//		$os_bin = 'sh';
-//		$txt = "#/bin/bash"."\n".
-//		       "projectPath=`pwd`"."\n".
-//		       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-//		       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -buildWindowsPlayer 'builds/mygame.exe'";
-//
-//		// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-//		$compile_command = 'nohup sh starter_artificial.sh'.'> /dev/null 2>/dev/null &';
-//	}
-//
-//	// 1 : Generate bat or sh
-//	$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
-//	fwrite($myfile, $txt);
-//	fclose($myfile);
-//	chmod($game_dirpath.$DS."starter_artificial.".$os_bin, 0755);
-//
-//
-//	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
-//
-//	if ($os === 'lin'){
-//		$init_workdir = getcwd();
-//
-//		chdir($game_dirpath);
-//
-//		//$handle = fopen($game_dirpath.$DS.'command.txt','w');
-//		// 2: run bat or sh to compile the game
-//		$output = shell_exec($compile_command);
-//		chdir($init_workdir);
-//
-//		//fwrite($handle, getcwd() .PHP_EOL);
-//		//fclose($handle);
-//
-//	} else {
-//		// 2: run bat or sh to compile the game
-//		$output = shell_exec($compile_command);
-//	}
-//
-//	wp_die();
-//}
+?>
