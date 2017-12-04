@@ -61,6 +61,18 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[poi_v_scale_z]___
       objectReference: {fileID: 0}
+    - target: {fileID: 65002973632262576, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_Size.x
+      value: 0.302
+      objectReference: {fileID: 0}
+    - target: {fileID: 65002973632262576, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_Size.y
+      value: 0.302
+      objectReference: {fileID: 0}
+    - target: {fileID: 65002973632262576, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_Size.z
+      value: 0.302
+      objectReference: {fileID: 0}
     - target: {fileID: 114895655547013306, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
       propertyPath: videoToShow
       value: ___[poi_v_v_name]___
@@ -70,8 +82,7 @@ Prefab:
   m_IsPrefabParent: 0
 --- !u!4 &___[poi_v_trans_fid]___ stripped
 Transform:
-  m_PrefabParentObject: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076,
-    type: 2}
+  m_PrefabParentObject: {fileID: 4314884090211512, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
   m_PrefabInternal: {fileID: ___[poi_v_fid]___}
 --- !u!1001 &___[poi_v_obj_fid]___
 Prefab:
@@ -199,23 +210,32 @@ Prefab:
       propertyPath: m_Name
       value: ___[poi_it_title]___
       objectReference: {fileID: 0}
-    - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17,
-        type: 2}
+    - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
       propertyPath: imageSpriteNameToShow
       value: ___[poi_it_sprite_name]___
       objectReference: {fileID: 0}
-    - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17,
-        type: 2}
+    - target: {fileID: 114549906102068134, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
       propertyPath: textToShow
       value: '___[poi_it_text]___'
+      objectReference: {fileID: 0}
+    - target: {fileID: 65218638646948556, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
+      propertyPath: m_Size.x
+      value: 0.301
+      objectReference: {fileID: 0}
+    - target: {fileID: 65218638646948556, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
+      propertyPath: m_Size.y
+      value: 0.301
+      objectReference: {fileID: 0}
+    - target: {fileID: 65218638646948556, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
+      propertyPath: m_Size.z
+      value: 0.301
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &___[poi_it_connector_fid]___ stripped
 Transform:
-  m_PrefabParentObject: {fileID: 4761904222008530, guid: 4c118634f374a3647acbe1862739fb17,
-    type: 2}
+  m_PrefabParentObject: {fileID: 4761904222008530, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
   m_PrefabInternal: {fileID: ___[poi_it_fid]___}
 --- !u!1001 &___[poi_it_obj_fid]___
 Prefab:
@@ -365,6 +385,18 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[poi_a_scale_z]___
       objectReference: {fileID: 0}
+    - target: {fileID: 65548309201650982, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
+      propertyPath: m_Size.x
+      value: 0.203
+      objectReference: {fileID: 0}
+    - target: {fileID: 65548309201650982, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
+      propertyPath: m_Size.y
+      value: 0.203
+      objectReference: {fileID: 0}
+    - target: {fileID: 65548309201650982, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
+      propertyPath: m_Size.z
+      value: 0.203
+      objectReference: {fileID: 0}
     - target: {fileID: 1629036710865210, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
       propertyPath: m_Name
       value: ___[poi_a_title]___
@@ -378,8 +410,7 @@ Prefab:
   m_IsPrefabParent: 0
 --- !u!4 &___[poi_a_transform_fid]___ stripped
 Transform:
-  m_PrefabParentObject: {fileID: 4421351638810854, guid: 0adb8d0e70f9bab418a4f8e9259d118a,
-    type: 2}
+  m_PrefabParentObject: {fileID: 4421351638810854, guid: 0adb8d0e70f9bab418a4f8e9259d118a, type: 2}
   m_PrefabInternal: {fileID: ___[poi_a_fid]___}
 --- !u!1001 &___[poi_a_obj_fid]___
 Prefab:
