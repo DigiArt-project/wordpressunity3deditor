@@ -74,7 +74,17 @@ function wpunity_getSceneUnityMetaPattern(){
 
 //Get 'obj.meta Pattern'
 function wpunity_getYaml_obj_dotmeta_pattern(){
+
+
+
+
 	$yamloptions = get_option( 'yaml_settings' );
+
+    $fj = fopen("output_yamlsettings.txt","w");
+    fwrite($fj, print_r($yamloptions,true));
+
+    fclose($fj);
+
 	return $yamloptions["wpunity_obj_meta_pat"];
 }
 

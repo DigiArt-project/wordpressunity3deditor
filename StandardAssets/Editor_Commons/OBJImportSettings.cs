@@ -15,8 +15,10 @@ class OBJImportSettings : AssetPostprocessor
 			modImport.optimizeMesh = false;
 
         if (modImport.assetPath.Contains (".obj")) {
+                modImport.importMaterials = true;
            		Debug.Log("PP:" + modImport.assetPath);
            		string[] linesBefore = System.IO.File.ReadAllLines(modImport.assetPath + ".meta");
+           		//System.IO.File.Delete(modImport.assetPath + ".meta");
            		Debug.Log("MM:" + linesBefore[1]);
         }
 	}
