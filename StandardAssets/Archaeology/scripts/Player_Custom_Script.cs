@@ -123,7 +123,8 @@ public class Player_Custom_Script : MonoBehaviour {
 				canvas_ti.enabled = false;
 				canvas_v.enabled = false;
 
-				active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                if (active)
+				    active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 			}
 
 

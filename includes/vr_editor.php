@@ -61,6 +61,10 @@ echo '</script>';
 <!-- Handle keyboard buttons shortcuts -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/keyButtons.js'></script>
 
+
+<!-- Functions for clicking on 3D objects -->
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/rayCasters.js'></script>
+
 <!-- Functions for controllers (axes, dat.gui, phpForm) -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/auxControlers.js'></script>
 
@@ -597,8 +601,12 @@ $formRes->init($sceneToLoad);
 //        }, 1000 / 25 );
 
 
+
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+
+
+
 
         if (isComposerOn)
             envir.composer.render();
@@ -606,6 +614,8 @@ $formRes->init($sceneToLoad);
 
         // Update it
         update();
+
+
 
     }
 
@@ -643,12 +653,18 @@ $formRes->init($sceneToLoad);
             updatePositionsPhpAndJavsFromControlsAxes();
         }
     }
+
+
+
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
 
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, true );
 
     animate();
+
+
+
 </script>
 
 <!-- Change dat GUI style: Override the inside js style -->

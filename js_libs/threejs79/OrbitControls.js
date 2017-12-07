@@ -67,13 +67,16 @@ THREE.OrbitControls = function ( object, domElement ) {
 	this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
 
 	// Set to false to disable use of the keys
-	this.enableKeys = true;
+	this.enableKeys = false; // VERVERIDIS
 
 	// The four arrow keys
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
 	// Mouse buttons
-	this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
+	//this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
+
+	// VERVERIDIS
+    this.mouseButtons = { ORBIT: THREE.MOUSE.RIGHT, ZOOM: THREE.MOUSE.LEFT, PAN: THREE.MOUSE.MIDDLE };
 
 	// for reset
 	this.target0 = this.target.clone();
@@ -519,27 +522,27 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		switch ( event.keyCode ) {
 
-			case scope.keys.UP:
-				pan( 0, scope.keyPanSpeed );
-				scope.update();
-				break;
-
-			case scope.keys.BOTTOM:
-				pan( 0, - scope.keyPanSpeed );
-				scope.update();
-				break;
-
-			case scope.keys.LEFT:
-				pan( scope.keyPanSpeed, 0 );
-				scope.update();
-				break;
-
-			case scope.keys.RIGHT:
-				pan( - scope.keyPanSpeed, 0 );
-				scope.update();
-				break;
-
-		}
+		// 	case scope.keys.UP:
+		// 		pan( 0, scope.keyPanSpeed );
+		// 		scope.update();
+		// 		break;
+        //
+		// 	case scope.keys.BOTTOM:
+		// 		pan( 0, - scope.keyPanSpeed );
+		// 		scope.update();
+		// 		break;
+        //
+		// 	case scope.keys.LEFT:
+		// 		pan( scope.keyPanSpeed, 0 );
+		// 		scope.update();
+		// 		break;
+        //
+		// 	case scope.keys.RIGHT:
+		// 		pan( - scope.keyPanSpeed, 0 );
+		// 		scope.update();
+		// 		break;
+        //
+		 }
 
 	}
 
@@ -653,6 +656,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 		if ( scope.enabled === false ) return;
 
 		event.preventDefault();
+
+		console.log("scope.mouseButtons.ORBIT", scope.mouseButtons.ORBIT);
 
 		if ( event.button === scope.mouseButtons.ORBIT ) {
 
