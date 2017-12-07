@@ -43,7 +43,7 @@ class vr_editor_environmentals {
         this.setOrbitCamera();
         this.setAvatarCamera();
 
-        this.setRecycleBin();
+        //this.setRecycleBin();
         //this.setAxisText();
         //this.setArtificialFloor();
         this.setLight();
@@ -285,50 +285,40 @@ class vr_editor_environmentals {
     }
 
 
-    setRecycleBin(){
-
-        var ctx = this.ctx;
-        var loader = new THREE.TextureLoader();
-        loader.load(PLUGIN_PATH_VR + "/images/recycle.png", function ( texture ) {
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set( 1, 1 );
-            texture.offset = new THREE.Vector2( 0.45, 0 );
-            //texture.generateMipmaps = true;
-
-            var radiusTop = 1.3,
-                radiusBottom=1.1,
-                height=3.5,
-                radiusSegments=64,
-                heightSegments=16,
-                openEnded=true;
-
-            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded);
-
-            var material    = new THREE.MeshPhongMaterial({transparent:true, opacity:0.6, color: 0xaea6ca, map:texture, side:THREE.DoubleSide});
-            var recycleBin = new THREE.Mesh( geometry, material );
-
-            recycleBin.position.set( -0.3, -0.3, -1 );
-            recycleBin.scale.set( 0.03, 0.03, 0.03 );
-
-            // recycleBin.position.set( -0.08, -0.08, -0.25 );
-            // recycleBin.scale.set( 0.005, 0.005, 0.005 );
-            recycleBin.name = "recycleBin";
-
-
-
-
-            // var light = new THREE.DirectionalLight(0xffffff);
-            // light.position.set(10, 5, 20);
-            // recycleBin.add(light);
-
-            //ctx.scene.add( new THREE.DirectionalLightHelper(light, 5));
-
-
-            ctx.cameraOrbit.add( recycleBin );
-        });
-
-    }
+    // setRecycleBin(){
+    //
+    //     var ctx = this.ctx;
+    //     var loader = new THREE.TextureLoader();
+    //     loader.load(PLUGIN_PATH_VR + "/images/recycle.png", function ( texture ) {
+    //         texture.wrapS = THREE.RepeatWrapping;
+    //         texture.wrapT = THREE.RepeatWrapping;
+    //         texture.repeat.set( 1, 1 );
+    //         texture.offset = new THREE.Vector2( 0.45, 0 );
+    //         //texture.generateMipmaps = true;
+    //
+    //         var radiusTop = 1.3,
+    //             radiusBottom=1.1,
+    //             height=3.5,
+    //             radiusSegments=64,
+    //             heightSegments=16,
+    //             openEnded=true;
+    //
+    //         var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded);
+    //
+    //         var material    = new THREE.MeshPhongMaterial({transparent:true, opacity:0.6, color: 0xaea6ca, map:texture, side:THREE.DoubleSide});
+    //         var recycleBin = new THREE.Mesh( geometry, material );
+    //
+    //         recycleBin.position.set( -0.3, -0.3, -1 );
+    //         recycleBin.scale.set( 0.03, 0.03, 0.03 );
+    //
+    //         // recycleBin.position.set( -0.08, -0.08, -0.25 );
+    //         // recycleBin.scale.set( 0.005, 0.005, 0.005 );
+    //         recycleBin.name = "recycleBin";
+    //
+    //         ctx.cameraOrbit.add( recycleBin );
+    //     });
+    //
+    // }
 
     /*
      X, Y ,Z letters
@@ -564,34 +554,6 @@ class vr_editor_environmentals {
         }
         context.putImageData( image, 0, 0 );
         return canvas;
-    }
-
-    convertQuats(ax, ay, az){
-
-        ay = Math.PI - ay;
-
-        var t0 = Math.cos(ay * 0.5);  // yaw
-        var t1 = Math.sin(ay * 0.5);
-        var t2 = Math.cos(az * 0.5);  // roll
-        var t3 = Math.sin(az * 0.5);
-        var t4 = Math.cos(ax * 0.5);  // pitch
-        var t5 = Math.sin(ax * 0.5);
-
-        var t024 = t0 * t2 * t4;
-        var t025 = t0 * t2 * t5;
-        var t034 = t0 * t3 * t4;
-        var t035 = t0 * t3 * t5;
-        var t124 = t1 * t2 * t4;
-        var t125 = t1 * t2 * t5;
-        var t134 = t1 * t3 * t4;
-        var t135 = t1 * t3 * t5;
-
-        var x = t025 + t134;
-        var y =-t035 + t124;
-        var z = t034 + t125;
-        var w = t024 - t135;
-
-        return new THREE.Quaternion(x,y,z,w);
     }
 
 

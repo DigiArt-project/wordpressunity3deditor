@@ -119,8 +119,12 @@ THREE.SceneExporter.prototype = {
                         // Everything is Object3D !
                         // What remains here is the (Groups) = 3d models obj to load
                         // and Object3D avatarYawObject
-                        linesArray.push(ObjectString(node, pad));
-                        nobjects += 1;
+
+                    if (node.name === "bbox" || node.name === "xline" || node.name === "yline" || node.name === "zline" )
+                        continue
+
+                    linesArray.push(ObjectString(node, pad));
+                    nobjects += 1;
                 }
 
 
@@ -296,6 +300,8 @@ THREE.SceneExporter.prototype = {
         }
 
         function ObjectString( o, n ) {
+
+
 
             if (o.name != 'avatarYawObject'){
 

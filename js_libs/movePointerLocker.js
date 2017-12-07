@@ -43,7 +43,7 @@ function initPointerLock() {
                 envir.avatarControls.enabled = true;
                 envir.orbitControls.enabled = false;
 
-                envir.cameraOrbit.getObjectByName("recycleBin").visible = false;
+                //envir.cameraOrbit.getObjectByName("recycleBin").visible = false;
                 blocker.style.display = 'none';
 
                 // When in AVATAR the avatarControls position is the orbit controls target
@@ -73,7 +73,7 @@ function initPointerLock() {
                 //if (envir.avatarControls.getObject().rotation.y < - Math.PI /2)
                 //    envir.avatarControls.getObject().rotation.y += 0.85;
 
-                envir.cameraOrbit.getObjectByName("recycleBin").visible=true;
+                // envir.cameraOrbit.getObjectByName("recycleBin").visible=true;
                 blocker.style.display = '-webkit-box';
                 blocker.style.display = '-moz-box';
                 blocker.style.display = 'box';

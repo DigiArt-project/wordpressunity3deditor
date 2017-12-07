@@ -76,12 +76,6 @@ echo '</script>';
 <script type="text/javascript">
 
 
-
-
-
-
-
-
     isComposerOn = true;
 
     //  Save Button implemented with Ajax
@@ -210,6 +204,10 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
+    <div id="xlengthText"></div>
+    <div id="ylengthText"></div>
+    <div id="zlengthText"></div>
+
     <!-- Controlling 3d items transition-rotation-scale (trs) -->
     <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
 
@@ -228,7 +226,8 @@ echo '</script>';
     </div>
 
 
-    <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
+    <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+       title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">delete</i>
     </a>
 
@@ -369,7 +368,8 @@ echo '</script>';
     // Controls with axes (Transform, Rotate, Scale)
     var transform_controls = new THREE.TransformControls( envir.cameraOrbit, envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
-    transform_controls.addEventListener( 'change', checkForRecycle );
+
+    //transform_controls.addEventListener( 'change', checkForRecycle );
 
     envir.addCubeToControls(transform_controls);
 
@@ -377,6 +377,12 @@ echo '</script>';
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
         transform_controls.setMode(value);
         showObjectPropertiesPanel(value);
+    });
+
+    jQuery("#removeAssetBtn").click(function(){
+
+        deleterFomScene(transform_controls.object.name);
+
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -428,7 +434,8 @@ echo '</script>';
         envir.gridHelper.visible = false;
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=false;
-        envir.scene.getObjectByName("recycleBin").visible=false;
+
+        //envir.scene.getObjectByName("recycleBin").visible = false;
 
         // Save screenshot data to input
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
@@ -441,7 +448,7 @@ echo '</script>';
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=true;
 
-        envir.scene.getObjectByName("recycleBin").visible=true;
+        //envir.scene.getObjectByName("recycleBin").visible=true;
 
         wpunity_saveSceneAjax();
 
@@ -455,10 +462,10 @@ echo '</script>';
     controllerDatGuiOnChange();
 
     // Is Recycle Bin deployed
-    var isRecycleBinDeployed = false;
+    // var isRecycleBinDeployed = false;
 
     /* The items in the recycle bin */
-    var delArchive = [];
+    // var delArchive = [];
 
     // Load all 3D including Steve
     var loaderMulti;

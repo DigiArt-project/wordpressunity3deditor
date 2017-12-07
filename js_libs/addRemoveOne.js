@@ -10,9 +10,6 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "scale": s
     };
 
-
-
-
     resources3D[nameModel3D] = {
         "path": path,
         "assetid": assetid,
@@ -34,36 +31,36 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
     //   Load the extra item in 3D environment or get it from recycle bin ============================
 
     // envir.cameraOrbit.children[0] is the recycle bin
-    var objInRecycleBin = envir.cameraOrbit.children[0].getObjectByName(nameModel3D);
+    //var objInRecycleBin; // = envir.cameraOrbit.children[0].getObjectByName(nameModel3D);
 
     // Restore from recycle bin
-    if(typeof objInRecycleBin != "undefined") {
+    //if(typeof objInRecycleBin != "undefined") {
 
-        resources3D[nameModel3D] = delArchive[nameModel3D];
-
-        //----------- Add meshes -----------
-        //objInRecycleBin.traverse(function (node) {
-        //    //if (node.material)
-        //    //    node.material.side = THREE.DoubleSide;
-        //});
-        ////---------------------------------
-
-        // envir.cameraOrbit.children[0] is the recycle Bin
-        envir.cameraOrbit.children[0].remove(objInRecycleBin);
-
-        objInRecycleBin.scale.set(s,s,s);
-        objInRecycleBin.position.set(x,y,z);
-        objInRecycleBin.rotation.set(r1,r2,r3);
-        envir.scene.add(objInRecycleBin);
-
-        transform_controls.attach(objInRecycleBin);
-
-        // highlight
-        envir.outlinePass.selectedObjects = [objInRecycleBin];
-        envir.renderer.setClearColor( 0xffffff, 0.9 );
+        // resources3D[nameModel3D] = delArchive[nameModel3D];
+        //
+        // //----------- Add meshes -----------
+        // //objInRecycleBin.traverse(function (node) {
+        // //    //if (node.material)
+        // //    //    node.material.side = THREE.DoubleSide;
+        // //});
+        // ////---------------------------------
+        //
+        // // envir.cameraOrbit.children[0] is the recycle Bin
+        // envir.cameraOrbit.children[0].remove(objInRecycleBin);
+        //
+        // objInRecycleBin.scale.set(s,s,s);
+        // objInRecycleBin.position.set(x,y,z);
+        // objInRecycleBin.rotation.set(r1,r2,r3);
+        // envir.scene.add(objInRecycleBin);
+        //
+        // transform_controls.attach(objInRecycleBin);
+        //
+        // // highlight
+        // envir.outlinePass.selectedObjects = [objInRecycleBin];
+        // envir.renderer.setClearColor( 0xffffff, 0.9 );
 
         // Load it if it is not in recycle bin
-    } else {
+    //} else {
 
         // Make progress bar visible
         jQuery("#progress").get(0).style.display = "block";
@@ -114,34 +111,126 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         console.log(extraResource);
         
         loaderMulti.load(manager, extraResource);
-    }
+    //}
 
 }
 
-/**
- *    ----------- Check for Recycle Bin Drag ----------------------------
- */
-function checkForRecycle(){
+// /**
+//  *    ----------- Check for Recycle Bin Drag ----------------------------
+//  */
+// function checkForRecycle(){
+//
+//     var raycasterRecycleBin = new THREE.Raycaster();
+//     var mouseDrag = new THREE.Vector2();
+//
+//     // handle scrolling of window
+//     var offtop = envir.container_3D_all.getBoundingClientRect().top;
+//     var offleft =envir.container_3D_all.getBoundingClientRect().left;
+//
+//     // translate into -1 to 1 values
+//     mouseDrag.x =   ( (event.clientX - offleft)  / envir.container_3D_all.clientWidth ) * 2 - 1;
+//     mouseDrag.y = - ( (event.clientY - offtop) / envir.container_3D_all.clientHeight ) * 2 + 1;
+//
+//     // calculate objects intersecting the picking ray
+//     raycasterRecycleBin.setFromCamera( mouseDrag, envir.cameraOrbit );
+//
+//     var intersects = raycasterRecycleBin.intersectObjects( [envir.cameraOrbit.children[0]], false );
+//
+//     if(intersects.length>0)
+//         putInRecyleBin(transform_controls.object.name);
+// }
+//
+// /**
+//  *
+//  * -- Put in recycle bin --
+//  *
+//  * @param nameToRemove
+//  */
+// function putInRecyleBin(nameToRemove){
+//
+//     var container = document.paramsform;
+//
+//     // Delete Variables
+//     delArchive[nameToRemove] = resources3D[nameToRemove];
+//     delete resources3D[nameToRemove];
+//
+//     // Remove from scene and add to recycle bin
+//     var objectSelected = envir.scene.getObjectByName(nameToRemove);
+//
+//     transform_controls.detach(objectSelected);
+//
+//     // prevent orbiting
+//     document.dispatchEvent(new CustomEvent("mouseup", { "detail": "Example of an event" }));
+//
+//     envir.scene.remove(objectSelected);
+//     objectSelected.position.set(0,0,0);
+//
+//     var bbox = new THREE.Box3().setFromObject(objectSelected);
+//
+//     var scale_factor_x = 2/(bbox.max.x - bbox.min.x);
+//     var scale_factor_y = 2/(bbox.max.y - bbox.min.y);
+//     var scale_factor_z = 2/(bbox.max.z - bbox.min.z);
+//
+//     if (scale_factor_x > 1000)
+//         scale_factor_x = 1;
+//
+//     if (scale_factor_y > 1000)
+//         scale_factor_y = 1;
+//
+//     if (scale_factor_z > 1000)
+//         scale_factor_z = 1;
+//
+//
+//     objectSelected.scale.set(scale_factor_x, scale_factor_y, scale_factor_z);
+//     objectSelected.isInRecycleBin = true;
+//
+//     // Removed items are added to the cameraOrbit ??? Find something better
+//     envir.cameraOrbit.children[0].add(objectSelected);
+//
+//     // Make trs box visible - invisible
+//     //if (obj_ARR.length > 0) {
+//     //    transform_controls.attach(obj_ARR[0]);
+//     //    transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=true});
+//     //}else
+//     //    transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=false});
+//
+// }
+//
+//
+// /**
+//  * Expand items from recycle bin
+//  *
+//  */
+// function enlistDeletedObjects(){
+//
+//     for(var i=0; i < envir.cameraOrbit.children[0].children.length; i++){
+//         if (envir.cameraOrbit.children[0].children[i] instanceof THREE.Group){
+//             var recycledItem = envir.cameraOrbit.children[0].children[i];
+//             recycledItem.position.set(0, (i+1)*4, 0);
+//             recycledItem.isInRecycleBin = true;
+//         }
+//     }
+//
+//     isRecycleBinDeployed = true;
+// }
+//
+// /**
+//  *   Collapse items in recycle bin
+//  *
+//  */
+// function delistDeletedObjects(){
+//
+//     for(var i=0; i < envir.cameraOrbit.children[0].children.length; i++){
+//         if (envir.cameraOrbit.children[0].children[i] instanceof THREE.Group){
+//             var recycledItem = envir.cameraOrbit.children[0].children[i];
+//             recycledItem.position.set(0,0,0);
+//             recycledItem.isInRecycleBin = true;
+//         }
+//     }
+//
+//     isRecycleBinDeployed = false;
+// }
 
-    var raycasterRecycleBin = new THREE.Raycaster();
-    var mouseDrag = new THREE.Vector2();
-
-    // handle scrolling of window
-    var offtop = envir.container_3D_all.getBoundingClientRect().top;
-    var offleft =envir.container_3D_all.getBoundingClientRect().left;
-
-    // translate into -1 to 1 values
-    mouseDrag.x =   ( (event.clientX - offleft)  / envir.container_3D_all.clientWidth ) * 2 - 1;
-    mouseDrag.y = - ( (event.clientY - offtop) / envir.container_3D_all.clientHeight ) * 2 + 1;
-
-    // calculate objects intersecting the picking ray
-    raycasterRecycleBin.setFromCamera( mouseDrag, envir.cameraOrbit );
-
-    var intersects = raycasterRecycleBin.intersectObjects( [envir.cameraOrbit.children[0]], false );
-
-    if(intersects.length>0)
-        putInRecyleBin(transform_controls.object.name);
-}
 
 /**
  *
@@ -149,12 +238,12 @@ function checkForRecycle(){
  *
  * @param nameToRemove
  */
-function putInRecyleBin(nameToRemove){
+function deleterFomScene(nameToRemove){
 
     var container = document.paramsform;
 
     // Delete Variables
-    delArchive[nameToRemove] = resources3D[nameToRemove];
+    //delArchive[nameToRemove] = resources3D[nameToRemove];
     delete resources3D[nameToRemove];
 
     // Remove from scene and add to recycle bin
@@ -166,70 +255,6 @@ function putInRecyleBin(nameToRemove){
     document.dispatchEvent(new CustomEvent("mouseup", { "detail": "Example of an event" }));
 
     envir.scene.remove(objectSelected);
-    objectSelected.position.set(0,0,0);
 
-    var bbox = new THREE.Box3().setFromObject(objectSelected);
-
-    var scale_factor_x = 2/(bbox.max.x - bbox.min.x);
-    var scale_factor_y = 2/(bbox.max.y - bbox.min.y);
-    var scale_factor_z = 2/(bbox.max.z - bbox.min.z);
-
-    if (scale_factor_x > 1000)
-        scale_factor_x = 1;
-
-    if (scale_factor_y > 1000)
-        scale_factor_y = 1;
-
-    if (scale_factor_z > 1000)
-        scale_factor_z = 1;
-
-
-    objectSelected.scale.set(scale_factor_x, scale_factor_y, scale_factor_z);
-    objectSelected.isInRecycleBin = true;
-
-    // Removed items are added to the cameraOrbit ??? Find something better
-    envir.cameraOrbit.children[0].add(objectSelected);
-
-    // Make trs box visible - invisible
-    //if (obj_ARR.length > 0) {
-    //    transform_controls.attach(obj_ARR[0]);
-    //    transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=true});
-    //}else
-    //    transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=false});
-
-}
-
-
-/**
- * Expand items from recycle bin
- *
- */
-function enlistDeletedObjects(){
-
-    for(var i=0; i < envir.cameraOrbit.children[0].children.length; i++){
-        if (envir.cameraOrbit.children[0].children[i] instanceof THREE.Group){
-            var recycledItem = envir.cameraOrbit.children[0].children[i];
-            recycledItem.position.set(0, (i+1)*4, 0);
-            recycledItem.isInRecycleBin = true;
-        }
-    }
-
-    isRecycleBinDeployed = true;
-}
-
-/**
- *   Collapse items in recycle bin
- *
- */
-function delistDeletedObjects(){
-
-    for(var i=0; i < envir.cameraOrbit.children[0].children.length; i++){
-        if (envir.cameraOrbit.children[0].children[i] instanceof THREE.Group){
-            var recycledItem = envir.cameraOrbit.children[0].children[i];
-            recycledItem.position.set(0,0,0);
-            recycledItem.isInRecycleBin = true;
-        }
-    }
-
-    isRecycleBinDeployed = false;
+    transform_controls.detach();
 }

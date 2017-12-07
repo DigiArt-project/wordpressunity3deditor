@@ -4,15 +4,21 @@
 
 // ------------------------ raycasting for picking objects --------------------------------
 
-
 // Raycasting on mouse down for selecting object
 var raycasterPick = new THREE.Raycaster();
 
 
+// Find dimensions of the selected object
 function findDimensions(grouObj){
+
+    envir.scene.remove( envir.scene.getObjectByName('bbox') );
+    envir.scene.remove( envir.scene.getObjectByName('x_dim_line') );
 
     var box = new THREE.BoxHelper( grouObj, 0xff00ff );
     box.geometry.computeBoundingBox();
+    box.name = "bbox";
+
+    envir.scene.add(box);
 
     var finalVec = new THREE.Vector3().subVectors(box.geometry.boundingBox.min, box.geometry.boundingBox.max);
 
@@ -20,7 +26,143 @@ function findDimensions(grouObj){
     var y = Math.abs(finalVec.y);
     var z = Math.abs(finalVec.z);
 
-    //console.log("Dims", x,y,z);
+    // xline
+    var xline = new THREE.Geometry();
+
+    xline.vertices.push(
+
+        new THREE.Vector3(box.geometry.boundingBox.min.x,
+                          box.geometry.boundingBox.min.y,
+            box.geometry.boundingBox.max.z + 0.2*(box.geometry.boundingBox.max.z - box.geometry.boundingBox.min.z)),
+
+        new THREE.Vector3(box.geometry.boundingBox.max.x,
+            box.geometry.boundingBox.min.y,
+            box.geometry.boundingBox.max.z + 0.2*(box.geometry.boundingBox.max.z - box.geometry.boundingBox.min.z)))
+
+    var x_dim_line = new THREE.Line( xline, new THREE.LineBasicMaterial({color: 0xff0000}));
+    x_dim_line.name = 'xline';
+
+    envir.scene.add(x_dim_line);
+
+    var xText = jQuery('#xlengthText')[0];
+    xText.style.position = "absolute";
+
+    console.log(x_dim_line);
+
+    var projectedPosition = toScreenPosition(xline.vertices[0], xline.vertices[1], envir.cameraOrbit);
+
+    console.log(projectedPosition);
+
+    xText.style.top = projectedPosition.y + "px";
+    xText.style.left = projectedPosition.x + "px";
+
+
+    xText.style.textAlign = "center";
+    xText.style.zIndex = "100";
+    xText.style.display = "block";
+    xText.style.color = "#ff0000";
+    xText.style.fontSize  = "7pt";
+    xText.innerHTML = Math.round(x*100)/100;
+    xText.style.border = "1px solid black";
+
+    // yline
+    var yline = new THREE.Geometry();
+
+    yline.vertices.push(
+
+        new THREE.Vector3(box.geometry.boundingBox.max.x + 0.2*(box.geometry.boundingBox.max.x - box.geometry.boundingBox.min.x),
+            box.geometry.boundingBox.min.y,
+            box.geometry.boundingBox.min.z ),
+
+        new THREE.Vector3(box.geometry.boundingBox.max.x + 0.2*(box.geometry.boundingBox.max.x - box.geometry.boundingBox.min.x),
+            box.geometry.boundingBox.max.y,
+            box.geometry.boundingBox.min.z )
+    );
+
+    var y_dim_line = new THREE.Line( yline, new THREE.LineBasicMaterial({color: 0x00ff00}));
+    y_dim_line.name = 'yline';
+
+    envir.scene.add(y_dim_line);
+
+    var yText = jQuery('#ylengthText')[0];
+    yText.style.position = "absolute";
+
+    console.log(y_dim_line);
+
+    var projectedPositionY = toScreenPosition(yline.vertices[0], yline.vertices[1], envir.cameraOrbit);
+
+    console.log(projectedPositionY);
+
+    yText.style.top = projectedPositionY.y + "px";
+    yText.style.left = projectedPositionY.x + "px";
+
+
+    yText.style.textAlign = "center";
+    yText.style.zIndex = "100";
+    yText.style.display = "block";
+    yText.style.color = "#00ff00";
+    yText.style.fontSize  = "7pt";
+    yText.innerHTML = Math.round(y*100)/100;
+    yText.style.border = "1px solid black";
+
+
+    // zline
+    var zline = new THREE.Geometry();
+
+    zline.vertices.push(
+
+        new THREE.Vector3(box.geometry.boundingBox.max.x + 0.2*(box.geometry.boundingBox.max.x - box.geometry.boundingBox.min.x),
+            box.geometry.boundingBox.min.y,
+            box.geometry.boundingBox.min.z ),
+
+        new THREE.Vector3(box.geometry.boundingBox.max.x + 0.2*(box.geometry.boundingBox.max.x - box.geometry.boundingBox.min.x),
+            box.geometry.boundingBox.min.y,
+            box.geometry.boundingBox.max.z )
+    );
+
+    var z_dim_line = new THREE.Line( zline, new THREE.LineBasicMaterial({color: 0x0000ff}));
+    z_dim_line.name = 'zline';
+
+    envir.scene.add(z_dim_line);
+
+    var zText = jQuery('#zlengthText')[0];
+    zText.style.position = "absolute";
+
+    console.log(z_dim_line);
+
+    var projectedPositionZ = toScreenPosition(zline.vertices[0], zline.vertices[1], envir.cameraOrbit);
+
+    console.log(projectedPositionZ);
+
+    zText.style.top = projectedPositionZ.y  + "px";
+    zText.style.left = projectedPositionZ.x + "px";
+
+
+    zText.style.textAlign = "left";
+    zText.style.zIndex = "100";
+    zText.style.display = "block";
+    zText.style.color = "#0000ff";
+    zText.style.fontSize  = "7pt";
+    zText.innerHTML = Math.round(z*100)/100;
+    zText.style.border = "1px solid black";
+
+
+    return [x,y,z];
+}
+
+
+
+function toScreenPosition(position1, position2, camera)
+{
+    var vector = new THREE.Vector3(position1.x/2 + position2.x/2, position1.y/2 + position2.y/2,
+        position1.z/2 + position2.z/2);
+
+
+    var vector = vector.project(camera);
+    vector.x = (vector.x + 1)/2 * envir.container_3D_all.clientWidth;
+    vector.y = -(vector.y - 1)/2 * envir.container_3D_all.clientHeight;
+    return vector;
+
 }
 
 /**
@@ -30,9 +172,7 @@ function findDimensions(grouObj){
  */
 function onMouseDownSelect( event ) {
 
-
-
-    var i;
+    var showRayPickLine = false; // Do not show raycast line
 
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
@@ -40,15 +180,11 @@ function onMouseDownSelect( event ) {
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
 
-    //console.log("EVA123", event.clientY, , jQuery(window).scrollTop() );
-
-    //mouse.x =   ( (event.clientX - envir.container_3D_all.offsetLeft) / envir.container_3D_all.clientWidth ) * 2 - 1;
     mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
     mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
     // calculate objects intersecting the picking ray
     raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
-
 
     var geolinecast = new THREE.Geometry();
 
@@ -62,19 +198,27 @@ function onMouseDownSelect( event ) {
     var myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
     myBulletLine.name = 'rayLine';
 
-    envir.scene.add(myBulletLine);
+    // Show the myBulletLine (raycast)
+    if (showRayPickLine) {
+        envir.scene.add(myBulletLine);
 
-    // This will force scene to update and show the line
-    envir.scene.getObjectByName('orbitCamera').position.x += 0.001;
-    setTimeout(function() { envir.scene.getObjectByName('orbitCamera').position.x -= 0.001; }, 500);
+        // This will force scene to update and show the line
+        envir.scene.getObjectByName('orbitCamera').position.x += 0.001;
 
-    // Remove the line
-    setTimeout(function() { envir.scene.remove(envir.scene.getObjectByName('rayLine')); }, 500);
+        setTimeout(function () {
+            envir.scene.getObjectByName('orbitCamera').position.x -= 0.001;
+        }, 500);
 
+        // Remove the line
+        setTimeout(function () {
+            envir.scene.remove(envir.scene.getObjectByName('rayLine'));
+        }, 500);
+    }
 
     var activMeshAndFloor = getActiveMeshes().concat(
         [  //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
-            envir.cameraOrbit.children[0], transform_controls.getObjectByName('trs_modeChanger')]);
+            // envir.cameraOrbit.children[0],
+            transform_controls.getObjectByName('trs_modeChanger')]);
 
     // add the recycle bin and the mode change cube
     var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
@@ -105,50 +249,50 @@ function onMouseDownSelect( event ) {
     }
 
     // --------- Enlist deleted items ----------
-    if (intersects.length>0)
-        if(intersects[0].object.name === 'recycleBin') {
-            if (!isRecycleBinDeployed)
-                enlistDeletedObjects();
-            else
-                delistDeletedObjects();
-            return;
-        }
+    // if (intersects.length>0)
+    //     if(intersects[0].object.name === 'recycleBin') {
+    //         if (!isRecycleBinDeployed)
+    //             enlistDeletedObjects();
+    //         else
+    //             delistDeletedObjects();
+    //         return;
+    //     }
 
 
-    //--------- Click item from recycle Bin ? --------------------------------
-    if (intersects.length>0) {
-
-        if (intersects[0].object.parent.isInRecycleBin == true) {
-
-            intersects[0].object.parent.isInRecycleBin = false;
-
-            var nameToRestore = intersects[0].object.parent.name;
-
-            var trs = delArchive[nameToRestore]["trs"];
-
-            addAssetToCanvas(nameToRestore, delArchive[nameToRestore]["assetid"],
-                delArchive[nameToRestore]["path"],
-                delArchive[nameToRestore]["obj"], delArchive[nameToRestore]["objID"],
-                delArchive[nameToRestore]["mtl"], delArchive[nameToRestore]["mtlID"],
-                delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
-                delArchive[nameToRestore]["diffImage"], delArchive[nameToRestore]["diffImageID"],
-                delArchive[nameToRestore]["image1id"],
-                delArchive[nameToRestore]["doorName_source"],
-                delArchive[nameToRestore]["doorName_target"],
-                delArchive[nameToRestore]["sceneName_target"],
-                trs["translation"][0], trs["translation"][1], trs["translation"][2],
-                trs["rotation"][0], trs["rotation"][1], trs["rotation"][2],
-                trs["scale"]);
-
-            // Make trs box visible
-            transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=true});
-
-            return;
-        }
-    }
+    // //--------- Click item from recycle Bin ? --------------------------------
+    // if (intersects.length>0) {
+    //
+    //     if (intersects[0].object.parent.isInRecycleBin == true) {
+    //
+    //         intersects[0].object.parent.isInRecycleBin = false;
+    //
+    //         var nameToRestore = intersects[0].object.parent.name;
+    //
+    //         var trs = delArchive[nameToRestore]["trs"];
+    //
+    //         addAssetToCanvas(nameToRestore, delArchive[nameToRestore]["assetid"],
+    //             delArchive[nameToRestore]["path"],
+    //             delArchive[nameToRestore]["obj"], delArchive[nameToRestore]["objID"],
+    //             delArchive[nameToRestore]["mtl"], delArchive[nameToRestore]["mtlID"],
+    //             delArchive[nameToRestore]["categoryName"], delArchive[nameToRestore]["categoryID"],
+    //             delArchive[nameToRestore]["diffImage"], delArchive[nameToRestore]["diffImageID"],
+    //             delArchive[nameToRestore]["image1id"],
+    //             delArchive[nameToRestore]["doorName_source"],
+    //             delArchive[nameToRestore]["doorName_target"],
+    //             delArchive[nameToRestore]["sceneName_target"],
+    //             trs["translation"][0], trs["translation"][1], trs["translation"][2],
+    //             trs["rotation"][0], trs["rotation"][1], trs["rotation"][2],
+    //             trs["scale"]);
+    //
+    //         // Make trs box visible
+    //         transform_controls.traverse(function(node){if(node.name=='trs_modeChanger') node.visible=true});
+    //
+    //         return;
+    //     }
+    // }
 
     //-------------------- Select object in scene by raycasting ----------------------------------------------------
-    for ( i = 0; i < intersects.length; i++ ) {
+    for ( var i = 0; i < intersects.length; i++ ) {
 
         // selected_object_name = intersects[i].object.name;
         // arrNameObjInter[selected_object_name] = intersects[i].object;
@@ -613,6 +757,11 @@ var gui_controls_funs = new function() {
     this.dg_ry = 0;
     this.dg_rz = 0;
     this.dg_scale = 0;
+    this.dg_dim_x = 0;
+    this.dg_dim_y = 0;
+    this.dg_dim_z = 0;
+
+
 };
 
 
@@ -643,7 +792,12 @@ var dg_controller_rx = controlInterface.rotate.add( gui_controls_funs, 'dg_rx', 
 var dg_controller_ry = controlInterface.rotate.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
 var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180, 0.001).name('Rotate z');//.listen();
 
-var dg_controller_sc = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.001).name('Scale');//.listen();
+var dg_controller_sc  = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.001).name('Scale');//.listen();
+var dg_controller_dim_x = controlInterface.scale.add( gui_controls_funs, 'dg_dim_x').min(0.001).max(1000).step(0.001).name('x length (red)');
+var dg_controller_dim_y = controlInterface.scale.add( gui_controls_funs, 'dg_dim_y').min(0.001).max(1000).step(0.001).name('y length (green)');
+var dg_controller_dim_z = controlInterface.scale.add( gui_controls_funs, 'dg_dim_z').min(0.001).max(1000).step(0.001).name('z length (blue)');
+
+
 /*var cbt_axes_setbigger = gui.add( gui_controls_funs, 'bt_axes_setbigger').name('Increase axes (+)');
  var cbt_axes_setsmaller = gui.add( gui_controls_funs, 'bt_axes_setsmaller').name('Decrease axes (-)');*/
 /*var cbt_doublesided = gui.add( gui_controls_funs, 'bt_doublesided').name('Double sided');*/
@@ -720,14 +874,41 @@ function controllerDatGuiOnChange() {
 
 
     dg_controller_sc.onChange(function(value) {
+
             cancelAnimationFrame( id_animation_frame );
+
             transform_controls.object.scale.set(gui_controls_funs.dg_scale, gui_controls_funs.dg_scale, gui_controls_funs.dg_scale);
 
-            findDimensions(transform_controls.object);
+            var dims = findDimensions(transform_controls.object);
+
+            gui_controls_funs.dg_dim_x = dims[0];
+            gui_controls_funs.dg_dim_y = dims[1];
+            gui_controls_funs.dg_dim_z = dims[2];
 
             animate();
         }
     );
+
+
+    dg_controller_dim_x.onChange(function(value) {
+
+            // cancelAnimationFrame( id_animation_frame );
+            //
+            // gui_controls_funs.dg_scale = gui_controls_funs.dg_scale * value / gui_controls_funs.dg_dim_x_old;
+            //
+            // transform_controls.object.scale.set(gui_controls_funs.dg_scale, gui_controls_funs.dg_scale, gui_controls_funs.dg_scale);
+            //
+            // var dims = findDimensions(transform_controls.object);
+            //
+            // gui_controls_funs.dg_dim_x = dims[0];
+            // gui_controls_funs.dg_dim_y = dims[1];
+            // gui_controls_funs.dg_dim_z = dims[2];
+            //
+            // animate();
+        }
+    );
+
+
 
     // Make slider-text controllers more interactive
     setKeyPressControllerUnconstrained(dg_controller_tx);
@@ -737,6 +918,12 @@ function controllerDatGuiOnChange() {
     setKeyPressControllerConstrained(dg_controller_ry);
     setKeyPressControllerConstrained(dg_controller_rz);
     setKeyPressControllerConstrained(dg_controller_sc);
+
+    setKeyPressControllerConstrained(dg_controller_dim_x);
+    setKeyPressControllerConstrained(dg_controller_dim_y);
+    setKeyPressControllerConstrained(dg_controller_dim_z);
+
+
 }
 
 /**
@@ -830,7 +1017,13 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
     if (val > 0) {
         gui_controls_funs.dg_scale = val;
         transform_controls.object.scale.set( val, val, val);
-        findDimensions(transform_controls.object);
+
+        var dims = findDimensions(transform_controls.object);
+
+
+        gui_controls_funs.dg_dim_x = dims[0];
+        gui_controls_funs.dg_dim_y = dims[1];
+        gui_controls_funs.dg_dim_z = dims[2];
     }
     //--------- end of scale ------------------------
 }
