@@ -26,7 +26,7 @@ static void build() {
         
         string pathToDeploy = "builds/WebGLversion/";		
         
-        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.WebGL, androidBuildOptions);
+        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.WebGL, BuildOptions.None);
     }
 }';
 

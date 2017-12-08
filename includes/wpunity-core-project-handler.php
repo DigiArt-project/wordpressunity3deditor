@@ -420,7 +420,7 @@ static void build() {
 
         string pathToDeploy = "builds/'.$targetPlatform.'/'.$targetFileFormat.'";
 
-        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.'.$targetPlatform.', androidBuildOptions);
+        BuildPipeline.BuildPlayer(scenes, pathToDeploy, BuildTarget.'.$targetPlatform.', BuildOptions.None);
     }
 }';
 

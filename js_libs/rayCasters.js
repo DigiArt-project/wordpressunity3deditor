@@ -16,12 +16,8 @@ var arrNameObjInter = [];
  */
 function onMouseDownSelect( event ) {
 
-    // if (event.button==2)
-    //     return;
-
-
-
-
+    if (event.button==2)
+        return;
 
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
@@ -44,9 +40,6 @@ function onMouseDownSelect( event ) {
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
 
-    // Names of objects intersected
-    arrNameObjInter = [];
-
     // ------------ TRS sprite mode changer ---------
     if (intersects.length > 0) {
 
@@ -68,7 +61,16 @@ function onMouseDownSelect( event ) {
         }
     }
 
-    // ------ Select object in scene by raycasting -----------
+
+
+
+
+
+
+    // Names of objects intersected
+    arrNameObjInter = [];
+
+    // Get the names of the objects intersecting
     for ( var i = 0; i < intersects.length; i++ ) {
         // for group
         if (intersects[i].object.parent instanceof THREE.Group) {
