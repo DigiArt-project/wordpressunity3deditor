@@ -16,7 +16,7 @@ var arrNameObjInter = [];
  */
 function onMouseDownSelect( event ) {
 
-    if (event.button==2)
+    if (event.button == 2)
         return;
 
     /* Keep mouse clicks */
@@ -61,125 +61,70 @@ function onMouseDownSelect( event ) {
         }
     }
 
-
-
-
-
-
-
     // Names of objects intersected
     arrNameObjInter = [];
-
-    // Get the names of the objects intersecting
-    for ( var i = 0; i < intersects.length; i++ ) {
-        // for group
-        if (intersects[i].object.parent instanceof THREE.Group) {
-            selected_object_name = intersects[i].object.parent.name;
-            arrNameObjInter[selected_object_name] = intersects[i].object.parent;
-            // for object3D
-        }
-    }
-
-
     var nameL;
 
     // If only one object is intersected
-    if (Object.keys(arrNameObjInter).length == 1) {
-        nameL = Object.keys(arrNameObjInter)[0];
-        transform_controls.attach(arrNameObjInter[nameL]);
-
-        findDimensions(transform_controls.object);
-
-        // highlight
-        envir.outlinePass.selectedObjects = [arrNameObjInter[nameL].children[0]];
-        envir.renderer.setClearColor( 0xffffff, 0.9 );
-
-        //  Check for Door, MicroscopeTextbook, Box
-        activeOverides(event, arrNameObjInter, nameL );
-
-
-        // If more than 2 objects are intersected
-    } else if (Object.keys(arrNameObjInter).length > 1) {
-        var popupSelect = document.getElementById("popupSelect");
-
-        // Clear options
-        for (i = document.getElementById("popupSelect").options.length; i-->0;)
-            document.getElementById("popupSelect").options[i] = null;
-
-        // Auto open Selection
-        popupSelect.dispatchEvent(new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true
-        }));
-
-
-        // Add options
-        var option;
-
-        // Prompt "Select"
-        option = document.createElement("option");
-        option.text = "Select";
-        option.value = "Select";
-        popupSelect.add(option);
-
-        // Add options for each intersected object
-        for (nameL in  arrNameObjInter ) {
-            option = document.createElement("option");
-            option.text = nameL;
-            option.value = nameL;
-            option.style.background = "#5f8";
-            popupSelect.add(option);
-        }
-
-        // Prompt "Cancel"
-        option = document.createElement("option");
-        option.text = "Cancel";
-        option.value = "Cancel";
-        option.style.background = "#f59";
-        popupSelect.add(option);
-
-        // Show Selection
-        jQuery("#popUpDiv").show();
-        var ppDiv = document.getElementById("popUpDiv");
-
-        ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-        ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
-
-        // On popup change
-        jQuery("#popupSelect").change(function(e) {
-            var nameL = jQuery("#popupSelect").val();
-
-            if (nameL != "Cancel" && nameL != "Select") {
-                transform_controls.attach(arrNameObjInter[nameL]);
-
-                findDimensions(transform_controls.object);
-
-                // highlight
-                envir.outlinePass.selectedObjects = [ arrNameObjInter[nameL].children[0] ];
-                envir.renderer.setClearColor( 0xffffff, 0.9 );
-
-                //  Check for Door, MicroscopeTextbook, Box
-                activeOverides(event, arrNameObjInter, nameL );
-            }
-            jQuery("#popUpDiv").hide();
-        });
+    if(intersects.length === 1){
+        // nameL = intersects[0].object.parent.name;
+        // arrNameObjInter[nameL] = intersects[0].object.parent;
+        selectorMajor(event, intersects[0]);
+        return;
     }
+
+    // More than one objects intersected
+    var prevSelected = transform_controls.object.name;
+    var selectNext = false;
+
+
+    var i = 0;
+    for (i = 0; i<intersects.length; i++) {
+        console.log(intersects[i].object.parent.name,intersects.length);
+        selectNext = prevSelected === intersects[i].object.parent.name;
+        if(selectNext)
+            break;
+    }
+
+    if (!selectNext || i===intersects.length-1)
+        i = -1;
+
+    selectorMajor(event, intersects[i+1]);
+
 }// onMouseDown
 
 
+
+function selectorMajor(event, inters){
+
+    transform_controls.attach(inters.object.parent);
+
+    findDimensions(transform_controls.object);
+
+    // highlight
+    envir.outlinePass.selectedObjects = [ inters.object.parent.children[0] ];
+    envir.renderer.setClearColor( 0xffffff, 0.9 );
+
+    //  Check for Door, MicroscopeTextbook, Box
+    activeOverides(event, inters );
+
+}
+
 // Middle click raycast operations
-function activeOverides(event, arrNameObjInter, nameL ){
+function activeOverides(event, inters ){
 
-    if(event.button === 1 && arrNameObjInter[nameL].categoryName === 'Door') // Middle button show also properties
-        displayDoorProperties(event, nameL);
+    var ooo  = inters.object.parent;
+    var name = ooo.name;
 
-    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Microscope' ||
-            arrNameObjInter[nameL].categoryName === 'Textbook')) // Middle button show also properties
-        displayMicroscopeTextbookProperties(event, nameL);
+    if(event.button === 1 && ooo.categoryName === 'Door') // Middle button show also properties
+        displayDoorProperties(event, name);
 
-    if(event.button === 1 && (arrNameObjInter[nameL].categoryName === 'Box') ) // Middle button show also properties
-        displayBoxProperties(event, nameL);
+    if(event.button === 1 && (ooo.categoryName === 'Microscope' ||
+            ooo.categoryName === 'Textbook')) // Middle button show also properties
+        displayMicroscopeTextbookProperties(event, name);
+
+    if(event.button === 1 && (ooo.categoryName === 'Box') ) // Middle button show also properties
+        displayBoxProperties(event, name);
 }
 
 
