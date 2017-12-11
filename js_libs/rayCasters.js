@@ -6,18 +6,12 @@ var raycasterPick = new THREE.Raycaster();
 // Show or not the ray line
 var showRayPickLine = false; // Do not show raycast line
 
-// Names of objects intersected
-var arrNameObjInter = [];
-
 /**
  * Detect mouse events
  *
  * @param event
  */
 function onMouseDownSelect( event ) {
-
-    if (event.button == 2)
-        return;
 
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
@@ -61,14 +55,8 @@ function onMouseDownSelect( event ) {
         }
     }
 
-    // Names of objects intersected
-    arrNameObjInter = [];
-    var nameL;
-
     // If only one object is intersected
     if(intersects.length === 1){
-        // nameL = intersects[0].object.parent.name;
-        // arrNameObjInter[nameL] = intersects[0].object.parent;
         selectorMajor(event, intersects[0]);
         return;
     }
@@ -76,7 +64,6 @@ function onMouseDownSelect( event ) {
     // More than one objects intersected
     var prevSelected = transform_controls.object.name;
     var selectNext = false;
-
 
     var i = 0;
     for (i = 0; i<intersects.length; i++) {
@@ -105,25 +92,25 @@ function selectorMajor(event, inters){
     envir.outlinePass.selectedObjects = [ inters.object.parent.children[0] ];
     envir.renderer.setClearColor( 0xffffff, 0.9 );
 
-    //  Check for Door, MicroscopeTextbook, Box
-    activeOverides(event, inters );
+    //  Check for Door, MicroscopeTextbook, Box when right click
+    if (event.button === 2)
+        activeOverides(event, inters );
 
 }
 
 // Middle click raycast operations
-function activeOverides(event, inters ){
+function activeOverides(event, inters){
 
-    var ooo  = inters.object.parent;
-    var name = ooo.name;
+    var objectParent  = inters.object.parent;
+    var name = objectParent.name;
 
-    if(event.button === 1 && ooo.categoryName === 'Door') // Middle button show also properties
+    if( objectParent.categoryName === 'Door')
         displayDoorProperties(event, name);
 
-    if(event.button === 1 && (ooo.categoryName === 'Microscope' ||
-            ooo.categoryName === 'Textbook')) // Middle button show also properties
+    if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook')
         displayMicroscopeTextbookProperties(event, name);
 
-    if(event.button === 1 && (ooo.categoryName === 'Box') ) // Middle button show also properties
+    if( objectParent.categoryName === 'Box' )
         displayBoxProperties(event, name);
 }
 
