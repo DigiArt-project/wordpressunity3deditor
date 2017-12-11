@@ -717,17 +717,32 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
         'orderby' => 'ID',
         'order'   => 'ASC',
     );
+
+    $fh = fopen("output_sceneselector.txt","w");
+
+
     $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
+
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            $scenes_counter = wpunity_compile_scenes_cre($game_path,$scene_id,$gameSlug,$settings_path,
-                $scenes_counter,$handybuilder_file, $gameType);
+            wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path,
+                $scenes_counter, $handybuilder_file, $gameType);
+
+            // Increment scene counter if scene is either WonderAround or Educational-Energy scene
+            $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
+            $scene_type_slug = $scene_type[0]->slug;
+
+            if ($scene_type_slug == 'wonderaround-yaml' || $scene_type_slug == 'educational-energy' ){
+                $scenes_counter++;
+            }
+
         endwhile;
     endif;
+
     wp_reset_postdata();
 }
 
@@ -764,8 +779,8 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
 
 //Create MainMenu scene and others
 function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path, $scenes_counter, $handybuilder_file, $gameType){
-    $scene_post = get_post($scene_id);
 
+    $scene_post = get_post($scene_id);
     $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
     $scene_type_ID = $scene_type[0]->term_id;
     $scene_type_slug = $scene_type[0]->slug;
@@ -784,7 +799,6 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
         wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }
 
-    return $scenes_counter;
 }
 
 //==========================================================================================================================================

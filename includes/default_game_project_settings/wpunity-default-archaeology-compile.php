@@ -109,7 +109,8 @@ function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file5_path_CS);
 }
 
-function wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_ID, $scene_id, $gameSlug, $game_path, $settings_path, $handybuilder_file,
+                                                       $scenes_counter, $gameType){
     //DATA of Wonder Around Scene
     $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
     //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
@@ -129,12 +130,8 @@ function wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_I
     fwrite($create_fileA,$file_contentAb);
     fclose($create_fileA);
 
-    if($scenes_counter<7) {
-        wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
-            $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
-
-        $scenes_counter = $scenes_counter + 1;
-    }
+    wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
+         $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . $scene_name . '.unity';
