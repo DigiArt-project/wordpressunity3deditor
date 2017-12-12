@@ -3,7 +3,7 @@ using UnityEditor;
 using System.IO;
 using System;
 
-class OBJImportSettings : AssetPostprocessor
+class GeneralImportSettings : AssetPostprocessor
 {
    void OnPreprocessModel(){
 		ModelImporter modImport = assetImporter as ModelImporter;
@@ -44,8 +44,10 @@ class OBJImportSettings : AssetPostprocessor
 		if (assetPath.Contains ("_sprite")) {
         	textureImporter.textureType = TextureImporterType.Sprite;
         	textureImporter.spriteImportMode = SpriteImportMode.Single;
+
         }
 	}
+
 
 	static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths){
 		string[] assetPaths = AssetDatabase.GetAllAssetPaths();
@@ -55,18 +57,22 @@ class OBJImportSettings : AssetPostprocessor
             Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
             if (mat) {
                 if (path.Contains ("NoGlossy")) {
-
                     mat.SetFloat ("_Glossiness", 0);
-
                 } else if (path.Contains ("TwoSided")) {
-
-                    Debug.Log ("mat.name" + mat.name);
-                    Debug.Log ("TwoSided");
-
                     mat.shader = Shader.Find ("Standard (Two Sided)");
-
                 }
             }
+
+             Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+
+             if(sprite){
+                Debug.Log(sprite);
+
+             }
+
+
 		}
+
+
 	}
 }

@@ -362,7 +362,7 @@ function wpunity_compile_folders_gen($gameSlug){
 
 //==========================================================================================================================================
 //==========================================================================================================================================
-//1b. Create cs file before all data (Generate HandyBuilder.cs and OBJImportSettings.cs)
+//1b. Create cs file before all data (Generate HandyBuilder.cs and GeneralImportSettings.cs)
 function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
@@ -374,14 +374,14 @@ function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
     $filepath =$filepath = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
     wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform);
 
-    // OBJImportSettings.cs
+    // GeneralImportSettings.cs
     $pluginpath = dirname ( dirname (get_template_directory()));
     $pluginpath = str_replace('\\','/',$pluginpath);
     $pluginSlug = plugin_basename(__FILE__);
     $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
-    $filepath_source_file = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/Editor_Commons/OBJImportSettings.cs';
+    $filepath_source_file = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/Editor_Commons/GeneralImportSettings.cs';
 
-    $filepath_target_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/OBJImportSettings.cs';
+    $filepath_target_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/GeneralImportSettings.cs';
 
     if (!copy($filepath_source_file, $filepath_target_file)) {
         echo "failed to copy $filepath_source_file to $filepath_target_file...\n";
@@ -844,48 +844,25 @@ function wpunity_compile_sprite_upload($featured_image_sprite_id, $gameSlug, $sc
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_models_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/Resources';
 
-    $fs = fopen("output_sprite_creation.txt","w");
-
-
+    // Copy the file to Resources
     $attachment_post = get_post($featured_image_sprite_id);
-
-    fwrite($fs, "attachment_post:".print_r($attachment_post,true).chr(10));
-
     $attachment_file = $attachment_post->guid;
-
-    fwrite($fs, "attachment_file:". $attachment_file .chr(10));
-
     $attachment_tempname = str_replace('\\', '/', $attachment_file);
-
-    fwrite($fs, "attachment_tempname:". $attachment_tempname.chr(10) );
-
     $attachment_name = pathinfo($attachment_tempname);
-
-    fwrite($fs, "attachment_name:". $attachment_name .chr(10) );
-
-    $new_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
-
-    fwrite($fs, "new_file:". $new_file .chr(10) );
-
+    $new_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'];
     copy($attachment_file,$new_file);
 
-    $sprite_meta_yaml = wpunity_getYaml_jpg_sprite_pattern();
-
-    fwrite($fs, "sprite_meta_yaml:". $sprite_meta_yaml .chr(10) );
+    // Now for the meta
+    $sprite_meta_yaml = 'fileFormatVersion: 2
+guid: ___[jpg_guid]___
+timeCreated: ___[unx_time_created]___
+licenseType: Free
+[junk line to allow importer will do the rest, do not remove]'; //wpunity_getYaml_jpg_sprite_pattern();
 
     $sprite_meta_guid = wpunity_create_guids('jpg', $featured_image_sprite_id);
-
-    fwrite($fs, "sprite_meta_guid:". $sprite_meta_guid .chr(10) );
-
     $sprite_meta_yaml_replace = wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid);
-
-    fwrite($fs, "sprite_meta_yaml_replace:". $sprite_meta_yaml_replace .chr(10) );
-
-    $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'] . '.meta';
+    $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'] . '.meta';
     $create_meta_file = fopen($sprite_meta_file, "w") or die("Unable to open file!");
-
-    fwrite($fs, "create_meta_file:". $create_meta_file .chr(10) );
-    fclose($fs);
 
     fwrite($create_meta_file,$sprite_meta_yaml_replace);
     fclose($create_meta_file);
@@ -941,6 +918,8 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
     if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
     if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
     if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
+
+
 
     $seq_index_of_scene = $scenes_counter;
     $name_of_panel = 'panel_' . $scene_name;
