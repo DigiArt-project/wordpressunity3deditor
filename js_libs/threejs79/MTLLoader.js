@@ -381,8 +381,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
             if (typeof this.textureFileContent !== 'undefined' ) {
 
-            	map = scope.loadTexture(this.textureFileContent, function() {
-                });
+            	map = scope.loadTexture(this.textureFileContent, function() {});
 
             } else {
                 map = scope.loadTexture(resolveURL(scope.baseUrl, texParams.url, function() {

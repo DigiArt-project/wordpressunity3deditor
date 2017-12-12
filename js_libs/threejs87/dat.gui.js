@@ -2013,7 +2013,7 @@
                     }
 
                     function onMouseDrag(e) {
-                        var diff = prevY - e.clientY;
+                        var diff = 100 * (prevY - e.clientY);
                         _this.setValue(_this.getValue() + diff * _this.__impliedStep);
 
                         prevY = e.clientY;

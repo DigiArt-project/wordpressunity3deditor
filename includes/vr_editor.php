@@ -1,16 +1,30 @@
 <!-- For some reason these scripts can not be enqued : Try again when php -> js -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>-->
+<!---->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/CopyShader.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/FXAAShader.js'></script>-->
+<!---->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/EffectComposer.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/RenderPass.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OutlinePass.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/ShaderPass.js'></script>-->
 
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/CopyShader.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/FXAAShader.js'></script>
 
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/EffectComposer.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/RenderPass.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OutlinePass.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/ShaderPass.js'></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/dat.gui.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>
+
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CopyShader.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/FXAAShader.js'></script>
+
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/EffectComposer.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/RenderPass.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OutlinePass.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/ShaderPass.js'></script>
 
 
 <!-- vr_editor.php -->

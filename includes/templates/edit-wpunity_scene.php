@@ -205,30 +205,38 @@ get_header(); ?>
             </div>
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
+                <?php if ( $game_type_obj->string === "Energy" ) {
 
-                <div class="mdc-layout-grid">
+                    echo '<div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__inner CenterContents">
 
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
-                                <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
-                                <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
-                            </select>
+
+                            <div class="mdc-layout-grid__inner CenterContents">;
+                                <div class="mdc-layout-grid__cell--span-6">
+                                    <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
+                                        <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
+                                        <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
+                                    </select>
+                                </div>
+                                <div class="mdc-layout-grid__cell--span-6">
+                                    <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
+                                        <option value="Greece" selected>Greece</option>
+                                        <option value="England">England</option>
+                                        <option value="Italy">Italy</option>
+                                    </select>
+                                </div>;
+                            </div>
+                        
+
+
                         </div>
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
-                                <option value="Greece" selected>Greece</option>
-                                <option value="England">England</option>
-                                <option value="Italy">Italy</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
                 <div style="min-height: 1240px;">
                     <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-                </div>
+                </div>';
+
+                }  ?>
+                
             </div>
         </div>
     </section>
@@ -239,44 +247,62 @@ get_header(); ?>
         var project_id = <?php echo $project_id; ?>;
         var scene_id = <?php echo $scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
-        var game_master_id = "<?php echo get_current_user_id();?>";
-        var versionSelector = document.getElementById("analyticsVersionSelector");
-        var locationSelector = document.getElementById("analyticsLocationSelector");
 
-        var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
-        var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
+        // For the time being we have analytics only for Energy
+        if (game_type === "Energy") {
+            var game_master_id = "<?php echo get_current_user_id();?>";
+            var versionSelector = document.getElementById("analyticsVersionSelector");
+            var locationSelector = document.getElementById("analyticsLocationSelector");
 
-        loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+            var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
+            var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
-        jQuery('#analyticsVersionSelector').on('change', function() {
-            analyticsVersionValue = this.value;
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-        });
 
-        jQuery('#analyticsLocationSelector').on('change', function() {
-            analyticsLocationValue = this.value;
-            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-        });
+            jQuery('#analyticsVersionSelector').on('change', function () {
+                analyticsVersionValue = this.value;
+                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+            });
 
-        function loadAnalyticsIframe(version, location) {
+            jQuery('#analyticsLocationSelector').on('change', function () {
+                analyticsLocationValue = this.value;
+                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+            });
 
-            var url = "http://52.59.219.11/?" +
-                "wpunity_game="+ project_id +
-                "&wpunity_scene="+scene_id+
-                "&scene_type=scene"+
-                "&lab="+game_type+ //"&game_type="+game_type+
-                "&version="+ version +
-                "&gamemaster_id="+ game_master_id +
-                "&location="+ location;
+            function loadAnalyticsIframe(version, location) {
 
-            var $iframe = jQuery('#analyticsIframeContent');
-            if ( $iframe.length ) {
-                $iframe.attr('src', url);
-                return false;
+                var url = "http://52.59.219.11/?" +
+                    "wpunity_game=" + project_id +
+                    "&wpunity_scene=" + scene_id +
+                    "&scene_type=scene" +
+                    "&lab=" + game_type + //"&game_type="+game_type+
+                    "&version=" + version +
+                    "&gamemaster_id=" + game_master_id +
+                    "&location=" + location;
+
+                var $iframe = jQuery('#analyticsIframeContent');
+
+                if ($iframe.length) {
+                    $iframe.attr('src', url);
+                    return false;
+                }
+
+                // In Firefox iframe causes the 3D not to display textures and the analytics charts are not showing
+                // The following patch
+                // Firefox iframe bug: https://stackoverflow.com/questions/3253362/iframe-src-caching-issue-on-firefox
+                // makes 3D editor to work, however Analytics charts still not render
+                $(parent.document).find("analyticsIframeContent").each(function () {
+                    if (this.contentDocument == window.document) {
+                        // if the href of the iframe is not same as
+                        // the value of src attribute then reload it
+                        if (this.src != url) {
+                            this.src = this.src;
+                        }
+                    }
+                });
+
+                return true;
             }
-
-            return true;
-
         }
 
         var mdc = window.mdc;

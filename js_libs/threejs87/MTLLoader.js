@@ -45,6 +45,22 @@ THREE.MTLLoader.prototype = {
 
     },
 
+
+    // VERVERIDIS
+    loadfromtext: function (text, textureFileContent, onLoad, onProgress, onError){
+
+        var scope = this;
+
+        this.textureFileContent = textureFileContent;
+
+        onLoad( scope.parse( text ) );
+
+    },
+
+
+
+
+
     /**
      * Set base path for resolving references.
      * If set this path will be prepended to each loaded and found reference.
@@ -373,7 +389,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
             if (typeof scope.baseUrl === 'string') // check if it is the url path
                 var map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
-             else { // if it is array then we have multiple raw images (preview on client mode)
+             else { // Ververidis: if it is array then we have multiple raw images (preview on client mode)
                 var map = scope.loadTextureAsRawImage(scope.baseUrl[value]);
             }
 
@@ -539,10 +555,10 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
     },
 
-    loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
+    loadTexture: function ( url_or_text, mapping, onLoad, onProgress, onError ) {
 
         var texture;
-        var loader = THREE.Loader.Handlers.get( url );
+        var loader = THREE.Loader.Handlers.get( url_or_text );
         var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 
         if ( loader === null ) {
@@ -550,7 +566,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         }
 
         if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
-        texture = loader.load( url, onLoad, onProgress, onError );
+        texture = loader.load( url_or_text, onLoad, onProgress, onError );
 
         if ( mapping !== undefined ) texture.mapping = mapping;
 
@@ -562,6 +578,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
     loadTextureAsRawImage: function (textureFileContent, mapping, onLoad, onProgress, onError ) {
 
         var texture = new THREE.Texture();
+
+        // JPG vs PNG
         texture.format = THREE.RGBFormat; // isJPEG ? RGBFormat : RGBAFormat;
 
         var image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
