@@ -154,6 +154,70 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
 //==========================================================================================================================================
 //==========================================================================================================================================
+
+function wpunity_reset_allyamls(){
+	//Archaeology GAME TERMS
+	$ArchGameTerm = get_term_by( 'slug', 'archaeology_games', 'wpunity_game_type');
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_audio_manager_term', wpunity_default_value_AudioManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_cluster_input_manager_term', wpunity_default_value_ClusterInputManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_dynamics_manager_term', wpunity_default_value_DynamicsManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_editor_build_settings_term', wpunity_default_value_EditorBuildSettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_editor_settings_term', wpunity_default_value_EditorSettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_graphics_settings_term', wpunity_default_value_GraphicsSettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_input_manager_term', wpunity_default_value_InputManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_nav_mesh_areas_term', wpunity_default_value_NavMeshAreas_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_network_manager_term', wpunity_default_value_NetworkManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_physics2d_settings_term', wpunity_default_value_Physics2DSettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_project_settings_term', wpunity_default_value_ProjectSettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_project_version_term', wpunity_default_value_ProjectVersion_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_quality_settings_term', wpunity_default_value_QualitySettings_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_tag_manager_term', wpunity_default_value_TagManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_time_manager_term', wpunity_default_value_TimeManager_arch_get(), true);
+	update_term_meta($ArchGameTerm->term_id, 'wpunity_unity_connect_settings_term', wpunity_default_value_unityConnect_arch_get(), true);
+
+	//Archaeology SCENE TERMS
+	$ArchCredTerm = get_term_by( 'slug', 'credentials-arch-yaml', 'wpunity_scene_yaml');
+	update_term_meta($ArchCredTerm->term_id, 'wpunity_yamlmeta_s_credentials_arch', wpunity_default_value_credits_unity_archaeology_get());
+
+	$ArchMenuTerm = get_term_by( 'slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml');
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_mainmenu_arch', wpunity_default_value_mmenu_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_options_arch', wpunity_default_value_options_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_help_arch', wpunity_default_value_help_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_login_arch', wpunity_default_value_login_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_reward_arch', wpunity_default_value_reward_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_selector_arch', wpunity_default_value_selector_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_selector2_arch', wpunity_default_value_selector2_unity_archaeology_get());
+	update_term_meta($ArchMenuTerm->term_id, 'wpunity_yamlmeta_s_selector_title_arch', wpunity_default_value_selectortext_unity_archaeology_get());
+
+	$ArchWonderTerm = get_term_by( 'slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
+	update_term_meta($ArchWonderTerm->term_id, 'wpunity_yamlmeta_wonderaround_pat', wpunity_default_value_wonderaround_unity_archaeology_get());
+
+	//Archaeology ASSETS TERMS
+	$ArchArtifactTerm = get_term_by( 'slug', 'artifact', 'wpunity_asset3d_cat');
+	update_term_meta($ArchArtifactTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_artifact_get(), true);
+
+	$ArchDecoTerm = get_term_by( 'slug', 'decoration_arch', 'wpunity_asset3d_cat');
+	update_term_meta($ArchDecoTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_decoration_arch_get(), true);
+
+	$ArchDoorTerm = get_term_by( 'slug', 'door', 'wpunity_asset3d_cat');
+	update_term_meta($ArchDoorTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_door_get(), true);
+
+	$ArchPoisTTerm = get_term_by( 'slug', 'pois_imagetext', 'wpunity_asset3d_cat');
+	update_term_meta($ArchPoisTTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_get(), true);
+
+	$ArchPoisVTerm = get_term_by( 'slug', 'pois_video', 'wpunity_asset3d_cat');
+	update_term_meta($ArchPoisVTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_video_get(), true);
+
+	$ArchSiteTerm = get_term_by( 'slug', 'site', 'wpunity_asset3d_cat');
+	update_term_meta($ArchSiteTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_site_get(), true);
+
+	//$ChemGameTerm = get_term_by( 'slug', 'chemistry_games', 'wpunity_game_type');
+	//$EnergyGameTerm = get_term_by( 'slug', 'energy_games', 'wpunity_game_type');
+
+}
+
+//==========================================================================================================================================
+//==========================================================================================================================================
 //GUIDs & FIDs
 
 // 32 chars Hex (identifier for the resource)

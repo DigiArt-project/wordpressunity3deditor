@@ -378,19 +378,19 @@ NativeFormatImporter:
 
         add_settings_section( 'section_yaml', __('YAML Settings'), array( &$this, 'section_yaml_desc' ), $this->yaml_settings_key );
 
-        add_settings_field( 'wpunity_scene_meta_pat', __('each_scene.unity meta pattern'), array( &$this, 'field_wpunity_scene_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_scene_meta_pat', __('each_scene.unity meta pattern'), array( &$this, 'field_wpunity_scene_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_folder_meta_pat', __('Folder.meta Pattern'), array( &$this, 'field_wpunity_folder_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_folder_meta_pat', __('Folder.meta Pattern'), array( &$this, 'field_wpunity_folder_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_obj_meta_pat', __('obj.meta Pattern'), array( &$this, 'field_wpunity_obj_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_obj_meta_pat', __('obj.meta Pattern'), array( &$this, 'field_wpunity_obj_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_jpg_meta_pat', __('jpg.meta Pattern'), array( &$this, 'field_wpunity_jpg_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_jpg_meta_pat', __('jpg.meta Pattern'), array( &$this, 'field_wpunity_jpg_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_jpgsprite_meta_pat', __('The jpg sprite meta pattern'), array( &$this, 'field_wpunity_jpgsprite_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_jpgsprite_meta_pat', __('The jpg sprite meta pattern'), array( &$this, 'field_wpunity_jpgsprite_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_mat_pat', __('Material (.mat) Pattern'), array( &$this, 'field_wpunity_mat_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_mat_pat', __('Material (.mat) Pattern'), array( &$this, 'field_wpunity_mat_pat' ), $this->yaml_settings_key, 'section_yaml' );
 
-        add_settings_field( 'wpunity_mat_meta_pat', __('mat.meta Pattern'), array( &$this, 'field_wpunity_mat_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
+        //add_settings_field( 'wpunity_mat_meta_pat', __('mat.meta Pattern'), array( &$this, 'field_wpunity_mat_meta_pat' ), $this->yaml_settings_key, 'section_yaml' );
     }
 
 
@@ -496,6 +496,7 @@ NativeFormatImporter:
                 <?php $this->render_tabs(); ?>
                 <form method="post" action="options.php">
                     <?php
+                    wpunity_reset_allyamls();
                     wp_nonce_field( 'update-options' );
                     settings_fields( $tab );
                     do_settings_sections( $tab );
