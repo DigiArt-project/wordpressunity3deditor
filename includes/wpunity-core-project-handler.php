@@ -891,15 +891,7 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
     $termid  = $mainMenuTerm->term_id;
     $metaname = 'wpunity_yamlmeta_s_selector2'.$taxnamemeta_suffix;
 
-//    $fh = fopen("output_archtype.txt","w");
-//    fwrite($fh, "1. ". $metaname. PHP_EOL);
-//    fwrite($fh, "2. ". $termid . PHP_EOL);
-
     $term_meta_s_selector2 = get_term_meta($termid, $metaname,true);
-
-//    fwrite($fh, "3. ". $term_meta_s_selector2 . PHP_EOL);
-//    fclose($fh);
-
 
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
 
@@ -912,13 +904,13 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
     wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform);
 
     //Add second part of the new Scene Tile
-    $tile_pos_x = 270;$tile_pos_y=-250;//default values of tile's coordination
-    if($scenes_counter==2){$tile_pos_x = 680;$tile_pos_y=-250;}
-    if($scenes_counter==3){$tile_pos_x = 1090;$tile_pos_y=-250;}
-    if($scenes_counter==4){$tile_pos_x = 270;$tile_pos_y=-580;}
-    if($scenes_counter==5){$tile_pos_x = 680;$tile_pos_y=-580;}
-    if($scenes_counter==6){$tile_pos_x = 1090;$tile_pos_y=-580;}
 
+    // Find position of the tile
+    $pos = [270, 680, 1090];
+    $posy   = -250;
+
+    $tile_pos_x = $pos[ ($scenes_counter-1) % 3 ];
+    $tile_pos_y = $posy - 330 * floor(($scenes_counter-1) / 3);
 
 
     $seq_index_of_scene = $scenes_counter;
