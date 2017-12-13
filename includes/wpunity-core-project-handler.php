@@ -678,9 +678,13 @@ function wpunity_compile_objmeta_cre($folder, $objName, $objID, $suffix = ""){
     $file = $folder . '/' . $objName . $suffix. '.obj.meta';
     $create_file = fopen($file, "w") or die("Unable to open file!");
 
-    $objMetaPattern = wpunity_getYaml_obj_dotmeta_pattern();
+    $objMetaPattern = "fileFormatVersion: 2
+guid: ___[obj_guid]___
+timeCreated: ___[unx_time_created]___
+licenseType: Free
+";      // wpunity_getYaml_obj_dotmeta_pattern();
 
-     $objMetaContent = wpunity_replace_objmeta($objMetaPattern,$objID);
+     $objMetaContent = wpunity_replace_objmeta($objMetaPattern, $objID);
 
     fwrite($create_file, $objMetaContent);
     fclose($create_file);
