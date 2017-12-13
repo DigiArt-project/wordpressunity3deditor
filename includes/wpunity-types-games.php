@@ -151,6 +151,12 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             //Create Default Scenes for this "Game"
             wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID);
 
+            //Create Sample Data (assets) for the game that auto-created
+            $current_user = wp_get_current_user();
+            $user_id = $current_user->ID;
+            $username = $current_user->user_login;
+            wpunity_registrationhook_createAssets($user_id,$username,$gameID);
+
         }
     }
 }

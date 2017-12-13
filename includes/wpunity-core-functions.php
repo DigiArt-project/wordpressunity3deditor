@@ -212,9 +212,9 @@ function wpunity_replace_jpgmeta($file_content,$objID){
 
 //==========================================================================================================================================
 //==========================================================================================================================================
-//Create sample data when a user is registered
+//Create sample data when a user is registered (changed it to "when a game is created")
 
-add_action( 'user_register', 'wpunity_registrationhook_createGame', 10, 1 );
+//add_action( 'user_register', 'wpunity_registrationhook_createGame', 10, 1 );
 
 function wpunity_registrationhook_createGame( $user_id ) {
 
