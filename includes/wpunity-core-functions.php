@@ -417,7 +417,7 @@ function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asse
 	$textureFile_id = wpunity_upload_Assetimg64($texture_content, 'texture_'.$assetTitleForm, $asset_newID, $gameSlug);
 	$textureFile_filename = basename(get_attached_file($textureFile_id));
 
-	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*\n/ui", "map_Kd " . $textureFile_filename . "\n", $mtl_content);
+	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*/ui", "map_Kd " . $textureFile_filename, $mtl_content);
 	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
 	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 

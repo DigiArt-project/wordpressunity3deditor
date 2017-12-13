@@ -58,56 +58,56 @@ function wpunity_getEditpage($type){
 
 //==========================================================================================================================================
 
-//Get Settings Values (Generic Yaml Patterns
-
-//Get 'Folder.meta Pattern'
-function wpunity_getFolderMetaPattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_folder_meta_pat"];;
-}
-
-//Get 'each_scene.unity meta pattern'
-function wpunity_getSceneUnityMetaPattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_scene_meta_pat"];
-}
-
-//Get 'obj.meta Pattern'
-function wpunity_getYaml_obj_dotmeta_pattern(){
-
-	$yamloptions = get_option( 'yaml_settings' );
-
-    $fj = fopen("output_yamlsettings.txt","w");
-    fwrite($fj, print_r($yamloptions,true));
-
-    fclose($fj);
-
-	return $yamloptions["wpunity_obj_meta_pat"];
-}
-
-//Get 'jpg.meta Pattern'
-function wpunity_getYaml_jpg_dotmeta_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_jpg_meta_pat"];
-}
-
-//Get 'The jpg sprite meta pattern'
-function wpunity_getYaml_jpg_sprite_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_jpgsprite_meta_pat"];
-}
-
-//Get 'Material (.mat) Pattern'
-function wpunity_getYaml_mat_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_mat_pat"];
-}
-
-//Get 'mat.meta Pattern'
-function wpunity_getYaml_mat_dotmeta_pattern(){
-	$yamloptions = get_option( 'yaml_settings' );
-	return $yamloptions["wpunity_mat_meta_pat"];
-}
+////Get Settings Values (Generic Yaml Patterns
+//
+////Get 'Folder.meta Pattern'
+//function wpunity_getFolderMetaPattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_folder_meta_pat"];;
+//}
+//
+////Get 'each_scene.unity meta pattern'
+//function wpunity_getSceneUnityMetaPattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_scene_meta_pat"];
+//}
+//
+////Get 'obj.meta Pattern'
+//function wpunity_getYaml_obj_dotmeta_pattern(){
+//
+//	$yamloptions = get_option( 'yaml_settings' );
+//
+//    $fj = fopen("output_yamlsettings.txt","w");
+//    fwrite($fj, print_r($yamloptions,true));
+//
+//    fclose($fj);
+//
+//	return $yamloptions["wpunity_obj_meta_pat"];
+//}
+//
+////Get 'jpg.meta Pattern'
+//function wpunity_getYaml_jpg_dotmeta_pattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_jpg_meta_pat"];
+//}
+//
+////Get 'The jpg sprite meta pattern'
+//function wpunity_getYaml_jpg_sprite_pattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_jpgsprite_meta_pat"];
+//}
+//
+////Get 'Material (.mat) Pattern'
+//function wpunity_getYaml_mat_pattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_mat_pat"];
+//}
+//
+////Get 'mat.meta Pattern'
+//function wpunity_getYaml_mat_dotmeta_pattern(){
+//	$yamloptions = get_option( 'yaml_settings' );
+//	return $yamloptions["wpunity_mat_meta_pat"];
+//}
 
 //==========================================================================================================================================
 

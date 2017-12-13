@@ -203,9 +203,9 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 
     // MTL : Open mtl file and replace jpg filename
     for ($k = 0; $k < count($textureNamesIn); $k++) {
-        $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg",
-            "map_Kd ".$textureNamesOut[$k],
-            $mtl_content);
+        // $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg", "map_Kd ".$textureNamesOut[$k], $mtl_content);
+        // This replace is better. It does not depend on the number of white spaces.
+        $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*/ui", "map_Kd " . $textureNamesOut[$k], $mtl_content);
     }
 
     $mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
