@@ -42,6 +42,10 @@ public class Player_Custom_Script : MonoBehaviour {
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 
+            GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
+
+			GameObject.Find ("panel_v").GetComponent<AudioSource> ().Stop ();
+
 			// Make the obj to appear
 			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
@@ -169,14 +173,38 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			// Get the name of the sprite from the collided object
 			string videoName = go.GetComponent<DisplayPOI_Script> ().videoToShow;
+            string videoUrlName = go.GetComponent<DisplayPOI_Script> ().videoUrlToShow;
 
-			VideoClip videoClip = Resources.Load<VideoClip> (videoName);
+            // Put the video to the video player
+            VideoPlayer videoPlayer = GameObject.Find ("panel_v").GetComponent<VideoPlayer> ();
+            videoPlayer.playOnAwake  = false;
 
-			if (videoClip) {
-				GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().clip = videoClip;
+
+            #if UNITY_WEBGL
+            	videoPlayer.source = VideoSource.Url;
+            	videoPlayer.url= videoUrlName; //"http://127.0.0.1:8080/Videos/Hanna.mp4";
+            #else
+            	videoPlayer.source = VideoSource.VideoClip;
+            	videoPlayer.clip = Resources.Load<VideoClip> (videoName);
+            #endif
+
+            // Set video audio to audioSource
+            AudioSource audioSource = GameObject.Find ("panel_v").GetComponent<AudioSource> ();
+
+            videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+            videoPlayer.EnableAudioTrack (0, true);
+
+            audioSource.playOnAwake  =  false;
+            videoPlayer.SetTargetAudioSource (0, audioSource);
+
+
+
+			if (videoName.Length > 0 || videoUrlName.Length > 0) {
+				videoPlayer.Play ();
+                audioSource.Play ();
 				canvas_v.enabled = true;
 			} else {
-				Debug.Log (videoName + " video file was not found. Have you imported it in Resources folder?");
+				Debug.Log (videoName + " or " + videoUrlName  + " was not found.");
 			}
 
 		} else if (go.tag == "poi_artefact") {

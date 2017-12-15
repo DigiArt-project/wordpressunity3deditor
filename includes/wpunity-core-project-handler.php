@@ -277,7 +277,7 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 
     wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
 
-    wpunity_compile_models_gen($gameID,$gameSlug);//3. Create Model folders/files
+    wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform);//3. Create Model folders/files
 
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
 
@@ -558,7 +558,7 @@ function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileNa
 //3. Create Model folders/files
 
 // Add all objs in HandyBuilder.cs for importing (wrapper)
-function wpunity_compile_models_gen($gameID, $gameSlug){
+function wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform){
 
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
@@ -569,11 +569,11 @@ function wpunity_compile_models_gen($gameID, $gameSlug){
     $assetIds = wpunity_fetch_assetids_in_scenes($gameSlug);
 
     foreach ($assetIds as $asset_id)
-        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$gameSlug);
+        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $gameSlug, $targetPlatform);
 }
 
 //Import assets to HandyBuilder (function internal)
-function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$gameSlug){
+function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $gameSlug, $targetPlatform){
 
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
@@ -639,7 +639,7 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file,$g
 
     //Video FILE
     $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true); // Video ID
-    if(is_numeric($videoID)){
+    if(is_numeric($videoID) && $targetPlatform !== "WebGL"){
         $attachment_post = get_post($videoID);
         $attachment_file = $attachment_post->guid;
         $attachment_tempname = str_replace('\\', '/', $attachment_file);

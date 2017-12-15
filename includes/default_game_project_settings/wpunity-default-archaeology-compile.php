@@ -220,6 +220,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $asset_type = get_the_terms( $poi_vid_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
                 $poi_vid_obj = get_post_meta($poi_vid_id,'wpunity_asset3d_obj',true);
+
                 $poi_vid_video = get_post_meta($poi_vid_id,'wpunity_asset3d_video',true);
                 $attachment_video_post = get_post($poi_vid_video);
                 $attachment_file = $attachment_video_post->guid;
@@ -242,10 +243,11 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_guid = wpunity_create_guids('obj', $poi_vid_obj);
                 $poi_v_v_name = $attachment_name['filename'];
+                $poi_v_v_url = $attachment_video_post->guid;
 
                 $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
                     $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
-                    $poi_v_trans_fid,$poi_v_obj_fid, $poi_v_obj_guid, $poi_v_v_name);
+                    $poi_v_trans_fid,$poi_v_obj_fid, $poi_v_obj_guid, $poi_v_v_name, $poi_v_v_url);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
             }
@@ -470,7 +472,7 @@ function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y
 
 function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,
                                        $poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,
-                                       $poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name){
+                                       $poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name, $poi_v_v_url){
 
     $file_content_return = str_replace("___[poi_v_fid]___",$poi_v_fid,$poi_vid_yaml);
     $file_content_return = str_replace("___[poi_v_pos_x]___",$poi_v_pos_x,$file_content_return);
@@ -488,6 +490,7 @@ function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$po
     $file_content_return = str_replace("___[poi_v_obj_fid]___",$poi_v_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_v_obj_guid]___",$poi_v_obj_guid,$file_content_return);
     $file_content_return = str_replace("___[poi_v_v_name]___",$poi_v_v_name,$file_content_return);
+    $file_content_return = str_replace("___[poi_v_v_url]___",$poi_v_v_url,$file_content_return);
 
     return $file_content_return;
 }

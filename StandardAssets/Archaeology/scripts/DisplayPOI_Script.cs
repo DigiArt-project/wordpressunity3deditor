@@ -20,7 +20,7 @@ public class DisplayPOI_Script : MonoBehaviour {
 
 	public string videoToShow = "";
 
-
+	public string videoUrlToShow = "";
 
 
 
