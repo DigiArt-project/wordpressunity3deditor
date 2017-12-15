@@ -26,6 +26,11 @@ public class Menu_Script : MonoBehaviour {
 //			Destroy(gameObject);
 
 		// End oculus
+
+		#if UNITY_WEBGL
+           GameObject.Find ("bt_exit").SetActive (false);
+		#endif
+
 	}
 
 //	public void onClick_StartGame(){
