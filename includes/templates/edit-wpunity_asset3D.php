@@ -1,5 +1,7 @@
 <?php
 
+
+
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
@@ -184,6 +186,8 @@ $asset_title_saved = ($create_new == 1 ? "" : get_the_title( $asset_checked_id )
 $asset_title_label = ($create_new == 1 ? "Enter a title for your asset" : "Edit the title of your asset");
 $asset_desc_saved = ($create_new == 1 ? "" : get_post_field('post_content', $asset_checked_id));
 $asset_desc_label = ($create_new == 1 ? "Add a small description for your asset" : "Edit the description of your asset");
+
+//print_r(get_allowed_mime_types());
 
 //Check if its new/saved and get data for Terrain Options
 if($create_new == 0) {
@@ -395,9 +399,11 @@ if($create_new == 0) {
 
                         <h3 class="mdc-typography--title">Video POI Details</h3>
 
+
+
                         <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <label for="videoFileInput"> Select a video</label>
-                            <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4,video/ogv"/>
+                            <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
                         </div>
                     </div>
 

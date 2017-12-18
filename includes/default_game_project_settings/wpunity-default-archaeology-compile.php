@@ -341,8 +341,11 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $decor_scale_x = $value['scale'][0];
                 $decor_scale_y = $value['scale'][1];
                 $decor_scale_z = $value['scale'][2];
+                $decor_title = get_the_title($decoarch_id);
 
-                $decoarch_finalyaml = wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor_obj_guid,$decor_pos_x,$decor_pos_y,$decor_pos_z,$decor_rot_x,$decor_rot_y,$decor_rot_z,$decor_rot_w,$decor_scale_x,$decor_scale_y,$decor_scale_z);
+                $decoarch_finalyaml = wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor_obj_guid,$decor_pos_x,$decor_pos_y,
+                    $decor_pos_z,$decor_rot_x,$decor_rot_y,$decor_rot_z,$decor_rot_w,$decor_scale_x,$decor_scale_y,$decor_scale_z,
+                    $decor_title);
                 $allObjectsYAML = $allObjectsYAML . $LF . $decoarch_finalyaml;
             }
 
@@ -402,7 +405,9 @@ function wpunity_replace_wonderaround_unity($term_meta_wonder_around, $scene_id)
     return $file_content_return;
 }
 
-function wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor_obj_guid,$decor_pos_x,$decor_pos_y,$decor_pos_z,$decor_rot_x,$decor_rot_y,$decor_rot_z,$decor_rot_w,$decor_scale_x,$decor_scale_y,$decor_scale_z){
+function wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor_obj_guid,$decor_pos_x,$decor_pos_y,
+                                               $decor_pos_z,$decor_rot_x,$decor_rot_y,$decor_rot_z,$decor_rot_w,
+                                               $decor_scale_x,$decor_scale_y,$decor_scale_z,$decor_title){
 
     $file_content_return = str_replace("___[decor_fid]___",$decor_fid,$decorarch_yaml);
     $file_content_return = str_replace("___[decor_obj_guid]___",$decor_obj_guid,$file_content_return);
@@ -416,6 +421,7 @@ function wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor
     $file_content_return = str_replace("___[decor_scale_x]___",$decor_scale_x,$file_content_return);
     $file_content_return = str_replace("___[decor_scale_y]___",$decor_scale_y,$file_content_return);
     $file_content_return = str_replace("___[decor_scale_z]___",$decor_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[decor_title]___",$decor_title,$file_content_return);
 
     return $file_content_return;
 }

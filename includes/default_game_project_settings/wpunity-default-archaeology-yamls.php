@@ -97,7 +97,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[poi_v_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ');
+');
 
 $ini_asset_site = array('--- !u!1001 &___[site_fid]___
 Prefab:
@@ -157,7 +157,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[site_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ');
+');
 
 $ini_asset_poi = array("--- !u!1001 &___[poi_it_fid]___
 Prefab:
@@ -210,7 +210,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 4761904222008530, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
+    - target: {fileID: 1075652707080240, guid: 4c118634f374a3647acbe1862739fb17, type: 2}
       propertyPath: m_Name
       value: ___[poi_it_title]___
       objectReference: {fileID: 0}
@@ -250,7 +250,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[poi_it_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ");
+");
 
 $ini_asset_door = array('--- !u!1001 &___[door_fid]___
 Prefab:
@@ -340,7 +340,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[door_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ');
+');
 
 $ini_asset_artifact = array('--- !u!1001 &___[poi_a_fid]___
 Prefab:
@@ -425,7 +425,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[poi_a_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ');
+');
 
 $ini_asset_decoration_arch = array('--- !u!1001 &___[decor_fid]___
 Prefab:
@@ -474,10 +474,14 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: ___[decor_scale_z]___
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ___[decor_obj_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[decor_title]___
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[decor_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
-  ');
+');
 
 function wpunity_default_value_poi_video_get(){
     global $ini_asset_poi_video;

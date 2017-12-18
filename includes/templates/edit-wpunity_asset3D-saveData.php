@@ -139,6 +139,9 @@ function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
     $asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
     $asset_videoForm = $_FILES['videoFileInput'];
 
+
+
+
     $attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
     set_post_thumbnail( $asset_newID, $attachment_id );
 
@@ -188,10 +191,8 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     for($i=0; $i < count($tContent); $i++) {
 
         $textureFile_id = wpunity_upload_Assetimg64(
-            $tContent[$textureNamesIn[$i]],
-            'texture_'.$textureNamesIn[$i].'_'.$assetTitleForm,
-            $asset_newID,
-            $gameSlug);
+            $tContent[$textureNamesIn[$i]], 'texture_'.$textureNamesIn[$i].'_'.$assetTitleForm,
+            $asset_newID, $gameSlug);
 
         $textureFile_filename = basename(get_attached_file($textureFile_id));
 
@@ -205,7 +206,8 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     for ($k = 0; $k < count($textureNamesIn); $k++) {
         // $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg", "map_Kd ".$textureNamesOut[$k], $mtl_content);
         // This replace is better. It does not depend on the number of white spaces.
-        $mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*/ui", "map_Kd " . $textureNamesOut[$k], $mtl_content);
+        $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b".$textureNamesIn[$k].".jpg\b/ui",
+                                "map_Kd " . $textureNamesOut[$k], $mtl_content);
     }
 
     $mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
