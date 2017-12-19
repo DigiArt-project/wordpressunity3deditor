@@ -42,7 +42,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 
-            GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
+			GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
 
 			GameObject.Find ("panel_v").GetComponent<AudioSource> ().Stop ();
 
@@ -127,8 +127,8 @@ public class Player_Custom_Script : MonoBehaviour {
 				canvas_ti.enabled = false;
 				canvas_v.enabled = false;
 
-                if (active)
-				    active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+				if (active)
+					active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 			}
 
 
@@ -160,7 +160,11 @@ public class Player_Custom_Script : MonoBehaviour {
 				Debug.Log( spriteName + " was not found. Are you sure you have imported it in Resources folder?" );
 			}
 
+			// Set the text
 			GameObject.Find ("txt_ti").GetComponent<Text> ().text = go.GetComponent<DisplayPOI_Script> ().textToShow;
+
+			// Get the title of the poi to put as a text in the title_txt_ti in canvas_ti
+			GameObject.Find ("title_txt_ti").GetComponent<Text> ().text = go.name;
 
 			canvas_ti.enabled = true;
 
@@ -173,35 +177,35 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			// Get the name of the sprite from the collided object
 			string videoName = go.GetComponent<DisplayPOI_Script> ().videoToShow;
-            string videoUrlName = go.GetComponent<DisplayPOI_Script> ().videoUrlToShow;
+			string videoUrlName = go.GetComponent<DisplayPOI_Script> ().videoUrlToShow;
 
-            // Put the video to the video player
-            VideoPlayer videoPlayer = GameObject.Find ("panel_v").GetComponent<VideoPlayer> ();
-            videoPlayer.playOnAwake  = false;
-
-
-            #if UNITY_WEBGL
-            	videoPlayer.source = VideoSource.Url;
-            	videoPlayer.url= videoUrlName; //"http://127.0.0.1:8080/Videos/Hanna.mp4";
-            #else
-            	videoPlayer.source = VideoSource.VideoClip;
-            	videoPlayer.clip = Resources.Load<VideoClip> (videoName);
-            #endif
-
-            // Set video audio to audioSource
-            AudioSource audioSource = GameObject.Find ("panel_v").GetComponent<AudioSource> ();
-
-            videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
-            videoPlayer.EnableAudioTrack (0, true);
-
-            audioSource.playOnAwake  =  false;
-            videoPlayer.SetTargetAudioSource (0, audioSource);
+			// Put the video to the video player
+			VideoPlayer videoPlayer = GameObject.Find ("panel_v").GetComponent<VideoPlayer> ();
+			videoPlayer.playOnAwake  = false;
 
 
+			#if UNITY_WEBGL
+			videoPlayer.source = VideoSource.Url;
+			videoPlayer.url= videoUrlName; //"http://127.0.0.1:8080/Videos/Hanna.mp4";
+			#else
+			videoPlayer.source = VideoSource.VideoClip;
+			videoPlayer.clip = Resources.Load<VideoClip> (videoName);
+			#endif
 
-			if (videoName.Length > 0 || videoUrlName.Length > 0) {
+			// Set video audio to audioSource
+			AudioSource audioSource = GameObject.Find ("panel_v").GetComponent<AudioSource> ();
+
+			videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+			videoPlayer.EnableAudioTrack (0, true);
+
+			audioSource.playOnAwake  =  false;
+			videoPlayer.SetTargetAudioSource (0, audioSource);
+
+
+
+			if (videoName.Length > 0 || videoUrlName.Length >0) {
 				videoPlayer.Play ();
-                audioSource.Play ();
+				audioSource.Play ();
 				canvas_v.enabled = true;
 			} else {
 				Debug.Log (videoName + " or " + videoUrlName  + " was not found.");
@@ -227,7 +231,6 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			gameObject.GetComponent<FirstPersonController> ().enabled = false;
 		}
-
 
 	}
 }

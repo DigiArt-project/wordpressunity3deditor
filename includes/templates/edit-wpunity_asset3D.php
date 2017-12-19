@@ -348,8 +348,8 @@ if($create_new == 0) {
 
                     <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                         <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
-                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
-                               value="<?php echo $asset_title_saved; ?>">
+                               aria-controls="title-validation-msg" required minlength="3" maxlength="40" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
+                               value="<?php echo trim($asset_title_saved); ?>">
                         <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
@@ -359,7 +359,8 @@ if($create_new == 0) {
                     </p>
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                        <textarea id="multi-line" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;" name="assetDesc" form="3dAssetForm"><?php echo $asset_desc_saved; ?></textarea>
+                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 860px;"
+                                  name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
                     </div>
 
