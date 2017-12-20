@@ -197,18 +197,29 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_scale_x = $value['scale'][0];
                 $poi_it_scale_y = $value['scale'][1];
                 $poi_it_scale_z = $value['scale'][2];
-                $poi_it_title = get_the_title($poi_img_id);
+                $poi_it_title = html_entity_decode(get_the_title($poi_img_id));
 
                 $post_featuredimage_url = get_the_post_thumbnail_url($poi_img_id, 'full'); // http:// ..... /image.jpg
                 $poi_it_sprite_name = pathinfo($post_featuredimage_url)['filename']; // image
 
-                $poi_it_text = $content_post->post_content; // CHECK
+                $poi_it_text = html_entity_decode($content_post->post_content); // CHECK
+
+                // For uknown reason 2017.1 Unity does not like to have a line starting with <" character
+                $poi_it_text = str_replace("<b>"," <b>", $poi_it_text);
+                $poi_it_text = str_replace("<i>"," <i>", $poi_it_text);
+                //$poi_it_text = str_replace("\n\n","\n\n\n", $poi_it_text);
+
+                $poi_it_text = str_replace("\r\n\r\n","\r\n\r\n\r\n", $poi_it_text);
+
+
                 $poi_it_connector_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_fid = wpunity_create_fids($current_fid++);
                 $poi_it_obj_guid = wpunity_create_guids('obj', $poi_img_obj);
 
-                $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,
-                    $poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,$poi_it_title,
+                $poi_img_finalyaml = wpunity_replace_poi_img_unity($poi_img_yaml,
+                    $poi_it_fid,$poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,
+                    $poi_it_rot_x, $poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,
+                    $poi_it_scale_y,$poi_it_scale_z,$poi_it_title,
                     $poi_it_sprite_name,
                     $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
 

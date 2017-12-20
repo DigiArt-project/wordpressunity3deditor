@@ -90,7 +90,7 @@ $editscenePage = wpunity_getEditpage('scene');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
-	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'])); //Description of the Asset (Form value)
+	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
 
 	if($create_new == 1){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
