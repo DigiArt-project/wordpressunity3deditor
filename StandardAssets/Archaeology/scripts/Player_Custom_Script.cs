@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -258,6 +257,10 @@ public class Player_Custom_Script : MonoBehaviour {
 			// Copy mesh
 			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
 
+
+			// Get the title of the poi to put as a text in the title_txt_ti in canvas_ti
+			GameObject.Find ("txt_a_title").GetComponent<Text> ().text = go.name;
+
 			camera.enabled = false;
 			camera2.enabled = true;
 
@@ -266,11 +269,11 @@ public class Player_Custom_Script : MonoBehaviour {
 	}
 
 	void appearExitButton(){
-		GameObject.Find ("bt_scene_exit").transform.Translate(0, - 30, 0);
+		GameObject.Find ("bt_scene_exit").transform.Translate(0, - 230, 0);
 	}
 
 	void vanishExitButton(){
-		GameObject.Find ("bt_scene_exit").transform.Translate(0,   30, 0);
+		GameObject.Find ("bt_scene_exit").transform.Translate(0,   230, 0);
 	}
 
 	void freezePlayer(){
