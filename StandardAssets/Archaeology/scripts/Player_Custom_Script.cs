@@ -13,6 +13,7 @@ public class Player_Custom_Script : MonoBehaviour {
 	private Canvas canvas_a;
 	private Camera camera, camera2;
 	private GameObject active;
+	private Boolean flag_artifact_rotate_scale = false;
 
 	void Start () {
 
@@ -22,24 +23,20 @@ public class Player_Custom_Script : MonoBehaviour {
 
 		camera = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera> ();
 
-
-
 		// camera 2 is a camera on a separate place for viewing the selected 3D model
 		camera2 = GameObject.Find ("camera2").GetComponent<Camera> ();
 
-
 		Button bt_it_close = GameObject.Find ("bt_ti_close").GetComponent<Button>();
 		bt_it_close.onClick.AddListener( activateObjectAgain );
-
 	}
 
-
+	// When player runs over an item
 	void OnTriggerEnter(Collider other)
 	{
 		checkTag (other.gameObject);
 	}
 
-
+	// When player goes away from an item
 	void OnTriggerExit(Collider other)
 	{
 		if (other.gameObject.tag == "poi_imagetext") {
@@ -63,16 +60,19 @@ public class Player_Custom_Script : MonoBehaviour {
 			playPlayer ();
 
 		} else if (other.gameObject.tag == "poi_artefact") {
-			// It is not possible because FPS is disabled. Done with button that calls closeArtefactView
+			// playPlayer ()  is not possible because FPS is disabled. Done with button that calls closeArtefactView
+
+
 		}
 	}
 
-
+	// Close the 3D viewer of the artifact and the canvas with related info
 	public void closeArtefactView(){
 
 		canvas_a.enabled = false;
 
 		camera.enabled = true;
+		camera.fieldOfView = 60;
 		camera2.enabled = false;
 
 		// Destroy the copied object
@@ -80,30 +80,38 @@ public class Player_Custom_Script : MonoBehaviour {
 
 		// Enable FPS
 		playPlayer();
+		appearExitButton ();
 	}
 
 
 
 	void Update(){
-		if (camera2.isActiveAndEnabled) {
+		if (camera2.isActiveAndEnabled ) {
 
-			// Rotation
-			GameObject.Find ("meshcontainer").transform.Rotate (
-				new Vector3 (- Input.GetAxis ("Mouse Y") * Time.deltaTime * 200, - Input.GetAxis ("Mouse X") * Time.deltaTime * 200, 0)
-			);
-
-
-			// Scaling
-			if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-				Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale -
-					30 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
-
-				if (targetScale.x > 0)
-					GameObject.Find ("meshcontainer").transform.localScale =
-						Vector3.Lerp (GameObject.Find ("meshcontainer").transform.localScale, targetScale, 10 * Time.deltaTime);
+			if (Input.GetButtonDown("Fire1"))
+			{
+				if (Input.mousePosition [0] < Screen.width / 2)
+					flag_artifact_rotate_scale = true;
+				else
+					flag_artifact_rotate_scale = false;
 			}
 
+			if (flag_artifact_rotate_scale){
 
+				// Rotation
+				GameObject.Find ("meshcontainer").transform.Rotate (
+					new Vector3 (- Input.GetAxis ("Mouse Y") * Time.deltaTime * 200, - Input.GetAxis ("Mouse X") * Time.deltaTime * 200, 0)
+				);
+
+				// Scaling
+				if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
+					Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale - 30 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
+
+					if (targetScale.x > 0)
+						GameObject.Find ("meshcontainer").transform.localScale =
+							Vector3.Lerp (GameObject.Find ("meshcontainer").transform.localScale, targetScale, 10 * Time.deltaTime);
+				}
+			}
 		}
 
 
@@ -112,9 +120,11 @@ public class Player_Custom_Script : MonoBehaviour {
 			// Scroll wheel zoom
 			if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
 				if (camera != null) {
-					if (camera.fieldOfView <= 60)
+					if (camera.fieldOfView <= 60 && camera.fieldOfView > 2) {
 						camera.fieldOfView -= 10 * Input.GetAxis ("Mouse ScrollWheel");
-					else
+					} else if (camera.fieldOfView <= 2) {
+						camera.fieldOfView = 2;
+					} else
 						camera.fieldOfView = 60;
 				}
 			}
@@ -133,8 +143,6 @@ public class Player_Custom_Script : MonoBehaviour {
 					}
 				}
 			}
-
-
 
 			if (Input.GetKeyDown ("s") || Input.GetKeyDown ("w"))
 				activateObjectAgain ();
@@ -252,7 +260,17 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			camera.enabled = false;
 			camera2.enabled = true;
+
+			vanishExitButton();
 		}
+	}
+
+	void appearExitButton(){
+		GameObject.Find ("bt_scene_exit").transform.Translate(0, - 30, 0);
+	}
+
+	void vanishExitButton(){
+		GameObject.Find ("bt_scene_exit").transform.Translate(0,   30, 0);
 	}
 
 	void freezePlayer(){
