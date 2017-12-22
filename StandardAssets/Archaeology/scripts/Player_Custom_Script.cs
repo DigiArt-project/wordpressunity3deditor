@@ -15,14 +15,22 @@ public class Player_Custom_Script : MonoBehaviour {
 	private GameObject active;
 
 	void Start () {
+
 		canvas_ti = GameObject.Find ("canvas_ti").GetComponent<Canvas> ();
 		canvas_v = GameObject.Find ("canvas_v").GetComponent<Canvas> ();
 		canvas_a = GameObject.Find ("canvas_a").GetComponent<Canvas> ();
 
 		camera = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera> ();
 
+
+
 		// camera 2 is a camera on a separate place for viewing the selected 3D model
 		camera2 = GameObject.Find ("camera2").GetComponent<Camera> ();
+
+
+		Button bt_it_close = GameObject.Find ("bt_ti_close").GetComponent<Button>();
+		bt_it_close.onClick.AddListener( activateObjectAgain );
+
 	}
 
 
@@ -39,6 +47,9 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			// Make the obj to appear
 			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+
+			playPlayer ();
+
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 
@@ -48,6 +59,8 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			// Make the obj to appear
 			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+
+			playPlayer ();
 
 		} else if (other.gameObject.tag == "poi_artefact") {
 			// It is not possible because FPS is disabled. Done with button that calls closeArtefactView
@@ -66,7 +79,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		Destroy (GameObject.Find ("meshcontainer").transform.GetChild (0).gameObject);
 
 		// Enable FPS
-		gameObject.GetComponent<FirstPersonController> ().enabled = true;
+		playPlayer();
 	}
 
 
@@ -123,18 +136,23 @@ public class Player_Custom_Script : MonoBehaviour {
 
 
 
-			if (Input.GetKeyDown ("s") || Input.GetKeyDown ("w") ) {
-				canvas_ti.enabled = false;
-				canvas_v.enabled = false;
-
-				if (active)
-					active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
-			}
-
-
-
+			if (Input.GetKeyDown ("s") || Input.GetKeyDown ("w"))
+				activateObjectAgain ();
 		}
 
+	}
+
+
+
+	// Closes poi_it and poi_v canvases and reshows their objs
+	void activateObjectAgain(){
+		canvas_ti.enabled = false;
+		canvas_v.enabled = false;
+
+		if (active)
+			active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+
+		playPlayer ();
 	}
 
 
@@ -142,6 +160,8 @@ public class Player_Custom_Script : MonoBehaviour {
 	void checkTag(GameObject go){
 
 		if (go.tag == "poi_imagetext") {
+
+			freezePlayer ();
 
 			active = go;
 
@@ -169,6 +189,8 @@ public class Player_Custom_Script : MonoBehaviour {
 			canvas_ti.enabled = true;
 
 		} else if (go.tag == "poi_video") {
+
+			freezePlayer ();
 
 			active = go;
 
@@ -213,6 +235,8 @@ public class Player_Custom_Script : MonoBehaviour {
 
 		} else if (go.tag == "poi_artefact") {
 
+			freezePlayer ();
+
 			canvas_a.enabled = true;
 
 			// show text on canvas by fetching it from the collided object
@@ -228,9 +252,14 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			camera.enabled = false;
 			camera2.enabled = true;
-
-			gameObject.GetComponent<FirstPersonController> ().enabled = false;
 		}
+	}
 
+	void freezePlayer(){
+		gameObject.GetComponent<FirstPersonController>().enabled = false;
+	}
+
+	void playPlayer(){
+		gameObject.GetComponent<FirstPersonController>().enabled = true;
 	}
 }

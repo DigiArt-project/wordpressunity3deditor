@@ -302,16 +302,30 @@ function wpunity_compile_folders_del($gameSlug) {
     if (is_dir($path) === true) {
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
 
+        //$fg = fopen("output_delete_report.txt","w");
+
+
         foreach ($files as $file) {
             if (in_array($file->getBasename(), array('.', '..')) !== true) {
+
+
+
                 if ($file->isDir() === true && $file->getBasename() != 'Library'  ) {
                     rmdir($file->getPathName());
                 }
-                else if (($file->isFile() === true) || ($file->isLink() === true)){ // && $file->getParentFolderName() != 'Library' ) {
-                    unlink($file->getPathname());
+                else if (($file->isFile() === true) || ($file->isLink() === true) && $file->getParentFolderName() != 'Library' ) {
+                    if ( strpos($file->getPathname(), DIRECTORY_SEPARATOR.Library.DIRECTORY_SEPARATOR) === false  ) {
+
+                     //   fwrite($fg, $file->getPathname() . PHP_EOL );
+
+                        unlink($file->getPathname());
+                    }
                 }
             }
         }
+
+       // fclose($fg);
+
 
         return true;
     }
