@@ -91,8 +91,8 @@ function wpunity_register_scripts() {
 	wp_register_script( 'wpunity_load87_trackballcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/TrackballControls.js', null, null, false);
     wp_register_script( 'wpunity_CSS2DRenderer', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/CSS2DRenderer.js', null, null, false);
 
-	wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporterUtils.js', null, null, false);
-	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/SceneExporter.js', null, null, false);
+	wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporterUtils.js', null, null, false);
+	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporter.js', null, null, false);
 
 // ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
 //wp_register_script( 'wpunity_load_pointerlockcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/PointerLockControls.js', null, null, false);

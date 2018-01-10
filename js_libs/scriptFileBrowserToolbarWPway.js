@@ -99,6 +99,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "image1id":e.target.attributes.getNamedItem("data-image1id").value,
                 "doorName_source":e.target.attributes.getNamedItem("data-doorName_source").value,
                 "doorName_target":e.target.attributes.getNamedItem("data-doorName_target").value,
+                "isreward":e.target.attributes.getNamedItem("data-isreward").value,
                 "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value
             };
 
@@ -183,6 +184,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-doorName_source="'+ f.doorName_source +
                     '" data-doorName_target="'+ f.doorName_target +
                     '" data-sceneName_target="'+ f.sceneName_target +
+                    '" data-isreward="'+ f.isreward +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +

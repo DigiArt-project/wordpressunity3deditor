@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityStandardAssets.Characters.FirstPerson;
 using System;
+using System.Collections.Generic;
 
 public class Player_Custom_Script : MonoBehaviour {
 
@@ -13,8 +15,22 @@ public class Player_Custom_Script : MonoBehaviour {
 	private Camera camera, camera2;
 	private GameObject active;
 	private Boolean flag_artifact_rotate_scale = false;
+	private GameObject[] pois;
+	private List<GameObject> poisList;
+	private Boolean flagCongratsAlreadyDisplayed = false;
+	private Text infoTextCurrStatus;
+	private int NPois;
+	private RectTransform imageGreenBarRect;
+	private GameObject directionalArrow;
+	private GameObject rewardObject;
 
 	void Start () {
+		// Get all pois and transform the array to a list
+		pois = getPOIs();
+		poisList = new List<GameObject>(pois);
+		poisList.Remove (null);
+		NPois = poisList.Count;
+
 
 		canvas_ti = GameObject.Find ("canvas_ti").GetComponent<Canvas> ();
 		canvas_v = GameObject.Find ("canvas_v").GetComponent<Canvas> ();
@@ -27,6 +43,40 @@ public class Player_Custom_Script : MonoBehaviour {
 
 		Button bt_it_close = GameObject.Find ("bt_ti_close").GetComponent<Button>();
 		bt_it_close.onClick.AddListener( activateObjectAgain );
+
+		infoTextCurrStatus = GameObject.Find ("infoTextCurrStatus").GetComponent<Text> ();
+		infoTextCurrStatus.text = "0/" + NPois;
+
+		imageGreenBarRect = GameObject.Find ("imageGreenBar").GetComponent<RectTransform> ();
+		imageGreenBarRect.sizeDelta = new Vector2 (2, 20);
+
+		directionalArrow = GameObject.Find ("directionalArrow");
+		directionalArrow.GetComponent<Image> ().enabled = false;
+
+	}
+
+	public GameObject[] getPOIs(){
+
+		GameObject[] pois_it = GameObject.FindGameObjectsWithTag ("poi_imagetext");
+		GameObject[] pois_v = GameObject.FindGameObjectsWithTag ("poi_video");
+		GameObject[] pois_a = GameObject.FindGameObjectsWithTag ("poi_artefact");
+
+
+		int n = pois_it.Length + pois_v.Length + pois_a.Length;
+
+		GameObject[] pois = new GameObject[n];
+
+		pois_it.CopyTo (pois, 0);
+		pois_v.CopyTo  (pois, pois_it.Length);
+		pois_a.CopyTo  (pois, pois_it.Length + pois_v.Length);
+
+		// Remove Reward items
+		for (int i = 0; i < n; i++)
+			if (pois [i].GetComponent<DisplayPOI_Script> ().isRewardItem)
+				pois [i] = null;
+
+
+		return pois;
 	}
 
 	// When player runs over an item
@@ -49,19 +99,15 @@ public class Player_Custom_Script : MonoBehaviour {
 		} else if (other.gameObject.tag == "poi_video") {
 			canvas_v.enabled = false;
 
-			GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
-
 			GameObject.Find ("panel_v").GetComponent<AudioSource> ().Stop ();
+			GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
 
 			// Make the obj to appear
 			other.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
 			playPlayer ();
-
 		} else if (other.gameObject.tag == "poi_artefact") {
 			// playPlayer ()  is not possible because FPS is disabled. Done with button that calls closeArtefactView
-
-
 		}
 	}
 
@@ -80,6 +126,7 @@ public class Player_Custom_Script : MonoBehaviour {
 		// Enable FPS
 		playPlayer();
 		appearExitButton ();
+		appearInfoPanel ();
 	}
 
 
@@ -133,7 +180,7 @@ public class Player_Custom_Script : MonoBehaviour {
 			if (Input.GetMouseButtonDown(0)) {
 				RaycastHit[] hits;
 
-				hits = Physics.RaycastAll(camera.ScreenPointToRay(Input.mousePosition), 100.0F);
+				hits = Physics.RaycastAll(camera.ScreenPointToRay(Input.mousePosition), 50.0F);
 
 				for (int i = 0 ; i < hits.Length; i++) {
 					if (hits [i].transform.gameObject.tag != "Untagged") {
@@ -147,24 +194,52 @@ public class Player_Custom_Script : MonoBehaviour {
 				activateObjectAgain ();
 		}
 
+
+
+		if(rewardObject){
+			directionalArrow.GetComponent<Image> ().enabled = true;
+			Vector3 dir = gameObject.transform.InverseTransformPoint (rewardObject.transform.position);
+			float angleR = Mathf.Atan2 (dir.x, dir.z) * Mathf.Rad2Deg;
+			angleR += 180;
+			directionalArrow.transform.localEulerAngles = new Vector3(0, 180, angleR);
+		}
+
+
 	}
-
-
 
 	// Closes poi_it and poi_v canvases and reshows their objs
 	void activateObjectAgain(){
 		canvas_ti.enabled = false;
-		canvas_v.enabled = false;
+
+		if (canvas_v.enabled == true) {
+			appearExitButton ();
+			appearInfoPanel ();
+			canvas_v.enabled = false;
+			GameObject.Find ("panel_v").GetComponent<AudioSource> ().Stop ();
+			GameObject.Find ("panel_v").GetComponent<VideoPlayer> ().Stop ();
+		}
 
 		if (active)
 			active.transform.GetChild(0).transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
 		playPlayer ();
+
+		if (poisList.Count == 0 && NPois > 0)
+			DisplayCongrats ();
 	}
 
 
 	/* Check the tag of the clicked or collided object */
 	void checkTag(GameObject go){
+
+		// Deduct poisList counter
+		poisList.Remove (go);
+
+		infoTextCurrStatus.text = (NPois - poisList.Count) + "/" + NPois;
+
+		int nWidth = (NPois - poisList.Count) * 220 /NPois;
+
+		imageGreenBarRect.sizeDelta = new Vector2 ( nWidth , 20);
 
 		if (go.tag == "poi_imagetext") {
 
@@ -240,6 +315,11 @@ public class Player_Custom_Script : MonoBehaviour {
 				Debug.Log (videoName + " or " + videoUrlName  + " was not found.");
 			}
 
+
+			vanishExitButton();
+			vanishInfoPanel ();
+
+
 		} else if (go.tag == "poi_artefact") {
 
 			freezePlayer ();
@@ -265,6 +345,7 @@ public class Player_Custom_Script : MonoBehaviour {
 			camera2.enabled = true;
 
 			vanishExitButton();
+			vanishInfoPanel ();
 		}
 	}
 
@@ -276,6 +357,14 @@ public class Player_Custom_Script : MonoBehaviour {
 		GameObject.Find ("bt_scene_exit").transform.Translate(0,   230, 0);
 	}
 
+	void appearInfoPanel(){
+		GameObject.Find ("infoPanel").transform.Translate (0, -230, 0);
+	}
+
+	void vanishInfoPanel(){
+		GameObject.Find ("infoPanel").transform.Translate (0, 230, 0);
+	}
+
 	void freezePlayer(){
 		gameObject.GetComponent<FirstPersonController>().enabled = false;
 	}
@@ -283,4 +372,51 @@ public class Player_Custom_Script : MonoBehaviour {
 	void playPlayer(){
 		gameObject.GetComponent<FirstPersonController>().enabled = true;
 	}
+
+
+	void DisplayCongrats(){
+
+		if (!flagCongratsAlreadyDisplayed) {
+			GameObject.Find ("infoTextAccomplished").GetComponent<Text> ().enabled = true;
+			GameObject.Find ("infoTextCurrStatus").SetActive (false);
+			GameObject.Find ("imageGreenBar").SetActive (false);
+			GameObject.Find ("imageRedBar").SetActive (false);
+
+			findRewardObjectAndDisplayIt ();
+			flagCongratsAlreadyDisplayed = true;
+		}
+
+
+	}
+
+
+	void findRewardObjectAndDisplayIt(){
+
+		GameObject[] allObjects = FindObjectsOfType<GameObject> ();
+
+		foreach (GameObject go in allObjects) {
+			if (go.GetComponent<DisplayPOI_Script> () || go.GetComponent<Door_Script> ()) {
+
+				if (go.GetComponent<DisplayPOI_Script> ())
+					if (go.GetComponent<DisplayPOI_Script> ().isRewardItem) {
+
+						go.transform.Translate (0, 10000, 0);
+						rewardObject = go;
+					}
+
+
+				if (go.GetComponent<Door_Script> ())
+					if (go.GetComponent<Door_Script> ().isRewardItem) {
+
+						go.transform.Translate (0, 10000, 0);
+						rewardObject = go;
+					}
+
+			}
+		}
+
+	}
+
+
 }
+

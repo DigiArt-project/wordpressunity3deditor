@@ -43,6 +43,7 @@ class ParseJSON {
                 $doorName_target = $value->doorName_target;
                 $sceneName_target = $value->sceneName_target;
 
+                $isreward = $value->isreward;
 
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
@@ -74,6 +75,7 @@ class ParseJSON {
                                             '","doorName_source":"'.$doorName_source.
                                             '","doorName_target":"'.$doorName_target.
                                             '","sceneName_target":"'.$sceneName_target.
+                                            '","isreward":"'.$isreward.
                                             '","trs":selected_object_trs};';
 
             echo '</script>';

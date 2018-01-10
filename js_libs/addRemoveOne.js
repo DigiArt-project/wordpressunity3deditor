@@ -1,6 +1,6 @@
 function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
                           categoryName, categoryID, diffImages, diffImageIDs, image1id,
-                          doorName_source, doorName_target, sceneName_target,
+                          doorName_source, doorName_target, sceneName_target, isreward,
                           x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
@@ -25,6 +25,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "doorName_source":doorName_source,
         "doorName_target":doorName_target,
         "sceneName_target":sceneName_target,
+        "isreward":isreward,
         "trs": selected_object_trs
     };
 

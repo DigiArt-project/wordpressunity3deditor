@@ -175,7 +175,7 @@ class vr_editor_environmentals {
         var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
 
         var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
-        cubeForModeChangeDetec.position.set( 1.4, 1.4, 0);
+        cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
         cubeForModeChangeDetec.name = "trs_modeChanger";
         transform_controls.add( cubeForModeChangeDetec );
     }

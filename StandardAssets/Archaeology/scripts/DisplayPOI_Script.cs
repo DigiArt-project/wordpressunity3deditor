@@ -4,12 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
-
-//  EVERYTHING MOVED TO PLAYER_CUSTOM_SCRIPT.CS
-
 public class DisplayPOI_Script : MonoBehaviour {
-
-
 
 
 	public string imageSpriteNameToShow = "";
@@ -22,7 +17,7 @@ public class DisplayPOI_Script : MonoBehaviour {
 
 	public string videoUrlToShow = "";
 
-
+	public bool isRewardItem = false;
 
 	//private Camera camera,camera2;
 
@@ -38,6 +33,10 @@ public class DisplayPOI_Script : MonoBehaviour {
 	// private bool isDynamicObject = false;
 
 	void Start(){
+
+		if (isRewardItem)
+			gameObject.transform.Translate(0, -10000, 0);
+
 
 //		// Find if OVR mode
 //		ms = GameObject.Find ("mainCanvas").GetComponent<Menu_Script> ();

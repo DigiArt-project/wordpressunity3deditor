@@ -173,6 +173,7 @@ echo '</script>';
         var doorName_source = dataDrag.doorName_source;
         var doorName_target = dataDrag.doorName_target;
         var sceneName_target = dataDrag.sceneName_target;
+        var isreward = dataDrag.isreward;
 
         // we take the behavior type from the path of the obj
         var slashesArr = allIndexOf("/", path);
@@ -182,6 +183,7 @@ echo '</script>';
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
+            isreward,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);
@@ -302,33 +304,43 @@ echo '</script>';
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
-    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">
-        <select title="Select an object" id="popupSelect" class="mdc-select"></select>
-    </div>
+<!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
+<!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
+<!--    </div>-->
 
 
 
     <!-- Interface for Changing the door properties -->
-    <div id="popUpObjectPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+    <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 240px;">
 
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
-        <p class="mdc-typography--title"> Door options </p>
+        <p class="mdc-typography--subheading1" style=""> Door options </p>
         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
             <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
                    style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-            <label for="doorid" class="mdc-textfield__label">
-                Enter a door name </label>
+            <label for="doorid" class="mdc-textfield__label">Enter a door name </label>
             <div class="mdc-textfield__bottom-line"></div>
-
         </div>
-        <div class="WhiteSpaceSeparator"></div>
-        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>
-        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
-                class="mdc-select" style="min-width: 91%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
-        </select>
+
+            
+            
+            <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
+               style="vertical-align: text-bottom; ">directions</i>
+            <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
+                    class="mdc-select--subheading1" style="min-width: 90%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
+            </select>
+            
+            
+        
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+            <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
+            <label for="door_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
+        </div>
+        
     </div>
 
     <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
@@ -357,6 +369,70 @@ echo '</script>';
         <select title="Select a functional category label" id="chemistryBoxComponent" class="mdc-select">
         </select>
     </div>
+
+
+    <!-- Popup menu to for Reward item checkbox, from Artifact -->
+    <div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+
+        <!-- The close button-->
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("artifact_reward_checkbox"); return false;'>
+            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+        </a>
+
+        <!-- The checkbox-->
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+            <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
+            <label for="artifact_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
+        </div>
+        
+    </div>
+
+
+    <!-- Popup menu to for Reward item checkbox, from POI IT -->
+    <div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+
+        <!-- The close button-->
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox"); return false;'>
+            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+        </a>
+
+        <!-- The checkbox-->
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+            <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
+            <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
+        </div>
+
+    </div>
+
+
+    <!-- Popup menu to for Reward item checkbox, from POI Video -->
+    <div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+
+        <!-- The close button-->
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox"); return false;'>
+            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+        </a>
+
+        <!-- The checkbox-->
+        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+            <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
+            <label for="poi_video_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
 
 
 
@@ -614,23 +690,14 @@ $formRes->init($sceneToLoad);
 //            id_animation_frame = requestAnimationFrame( animate );
 //        }, 1000 / 25 );
 
-
-
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
-
-
-
 
         if (isComposerOn)
             envir.composer.render();
 
-
         // Update it
         update();
-
-
-
     }
 
     // UPDATE
@@ -668,16 +735,20 @@ $formRes->init($sceneToLoad);
         }
     }
 
-
-
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
+    jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, true );
-
+    
+    jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    
+    
+    
+    
     animate();
-
-
 
 </script>
 

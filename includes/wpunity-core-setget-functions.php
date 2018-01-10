@@ -210,7 +210,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 				'image1id'=>$image1id,
                 'doorName_source'=>'', //$doorName_source,   the asset does not save door but the json
                 'doorName_target'=>'', //$doorName_target,
-                'sceneName_target'=>'' //$sceneName_target
+                'sceneName_target'=>'', //$sceneName_target
+                'isreward'=>0,
 			];
 
 		endwhile;

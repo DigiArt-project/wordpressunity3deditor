@@ -341,6 +341,7 @@ THREE.SceneExporter.prototype = {
                     '   "doorName_source" : ' + '"' + o.doorName_source  + '"' + ',',
                     '   "doorName_target" : ' + '"' + o.doorName_target  + '"' + ',',
                     '   "sceneName_target" : ' + '"' + o.sceneName_target  + '"' + ',',
+                    '   "isreward" : ' + '"' + o.isreward  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',
                     '	"fnMtlID" : ' + '"' + o.fnMtlID + '"' + ( o.children.length ? ',' : '' )
 
@@ -348,7 +349,7 @@ THREE.SceneExporter.prototype = {
                     //'	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
                 //===============================================
-
+                console.log(output);
             } else {
 
                 var quatCombined = new THREE.Quaternion();
@@ -361,7 +362,7 @@ THREE.SceneExporter.prototype = {
                 quatR_player.setFromEuler(eulerR_player);
 
 
-                console.log("o.rotation", o.rotation);
+                //console.log("o.rotation", o.rotation);
 
                 // camera is only around x
                 var quatR_camera = new THREE.Quaternion();
@@ -394,7 +395,7 @@ THREE.SceneExporter.prototype = {
                 ];
 
 
-                console.log(output);
+                //console.log(output);
             }
 
 

@@ -6,12 +6,21 @@ var raycasterPick = new THREE.Raycaster();
 // Show or not the ray line
 var showRayPickLine = false; // Do not show raycast line
 
+
+// function onContextMenu(event ){
+//     console.log(event);
+//     event.preventDefault();
+// }
+
 /**
  * Detect mouse events
  *
  * @param event
  */
 function onMouseDownSelect( event ) {
+
+    event.preventDefault();
+    event.stopPropagation();
 
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
@@ -55,17 +64,22 @@ function onMouseDownSelect( event ) {
         }
     }
 
+
+
     // If only one object is intersected
     if(intersects.length === 1){
         selectorMajor(event, intersects[0]);
         return;
     }
 
+
+
     // More than one objects intersected
     var prevSelected = transform_controls.object.name;
     var selectNext = false;
 
     var i = 0;
+
     for (i = 0; i<intersects.length; i++) {
         console.log(intersects[i].object.parent.name,intersects.length);
         selectNext = prevSelected === intersects[i].object.parent.name;
@@ -75,6 +89,8 @@ function onMouseDownSelect( event ) {
 
     if (!selectNext || i===intersects.length-1)
         i = -1;
+
+
 
     selectorMajor(event, intersects[i+1]);
 
@@ -93,8 +109,10 @@ function selectorMajor(event, inters){
     envir.renderer.setClearColor( 0xffffff, 0.9 );
 
     //  Check for Door, MicroscopeTextbook, Box when right click
-    if (event.button === 2)
-        activeOverides(event, inters );
+    if (event.button === 2) {
+        activeOverides(event, inters);
+    }
+
 
 }
 
@@ -104,15 +122,28 @@ function activeOverides(event, inters){
     var objectParent  = inters.object.parent;
     var name = objectParent.name;
 
+    if( objectParent.categoryName === 'Artifact')
+        displayArtifactProperties(event, name);
+
+    if( objectParent.categoryName === 'Points of Interest (Image-Text)')
+        displayPoiImageTextProperties(event, name);
+
+    if( objectParent.categoryName === 'Points of Interest (Video)')
+        displayPoiVideoProperties(event, name);
+
     if( objectParent.categoryName === 'Door')
         displayDoorProperties(event, name);
 
     if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook')
         displayMicroscopeTextbookProperties(event, name);
 
-    if( objectParent.categoryName === 'Box' )
+    if( objectParent.categoryName === 'Box' ) // for chemistry box
         displayBoxProperties(event, name);
 }
+
+
+
+
 
 
 /**
@@ -191,10 +222,6 @@ function displayBoxProperties(event, nameBoxSource){
 
         clearAndUnbindBoxProperties();
     });
-
-
-
-
 }
 
 
@@ -284,103 +311,192 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
 
 }
 
+
+
+
+/**
+ *  Artifact properties
+ *
+ * @param event
+ * @param name
+ */
+function displayArtifactProperties(event, name){
+
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpArtifactPropertiesDiv");
+
+    // The checkbox only
+    var chbox = jQuery("#artifact_reward_checkbox");
+
+    // Save the previous artifact properties values (in case of  direct mouse click on another item)
+    chbox.trigger("change");
+
+    clearAndUnbindCheckBoxProperties("artifact_reward_checkbox");
+
+    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add change listener
+    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
+}
+
+
+/**
+ * Poi image text properties
+ *
+ * @param event
+ * @param name
+ */
+function displayPoiImageTextProperties(event, name){
+
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpPoiImageTextPropertiesDiv");
+
+    // The checkbox only
+    var chbox = jQuery("#poi_image_text_reward_checkbox");
+
+    // Save the previous artifact properties values (in case of  direct mouse click on another item)
+    chbox.trigger("change");
+
+    clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox");
+
+    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add change listener
+    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
+}
+
+/**
+ * Poi video properties
+ *
+ * @param event
+ * @param name
+ */
+function displayPoiVideoProperties(event, name){
+
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpPoiVideoPropertiesDiv");
+
+    // The checkbox only
+    var chbox = jQuery("#poi_video_reward_checkbox");
+
+    // Save the previous artifact properties values (in case of  direct mouse click on another item)
+    chbox.trigger("change");
+
+    clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox");
+
+    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add change listener
+    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
+
+}
+
+
+
+// Clear past options
+function clearAndUnbindCheckBoxProperties( chkboxname ) {
+    var chbox = jQuery("#" + chkboxname);
+    chbox.prop('checked',false);
+    chbox.unbind('change');     // Remove listeners
+}
+
+
+
+
 /**
  * Selecting a DoorTarget for the DoorSource
  *
  * @param event
- * @param nameDoorSource
+ * @param name
  */
-function displayDoorProperties(event, nameDoorSource){
+function displayDoorProperties(event, name){
+
+    var popUpDoorPropertiesDiv = jQuery("#popUpDoorPropertiesDiv");
+    var doorid = jQuery("#doorid");
+    var popupDoorSelect = jQuery("#popupDoorSelect");
+    var chbox = jQuery("#door_reward_checkbox");
 
     // Save the previous door values (in case of  direct mouse click on another door)
-    jQuery("#doorid").trigger("change");
-    jQuery("#popupDoorSelect").trigger("change");
+    doorid.trigger("change");
+    popupDoorSelect.trigger("change");
+    chbox.trigger("change");
+
+
+    clearAndUnbindCheckBoxProperties("door_reward_checkbox");
+
+    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+    // Add change listener
+    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0;});
+
 
     clearAndUnbindDoorProperties();
-
-    // Add options
-    var option;
-
-    // // Prompt "Select"
-    option = document.createElement("option");
-    option.text = "Select a door";
-    option.value = "Select a door";
-    option.selected = true;
-    option.disabled = true;
-    popupDoorSelect.add(option);
 
     // Add doors from other scenes
     var doorsFromOtherScenes = [];
 
-
-
-    for (var l=0; l < doorsAll.length; l++){
-
-        console.log(l, envir.scene.getObjectByName(nameDoorSource).doorName_source , doorsAll[l].door);
-
-        if (envir.scene.getObjectByName(nameDoorSource).doorName_source !== doorsAll[l].door)
+    for (var l=0; l < doorsAll.length; l++)
+        if (envir.scene.getObjectByName(name).doorName_source !== doorsAll[l].door)
             doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene + " (" + doorsAll[l].sceneSlug + ")" );
-    }
 
     // Add options for each intersected object
-    for (var doorName of doorsFromOtherScenes ) {
-        option = document.createElement("option");
-        option.text = doorName;
-        option.value = doorName;
-        option.style.background = "#fff";
-        popupDoorSelect.add(option);
-    }
-
-    // Prompt "Cancel"
-    option = document.createElement("option");
-    option.text = "Cancel";
-    option.value = "Cancel";
-    option.style.background = "#b7afaa";
-    popupDoorSelect.add(option);
+    createOption(popupDoorSelect[0], "Select a door", "Select a door", true, true, "#fff");
+    for (var doorName of doorsFromOtherScenes )
+        createOption(popupDoorSelect[0], doorName, doorName, false, false, "#fff");
 
 
     // Set doorid from existing values
-    if (envir.scene.getObjectByName(nameDoorSource).doorName_source)
-        jQuery("#doorid").val( envir.scene.getObjectByName(nameDoorSource).doorName_source );
+    if (envir.scene.getObjectByName(name).doorName_source)
+        doorid.val( envir.scene.getObjectByName(name).doorName_source );
 
-    if(envir.scene.getObjectByName(nameDoorSource).doorName_target)
-        jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
-            envir.scene.getObjectByName(nameDoorSource).sceneName_target );
+    if(envir.scene.getObjectByName(name).doorName_target)
+        popupDoorSelect.val ( envir.scene.getObjectByName(name).doorName_target + " at " +
+            envir.scene.getObjectByName(name).sceneName_target );
 
     // Show Selection
-    jQuery("#popUpObjectPropertiesDiv").show();
-    var ppPropertiesDiv = document.getElementById("popUpObjectPropertiesDiv");
-
-    ppPropertiesDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    ppPropertiesDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+    popUpDoorPropertiesDiv.show();
+    popUpDoorPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    popUpDoorPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
     mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
-    jQuery("#doorid").change(function(e) {
+    doorid.change(function(e) {
         var nameDoorSource_simple = jQuery("#doorid").val();
 
-        // nameDoorSource is the scene object generated automatically e.g.    "mydoora_1231214515"
+        // name is the scene object generated automatically e.g.    "mydoora_1231214515"
         // doorName_source is more simplified given by the user  e.g.  "doorToCave"
-        envir.scene.getObjectByName(nameDoorSource).doorName_source = nameDoorSource_simple;
+        envir.scene.getObjectByName(name).doorName_source = nameDoorSource_simple;
     });
 
     // On popup change
-    jQuery("#popupDoorSelect").change(function(e) {
-        var valDoorScene = jQuery("#popupDoorSelect").val();
+    popupDoorSelect.change(function(e) {
+        var valDoorScene = popupDoorSelect.val();
 
         if (!valDoorScene)
             return;
 
-        if (valDoorScene && valDoorScene != "Cancel" && valDoorScene != "Select") {
+        if (valDoorScene && valDoorScene != "Select a door") {
 
             var nameDoor_Target = valDoorScene.split("at")[0];
             var sceneName_Target = valDoorScene.split("at")[1];
 
-            envir.scene.getObjectByName(nameDoorSource).doorName_target = nameDoor_Target.trim();
-            envir.scene.getObjectByName(nameDoorSource).sceneName_target = sceneName_Target.trim();
+            envir.scene.getObjectByName(name).doorName_target = nameDoor_Target.trim();
+            envir.scene.getObjectByName(name).sceneName_target = sceneName_Target.trim();
         }
-        jQuery("#popUpObjectPropertiesDiv").hide();
-        clearAndUnbindDoorProperties();
     });
 }
 
@@ -472,4 +588,17 @@ function raylineVisualize(){
         envir.scene.remove(envir.scene.getObjectByName('rayLine'));
     }, 500);
 
+}
+
+
+// Create options for the door destination select dom element
+function createOption(container, txt, val, sel, dis, backgr){
+    var option = document.createElement("option");
+    option.text = txt;
+    option.value = val;
+    option.selected = sel;
+    option.disabled = dis;
+    option.style.background = backgr;
+    option.style.fontSize = "9pt";
+    container.add(option);
 }

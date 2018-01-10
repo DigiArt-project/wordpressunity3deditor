@@ -197,6 +197,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_it_scale_x = $value['scale'][0];
                 $poi_it_scale_y = $value['scale'][1];
                 $poi_it_scale_z = $value['scale'][2];
+                $poi_it_isreward = $value['isreward'];
                 $poi_it_title = html_entity_decode(get_the_title($poi_img_id));
 
                 $post_featuredimage_url = get_the_post_thumbnail_url($poi_img_id, 'full'); // http:// ..... /image.jpg
@@ -221,7 +222,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                     $poi_it_rot_x, $poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,$poi_it_scale_x,
                     $poi_it_scale_y,$poi_it_scale_z,$poi_it_title,
                     $poi_it_sprite_name,
-                    $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid);
+                    $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid, $poi_it_isreward);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_img_finalyaml;
             }
@@ -249,6 +250,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_v_scale_x = $value['scale'][0];
                 $poi_v_scale_y = $value['scale'][1];
                 $poi_v_scale_z = $value['scale'][2];
+                $poi_v_isreward = $value['isreward'];
                 $poi_v_title = get_the_title($poi_vid_id);
                 $poi_v_trans_fid = wpunity_create_fids($current_fid++);
                 $poi_v_obj_fid = wpunity_create_fids($current_fid++);
@@ -258,7 +260,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $poi_vid_finalyaml = wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,
                     $poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,$poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,
-                    $poi_v_trans_fid,$poi_v_obj_fid, $poi_v_obj_guid, $poi_v_v_name, $poi_v_v_url);
+                    $poi_v_trans_fid,$poi_v_obj_fid, $poi_v_obj_guid, $poi_v_v_name, $poi_v_v_url, $poi_v_isreward);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $poi_vid_finalyaml;
             }
@@ -281,6 +283,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $door_scale_x = $value['scale'][0];
                 $door_scale_y = $value['scale'][1];
                 $door_scale_z = $value['scale'][2];
+                $door_isreward = $value['isreward'];
                 $door_title = $value['doorName_source'];
 
                 $door_scene_arrival =  explode("(", $value['sceneName_target'])[1]; // After ( is the slug. Before is the name
@@ -293,7 +296,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $door_finalyaml = wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,
                     $door_rot_z,$door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,$door_title,
-                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid);
+                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid, $door_isreward);
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $door_finalyaml;
             }
@@ -316,6 +319,8 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_a_scale_x = $value['scale'][0];
                 $poi_a_scale_y = $value['scale'][1];
                 $poi_a_scale_z = $value['scale'][2];
+                $poi_a_isreward = $value['isreward'];
+                
                 $poi_a_title = get_the_title($artifact_id);
                 $poi_a_transform_fid = wpunity_create_fids($current_fid++);
                 $poi_a_obj_fid = wpunity_create_fids($current_fid++);
@@ -327,7 +332,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $artifact_finalyaml = wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$poi_a_pos_y,$poi_a_pos_z,
                     $poi_a_rot_x,$poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,
                     $poi_a_scale_x,$poi_a_scale_y,$poi_a_scale_z,
-                    $poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text);
+                    $poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text, $poi_a_isreward );
 
                 $allObjectsYAML = $allObjectsYAML . $LF . $artifact_finalyaml;
             }
@@ -439,7 +444,8 @@ function wpunity_replace_decoration_arch_unity($decorarch_yaml,$decor_fid,$decor
 
 function wpunity_replace_artifact_unity($artifact_yaml, $poi_a_fid, $poi_a_pos_x, $poi_a_pos_y, $poi_a_pos_z, $poi_a_rot_x,
                                         $poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,$poi_a_scale_x,$poi_a_scale_y,
-                                        $poi_a_scale_z,$poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text){
+                                        $poi_a_scale_z,$poi_a_title,$poi_a_transform_fid,$poi_a_obj_fid,$poi_a_obj_guid, $poi_a_text,
+                                        $poi_a_isreward){
 
     $file_content_return = str_replace("___[poi_a_fid]___",$poi_a_fid,$artifact_yaml);
     $file_content_return = str_replace("___[poi_a_pos_x]___",$poi_a_pos_x,$file_content_return);
@@ -457,6 +463,7 @@ function wpunity_replace_artifact_unity($artifact_yaml, $poi_a_fid, $poi_a_pos_x
     $file_content_return = str_replace("___[poi_a_obj_fid]___",$poi_a_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_obj_guid]___",$poi_a_obj_guid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_text]___", $poi_a_text , $file_content_return);
+    $file_content_return = str_replace("___[poi_a_isreward]___", $poi_a_isreward , $file_content_return);
 
     return $file_content_return;
 }
@@ -464,7 +471,7 @@ function wpunity_replace_artifact_unity($artifact_yaml, $poi_a_fid, $poi_a_pos_x
 function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y,$door_pos_z,$door_rot_x,$door_rot_y,$door_rot_z,
                                     $door_rot_w,$door_scale_x,$door_scale_y,$door_scale_z,
                                     $door_title,
-                                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid){
+                                    $door_scene_arrival,$door_door_arrival,$door_transform_fid,$door_obj_fid,$door_guid, $door_isreward){
 
     $file_content_return = str_replace("___[door_fid]___",$door_fid,$door_yaml);
     $file_content_return = str_replace("___[door_pos_x]___",$door_pos_x,$file_content_return);
@@ -480,6 +487,9 @@ function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y
     $file_content_return = str_replace("___[door_title]___", $door_title, $file_content_return);
     $file_content_return = str_replace("___[door_scene_arrival]___",$door_scene_arrival,$file_content_return);
     $file_content_return = str_replace("___[door_door_arrival]___",$door_door_arrival,$file_content_return);
+    
+    $file_content_return = str_replace("___[door_isreward]___", $door_isreward, $file_content_return);
+    
     $file_content_return = str_replace("___[door_transform_fid]___",$door_transform_fid,$file_content_return);
     $file_content_return = str_replace("___[door_obj_fid]___",$door_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[door_guid]___",$door_guid,$file_content_return);
@@ -489,7 +499,7 @@ function wpunity_replace_door_unity($door_yaml,$door_fid,$door_pos_x,$door_pos_y
 
 function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$poi_v_pos_y,$poi_v_pos_z,$poi_v_rot_x,$poi_v_rot_y,$poi_v_rot_z,
                                        $poi_v_rot_w,$poi_v_scale_x,$poi_v_scale_y,$poi_v_scale_z,$poi_v_title,$poi_v_trans_fid,
-                                       $poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name, $poi_v_v_url){
+                                       $poi_v_obj_fid,$poi_v_obj_guid,$poi_v_v_name, $poi_v_v_url, $poi_v_isreward){
 
     $file_content_return = str_replace("___[poi_v_fid]___",$poi_v_fid,$poi_vid_yaml);
     $file_content_return = str_replace("___[poi_v_pos_x]___",$poi_v_pos_x,$file_content_return);
@@ -508,6 +518,8 @@ function wpunity_replace_poi_vid_unity($poi_vid_yaml,$poi_v_fid,$poi_v_pos_x,$po
     $file_content_return = str_replace("___[poi_v_obj_guid]___",$poi_v_obj_guid,$file_content_return);
     $file_content_return = str_replace("___[poi_v_v_name]___",$poi_v_v_name,$file_content_return);
     $file_content_return = str_replace("___[poi_v_v_url]___",$poi_v_v_url,$file_content_return);
+    
+    $file_content_return = str_replace("___[poi_v_isreward]___", $poi_v_isreward, $file_content_return);
 
     return $file_content_return;
 }
@@ -516,7 +528,7 @@ function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,
                                        $poi_it_pos_x,$poi_it_pos_y,$poi_it_pos_z,$poi_it_rot_x,$poi_it_rot_y,$poi_it_rot_z,$poi_it_rot_w,
                                        $poi_it_scale_x,$poi_it_scale_y,$poi_it_scale_z,
                                        $poi_it_title,$poi_it_sprite_name,
-                                       $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid){
+                                       $poi_it_text,$poi_it_connector_fid,$poi_it_obj_fid,$poi_it_obj_guid, $poi_it_isreward){
 
     $file_content_return = str_replace("___[poi_it_fid]___",$poi_it_fid,$poi_img_yaml);
     $file_content_return = str_replace("___[poi_it_pos_x]___",$poi_it_pos_x,$file_content_return);
@@ -532,6 +544,9 @@ function wpunity_replace_poi_img_unity($poi_img_yaml,$poi_it_fid,
     $file_content_return = str_replace("___[poi_it_title]___",$poi_it_title,$file_content_return);
     $file_content_return = str_replace("___[poi_it_sprite_name]___",$poi_it_sprite_name,$file_content_return);
     $file_content_return = str_replace("___[poi_it_text]___",$poi_it_text,$file_content_return);
+    
+    $file_content_return = str_replace("___[poi_it_isreward]___",$poi_it_isreward,$file_content_return);
+    
     $file_content_return = str_replace("___[poi_it_connector_fid]___",$poi_it_connector_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_it_obj_fid]___",$poi_it_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_it_obj_guid]___",$poi_it_obj_guid,$file_content_return);
