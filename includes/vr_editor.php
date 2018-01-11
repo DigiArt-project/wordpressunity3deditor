@@ -311,7 +311,8 @@ echo '</script>';
 
 
     <!-- Interface for Changing the door properties -->
-    <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 240px;">
+    <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
+         style="min-width: 240px; max-width:300px">
 
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
@@ -328,18 +329,18 @@ echo '</script>';
             
             
             <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
-               style="vertical-align: text-bottom; ">directions</i>
+               style="vertical-align: text-bottom;">directions</i>
             <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
-                    class="mdc-select--subheading1" style="min-width: 90%; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
+                    class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
             </select>
             
             
         
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+        
             <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
-            <label for="door_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
-        </div>
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
+            <label for="door_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
+        
         
     </div>
 
@@ -381,11 +382,12 @@ echo '</script>';
         </a>
 
         <!-- The checkbox-->
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
             <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
-            <label for="artifact_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
-        </div>
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                   style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+            <label for="artifact_reward_checkbox" class="mdc-textfield__label"
+                   style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+
         
     </div>
 
@@ -400,11 +402,11 @@ echo '</script>';
         </a>
 
         <!-- The checkbox-->
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
-            <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
-            <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
-        </div>
+        <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+        <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"
+               style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+
 
     </div>
 
@@ -419,11 +421,13 @@ echo '</script>';
         </a>
 
         <!-- The checkbox-->
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="min-width: 200px">
+        
             <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light">
-            <label for="poi_video_reward_checkbox" class="mdc-textfield__label">Is a reward item?</label>
-        </div>
+                   class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                   style="margin-left: 29px; width: 150px !important; float: right;">
+            <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
+                Is a reward item?</label>
+    
 
     </div>
 
@@ -738,13 +742,12 @@ $formRes->init($sceneToLoad);
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
+   
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
-    
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-    
     
     
     
