@@ -339,13 +339,24 @@ $wpunity_databox1 = array(
 			'id' => $wpunity_prefix . 'next_scene',
 			'type' => 'text',
 			'std' => ''
-		),array(
+		
+        
+        ),array(
 			'name' => 'Video',
 			'desc' => 'Video',
 			'id' => $wpunity_prefix . 'video',
 			'type' => 'text',
 			'std' => ''
-		),array(
+        
+        
+        ),array(
+            'name' => 'isreward',
+            'desc' => 'isreward',
+            'id' => $wpunity_prefix . 'isreward',
+            'type' => 'text',
+            'std' => '0'
+
+        ),array(
 			'name' => 'Image 1',
 			'desc' => 'Image 1',
 			'id' => $wpunity_prefix . 'image1',

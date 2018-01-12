@@ -327,7 +327,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $poi_a_obj_guid = wpunity_create_guids('obj', $artifact_obj);
 
                 $content_post = get_post($artifact_id);
-                $poi_a_text = $content_post->post_content;
+                $poi_a_text =   html_entity_decode(  $content_post->post_content ) ;
 
                 $artifact_finalyaml = wpunity_replace_artifact_unity($artifact_yaml,$poi_a_fid,$poi_a_pos_x,$poi_a_pos_y,$poi_a_pos_z,
                     $poi_a_rot_x,$poi_a_rot_y,$poi_a_rot_z,$poi_a_rot_w,
@@ -462,7 +462,7 @@ function wpunity_replace_artifact_unity($artifact_yaml, $poi_a_fid, $poi_a_pos_x
     $file_content_return = str_replace("___[poi_a_transform_fid]___",$poi_a_transform_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_obj_fid]___",$poi_a_obj_fid,$file_content_return);
     $file_content_return = str_replace("___[poi_a_obj_guid]___",$poi_a_obj_guid,$file_content_return);
-    $file_content_return = str_replace("___[poi_a_text]___", $poi_a_text , $file_content_return);
+    $file_content_return = str_replace("___[poi_a_text]___", "'" . $poi_a_text . "'", $file_content_return);
     $file_content_return = str_replace("___[poi_a_isreward]___", $poi_a_isreward , $file_content_return);
 
     return $file_content_return;

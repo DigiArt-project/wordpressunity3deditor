@@ -362,7 +362,14 @@ if($create_new == 0) {
                         <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 860px;"
                                   name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
+
+                        
+                        
                     </div>
+
+
+                    <button class="mdc-button--primary">Fetch description from Wikipedia</button>
+                    <button class="mdc-button--primary" style="margin-top:30px" >Fetch description from Europeana</button>
 
                     <hr class="WhiteSpaceSeparator">
 
