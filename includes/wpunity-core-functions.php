@@ -194,22 +194,22 @@ function wpunity_reset_allyamls(){
 
 	//Archaeology ASSETS TERMS
 	$ArchArtifactTerm = get_term_by( 'slug', 'artifact', 'wpunity_asset3d_cat');
-	update_term_meta($ArchArtifactTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_artifact_get(), true);
+	update_term_meta($ArchArtifactTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_artifact_get(), false);
 
 	$ArchDecoTerm = get_term_by( 'slug', 'decoration_arch', 'wpunity_asset3d_cat');
-	update_term_meta($ArchDecoTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_decoration_arch_get(), true);
+	update_term_meta($ArchDecoTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_decoration_arch_get(), false);
 
 	$ArchDoorTerm = get_term_by( 'slug', 'door', 'wpunity_asset3d_cat');
-	update_term_meta($ArchDoorTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_door_get(), true);
+	update_term_meta($ArchDoorTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_door_get(), false);
 
 	$ArchPoisTTerm = get_term_by( 'slug', 'pois_imagetext', 'wpunity_asset3d_cat');
-	update_term_meta($ArchPoisTTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_get(), true);
+	update_term_meta($ArchPoisTTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_get(), false);
 
 	$ArchPoisVTerm = get_term_by( 'slug', 'pois_video', 'wpunity_asset3d_cat');
-	update_term_meta($ArchPoisVTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_video_get(), true);
+	update_term_meta($ArchPoisVTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_video_get(), false);
 
 	$ArchSiteTerm = get_term_by( 'slug', 'site', 'wpunity_asset3d_cat');
-	update_term_meta($ArchSiteTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_site_get(), true);
+	update_term_meta($ArchSiteTerm->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_site_get(), false);
 
 	//$ChemGameTerm = get_term_by( 'slug', 'chemistry_games', 'wpunity_game_type');
 	//$EnergyGameTerm = get_term_by( 'slug', 'energy_games', 'wpunity_game_type');
