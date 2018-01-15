@@ -1,4 +1,99 @@
 
+/**
+ * AJAX: FETCH CONTENT FOR DESCRIPTION
+ * @param externalSource  either "Wikipedia" or "Europeana"
+ */
+function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, description_dom ){
+
+
+    console.log("AAA", externalSource, title, description_dom);
+
+    //document.getElementById('wpunity_fetchDescription_bt').innerHTML = "Fetching";
+    //externalSource = document.getElementById("fetch_source").options[document.getElementById("fetch_source").selectedIndex].value;
+    //lang document.getElementById("fetch_lang").options[document.getElementById("fetch_lang").selectedIndex].value;
+
+    var title =  title.replace(" ","%20"); // document.getElementById("wpunity_titles_search").value.replace(" ","%20");
+
+
+    var lang = "en";
+    var fulltext = ''; // document.getElementById("wpunity_fulltext_chkbox").checked?'':'exintro=&';
+
+    var reqCompile = jQuery.ajax({
+        url : my_ajax_object_fetch_content.ajax_url,
+        type : 'POST',
+        data : {'action': 'wpunity_fetch_description_action',
+            'lang':           lang,
+            'externalSource': externalSource,
+            'titles':         title,
+            'fulltext':       fulltext},
+
+        success : function(response) {
+
+            //console.log(response);
+
+            var json_content = jQuery.parseJSON(response);
+
+            if (json_content) {
+
+                if (externalSource === 'Wikipedia') {
+
+                    if (json_content.query) {
+                        for (key in json_content.query.pages) {
+                            if (json_content.query.pages[key].extract) {
+
+                                description_dom['multi-line'].value = json_content.query.pages[key].extract.trim();
+
+                                description_dom[1].style.display = 'none';
+                            }
+                                //tinymce.activeEditor.setContent(json_content.query.pages[key].extract.trim());
+                        }
+                    } else {
+
+                        console.log("Nothing found 151");
+                        alert("Nothing found in Wikipedia");
+
+                        //tinymce.activeEditor.setContent(response);
+                    }
+                } else if (externalSource === 'Europeana') {
+
+                    if (json_content.items[0].title !== ''){
+
+                        description_dom['multi-line'].value += JSON.stringify(json_content.items[0].title[0]);
+
+                        if ( json_content.items[0].dcDescription !== undefined)
+                            description_dom['multi-line'].value += " : " + JSON.stringify(json_content.items[0].dcDescription[0]);
+
+                        description_dom[1].style.display = 'none';
+                    } else {
+
+                        console.log("Nothing found 152");
+                        alert("Nothing found in Europeana.");
+
+                    }
+
+
+                    //tinymce.activeEditor.setContent(JSON.stringify(json_content.items));
+
+                }
+            }
+            //document.getElementById('wpunity_fetchDescription_bt').innerHTML = "Fetch";
+
+        },
+        error : function(xhr, ajaxOptions, thrownError){
+            console.log("ajaxOptions" + ajaxOptions);
+            console.log("ERROR"  + thrownError);
+            alert('Error 21: API problems. Fetch again? ' + thrownError);
+
+            //document.getElementById('wpunity_fetchDescription_bt').innerHTML = 'Error 21: Fetch again?' + thrownError;
+        }
+    });
+
+
+}
+
+
+
+
 //----------------------------------------------------------------------------------
 //  AJAX: FETCH CONTENT FOR DESCRIPTION
 //----------------------------------------------------------------------------------

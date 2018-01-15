@@ -66,7 +66,8 @@ function wpunity_assets_fetch_description_box_content($post){
 
 
 
-	echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
+	echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton"
+     onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
 	?>
 
     <br /><br />

@@ -27,8 +27,26 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 	wp_enqueue_script('flot');
 	wp_enqueue_script('flot-axis-labels');
+    
+    // load script from js_libs
+    wp_enqueue_script( 'wpunity_content_interlinking_request');
+    
+    $pluginpath = dirname (plugin_dir_url( __DIR__  ));
+    
+    wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
+        $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
+    
+    wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
+        array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
+    );
+    
+    
 }
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
+
+
+
+
 
 
 // Default Values
@@ -359,7 +377,7 @@ if($create_new == 0) {
                     </p>
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 860px;"
+                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 460px;"
                                   name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
 
@@ -368,9 +386,19 @@ if($create_new == 0) {
                     </div>
 
 
-                    <button class="mdc-button--primary">Fetch description from Wikipedia</button>
-                    <button class="mdc-button--primary" style="margin-top:30px" >Fetch description from Europeana</button>
+                    <button type="button" class="mdc-button--primary"
+                            onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
+                            jQuery('#assetDescription')[0].children)">
+                        Fetch description from Wikipedia</button>
+                    
+                    <button type="button" class="mdc-button--primary"
+                            onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
+                            jQuery('#assetDescription')[0].children)"
+                            style="margin-top:30px" >Fetch description from Europeana</button>
 
+                    
+                    
+                    
                     <hr class="WhiteSpaceSeparator">
 
                     <div id="poiImgDetailsPanel" style="display: none;">
@@ -917,6 +945,8 @@ if($create_new == 0) {
 		}
 		?>
     </form>
+
+
 
     <script type="text/javascript">
         'use strict';
