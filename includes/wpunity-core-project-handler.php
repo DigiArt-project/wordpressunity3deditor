@@ -308,9 +308,7 @@ function wpunity_compile_folders_del($gameSlug) {
         foreach ($files as $file) {
             if (in_array($file->getBasename(), array('.', '..')) !== true) {
 
-
-
-                if ($file->isDir() === true && $file->getBasename() != 'Library'  ) {
+                if ($file->isDir() === true ){ //&& $file->getBasename() != 'Library'  ) {
                     rmdir($file->getPathName());
                 }
                 else if (($file->isFile() === true) || ($file->isLink() === true) && $file->getParentFolderName() != 'Library' ) {
