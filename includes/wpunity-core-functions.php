@@ -590,6 +590,7 @@ function wpunity_upload_img_vid_directory( $dir ) {
 	) + $dir;
 }
 
+
 function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
