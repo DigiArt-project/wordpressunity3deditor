@@ -131,7 +131,7 @@ get_header(); ?>
             <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
-					<?php if ( $game_type_obj->string === "Energy" ) { ?>
+					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
                         <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk Student</a>
@@ -219,7 +219,7 @@ get_header(); ?>
 
             </div>
 
-			<?php if ( $game_type_obj->string === "Energy" ) { ?>
+			<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                 <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
@@ -279,7 +279,7 @@ get_header(); ?>
         var pwd = '12345';
 
         // For the time being we have analytics only for Energy
-        if (game_type === "energy") {
+        if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
             var versionSelector = document.getElementById("analyticsVersionSelector");
@@ -292,7 +292,7 @@ get_header(); ?>
 
             loadAtRiskIframe('59478f44-5eff-4507-8a2a-646df93847f9');
 
-            ddaIframe(user_email, pwd, '59478f44-5eff-4507-8a2a-646df93847f9');
+            ddaIframe(user_email, 'pushit', '59478f44-5eff-4507-8a2a-646df93847f9');
 
             jQuery('#analyticsVersionSelector').on('change', function () {
                 analyticsVersionValue = this.value;
@@ -361,13 +361,12 @@ get_header(); ?>
                 return true;
             }
 
-            function ddaIframe(email, pwd, id) {
+            function ddaIframe(email, pwd) {
 
                 var url = "https://envisage.goedle.io/dda/strategies.htm?" +
                     "email=" + email +
                     "&pwd=" + pwd +
-                    "&app_key=" + '1' +
-                    "&exp_id=" + id;
+                    "&app_key=" + '1';
 
                 var iframe = jQuery('#ddaIframeContent');
                 if (iframe.length) {
