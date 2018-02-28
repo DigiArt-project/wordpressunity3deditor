@@ -116,6 +116,10 @@ Characteristics :
 	- Average Wind speed = 7.5 m/s
 	- Access cost = 1 $"';
 
+
+		$image_content2 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img2.png";
+		$image_content3 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img3.png";
+
 		// Create First Scene Data
 		$firstSceneData = array(
 			'post_title' => $firstSceneTitle,
@@ -168,8 +172,13 @@ Characteristics :
 			),
 		);
 
-		wp_insert_post( $secondSceneData );
-		wp_insert_post( $thirdSceneData );
+		$scene2_id = wp_insert_post( $secondSceneData );
+		$scene3_id = wp_insert_post( $thirdSceneData );
+
+		$attachment2_id = wpunity_upload_img_vid( $image_content2, $scene2_id);
+		$attachment3_id = wpunity_upload_img_vid( $image_content3, $scene3_id);
+		set_post_thumbnail( $scene2_id, $attachment2_id );
+		set_post_thumbnail( $scene3_id, $attachment3_id );
 	}else {
 		// Create First Scene Data
 		$firstSceneData = array(
@@ -230,8 +239,12 @@ Characteristics :
 	// Insert posts 1-1 into the database
 	wp_insert_post( $mainmenuSceneData );
 	wp_insert_post( $credentialsSceneData );
-	wp_insert_post( $firstSceneData );
-
+	$scene1_id = wp_insert_post( $firstSceneData );
+	if($game_category == 'energy_games'){
+		$image_content1 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img1.png";
+		$attachment1_id = wpunity_upload_img_vid( $image_content1, $scene1_id);
+		set_post_thumbnail( $scene1_id, $attachment1_id );
+	}
 }
 
 //==========================================================================================================================================
