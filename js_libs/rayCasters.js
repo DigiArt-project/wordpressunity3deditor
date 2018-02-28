@@ -134,6 +134,9 @@ function activeOverides(event, inters){
     if( objectParent.categoryName === 'Door')
         displayDoorProperties(event, name);
 
+    if( objectParent.categoryName === 'Marker')
+        displayMarkerProperties(event, name);
+
     if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook')
         displayMicroscopeTextbookProperties(event, name);
 
@@ -500,6 +503,82 @@ function displayDoorProperties(event, name){
     });
 }
 
+function displayMarkerProperties(event, name){
+
+    var popUpDoorPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
+    var doorid = jQuery("#markerid");
+    var popupDoorSelect = jQuery("#popupMarkerSelect");
+    var chbox = jQuery("#marker_reward_checkbox");
+
+    // Save the previous door values (in case of  direct mouse click on another door)
+    doorid.trigger("change");
+    popupDoorSelect.trigger("change");
+    chbox.trigger("change");
+
+
+    clearAndUnbindCheckBoxProperties("marker_reward_checkbox");
+
+    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+    // Add change listener
+    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0;});
+
+
+    clearAndUnbindMarkerProperties();
+
+    // Add doors from other scenes
+    var doorsFromOtherScenes = [];
+
+    for (var l=0; l < doorsAll.length; l++)
+        if (envir.scene.getObjectByName(name).doorName_source !== doorsAll[l].door)
+            doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene + " (" + doorsAll[l].sceneSlug + ")" );
+
+    // Add options for each intersected object
+    createOption(popupDoorSelect[0], "Select a door", "Select a door", true, true, "#fff");
+    for (var doorName of doorsFromOtherScenes )
+    createOption(popupDoorSelect[0], doorName, doorName, false, false, "#fff");
+
+
+    // Set doorid from existing values
+    if (envir.scene.getObjectByName(name).doorName_source)
+        doorid.val( envir.scene.getObjectByName(name).doorName_source );
+
+    if(envir.scene.getObjectByName(name).doorName_target)
+        popupDoorSelect.val ( envir.scene.getObjectByName(name).doorName_target + " at " +
+            envir.scene.getObjectByName(name).sceneName_target );
+
+    // Show Selection
+    popUpDoorPropertiesDiv.show();
+    popUpDoorPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    popUpDoorPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
+
+    doorid.change(function(e) {
+        var nameDoorSource_simple = jQuery("#doorid").val();
+
+        // name is the scene object generated automatically e.g.    "mydoora_1231214515"
+        // doorName_source is more simplified given by the user  e.g.  "doorToCave"
+        envir.scene.getObjectByName(name).doorName_source = nameDoorSource_simple;
+    });
+
+    // On popup change
+    popupDoorSelect.change(function(e) {
+        var valDoorScene = popupDoorSelect.val();
+
+        if (!valDoorScene)
+            return;
+
+        if (valDoorScene && valDoorScene != "Select a door") {
+
+            var nameDoor_Target = valDoorScene.split("at")[0];
+            var sceneName_Target = valDoorScene.split("at")[1];
+
+            envir.scene.getObjectByName(name).doorName_target = nameDoor_Target.trim();
+            envir.scene.getObjectByName(name).sceneName_target = sceneName_Target.trim();
+        }
+    });
+}
+
 /**
  * Clear Door properties
  */
@@ -515,6 +594,20 @@ function clearAndUnbindDoorProperties() {
     jQuery("#doorid").val( null ).unbind('change');
 
     jQuery("#popupDoorSelect").unbind('change');
+}
+
+function clearAndUnbindMarkerProperties() {
+    // Clear past options
+
+    // door target
+    var popupMarkerSelect = document.getElementById("popupMarkerSelect");
+    for (var i = popupMarkerSelect.options.length; i-->0;)
+        popupMarkerSelect.options[i] = null;
+
+    // door source title & remove listeners
+    jQuery("#markerid").val( null ).unbind('change');
+
+    jQuery("#popupMarkerSelect").unbind('change');
 }
 
 
