@@ -91,6 +91,27 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		),
 	);
 
+	wp_insert_post( $mainmenuSceneData );
+
+	// Create Credentials Scene Data
+	$credentialsSceneData = array(
+		'post_title'    => $credentialsSceneTitle,
+		'post_content' => 'Credits of the Game',
+		'post_name' => $credentialsSceneSlug,
+		'post_type' => 'wpunity_scene',
+		'post_status'   => 'publish',
+		'tax_input'    => array(
+			'wpunity_scene_pgame'     => array( $allScenePGameID ),
+			'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
+		),'meta_input'   => array(
+			'wpunity_scene_default' => 1,
+			'wpunity_scene_metatype' => 'credits',
+		),
+	);
+
+	wp_insert_post( $credentialsSceneData );
+
+
 	if($game_category == 'energy_games'){
 		$firstSceneTitle = 'Mountains'; //Title for First Menu
 		$firstSceneSlug = $gameSlug . '-mountains'; //Slug for First Menu
@@ -108,13 +129,13 @@ Here you have 5 places to explore.Characteristics :
 Here you have 5 places to explore.
 Characteristics :
 	- Average Wind speed = 8.5 m/s
-	- Access cost = 2 $"';
+	- Access cost = 2 $';
 
 		$content3 = 'Area-3 is near seashore. It has easy access due to port. Its windclass is Low (windspeeds 7.5 m/s).
 Here you have 8 places to explore.
 Characteristics :
 	- Average Wind speed = 7.5 m/s
-	- Access cost = 1 $"';
+	- Access cost = 1 $';
 
 
 		$image_content2 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img2.png";
@@ -199,21 +220,7 @@ Characteristics :
 		);
 	}
 
-	// Create Credentials Scene Data
-	$credentialsSceneData = array(
-		'post_title'    => $credentialsSceneTitle,
-		'post_content' => 'Credits of the Game',
-		'post_name' => $credentialsSceneSlug,
-		'post_type' => 'wpunity_scene',
-		'post_status'   => 'publish',
-		'tax_input'    => array(
-			'wpunity_scene_pgame'     => array( $allScenePGameID ),
-			'wpunity_scene_yaml'     => array( $credentialsSceneYAMLID ),
-		),'meta_input'   => array(
-			'wpunity_scene_default' => 1,
-			'wpunity_scene_metatype' => 'credits',
-		),
-	);
+
 
 	if($game_category == 'chemistry_games'){
 		// Create Exam Scene Data
@@ -237,8 +244,7 @@ Characteristics :
 	}
 
 	// Insert posts 1-1 into the database
-	wp_insert_post( $mainmenuSceneData );
-	wp_insert_post( $credentialsSceneData );
+
 	$scene1_id = wp_insert_post( $firstSceneData );
 	if($game_category == 'energy_games'){
 		$image_content1 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img1.png";

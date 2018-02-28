@@ -155,8 +155,8 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             $current_user = wp_get_current_user();
             $user_id = $current_user->ID;
             $username = $current_user->user_login;
-            wpunity_registrationhook_createAssets($user_id,$username,$gameID);
-
+            //wpunity_registrationhook_createAssets($user_id,$username,$gameID);
+            //MALTA remove comments
         }
     }
 }
