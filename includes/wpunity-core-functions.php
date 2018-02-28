@@ -91,22 +91,87 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		),
 	);
 
-	// Create First Scene Data
-	$firstSceneData = array(
-		'post_title'    => $firstSceneTitle,
-		'post_content' => 'Auto-created scene',
-		'post_name' => $firstSceneSlug,
-		'post_type' => 'wpunity_scene',
-		'post_status'   => 'publish',
-		'tax_input'    => array(
-			'wpunity_scene_pgame'     => array( $allScenePGameID ),
-			'wpunity_scene_yaml'     => array( $firstSceneYAMLID ),
-		),'meta_input'   => array(
-			'wpunity_scene_default' => 1,
-			'wpunity_scene_metatype' => 'scene',
-			'wpunity_scene_json_input' => $default_json,
-		),
-	);
+	if($game_category == 'energy_games'){
+		$firstSceneTitle = 'Mountains'; //Title for First Menu
+		$firstSceneSlug = $gameSlug . '-mountains'; //Slug for First Menu
+		$secondSceneTitle = 'Plain'; //Title for First Menu
+		$secondSceneSlug = $gameSlug . '-plains'; //Slug for First Menu
+		$thirdSceneTitle = 'Coastline'; //Title for First Menu
+		$thirdSceneSlug = $gameSlug . '-coastline'; //Slug for First Menu
+
+		// Create First Scene Data
+		$firstSceneData = array(
+			'post_title' => $firstSceneTitle,
+			'post_content' => 'Region-1',
+			'post_name' => $firstSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status' => 'publish',
+			'tax_input' => array(
+				'wpunity_scene_pgame' => array($allScenePGameID),
+				'wpunity_scene_yaml' => array($firstSceneYAMLID),
+			), 'meta_input' => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+				'wpunity_isRegional' => 1,
+			),
+		);
+
+		$secondSceneData = array(
+			'post_title' => $secondSceneTitle,
+			'post_content' => 'Region-2',
+			'post_name' => $secondSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status' => 'publish',
+			'tax_input' => array(
+				'wpunity_scene_pgame' => array($allScenePGameID),
+				'wpunity_scene_yaml' => array($firstSceneYAMLID),
+			), 'meta_input' => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+				'wpunity_isRegional' => 1,
+			),
+		);
+
+		$thirdSceneData = array(
+			'post_title' => $thirdSceneTitle,
+			'post_content' => 'Region-3',
+			'post_name' => $thirdSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status' => 'publish',
+			'tax_input' => array(
+				'wpunity_scene_pgame' => array($allScenePGameID),
+				'wpunity_scene_yaml' => array($firstSceneYAMLID),
+			), 'meta_input' => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+				'wpunity_isRegional' => 1,
+			),
+		);
+
+		wp_insert_post( $secondSceneData );
+		wp_insert_post( $thirdSceneData );
+	}else {
+		// Create First Scene Data
+		$firstSceneData = array(
+			'post_title' => $firstSceneTitle,
+			'post_content' => 'Auto-created scene',
+			'post_name' => $firstSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status' => 'publish',
+			'tax_input' => array(
+				'wpunity_scene_pgame' => array($allScenePGameID),
+				'wpunity_scene_yaml' => array($firstSceneYAMLID),
+			), 'meta_input' => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'scene',
+				'wpunity_scene_json_input' => $default_json,
+				'wpunity_isRegional' => 0,
+			),
+		);
+	}
 
 	// Create Credentials Scene Data
 	$credentialsSceneData = array(
