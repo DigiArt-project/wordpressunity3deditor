@@ -94,15 +94,32 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 	if($game_category == 'energy_games'){
 		$firstSceneTitle = 'Mountains'; //Title for First Menu
 		$firstSceneSlug = $gameSlug . '-mountains'; //Slug for First Menu
-		$secondSceneTitle = 'Plain'; //Title for First Menu
-		$secondSceneSlug = $gameSlug . '-plains'; //Slug for First Menu
-		$thirdSceneTitle = 'Coastline'; //Title for First Menu
-		$thirdSceneSlug = $gameSlug . '-coastline'; //Slug for First Menu
+		$secondSceneTitle = 'Fields'; //Title for First Menu
+		$secondSceneSlug = $gameSlug . '-fields'; //Slug for First Menu
+		$thirdSceneTitle = 'Seashore'; //Title for First Menu
+		$thirdSceneSlug = $gameSlug . '-seashore'; //Slug for First Menu
+
+		$content1 = 'Area-1 is near mountains.It has difficult access. Its windclass is High (10 m/s).
+Here you have 5 places to explore.Characteristics :
+	- Average Wind speed = 10 m/s
+	- Access cost = 3 $';
+
+		$content2 = 'Area-2 is near plain land. It has not difficult access. Its windclass is Medium (windspeeds 8.5 m/s).
+Here you have 5 places to explore.
+Characteristics :
+	- Average Wind speed = 8.5 m/s
+	- Access cost = 2 $"';
+
+		$content3 = 'Area-3 is near seashore. It has easy access due to port. Its windclass is Low (windspeeds 7.5 m/s).
+Here you have 8 places to explore.
+Characteristics :
+	- Average Wind speed = 7.5 m/s
+	- Access cost = 1 $"';
 
 		// Create First Scene Data
 		$firstSceneData = array(
 			'post_title' => $firstSceneTitle,
-			'post_content' => 'Region-1',
+			'post_content' => $content1,
 			'post_name' => $firstSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status' => 'publish',
@@ -119,7 +136,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
 		$secondSceneData = array(
 			'post_title' => $secondSceneTitle,
-			'post_content' => 'Region-2',
+			'post_content' => $content2,
 			'post_name' => $secondSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status' => 'publish',
@@ -136,7 +153,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
 		$thirdSceneData = array(
 			'post_title' => $thirdSceneTitle,
-			'post_content' => 'Region-3',
+			'post_content' => $content3,
 			'post_name' => $thirdSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status' => 'publish',
