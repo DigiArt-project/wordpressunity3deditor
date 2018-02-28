@@ -116,6 +116,7 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     $scene_title = $scene_post->post_title;
     $scene_desc = $scene_post->post_content;
 
+
     $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
     if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid =
@@ -129,12 +130,19 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     fwrite($create_file7,$file_content7b);
     fclose($create_file7);
 
-    if($scenes_counter<7) {
-        wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
-            $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
-        $scenes_counter = $scenes_counter + 1;
+//    if($scenes_counter<7) {
+//        wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
+//            $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
+//        $scenes_counter = $scenes_counter + 1;
+//    }
+    $scene_region = get_post_meta($scene_id,'wpunity_isRegional', true);
+    if($scene_region == '1') {
+        if ($scenes_counter < 7) {
+            wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc,
+                $scene_type_ID, $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
+            $scenes_counter = $scenes_counter + 1;
+        }
     }
-
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
