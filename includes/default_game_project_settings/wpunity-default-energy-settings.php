@@ -56,6 +56,18 @@ function wpunity_assets_taxcategory_energy_fill(){
   update_term_meta($inserted_term9->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_producer_get(), true);
   update_term_meta($inserted_term9->term_id, 'wpunity_assetcat_gamecat', 2 , true);
 
+  wp_insert_term(
+      'Marker', // the term
+      'wpunity_asset3d_cat', // the taxonomy
+      array(
+          'description'=> 'Markers are 3D model where user clicks and thus going from one Scene to another Scene.',
+          'slug' => 'marker',
+      )
+  );
+  $inserted_term10 = get_term_by('slug', 'marker', 'wpunity_asset3d_cat');
+  update_term_meta($inserted_term10->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_marker_get(), true);
+  update_term_meta($inserted_term10->term_id, 'wpunity_assetcat_gamecat', 2 , true);
+
 }
 
 /***************************************************************************************************************/

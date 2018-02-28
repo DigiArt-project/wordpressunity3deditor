@@ -627,6 +627,8 @@ Prefab:
   m_IsPrefabParent: 0
     ');
 
+$ini_asset_marker = array('');
+
 function wpunity_default_value_terrain_get(){
     global $ini_asset_terrain;
     return $ini_asset_terrain[0];
@@ -645,6 +647,11 @@ function wpunity_default_value_producer_get(){
 function wpunity_default_value_decoration_energy_get(){
     global $ini_asset_staticDec;
     return $ini_asset_staticDec[0];
+}
+
+function wpunity_default_value_marker_get(){
+  global $ini_asset_marker;
+  return $ini_asset_marker[0];
 }
 
 
