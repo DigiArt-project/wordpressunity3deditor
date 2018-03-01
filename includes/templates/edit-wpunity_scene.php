@@ -180,6 +180,7 @@ get_header(); ?>
 								$projectGameSlug = $parentGameSlug;
 
 								$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
+                                $scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
 
 								$scenefolder = $sceneTitle;
 								$gamefolder = $parentGameSlug;

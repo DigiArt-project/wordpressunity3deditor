@@ -505,14 +505,14 @@ function displayDoorProperties(event, name){
 
 function displayMarkerProperties(event, name){
 
-    var popUpDoorPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
-    var doorid = jQuery("#markerid");
-    var popupDoorSelect = jQuery("#popupMarkerSelect");
+    var popUpMarkerPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
+    var markerid = jQuery("#markerid");
+    var popupMarkerSelect = jQuery("#popupMarkerSelect");
     var chbox = jQuery("#marker_reward_checkbox");
 
     // Save the previous door values (in case of  direct mouse click on another door)
-    doorid.trigger("change");
-    popupDoorSelect.trigger("change");
+    markerid.trigger("change");
+    popupMarkerSelect.trigger("change");
     chbox.trigger("change");
 
 
@@ -526,35 +526,35 @@ function displayMarkerProperties(event, name){
     clearAndUnbindMarkerProperties();
 
     // Add doors from other scenes
-    var doorsFromOtherScenes = [];
+    var markersFromOtherScenes = [];
 
-    for (var l=0; l < doorsAll.length; l++)
-        if (envir.scene.getObjectByName(name).doorName_source !== doorsAll[l].door)
-            doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene + " (" + doorsAll[l].sceneSlug + ")" );
+    for (var l=0; l < scenesMarkerAll.length; l++)
+        if (envir.scene.getObjectByName(name).doorName_source !== scenesMarkerAll[l].door)
+            markersFromOtherScenes.push ( scenesMarkerAll[l].door + " at " + scenesMarkerAll[l].scene + " (" + scenesMarkerAll[l].sceneSlug + ")" );
 
     // Add options for each intersected object
-    createOption(popupDoorSelect[0], "Select a door", "Select a door", true, true, "#fff");
-    for (var doorName of doorsFromOtherScenes )
-    createOption(popupDoorSelect[0], doorName, doorName, false, false, "#fff");
+    createOption(popupMarkerSelect[0], "Select a scene", "Select a scene", true, true, "#fff");
+    for (var doorName of markersFromOtherScenes )
+    createOption(popupMarkerSelect[0], doorName, doorName, false, false, "#fff");
 
 
-    // Set doorid from existing values
+    // Set markerid from existing values
     if (envir.scene.getObjectByName(name).doorName_source)
-        doorid.val( envir.scene.getObjectByName(name).doorName_source );
+        markerid.val( envir.scene.getObjectByName(name).doorName_source );
 
-    if(envir.scene.getObjectByName(name).doorName_target)
-        popupDoorSelect.val ( envir.scene.getObjectByName(name).doorName_target + " at " +
+    if(envir.scene.getObjectByName(name).sceneName_target)
+        popupMarkerSelect.val ( envir.scene.getObjectByName(name).sceneName_target + " at " +
             envir.scene.getObjectByName(name).sceneName_target );
 
     // Show Selection
-    popUpDoorPropertiesDiv.show();
-    popUpDoorPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    popUpDoorPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+    popUpMarkerPropertiesDiv.show();
+    popUpMarkerPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    popUpMarkerPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
     mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
-    doorid.change(function(e) {
-        var nameDoorSource_simple = jQuery("#doorid").val();
+    markerid.change(function(e) {
+        var nameDoorSource_simple = jQuery("#markerid").val();
 
         // name is the scene object generated automatically e.g.    "mydoora_1231214515"
         // doorName_source is more simplified given by the user  e.g.  "doorToCave"
@@ -562,8 +562,8 @@ function displayMarkerProperties(event, name){
     });
 
     // On popup change
-    popupDoorSelect.change(function(e) {
-        var valDoorScene = popupDoorSelect.val();
+    popupMarkerSelect.change(function(e) {
+        var valDoorScene = popupMarkerSelect.val();
 
         if (!valDoorScene)
             return;
