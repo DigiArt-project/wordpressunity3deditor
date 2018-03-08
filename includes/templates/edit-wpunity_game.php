@@ -76,8 +76,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
 	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
 
-    $thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
-    if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');}
+	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
+	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');}
     elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');}
     elseif($thegameType[0]->slug == 'chemistry_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
 
@@ -110,7 +110,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			$allScenePGameID,
 		),
 		'wpunity_scene_yaml' => array(
-            $newscene_yaml_tax->term_id,
+			$newscene_yaml_tax->term_id,
 		)
 	);
 
@@ -118,7 +118,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'wpunity_scene_default' => 0,
 		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
-        'wpunity_isRegional' => 0,
+		'wpunity_isRegional' => 0,
 	);
 
 	$scene_information = array(
@@ -171,6 +171,57 @@ get_header();
     <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">GIO Keys</h2>
+    <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Change keys</a>
+
+
+    <div class="EditPageAccordionPanel">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+
+                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO app_key</h3>
+
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                        <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                        <label for="app-key" class="mdc-textfield__label">Insert a valid app_key</label>
+                        <div class="mdc-textfield__bottom-line"></div>
+                    </div>
+
+                    <button class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
+                        SAVE
+                    </button>
+                </div>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
+
+                    <a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                        GENERATE NEW
+                    </a>
+                    <div class="mdc-textfield mdc-textfield--disabled mdc-text" style="max-width: 70%; width: 100%;" data-mdc-auto-init="MDCTextfield">
+                        <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                        <label for="exp-id" class="mdc-textfield__label"></label>
+                        <div class="mdc-textfield__bottom-line"></div>
+                    </div>
+
+                    <br>
+                    <button class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
+                        SAVE
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
     <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Add New Scene</a>
 
@@ -183,7 +234,7 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input"
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
                             <div class="mdc-textfield__bottom-line"></div>
@@ -281,7 +332,7 @@ if ( $custom_query->have_posts() ) :?>
 
 							//create permalink depending the scene yaml category
 							$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-                            if($scene_type == 'sceneExam' ){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+							if($scene_type == 'sceneExam' ){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 							$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
 							?>
                             <a href="<?php echo $edit_page_link; ?>">
@@ -301,7 +352,7 @@ if ( $custom_query->have_posts() ) :?>
                         <section class="mdc-card__primary">
                             <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
                                 style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-								<a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
+                                <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
                             </h1>
                             <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
                                 &#8203;<?php echo $scene_desc; ?>
@@ -533,6 +584,13 @@ $wp_query = $temp_query;
             }
         }
 
+        jQuery("#guid-generator-btn").click(function (e) {
+
+            document.getElementById('exp-id').value = guid();
+
+        });
+
+
 
 
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
@@ -573,6 +631,17 @@ $wp_query = $temp_query;
 
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
+        }
+
+        function guid() {
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }
+
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
         }
 
     </script>
