@@ -14,15 +14,17 @@ $project_id    = sanitize_text_field( $project_id );
 $game_post     = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
 
+$userid = get_current_user_id();
+$user_data = get_userdata( $userid );
+$user_email = $user_data->user_email;
+
+
 $scene_post = get_post($scene_id);
 $sceneTitle = $scene_post->post_name;
 
 //$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 //$asset_post = get_post($asset_inserted_id);
 //if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
-
-
-
 
 
 $editgamePage = wpunity_getEditpage('game');
@@ -76,6 +78,10 @@ get_header(); ?>
         .panel.active {
             display: block;
         }
+
+        .mdc-tab {
+            min-width: 0;
+        }
     </style>
 
     <!-- START PAGE -->
@@ -120,10 +126,19 @@ get_header(); ?>
                 </div>
 
             </div>
+
+            <!--Set tab buttons-->
             <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
-                    <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" >Analytics</a>
+					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
+
+                        <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
+                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk Student</a>
+                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">DDA</a>
+
+					<?php } ?>
+
                     <span class="mdc-tab-bar__indicator"></span>
                 </nav>
             </div>
@@ -204,41 +219,54 @@ get_header(); ?>
                 <input id="wpunity_scene_sshot" type="hidden" value="">
 
             </div>
-            <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
-                <?php if ( $game_type_obj->string === "Energy" ) {
+			<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
-                    echo '<div class="mdc-layout-grid">
-
+                <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
 
-                            <div class="mdc-layout-grid__inner CenterContents">;
-                                <div class="mdc-layout-grid__cell--span-6">
-                                    <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
-                                        <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
-                                        <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
-                                    </select>
-                                </div>
-                                <div class="mdc-layout-grid__cell--span-6">
-                                    <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
-                                        <option value="Greece" selected>Greece</option>
-                                        <option value="England">England</option>
-                                        <option value="Italy">Italy</option>
-                                    </select>
-                                </div>;
+
+                    <div class="mdc-layout-grid">
+
+                        <div class="mdc-layout-grid__inner CenterContents">
+                            <div class="mdc-layout-grid__cell--span-6">
+                                <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
+                                    <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
+                                    <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
+                                </select>
                             </div>
-                        
-
-
+                            <div class="mdc-layout-grid__cell--span-6">
+                                <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
+                                    <option value="Greece" selected>Greece</option>
+                                    <option value="England">England</option>
+                                    <option value="Italy">Italy</option>
+                                </select>
+                            </div>
                         </div>
+                    </div>
 
-                <div style="min-height: 1240px;">
-                    <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-                </div>';
+                    <div style="min-height: 1240px;">
+                        <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                    </div>
 
-                }  ?>
-                
-            </div>
+
+
+                </div>
+
+                <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
+                    <div style="min-height: 1240px;">
+                        <iframe id="atRiskIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                    </div>
+                </div>
+
+                <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
+                    <div style="min-height: 1240px;">
+                        <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                    </div>
+                </div>
+
+			<?php } ?>
+
         </div>
     </section>
 
@@ -248,10 +276,13 @@ get_header(); ?>
         var project_id = <?php echo $project_id; ?>;
         var scene_id = <?php echo $scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
+        var user_email = "<?php echo $user_email; ?>";
+        var pwd = '12345';
 
         // For the time being we have analytics only for Energy
-        if (game_type === "Energy") {
+        if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
+
             var versionSelector = document.getElementById("analyticsVersionSelector");
             var locationSelector = document.getElementById("analyticsLocationSelector");
 
@@ -259,6 +290,10 @@ get_header(); ?>
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+
+            loadAtRiskIframe('59478f44-5eff-4507-8a2a-646df93847f9');
+
+            ddaIframe(user_email, 'pushit', '59478f44-5eff-4507-8a2a-646df93847f9');
 
             jQuery('#analyticsVersionSelector').on('change', function () {
                 analyticsVersionValue = this.value;
@@ -281,10 +316,10 @@ get_header(); ?>
                     "&gamemaster_id=" + game_master_id +
                     "&location=" + location;
 
-                var $iframe = jQuery('#analyticsIframeContent');
+                var iframe = jQuery('#analyticsIframeContent');
 
-                if ($iframe.length) {
-                    $iframe.attr('src', url);
+                if (iframe.length) {
+                    iframe.attr('src', url);
                     return false;
                 }
 
@@ -301,9 +336,57 @@ get_header(); ?>
                         }
                     }
                 });
-
                 return true;
             }
+
+            function loadAtRiskIframe(id) {
+
+                var url = "https://envisage.goedle.io/at-risk/index.htm?" +
+                    "exp_id=" + id;
+
+                var iframe = jQuery('#atRiskIframeContent');
+                if (iframe.length) {
+                    iframe.attr('src', url);
+                    return false;
+                }
+
+                $(parent.document).find("atRiskIframeContent").each(function () {
+                    if (this.contentDocument == window.document) {
+                        // if the href of the iframe is not same as
+                        // the value of src attribute then reload it
+                        if (this.src != url) {
+                            this.src = this.src;
+                        }
+                    }
+                });
+                return true;
+            }
+
+            function ddaIframe(email, pwd) {
+
+                var url = "https://envisage.goedle.io/dda/strategies.htm?" +
+                    "email=" + email +
+                    "&pwd=" + pwd +
+                    "&app_key=" + '1';
+
+                var iframe = jQuery('#ddaIframeContent');
+                if (iframe.length) {
+                    iframe.attr('src', url);
+                    return false;
+                }
+
+                $(parent.document).find("ddaIframeContent").each(function () {
+                    if (this.contentDocument == window.document) {
+                        // if the href of the iframe is not same as
+                        // the value of src attribute then reload it
+                        if (this.src != url) {
+                            this.src = this.src;
+                        }
+                    }
+                });
+                return true;
+            }
+
         }
 
         var mdc = window.mdc;
@@ -334,12 +417,5 @@ get_header(); ?>
                 newActivePanel.classList.add('active');
             }
         }
-
-
-        /* TODO: Implement this in a smarter way */
-        /*window.onbeforeunload = function() {
-            return true;
-        };*/
-
     </script>
 <?php get_footer(); ?>
