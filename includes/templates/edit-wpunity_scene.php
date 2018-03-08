@@ -208,7 +208,14 @@ get_header(); ?>
 								require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-12">
+                            <iframe id="scene-analytics-iframe" style="min-width: 100%; min-height: 600px;"></iframe>
+                        </div>
                     </div>
                 </div>
 
@@ -250,7 +257,6 @@ get_header(); ?>
                     </div>
 
 
-
                 </div>
 
                 <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
@@ -289,6 +295,8 @@ get_header(); ?>
             var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
+            loadSceneAnalyticsIframe('energytool','fields', 4, 3, 90, 3);
+
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
 
             loadAtRiskIframe('59478f44-5eff-4507-8a2a-646df93847f9');
@@ -304,6 +312,26 @@ get_header(); ?>
                 analyticsLocationValue = this.value;
                 loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
             });
+
+
+            function loadSceneAnalyticsIframe(id, fields, map, watts, area, cost) {
+
+                var url = "http://52.59.219.11/?" +
+                    "lab=" + id +
+                    "&env=" + fields +
+                    "&map=" + map +
+                    "&watts=" + watts +
+                    "&area=" + area +
+                    "&cost=" + cost;
+
+                var iframe = jQuery('#scene-analytics-iframe');
+                if (iframe.length) {
+                    iframe.attr('src', url);
+                    return false;
+                }
+
+                return true;
+            }
 
             function loadAnalyticsIframe(version, location) {
 
