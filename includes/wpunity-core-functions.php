@@ -1,5 +1,16 @@
 <?php
 
+function wpunity_getProjectKeys($project_id) {
+
+	$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
+	$myExpID = get_post_meta( $project_id, 'wpunity_project_expID', true);
+
+	$mykeys = array('projectID' => $project_id, 'gioID' => $myGioID, 'expID' => $myExpID);
+
+	return $mykeys;
+}
+
+
 //==========================================================================================================================================
 //==========================================================================================================================================
 
