@@ -1676,6 +1676,39 @@ function wpunity_save_scene_async_action_callback()
 	wp_die();
 }
 
+function wpunity_save_gio_async_action_callback()
+{
+	// put meta in scene. True, false, or id of meta if does not exist
+	$res = update_post_meta( $_POST['project_id'], 'wpunity_project_gioApKey', wp_unslash($_POST['project_gioApKey']) );
+
+//	$attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
+//		$_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
+//
+//	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+//
+//
+//	$scene_new_info = array(
+//		'ID' => $_POST['scene_id'],
+//		'post_title' => $_POST['scene_title'],
+//		'post_content' => $_POST['scene_description']
+//	);
+//
+//	wp_update_post($scene_new_info);
+
+	echo $res ? 'true' : 'false';
+	wp_die();
+}
+
+function wpunity_save_expid_async_action_callback()
+{
+	// put meta in scene. True, false, or id of meta if does not exist
+	$res = update_post_meta( $_POST['project_id'], 'wpunity_project_expID', wp_unslash($_POST['project_expID']) );
+
+	echo $res ? 'true' : 'false';
+	wp_die();
+}
+
+
 /**
  *   This function is for compiling the \test_compiler\game_windows  project
  */

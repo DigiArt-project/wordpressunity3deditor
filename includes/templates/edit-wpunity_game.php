@@ -56,6 +56,12 @@ wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 
+//FOR SAVING extra keys
+wp_enqueue_script( 'ajax-script_savegio', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
+wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
+);
+
 
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
@@ -190,7 +196,7 @@ get_header();
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
 
-                    <button class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
+                    <button id="save-gio-button" class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
                         SAVE
                     </button>
                 </div>
@@ -212,7 +218,7 @@ get_header();
                     </div>
 
                     <br>
-                    <button class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
+                    <button id="save-expid-button" class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
                         SAVE
                     </button>
 
@@ -517,6 +523,16 @@ $wp_query = $temp_query;
 ?>
 
     <script type="text/javascript">
+
+        // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
+        jQuery('#save-gio-button').click(function() {
+            wpunity_saveGIOApKeyAjax();
+        });
+
+        jQuery('#save-expid-button').click(function() {
+            wpunity_saveExpIDAjax();
+        });
+
         var mdc = window.mdc;
         mdc.autoInit();
 

@@ -279,8 +279,14 @@ add_action('login_headerurl', 'wpse_lost_password_redirect');
 // Ajax for fetching game's assets within asset browser widget at vr_editor
 add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
 
-// Ajax for saving scene asynchronoysly
+
 add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
+
+
+add_action('wp_ajax_wpunity_save_expid_async_action','wpunity_save_expid_async_action_callback');
+
+// Ajax for saving gio asynchronoysly
+add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_action_callback');
 
 // Ajax for deleting scene
 add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
