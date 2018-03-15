@@ -940,7 +940,7 @@ if($create_new == 0) {
 
 		<?php if($game_type_obj->string == 'Energy') {
 			echo "<p>Help: Packet of 3D models for game type: " . $game_type_obj->string . "</p>" ;
-			echo "<a href='".plugins_url( '../assets/paketo_3d_v3.zip', dirname(__FILE__)  )."'>Energy Lab 3D models</a>";
+			echo "<a href='".plugins_url( '../assets/paketo_3d_v4.zip', dirname(__FILE__)  )."'>Energy Lab 3D models</a>";
 
 		}
 		?>

@@ -128,7 +128,7 @@ get_header(); ?>
             </div>
 
             <!--Set tab buttons-->
-            <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
+            <div class="mdc-toolbar__section mdc-toolbar__section--align-start" style="justify-content: flex-end">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>

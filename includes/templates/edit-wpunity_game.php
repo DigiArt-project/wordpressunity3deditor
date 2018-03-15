@@ -179,7 +179,7 @@ get_header();
     <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">GIO Keys</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Game analytics keys</h2>
     <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Change keys</a>
 
 

@@ -226,7 +226,7 @@ $user_id = get_current_user_id();
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" checked="" name="gameTypeRadio" value="3">
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3" checked>
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>
@@ -238,7 +238,7 @@ $user_id = get_current_user_id();
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio"   name="gameTypeRadio" value="2">
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>
@@ -249,17 +249,17 @@ $user_id = get_current_user_id();
 
 
 
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
-                                    </div>
-                                </div>
-                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">
-                                    <i class="material-icons"></i>Archaeology</label>
-                            </li>
+<!--                            <li class="mdc-form-field">-->
+<!--                                <div class="mdc-radio">-->
+<!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">-->
+<!--                                    <div class="mdc-radio__background">-->
+<!--                                        <div class="mdc-radio__outer-circle"></div>-->
+<!--                                        <div class="mdc-radio__inner-circle"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
+<!--                                    <i class="material-icons"></i>Archaeology</label>-->
+<!--                            </li>-->
 
                         </ul>
 
