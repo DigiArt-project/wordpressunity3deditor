@@ -280,10 +280,15 @@ get_header(); ?>
     <script type="text/javascript">
 
         var project_id = <?php echo $project_id; ?>;
+
+        var project_keys = [];
+        project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id)); ?>;
         var scene_id = <?php echo $scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
         var pwd = '12345';
+
+        console.log(project_keys);
 
         // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {
@@ -296,12 +301,14 @@ get_header(); ?>
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
             loadSceneAnalyticsIframe('energytool','fields', 4, 3, 90, 3);
-
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
 
-            loadAtRiskIframe('59478f44-5eff-4507-8a2a-646df93847f9');
+            // Start Goedle Iframes
+            loadAtRiskIframe(project_keys.expID);
 
-            ddaIframe(user_email, 'pushit', '59478f44-5eff-4507-8a2a-646df93847f9');
+            ddaIframe(user_email, 'pushit', project_keys.gioID);
+            // End Goedle Iframes
+
 
             jQuery('#analyticsVersionSelector').on('change', function () {
                 analyticsVersionValue = this.value;
@@ -367,10 +374,10 @@ get_header(); ?>
                 return true;
             }
 
-            function loadAtRiskIframe(id) {
+            function loadAtRiskIframe(exp_id) {
 
                 var url = "https://envisage.goedle.io/at-risk/index.htm?" +
-                    "exp_id=" + id;
+                    "exp_id=" + exp_id;
 
                 var iframe = jQuery('#atRiskIframeContent');
                 if (iframe.length) {
@@ -390,12 +397,12 @@ get_header(); ?>
                 return true;
             }
 
-            function ddaIframe(email, pwd) {
+            function ddaIframe(email, pwd, app_key) {
 
                 var url = "https://envisage.goedle.io/dda/strategies.htm?" +
                     "email=" + email +
                     "&pwd=" + pwd +
-                    "&app_key=" + '1';
+                    "&app_key=" + app_key;
 
                 var iframe = jQuery('#ddaIframeContent');
                 if (iframe.length) {

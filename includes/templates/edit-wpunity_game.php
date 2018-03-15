@@ -603,12 +603,8 @@ $wp_query = $temp_query;
         }
 
         jQuery("#guid-generator-btn").click(function (e) {
-
             document.getElementById('exp-id').value = guid();
-
         });
-
-
 
 
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
