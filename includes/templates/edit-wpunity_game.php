@@ -63,6 +63,9 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 );
 
 
+$project_saved_keys = wpunity_getProjectKeys($project_id);
+print_r($project_saved_keys);
+
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
@@ -191,7 +194,7 @@ get_header();
 
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" value="<?php if($project_saved_keys['gioID'] != ''){echo $project_saved_keys['gioID'];} ?>">
                         <label for="app-key" class="mdc-textfield__label">Insert a valid app_key</label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
@@ -212,7 +215,7 @@ get_header();
                     </a>
                     <div class="mdc-textfield mdc-textfield--disabled mdc-text" style="max-width: 70%; width: 100%;" data-mdc-auto-init="MDCTextfield">
                         <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
                         <label for="exp-id" class="mdc-textfield__label"></label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
