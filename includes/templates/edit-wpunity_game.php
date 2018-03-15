@@ -64,7 +64,6 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 
 
 $project_saved_keys = wpunity_getProjectKeys($project_id);
-print_r($project_saved_keys);
 
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
