@@ -521,10 +521,10 @@ function displayMarkerProperties(event, name){
     clearAndUnbindMarkerProperties();
 
     // Add nonRegional scenes as options
-    var scenesNonRegional =  []; // getNonRegionalScenes( gameProjectSlug );
-
-    scenesNonRegional.push({sceneName:"Wow",sceneSlug:"WowSlug"});
-    scenesNonRegional.push({sceneName:"Wow2",sceneSlug:"Wow2Slug"});
+    //var scenesNonRegional =  getNonRegionalScenes( gameProjectSlug );
+    console.log(scenesNonRegional);
+    // scenesNonRegional.push({sceneName:"Wow",sceneSlug:"WowSlug"});
+    // scenesNonRegional.push({sceneName:"Wow2",sceneSlug:"Wow2Slug"});
 
     var scenesNonRegionalSTR = [];
 

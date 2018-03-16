@@ -193,9 +193,12 @@ get_header(); ?>
 								$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
 								$parentGameId = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->term_id;
 								$projectGameSlug = $parentGameSlug;
-
+                                
+                                $scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
+								
 								$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
-                                $scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
+        
+								$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
 
 								$scenefolder = $sceneTitle;
 								$gamefolder = $parentGameSlug;

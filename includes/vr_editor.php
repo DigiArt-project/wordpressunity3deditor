@@ -59,6 +59,7 @@ echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
 echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
+echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
 echo '</script>';
 
 ?>
