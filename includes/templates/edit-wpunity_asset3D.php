@@ -316,7 +316,10 @@ if($create_new == 0) {
 									'value'     => $myGameType,
 									'compare'   => '='
 								)
-							));
+							    ),
+                            'orderby' => 'name',
+                            'order' => 'DESC',
+                        );
 
 						$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 						$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
