@@ -214,7 +214,7 @@ get_header(); ?>
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner">
                         <div class="mdc-layout-grid__cell--span-12" style="position: relative;  padding-bottom: 56.25%; /* 16:9 */  padding-top: 25px; height: 0;">
-                            <iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 50%; height: 100%;"></iframe>
+                            <iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
                         </div>
                     </div>
                 </div>
