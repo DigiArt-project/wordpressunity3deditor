@@ -1,5 +1,49 @@
 <?php
 
+function wpunity_getNonRegionalScenes($project_id) {
+	$game_post = get_post($project_id);
+	$gameSlug = $game_post->post_name;
+	$scenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+	$scenePGameID = $scenePGame->term_id;
+
+	$nonRegionalScenes = array();
+
+	// Define custom query parameters
+	$custom_query_args = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field'    => 'term_id',
+				'terms'    => $scenePGameID,
+			)
+		),
+		'meta_key'   => 'wpunity_isRegional',
+		'meta_value' => '0',
+		'orderby' => 'ID',
+		'order' => 'DESC',
+	);
+
+	$custom_query = new WP_Query( $custom_query_args );
+
+	// Output custom query loop
+	if ( $custom_query->have_posts() ) {
+		while ($custom_query->have_posts()) {
+			$custom_query->the_post();
+			$scene_id = get_the_ID();
+			$scene_slug = get_post_field( 'post_name', $scene_id );
+
+			$nonRegionalScenes[] = ['sceneID'=>$scene_id, 'sceneSlug'=>$scene_slug ];
+		}
+	}
+
+	wp_reset_postdata();
+	$wp_query = NULL;
+
+	return $nonRegionalScenes;
+}
+
 function wpunity_getProjectKeys($project_id) {
 
 	$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
