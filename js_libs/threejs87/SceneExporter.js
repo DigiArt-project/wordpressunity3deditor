@@ -65,14 +65,10 @@ THREE.SceneExporter.prototype = {
                     node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
                     node.name =='myGridHelper' || node.name =='myTransformControls'
                 )
-                    continue;
+                continue;
 
-
-                //
                 if (node instanceof THREE.Mesh)
                     continue;
-
-
 
                 if ( node instanceof THREE.Mesh ) {
 

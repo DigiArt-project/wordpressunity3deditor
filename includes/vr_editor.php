@@ -354,28 +354,12 @@ echo '</script>';
         </a>
 
         <p class="mdc-typography--subheading1" style=""> Marker options </p>
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="markerInputTextfield">
-            <input id="markerid" name="markerid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-            <label for="markerid" class="mdc-textfield__label">Enter a marker name </label>
-            <div class="mdc-textfield__bottom-line"></div>
-        </div>
-
-
 
         <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
            style="vertical-align: text-bottom;">directions</i>
         <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"
                 class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
         </select>
-
-
-
-
-        <input type="checkbox" title="Select if it is a reward item" id="marker_reward_checkbox" name="marker_reward_checkbox"
-               class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
-        <label for="marker_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
-
 
     </div>
 

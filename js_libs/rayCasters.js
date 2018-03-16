@@ -3,7 +3,7 @@
 // Main Raycast object
 var raycasterPick = new THREE.Raycaster();
 
-// Show or not the ray line
+// option to show or not the ray line
 var showRayPickLine = false; // Do not show raycast line
 
 
@@ -94,6 +94,7 @@ function onMouseDownSelect( event ) {
 
     selectorMajor(event, intersects[i+1]);
 
+
 }// onMouseDown
 
 
@@ -108,15 +109,14 @@ function selectorMajor(event, inters){
     envir.outlinePass.selectedObjects = [ inters.object.parent.children[0] ];
     envir.renderer.setClearColor( 0xffffff, 0.9 );
 
-    //  Check for Door, MicroscopeTextbook, Box when right click
+    // Right click: check for Door, MicroscopeTextbook, Box
     if (event.button === 2) {
         activeOverides(event, inters);
     }
-
-
 }
 
-// Middle click raycast operations
+
+// Right click raycast operations
 function activeOverides(event, inters){
 
     var objectParent  = inters.object.parent;
@@ -503,80 +503,59 @@ function displayDoorProperties(event, name){
     });
 }
 
+
+/**
+ * Display marker properties
+ *
+ * @param event
+ * @param name
+ */
 function displayMarkerProperties(event, name){
 
     var popUpMarkerPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
-    var markerid = jQuery("#markerid");
     var popupMarkerSelect = jQuery("#popupMarkerSelect");
-    var chbox = jQuery("#marker_reward_checkbox");
 
-    // Save the previous door values (in case of  direct mouse click on another door)
-    markerid.trigger("change");
+    // Save the previous marker values (in case of  direct mouse click on another marker)
     popupMarkerSelect.trigger("change");
-    chbox.trigger("change");
-
-
-    clearAndUnbindCheckBoxProperties("marker_reward_checkbox");
-
-    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
-    // Add change listener
-    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0;});
-
 
     clearAndUnbindMarkerProperties();
 
-    // Add doors from other scenes
-    var markersFromOtherScenes = [];
+    // Add nonRegional scenes as options
+    var scenesNonRegional =  []; // getNonRegionalScenes( gameProjectSlug );
 
-    for (var l=0; l < scenesMarkerAll.length; l++)
-        if (envir.scene.getObjectByName(name).doorName_source !== scenesMarkerAll[l].door)
-            markersFromOtherScenes.push ( scenesMarkerAll[l].door + " at " + scenesMarkerAll[l].scene + " (" + scenesMarkerAll[l].sceneSlug + ")" );
+    scenesNonRegional.push({sceneName:"Wow",sceneSlug:"WowSlug"});
+    scenesNonRegional.push({sceneName:"Wow2",sceneSlug:"Wow2Slug"});
 
-    // Add options for each intersected object
+    var scenesNonRegionalSTR = [];
+
+    for (var l=0; l < scenesNonRegional.length; l++)
+        scenesNonRegionalSTR.push ( scenesNonRegional[l].sceneSlug );
+
+    // Create options for the select widget
     createOption(popupMarkerSelect[0], "Select a scene", "Select a scene", true, true, "#fff");
-    for (var doorName of markersFromOtherScenes )
-    createOption(popupMarkerSelect[0], doorName, doorName, false, false, "#fff");
 
-
-    // Set markerid from existing values
-    if (envir.scene.getObjectByName(name).doorName_source)
-        markerid.val( envir.scene.getObjectByName(name).doorName_source );
+    for (var sceneNameAndSlug of scenesNonRegionalSTR )
+        createOption(popupMarkerSelect[0], sceneNameAndSlug, sceneNameAndSlug, false, false, "#fff");
 
     if(envir.scene.getObjectByName(name).sceneName_target)
-        popupMarkerSelect.val ( envir.scene.getObjectByName(name).sceneName_target + " at " +
-            envir.scene.getObjectByName(name).sceneName_target );
+        popupMarkerSelect.val ( envir.scene.getObjectByName(name).sceneName_target );
 
-    // Show Selection
-    popUpMarkerPropertiesDiv.show();
-    popUpMarkerPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    popUpMarkerPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
-
-    mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
-
-    markerid.change(function(e) {
-        var nameDoorSource_simple = jQuery("#markerid").val();
-
-        // name is the scene object generated automatically e.g.    "mydoora_1231214515"
-        // doorName_source is more simplified given by the user  e.g.  "doorToCave"
-        envir.scene.getObjectByName(name).doorName_source = nameDoorSource_simple;
-    });
+    // Show the whole popup div
+    showWholePopupDiv(popUpMarkerPropertiesDiv, event);
 
     // On popup change
     popupMarkerSelect.change(function(e) {
-        var valDoorScene = popupMarkerSelect.val();
+        var valScene = popupMarkerSelect.val();
 
-        if (!valDoorScene)
+        if (!valScene)
             return;
 
-        if (valDoorScene && valDoorScene != "Select a door") {
+        if (valScene && valScene != "Select a scene")
+            envir.scene.getObjectByName(name).sceneName_target = valScene.trim();
 
-            var nameDoor_Target = valDoorScene.split("at")[0];
-            var sceneName_Target = valDoorScene.split("at")[1];
-
-            envir.scene.getObjectByName(name).doorName_target = nameDoor_Target.trim();
-            envir.scene.getObjectByName(name).sceneName_target = sceneName_Target.trim();
-        }
     });
+
+    return;
 }
 
 /**
@@ -597,15 +576,16 @@ function clearAndUnbindDoorProperties() {
 }
 
 function clearAndUnbindMarkerProperties() {
+
     // Clear past options
 
-    // door target
+    // marker target scene
     var popupMarkerSelect = document.getElementById("popupMarkerSelect");
     for (var i = popupMarkerSelect.options.length; i-->0;)
         popupMarkerSelect.options[i] = null;
 
     // door source title & remove listeners
-    jQuery("#markerid").val( null ).unbind('change');
+    //jQuery("#markerid").val( null ).unbind('change');
 
     jQuery("#popupMarkerSelect").unbind('change');
 }
@@ -684,7 +664,7 @@ function raylineVisualize(){
 }
 
 
-// Create options for the door destination select dom element
+// Create options for a select
 function createOption(container, txt, val, sel, dis, backgr){
     var option = document.createElement("option");
     option.text = txt;
@@ -692,6 +672,14 @@ function createOption(container, txt, val, sel, dis, backgr){
     option.selected = sel;
     option.disabled = dis;
     option.style.background = backgr;
-    option.style.fontSize = "9pt";
+    //option.style.fontSize = "9pt";
     container.add(option);
+}
+
+
+function showWholePopupDiv(popUpDiv, event){
+    popUpDiv.show();
+    popUpDiv[0].style.left = 1 + event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()   + 'px';
+    event.preventDefault();
 }
