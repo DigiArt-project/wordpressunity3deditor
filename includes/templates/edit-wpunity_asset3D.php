@@ -984,7 +984,7 @@ if($create_new == 0) {
         //if (game_type_slug !== 'chemistry_games')
         var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ) );
         //else
-        //   var wu_webw_3d_view = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
+        //   var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
 
         wpunity_reset_panels(wu_webw_3d_view);
 
@@ -1095,19 +1095,27 @@ if($create_new == 0) {
 
                 wpunity_reset_panels(wu_webw_3d_view);
 
-                var descText = document.getElementById('categoryDescription');
-                descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
+                var descText;
+                var cat;
+
+                descText = document.getElementById('categoryDescription');
 
                 if(createAsset) {
+
+                    descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
+
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
+                    cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
                 } else {
+
+                    descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
+
                     jQuery("#termIdInput").attr( "value", selectedCatId );
 
-                    /*jQuery("#objectPropertiesPanel").hide();*/
-
+                    cat = jQuery("#currently-selected").attr("data-cat-slug");
                 }
-
-                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
                 if (cat === 'molecule') {
                     jQuery("#mtlRadio").prop("checked", false);
