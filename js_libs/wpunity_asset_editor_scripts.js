@@ -127,10 +127,10 @@ function wpunity_extract_file_extension(fn) {
 }
 
 
-function wpunity_clear_asset_files(previewCanvas) {
+function wpunity_clear_asset_files(wu_webw_3d_view) {
 
-    if (previewCanvas.renderer) {
-        previewCanvas.clearAllAssets();
+    if (wu_webw_3d_view.renderer) {
+        wu_webw_3d_view.clearAllAssets();
     }
 
     document.getElementById("fbxFileInput").value = "";
@@ -161,10 +161,10 @@ function wpunity_clear_asset_files(previewCanvas) {
     nPdb = 0;
 }
 
-function wpunity_reset_panels(previewCanvas) {
+function wpunity_reset_panels(wu_webw_3d_view) {
 
     // Clear all
-    wpunity_clear_asset_files(previewCanvas);
+    wpunity_clear_asset_files(wu_webw_3d_view);
 
 
     if (jQuery("ProducerPlotTooltip")) {
@@ -187,6 +187,7 @@ function wpunity_reset_panels(previewCanvas) {
 
 function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
+    // Load from selected files
     var _handleFileSelect = function ( event  ) {
 
         // copy because clear asset files in the following clears the total input fields also
@@ -220,6 +221,52 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
+
+
+    //--------------- load all from url (in edit asset) --------------
+    if (typeof path_url != "undefined") {
+        var manager = new THREE.LoadingManager();
+        var mtlLoader = new THREE.MTLLoader();
+
+        //var mtl_url = "bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt";
+        //var obj_file_name = "f74d834f96148080b5822a409a4299ff_objTurbine1.txt";
+        //var path_url = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/Models/";
+
+        mtlLoader.setPath(path_url);
+
+        mtlLoader.load(mtl_file_name, function (materials) {
+            materials.preload();
+
+            var objLoader = new THREE.OBJLoader(manager);
+            objLoader.setMaterials(materials);
+            objLoader.setPath(path_url);
+            objLoader.load(obj_file_name, 'after',
+                // OnObjLoad
+                function (object) {
+                    wu_webw_3d_view.scene.add(object);
+
+                    // 6 is the added object
+                    var totalradius = wu_webw_3d_view.computeSceneBoundingSphereAll( wu_webw_3d_view.scene.children[6] )[1];
+
+                    wu_webw_3d_view.controls.minDistance = 0.5*totalradius;
+                    wu_webw_3d_view.controls.maxDistance = 8*totalradius;
+                },
+                //onObjProgressLoad
+                function (xhr) {
+                    if (xhr.lengthComputable) {
+                    }
+                },
+                //onObjErrorLoad
+                function (xhr) {
+                }
+            );
+        });
+    }
+    //--------------------------------------------
+
+
+
+
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
@@ -263,7 +310,7 @@ function checkerCompleteReading(canvas){
 
         if (nMtl == 0) {
             // Start without MTL
-            previewCanvas.loadFilesUser(objectDefinition);
+            wu_webw_3d_view.loadFilesUser(objectDefinition);
         } else {
             if (mtlFileContent!==''){
 
@@ -271,7 +318,7 @@ function checkerCompleteReading(canvas){
 
                 if (nJpg==0){
                     // Start without Textures
-                    previewCanvas.loadFilesUser(objectDefinition);
+                    wu_webw_3d_view.loadFilesUser(objectDefinition);
                 } else {
 
                     console.log("nJpg", nJpg, jQuery("input[id='textureFileInput']").length);

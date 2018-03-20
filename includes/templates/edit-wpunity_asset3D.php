@@ -2,14 +2,13 @@
 
 /**
  *   Create asset
- *
  */
-
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
 
 	wp_enqueue_script('wpunity_load87_threejs');
+    wp_enqueue_script('wpunity_load87_objloader');
 	wp_enqueue_script('wpunity_load87_objloader2');
 	wp_enqueue_script('wpunity_load87_pdbloader');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
@@ -20,10 +19,11 @@ function loadAsset3DManagerScripts() {
 	// For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_CSS2DRenderer');
 	
-	wp_enqueue_script('wu_webw_3d_view');
+	wp_enqueue_script('WU_webw_3d_view');
 	wp_enqueue_script('wu_3d_view_pdb');
 
 	wp_enqueue_script('wpunity_asset_editor_scripts');
+//    wp_enqueue_script('wpunity_asset_editor_scripts_urlloading');
 	wp_enqueue_script('flot');
 	wp_enqueue_script('flot-axis-labels');
 
@@ -41,14 +41,8 @@ function loadAsset3DManagerScripts() {
 	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
 	);
-
-
 }
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
-
-
-
-
 
 
 // Default Values
@@ -103,6 +97,24 @@ if($asset_post->post_type == 'wpunity_asset3d') {
 	$create_new = 0;
 	$asset_checked_id = $asset_inserted_id;
 }
+
+if($asset_inserted_id) {
+    $assetpostMeta = get_post_meta($asset_inserted_id);
+    $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+    $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+    
+    $mtl_file_name = basename($mtlpost->guid);
+    $obj_file_name = basename($objpost->guid);
+    $path_url = pathinfo($mtlpost->guid)['dirname'];
+    
+    echo '<script>';
+    echo 'var mtl_file_name="'.$mtl_file_name.'";';
+    echo 'var obj_file_name="'.$obj_file_name.'";';
+    echo 'var path_url="'.$path_url . '/'    .'";';
+    echo '</script>';
+}
+
+
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
@@ -970,15 +982,16 @@ if($create_new == 0) {
 
         // TODO: Remove also from register and enquire
         //if (game_type_slug !== 'chemistry_games')
-        var previewCanvas = new wu_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ) );
         //else
-        //   var previewCanvas = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
+        //   var wu_webw_3d_view = new wu_3d_view_pdb( document.getElementById( 'previewCanvas' ) );
 
-        wpunity_reset_panels(previewCanvas);
+        wpunity_reset_panels(wu_webw_3d_view);
 
+        
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
-        loadAssetPreviewer(previewCanvas, multipleFilesInputElem);
+        
+        loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
 
 
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
@@ -986,8 +999,8 @@ if($create_new == 0) {
 
         createScreenshotBtn.click(function() {
 
-            previewCanvas.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(previewCanvas);
+            wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(wu_webw_3d_view);
         });
 
         // Flot options
@@ -1078,9 +1091,9 @@ if($create_new == 0) {
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
-                previewCanvas.resizeDisplayGL();
+                wu_webw_3d_view.resizeDisplayGL();
 
-                wpunity_reset_panels(previewCanvas);
+                wpunity_reset_panels(wu_webw_3d_view);
 
                 var descText = document.getElementById('categoryDescription');
                 descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
@@ -1089,7 +1102,9 @@ if($create_new == 0) {
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
                 } else {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
-                    jQuery("#objectPropertiesPanel").hide();
+
+                    /*jQuery("#objectPropertiesPanel").hide();*/
+
                 }
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");

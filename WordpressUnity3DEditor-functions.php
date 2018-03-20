@@ -42,7 +42,8 @@ function wpunity_load_jquery_scripts() {
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
 function wpunity_register_scripts() {
-	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_asset_editor_scripts.js');
+	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ).'js_libs/wpunity_asset_editor_scripts.js');
+
 	wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
 	wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
@@ -103,7 +104,7 @@ function wpunity_register_scripts() {
 
 	//wp_register_script( 'wu_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_3d_view.js', null, null, false);
 
-	wp_register_script( 'wu_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/wu_webw_3d_view.js', null, null, false);
+	wp_register_script( 'WU_webw_3d_view', plugin_dir_url( __FILE__ ) . 'js_libs/WU_webw_3d_view.js', null, null, false);
 
 //================================= Scene YAML Templates ===================================
 }
