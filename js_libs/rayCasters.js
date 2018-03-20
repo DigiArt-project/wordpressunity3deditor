@@ -37,15 +37,14 @@ function onMouseDownSelect( event ) {
     if (showRayPickLine)
         raylineVisualize();
 
-    var activMeshAndFloor = getActiveMeshes().concat(
-        [  transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+    // All 3D meshes that can be clicked
+    var activMesh = getActiveMeshes().concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
 
     // Find the intersections (it can be more than one)
-    var intersects = raycasterPick.intersectObjects( activMeshAndFloor , true );
+    var intersects = raycasterPick.intersectObjects( activMesh , true );
 
-    // ------------ TRS sprite mode changer ---------
+    // ------------ in case TRS cube is clicked ---------
     if (intersects.length > 0) {
-
         if (intersects[0].object.name === 'trs_modeChanger') {
 
             if (transform_controls.getMode() === 'rotate')
@@ -64,15 +63,11 @@ function onMouseDownSelect( event ) {
         }
     }
 
-
-
     // If only one object is intersected
     if(intersects.length === 1){
         selectorMajor(event, intersects[0]);
         return;
     }
-
-
 
     // More than one objects intersected
     var prevSelected = transform_controls.object.name;
@@ -90,11 +85,7 @@ function onMouseDownSelect( event ) {
     if (!selectNext || i===intersects.length-1)
         i = -1;
 
-
-
     selectorMajor(event, intersects[i+1]);
-
-
 }// onMouseDown
 
 
@@ -103,16 +94,17 @@ function selectorMajor(event, inters){
 
     transform_controls.attach(inters.object.parent);
 
+    // calculate object physical dimensions
     findDimensions(transform_controls.object);
 
     // highlight
     envir.outlinePass.selectedObjects = [ inters.object.parent.children[0] ];
     envir.renderer.setClearColor( 0xffffff, 0.9 );
 
-    // Right click: check for Door, MicroscopeTextbook, Box
-    if (event.button === 2) {
+    // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
+    if (event.button === 2)
         activeOverides(event, inters);
-    }
+
 }
 
 
@@ -157,8 +149,7 @@ function displayBoxProperties(event, nameBoxSource){
     // Save the previous Box values (in case of  direct mouse click on another Box)
     jQuery("#chemistryBoxComponent").trigger("change");
 
-
-    clearAndUnbindBoxProperties();
+    clearAndUnbind("chemistryBoxComponent");
 
     var ppDiv = document.getElementById("chemistryBoxPopupDiv");
     var ppSelect = document.getElementById("chemistryBoxComponent");
@@ -223,7 +214,7 @@ function displayBoxProperties(event, nameBoxSource){
         }
         jQuery("#chemistryBoxPopupDiv").hide();
 
-        clearAndUnbindBoxProperties();
+        clearAndUnbind("chemistryBoxComponent");
     });
 }
 
@@ -240,7 +231,7 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     // Save the previous MicroscopeTextbook values (in case of  direct mouse click on another microscope or textbook)
     jQuery("#chemistrySceneSelectComponent").trigger("change");
 
-    clearAndUnbindMicroscopeTextbookProperties();
+    clearAndUnbind("chemistrySceneSelectComponent");
 
     var ppDiv = document.getElementById("chemistrySceneSelectPopupDiv");
     var ppSelect = document.getElementById("chemistrySceneSelectComponent");
@@ -309,7 +300,8 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
         }
         jQuery("#chemistrySceneSelectPopupDiv").hide();
 
-        clearAndUnbindMicroscopeTextbookProperties();
+        clearAndUnbind("chemistrySceneSelectComponent");
+        //clearAndUnbindMicroscopeTextbookProperties();
     });
 
 }
@@ -334,7 +326,7 @@ function displayArtifactProperties(event, name){
     // Save the previous artifact properties values (in case of  direct mouse click on another item)
     chbox.trigger("change");
 
-    clearAndUnbindCheckBoxProperties("artifact_reward_checkbox");
+    clearAndUnbind(null,null,"artifact_reward_checkbox");
 
     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
 
@@ -365,7 +357,7 @@ function displayPoiImageTextProperties(event, name){
     // Save the previous artifact properties values (in case of  direct mouse click on another item)
     chbox.trigger("change");
 
-    clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox");
+    clearAndUnbind(null, null, "poi_image_text_reward_checkbox");
 
     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
 
@@ -395,7 +387,7 @@ function displayPoiVideoProperties(event, name){
     // Save the previous artifact properties values (in case of  direct mouse click on another item)
     chbox.trigger("change");
 
-    clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox");
+    clearAndUnbind(null, null, "poi_video_reward_checkbox");
 
     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
 
@@ -406,16 +398,6 @@ function displayPoiVideoProperties(event, name){
 
     // Add change listener
     chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
-
-}
-
-
-
-// Clear past options
-function clearAndUnbindCheckBoxProperties( chkboxname ) {
-    var chbox = jQuery("#" + chkboxname);
-    chbox.prop('checked',false);
-    chbox.unbind('change');     // Remove listeners
 }
 
 
@@ -440,14 +422,14 @@ function displayDoorProperties(event, name){
     chbox.trigger("change");
 
 
-    clearAndUnbindCheckBoxProperties("door_reward_checkbox");
+    clearAndUnbind(null, null, "door_reward_checkbox");
 
     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
     // Add change listener
     chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0;});
 
 
-    clearAndUnbindDoorProperties();
+    clearAndUnbind("popupDoorSelect", "doorid");
 
     // Add doors from other scenes
     var doorsFromOtherScenes = [];
@@ -518,13 +500,8 @@ function displayMarkerProperties(event, name){
     // Save the previous marker values (in case of  direct mouse click on another marker)
     popupMarkerSelect.trigger("change");
 
-    clearAndUnbindMarkerProperties();
+    clearAndUnbind("popupMarkerSelect");
 
-    // Add nonRegional scenes as options
-    //var scenesNonRegional =  getNonRegionalScenes( gameProjectSlug );
-    console.log(scenesNonRegional);
-    // scenesNonRegional.push({sceneName:"Wow",sceneSlug:"WowSlug"});
-    // scenesNonRegional.push({sceneName:"Wow2",sceneSlug:"Wow2Slug"});
 
     var scenesNonRegionalSTR = [];
 
@@ -558,61 +535,36 @@ function displayMarkerProperties(event, name){
     return;
 }
 
+
+// ----------------- Aux ----------------------------------------------------------
+
 /**
- * Clear Door properties
+ * A general mechanism to clear popup and unbind any handlers
  */
-function clearAndUnbindDoorProperties() {
-    // Clear past options
+function clearAndUnbind(selectName=null, idstr=null, chkboxname=null){
 
-    // door target
-    var popupDoorSelect = document.getElementById("popupDoorSelect");
-    for (var i = popupDoorSelect.options.length; i-->0;)
-        popupDoorSelect.options[i] = null;
+    // Clear the select DOM
+    if (selectName) {
+        var selectDOM = document.getElementById(selectName);
+        for (var i = selectDOM.options.length; i-- > 0;)
+            selectDOM.options[i] = null;
 
-    // door source title & remove listeners
-    jQuery("#doorid").val( null ).unbind('change');
+        // unbind onchange listener
+        jQuery("#" + selectName).unbind('change');
+    }
 
-    jQuery("#popupDoorSelect").unbind('change');
+    // Id (if any) unbind onchange listener
+    if (idstr)
+        jQuery("#"+idstr).val( null ).unbind('change');
+
+    // Checbox clear and unbind (if any)
+    if(chkboxname){
+        var chbox = jQuery("#" + chkboxname);
+        chbox.prop('checked',false);
+        chbox.unbind('change');     // Remove listeners
+    }
+
 }
-
-function clearAndUnbindMarkerProperties() {
-
-    // Clear past options
-
-    // marker target scene
-    var popupMarkerSelect = document.getElementById("popupMarkerSelect");
-    for (var i = popupMarkerSelect.options.length; i-->0;)
-        popupMarkerSelect.options[i] = null;
-
-    // door source title & remove listeners
-    //jQuery("#markerid").val( null ).unbind('change');
-
-    jQuery("#popupMarkerSelect").unbind('change');
-}
-
-
-function clearAndUnbindMicroscopeTextbookProperties(){
-
-    var ppSelect = document.getElementById("chemistrySceneSelectComponent");
-
-    for (var i = ppSelect.options.length; i-->0;)
-        ppSelect.options[i] = null;
-
-    jQuery("#chemistrySceneSelectComponent").unbind('change');
-}
-
-
-function clearAndUnbindBoxProperties(){
-
-    var ppSelect = document.getElementById("chemistryBoxComponent");
-
-    for (var i = ppSelect.options.length; i-->0;)
-        ppSelect.options[i] = null;
-
-
-    jQuery("#chemistryBoxComponent").unbind('change');
-}
-
 
 /**
  * Get active meshes for raycast picking method
@@ -683,3 +635,61 @@ function showWholePopupDiv(popUpDiv, event){
     popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()   + 'px';
     event.preventDefault();
 }
+
+//------------------------ OBSO -------------------------
+
+// Clear past options
+// function clearAndUnbindCheckBoxProperties( chkboxname ) {
+//     var chbox = jQuery("#" + chkboxname);
+//     chbox.prop('checked',false);
+//     chbox.unbind('change');     // Remove listeners
+// }
+
+//
+// /**
+//  * Clear Door properties
+//  */
+// function clearAndUnbindDoorProperties() {
+//     // Clear past options
+//
+//     // door target
+//     var popupDoorSelect = document.getElementById("popupDoorSelect");
+//     for (var i = popupDoorSelect.options.length; i-->0;)
+//         popupDoorSelect.options[i] = null;
+//
+//     // door source title & remove listeners
+//     jQuery("#doorid").val( null ).unbind('change');
+//
+//     jQuery("#popupDoorSelect").unbind('change');
+// }
+//
+// function clearAndUnbindMarkerProperties() {
+//     // marker target scene
+//     var popupMarkerSelect = document.getElementById("popupMarkerSelect");
+//     for (var i = popupMarkerSelect.options.length; i-->0;)
+//         popupMarkerSelect.options[i] = null;
+//
+//     jQuery("#popupMarkerSelect").unbind('change');
+// }
+//
+//
+// function clearAndUnbindMicroscopeTextbookProperties(){
+//
+//     var ppSelect = document.getElementById("chemistrySceneSelectComponent");
+//
+//     for (var i = ppSelect.options.length; i-->0;)
+//         ppSelect.options[i] = null;
+//
+//     jQuery("#chemistrySceneSelectComponent").unbind('change');
+// }
+//
+//
+// function clearAndUnbindBoxProperties(){
+//
+//     var ppSelect = document.getElementById("chemistryBoxComponent");
+//
+//     for (var i = ppSelect.options.length; i-->0;)
+//         ppSelect.options[i] = null;
+//
+//     jQuery("#chemistryBoxComponent").unbind('change');
+// }

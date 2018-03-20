@@ -233,9 +233,6 @@ get_header(); ?>
 			<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                 <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-
-
-
                     <div class="mdc-layout-grid">
 
                         <div class="mdc-layout-grid__inner CenterContents">
@@ -290,8 +287,6 @@ get_header(); ?>
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
         var pwd = '12345';
-
-        console.log(project_keys);
 
         // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {

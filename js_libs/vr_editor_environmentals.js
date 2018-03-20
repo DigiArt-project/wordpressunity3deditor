@@ -11,34 +11,30 @@ class vr_editor_environmentals {
         this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
         this.VIEW_ANGLE = 60;
 
-        this.original_width = this.SCREEN_WIDTH + "px";
-
-        console.log("this.original_width: " + this.original_width);
-
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
         this.NEAR = 0.01;
         this.FAR = 20000;
-        this.scene;
-
-        this.renderer;
-        this.stats;
-        this.light;
-        //this.floor;
-        this.sky;
-        this.sunSphere;
-
-
-        this.browse_controls;
-        this.initAvatarPosition;
-        this.cameraOrbit;
-        this.cameraAvatar;
-        this.cameraOrbitHelper;
-        this.cameraAvatarHelper;
-
-        this.outlinePass;
-        this.composer;
-        this.renderPass;
-        this.effectFXAA;
+        // this.scene;
+        //
+        // this.renderer;
+        // this.stats;
+        // this.light;
+        // //this.floor;
+        // this.sky;
+        // this.sunSphere;
+        //
+        //
+        // this.browse_controls;
+        // this.initAvatarPosition;
+        // this.cameraOrbit;
+        // this.cameraAvatar;
+        // this.cameraOrbitHelper;
+        // this.cameraAvatarHelper;
+        //
+        // this.outlinePass;
+        // this.composer;
+        // this.renderPass;
+        // this.effectFXAA;
 
 
 
@@ -57,9 +53,6 @@ class vr_editor_environmentals {
 
         this.setComposer();
 
-
-
-
         // this.setTerrain(); // test after 74
 
         // Window resize event (container was added)
@@ -75,12 +68,10 @@ class vr_editor_environmentals {
 
     turboResize(){
         this.SCREEN_WIDTH = this.container_3D_all.clientWidth; // 500; //window.innerWidth;
-
-
-        console.log(this.SCREEN_WIDTH);
-
         this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
         this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
+
+        console.log("this.container_3D_all.clientWidth", this.container_3D_all.clientWidth);
 
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
@@ -99,8 +90,6 @@ class vr_editor_environmentals {
     makeFullScreen() {
 
         if (this.container_3D_all.style.width!=="100%") {
-
-            // Make it full screen
             this.container_3D_all.style.position = 'fixed';
             this.container_3D_all.style.width = '100%';
             this.container_3D_all.style.height = '100%';
@@ -114,6 +103,7 @@ class vr_editor_environmentals {
             jQuery("#fullScreenBtn").html('Exit Full Screen');
 
             jQuery("body#header").css("display", "none" );
+
 
             if (document.getElementById('wpadminbar')) {
                 document.getElementById('wpadminbar').style.zIndex = 0;
@@ -142,14 +132,12 @@ class vr_editor_environmentals {
 
         } else {
 
-            // Exit full screen
             this.container_3D_all.style.position = 'relative';
-            this.container_3D_all.style.width = this.original_width; //document.getElementById("panel-1").clientWidth - 20 + "px";
+            this.container_3D_all.style.width = '99%';
             this.container_3D_all.style.height = '600px';
-            this.container_3D_all.style.overflow = 'auto';
+            //this.container_3D_all.style.overflow = 'auto';
             this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
             this.container_3D_all.style.zIndex = '999';
-
 
             jQuery("#fullScreenBtn").html('Full Screen');
 
@@ -173,8 +161,6 @@ class vr_editor_environmentals {
             if (document.getElementById('postdivrich')) {
                 document.getElementById('postdivrich').style.display = '';
             }
-
-
         }
 
         envir.turboResize();

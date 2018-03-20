@@ -214,7 +214,7 @@ echo '</script>';
         var vr_editor = jQuery('#vr_editor_main_div');
         var cw = vr_editor.width();
         vr_editor.css({'height':cw*2/3+'px'});
-
+        
         envir.turboResize();
     }
 
@@ -448,18 +448,7 @@ echo '</script>';
             <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
                 Is a reward item?</label>
     
-
     </div>
-
-
-
-
-
-
-
-
-
-
 </div>
 
 
@@ -542,7 +531,6 @@ echo '</script>';
 
         jQuery('#save-scene-button').html("Saving...").addClass("LinkDisabled");
 
-
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
@@ -552,8 +540,6 @@ echo '</script>';
         envir.gridHelper.visible = false;
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=false;
-
-        //envir.scene.getObjectByName("recycleBin").visible = false;
 
         // Save screenshot data to input
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
@@ -566,12 +552,7 @@ echo '</script>';
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=true;
 
-        //envir.scene.getObjectByName("recycleBin").visible=true;
-
         wpunity_saveSceneAjax();
-
-        //document.getElementById('wpunity_scene_theForm').submit();
-
     });
 
     hideObjectPropertiesPanels();
