@@ -46,6 +46,7 @@ function wpunity_register_scripts() {
 	wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
 	wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
+	wp_register_script( 'wpunity_lightslider', plugin_dir_url( __FILE__ ) . 'js_libs/lightslider.min.js');
 	//wp_register_script( 'wpunity_compile_request', plugin_dir_url( __FILE__ ) . 'js_libs/assemble_compile_commands/request_game_compile.js',
 //	null, null, false);
 //
@@ -115,6 +116,7 @@ function wpunity_register_styles() {
 	wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
 	wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
 	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
+	wp_register_style( 'wpunity_lightslider_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/lightslider.min.css' );
 
 	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
 	// Material & Frontend CSS & Scripts
@@ -122,6 +124,7 @@ function wpunity_register_styles() {
 	wp_enqueue_script('wpunity_material_scripts');
 	wp_enqueue_style( 'wpunity_material_icons', plugin_dir_url( __FILE__ ) . 'css/material-icons/material-icons.css' );
 	wp_enqueue_style('wpunity_frontend_stylesheet');
+	wp_enqueue_style( 'wpunity_lightslider_stylesheet');
 }
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 

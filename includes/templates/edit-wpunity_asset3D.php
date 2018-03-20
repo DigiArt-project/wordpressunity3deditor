@@ -25,20 +25,22 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 	wp_enqueue_script('flot');
 	wp_enqueue_script('flot-axis-labels');
-    
-    // load script from js_libs
-    wp_enqueue_script( 'wpunity_content_interlinking_request');
-    
-    $pluginpath = dirname (plugin_dir_url( __DIR__  ));
-    
-    wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
-        $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
-    
-    wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
-        array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
-    );
-    
-    
+
+	wp_enqueue_script('wpunity_lightslider');
+
+	// load script from js_libs
+	wp_enqueue_script( 'wpunity_content_interlinking_request');
+
+	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+
+	wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
+		$pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
+
+	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
+		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
+	);
+
+
 }
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
 
@@ -116,12 +118,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 		//If the Asset has created (doesnt returns 0) -> Gather Info for extra fields
 		if($asset_newID != 0) {
-            $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-            if($assetCatTerm->slug == 'molecule') {
-                wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
-            }else{
-                wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
-            }
+			$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+			if($assetCatTerm->slug == 'molecule') {
+				wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
+			}else{
+				wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
+			}
 
 			if($assetCatTerm->slug == 'consumer') {
 				wpunity_create_asset_consumerExtra_frontend($asset_newID);
@@ -134,8 +136,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			}elseif ($assetCatTerm->slug == 'pois_video') {
 				wpunity_create_asset_poisVideoExtra_frontend($asset_newID);
 			}elseif ($assetCatTerm->slug == 'molecule') {
-                wpunity_create_asset_moleculeExtra_frontend($asset_newID);
-            }
+				wpunity_create_asset_moleculeExtra_frontend($asset_newID);
+			}
 		}
 		if($scene_id == 0){wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));}
 		else{wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );}
@@ -314,10 +316,10 @@ if($create_new == 0) {
 									'value'     => $myGameType,
 									'compare'   => '='
 								)
-							    ),
-                            'orderby' => 'name',
-                            'order' => 'DESC',
-                        );
+							),
+							'orderby' => 'name',
+							'order' => 'DESC',
+						);
 
 						$cat_terms = get_terms('wpunity_asset3d_cat', $args);
 						$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
@@ -378,28 +380,26 @@ if($create_new == 0) {
                     </p>
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 460px;"
+                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                                   name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
 
-                        
-                        
                     </div>
 
 
-                    <button type="button" class="mdc-button--primary"
+                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
                             onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
                             jQuery('#assetDescription')[0].children)">
                         Fetch description from Wikipedia</button>
-                    
-                    <button type="button" class="mdc-button--primary"
+
+                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
                             onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
                             jQuery('#assetDescription')[0].children)"
                             style="margin-top:30px" >Fetch description from Europeana</button>
 
-                    
-                    
-                    
+
+
+
                     <hr class="WhiteSpaceSeparator">
 
                     <div id="poiImgDetailsPanel" style="display: none;">
@@ -591,10 +591,34 @@ if($create_new == 0) {
 
                                 <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
 
-                                <label id="fileUploadInputLabel" for="multipleFilesInput"> Select an a) obj, b) mtl, & c) optional texture file</label>
+
+                                <label>Select an asset to insert</label>
+                                <ul id="lightSlider">
+                                    <!--put php loop here for every li item-->
+
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-1.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg" />
+                                    </li>
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-2.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-2.jpg" />
+                                    </li>
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-3.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-3.jpg" />
+                                    </li>
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-4.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-4.jpg" />
+                                    </li>
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-5.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-5.jpg" />
+                                    </li>
+                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-6.jpg">
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-6.jpg" />
+                                    </li>
+                                </ul>
+
+                                <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
                                        multiple accept=".obj,.mtl,.jpg"/>
-
 
 
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
@@ -613,8 +637,6 @@ if($create_new == 0) {
 
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -955,7 +977,6 @@ if($create_new == 0) {
         var mdc = window.mdc;
         mdc.autoInit();
 
-
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
         // TODO: Remove also from register and enquire
@@ -1103,6 +1124,30 @@ if($create_new == 0) {
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
                 loadFileInputLabel();
 
+                jQuery('#lightSlider').lightSlider({
+                    item: 4,
+                    loop: true,
+                    slideMove: 2,
+                    easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+                    speed: 600,
+                    responsive : [
+                        {
+                            breakpoint:800,
+                            settings: {
+                                item:3,
+                                slideMove:1,
+                                slideMargin:6
+                            }
+                        },
+                        {
+                            breakpoint:480,
+                            settings: {
+                                item:2,
+                                slideMove:1
+                            }
+                        }
+                    ]
+                });
 
                 switch(cat) {
                     // Archaeology cases
