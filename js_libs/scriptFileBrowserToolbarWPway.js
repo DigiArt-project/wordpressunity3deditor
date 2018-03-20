@@ -142,7 +142,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     continue;
 
                 if(!f.objPath)
-                     continue;
+                    continue;
 
                 var fileType = f.objPath.split('.').pop();
 
@@ -159,11 +159,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     imgFileExtension = '.jpg';
                 }
 
-                if (!f.screenImagePath) {
-                    f.screenImagePath = window.location.origin + "/wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
-                        //f.mtlPath.substr(0, f.mtlPath.indexOf('uploads')) +
-                        //'plugins/WordpressUnity3DEditor/images/ic_no_sshot.png';
-                }
+                f.screenImagePath = f.screenImagePath ? f.screenImagePath : "../wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
 
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
@@ -192,7 +188,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
                     '" onclick="javascript:window.location.href=\''+urlforAssetEdit + f.assetid + '\'" class="mdc-button mdc-button--dense">Edit</a>'+
                     '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax('+
-                       f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
+                    f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span>' +
                     '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
                     '<div class="progressSliderLine"></div>\n' +
@@ -202,7 +198,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '</li>' );
 
 
-            // <?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_assetpass . $asset_checked_id ); ?>
+                // <?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_assetpass . $asset_checked_id ); ?>
 
                 file.appendTo(fileList);
             }
@@ -239,7 +235,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
         input_data.forEach(function(d){
             if (d.assetName.indexOf(needle) !== -1)
-                    output_data.push(d);
+                output_data.push(d);
         });
         return output_data;
     }
