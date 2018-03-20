@@ -380,28 +380,26 @@ if($create_new == 0) {
                     </p>
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; height: 460px;"
+                        <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                                   name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
 
-                        
-                        
                     </div>
 
 
-                    <button type="button" class="mdc-button--primary"
+                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
                             onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
                             jQuery('#assetDescription')[0].children)">
                         Fetch description from Wikipedia</button>
                     
-                    <button type="button" class="mdc-button--primary"
+                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
                             onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
                             jQuery('#assetDescription')[0].children)"
                             style="margin-top:30px" >Fetch description from Europeana</button>
 
-                    
-                    
-                    
+
+
+
                     <hr class="WhiteSpaceSeparator">
 
                     <div id="poiImgDetailsPanel" style="display: none;">
@@ -598,7 +596,6 @@ if($create_new == 0) {
                                        multiple accept=".obj,.mtl,.jpg"/>
 
 
-
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                                 <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                                 <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
@@ -615,8 +612,6 @@ if($create_new == 0) {
 
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
