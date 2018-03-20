@@ -31,6 +31,7 @@ class LoaderMulti {
                                 // });
 
                                 object.name = "Steve";
+
                                 object.children[0].name = "SteveMesh";
 
                                 // Make a shield around Steve

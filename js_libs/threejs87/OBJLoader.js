@@ -353,19 +353,49 @@ THREE.OBJLoader = ( function () {
 
         constructor: OBJLoader,
 
-        load: function ( url, onLoad, onProgress, onError ) {
+        load: function ( url_or_text, modeBeforeOrAfterSave, onLoad, onProgress, onError ) {
 
             var scope = this;
 
             var loader = new THREE.FileLoader( scope.manager );
             loader.setPath( this.path );
-            loader.load( url, function ( text ) {
 
-                onLoad( scope.parse( text ) );
+            if(modeBeforeOrAfterSave=='after') { // get from url_or_text: available after obj is uploaded
 
-            }, onProgress, onError );
+                // url
+                loader.load(url_or_text,
+                    function (text) {onLoad(scope.parse(text));},
+                    onProgress, onError);
+
+            } else { // it is already given as text
+                var sc = scope.parse(url_or_text);
+                onLoad(sc);
+            }
+
+
+            // loader.load( url, function ( text ) {
+            //     onLoad( scope.parse( text ) );
+            // }, onProgress, onError );
+
+
+
 
         },
+
+
+        // load: function ( url, onLoad, onProgress, onError ) {
+        //
+        //     var scope = this;
+        //
+        //     var loader = new THREE.FileLoader( scope.manager );
+        //     loader.setPath( this.path );
+        //     loader.load( url, function ( text ) {
+        //
+        //         onLoad( scope.parse( text ) );
+        //
+        //     }, onProgress, onError );
+        //
+        // },
 
         setPath: function ( value ) {
 

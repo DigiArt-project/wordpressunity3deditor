@@ -12,7 +12,7 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
     //externalSource = document.getElementById("fetch_source").options[document.getElementById("fetch_source").selectedIndex].value;
     //lang document.getElementById("fetch_lang").options[document.getElementById("fetch_lang").selectedIndex].value;
 
-    var title =  title.replace(" ","%20"); // document.getElementById("wpunity_titles_search").value.replace(" ","%20");
+    var title =   title.replace(new RegExp(" ", 'g'),"_"); // document.getElementById("wpunity_titles_search").value.replace(" ","%20");
 
 
     var lang = "en";

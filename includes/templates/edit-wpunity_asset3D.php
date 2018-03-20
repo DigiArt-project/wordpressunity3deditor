@@ -1,15 +1,13 @@
 <?php
 
-
+/**
+ *   Create asset
+ *
+ */
 
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
-
-	/*wp_enqueue_script('wpunity_load_threejs');
-	wp_enqueue_script('wpunity_load_objloader');
-	wp_enqueue_script('wpunity_load_mtlloader');
-	wp_enqueue_script('wpunity_load_orbitcontrols');*/
 
 	wp_enqueue_script('wpunity_load87_threejs');
 	wp_enqueue_script('wpunity_load87_objloader2');

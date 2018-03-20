@@ -43,6 +43,9 @@ function onMouseDownSelect( event ) {
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
+    if (intersects.length === 0)
+        return;
+
     // ------------ in case TRS cube is clicked ---------
     if (intersects.length > 0) {
         if (intersects[0].object.name === 'trs_modeChanger') {
@@ -70,7 +73,8 @@ function onMouseDownSelect( event ) {
     }
 
     // More than one objects intersected
-    var prevSelected = transform_controls.object.name;
+
+    var prevSelected = typeof transform_controls.object != 'undefined' ? typeof transform_controls.object.name : null;
     var selectNext = false;
 
     var i = 0;

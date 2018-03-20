@@ -1404,7 +1404,7 @@ function wpunity_fetch_description_action_callback(){
 
     $fff = fopen("output_wiki.txt","w");
     fwrite($fff, $_POST['externalSource']);
-    fclose($fff);
+
     
 	if ($_POST['externalSource']=='Wikipedia')
 		$url = 'https://'.$_POST['lang'].'.wikipedia.org/w/api.php?action=query&format=json&exlimit=3&prop=extracts&'.$_POST['fulltext'].'titles='.$_POST['titles'];
@@ -1412,7 +1412,11 @@ function wpunity_fetch_description_action_callback(){
 		$url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles'];//.'&qf=LANGUAGE:'.$_POST['lang'];
 
 	echo  strip_tags(file_get_contents($url));
-
+    
+    fwrite($fff, $_POST['titles']);
+    fwrite($fff, htmlspecialchars($_POST['titles']));
+    fclose($fff);
+	
 	wp_die();
 }
 

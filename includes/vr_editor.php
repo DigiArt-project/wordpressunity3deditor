@@ -1,17 +1,8 @@
 <!-- For some reason these scripts can not be enqued : Try again when php -> js -->
-<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
-<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>-->
-<!---->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/CopyShader.js'></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/FXAAShader.js'></script>-->
-<!---->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/EffectComposer.js'></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/RenderPass.js'></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OutlinePass.js'></script>-->
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/ShaderPass.js'></script>-->
-
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
+<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OrbitControls.js'></script>
 
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
@@ -32,10 +23,10 @@
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
-wp_enqueue_script('wpunity_load_threejs');
-wp_enqueue_script('wpunity_load_objloader');
-wp_enqueue_script('wpunity_load_mtlloader');
-wp_enqueue_script('wpunity_load_orbitcontrols');
+//wp_enqueue_script('wpunity_load87_threejs');
+//wp_enqueue_script('wpunity_load87_objloader');
+//wp_enqueue_script('wpunity_load87_mtlloader');
+//wp_enqueue_script('wpunity_load87_orbitcontrols');
 
 wp_enqueue_script('wpunity_load_sceneexporterutils');
 wp_enqueue_script('wpunity_load_sceneexporter');

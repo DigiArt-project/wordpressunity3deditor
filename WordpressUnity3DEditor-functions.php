@@ -75,10 +75,10 @@ function wpunity_register_scripts() {
 
 
 //=========================== THREE js scripts ============================================
-	wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
-	wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
-	wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
-	wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
+//	wp_register_script( 'wpunity_load_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/three.js', null, null, false);
+//	wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
+//	wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
+// wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
 
 	wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
     wp_register_script( 'wpunity_load87_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader.js', null, null, false);

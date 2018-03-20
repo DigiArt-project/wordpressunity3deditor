@@ -71,8 +71,6 @@ class vr_editor_environmentals {
         this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
         this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
 
-        console.log("this.container_3D_all.clientWidth", this.container_3D_all.clientWidth);
-
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
 
@@ -189,6 +187,8 @@ class vr_editor_environmentals {
         this.scene.add(this.cameraOrbit);
 
         this.cameraOrbit.position.set( 50, 50, 50);
+
+        //console.log(THREE.OrbitControls);
 
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
