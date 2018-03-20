@@ -88,8 +88,8 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             canvas.loadMolecule(content);
 
             break;
-
     }
+
 
     if (content) {
         if(type === 'texture') {

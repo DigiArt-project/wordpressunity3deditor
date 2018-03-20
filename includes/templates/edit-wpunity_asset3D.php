@@ -17,8 +17,9 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wpunity_load87_orbitcontrols');
 	wp_enqueue_script('wpunity_load87_trackballcontrols');
 
+	// For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_CSS2DRenderer');
-
+	
 	wp_enqueue_script('wu_webw_3d_view');
 	wp_enqueue_script('wu_3d_view_pdb');
 
@@ -26,16 +27,17 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('flot');
 	wp_enqueue_script('flot-axis-labels');
 
+	// scroll for images
 	wp_enqueue_script('wpunity_lightslider');
 
-	// load script from js_libs
-	wp_enqueue_script( 'wpunity_content_interlinking_request');
 
 	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
 
+	// content interlinking ajax
 	wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
-		$pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
-
+		$pluginpath.'/js_libs/content_interlinking_commands/content_interlinking.js', array('jquery') );
+ 
+	// ajax php admin url
 	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
 	);
@@ -597,23 +599,10 @@ if($create_new == 0) {
                                     <!--put php loop here for every li item-->
 
                                     <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-1.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg" />
+                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg" data-asset-id="5"
+                                             onclick="console.log(this.dataset.assetId)"/>
                                     </li>
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-2.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-2.jpg" />
-                                    </li>
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-3.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-3.jpg" />
-                                    </li>
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-4.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-4.jpg" />
-                                    </li>
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-5.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-5.jpg" />
-                                    </li>
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-6.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-6.jpg" />
-                                    </li>
+                                    
                                 </ul>
 
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
@@ -1098,12 +1087,9 @@ if($create_new == 0) {
 
                 if(createAsset) {
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
-
                 } else {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
-
                     jQuery("#objectPropertiesPanel").hide();
-
                 }
 
                 var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
