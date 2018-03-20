@@ -1102,7 +1102,7 @@ if($create_new == 0) {
                 } else {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
 
-                    jQuery("#objectPropertiesPanel").hide();
+                    /*jQuery("#objectPropertiesPanel").hide();*/
 
                 }
 
