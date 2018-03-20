@@ -67,6 +67,10 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
 
             // Obj as text (needed for ObjLoader in 3D editor)
             var dec = new TextDecoder();
+
+            console.log(objFileContent);
+            console.log(objFileContent.byteLength);
+
             document.getElementById('objFileInput').value = dec.decode(objFileContent);
 
             checkerCompleteReading(canvas);
