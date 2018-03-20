@@ -1093,20 +1093,27 @@ if($create_new == 0) {
 
                 wpunity_reset_panels(previewCanvas);
 
-                var descText = document.getElementById('categoryDescription');
-                descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
+                var descText;
+                var cat;
+
+                descText = document.getElementById('categoryDescription');
 
                 if(createAsset) {
+
+                    descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
+
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
+                    cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
+
                 } else {
+
+                    descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
+
                     jQuery("#termIdInput").attr( "value", selectedCatId );
 
-                    /*jQuery("#objectPropertiesPanel").hide();*/
-
+                    cat = jQuery("#currently-selected").attr("data-cat-slug");
                 }
-
-                var cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
 
                 if (cat === 'molecule') {
                     jQuery("#mtlRadio").prop("checked", false);
