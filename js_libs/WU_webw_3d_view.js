@@ -1,7 +1,7 @@
 /*
      3D viewer for all types of files
  */
-class wu_webw_3d_view {
+class WU_webw_3d_view {
 
     constructor(elementToBindTo) {
 

@@ -1,4 +1,17 @@
 <!-- For some reason these scripts can not be enqued : Try again when php -> js -->
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/TransformControls.js"></script>-->
+<!--<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/PointerLockControls.js"></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/dat.gui.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/stats.min.js'></script>-->
+<!---->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/CopyShader.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/FXAAShader.js'></script>-->
+<!---->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/EffectComposer.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/RenderPass.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/OutlinePass.js'></script>-->
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs79/ShaderPass.js'></script>-->
+
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
@@ -52,6 +65,7 @@ echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
 echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
 echo '</script>';
+
 
 ?>
 

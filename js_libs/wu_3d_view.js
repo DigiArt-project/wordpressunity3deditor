@@ -1,6 +1,6 @@
 // OBSOLETE
 
-// 16/10/2017 by Ververidis: This function is obsolete. IT is replaced with wu_webw_3d_view.js
+// 16/10/2017 by Ververidis: This function is obsolete. IT is replaced with WU_webw_3d_view.js
 // Back-end: Remove 3d viewer from back-end, leave only json.
 
 class wu_3d_view {
