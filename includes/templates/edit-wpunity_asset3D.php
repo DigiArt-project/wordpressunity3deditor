@@ -646,7 +646,7 @@ if($create_new == 0) {
 <!--                                             data-path-url=""-->
 <!--                                             onclick="console.log(this.dataset.mtlFile, this.dataset.objFile, this.dataset.pathUrl);"/>-->
 <!--                                    </li>-->
-                                    
+                                
                                 </ul>
     
 
@@ -1563,7 +1563,7 @@ if($create_new == 0) {
                 inputLabel.innerHTML = 'Select a pdb file';
                 input.accept = ".pdb";
             } else {
-                inputLabel.innerHTML = 'or Select an a) obj, b) mtl, & c) optional texture file';
+                inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
                 input.accept = ".obj,.mtl,.jpg";
             }
         }
