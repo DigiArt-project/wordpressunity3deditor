@@ -44,6 +44,10 @@ function wpunity_getNonRegionalScenes($project_id) {
 	return $nonRegionalScenes;
 }
 
+//==========================================================================================================================================
+//==========================================================================================================================================
+
+//Function to get ALL necessary keys about GIO Analytics
 function wpunity_getProjectKeys($project_id) {
 
 	$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
@@ -53,6 +57,36 @@ function wpunity_getProjectKeys($project_id) {
 	$mykeys = array('projectID' => $project_id, 'gioID' => $myGioID, 'expID' => $myExpID, 'extraPass' => $extraPass);
 
 	return $mykeys;
+}
+
+//STEP 1 for GIO data
+add_action( 'user_register', 'wpunity_registrationUser_save', 10, 1 );
+
+function wpunity_registrationUser_save( $user_id ) {
+	//GIO CALL
+	//"email": <email_registered_at_wordpress>
+	//"password": <GIO_password>
+	//"first_name": <username_registered_at_wordpress>
+
+	$user_info = get_userdata($user_id);
+
+	$userEmail = $user_info->user_email;
+	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
+	$userName = $user_info->user_login;
+
+
+}
+
+//STEP 2 for GIO data
+function wpunity_createGame_GIO_request($project_id,$user_id){
+
+	$myGioID = '';//the return value for GIO id
+	$myExpID = '';//the return value for exp id
+
+	//save values to our DB
+	update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
+	update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);
+
 }
 
 
