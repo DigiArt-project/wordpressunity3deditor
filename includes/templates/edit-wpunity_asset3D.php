@@ -609,14 +609,48 @@ if($create_new == 0) {
                                 <label>Select an asset to insert</label>
                                 <ul id="lightSlider">
                                     <!--put php loop here for every li item-->
-
-                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-1.jpg">
-                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg" data-asset-id="5"
-                                             onclick="console.log(this.dataset.assetId)"/>
-                                    </li>
+    
+                                    <?php
+                                        $asset_id_avail = [3844, 3850];
+        
+                                        for ($k = 0; $k < count($asset_id_avail); $k++){
+                                            $assetpostMeta = get_post_meta($asset_id_avail[ $k ]);
+            
+                                            $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+                                            $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+                                            $scrnImagePost = get_post($assetpostMeta['wpunity_asset3d_screenimage'][0]);
+            
+                                            $scrn_image_file_name = $scrnImagePost->guid;
+                                            $mtl_file_name = basename($mtlpost->guid);
+                                            $obj_file_name = basename($objpost->guid);
+                                            $path_url = pathinfo($mtlpost->guid)['dirname'];
+    
+                                            echo '<li data-thumb="'.$scrn_image_file_name.'">';
+                                            echo '<img src="'.$scrn_image_file_name.'"'.
+                                                 ' data-mtl-file="'.$mtl_file_name.'"'.
+                                                 ' data-obj-file="'.$obj_file_name.'"'.
+                                                 ' data-path-url="'.$path_url.'/"'.
+                                                 ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);"/>';
+                                            echo '</li>';
+                                        }
+    
+                                    ?>
+                                    
+                                    
+                                    
+<!--                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-1.jpg">-->
+<!--                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg"-->
+<!--                                             data-asset-id="5"-->
+<!--                                             data-mtl-file="bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt"-->
+<!--                                             data-obj-file="f74d834f96148080b5822a409a4299ff_objTurbine1.txt"-->
+<!--                                             data-path-url=""-->
+<!--                                             onclick="console.log(this.dataset.mtlFile, this.dataset.objFile, this.dataset.pathUrl);"/>-->
+<!--                                    </li>-->
                                     
                                 </ul>
+    
 
+                                
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
                                        multiple accept=".obj,.mtl,.jpg"/>
@@ -1529,7 +1563,7 @@ if($create_new == 0) {
                 inputLabel.innerHTML = 'Select a pdb file';
                 input.accept = ".pdb";
             } else {
-                inputLabel.innerHTML = 'Select an a) obj, b) mtl, & c) optional texture file';
+                inputLabel.innerHTML = 'or Select an a) obj, b) mtl, & c) optional texture file';
                 input.accept = ".obj,.mtl,.jpg";
             }
         }

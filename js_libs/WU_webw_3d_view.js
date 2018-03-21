@@ -270,6 +270,8 @@ class WU_webw_3d_view {
     clearAllAssets() {
         var scope = this;
 
+        console.log("CLEARING");
+
         // PDB Specific
         while (scope.root.children.length > 0) {
             var object = scope.root.children[0];

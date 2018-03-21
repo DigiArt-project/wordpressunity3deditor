@@ -68,9 +68,6 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             // Obj as text (needed for ObjLoader in 3D editor)
             var dec = new TextDecoder();
 
-            console.log(objFileContent);
-            console.log(objFileContent.byteLength);
-
             document.getElementById('objFileInput').value = dec.decode(objFileContent);
 
             checkerCompleteReading(canvas);
@@ -187,6 +184,9 @@ function wpunity_reset_panels(wu_webw_3d_view) {
 
 function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
+    // for existing 3D models
+    loader_asset_exists(path_url, mtl_file_name, obj_file_name);
+
     // Load from selected files
     var _handleFileSelect = function ( event  ) {
 
@@ -223,50 +223,6 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
 
 
-    //--------------- load all from url (in edit asset) --------------
-    if (typeof path_url != "undefined") {
-        var manager = new THREE.LoadingManager();
-        var mtlLoader = new THREE.MTLLoader();
-
-        //var mtl_url = "bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt";
-        //var obj_file_name = "f74d834f96148080b5822a409a4299ff_objTurbine1.txt";
-        //var path_url = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/Models/";
-
-        mtlLoader.setPath(path_url);
-
-        mtlLoader.load(mtl_file_name, function (materials) {
-            materials.preload();
-
-            var objLoader = new THREE.OBJLoader(manager);
-            objLoader.setMaterials(materials);
-            objLoader.setPath(path_url);
-            objLoader.load(obj_file_name, 'after',
-                // OnObjLoad
-                function (object) {
-                    wu_webw_3d_view.scene.add(object);
-
-                    // 6 is the added object
-                    var totalradius = wu_webw_3d_view.computeSceneBoundingSphereAll( wu_webw_3d_view.scene.children[6] )[1];
-
-                    wu_webw_3d_view.controls.minDistance = 0.5*totalradius;
-                    wu_webw_3d_view.controls.maxDistance = 8*totalradius;
-                },
-                //onObjProgressLoad
-                function (xhr) {
-                    if (xhr.lengthComputable) {
-                    }
-                },
-                //onObjErrorLoad
-                function (xhr) {
-                }
-            );
-        });
-    }
-    //--------------------------------------------
-
-
-
-
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
@@ -280,8 +236,6 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
         canvas.render();
     };
 
-
-
     canvas.initGL();
     canvas.resizeDisplayGL();
     canvas.initPostGL();
@@ -290,7 +244,10 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
     render();
 }
 
-
+/**
+ * Reading from text files on client side
+ * @param canvas
+ */
 function checkerCompleteReading(canvas){
 
     if (nObj==1 && objFileContent!=='' ){
@@ -321,8 +278,6 @@ function checkerCompleteReading(canvas){
                     wu_webw_3d_view.loadFilesUser(objectDefinition);
                 } else {
 
-                    console.log("nJpg", nJpg, jQuery("input[id='textureFileInput']").length);
-
                     if ( nJpg === jQuery("input[id='textureFileInput']").length) {
 
                         // Get textureFileInput array with jQuery
@@ -348,6 +303,64 @@ function checkerCompleteReading(canvas){
             }
         }
     }
+}
+
+
+/**
+ * Reading from url in server side
+ * @param pathUrl
+ * @param mtlFilename
+ * @param objFilename
+ */
+function loader_asset_exists(pathUrl, mtlFilename, objFilename){
+
+    if (wu_webw_3d_view.scene != null) {
+        if (wu_webw_3d_view.renderer)
+             wu_webw_3d_view.clearAllAssets();
+    }
+    //--------------- load all from url (in edit asset) --------------
+    if (typeof pathUrl != "undefined") { // this means that 3D model exists for this asset
+
+        var manager = new THREE.LoadingManager();
+        var mtlLoader = new THREE.MTLLoader();
+
+        //var mtl_url = "bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt";
+        //var obj_file_name = "f74d834f96148080b5822a409a4299ff_objTurbine1.txt";
+        //var pathUrl = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/Models/";
+
+        mtlLoader.setPath(pathUrl);
+
+        mtlLoader.load(mtlFilename, function (materials) {
+            materials.preload();
+
+            var objLoader = new THREE.OBJLoader(manager);
+            objLoader.setMaterials(materials);
+            objLoader.setPath(pathUrl);
+
+            objLoader.load(objFilename, 'after',
+                // OnObjLoad
+                function (object) {
+                    // adding to the pivot point only
+                    wu_webw_3d_view.pivot.add(object);
+
+                    // ZOOM to fit in screen
+                    var totalradius = wu_webw_3d_view.computeSceneBoundingSphereAll( wu_webw_3d_view.scene.children[5] )[1]; // 5 is the pivot (parent of the added object)
+                    wu_webw_3d_view.controls.minDistance = 0.5*totalradius;
+                    wu_webw_3d_view.controls.maxDistance = 8*totalradius;
+                },
+                //onObjProgressLoad
+                function (xhr) {
+                    if (xhr.lengthComputable) {
+                    }
+                },
+                //onObjErrorLoad
+                function (xhr) {
+                    console.log("Error 351");
+                }
+            );
+        });
+    }
+
 }
 
 
