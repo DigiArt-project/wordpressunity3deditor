@@ -1,5 +1,106 @@
 <?php
 
+function wpunity_the_slug_exists($post_name) {
+	global $wpdb;
+	if($wpdb->get_row("SELECT post_name FROM wp_posts WHERE post_name = '" . $post_name . "'", 'ARRAY_A')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+function wpunity_createJoker_activation() {
+	$userID = get_current_user_id();
+	//$virtualplace_tax = get_term_by('slug', 'virtual_place', 'wpunity_game_cat');
+	//$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
+
+	if (!wpunity_the_slug_exists('joker-arch')) {
+		$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+		$archaeology_tax_id = $archaeology_tax->term_id;
+
+		$game_taxonomies_arch = array(
+			'wpunity_game_type' => array(
+				$archaeology_tax_id,
+			),
+//			'wpunity_game_cat' => array(
+//				$virtualplace_tax->term_id,
+//			)
+		);
+
+		$game_information_arch = array(
+			'post_title' => 'Archaeology Joker',
+			'post_name' => 'joker-arch',
+			'post_content' => '',
+			'post_type' => 'wpunity_game',
+			'post_status' => 'publish',
+			'tax_input' => $game_taxonomies_arch,
+			'post_author'   => $userID,
+		);
+
+		wp_insert_post($game_information_arch);
+	}
+
+	if (!wpunity_the_slug_exists('joker-energy')) {
+		$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
+		$energy_tax_id = $energy_tax->term_id;
+
+		$game_taxonomies_ener = array(
+			'wpunity_game_type' => array(
+				$energy_tax_id,
+			),
+//			'wpunity_game_cat' => array(
+//				$virtualplace_tax->term_id,
+//			)
+		);
+
+		$game_information_ener = array(
+			'post_title' => 'Energy Joker',
+			'post_name' => 'joker-energy',
+			'post_content' => '',
+			'post_type' => 'wpunity_game',
+			'post_status' => 'publish',
+			'tax_input' => $game_taxonomies_ener,
+			'post_author'   => $userID,
+		);
+
+		wp_insert_post($game_information_ener);
+	}
+
+	if (!wpunity_the_slug_exists('joker-chem')) {
+		$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
+		$chemistry_tax_id = $chemistry_tax->term_id;
+
+		$game_taxonomies_chem = array(
+			'wpunity_game_type' => array(
+				$chemistry_tax_id,
+			),
+//			'wpunity_game_cat' => array(
+//				$virtualplace_tax->term_id,
+//			)
+		);
+
+		$game_information_chem = array(
+			'post_title' => 'Chemistry Joker',
+			'post_name' => 'joker-chem',
+			'post_content' => '',
+			'post_type' => 'wpunity_game',
+			'post_status' => 'publish',
+			'tax_input' => $game_taxonomies_chem,
+			'post_author'   => $userID,
+		);
+
+		wp_insert_post($game_information_chem);
+	}
+
+
+}
+//add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
+
+
+//==========================================================================================================================================
+//==========================================================================================================================================
+
 function wpunity_getNonRegionalScenes($project_id) {
 	$game_post = get_post($project_id);
 	$gameSlug = $game_post->post_name;

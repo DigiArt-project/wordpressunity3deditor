@@ -186,8 +186,6 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_ass
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-db-table-creations.php' );
 register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
 
-
-
 // Add helper functions file
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
 
@@ -294,5 +292,6 @@ add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_actio
 
 // Ajax for deleting scene
 add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
+
 
 ?>
