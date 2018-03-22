@@ -78,6 +78,9 @@ $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
 $allGamesPage = wpunity_getEditpage('allgames');
 
+$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
+
+
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	$credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
@@ -564,9 +567,10 @@ if ( $assets ) :?>
                             </h1>
                         </div>
 
+                        <!--TODO: Check the urls for edit and delete-->
                         <section class="mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="">EDIT</a>
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid]; ?> , <?php echo $gameSlug ?>)">DELETE</a>
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit; ?>&<?php echo $asset[assetid]; ?>\'">EDIT</a>
                         </section>
 
                     </div>
