@@ -63,10 +63,6 @@ function wpunity_getProjectKeys($project_id) {
 add_action( 'user_register', 'wpunity_registrationUser_save', 10, 1 );
 
 function wpunity_registrationUser_save( $user_id ) {
-	//GIO CALL
-	//"email": <email_registered_at_wordpress>
-	//"password": <GIO_password>
-	//"first_name": <username_registered_at_wordpress>
 
 	$user_info = get_userdata($user_id);
 
@@ -74,15 +70,15 @@ function wpunity_registrationUser_save( $user_id ) {
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 	$userName = $user_info->user_login;
 
-	$response = wp_remote_post( "http://api-staging.goedle.io/users/", array(
-			'method' => 'POST',
-			'timeout' => 45,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'blocking' => true,
-			'sslverify' => false,
-			'headers' => array( 'content-type' => 'application/json' ),
-			'body' => '['. json_encode(array(
+	$args = array(
+		'method' => 'POST',
+		'timeout' => 45,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'blocking' => true,
+		'sslverify' => 0,
+		'headers' => array( 'content-type' => 'application/json' ),
+		'body' => '['. json_encode(array(
 				'user' => array(
 					'email' => $userEmail,
 					'password' => $extraPass,
@@ -93,9 +89,15 @@ function wpunity_registrationUser_save( $user_id ) {
 					'add' => false
 				)
 			) ). ']',
-			'cookies' => array()
-		)
+		'cookies' => array()
 	);
+
+	$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
+
+	/*print_r($args);
+	print_r($response);
+    die();*/
+
 
 	if ( is_wp_error( $response ) ) {
 		$error_message = $response->get_error_message();
@@ -161,11 +163,12 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 		$myGioID = $request->app->app_key; //the return value for GIO id
 		$api_key = $request->app->api_key;
-	}
 
-	//save values to our DB
-	update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
-	/*update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);*/
+		// Save values to our DB
+		// TODO Stathi add new field for api_key. Bound to project.
+		update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
+		/*update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);*/
+	}
 
 }
 
