@@ -569,7 +569,7 @@ if ( $assets ) :?>
 
                         <!--TODO: Check the urls for edit and delete-->
                         <section class="mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid]; ?> , <?php echo $gameSlug ?>)">DELETE</a>
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>')">DELETE</a>
                             <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit; ?>&<?php echo $asset[assetid]; ?>\'">EDIT</a>
                         </section>
 
