@@ -545,7 +545,9 @@ if ( $assets ) :?>
                         <a href="#">
 
 							<?php if ($asset[screenImagePath]){ ?>
-                                <img src="<?php echo $asset[screenImagePath]; ?>">
+
+                                <img width="495" height="330" src="<?php echo $asset[screenImagePath]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+
 							<?php } else { ?>
                                 <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                     <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
