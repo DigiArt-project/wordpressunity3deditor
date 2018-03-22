@@ -44,6 +44,10 @@ function wpunity_getNonRegionalScenes($project_id) {
 	return $nonRegionalScenes;
 }
 
+//==========================================================================================================================================
+//==========================================================================================================================================
+
+//Function to get ALL necessary keys about GIO Analytics
 function wpunity_getProjectKeys($project_id) {
 
 	$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
@@ -53,6 +57,119 @@ function wpunity_getProjectKeys($project_id) {
 	$mykeys = array('projectID' => $project_id, 'gioID' => $myGioID, 'expID' => $myExpID, 'extraPass' => $extraPass);
 
 	return $mykeys;
+}
+
+//STEP 1 for GIO data
+add_action( 'user_register', 'wpunity_registrationUser_save', 10, 1 );
+
+function wpunity_registrationUser_save( $user_id ) {
+
+	$user_info = get_userdata($user_id);
+
+	$userEmail = $user_info->user_email;
+	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
+	$userName = $user_info->user_login;
+
+	$args = array(
+		'method' => 'POST',
+		'timeout' => 45,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'blocking' => true,
+		'sslverify' => 0,
+		'headers' => array( 'content-type' => 'application/json' ),
+		'body' => '['. json_encode(array(
+				'user' => array(
+					'email' => $userEmail,
+					'password' => $extraPass,
+					'first_name' => $userName,
+					'company' => 'ENVISAGE'
+				),
+				'app' => array(
+					'add' => false
+				)
+			) ). ']',
+		'cookies' => array()
+	);
+
+	$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
+
+	/*print_r($args);
+	print_r($response);
+    die();*/
+
+
+	if ( is_wp_error( $response ) ) {
+		$error_message = $response->get_error_message();
+
+		echo '<script language="javascript">';
+		echo 'alert("Something went wrong");';
+		echo "Something went wrong: $error_message";
+		echo '</script>';
+
+	} else {
+
+		echo '<script language="javascript">';
+		echo 'alert("Something went wrong");';
+		echo 'Response:<pre>';
+		echo $response;
+		echo '</pre>';
+		echo '</script>';
+	}
+}
+
+//STEP 2 for GIO data
+function wpunity_createGame_GIO_request($project_id, $user_id){
+
+	$user_info = get_userdata($user_id);
+	$userEmail = $user_info->user_email;
+	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
+
+	$token = wp_remote_post( "http://api-staging.goedle.io/token/", array(
+			'method' => 'POST',
+			'timeout' => 45,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking' => true,
+			'sslverify' => false,
+			'headers' => array( 'content-type' => 'application/json' ),
+			'body' => '['. json_encode(array(
+				'email' => $userEmail,
+				'password' => $extraPass
+			) ) . ']',
+			'cookies' => array()
+		)
+	);
+
+	if (!is_wp_error( $token ) ) {
+
+		$request = wp_remote_post( " http://api-staging.goedle.io/apps/", array(
+				'method' => 'POST',
+				'timeout' => 45,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'sslverify' => false,
+				'headers' => array( 'content-type' => 'application/json', 'Authorization' => '${'. $token->token .'}' ),
+				'body' => '['. json_encode(array(
+
+				) ) . ']',
+				'cookies' => array()
+			)
+		);
+	}
+
+	if (!is_wp_error( $request ) ) {
+
+		$myGioID = $request->app->app_key; //the return value for GIO id
+		$api_key = $request->app->api_key;
+
+		// Save values to our DB
+		// TODO Stathi add new field for api_key. Bound to project.
+		update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
+		/*update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);*/
+	}
+
 }
 
 
@@ -69,35 +186,35 @@ function wpunity_extrapass_register_form() {
 	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
 
 	?>
-	<p>
-		<label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
-			<input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
-	</p>
-	<script type="text/javascript">
-		jQuery(document).ready(
-			function wpunityGenerateExtraPass(){
-				var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-				document.getElementById('extra_pass').value  = rString;
-			}
-		);
+    <p>
+        <label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
+            <input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
+    </p>
+    <script type="text/javascript">
+        jQuery(document).ready(
+            function wpunityGenerateExtraPass(){
+                var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+                document.getElementById('extra_pass').value  = rString;
+            }
+        );
 
-		jQuery( "#registerform" ).focus(function() {
-			alert( "Handler for .focus() called." );
-		});
-
-
-		function wpunity_randomString(length, chars) {
-			var result = '';
-			for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-			return result;
-		}
+        jQuery( "#registerform" ).focus(function() {
+            alert( "Handler for .focus() called." );
+        });
 
 
-//		function wpunityGenerateExtraPass(){
-//			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-//			document.getElementById('extra_pass').value  = rString;
-//		}
-	</script>
+        function wpunity_randomString(length, chars) {
+            var result = '';
+            for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+            return result;
+        }
+
+
+        //		function wpunityGenerateExtraPass(){
+        //			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        //			document.getElementById('extra_pass').value  = rString;
+        //		}
+    </script>
 	<?php
 }
 
@@ -128,14 +245,14 @@ add_action( 'edit_user_profile', 'wpunity_extrapass_profile_fields' );
 
 function wpunity_extrapass_profile_fields( $user ) {
 	?>
-	<h3><?php esc_html_e('Extra Information'); ?></h3>
+    <h3><?php esc_html_e('Extra Information'); ?></h3>
 
-	<table class="form-table">
-		<tr>
-			<th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
-			<td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
-		</tr>
-	</table>
+    <table class="form-table">
+        <tr>
+            <th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
+            <td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
+        </tr>
+    </table>
 	<?php
 }
 
@@ -770,8 +887,8 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 					if ($key !== 'avatarYawObject') {
 						if ($value['categoryName'] === 'Door') {
 							$doorInfoGathered[] = ['door' => $value['doorName_source'],
-								'scene' => $sceneTitle,
-								'sceneSlug'=> $sceneSlug];
+							                       'scene' => $sceneTitle,
+							                       'sceneSlug'=> $sceneSlug];
 						}
 					}
 				}
@@ -825,8 +942,8 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 					if ($key !== 'avatarYawObject') {
 						if ($value['categoryName'] === 'Door') {
 							$doorInfoGathered[] = ['door' => $value['doorName_source'],
-								'scene' => $sceneTitle,
-								'sceneSlug'=> $sceneSlug];
+							                       'scene' => $sceneTitle,
+							                       'sceneSlug'=> $sceneSlug];
 						}
 					}
 				}
@@ -881,10 +998,10 @@ function wpunity_get_all_sceneids_of_game($allScenePGameID){
 
 function wpunity_upload_img_vid_directory( $dir ) {
 	return array(
-		'path'   => $dir['basedir'] . '/Models',
-		'url'    => $dir['baseurl'] . '/Models',
-		'subdir' => '/Models',
-	) + $dir;
+		       'path'   => $dir['basedir'] . '/Models',
+		       'url'    => $dir['baseurl'] . '/Models',
+		       'subdir' => '/Models',
+	       ) + $dir;
 }
 
 
@@ -1402,21 +1519,21 @@ add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_descripti
 
 function wpunity_fetch_description_action_callback(){
 
-    $fff = fopen("output_wiki.txt","w");
-    fwrite($fff, $_POST['externalSource']);
+	$fff = fopen("output_wiki.txt","w");
+	fwrite($fff, $_POST['externalSource']);
 
-    
+
 	if ($_POST['externalSource']=='Wikipedia')
 		$url = 'https://'.$_POST['lang'].'.wikipedia.org/w/api.php?action=query&format=json&exlimit=3&prop=extracts&'.$_POST['fulltext'].'titles='.$_POST['titles'];
 	else
 		$url = 'https://www.europeana.eu/api/v2/search.json?wskey=8mfU6ZgfW&query='.$_POST['titles'];//.'&qf=LANGUAGE:'.$_POST['lang'];
 
 	echo  strip_tags(file_get_contents($url));
-    
-    fwrite($fff, $_POST['titles']);
-    fwrite($fff, htmlspecialchars($_POST['titles']));
-    fclose($fff);
-	
+
+	fwrite($fff, $_POST['titles']);
+	fwrite($fff, htmlspecialchars($_POST['titles']));
+	fclose($fff);
+
 	wp_die();
 }
 
@@ -1474,13 +1591,13 @@ function wpunity_assepile_action_callback(){
 			break;
 	}
 
-    $gameId = $_REQUEST['gameId'];
-    $gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
+	$gameId = $_REQUEST['gameId'];
+	$gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
 
 
-    $assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
+	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
 
-    //wp_die();
+	//wp_die();
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
