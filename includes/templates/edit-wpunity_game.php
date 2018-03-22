@@ -59,7 +59,7 @@ wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
 //FOR SAVING extra keys
 wp_enqueue_script( 'ajax-script_savegio', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
 wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
+	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
 );
 
 
@@ -77,6 +77,9 @@ $editsceneExamPage = wpunity_getEditpage('sceneExam');
 $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
 $allGamesPage = wpunity_getEditpage('allgames');
+
+$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
+
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
@@ -521,8 +524,81 @@ if ( $custom_query->have_posts() ) :?>
 
 wp_reset_postdata();
 $wp_query = NULL;
-$wp_query = $temp_query;
-?>
+$wp_query = $temp_query; ?>
+
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Assets</h2>
+
+
+
+
+<?php $assets = wpunity_getAllassets_byGameProject($gameSlug);
+
+// Output custom query loop
+if ( $assets ) :?>
+
+    <div class="mdc-layout-grid">
+
+        <div class="mdc-layout-grid__inner">
+
+			<?php foreach ($assets as $asset) {	?>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+
+                    <div class="mdc-card mdc-theme--background" id="<?php echo $asset[assetid]; ?>">
+                        <div class="SceneThumbnail">
+                            <a href="#">
+
+								<?php if ($asset[screenImagePath]){ ?>
+
+                                    <img width="495" height="330" src="<?php echo $asset[screenImagePath]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+
+								<?php } else { ?>
+                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                    </div>
+								<?php } ?>
+
+                            </a>
+                        </div>
+
+                        <div class="mdc-card__primary">
+                            <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
+                            </h1>
+                        </div>
+
+                        <!--TODO: Check the urls for edit and delete-->
+                        <section class="mdc-card__actions">
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>')">DELETE</a>
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit; ?>&<?php echo $asset[assetid]; ?>\'">EDIT</a>
+                        </section>
+
+                    </div>
+                </div>
+			<?php } ?>
+
+        </div>
+    </div>
+
+<?php else : ?>
+
+    <hr class="WhiteSpaceSeparator">
+
+    <div class="CenterContents">
+
+        <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No assets available">
+            landscape
+        </i>
+
+        <h3 class="mdc-typography--headline">No Assets available</h3>
+        <hr class="WhiteSpaceSeparator">
+
+    </div>
+
+
+<?php endif; ?>
+
+
 
     <script type="text/javascript">
 
