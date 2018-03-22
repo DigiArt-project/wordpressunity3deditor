@@ -180,9 +180,9 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     $obj_content = $_POST['objFileInput'];
 
     // Remove this debugging piece of code in the end
-    $fh = fopen("output_mtlContent.txt", "w");
-    fwrite($fh, $mtl_content);
-    fclose($fh);
+//    $fh = fopen("output_mtlContent.txt", "w");
+//    fwrite($fh, $mtl_content);
+//    fclose($fh);
     // - until here
 
 
@@ -225,8 +225,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
     $obj_content = substr_replace ( $obj_content , $obj_contentfirst , 0 , 500 );
     
-    
-    
     $objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
 
     // SCREENSHOT
@@ -238,6 +236,27 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
     update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
 
+}
+
+function wpunity_copy_3Dfiles($asset_newID, $asset_sourceID){
+
+    //$fo = fopen("output_copy_asset.txt","w");
+    //fwrite($fo, print_r([$asset_newID, $assetTitleForm, $gameSlug, $asset_sourceID], true) );
+    //fclose($fo);
+    
+    // Get the source post
+    $assetpostMeta = get_post_meta($asset_sourceID);
+    
+    // and Clone all the meta fields related to 3D
+    update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $assetpostMeta['wpunity_asset3d_mtl'][0]);
+    update_post_meta($asset_newID, 'wpunity_asset3d_obj', $assetpostMeta['wpunity_asset3d_obj'][0]);
+    update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $assetpostMeta['wpunity_asset3d_screenimage'][0]);
+    
+    delete_post_meta($asset_newID, 'wpunity_asset3d_diffimage');
+    for ($m=0; $m < count($assetpostMeta['wpunity_asset3d_diffimage']); $m++)
+        add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $assetpostMeta['wpunity_asset3d_diffimage'][$m]);
+    
+    
 }
 
 function wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug){

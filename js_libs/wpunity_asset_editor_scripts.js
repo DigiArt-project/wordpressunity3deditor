@@ -130,6 +130,8 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
         wu_webw_3d_view.clearAllAssets();
     }
 
+
+
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
@@ -185,10 +187,13 @@ function wpunity_reset_panels(wu_webw_3d_view) {
 function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     // for existing 3D models
-    loader_asset_exists(path_url, mtl_file_name, obj_file_name);
+    if (typeof path_url != "undefined")
+        loader_asset_exists(path_url, mtl_file_name, obj_file_name);
 
     // Load from selected files
     var _handleFileSelect = function ( event  ) {
+
+        document.getElementById('asset_sourceID').value ="";
 
         // copy because clear asset files in the following clears the total input fields also
         var files = {... event.target.files};
