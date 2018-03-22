@@ -542,29 +542,27 @@ if ( $assets ) :?>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
                     <div class="mdc-card mdc-theme--background" id="<?php echo $asset[assetid]; ?>">
-                        <a href="#">
+                        <div class="SceneThumbnail">
+                            <a href="#">
 
-							<?php if ($asset[screenImagePath]){ ?>
+								<?php if ($asset[screenImagePath]){ ?>
 
-                                <img width="495" height="330" src="<?php echo $asset[screenImagePath]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+                                    <img width="495" height="330" src="<?php echo $asset[screenImagePath]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
 
-							<?php } else { ?>
-                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                    <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                </div>
-							<?php } ?>
+								<?php } else { ?>
+                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                    </div>
+								<?php } ?>
 
-                            <div class="mdc-card__media-content">
+                            </a>
+                        </div>
 
-
-                                <h1 class="mdc-card__primary mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                    <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
-                                </h1>
-
-
-                            </div>
-
-                        </a>
+                        <div class="mdc-card__primary">
+                            <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
+                            </h1>
+                        </div>
 
                         <section class="mdc-card__actions">
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="">DELETE</a>
