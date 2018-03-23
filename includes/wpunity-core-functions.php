@@ -217,7 +217,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 	$userEmail = $user_info->user_email;
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 
-	$token = wp_remote_post( "http://api-staging.goedle.io/token/", array(
+	$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", array(
 			'method' => 'POST',
 			'timeout' => 45,
 			'redirection' => 5,
@@ -233,7 +233,10 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 		)
 	);
 
-	if (!is_wp_error( $token ) ) {
+	if (!is_wp_error( $token_request ) ) {
+
+		$token = json_decode($token_request[body]);
+		$token = $token->token;
 
 		$request = wp_remote_post( " http://api-staging.goedle.io/apps/", array(
 				'method' => 'POST',
@@ -241,11 +244,9 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 				'redirection' => 5,
 				'httpversion' => '1.0',
 				'blocking' => true,
-				'sslverify' => false,
-				'headers' => array( 'content-type' => 'application/json', 'Authorization' => '${'. $token->token .'}' ),
-				'body' =>json_encode(array(
-
-				) ),
+				'sslverify' => 0,
+				'headers' => array( 'content-type' => 'application/json', 'Authorization' => '${'. $token .'}' ),
+				'body' =>json_encode(array() ),
 				'cookies' => array()
 			)
 		);
