@@ -566,10 +566,8 @@ if ( $assets ) :?>
                                 <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
                             </h1>
 
-                            <?php /* print_r($asset);*/?>
-
                             <p class="mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <?php echo $asset[categoryName];?>
+								<?php echo $asset[categoryName];?>
                             </p>
 
                         </div>
