@@ -643,31 +643,50 @@ if($create_new == 0) {
                                     <!--put php loop here for every li item-->
     
                                     <?php
-                                        $asset_id_avail = [3844, 3850, 3455];
-        
-                                        for ($k = 0; $k < count($asset_id_avail); $k++){
-                                            $assetpostMeta = get_post_meta($asset_id_avail[ $k ]);
-            
-                                            $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-                                            $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
-                                            $scrnImagePost = get_post($assetpostMeta['wpunity_asset3d_screenimage'][0]);
-            
-                                            $scrn_image_file_name = $scrnImagePost->guid;
-                                            $mtl_file_name = basename($mtlpost->guid);
-                                            $obj_file_name = basename($objpost->guid);
-                                            $path_url = pathinfo($mtlpost->guid)['dirname'];
-    
-                                            echo '<li data-thumb="'.$scrn_image_file_name.'">';
-                                            echo '<img src="'.$scrn_image_file_name.'"'.
-                                                 ' data-asset-id="'.$asset_id_avail[ $k ].'"'.
-                                                 ' data-mtl-file="'.$mtl_file_name.'"'.
-                                                 ' data-obj-file="'.$obj_file_name.'"'.
-                                                 ' data-path-url="'.$path_url.'/"'.
-                                                 ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
-                                                    'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
-                                                    '"/>';
-                                            echo '</li>';
-                                        }
+                                        $asset_id_avail = [332, 3850, 3455];
+
+										foreach ( $asset_id_avail as $myAssetID ) {
+											$mtlID = get_post_meta($myAssetID, 'wpunity_asset3d_mtl', true);
+											$objID = get_post_meta($myAssetID, 'wpunity_asset3d_obj', true);
+											$screenimgID = get_post_meta($myAssetID, 'wpunity_asset3d_screenimage', true);
+											$diffimgID = get_post_meta($myAssetID, 'wpunity_asset3d_diffimage', true);
+											if($screenimgID){$screenimgURL = wp_get_attachment_url($screenimgID);}else{}//default image
+											
+											echo '<li data-thumb="'. $screenimgURL . '">';
+											echo '<img src="'. $screenimgURL .'"'.
+												' data-asset-id="'. $myAssetID .'"'.
+												' data-mtl-file="'. basename( get_attached_file( $mtlID ) ) .'"'.
+												' data-obj-file="'. basename( get_attached_file( $objID ) ) .'"'.
+												' data-path-url="'. pathinfo(wp_get_attachment_url($mtlID))['dirname'] .'/"'.
+												' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
+												'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
+												'"/>';
+											echo '</li>';
+										}
+
+//                                        for ($k = 0; $k < count($asset_id_avail); $k++){
+//                                            $assetpostMeta = get_post_meta($asset_id_avail[ $k ]);
+//
+//											$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+//                                            $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+//                                            $scrnImagePost = get_post($assetpostMeta['wpunity_asset3d_screenimage'][0]);
+//
+//                                            $scrn_image_file_name = $scrnImagePost->guid;
+//                                            $mtl_file_name = basename($mtlpost->guid);
+//                                            $obj_file_name = basename($objpost->guid);
+//                                            $path_url = pathinfo($mtlpost->guid)['dirname'];
+//
+//                                            echo '<li data-thumb="'.$scrn_image_file_name.'">';
+//                                            echo '<img src="'.$scrn_image_file_name.'"'.
+//                                                 ' data-asset-id="'.$asset_id_avail[ $k ].'"'.
+//                                                 ' data-mtl-file="'.$mtl_file_name.'"'.
+//                                                 ' data-obj-file="'.$obj_file_name.'"'.
+//                                                 ' data-path-url="'.$path_url.'/"'.
+//                                                 ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
+//                                                    'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
+//                                                    '"/>';
+//                                            echo '</li>';
+//                                        }
     
                                     ?>
                                     
