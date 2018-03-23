@@ -88,7 +88,31 @@ $game_type_obj = wpunity_return_game_type($project_id);
 //Get 'parent-game' taxonomy with the same slug as Game
 $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 $assetPGameID = $assetPGame->term_id;
-$assetPGameSlug = $assetPGame->post_name;
+$assetPGameSlug = $assetPGame->slug;
+
+
+echo "assetPGameID=" . $assetPGameID;
+echo " <br /> ";
+echo "assetCatID=" . $assetCatID;
+echo " <br /> ";
+echo "assetTitleForm=" . $assetTitleForm;
+echo " <br /> ";
+echo "assetDescForm=" . $assetDescForm;
+echo " <br /> ";
+echo "gameSlug=" . $gameSlug;
+echo " <br /> ";
+echo "game_post=" . print_r($game_post,true);
+echo " <br /> ";
+echo "game_type_obj=" . print_r($game_type_obj, true);
+echo " <br /> ";
+echo "assetPGame=" . print_r($assetPGame, true);
+echo " <br /> ";
+echo "assetPGameSlug=" . $assetPGameSlug;
+
+
+
+
+
 
 $asset_post = get_post($asset_inserted_id);
 
@@ -123,6 +147,7 @@ $allGamesPage = wpunity_getEditpage('allgames');
 $editscenePage = wpunity_getEditpage('scene');
 
 
+
 // If form is submitted
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 	
@@ -133,10 +158,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	if($create_new == 1){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
-
+  
 		$asset_newID = 	wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug);
 
-		//If the Asset has created (doesnt returns 0) -> Gather Info for extra fields
+		// Create new: If the Asset is created (doesnt returns 0) -> Gather Info for extra fields
 		if($asset_newID != 0) {
 			$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
 
