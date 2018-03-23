@@ -8,7 +8,7 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wpunity_scripts');
 
 	wp_enqueue_script('wpunity_load87_threejs');
-    wp_enqueue_script('wpunity_load87_objloader');
+	wp_enqueue_script('wpunity_load87_objloader');
 	wp_enqueue_script('wpunity_load87_objloader2');
 	wp_enqueue_script('wpunity_load87_pdbloader');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
@@ -18,7 +18,7 @@ function loadAsset3DManagerScripts() {
 
 	// For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_CSS2DRenderer');
-	
+
 	wp_enqueue_script('WU_webw_3d_view');
 	wp_enqueue_script('wu_3d_view_pdb');
 
@@ -36,7 +36,7 @@ function loadAsset3DManagerScripts() {
 	// content interlinking ajax
 	wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
 		$pluginpath.'/js_libs/content_interlinking_commands/content_interlinking.js', array('jquery') );
- 
+
 	// ajax php admin url
 	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
@@ -101,19 +101,19 @@ if($asset_post->post_type == 'wpunity_asset3d') {
 
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_inserted_id) {
-    $assetpostMeta = get_post_meta($asset_inserted_id);
-    $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-    $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
-    
-    $mtl_file_name = basename($mtlpost->guid);
-    $obj_file_name = basename($objpost->guid);
-    $path_url = pathinfo($mtlpost->guid)['dirname'];
-    
-    echo '<script>';
-    echo 'var mtl_file_name="'.$mtl_file_name.'";';
-    echo 'var obj_file_name="'.$obj_file_name.'";';
-    echo 'var path_url="'.$path_url . '/'    .'";';
-    echo '</script>';
+	$assetpostMeta = get_post_meta($asset_inserted_id);
+	$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+	$objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+
+	$mtl_file_name = basename($mtlpost->guid);
+	$obj_file_name = basename($objpost->guid);
+	$path_url = pathinfo($mtlpost->guid)['dirname'];
+
+	echo '<script>';
+	echo 'var mtl_file_name="'.$mtl_file_name.'";';
+	echo 'var obj_file_name="'.$obj_file_name.'";';
+	echo 'var path_url="'.$path_url . '/'    .'";';
+	echo '</script>';
 }
 //--------------------------------------------------------
 
@@ -125,11 +125,11 @@ $editscenePage = wpunity_getEditpage('scene');
 
 // If form is submitted
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-	
-    $assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
+
+	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
 	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
 
-    // NEW
+	// NEW
 	if($create_new == 1){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
@@ -144,12 +144,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			if($assetCatTerm->slug == 'molecule') {
 				wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
 			}else{
-			    // Check if it is not cloning of an existing asset
+				// Check if it is not cloning of an existing asset
 
-			    if ($_POST['asset_sourceID']=='')
-				    wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
-			    else // it is cloning
-                    wpunity_copy_3Dfiles($asset_newID, $_POST['asset_sourceID']);
+				if ($_POST['asset_sourceID']=='')
+					wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
+				else // it is cloning
+					wpunity_copy_3Dfiles($asset_newID, $_POST['asset_sourceID']);
 			}
 
 			// Save parameters
@@ -172,29 +172,29 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		exit;
 
 	}else{
-	    // Edit an existing asset
+		// Edit an existing asset
 		//Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($asset_inserted_id, $assetTitleForm, $assetDescForm);
 
 		if($asset_updatedConf == 1) {
 			$saved_assetCatTerm = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-            
-            
-            
-            
-            // Save 3D files
-            if($saved_assetCatTerm->slug == 'molecule') {
-                wpunity_create_asset_pdbFiles_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
-            }else{
-                // Check if it is not cloning of an existing asset
-                if ($_POST['asset_sourceID']!='')
-                    wpunity_create_asset_3DFilesExtra_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
-                else // it is cloning
-                    wpunity_copy_3Dfiles($asset_inserted_id, $_POST['asset_sourceID']);
-            }
-			
-			
-			
+
+
+
+
+			// Save 3D files
+			if($saved_assetCatTerm->slug == 'molecule') {
+				wpunity_create_asset_pdbFiles_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
+			}else{
+				// Check if it is not cloning of an existing asset
+				if ($_POST['asset_sourceID']!='')
+					wpunity_create_asset_3DFilesExtra_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
+				else // it is cloning
+					wpunity_copy_3Dfiles($asset_inserted_id, $_POST['asset_sourceID']);
+			}
+
+
+
 			if($saved_assetCatTerm[0]->slug == 'consumer') {
 				wpunity_create_asset_consumerExtra_frontend($asset_checked_id);
 			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
@@ -641,51 +641,40 @@ if($create_new == 0) {
                                 <label>Select an asset to insert</label>
                                 <ul id="lightSlider">
                                     <!--put php loop here for every li item-->
-    
-                                    <?php
-                                        $asset_id_avail = [3844, 3850, 3455];
-        
-                                        for ($k = 0; $k < count($asset_id_avail); $k++){
-                                            $assetpostMeta = get_post_meta($asset_id_avail[ $k ]);
-            
-                                            $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-                                            $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
-                                            $scrnImagePost = get_post($assetpostMeta['wpunity_asset3d_screenimage'][0]);
-            
-                                            $scrn_image_file_name = $scrnImagePost->guid;
-                                            $mtl_file_name = basename($mtlpost->guid);
-                                            $obj_file_name = basename($objpost->guid);
-                                            $path_url = pathinfo($mtlpost->guid)['dirname'];
-    
-                                            echo '<li data-thumb="'.$scrn_image_file_name.'">';
-                                            echo '<img src="'.$scrn_image_file_name.'"'.
-                                                 ' data-asset-id="'.$asset_id_avail[ $k ].'"'.
-                                                 ' data-mtl-file="'.$mtl_file_name.'"'.
-                                                 ' data-obj-file="'.$obj_file_name.'"'.
-                                                 ' data-path-url="'.$path_url.'/"'.
-                                                 ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
-                                                    'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
-                                                    '"/>';
-                                            echo '</li>';
-                                        }
-    
-                                    ?>
-                                    
-                                    
-                                    
-<!--                                    <li data-thumb="http://sachinchoolur.github.io/lightslider/img/thumb/cS-1.jpg">-->
-<!--                                        <img src="http://sachinchoolur.github.io/lightslider/img/cS-1.jpg"-->
-<!--                                             data-asset-id="5"-->
-<!--                                             data-mtl-file="bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt"-->
-<!--                                             data-obj-file="f74d834f96148080b5822a409a4299ff_objTurbine1.txt"-->
-<!--                                             data-path-url=""-->
-<!--                                             onclick="console.log(this.dataset.mtlFile, this.dataset.objFile, this.dataset.pathUrl);"/>-->
-<!--                                    </li>-->
-                                
+
+									<?php
+									$asset_id_avail = [3844, 3850, 3455];
+
+									for ($k = 0; $k < count($asset_id_avail); $k++){
+										$assetpostMeta = get_post_meta($asset_id_avail[ $k ]);
+
+										$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+										$objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+										$scrnImagePost = get_post($assetpostMeta['wpunity_asset3d_screenimage'][0]);
+
+										$scrn_image_file_name = $scrnImagePost->guid;
+
+
+										$mtl_file_name = basename($mtlpost->guid);
+										$obj_file_name = basename($objpost->guid);
+										$path_url = pathinfo($mtlpost->guid)['dirname'];
+
+										echo '<li data-thumb="'.$scrn_image_file_name.'">';
+										echo '<img src="'.$scrn_image_file_name.'"'.
+										     ' data-asset-id="'.$asset_id_avail[ $k ].'"'.
+										     ' data-mtl-file="'.$mtl_file_name.'"'.
+										     ' data-obj-file="'.$obj_file_name.'"'.
+										     ' data-path-url="'.$path_url.'/"'.
+										     ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
+										     'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
+										     '"/>';
+										echo '</li>';
+									}	?>
+
                                 </ul>
-    
+
                                 <input type="hidden" id="asset_sourceID" name="asset_sourceID" value=""/>
-                                
+
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
                                        multiple accept=".obj,.mtl,.jpg"/>
@@ -1057,9 +1046,9 @@ if($create_new == 0) {
 
         wpunity_reset_panels(wu_webw_3d_view);
 
-        
+
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-        
+
         loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
 
 

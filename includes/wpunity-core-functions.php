@@ -168,7 +168,7 @@ function wpunity_registrationUser_save( $user_id ) {
 	$user_info = get_userdata($user_id);
 
 	$userEmail = $user_info->user_email;
-	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
+	$extraPass = 'i5ufxIBxAmybazyw';
 	$userName = $user_info->user_login;
 
 	$args = array(
@@ -179,43 +179,34 @@ function wpunity_registrationUser_save( $user_id ) {
 		'blocking' => true,
 		'sslverify' => 0,
 		'headers' => array( 'content-type' => 'application/json' ),
-		'body' => '['. json_encode(array(
-				'user' => array(
-					'email' => $userEmail,
-					'password' => $extraPass,
-					'first_name' => $userName,
-					'company' => 'ENVISAGE'
-				),
-				'app' => array(
-					'add' => false
-				)
-			) ). ']',
+		'body' => json_encode(array(
+			'user' => array(
+				'email' => $userEmail,
+				'password' => $extraPass,
+				'first_name' => $userName,
+				'company' => 'ENVISAGE'
+			),
+			'app' => array(
+				'add' => false
+			)
+		) ),
 		'cookies' => array()
 	);
 
 	$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
 
-	/*print_r($args);
-	print_r($response);
-    die();*/
-
-
 	if ( is_wp_error( $response ) ) {
 		$error_message = $response->get_error_message();
 
-		echo '<script language="javascript">';
-		echo 'alert("Something went wrong");';
-		echo "Something went wrong: $error_message";
-		echo '</script>';
-
+		print_r($error_message);
+		die();
 	} else {
 
-		echo '<script language="javascript">';
-		echo 'alert("Something went wrong");';
-		echo 'Response:<pre>';
-		echo $response;
-		echo '</pre>';
-		echo '</script>';
+		if ((string)(int)$response[response][code] !== '201') {
+			print_r($response[response][code]);
+			print_r($response[response][message]);
+			die();
+		}
 	}
 }
 
@@ -234,10 +225,10 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 			'blocking' => true,
 			'sslverify' => false,
 			'headers' => array( 'content-type' => 'application/json' ),
-			'body' => '['. json_encode(array(
+			'body' => json_encode(array(
 				'email' => $userEmail,
 				'password' => $extraPass
-			) ) . ']',
+			) ),
 			'cookies' => array()
 		)
 	);
@@ -252,9 +243,9 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 				'blocking' => true,
 				'sslverify' => false,
 				'headers' => array( 'content-type' => 'application/json', 'Authorization' => '${'. $token->token .'}' ),
-				'body' => '['. json_encode(array(
+				'body' =>json_encode(array(
 
-				) ) . ']',
+				) ),
 				'cookies' => array()
 			)
 		);
