@@ -5,18 +5,25 @@
  */
 function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, description_dom ){
 
-
-    console.log("AAA", externalSource, title, description_dom);
-
     //document.getElementById('wpunity_fetchDescription_bt').innerHTML = "Fetching";
     //externalSource = document.getElementById("fetch_source").options[document.getElementById("fetch_source").selectedIndex].value;
     //lang document.getElementById("fetch_lang").options[document.getElementById("fetch_lang").selectedIndex].value;
 
+    // Replace empty spaces with underscores
     var title =   title.replace(new RegExp(" ", 'g'),"_"); // document.getElementById("wpunity_titles_search").value.replace(" ","%20");
 
 
     var lang = "en";
-    var fulltext = ''; // document.getElementById("wpunity_fulltext_chkbox").checked?'':'exintro=&';
+
+    for (var j=0; j< title.length; j++)
+        if ( title.charCodeAt(j) > 902 && title.charCodeAt(j) < 974 ){
+             lang = "el";
+             break;
+        }
+
+
+
+    var fulltext = '';
 
     var reqCompile = jQuery.ajax({
         url : my_ajax_object_fetch_content.ajax_url,
@@ -29,7 +36,7 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
 
         success : function(response) {
 
-            //console.log(response);
+//            console.log(response);
 
             var json_content = jQuery.parseJSON(response);
 
@@ -44,26 +51,57 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
                                 description_dom['multi-line'].value = json_content.query.pages[key].extract.trim();
 
                                 description_dom[1].style.display = 'none';
-                            }
+                            } else {
                                 //tinymce.activeEditor.setContent(json_content.query.pages[key].extract.trim());
+
+                                    console.log("Nothing found 151");
+                                    alert("Nothing found in Wikipedia");
+
+                                    //tinymce.activeEditor.setContent(response);
+
+
+                            }
                         }
-                    } else {
-
-                        console.log("Nothing found 151");
-                        alert("Nothing found in Wikipedia");
-
-                        //tinymce.activeEditor.setContent(response);
                     }
                 } else if (externalSource === 'Europeana') {
 
-                    if (json_content.items[0].title !== ''){
+                    console.log(json_content);
 
-                        description_dom['multi-line'].value += JSON.stringify(json_content.items[0].title[0]);
+                    if(json_content.items.length > 0 ){
 
-                        if ( json_content.items[0].dcDescription !== undefined)
-                            description_dom['multi-line'].value += " : " + JSON.stringify(json_content.items[0].dcDescription[0]);
+                        for (var l=0; l<json_content.items.length; l++) {
 
-                        description_dom[1].style.display = 'none';
+                            description_dom['multi-line'].value += '---------- ' + l +  ' -----------';
+                            description_dom['multi-line'].value += '\n';
+
+                            if (json_content.items[l].title !== '') {
+                                description_dom['multi-line'].value += JSON.stringify(json_content.items[l].title[0]);
+
+                                description_dom['multi-line'].value += '\n';
+                                description_dom['multi-line'].value += '\n';
+                            }
+
+                            if (json_content.items[l].edmIsShownAt !== '') {
+                                description_dom['multi-line'].value += JSON.stringify(json_content.items[l].edmIsShownAt);
+
+                                description_dom['multi-line'].value += '\n';
+                                description_dom['multi-line'].value += '\n';
+                            }
+
+                            if (json_content.items[l].dcDescription !== undefined) {
+                                description_dom['multi-line'].value += " : " + JSON.stringify(json_content.items[l].dcDescription[0]);
+
+                                description_dom['multi-line'].value += '\n';
+
+                                description_dom['multi-line'].value += '\n';
+
+                            }
+
+
+                            description_dom[1].style.display = 'none';
+
+                        }
+
                     } else {
 
                         console.log("Nothing found 152");
