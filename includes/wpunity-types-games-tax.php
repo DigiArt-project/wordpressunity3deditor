@@ -492,4 +492,31 @@ function wpunity_games_taxcategory_fill(){
 
 add_action( 'init', 'wpunity_games_taxcategory_fill' );
 
+//==========================================================================================================================================
+
+
+add_filter( 'manage_wpunity_game_posts_columns', 'wpunity_set_custom_wpunity_game_columns' );
+
+function wpunity_set_custom_wpunity_game_columns($columns) {
+    $columns['game_slug'] = 'Game Slug';
+
+    return $columns;
+}
+
+// Add the data to the custom columns for the book post type:
+add_action( 'manage_wpunity_game_posts_custom_column' , 'wpunity_set_custom_wpunity_game_columns_fill', 10, 2 );
+
+function wpunity_set_custom_wpunity_game_columns_fill( $column, $post_id ) {
+    switch ( $column ) {
+
+        case 'game_slug' :
+            $mypost = get_post($post_id);
+            $theSlug = $mypost->post_name;
+            if ( is_string( $theSlug ) )
+                echo $theSlug;
+            else
+                echo 'no slug found';
+            break;
+    }
+}
 ?>

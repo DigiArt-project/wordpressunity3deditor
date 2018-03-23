@@ -185,4 +185,32 @@ add_action( 'save_post', 'wpunity_scenes_taxyaml_box_content_save' );
 
 //==========================================================================================================================================
 
+//==========================================================================================================================================
+
+
+add_filter( 'manage_wpunity_scene_posts_columns', 'wpunity_set_custom_wpunity_scene_columns' );
+
+function wpunity_set_custom_wpunity_scene_columns($columns) {
+    $columns['scene_slug'] = 'Scene Slug';
+
+    return $columns;
+}
+
+// Add the data to the custom columns for the book post type:
+add_action( 'manage_wpunity_scene_posts_custom_column' , 'wpunity_set_custom_wpunity_scene_columns_fill', 10, 2 );
+
+function wpunity_set_custom_wpunity_scene_columns_fill( $column, $post_id ) {
+    switch ( $column ) {
+
+        case 'scene_slug' :
+            $mypost = get_post($post_id);
+            $theSlug = $mypost->post_name;
+            if ( is_string( $theSlug ) )
+                echo $theSlug;
+            else
+                echo 'no slug found';
+            break;
+    }
+}
+
 ?>
