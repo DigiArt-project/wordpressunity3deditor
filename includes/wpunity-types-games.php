@@ -134,11 +134,11 @@ class GameClass{
 function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
     $post_type = get_post_type($post);
+    $gameSlug = $post->post_name;
 
     if ($post_type == 'wpunity_game') {
-        if ( $new_status == 'publish' ) {
+        if ( $new_status == 'publish' && ( ($gameSlug != 'joker-arch') || ($gameSlug != 'joker-energy') || ($gameSlug != 'joker-chem') ) ) {
 
-            $gameSlug = $post->post_name;
             $gameTitle = $post->post_title;
             $gameID = $post->ID;
 
