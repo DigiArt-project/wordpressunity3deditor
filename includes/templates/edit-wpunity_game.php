@@ -592,7 +592,7 @@ if ( $assets ) :?>
     <div class="CenterContents">
 
         <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No assets available">
-            landscape
+            insert_photo
         </i>
 
         <h3 class="mdc-typography--headline">No Assets available</h3>
