@@ -444,8 +444,6 @@ if($create_new == 0) {
                             style="margin-top:30px" >Fetch description from Europeana</button>
 
 
-
-
                     <hr class="WhiteSpaceSeparator">
 
                     <div id="poiImgDetailsPanel" style="display: none;">

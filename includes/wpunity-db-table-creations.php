@@ -10,8 +10,6 @@ function wpunity_db_create_games_versions_table () {
 	global $wpdb;
 	global $wpunity_db_version;
 
-	echo "generating table";
-
 	$table_name = $wpdb->prefix . "_games_versions";
 
 	$charset_collate = $wpdb->get_charset_collate();
