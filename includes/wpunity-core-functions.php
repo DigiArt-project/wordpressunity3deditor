@@ -97,6 +97,8 @@ function wpunity_createJoker_activation() {
 }
 //add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
 
+add_action( 'init', 'wpunity_createJoker_activation', 10, 2 );
+
 
 //==========================================================================================================================================
 //==========================================================================================================================================
@@ -553,7 +555,7 @@ Characteristics :
 
 		$scene2_id = wp_insert_post( $secondSceneData );
 		$scene3_id = wp_insert_post( $thirdSceneData );
-
+	
 		$attachment2_id = wpunity_upload_img_vid( $image_content2, $scene2_id);
 		$attachment3_id = wpunity_upload_img_vid( $image_content3, $scene3_id);
 		set_post_thumbnail( $scene2_id, $attachment2_id );
@@ -605,6 +607,7 @@ Characteristics :
 
 	$scene1_id = wp_insert_post( $firstSceneData );
 	if($game_category == 'energy_games'){
+	 
 		$image_content1 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img1.png";
 		$attachment1_id = wpunity_upload_img_vid( $image_content1, $scene1_id);
 		set_post_thumbnail( $scene1_id, $attachment1_id );
@@ -1108,6 +1111,8 @@ function wpunity_upload_img_vid_directory( $dir ) {
 
 function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
 
+ 
+ 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
@@ -1116,6 +1121,7 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation =
 	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
 	add_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
+	
 	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
 	remove_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
 
