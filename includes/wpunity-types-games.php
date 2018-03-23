@@ -167,6 +167,10 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
 
             //Request keys from GIO
             wpunity_createGame_GIO_request( $gameID , $user_id );
+        }else{
+            $gameTitle = $post->post_title;
+            //Create a parent game tax category for the assets
+            wp_insert_term($gameTitle,'wpunity_asset3d_pgame',$gameSlug,'Asset of a Game');
         }
     }
 }
