@@ -218,4 +218,30 @@ add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_sa
 
 //==========================================================================================================================================
 
+
+add_filter( 'manage_wpunity_asset3d_posts_columns', 'wpunity_set_custom_wpunity_asset3d_columns' );
+
+function wpunity_set_custom_wpunity_asset3d_columns($columns) {
+    $columns['asset_slug'] = 'Asset Slug';
+
+    return $columns;
+}
+
+// Add the data to the custom columns for the book post type:
+add_action( 'manage_wpunity_asset3d_posts_custom_column' , 'wpunity_set_custom_wpunity_asset3d_columns_fill', 10, 2 );
+
+function wpunity_set_custom_wpunity_asset3d_columns_fill( $column, $post_id ) {
+    switch ( $column ) {
+
+        case 'asset_slug' :
+            $mypost = get_post($post_id);
+            $theSlug = $mypost->post_name;
+            if ( is_string( $theSlug ) )
+                echo $theSlug;
+            else
+                echo 'no slug found';
+            break;
+    }
+}
+
 ?>
