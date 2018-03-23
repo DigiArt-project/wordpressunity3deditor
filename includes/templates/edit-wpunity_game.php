@@ -565,6 +565,13 @@ if ( $assets ) :?>
                             <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
                             </h1>
+
+                            <?php /* print_r($asset);*/?>
+
+                            <p class="mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <?php echo $asset[categoryName];?>
+                            </p>
+
                         </div>
 
                         <!--TODO: Check the urls for edit and delete-->
