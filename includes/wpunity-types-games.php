@@ -136,8 +136,15 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     $post_type = get_post_type($post);
     $gameSlug = $post->post_name;
 
-    if ($post_type == 'wpunity_game') {
-        if ( $new_status == 'publish' && ( ($gameSlug != 'joker-arch') || ($gameSlug != 'joker-energy') || ($gameSlug != 'joker-chem') ) ) {
+    
+    
+    if ($post_type == 'wpunity_game' && $new_status == 'publish') {
+    
+//        $fh = fopen("output_folder_Game.txt","a");
+//        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
+//        fclose($fh);
+        
+        if ( ($gameSlug != 'joker-arch') && ($gameSlug != 'joker-energy') && ($gameSlug != 'joker-chem')  ) {
 
             $gameTitle = $post->post_title;
             $gameID = $post->ID;

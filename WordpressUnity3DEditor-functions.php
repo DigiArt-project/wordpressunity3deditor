@@ -293,5 +293,14 @@ add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_actio
 // Ajax for deleting scene
 add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
 
+//$fo = fopen("output_activation.txt","w");
+//fwrite($fo, dirname( __FILE__ ) . '/includes/wpunity-core-functions.php');
+//fclose($fo);
+
+//include_once dirname( __FILE__ ) . '/includes/wpunity-core-functions.php';
+
+//include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
+//register_activation_hook( __FILE__ , 'wpunity_createJoker_activation' );
+
 
 ?>
