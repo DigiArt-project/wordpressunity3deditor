@@ -144,7 +144,7 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
 //        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
 //        fclose($fh);
         
-        if ( ($gameSlug != 'joker-arch') && ($gameSlug != 'joker-energy') && ($gameSlug != 'joker-chem')  ) {
+        if(($gameSlug != 'archaeology-joker') && ($gameSlug != 'energy-joker') && ($gameSlug != 'chemistry-joker')){
 
             $gameTitle = $post->post_title;
             $gameID = $post->ID;

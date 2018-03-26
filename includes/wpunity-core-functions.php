@@ -15,7 +15,7 @@ function wpunity_createJoker_activation() {
 	//$virtualplace_tax = get_term_by('slug', 'virtual_place', 'wpunity_game_cat');
 	//$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
 
-	if (!wpunity_the_slug_exists('joker-arch')) {
+	if (!wpunity_the_slug_exists('archaeology-joker')) {
 		$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
 		$archaeology_tax_id = $archaeology_tax->term_id;
 
@@ -30,7 +30,7 @@ function wpunity_createJoker_activation() {
 
 		$game_information_arch = array(
 			'post_title' => 'Archaeology Joker',
-			'post_name' => 'joker-arch',
+			'post_name' => 'archaeology-joker',
 			'post_content' => '',
 			'post_type' => 'wpunity_game',
 			'post_status' => 'publish',
@@ -41,7 +41,7 @@ function wpunity_createJoker_activation() {
 		wp_insert_post($game_information_arch);
 	}
 
-	if (!wpunity_the_slug_exists('joker-energy')) {
+	if (!wpunity_the_slug_exists('energy-joker')) {
 		$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
 		$energy_tax_id = $energy_tax->term_id;
 
@@ -56,7 +56,7 @@ function wpunity_createJoker_activation() {
 
 		$game_information_ener = array(
 			'post_title' => 'Energy Joker',
-			'post_name' => 'joker-energy',
+			'post_name' => 'energy-joker',
 			'post_content' => '',
 			'post_type' => 'wpunity_game',
 			'post_status' => 'publish',
@@ -67,7 +67,7 @@ function wpunity_createJoker_activation() {
 		wp_insert_post($game_information_ener);
 	}
 
-	if (!wpunity_the_slug_exists('joker-chem')) {
+	if (!wpunity_the_slug_exists('chemistry-joker')) {
 		$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
 		$chemistry_tax_id = $chemistry_tax->term_id;
 
@@ -82,7 +82,7 @@ function wpunity_createJoker_activation() {
 
 		$game_information_chem = array(
 			'post_title' => 'Chemistry Joker',
-			'post_name' => 'joker-chem',
+			'post_name' => 'chemistry-joker',
 			'post_content' => '',
 			'post_type' => 'wpunity_game',
 			'post_status' => 'publish',
