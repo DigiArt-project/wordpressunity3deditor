@@ -90,25 +90,25 @@ $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->slug;
 
-
-echo "assetPGameID=" . $assetPGameID;
-echo " <br /> ";
-echo "assetCatID=" . $assetCatID;
-echo " <br /> ";
-echo "assetTitleForm=" . $assetTitleForm;
-echo " <br /> ";
-echo "assetDescForm=" . $assetDescForm;
-echo " <br /> ";
-echo "gameSlug=" . $gameSlug;
-echo " <br /> ";
-echo "game_post=" . print_r($game_post,true);
-echo " <br /> ";
-echo "game_type_obj=" . print_r($game_type_obj, true);
-echo " <br /> ";
-echo "assetPGame=" . print_r($assetPGame, true);
-echo " <br /> ";
-echo "assetPGameSlug=" . $assetPGameSlug;
-
+//
+//echo "assetPGameID=" . $assetPGameID;
+//echo " <br /> ";
+//echo "assetCatID=" . $assetCatID;
+//echo " <br /> ";
+//echo "assetTitleForm=" . $assetTitleForm;
+//echo " <br /> ";
+//echo "assetDescForm=" . $assetDescForm;
+//echo " <br /> ";
+//echo "gameSlug=" . $gameSlug;
+//echo " <br /> ";
+//echo "game_post=" . print_r($game_post,true);
+//echo " <br /> ";
+//echo "game_type_obj=" . print_r($game_type_obj, true);
+//echo " <br /> ";
+//echo "assetPGame=" . print_r($assetPGame, true);
+//echo " <br /> ";
+//echo "assetPGameSlug=" . $assetPGameSlug;
+//
 
 
 

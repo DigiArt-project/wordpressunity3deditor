@@ -322,9 +322,6 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 	$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
 	
-	print_r($token_request);
-	
-	echo "<br /><br />";
 
 	if (is_wp_error( $token_request ) ) {
 
@@ -350,25 +347,20 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 			'cookies' => array()
 		);
 
-		print_r($args);
-		
-		echo "<br /><br />";
 		
             $request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
 
 		if (is_wp_error( $request ) ) {
 
 			$error_message = $request->get_error_message();
-			print_r($error_message);
+            print_r($error_message);
             // Todo: @Tasos place an alert div with message
 			//die();
 
 		} else {
 
 			if ((string)(int)$request['response']['code'] !== '201') {
-                
-                print_r($request);
-			    
+		  
 				print_r($request['response']['code']);
 				print_r($request['response']['message']);
                 // Todo: @Tasos place an alert div with message
