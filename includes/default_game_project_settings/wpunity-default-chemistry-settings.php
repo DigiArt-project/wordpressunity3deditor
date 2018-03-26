@@ -21,40 +21,28 @@ function wpunity_assets_taxcategory_chemistry_fill(){
     update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
     wp_insert_term(
-        'Textbook', // the term
+        'Gate', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Chemistry Asset Type (Textbook)',
-            'slug' => 'textbook',
+            'description'=> 'Chemistry Asset Type (Gate)',
+            'slug' => 'gate',
         )
     );
-    $inserted_term2 = get_term_by('slug', 'textbook', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_textbook_get(), true);
+    $inserted_term2 = get_term_by('slug', 'gate', 'wpunity_asset3d_cat');
+    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_gate_get(), true);
     update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
-    wp_insert_term(
-        'Microscope', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Chemistry Asset Type (Microscope)',
-            'slug' => 'microscope',
-        )
-    );
-    $inserted_term3 = get_term_by('slug', 'microscope', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_microscope_get(), true);
-    update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_gamecat', 3 , true);
-
-    wp_insert_term(
-        'Box', // the term
-        'wpunity_asset3d_cat', // the taxonomy
-        array(
-            'description'=> 'Chemistry Asset Type (Box)',
-            'slug' => 'box',
-        )
-    );
-    $inserted_term4 = get_term_by('slug', 'box', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_box_get(), true);
-    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 3 , true);
+//    wp_insert_term(
+//        'Box', // the term
+//        'wpunity_asset3d_cat', // the taxonomy
+//        array(
+//            'description'=> 'Chemistry Asset Type (Box)',
+//            'slug' => 'box',
+//        )
+//    );
+//    $inserted_term4 = get_term_by('slug', 'box', 'wpunity_asset3d_cat');
+//    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_box_get(), true);
+//    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
     wp_insert_term(
         'Molecule', // the term
