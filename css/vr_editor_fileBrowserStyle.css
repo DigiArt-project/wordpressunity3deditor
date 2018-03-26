@@ -206,6 +206,10 @@
 }
 
 
+.editor-asset-tile-style:hover {
+	background-color: rgba(63,81,181,0.1);
+}
+
 /*@media all and (max-width:250px) {*/
 
 /*.filemanager .data li {*/

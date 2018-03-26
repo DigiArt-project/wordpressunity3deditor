@@ -379,10 +379,6 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 .ColorPickerSliderBlue .ui-slider-handle { border-color: #729fcf; }
 
 
-.editor-asset-tile-style:hover {
-    background-color: rgba(63,81,181,0.1);
-}
-
 /* jimver04 additions */
 #backtotop {
     z-index : 100 !important;
