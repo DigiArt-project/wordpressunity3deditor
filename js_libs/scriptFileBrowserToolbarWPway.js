@@ -163,9 +163,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; position: relative;">' +
-                    '<a class="mdc-list-item" style="align-items:baseline; left:0; padding:6px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
-                    '" title="'+ f.name +
-                    '" data-assetslug="'+ f.assetSlug +
+                    '<a class="mdc-list-item editor-asset-tile-style" style="align-items:baseline; left:0; padding:6px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
+                    '" title="Drag the card into the plane" ' +
+                    'data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
                     '" data-objPath="'+ f.objPath +
                     '" data-objID="'+ f.objID +
@@ -185,7 +185,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
                     '<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                    '" onclick="javascript:window.location.href=\''+urlforAssetEdit + f.assetid + '\'" class="mdc-button mdc-button--dense">Edit</a>'+
+                    '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '\'" class="mdc-button mdc-button--dense">Edit</a>'+
                     '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax('+
                     f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
                     '</span>' +
