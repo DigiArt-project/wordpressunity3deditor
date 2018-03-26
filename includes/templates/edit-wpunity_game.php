@@ -531,10 +531,10 @@ $wp_query = $temp_query; ?>
 
 
 
-<?php $assets_game = wpunity_getAllassets_byGameProject($gameSlug);
-      $assets_joker_game = wpunity_getAllassets_byGameProject('archaeology-joker');
+<?php $assets = wpunity_getAllassets_byGameProject($gameSlug, $project_id);
 
-      $assets = array_merge($assets_game, $assets_joker_game);
+//      $assets_joker_game = wpunity_getAllassets_byGameProject('archaeology-joker');
+//      $assets = array_merge($assets_game, $assets_joker_game);
 
 // Output custom query loop
 if ( $assets ) :?>

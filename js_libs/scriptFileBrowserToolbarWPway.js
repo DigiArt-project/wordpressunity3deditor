@@ -1,19 +1,18 @@
 //  AJAX: FETCH Assets 3d
-function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit){
+function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID){
 
     jQuery.ajax({
         url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
         type : 'POST',
         data : {
             'action': 'wpunity_fetch_game_assets_action',
-            'gameProjectSlug': gameProjectSlug
+            'gameProjectSlug': gameProjectSlug,
+            'gameProjectID': gameProjectID
         },
 
         success : function(responseRecords) {
 
             responseRecords = responseRecords.items;
-
-
 
             file_Browsing_By_DB(responseRecords, gameProjectSlug, urlforAssetEdit);
         },

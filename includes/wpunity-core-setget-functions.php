@@ -118,7 +118,7 @@ function wpunity_fetch_game_assets_action_callback(){
 	// Output the directory listing as JSON
 	header('Content-type: application/json');
 
-	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug']);
+	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug'], $_POST['gameProjectID']);
 
 	for ($i=0; $i<count($response); $i++){
 		$response[$i][name] = $response[$i][assetName];
@@ -146,10 +146,24 @@ function wpunity_fetch_game_assets_action_callback(){
 	wp_die();
 }
 
-function wpunity_getAllassets_byGameProject($gameProjectSlug){
+/**
+ * Get the Assets of a game plus its respective joker game assets
+ *
+ * @param $gameProjectSlug
+ * @param $gameProjectID
+ * @return array
+ */
+
+function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 
 	$allAssets = [];
-
+ 
+	// find the joker game slug e.g. "Archaeology-joker"
+    $joker_game_slug = wp_get_post_terms( $gameProjectID, 'wpunity_game_type')[0]->name."-joker";
+    
+    // Slugs are low case "Archaeology-joker" -> "archaeology-joker"
+    $joker_game_slug = strtolower($joker_game_slug);
+	
 	$queryargs = array(
 		'post_type' => 'wpunity_asset3d',
 		'posts_per_page' => -1,
@@ -157,7 +171,7 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug){
 			array(
 				'taxonomy' => 'wpunity_asset3d_pgame',
 				'field' => 'slug',
-				'terms' => $gameProjectSlug
+				'terms' => array($gameProjectSlug, $joker_game_slug)
 			)
 		)
 	);

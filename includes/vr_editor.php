@@ -123,7 +123,7 @@ echo '</script>';
 
         });
 
-        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit);
+        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
     function removeSavedText(){
