@@ -150,6 +150,89 @@ function wpunity_getNonRegionalScenes($project_id) {
 //==========================================================================================================================================
 //==========================================================================================================================================
 
+//Add new Field at registration form (3 steps)
+
+//1. Add a new form element...
+add_action( 'register_form', 'wpunity_extrapass_register_form' );
+
+function wpunity_extrapass_register_form() {
+
+	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
+
+	?>
+	<p>
+		<label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
+			<input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
+	</p>
+	<script type="text/javascript">
+		jQuery(document).ready(
+			function wpunityGenerateExtraPass(){
+				var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+				document.getElementById('extra_pass').value  = rString;
+			}
+		);
+
+		jQuery( "#registerform" ).focus(function() {
+			alert( "Handler for .focus() called." );
+		});
+
+
+		function wpunity_randomString(length, chars) {
+			var result = '';
+			for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+			return result;
+		}
+
+
+		//		function wpunityGenerateExtraPass(){
+		//			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		//			document.getElementById('extra_pass').value  = rString;
+		//		}
+	</script>
+	<?php
+}
+
+//2. Add validation. In this case, we make sure extra_pass is required.
+add_filter( 'registration_errors', 'wpunity_extrapass_registration_errors', 10, 3 );
+
+function wpunity_extrapass_registration_errors( $errors, $sanitized_user_login, $user_email ) {
+
+	if ( empty( $_POST['extra_pass'] ) || ! empty( $_POST['extra_pass'] ) && trim( $_POST['extra_pass'] ) == '' ) {
+		$errors->add( 'extra_pass_error', sprintf('<strong>%s</strong>: %s','ERROR','You must include an extra pass.', 'mydomain' ));
+
+	}
+
+	return $errors;
+}
+
+//3. Finally, save our extra registration user meta.
+add_action( 'user_register', 'wpunity_extrapass_user_register', 10, 1 );
+
+function wpunity_extrapass_user_register( $user_id ) {
+	if ( ! empty( $_POST['extra_pass'] ) ) {
+		update_user_meta( $user_id, 'extra_pass', sanitize_text_field( $_POST['extra_pass'] ) );
+	}
+}
+
+add_action( 'show_user_profile', 'wpunity_extrapass_profile_fields' );
+add_action( 'edit_user_profile', 'wpunity_extrapass_profile_fields' );
+
+function wpunity_extrapass_profile_fields( $user ) {
+	?>
+	<h3><?php esc_html_e('Extra Information'); ?></h3>
+
+	<table class="form-table">
+		<tr>
+			<th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
+			<td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
+		</tr>
+	</table>
+	<?php
+}
+
+//==========================================================================================================================================
+//==========================================================================================================================================
+
 //Function to get ALL necessary keys about GIO Analytics
 function wpunity_getProjectKeys($project_id) {
 
@@ -163,14 +246,14 @@ function wpunity_getProjectKeys($project_id) {
 }
 
 //STEP 1 for GIO data
-add_action( 'user_register', 'wpunity_registrationUser_save', 10, 1 );
+add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
 
 function wpunity_registrationUser_save( $user_id ) {
 
 	$user_info = get_userdata($user_id);
 
 	$userEmail = $user_info->user_email;
-	$extraPass = 'i5ufxIBxAmybazyw';
+	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 	$userName = $user_info->user_login;
 
 	$args = array(
@@ -298,88 +381,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 }
 
 
-//==========================================================================================================================================
-//==========================================================================================================================================
 
-//Add new Field at registration form (3 steps)
-
-//1. Add a new form element...
-add_action( 'register_form', 'wpunity_extrapass_register_form' );
-
-function wpunity_extrapass_register_form() {
-
-	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
-
-	?>
-    <p>
-        <label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
-            <input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
-    </p>
-    <script type="text/javascript">
-        jQuery(document).ready(
-            function wpunityGenerateExtraPass(){
-                var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-                document.getElementById('extra_pass').value  = rString;
-            }
-        );
-
-        jQuery( "#registerform" ).focus(function() {
-            alert( "Handler for .focus() called." );
-        });
-
-
-        function wpunity_randomString(length, chars) {
-            var result = '';
-            for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-            return result;
-        }
-
-
-        //		function wpunityGenerateExtraPass(){
-        //			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-        //			document.getElementById('extra_pass').value  = rString;
-        //		}
-    </script>
-	<?php
-}
-
-//2. Add validation. In this case, we make sure extra_pass is required.
-add_filter( 'registration_errors', 'wpunity_extrapass_registration_errors', 10, 3 );
-
-function wpunity_extrapass_registration_errors( $errors, $sanitized_user_login, $user_email ) {
-
-	if ( empty( $_POST['extra_pass'] ) || ! empty( $_POST['extra_pass'] ) && trim( $_POST['extra_pass'] ) == '' ) {
-		$errors->add( 'extra_pass_error', sprintf('<strong>%s</strong>: %s','ERROR','You must include an extra pass.', 'mydomain' ));
-
-	}
-
-	return $errors;
-}
-
-//3. Finally, save our extra registration user meta.
-add_action( 'user_register', 'wpunity_extrapass_user_register' );
-
-function wpunity_extrapass_user_register( $user_id ) {
-	if ( ! empty( $_POST['extra_pass'] ) ) {
-		update_user_meta( $user_id, 'extra_pass', sanitize_text_field( $_POST['extra_pass'] ) );
-	}
-}
-
-add_action( 'show_user_profile', 'wpunity_extrapass_profile_fields' );
-add_action( 'edit_user_profile', 'wpunity_extrapass_profile_fields' );
-
-function wpunity_extrapass_profile_fields( $user ) {
-	?>
-    <h3><?php esc_html_e('Extra Information'); ?></h3>
-
-    <table class="form-table">
-        <tr>
-            <th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
-            <td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
-        </tr>
-    </table>
-	<?php
-}
 
 
 //==========================================================================================================================================
