@@ -383,6 +383,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     filter: saturate(70%);
     -webkit-transition: -webkit-filter 0.16s linear; /* Safari */
     transition: filter 0.16s;
+    cursor: pointer;
 }
 
 .asset-image-tile-style:hover {
@@ -390,6 +391,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     filter: saturate(100%);
     -webkit-transition: -webkit-filter 0.16s linear; /* Safari */
     transition: filter 0.16s;
+    cursor: pointer;
 }
 
 /* jimver04 additions */
