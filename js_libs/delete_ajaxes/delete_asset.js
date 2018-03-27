@@ -24,18 +24,22 @@ function wpunity_deleteAssetAjax(asset_id, game_slug) {
             res = JSON.parse(res);
             console.log("Asset with id=" + res + " was succesfully deleted");
 
-            // Remove objects from scene
-            var i;
-            var names_to_remove = [];
-            for (i=0; i< envir.scene.children.length; i++)
-                if (envir.scene.children[i].assetid == "" + res + "")
-                    names_to_remove.push(envir.scene.children[i].name);
+            if (typeof envir != "undefined") {
+                // Remove objects from scene
+                var i;
+                var names_to_remove = [];
+                for (i = 0; i < envir.scene.children.length; i++)
+                    if (envir.scene.children[i].assetid == "" + res + "")
+                        names_to_remove.push(envir.scene.children[i].name);
 
-            for (i=0; i< names_to_remove.length; i++)
-                envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
+                for (i = 0; i < names_to_remove.length; i++)
+                    envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
-            jQuery("#asset-"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+                jQuery("#asset-"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+            }
 
+
+            jQuery("#"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
         },
         error: function (xhr, ajaxOptions, thrownError) {
 

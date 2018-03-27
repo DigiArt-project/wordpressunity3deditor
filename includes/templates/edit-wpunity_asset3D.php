@@ -93,7 +93,15 @@ $assetPGameSlug = $assetPGame->slug;
 
 //$asset_id_avail_joker = [332, 3850, 3455];
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
-$isEditable = $_POST['editable']==='true'?true:false;
+
+if (!isset($_GET['wpunity_asset']))
+    $isEditable = true;
+else {
+    if (!isset($_POST['editable']))
+        $isEditable = true;
+    else
+        $isEditable = $_POST['editable'] === 'true' ? true : false;
+}
 
 //
 //echo "assetPGameID=" . $assetPGameID;

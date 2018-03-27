@@ -62,6 +62,12 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
 );
 
+// DELETE ASSET AJAX
+wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
+wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+);
+
 
 $project_saved_keys = wpunity_getProjectKeys($project_id);
 
