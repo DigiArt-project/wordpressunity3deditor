@@ -1607,7 +1607,7 @@ function wpunity_default_value_unityConnect_chemistry_get(){
 
 global $ini_scene_chemistry_unity_pattern,$ini_scene_main_menu_chem_unity_pattern,$ini_scene_credits_chem_unity_pattern,$ini_scene_options_chem_unity_pattern,$ini_scene_help_chem_unity_pattern;
 global $ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
-global $ini_scene_chem_exam;
+global $ini_scene_chem_exam,$ini_scene_chem_exam3d;
 
 $ini_scene_chemistry_unity_pattern = array('ADD HERE');
 
@@ -1630,6 +1630,8 @@ $ini_scene_selector_chem_unity_pattern2 = array('ADD HERE');
 $ini_scene_selector_chem_text = 'ADD HERE';
 
 $ini_scene_chem_exam = array('ADD HERE');
+
+$ini_scene_chem_exam3d = array('ADD HERE');
 
 
 function wpunity_default_value_chemwonderaround_unity_chemistry_get(){
@@ -1687,6 +1689,10 @@ function wpunity_default_value_exam_unity_chemistry_get(){
   return $ini_scene_chem_exam[0];
 }
 
+function wpunity_default_value_exam3d_unity_chemistry_get(){
+  global $ini_scene_chem_exam3d;
+  return $ini_scene_chem_exam3d[0];
+}
 
 /***************************************************************************************************************/
 //
