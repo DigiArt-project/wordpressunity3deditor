@@ -286,7 +286,6 @@ get_header(); ?>
         var scene_id = <?php echo $scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
-        var pwd = '12345';
 
         // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {
@@ -302,9 +301,13 @@ get_header(); ?>
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
 
             // Start Goedle Iframes
-            loadAtRiskIframe(project_keys.expID);
+            if (project_keys.expID) {
+                loadAtRiskIframe(project_keys.expID);
+            }
 
-            ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
+            if (project_keys.gioID) {
+                ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
+            }
             // End Goedle Iframes
 
 

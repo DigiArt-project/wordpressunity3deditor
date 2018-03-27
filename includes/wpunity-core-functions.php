@@ -369,14 +369,12 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 			$keys = json_decode($request[body]);
 
-			$myGioID = $keys->app->app_key; //the return value for GIO id
+			$app_key = $keys->app->app_key; //the return value for GIO id
 			$api_key = $keys->app->api_key;
 
 			// Save values to our DB
-			// TODO Stathi add new field for api_key. Bound to project.
-			update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
+			update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
 			update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
-			/*update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);*/
 		}
 	}
 }
