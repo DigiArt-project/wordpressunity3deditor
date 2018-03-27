@@ -153,7 +153,6 @@ function wpunity_fetch_game_assets_action_callback(){
  * @param $gameProjectID
  * @return array
  */
-
 function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 
 	$allAssets = [];
@@ -185,7 +184,12 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$custom_query->the_post();
 			$asset_id = get_the_ID();
 			$asset_name = get_the_title();
+			$asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
+            
+            
 
+            $isJokerAsset = strpos($asset_pgame[0]->slug, 'joker') !== false;
+			
 			// ALL DATA WE NEED
 			$objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
 			$objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
@@ -226,6 +230,7 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
                 'doorName_target'=>'', //$doorName_target,
                 'sceneName_target'=>'', //$sceneName_target
                 'isreward'=> '0',
+                'isJokerAsset'=> $isJokerAsset
 			];
 
 		endwhile;
@@ -238,6 +243,53 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 
 	return $allAssets;
 }
+
+
+/**
+ * Get the Assets of a game plus its respective joker game assets
+ *
+ * @param $gameProjectSlug
+ * @param $gameProjectID
+ * @return array
+ */
+function wpunity_get_assetids_joker($gameType){
+
+    $assetIds = [];
+
+    // find the joker game slug e.g. "Archaeology-joker"
+    $joker_game_slug = $gameType."-joker";
+
+    // Slugs are low case "Archaeology-joker" -> "archaeology-joker"
+    $joker_game_slug = strtolower($joker_game_slug);
+
+    $queryargs = array(
+        'post_type' => 'wpunity_asset3d',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field' => 'slug',
+                'terms' => $joker_game_slug
+            )
+        )
+    );
+
+    $custom_query = new WP_Query( $queryargs );
+    
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $assetIds[] = get_the_ID();
+        endwhile;
+    endif;
+   
+    // Reset postdata
+    wp_reset_postdata();
+    
+    return $assetIds;
+}
+
+
 
 // jimver : check this
 function wpunity_getAllscenes_unityfiles_byGame($gameID){

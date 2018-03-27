@@ -90,6 +90,11 @@ $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->slug;
 
+
+//$asset_id_avail_joker = [332, 3850, 3455];
+$asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
+
+
 //
 //echo "assetPGameID=" . $assetPGameID;
 //echo " <br /> ";
@@ -666,9 +671,9 @@ if($create_new == 0) {
                                     <!--put php loop here for every li item-->
 
 									<?php
-									$asset_id_avail = [332, 3850, 3455];
+									
 
-									foreach ( $asset_id_avail as $myAssetID ) {
+									foreach ( $asset_id_avail_joker as $myAssetID ) {
 										$mtlID = get_post_meta($myAssetID, 'wpunity_asset3d_mtl', true);
 										$objID = get_post_meta($myAssetID, 'wpunity_asset3d_obj', true);
 										$screenimgID = get_post_meta($myAssetID, 'wpunity_asset3d_screenimage', true);
