@@ -575,10 +575,21 @@ if ( $assets ) :?>
 
                         </div>
 
-                        <!--TODO: Check the urls for edit and delete-->
+                        <?php
+                        
+                        //echo current_user_can('administrator');
+                        // For joker assets, If the user is not administrator he should not be able to delete or edit them.
+                        $shouldHideDELETE_EDIT = $asset[isJokerAsset] && !current_user_can('administrator');
+                        ?>
+                        
                         <section class="mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>')">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit; ?>&<?php echo $asset[assetid]; ?>\'">EDIT</a>
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>')"
+                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit; ?>&<?php echo $asset[assetid]; ?>\'">
+                                <?php
+                                echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+                                ?>
+                            </a>
                         </section>
 
                     </div>
