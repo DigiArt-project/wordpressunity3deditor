@@ -93,7 +93,7 @@ $assetPGameSlug = $assetPGame->slug;
 
 //$asset_id_avail_joker = [332, 3850, 3455];
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
-
+$isEditable = $_POST['editable']==='true'?true:false;
 
 //
 //echo "assetPGameID=" . $assetPGameID;
@@ -1038,10 +1038,14 @@ if($create_new == 0) {
         <input type="hidden" name="submitted" id="submitted" value="true" />
 		<?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
         <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
-                data-mdc-auto-init="MDCRipple" type="submit">
+                data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
 			<?php echo $buttonTitleText; ?>
         </button>
 
+        
+            <?php echo $isEditable?'':'*You can not update a shared asset'?>
+        
+        
 		<?php if($game_type_obj->string == 'Energy') {
 			echo "<p>Help: Packet of 3D models for game type: " . $game_type_obj->string . "</p>" ;
 			echo "<a href='".plugins_url( '../assets/paketo_3d_v4.zip', dirname(__FILE__)  )."'>Energy Lab 3D models</a>";
