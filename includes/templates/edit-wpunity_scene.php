@@ -363,7 +363,7 @@ get_header(); ?>
                 // The following patch
                 // Firefox iframe bug: https://stackoverflow.com/questions/3253362/iframe-src-caching-issue-on-firefox
                 // makes 3D editor to work, however Analytics charts still not render
-                $(parent.document).find("analyticsIframeContent").each(function () {
+                jQuery(parent.document).find("analyticsIframeContent").each(function () {
                     if (this.contentDocument == window.document) {
                         // if the href of the iframe is not same as
                         // the value of src attribute then reload it
@@ -386,7 +386,7 @@ get_header(); ?>
                     return false;
                 }
 
-                $(parent.document).find("atRiskIframeContent").each(function () {
+                jQuery(parent.document).find("atRiskIframeContent").each(function () {
                     if (this.contentDocument == window.document) {
                         // if the href of the iframe is not same as
                         // the value of src attribute then reload it
@@ -411,7 +411,7 @@ get_header(); ?>
                     return false;
                 }
 
-                $(parent.document).find("ddaIframeContent").each(function () {
+                jQuery(parent.document).find("ddaIframeContent").each(function () {
                     if (this.contentDocument == window.document) {
                         // if the href of the iframe is not same as
                         // the value of src attribute then reload it
