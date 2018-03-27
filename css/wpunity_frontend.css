@@ -378,9 +378,18 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 .ColorPickerSliderBlue .ui-slider-range { background: #729fcf; }
 .ColorPickerSliderBlue .ui-slider-handle { border-color: #729fcf; }
 
+.asset-image-tile-style {
+    -webkit-filter: saturate(70%); /* Safari 6.0 - 9.0 */
+    filter: saturate(70%);
+    -webkit-transition: -webkit-filter 0.16s linear; /* Safari */
+    transition: filter 0.16s;
+}
 
-.editor-asset-tile-style:hover {
-    background-color: rgba(63,81,181,0.1);
+.asset-image-tile-style:hover {
+    -webkit-filter: saturate(100%); /* Safari 6.0 - 9.0 */
+    filter: saturate(100%);
+    -webkit-transition: -webkit-filter 0.16s linear; /* Safari */
+    transition: filter 0.16s;
 }
 
 /* jimver04 additions */
