@@ -369,13 +369,12 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 			$keys = json_decode($request[body]);
 
-			$myGioID = $keys->app->app_key; //the return value for GIO id
+			$app_key = $keys->app->app_key; //the return value for GIO id
 			$api_key = $keys->app->api_key;
 
 			// Save values to our DB
-			// TODO Stathi add new field for api_key. Bound to project.
-			update_post_meta( $project_id, 'wpunity_project_gioApKey', $myGioID);
-			/*update_post_meta( $project_id, 'wpunity_project_expID', $myExpID);*/
+			update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
+			update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
 		}
 	}
 }
@@ -402,8 +401,10 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
 	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 	if($game_category == 'chemistry_games'){
-		$examSceneTitle = 'First Exam'; //Title for Exam Scene
-		$examSceneSlug = $gameSlug . '-exam'; //Slug for Exam Scene
+		$exam2dSceneTitle = 'Exam 2D naming puzzle'; //Title for Exam Scene
+		$exam2dSceneSlug = $gameSlug . '-exam2d'; //Slug for Exam Scene
+		$exam3dSceneTitle = 'Exam 3D construction puzzle';
+		$exam3dSceneSlug = $gameSlug . '-exam3d';
 	}
 
 	if($game_category == 'energy_games'){
@@ -427,8 +428,10 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene (Chemistry)
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
-		$examSceneYAML = get_term_by('slug', 'exam-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam Scene (Chemistry)
-		$examSceneYAMLID = $examSceneYAML->term_id;
+		$exam2dSceneYAML = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam 2d Scene (Chemistry)
+		$exam2dSceneYAMLID = $exam2dSceneYAML->term_id;
+		$exam3dSceneYAML = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam 3d Scene (Chemistry)
+		$exam3dSceneYAMLID = $exam3dSceneYAML->term_id;
 	}
 
 	$default_json = '{
@@ -608,23 +611,41 @@ Characteristics :
 
 	if($game_category == 'chemistry_games'){
 		// Create Exam Scene Data
-		$examSceneData = array(
-			'post_title'    => $examSceneTitle,
+		$exam2dSceneData = array(
+			'post_title'    => $exam2dSceneTitle,
 			'post_content' => 'Auto-created scene',
-			'post_name' => $examSceneSlug,
+			'post_name' => $exam2dSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status'   => 'publish',
 			'tax_input'    => array(
 				'wpunity_scene_pgame'     => array( $allScenePGameID ),
-				'wpunity_scene_yaml'     => array( $examSceneYAMLID ),
+				'wpunity_scene_yaml'     => array( $exam2dSceneYAMLID ),
 			),'meta_input'   => array(
 				'wpunity_scene_default' => 1,
-				'wpunity_scene_metatype' => 'sceneExam',
+				'wpunity_scene_metatype' => 'sceneExam2d',
 				'wpunity_scene_json_input' => $default_json,
 			),
 		);
 
-		wp_insert_post( $examSceneData );
+		wp_insert_post( $exam2dSceneData );
+
+		$exam3dSceneData = array(
+			'post_title'    => $exam3dSceneTitle,
+			'post_content' => 'Auto-created scene',
+			'post_name' => $exam3dSceneSlug,
+			'post_type' => 'wpunity_scene',
+			'post_status'   => 'publish',
+			'tax_input'    => array(
+				'wpunity_scene_pgame'     => array( $allScenePGameID ),
+				'wpunity_scene_yaml'     => array( $exam3dSceneYAMLID ),
+			),'meta_input'   => array(
+				'wpunity_scene_default' => 1,
+				'wpunity_scene_metatype' => 'sceneExam3d',
+				'wpunity_scene_json_input' => $default_json,
+			),
+		);
+
+		wp_insert_post( $exam3dSceneData );
 	}
 
 	// Insert posts 1-1 into the database

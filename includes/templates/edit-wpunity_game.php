@@ -642,15 +642,26 @@ if ( $assets ) :?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
-        var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
-        compileDialog.focusTrap_.deactivate();
-        deleteDialog.focusTrap_.deactivate();
+
+        var deleteDialog = document.querySelector('#delete-dialog');
+        var compileDialog = document.querySelector('#compile-dialog');
+
+        if (deleteDialog) {
+            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
+            deleteDialog.focusTrap_.deactivate();
+        }
+
+        if (compileDialog) {
+
+            compileDialog = new mdc.dialog.MDCDialog(compileDialog);
+            compileDialog.focusTrap_.deactivate();
 
 
-        jQuery( "#compileGameBtn" ).click(function() {
-            compileDialog.show();
-        });
+            jQuery( "#compileGameBtn" ).click(function() {
+                compileDialog.show();
+            });
+        }
+
 
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
@@ -684,13 +695,17 @@ if ( $assets ) :?>
 
         var MDCSelect = mdc.select.MDCSelect;
         var platformDropdown = document.getElementById('platform-select');
-        var platformSelect = MDCSelect.attachTo(platformDropdown);
 
-        platformDropdown.addEventListener('MDCSelect:change', function() {
-            jQuery( "#platformInput" ).attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
-            jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
-        });
+        if (platformDropdown) {
 
+            var platformSelect = MDCSelect.attachTo(platformDropdown);
+
+            platformDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery( "#platformInput" ).attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+                jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
+            });
+
+        }
 
         var acc = document.getElementsByClassName("EditPageAccordion");
         var i;
