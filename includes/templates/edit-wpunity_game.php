@@ -587,9 +587,7 @@ if ( $assets ) :?>
                         // For joker assets, If the user is not administrator he should not be able to delete or edit them.
                         $shouldHideDELETE_EDIT = $asset[isJoker] && !current_user_can('administrator');
                         ?>
-    
-                        <?php echo "isCloned:".$asset[isCloned];?>
-                        <?php echo " isJoker:".$asset[isJoker];?>
+   
                         
                         <section class="mdc-card__actions">
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>',<?php echo $asset[isCloned];?>)"
