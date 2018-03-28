@@ -6,10 +6,12 @@
  * wpunity_deleteSceneAjax()
  *
  */
-function wpunity_deleteAssetAjax(asset_id, game_slug) {
+function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
 
-    jQuery("#deleteAssetProgressBar-"+ asset_id).show();
-    jQuery("#asset-"+asset_id).addClass("LinkDisabled");
+    if (typeof envir != "undefined") {
+        jQuery("#deleteAssetProgressBar-" + asset_id).show();
+        jQuery("#asset-" + asset_id).addClass("LinkDisabled");
+    }
 
     jQuery.ajax({
         url: my_ajax_object_deleteasset.ajax_url,
@@ -17,13 +19,15 @@ function wpunity_deleteAssetAjax(asset_id, game_slug) {
         data: {
             'action': 'wpunity_delete_asset_action',
             'asset_id': asset_id,
-            'game_slug': game_slug
+            'game_slug': game_slug,
+            'isCloned': isCloned
         },
         success: function (res) {
 
             res = JSON.parse(res);
             console.log("Asset with id=" + res + " was succesfully deleted");
 
+            // remove asset from scene (if we are at scene editor
             if (typeof envir != "undefined") {
                 // Remove objects from scene
                 var i;
@@ -36,10 +40,13 @@ function wpunity_deleteAssetAjax(asset_id, game_slug) {
                     envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
                 jQuery("#asset-"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+            } else {
+                // remove the respective tile from the Project editor
+                jQuery("#"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
             }
 
 
-            jQuery("#"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
 

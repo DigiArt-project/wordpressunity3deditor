@@ -44,6 +44,8 @@ class ParseJSON {
                 $sceneName_target = $value->sceneName_target;
 
                 $isreward = $value->isreward;
+                $isCloned = $value->isCloned;
+                $isJoker = $value->isJoker;
 
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
@@ -76,6 +78,8 @@ class ParseJSON {
                                             '","doorName_target":"'.$doorName_target.
                                             '","sceneName_target":"'.$sceneName_target.
                                             '","isreward":"'.$isreward.
+                                            '","isCloned":"'.$isCloned.
+                                            '","isJoker":"'.$isJoker.
                                             '","trs":selected_object_trs};';
 
             echo '</script>';

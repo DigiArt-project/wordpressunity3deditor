@@ -164,6 +164,8 @@ echo '</script>';
         var doorName_target = dataDrag.doorName_target;
         var sceneName_target = dataDrag.sceneName_target;
         var isreward = dataDrag.isreward;
+        var isCloned = dataDrag.isCloned;
+        var isJoker = dataDrag.isJoker;
 
         // we take the behavior type from the path of the obj
         var slashesArr = allIndexOf("/", path);
@@ -173,7 +175,7 @@ echo '</script>';
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-            isreward,
+            isreward, isCloned, isJoker,
             envir.getSteveWorldPosition().x,
             envir.getSteveWorldPosition().y,
             envir.getSteveWorldPosition().z);

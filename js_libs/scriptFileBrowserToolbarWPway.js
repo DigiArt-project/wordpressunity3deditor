@@ -99,7 +99,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "doorName_source":e.target.attributes.getNamedItem("data-doorName_source").value,
                 "doorName_target":e.target.attributes.getNamedItem("data-doorName_target").value,
                 "isreward":e.target.attributes.getNamedItem("data-isreward").value,
-                "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value
+                "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value,
+                "isCloned":e.target.attributes.getNamedItem("data-isCloned").value,
+                "isJoker":e.target.attributes.getNamedItem("data-isJoker").value
             };
 
             var jsonDataDrag = JSON.stringify(dragData);
@@ -160,6 +162,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                 f.screenImagePath = f.screenImagePath ? f.screenImagePath : "../wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
 
+                console.log( f.assetSlug + " is joker? " + f.isJoker );
+                console.log( f.assetSlug + " is cloned? " + f.isCloned );
+
                 img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; position: relative;">' +
@@ -180,14 +185,29 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-doorName_target="'+ f.doorName_target +
                     '" data-sceneName_target="'+ f.sceneName_target +
                     '" data-isreward="'+ f.isreward +
+                    '" data-isCloned="'+ f.isCloned +
+                    '" data-isJoker="'+ f.isJoker +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
                     '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
-                    '<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                    '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '\'" class="mdc-button mdc-button--dense">Edit</a>'+
-                    '<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid + '" onclick="wpunity_deleteAssetAjax('+
-                    f.assetid + ', \'' + gameProjectSlug + '\')" class="mdc-button mdc-button--dense">Delete</a>'+
+
+                    (f.isJoker==='false'?
+                            ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
+                    '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  + '\'" class="mdc-button mdc-button--dense">Edit</a>')
+                        :
+                            ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=false' + '\'" class="mdc-button mdc-button--dense">View</a>')
+                    )+
+
+                    (f.isJoker==='false'?
+                        ('<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid
+                            + '" onclick="wpunity_deleteAssetAjax('+
+                    f.assetid + ', \'' + gameProjectSlug + '\',' + f.isCloned + ')" class="mdc-button mdc-button--dense">Delete</a>') :
+                        ''
+                    )
+                        +
+
                     '</span>' +
                     '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
                     '<div class="progressSliderLine"></div>\n' +

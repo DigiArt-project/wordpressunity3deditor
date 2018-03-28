@@ -184,11 +184,9 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$custom_query->the_post();
 			$asset_id = get_the_ID();
 			$asset_name = get_the_title();
-			$asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
+			//$asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
             
-            
-
-            $isJokerAsset = strpos($asset_pgame[0]->slug, 'joker') !== false;
+            $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);    //strpos($asset_pgame[0]->slug, 'joker') !== false;
 			
 			// ALL DATA WE NEED
 			$objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
@@ -210,7 +208,10 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true);
 
 			$categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
-
+            
+            $isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
+            $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
+			
 			$allAssets[] = [
 				'assetName'=>$asset_name,
 				'assetSlug'=>get_post()->post_name,
@@ -230,13 +231,13 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
                 'doorName_target'=>'', //$doorName_target,
                 'sceneName_target'=>'', //$sceneName_target
                 'isreward'=> '0',
-                'isJokerAsset'=> $isJokerAsset
+                'isJokerAsset'=> $isJoker,
+                'isCloned'=> $isCloned,
+                'isJoker'=> $isJoker
 			];
 
 		endwhile;
 	endif;
-
-
 
 	// Reset postdata
 	wp_reset_postdata();

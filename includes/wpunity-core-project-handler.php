@@ -110,17 +110,22 @@ function wpunity_delete_asset3d_frontend_callback(){
 
     $asset_id = $_POST['asset_id'];
     $gameSlug = $_POST['game_slug'];
+    $isCloned = $_POST['isCloned'];
+    $isJoker = $_POST['isJoker'];
 
-    //1. Delete all Attachments (mtl/obj/jpg ...)
-    $mtlID = get_post_meta($asset_id,'wpunity_asset3d_mtl', true);
-    $res_delmtl= wp_delete_attachment( $mtlID,true );
-    $objID = get_post_meta($asset_id,'wpunity_asset3d_obj', true);
-    $res_delobj = wp_delete_attachment( $objID,true );
-    $difID = get_post_meta($asset_id,'wpunity_asset3d_diffimage', true);
-    $res_deldif = wp_delete_attachment( $difID,true );
-    $screenID = get_post_meta($asset_id,'wpunity_asset3d_screenimage', true);
-    $res_delscr = wp_delete_attachment( $screenID,true );
-
+    // If it is not clone then it is safe to delete the meta files.
+    if ($isCloned==='false') {
+        //1. Delete all Attachments (mtl/obj/jpg ...)
+        $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true);
+        $res_delmtl = wp_delete_attachment($mtlID, true);
+        $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true);
+        $res_delobj = wp_delete_attachment($objID, true);
+        $difID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', true);
+        $res_deldif = wp_delete_attachment($difID, true);
+        $screenID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true);
+        $res_delscr = wp_delete_attachment($screenID, true);
+    }
+    
     //2. Delete all uses of Asset from Scenes (json)
     $res_deljson = wpunity_delete_asset3d_from_games_and_scenes($asset_id, $gameSlug);
 

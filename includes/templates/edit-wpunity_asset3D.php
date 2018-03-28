@@ -91,37 +91,43 @@ $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->slug;
 
 
+
+$isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
+
 //$asset_id_avail_joker = [332, 3850, 3455];
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
-if (!isset($_GET['wpunity_asset']))
+if (!isset($_GET['wpunity_asset'])) {
     $isEditable = true;
-else {
-    if (!isset($_POST['editable']))
+}else {
+    if (!isset($_REQUEST['editable'])) {
         $isEditable = true;
-    else
-        $isEditable = $_POST['editable'] === 'true' ? true : false;
+    }else {
+        $isEditable = $_REQUEST['editable'] === 'true' ? true : false;
+    }
 }
 
-//
-//echo "assetPGameID=" . $assetPGameID;
-//echo " <br /> ";
-//echo "assetCatID=" . $assetCatID;
-//echo " <br /> ";
-//echo "assetTitleForm=" . $assetTitleForm;
-//echo " <br /> ";
-//echo "assetDescForm=" . $assetDescForm;
-//echo " <br /> ";
-//echo "gameSlug=" . $gameSlug;
-//echo " <br /> ";
-//echo "game_post=" . print_r($game_post,true);
-//echo " <br /> ";
-//echo "game_type_obj=" . print_r($game_type_obj, true);
-//echo " <br /> ";
-//echo "assetPGame=" . print_r($assetPGame, true);
-//echo " <br /> ";
-//echo "assetPGameSlug=" . $assetPGameSlug;
-//
+echo "isEditable=".$isEditable;
+echo " <br /> ";
+echo "assetPGameID=" . $assetPGameID;
+echo " <br /> ";
+echo "assetCatID=" . $assetCatID;
+echo " <br /> ";
+echo "assetTitleForm=" . $assetTitleForm;
+echo " <br /> ";
+echo "assetDescForm=" . $assetDescForm;
+echo " <br /> ";
+echo "gameSlug=" . $gameSlug;
+echo " <br /> ";
+echo "game_post=" . print_r($game_post,true);
+echo " <br /> ";
+echo "game_type_obj=" . print_r($game_type_obj, true);
+echo " <br /> ";
+echo "assetPGame=" . print_r($assetPGame, true);
+echo " <br /> ";
+echo "assetPGameSlug=" . $assetPGameSlug;
+
+
 
 
 
@@ -166,6 +172,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
 	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
+    
+    echo "<br />";
+    echo "create_new".$create_new;
+    echo "<br />";
 
 	// NEW
 	if($create_new == 1){
@@ -183,11 +193,27 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 				wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
 			}else{
 				// Check if it is not cloning of an existing asset
-
-				if ($_POST['asset_sourceID']=='')
-					wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
-				else // it is cloning
-					wpunity_copy_3Dfiles($asset_newID, $_POST['asset_sourceID']);
+                echo "<br />";
+                echo "POST['asset_sourceID']:" . "START:" . $_POST['asset_sourceID'] . ":END";
+                echo "<br />";
+                
+				if ($_POST['asset_sourceID']=='') {
+				    // NoCloning
+                    wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
+                    echo "<br />";
+                    
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isCloned', 'false');
+                    
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', $isJoker);
+                    
+                    
+                }else {
+                    // Cloning
+                    wpunity_copy_3Dfiles($asset_newID, $_POST['asset_sourceID']);
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isCloned', 'true');
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', "false");
+                }
+                
 			}
 
 			// Save parameters
@@ -205,33 +231,51 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 				wpunity_create_asset_moleculeExtra_frontend($asset_newID);
 			}
 		}
-		if($scene_id == 0){wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));}
-		else{wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );}
-		exit;
 
 	}else{
 		// Edit an existing asset
 		//Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($asset_inserted_id, $assetTitleForm, $assetDescForm);
+        
+        echo "<br />";
+		echo "asset_updatedConf:".$asset_updatedConf;
+        echo "<br />";
 
 		if($asset_updatedConf == 1) {
-			$saved_assetCatTerm = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
 
-
-
-
+    		$saved_assetCatTerm = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+    		
+    		echo "saved_assetCatTerm:".print_r($saved_assetCatTerm, true);
+            echo "<br />";
+    		
 			// Save 3D files
 			if($saved_assetCatTerm->slug == 'molecule') {
 				wpunity_create_asset_pdbFiles_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
 			}else{
+			    
+			    echo "asset_sourceID".$_POST['asset_sourceID'];
+			    echo "<br />";
+			    echo "asset_inserted_id:".$asset_inserted_id;
+                echo "<br />";
+			    echo "assetTitleForm:". $assetTitleForm;
+                echo "<br />";
+			    echo "gameSlug:".$gameSlug;
+                echo "<br />";
+			    
 				// Check if it is not cloning of an existing asset
-				if ($_POST['asset_sourceID']!='')
-					wpunity_create_asset_3DFilesExtra_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
-				else // it is cloning
-					wpunity_copy_3Dfiles($asset_inserted_id, $_POST['asset_sourceID']);
+				if ($_POST['asset_sourceID']==='') {
+				    echo "NoCloning";
+                    wpunity_create_asset_3DFilesExtra_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
+                    update_post_meta($asset_inserted_id, 'wpunity_asset3d_isCloned', 'false');
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', $isJoker);
+                    
+                }else { // it is cloning
+                    echo "Cloning";
+                    wpunity_copy_3Dfiles($asset_inserted_id, $_POST['asset_sourceID']);
+                    update_post_meta($asset_inserted_id, 'wpunity_asset3d_isCloned', 'true');
+                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', 'false');
+                }
 			}
-
-
 
 			if($saved_assetCatTerm[0]->slug == 'consumer') {
 				wpunity_create_asset_consumerExtra_frontend($asset_checked_id);
@@ -253,9 +297,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				//set_post_thumbnail( ,  );
 //			}
 		}
-		wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
-		exit;
-	}
+
+    }
+    
+    if($scene_id == 0)
+        wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+    else
+        wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene' );
+    
+    exit;
 }
 
 get_header();

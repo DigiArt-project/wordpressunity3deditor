@@ -359,14 +359,25 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'isreward',
             'type' => 'text',
             'std' => '0'
-
         ),array(
 			'name' => 'Image 1',
 			'desc' => 'Image 1',
 			'id' => $wpunity_prefix . 'image1',
 			'type' => 'text',
 			'std' => ''
-		),
+		),array(
+            'name' => 'isCloned',
+            'desc' => 'isCloned',
+            'id' => $wpunity_prefix . 'isCloned',
+            'type' => 'text',
+            'std' => 'false'
+        ),array(
+            'name' => 'isJoker',
+            'desc' => 'isJoker',
+            'id' => $wpunity_prefix . 'isJoker',
+            'type' => 'text',
+            'std' => 'false'
+        )
 	)
 );
 

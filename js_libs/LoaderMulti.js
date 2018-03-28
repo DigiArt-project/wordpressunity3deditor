@@ -123,6 +123,7 @@ class LoaderMulti {
                                 object.doorName_target = resources3D[name]['doorName_target'];
                                 object.sceneName_target = resources3D[name]['sceneName_target'];
                                 object.isreward = resources3D[name]['isreward'];
+                                object.isCloned = resources3D[name]['isCloned'];
 
 
 
