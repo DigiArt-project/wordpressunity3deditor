@@ -326,13 +326,10 @@ class WU_webw_3d_view {
 
         var loader = new THREE.PDBLoader();
 
-
-
         var scope = this;
 
         // Load new
         loader.load(url_or_text_pdb, function (pdb) {
-
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;

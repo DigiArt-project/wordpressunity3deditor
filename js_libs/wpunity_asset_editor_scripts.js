@@ -130,8 +130,6 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
         wu_webw_3d_view.clearAllAssets();
     }
 
-
-
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
@@ -186,9 +184,7 @@ function wpunity_reset_panels(wu_webw_3d_view) {
 
 function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
-    // for existing 3D models
-    if (typeof path_url != "undefined")
-        loader_asset_exists(path_url, mtl_file_name, obj_file_name);
+
 
     // Load from selected files
     var _handleFileSelect = function ( event  ) {
@@ -247,6 +243,13 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     // kick render loop
     render();
+
+    // for existing 3D models
+    if (typeof path_url != "undefined")
+        loader_asset_exists(path_url, mtl_file_name, obj_file_name, null);
+
+    if (typeof pdb_file_name != "undefined")
+        loader_asset_exists(null, null, null, pdb_file_name);
 }
 
 /**
@@ -317,14 +320,20 @@ function checkerCompleteReading(canvas){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename){
+function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFilename){
 
     if (wu_webw_3d_view.scene != null) {
         if (wu_webw_3d_view.renderer)
              wu_webw_3d_view.clearAllAssets();
     }
+
+    if (pdbFilename) {
+        wu_webw_3d_view.loadMolecule(pdbFilename);
+        return;
+    }
+
     //--------------- load all from url (in edit asset) --------------
-    if (typeof pathUrl != "undefined") { // this means that 3D model exists for this asset
+    if (pathUrl  && objFilename ) { // this means that 3D model exists for this asset
 
         var manager = new THREE.LoadingManager();
         var mtlLoader = new THREE.MTLLoader();

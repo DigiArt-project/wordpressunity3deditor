@@ -90,8 +90,6 @@ $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 $assetPGameID = $assetPGame->term_id;
 $assetPGameSlug = $assetPGame->slug;
 
-
-
 $isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
 
 //$asset_id_avail_joker = [332, 3850, 3455];
@@ -107,25 +105,25 @@ if (!isset($_GET['wpunity_asset'])) {
     }
 }
 
-//echo "isEditable=".$isEditable;
-//echo " <br /> ";
-//echo "assetPGameID=" . $assetPGameID;
-//echo " <br /> ";
-//echo "assetCatID=" . $assetCatID;
-//echo " <br /> ";
-//echo "assetTitleForm=" . $assetTitleForm;
-//echo " <br /> ";
-//echo "assetDescForm=" . $assetDescForm;
-//echo " <br /> ";
-//echo "gameSlug=" . $gameSlug;
-//echo " <br /> ";
-//echo "game_post=" . print_r($game_post,true);
-//echo " <br /> ";
-//echo "game_type_obj=" . print_r($game_type_obj, true);
-//echo " <br /> ";
-//echo "assetPGame=" . print_r($assetPGame, true);
-//echo " <br /> ";
-//echo "assetPGameSlug=" . $assetPGameSlug;
+echo "isEditable=".$isEditable;
+echo " <br /> ";
+echo "assetPGameID=" . $assetPGameID;
+echo " <br /> ";
+echo "assetCatID=" . $assetCatID;
+echo " <br /> ";
+echo "assetTitleForm=" . $assetTitleForm;
+echo " <br /> ";
+echo "assetDescForm=" . $assetDescForm;
+echo " <br /> ";
+echo "gameSlug=" . $gameSlug;
+echo " <br /> ";
+echo "game_post=" . print_r($game_post,true);
+echo " <br /> ";
+echo "game_type_obj=" . print_r($game_type_obj, true);
+echo " <br /> ";
+echo "assetPGame=" . print_r($assetPGame, true);
+echo " <br /> ";
+echo "assetPGameSlug=" . $assetPGameSlug;
 
 $asset_post = get_post($asset_inserted_id);
 
@@ -138,19 +136,30 @@ if($asset_post->post_type == 'wpunity_asset3d') {
 
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_inserted_id) {
-	$assetpostMeta = get_post_meta($asset_inserted_id);
-	$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-	$objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+    $assetpostMeta = get_post_meta($asset_inserted_id);
 
-	$mtl_file_name = basename($mtlpost->guid);
-	$obj_file_name = basename($objpost->guid);
-	$path_url = pathinfo($mtlpost->guid)['dirname'];
-
-	echo '<script>';
-	echo 'var mtl_file_name="'.$mtl_file_name.'";';
-	echo 'var obj_file_name="'.$obj_file_name.'";';
-	echo 'var path_url="'.$path_url . '/'    .'";';
-	echo '</script>';
+    if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
+        $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+        $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+        $mtl_file_name = basename($mtlpost->guid);
+        $obj_file_name = basename($objpost->guid);
+        $path_url = pathinfo($mtlpost->guid)['dirname'];
+    
+        echo '<script>';
+        echo 'var mtl_file_name="'.$mtl_file_name.'";';
+        echo 'var obj_file_name="'.$obj_file_name.'";';
+        echo 'var path_url="'.$path_url . '/'    .'";';
+        echo '</script>';
+    }
+    
+    if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
+        $pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
+        $pdb_file_name = $pdbpost->guid;
+    
+        echo '<script>';
+        echo 'var pdb_file_name="'.$pdb_file_name.'";';
+        echo '</script>';
+    }
 }
 //--------------------------------------------------------
 
@@ -1096,7 +1105,7 @@ if($create_new == 0) {
 
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
+        
         loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
 
 
