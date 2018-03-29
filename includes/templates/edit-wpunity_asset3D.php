@@ -29,6 +29,9 @@ function loadAsset3DManagerScripts() {
 
 	// scroll for images
 	wp_enqueue_script('wpunity_lightslider');
+	
+	// to capture screenshot of the 3D molecule and its tags
+    wp_enqueue_script('wpunity_html2canvas');
 
 
 	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
@@ -392,7 +395,7 @@ if($create_new == 0) {
 
             <div class="mdc-layout-grid__inner">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
                     <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -541,8 +544,6 @@ if($create_new == 0) {
 
                         <h3 class="mdc-typography--title">Video POI Details</h3>
 
-
-
                         <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                             <label for="videoFileInput"> Select a video</label>
                             <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
@@ -690,12 +691,13 @@ if($create_new == 0) {
                                     </div>
                                 </div>
 
-                                <div style="position: absolute;">
-                                    <div id="previewCanvasDiv" style="height: 300px; width:100%; position: relative"></div>
+                                <div id="wrapper_3d_inner">
+                                    <div style="position: absolute;">
+                                        <div id="previewCanvasDiv" style="height: 300px; width:100%; position: relative"></div>
+                                    </div>
+    
+                                    <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
                                 </div>
-
-                                <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
-
 
                                 <label>Select an asset to insert</label>
                                 <ul id="lightSlider">
@@ -1619,11 +1621,25 @@ if($create_new == 0) {
         });
 
 
-        function wpunity_create_model_sshot(canvas) {
+        function wpunity_create_model_sshot(wu_webw_3d_view_local) {
 
-            canvas.render();
-            document.getElementById("sshotPreviewImg").src = canvas.renderer.domElement.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = canvas.renderer.domElement.toDataURL("image/jpeg");
+            //console.log(wu_webw_3d_view_local.canvas.toDataURL("image/jpeg"));
+
+            wu_webw_3d_view_local.render();
+
+            // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels in the initial
+            // implementation
+            html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
+                
+                //document.getElementById("sshotFileInputContainer").appendChild(canvas)
+                //document.body.appendChild(canvas)
+                document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
+                document.getElementById("sshotFileInput").value = canvas.toDataURL("image/jpeg");
+
+            });
+
+
+
         }
 
         function wpunity_reset_sshot_field() {

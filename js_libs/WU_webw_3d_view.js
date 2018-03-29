@@ -60,22 +60,20 @@ class WU_webw_3d_view {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xddb59b);
 
-
         // - PDB Specific -
         this.scene.add(this.root);
 
-        // Label renderer
+        // - Label renderer -
         this.labelRenderer = new THREE.CSS2DRenderer();
-        //this.labelRenderer.setSize(this.windowW, this.windowH);
-        //this.labelRenderer.setSize( this.canvas.offsetWidth, this.canvas.offsetHeight); //window.innerWidth, window.innerHeight );
         this.labelRenderer.domElement.style.position = 'absolute';
         this.labelRenderer.domElement.style.top = '0';
+        this.labelRenderer.domElement.style.fontSize = "25pt";
+        this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
         this.labelRenderer.domElement.style.pointerEvents = 'none';
 
         document.getElementById("previewCanvasDiv").appendChild(this.labelRenderer.domElement);
 
         // - End of PDB specific -
-
         this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
 
@@ -211,9 +209,6 @@ class WU_webw_3d_view {
         this.camera.updateProjectionMatrix();
     }
 
-
-
-
     render() {
         if (!this.renderer.autoClear)
             this.renderer.clear();
@@ -335,7 +330,7 @@ class WU_webw_3d_view {
             var geometryBonds = pdb.geometryBonds;
             var json = pdb.json;
 
-            var boxGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
+
             var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
 
             var offset = geometryAtoms.center();
@@ -399,19 +394,30 @@ class WU_webw_3d_view {
                 start.multiplyScalar(75);
                 end.multiplyScalar(75);
 
-                var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial(0xffffff));
+                var HALF_PI = +Math.PI * .5;
+                var distance = start.distanceTo(end);
+
+                var cylinder = new THREE.CylinderGeometry(10,10,distance,10,10,false);
+
+                var orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
+                var offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
+                var offsetPosition = new THREE.Matrix4();//a matrix to fix pivot position
+                orientation.lookAt( start, end, new THREE.Vector3(0,1,0));//look at destination
+                offsetRotation.makeRotationX(HALF_PI);//rotate 90 degs on X
+                orientation.multiply(offsetRotation);//combine orientation with rotation transformations
+                cylinder.applyMatrix(orientation);
+
+                var object = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial(0xffffff));
+
                 object.position.copy(start);
                 object.position.lerp(end, 0.5);
-                object.scale.set(5, 5, start.distanceTo(end));
-                object.lookAt(end);
-                scope.root.add(object);
 
+                scope.root.add(object);
             }
 
             scope.render();
         });
     }
-
 
     /**
      * Auto zoom on obj with multiple meshes
@@ -456,9 +462,7 @@ class WU_webw_3d_view {
                  }
             }
         } );
-
         return [sceneBSCenter, sceneBSRadius];
-
     }
 
     /**

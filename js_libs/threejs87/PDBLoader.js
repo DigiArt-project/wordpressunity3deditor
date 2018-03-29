@@ -144,6 +144,8 @@ THREE.PDBLoader.prototype = {
 
             }
 
+
+
             // build geometry
 
             geometryAtoms.addAttribute( 'position', new THREE.Float32BufferAttribute( verticesAtoms, 3 ) );

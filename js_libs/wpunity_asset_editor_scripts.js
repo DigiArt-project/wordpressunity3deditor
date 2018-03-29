@@ -163,7 +163,6 @@ function wpunity_reset_panels(wu_webw_3d_view) {
     // Clear all
     wpunity_clear_asset_files(wu_webw_3d_view);
 
-
     if (jQuery("ProducerPlotTooltip")) {
         jQuery("div.ProducerPlotTooltip").remove();
     }
@@ -183,8 +182,6 @@ function wpunity_reset_panels(wu_webw_3d_view) {
 
 
 function loadAssetPreviewer(canvas, multipleFilesInputElem) {
-
-
 
     // Load from selected files
     var _handleFileSelect = function ( event  ) {
