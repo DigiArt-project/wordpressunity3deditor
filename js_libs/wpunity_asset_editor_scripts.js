@@ -14,8 +14,7 @@ var nMtl = 0;
 var nJpg = 0;
 var nPdb = 0;
 
-
-jQuery('#3dAssetForm').remove
+//jQuery('#3dAssetForm').remove
 
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
@@ -103,7 +102,7 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             checkerCompleteReading(canvas);
         }
 
-        if (objFileContent && mtlFileContent || pdbFileContent) {
+        if ((objFileContent && mtlFileContent) || pdbFileContent) {
 
         } else {
             wpunity_reset_sshot_field();
@@ -138,7 +137,6 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     while ( jQuery("[id^=textureFileInput]").length > 0) {
          jQuery("[id^=textureFileInput]")[0].remove();
    }
-
 
     document.getElementById("fileUploadInput").value = "";
 
@@ -219,8 +217,6 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
-
-
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
@@ -317,15 +313,17 @@ function checkerCompleteReading(canvas){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFilename){
+function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
 
     if (wu_webw_3d_view.scene != null) {
         if (wu_webw_3d_view.renderer)
              wu_webw_3d_view.clearAllAssets();
     }
 
-    if (pdbFilename) {
-        wu_webw_3d_view.loadMolecule(pdbFilename);
+
+
+    if (pdbFileContent) {
+        wu_webw_3d_view.loadMolecule(pdbFileContent);
         return;
     }
 
