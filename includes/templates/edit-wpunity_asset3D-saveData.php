@@ -165,14 +165,17 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 
     // Texture
     if (isset($_POST['textureFileInput'])) {
+        
         foreach (array_keys($_POST['textureFileInput']) as $texture) {
-            $tname = str_replace('.jpg', '', $texture);
+            $tname = str_replace(['.jpg','.png'], '', $texture);
             $tContent[$tname] = $_POST['textureFileInput'][$texture];
             $textureNamesIn[] = $tname;
         }
 
         $textureNamesOut = [];
+        
         for ($i = 0; $i < count($tContent); $i++) {
+            
             $textureFile_id = wpunity_upload_Assetimg64(
                 $tContent[$textureNamesIn[$i]], 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm,
                 $asset_newID, $gameSlug);
@@ -182,6 +185,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             $textureNamesOut[] = $textureFile_filename;
 
             add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
+            
             //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
         }
     }
@@ -190,18 +194,39 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     $mtl_content = $_POST['mtlFileInput'];
     $obj_content = $_POST['objFileInput'];
     
+//    $fl = fopen("output_png.txt","w");
+    
     // MTL : Open mtl file and replace jpg filename
     if($_POST['mtlFileInput'] && isset($_POST['textureFileInput'])) {
         if(strlen($_POST['mtlFileInput']) > 0) {
+            
             for ($k = 0; $k < count($textureNamesIn); $k++) {
-                // $mtl_content = str_replace("map_Kd ".$textureNamesIn[$k].".jpg", "map_Kd ".$textureNamesOut[$k], $mtl_content);
-                // This replace is better. It does not depend on the number of white spaces.
-                $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".jpg\b/ui",
-                    "map_Kd " . $textureNamesOut[$k], $mtl_content);
+//                fwrite($fl , $textureNamesIn[$k]);
+    
+                $isJPG = false;
+                $isPNG = false;
+                
+                $imageContentLine = substr($tContent[$textureNamesIn[$k]], 0, 20);
+                
+                if ( strpos($imageContentLine, "jpeg") )
+                    $isJPG = true;
+                
+                if (strpos($imageContentLine, "png"))
+                    $isPNG = true;
+                
+                if ($isJPG)
+                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".jpg\b/ui",
+                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
+                
+                if($isPNG)
+                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".png\b/ui",
+                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
+    
             }
         }
     }
     
+//    fclose($fl);
 
     // OBJ and MTL
     if (isset($_POST['mtlFileInput']) && isset($_POST['objFileInput'])) {

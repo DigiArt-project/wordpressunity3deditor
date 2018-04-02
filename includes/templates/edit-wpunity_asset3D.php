@@ -683,7 +683,7 @@ if($asset_id != null) {
 
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
-                                       multiple accept=".obj,.mtl,.jpg"/>
+                                       multiple accept=".obj,.mtl,.jpg,.png"/>
 
 
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
@@ -1624,7 +1624,7 @@ if($asset_id != null) {
                 input.accept = ".pdb";
             } else {
                 inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
-                input.accept = ".obj,.mtl,.jpg";
+                input.accept = ".obj,.mtl,.jpg,.png";
             }
         }
     </script>

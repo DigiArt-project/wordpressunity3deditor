@@ -399,6 +399,9 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             map.wrapS = scope.wrap;
             map.wrapT = scope.wrap;
 
+
+
+
             params[ mapType ] = map;
         }
 
@@ -507,6 +510,11 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         // Ververidis
         if (materialName.indexOf("TwoSided")!==-1)
             this.materials[ materialName ].side  = THREE.DoubleSide;
+
+        console.log("EFFAX : 152");
+        this.materials[ materialName ].transparent = true;
+        this.materials[ materialName ].side  = THREE.DoubleSide;
+
 
         return this.materials[ materialName ];
     },

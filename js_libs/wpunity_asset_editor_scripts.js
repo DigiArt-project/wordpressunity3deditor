@@ -1,6 +1,7 @@
 /**
  * Created by tpapazoglou on 11/7/2017.
  * Modified by dverver on 18/10/2017: Multiple jpgs as textures. fReader called once not twice for the same file.
+ * dverver 02/04/2018
  */
 'use strict';
 
@@ -12,6 +13,7 @@ var pdbFileContent = '';
 var nObj = 0;
 var nMtl = 0;
 var nJpg = 0;
+var nPng = 0;
 var nPdb = 0;
 
 //jQuery('#3dAssetForm').remove
@@ -153,6 +155,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nObj = 0;
     nMtl = 0;
     nJpg = 0;
+    nPng = 0;
     nPdb = 0;
 }
 
@@ -210,6 +213,11 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
             }
             if ( file.name.indexOf( '\.jpg' ) > 0 ) {
                 nJpg ++;
+
+                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
+            }
+            if ( file.name.indexOf( '\.png' ) > 0 ) {
+                nPng ++;
 
                 wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
             }
@@ -274,12 +282,13 @@ function checkerCompleteReading(canvas){
 
                 objectDefinition.mtlAsString = mtlFileContent;
 
-                if (nJpg==0){
+                if (nJpg==0 && nPng==0){
                     // Start without Textures
                     wu_webw_3d_view.loadFilesUser(objectDefinition);
+
                 } else {
 
-                    if ( nJpg === jQuery("input[id='textureFileInput']").length) {
+                    if ((nPng>0 && nPng === jQuery("input[id='textureFileInput']").length) || ( nJpg>0 && nJpg === jQuery("input[id='textureFileInput']").length) ) {
 
                         // Get textureFileInput array with jQuery
                         var textFil = jQuery("input[id='textureFileInput']");
