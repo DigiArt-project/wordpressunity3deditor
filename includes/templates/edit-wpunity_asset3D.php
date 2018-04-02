@@ -190,8 +190,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				update_post_meta( $asset_inserted_id, '_thumbnail_id', $attachment_new_id );
 //				//set_post_thumbnail( ,  );
 //			}
-    
-    
+
     // Create new or updated of main fields edit successfull
     if($asset_id != 0 || $asset_updatedConf == 1) {
             if ($_POST['asset_sourceID']=='') {
