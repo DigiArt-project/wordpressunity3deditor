@@ -8,6 +8,10 @@ function wpunity_windEnergy_scene_stats($scene_id){
 	$turbinesInfoGathered = [];
 	$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 	$scene_env = get_post_meta($scene_id, 'wpunity_scene_environment', true);
+
+	print_r($scene_env);
+
+
 	$jsonScene = htmlspecialchars_decode($scene_json);
 	$sceneJsonARR = json_decode($jsonScene, TRUE);
 
@@ -43,7 +47,7 @@ function wpunity_windEnergy_scene_stats($scene_id){
 		$totalItems++;
 	}
 
-	$scene_stats = array('env' => $scene_env,'map' => $scene_id,'watts' => $totalWatts / $totalItems,'area' => $totalArea / $totalItems,'cost' => $totalCost / $totalItems, 'totalProducers' =>  $totalItems);
+	$scene_stats = array('env' => $scene_env, 'map' => $scene_id, 'watts' => $totalWatts, 'area' => $totalArea, 'cost' => $totalCost, 'totalProducers' =>  $totalItems);
 
 	return $scene_stats;
 }

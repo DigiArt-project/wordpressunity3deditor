@@ -291,13 +291,15 @@ get_header(); ?>
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
+            var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($scene_id)); ?>
+
             var versionSelector = document.getElementById("analyticsVersionSelector");
             var locationSelector = document.getElementById("analyticsLocationSelector");
 
             var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
-            loadSceneAnalyticsIframe('energytool','fields', 4, 3, 90, 3);
+            loadSceneAnalyticsIframe('energytool', energy_stats);
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
 
             // Start Goedle Iframes
@@ -322,15 +324,15 @@ get_header(); ?>
             });
 
 
-            function loadSceneAnalyticsIframe(id, fields, map, watts, area, cost) {
+            function loadSceneAnalyticsIframe(lab, fields) {
 
                 var url = "http://52.59.219.11/?" +
-                    "lab=" + id +
-                    "&env=" + fields +
-                    "&map=" + map +
-                    "&watts=" + watts +
-                    "&area=" + area +
-                    "&cost=" + cost;
+                    "lab=" + lab +
+                    "&env=" + fields.env +
+                    "&map=" + fields.map +
+                    "&watts=" + fields.watts +
+                    "&area=" + fields.area +
+                    "&cost=" + fields.cost;
 
                 var iframe = jQuery('#scene-analytics-iframe');
                 if (iframe.length) {
