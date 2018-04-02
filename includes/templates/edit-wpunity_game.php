@@ -136,6 +136,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
 		'wpunity_isRegional' => 0,
+        'wpunity_scene_environment' => 'fields',
 	);
 
 	$scene_information = array(

@@ -1,5 +1,57 @@
 <?php
 
+//==========================================================================================================================================
+//==========================================================================================================================================
+
+function wpunity_windEnergy_scene_stats($scene_id){
+
+	$turbinesInfoGathered = [];
+	$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+	$scene_env = get_post_meta($scene_id, 'wpunity_scene_environment', true);
+	$jsonScene = htmlspecialchars_decode($scene_json);
+	$sceneJsonARR = json_decode($jsonScene, TRUE);
+
+	if (count($sceneJsonARR['objects']) > 0){
+		foreach ($sceneJsonARR['objects'] as $key => $value) {
+			if ($key !== 'avatarYawObject') {
+				if ($value['categoryName'] === 'Producer') {
+
+					$optCosts = get_post_meta($value['assetid'],'wpunity_producerOptCosts',true);
+					if($optCosts) {
+						$optCosts_size = $optCosts['size'];
+						$optCosts_cost = $optCosts['cost'];
+					}
+					$optGen = get_post_meta($value['assetid'],'wpunity_producerOptGen',true);
+					if($optGen) {
+						$optGen_power = $optGen['power'];
+					}
+
+					$turbinesInfoGathered[] = ['producerID' => $value['assetid'],
+						'proWatts' => $optGen_power,
+						'proArea' => $optCosts_size * 3,
+						'proCost' => $optCosts_cost
+					];
+				}
+			}
+		}
+	}
+	$totalWatts = 0;$totalArea = 0;$totalCost = 0;$totalItems = 0;
+	foreach ($turbinesInfoGathered as $prod) {
+		$totalWatts += $prod['proWatts'];
+		$totalArea += $prod['proArea'];
+		$totalCost += $prod['proCost'];
+		$totalItems++;
+	}
+
+	$scene_stats = array('env' => $scene_env,'map' => $scene_id,'watts' => $totalWatts / $totalItems,'area' => $totalArea / $totalItems,'cost' => $totalCost / $totalItems, 'totalProducers' =>  $totalItems);
+
+	return $scene_stats;
+}
+
+
+//==========================================================================================================================================
+//==========================================================================================================================================
+
 function wpunity_the_slug_exists($post_name) {
 	global $wpdb;
 	if($wpdb->get_row("SELECT post_name FROM wp_posts WHERE post_name = '" . $post_name . "'", 'ARRAY_A')) {
@@ -543,6 +595,7 @@ Characteristics :
 				'wpunity_scene_metatype' => 'scene',
 				'wpunity_scene_json_input' => $default_json,
 				'wpunity_isRegional' => 1,
+				'wpunity_scene_environment' => 'mountain',
 			),
 		);
 
@@ -560,6 +613,7 @@ Characteristics :
 				'wpunity_scene_metatype' => 'scene',
 				'wpunity_scene_json_input' => $default_json,
 				'wpunity_isRegional' => 1,
+				'wpunity_scene_environment' => 'fields',
 			),
 		);
 
@@ -577,6 +631,7 @@ Characteristics :
 				'wpunity_scene_metatype' => 'scene',
 				'wpunity_scene_json_input' => $default_json,
 				'wpunity_isRegional' => 1,
+				'wpunity_scene_environment' => 'seashore',
 			),
 		);
 
