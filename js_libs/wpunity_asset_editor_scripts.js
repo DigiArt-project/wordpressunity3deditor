@@ -1,6 +1,7 @@
 /**
  * Created by tpapazoglou on 11/7/2017.
  * Modified by dverver on 18/10/2017: Multiple jpgs as textures. fReader called once not twice for the same file.
+ * dverver 02/04/2018
  */
 'use strict';
 
@@ -12,10 +13,10 @@ var pdbFileContent = '';
 var nObj = 0;
 var nMtl = 0;
 var nJpg = 0;
+var nPng = 0;
 var nPdb = 0;
 
-
-jQuery('#3dAssetForm').remove
+//jQuery('#3dAssetForm').remove
 
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
@@ -103,7 +104,7 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             checkerCompleteReading(canvas);
         }
 
-        if (objFileContent && mtlFileContent || pdbFileContent) {
+        if ((objFileContent && mtlFileContent) || pdbFileContent) {
 
         } else {
             wpunity_reset_sshot_field();
@@ -139,7 +140,6 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
          jQuery("[id^=textureFileInput]")[0].remove();
    }
 
-
     document.getElementById("fileUploadInput").value = "";
 
     document.getElementById("sshotFileInput").value = "";
@@ -155,6 +155,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nObj = 0;
     nMtl = 0;
     nJpg = 0;
+    nPng = 0;
     nPdb = 0;
 }
 
@@ -215,12 +216,15 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
                 wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
             }
+            if ( file.name.indexOf( '\.png' ) > 0 ) {
+                nPng ++;
+
+                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
+            }
         }
 
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
-
-
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
@@ -278,12 +282,13 @@ function checkerCompleteReading(canvas){
 
                 objectDefinition.mtlAsString = mtlFileContent;
 
-                if (nJpg==0){
+                if (nJpg==0 && nPng==0){
                     // Start without Textures
                     wu_webw_3d_view.loadFilesUser(objectDefinition);
+
                 } else {
 
-                    if ( nJpg === jQuery("input[id='textureFileInput']").length) {
+                    if ((nPng>0 && nPng === jQuery("input[id='textureFileInput']").length) || ( nJpg>0 && nJpg === jQuery("input[id='textureFileInput']").length) ) {
 
                         // Get textureFileInput array with jQuery
                         var textFil = jQuery("input[id='textureFileInput']");
@@ -317,15 +322,17 @@ function checkerCompleteReading(canvas){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFilename){
+function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
 
     if (wu_webw_3d_view.scene != null) {
         if (wu_webw_3d_view.renderer)
              wu_webw_3d_view.clearAllAssets();
     }
 
-    if (pdbFilename) {
-        wu_webw_3d_view.loadMolecule(pdbFilename);
+
+
+    if (pdbFileContent) {
+        wu_webw_3d_view.loadMolecule(pdbFileContent);
         return;
     }
 

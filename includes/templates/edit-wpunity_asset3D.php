@@ -73,7 +73,7 @@ $optGen_speed = 10;
 $optGen_power = 3;
 $optProductionVal = null;
 
-$create_new = 1; //1=NEW ASSET 0=EDIT ASSET
+
 $perma_structure = get_option('permalink_structure') ? true : false;
 
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
@@ -81,7 +81,7 @@ $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET['wpunity_game'] )) : null ;
-$asset_inserted_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
+$asset_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
 $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['wpunity_scene'] )) : null ;
 
 $game_post = get_post($project_id);
@@ -108,38 +108,33 @@ if (!isset($_GET['wpunity_asset'])) {
     }
 }
 
-echo "isEditable=".$isEditable;
-echo " <br /> ";
-echo "assetPGameID=" . $assetPGameID;
-echo " <br /> ";
-echo "assetCatID=" . $assetCatID;
-echo " <br /> ";
-echo "assetTitleForm=" . $assetTitleForm;
-echo " <br /> ";
-echo "assetDescForm=" . $assetDescForm;
-echo " <br /> ";
-echo "gameSlug=" . $gameSlug;
-echo " <br /> ";
-echo "game_post=" . print_r($game_post,true);
-echo " <br /> ";
-echo "game_type_obj=" . print_r($game_type_obj, true);
-echo " <br /> ";
-echo "assetPGame=" . print_r($assetPGame, true);
-echo " <br /> ";
-echo "assetPGameSlug=" . $assetPGameSlug;
-
-$asset_post = get_post($asset_inserted_id);
-
-$asset_checked_id = 0;
-if($asset_post->post_type == 'wpunity_asset3d') {
-	$create_new = 0;
-	$asset_checked_id = $asset_inserted_id;
-}
-
+//echo "isEditable=".$isEditable;
+//echo " <br /> ";
+//echo "assetPGameID=" . $assetPGameID;
+//echo " <br /> ";
+//echo "assetCatID=" . $assetCatID;
+//echo " <br /> ";
+//echo "assetTitleForm=" . $assetTitleForm;
+//echo " <br /> ";
+//echo "assetDescForm=" . $assetDescForm;
+//echo " <br /> ";
+//echo "gameSlug=" . $gameSlug;
+//echo " <br /> ";
+//echo "game_post=" . print_r($game_post,true);
+//echo " <br /> ";
+//echo "game_type_obj=" . print_r($game_type_obj, true);
+//echo " <br /> ";
+//echo "assetPGame=" . print_r($assetPGame, true);
+//echo " <br /> ";
+//echo "assetPGameSlug=" . $assetPGameSlug;
+//echo " <br /> ";
+//echo "asset_id=" . $asset_id;
 
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
-if($asset_inserted_id) {
-    $assetpostMeta = get_post_meta($asset_inserted_id);
+if($asset_id != null) {
+    
+    $asset_post = get_post($asset_id);
+    $assetpostMeta = get_post_meta($asset_id);
 
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
         $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
@@ -174,97 +169,20 @@ $editscenePage = wpunity_getEditpage('scene');
 // If form is submitted
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
-	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
-
+    $assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
+    $assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
+    
+    $assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
+    $assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+    
 	// NEW
-	if($create_new == 1){
-		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
-  
-		$asset_newID = 	wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug);
-
-		// Create new: If the Asset is created (doesnt returns 0) -> Gather Info for extra fields
-		if($asset_newID != 0) {
-			$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-
-			// Save 3D files
-			if($assetCatTerm->slug == 'molecule') {
-				wpunity_create_asset_pdbFiles_frontend($asset_newID, $assetTitleForm, $gameSlug);
-			}else{
-				// Check if it is not cloning of an existing asset
-                echo "<br />";
-                echo "POST['asset_sourceID']:" . "START:" . $_POST['asset_sourceID'] . ":END";
-                echo "<br />";
-                
-				if ($_POST['asset_sourceID']=='') {
-				    // NoCloning
-                    wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug);
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isCloned', 'false');
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', $isJoker);
-                }else {
-                    // Cloning
-                    wpunity_copy_3Dfiles($asset_newID, $_POST['asset_sourceID']);
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isCloned', 'true');
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', "false");
-                }
-			}
-
-			// Save parameters
-			if($assetCatTerm->slug == 'consumer') {
-				wpunity_create_asset_consumerExtra_frontend($asset_newID);
-			}elseif($assetCatTerm->slug == 'terrain') {
-				wpunity_create_asset_terrainExtra_frontend($asset_newID);
-			}elseif ($assetCatTerm->slug == 'producer') {
-				wpunity_create_asset_producerExtra_frontend($asset_newID);
-			}elseif ($assetCatTerm->slug == 'pois_imagetext') {
-				wpunity_create_asset_poisITExtra_frontend($asset_newID);
-			}elseif ($assetCatTerm->slug == 'pois_video') {
-				wpunity_create_asset_poisVideoExtra_frontend($asset_newID);
-			}elseif ($assetCatTerm->slug == 'molecule') {
-				wpunity_create_asset_moleculeExtra_frontend($asset_newID);
-			}
-		}
-
-	}else{
-		// Edit an existing asset
-		//Return true if updated, false if failed
-		$asset_updatedConf = wpunity_update_asset_frontend($asset_inserted_id, $assetTitleForm, $assetDescForm);
-  
-
-		if($asset_updatedConf == 1) {
-
-    		$saved_assetCatTerm = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
-   		
-    		
-			// Save 3D files
-			if($saved_assetCatTerm->slug == 'molecule') {
-				wpunity_create_asset_pdbFiles_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
-			}else{
-				// Check if it is not cloning of an existing asset
-				if ($_POST['asset_sourceID']==='') {
-                    wpunity_create_asset_3DFilesExtra_frontend($asset_inserted_id, $assetTitleForm, $gameSlug);
-                    update_post_meta($asset_inserted_id, 'wpunity_asset3d_isCloned', 'false');
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', $isJoker);
-                }else { // it is cloning
-                    wpunity_copy_3Dfiles($asset_inserted_id, $_POST['asset_sourceID']);
-                    update_post_meta($asset_inserted_id, 'wpunity_asset3d_isCloned', 'true');
-                    update_post_meta($asset_newID, 'wpunity_asset3d_isJoker', 'false');
-                }
-			}
-
-			if($saved_assetCatTerm[0]->slug == 'consumer') {
-				wpunity_create_asset_consumerExtra_frontend($asset_checked_id);
-			}elseif($saved_assetCatTerm[0]->slug == 'terrain') {
-				wpunity_create_asset_terrainExtra_frontend($asset_checked_id);
-			}elseif ($saved_assetCatTerm[0]->slug == 'producer') {
-				wpunity_create_asset_producerExtra_frontend($asset_checked_id);
-			}elseif ($saved_assetCatTerm[0]->slug == 'pois_imagetext') {
-				wpunity_create_asset_poisITExtra_frontend($asset_checked_id);//change it to update
-			}elseif ($saved_assetCatTerm[0]->slug == 'pois_video') {
-				wpunity_create_asset_poisVideoExtra_frontend($asset_checked_id);//change it to update
-			}
-
+	if($asset_id == null){
+        //It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
+		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug);
+    }else {
+        // Edit an existing asset: Return true if updated, false if failed
+        $asset_updatedConf = wpunity_update_asset_frontend($asset_id, $assetTitleForm, $assetDescForm);
+    }
 			//upload the featured image for POI image-text
 //			$new_asset_featured_image =  $_FILES['poi-img-featured-image'];
 //			if($new_asset_featured_image){
@@ -272,8 +190,36 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //				update_post_meta( $asset_inserted_id, '_thumbnail_id', $attachment_new_id );
 //				//set_post_thumbnail( ,  );
 //			}
-		}
 
+    // Create new or updated of main fields edit successfull
+    if($asset_id != 0 || $asset_updatedConf == 1) {
+            if ($_POST['asset_sourceID']=='') {
+                // NoCloning
+                wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug);
+                update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
+                update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
+            }else {
+                // Cloning
+                wpunity_copy_3Dfiles($asset_id, $_POST['asset_sourceID']);
+                update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'true');
+                update_post_meta($asset_id, 'wpunity_asset3d_isJoker', "false");
+            }
+    }
+
+
+    // Save parameters
+    if($assetCatTerm->slug == 'consumer') {
+        wpunity_create_asset_consumerExtra_frontend($asset_id);
+    }elseif($assetCatTerm->slug == 'terrain') {
+        wpunity_create_asset_terrainExtra_frontend($asset_id);
+    }elseif ($assetCatTerm->slug == 'producer') {
+        wpunity_create_asset_producerExtra_frontend($asset_id);
+    }elseif ($assetCatTerm->slug == 'pois_imagetext') {
+        wpunity_create_asset_poisITExtra_frontend($asset_id);
+    }elseif ($assetCatTerm->slug == 'pois_video') {
+        wpunity_create_asset_poisVideoExtra_frontend($asset_id);
+    }elseif ($assetCatTerm->slug == 'molecule') {
+        wpunity_create_asset_moleculeExtra_frontend($asset_id);
     }
     
     if($scene_id == 0)
@@ -308,33 +254,33 @@ get_header();
     </ul>
 
 <?php
-$breacrumbsTitle = ($create_new == 1 ? "Create a new asset" : "Edit an existing asset");
-$dropdownHeading = ($create_new == 1 ? "Select a category" : "Category");
-$asset_title_saved = ($create_new == 1 ? "" : get_the_title( $asset_checked_id ));
-$asset_title_label = ($create_new == 1 ? "Enter a title for your asset" : "Edit the title of your asset");
-$asset_desc_saved = ($create_new == 1 ? "" : get_post_field('post_content', $asset_checked_id));
-$asset_desc_label = ($create_new == 1 ? "Add a small description for your asset" : "Edit the description of your asset");
+$breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
+$dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
+$asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
+$asset_title_label = ($asset_id == null ? "Enter a title for your asset" : "Edit the title of your asset");
+$asset_desc_saved = ($asset_id == null ? "" : get_post_field('post_content', $asset_id));
+$asset_desc_label = ($asset_id == null ? "Add a small description for your asset" : "Edit the description of your asset");
 
 //print_r(get_allowed_mime_types());
 
 //Check if its new/saved and get data for Terrain Options
-if($create_new == 0) {
-	$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+if($asset_id != null) {
+	$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
 	if($saved_term[0]->slug == 'terrain'){
-		$physics = get_post_meta($asset_checked_id,'wpunity_physicsValues',true);
+		$physics = get_post_meta($asset_id,'wpunity_physicsValues',true);
 		if($physics) {
 			$mean_speed_wind = $physics['mean'];
 			$var_speed_wind = $physics['variance'];
 			$min_speed_wind = $physics['min'];
 			$max_speed_wind = $physics['max'];
 		}
-		$energy_income = get_post_meta($asset_checked_id,'wpunity_energyConsumptionIncome',true);
+		$energy_income = get_post_meta($asset_id,'wpunity_energyConsumptionIncome',true);
 		if($energy_income) {
 			$income_when_overpower = $energy_income['over'];
 			$income_when_correct_power = $energy_income['correct'];
 			$income_when_under_power = $energy_income['under'];
 		}
-		$constr_pen = get_post_meta($asset_checked_id,'wpunity_constructionPenalties',true);
+		$constr_pen = get_post_meta($asset_id,'wpunity_constructionPenalties',true);
 		if($constr_pen){
 			$access_penalty = $constr_pen['access'];
 			$archaeology_penalty = $constr_pen['arch'];
@@ -342,7 +288,7 @@ if($create_new == 0) {
 			$hvdistance_penalty = $constr_pen['hiVolt'];
 		}
 	}elseif($saved_term[0]->slug == 'consumer'){
-		$consumptions = get_post_meta($asset_checked_id,'wpunity_energyConsumption',true);
+		$consumptions = get_post_meta($asset_id,'wpunity_energyConsumption',true);
 		if($consumptions) {
 			$min_consumption = $consumptions['min'];
 			$max_consumption = $consumptions['max'];
@@ -350,24 +296,24 @@ if($create_new == 0) {
 			$var_consumption = $consumptions['var'];
 		}
 	}elseif($saved_term[0]->slug == 'producer') {
-		$optCosts = get_post_meta($asset_checked_id,'wpunity_producerOptCosts',true);
+		$optCosts = get_post_meta($asset_id,'wpunity_producerOptCosts',true);
 		if($optCosts) {
 			$optCosts_size = $optCosts['size'];
 			$optCosts_dmg = $optCosts['dmg'];
 			$optCosts_cost = $optCosts['cost'];
 			$optCosts_repaid = $optCosts['repaid'];
 		}
-		$optGen = get_post_meta($asset_checked_id,'wpunity_producerOptGen',true);
+		$optGen = get_post_meta($asset_id,'wpunity_producerOptGen',true);
 		if($optGen) {
 			$optGen_class = $optGen['class'];
 			$optGen_speed = $optGen['speed'];
 			$optGen_power = $optGen['power'];
 		}
-		$optProductionVal = get_post_meta($asset_checked_id,'wpunity_producerPowerProductionVal',true);
+		$optProductionVal = get_post_meta($asset_id,'wpunity_producerPowerProductionVal',true);
 	}elseif ($saved_term[0]->slug == 'pois_imagetext') {
 		//load the already saved featured image for POI image-text
-		$the_featured_image_id =  get_post_thumbnail_id($asset_checked_id);
-		$the_featured_image_url = get_the_post_thumbnail_url($asset_checked_id);
+		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
+		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
 	}elseif ($saved_term[0]->slug == 'pois_video') {
 		//upload the featured image for POI video
 		//$asset_featured_image =  $_FILES['poi-video-featured-image'];
@@ -384,7 +330,7 @@ if($create_new == 0) {
 ?>
     <div class="PageHeaderStyle">
         <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span><?php echo $breacrumbsTitle; ?></span></h2>
-		<?php if($create_new == 0) { ?>
+		<?php if($asset_id != null ) { ?>
             <a class="mdc-button mdc-button--primary mdc-theme--primary" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 		<?php } ?>
     </div>
@@ -432,10 +378,10 @@ if($create_new == 0) {
 						);
 
 						$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-						$saved_term = wp_get_post_terms( $asset_checked_id, 'wpunity_asset3d_cat' );
+						$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
 						?>
 
-						<?php if($create_new == 1) { ?>
+						<?php if($asset_id == null) { ?>
                             <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
 						<?php } else { ?>
                             <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
@@ -513,7 +459,7 @@ if($create_new == 0) {
                     <div id="poiImgDetailsPanel" style="display: none;">
 
                         <h3 class="mdc-typography--title">Featured Image</h3>
-						<?php if($create_new == 1){ ?>
+						<?php if($asset_id == null){ ?>
                             <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
 						<?php }else{ ?>
                             <img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
@@ -709,17 +655,22 @@ if($create_new == 0) {
 									foreach ( $asset_id_avail_joker as $myAssetID ) {
 										$mtlID = get_post_meta($myAssetID, 'wpunity_asset3d_mtl', true);
 										$objID = get_post_meta($myAssetID, 'wpunity_asset3d_obj', true);
+                                        $pdbID = get_post_meta($myAssetID, 'wpunity_asset3d_pdb', true);
 										$screenimgID = get_post_meta($myAssetID, 'wpunity_asset3d_screenimage', true);
 										$diffimgID = get_post_meta($myAssetID, 'wpunity_asset3d_diffimage', true);
 										$screenimgURL = wp_get_attachment_url($screenimgID) ? wp_get_attachment_url($screenimgID) : plugins_url( '../images/thumb-no-asset.png', dirname(__FILE__) );
-
+                                        
+                                        
+                                        $pdb_sample_file_contents = $pdbID ? file_get_contents(wp_get_attachment_url( $pdbID )) : '';
+										
 										echo '<li data-thumb="'. $screenimgURL . '">';
 										echo '<img class="asset-image-tile-style" src="'. $screenimgURL .'"'.
 										     ' data-asset-id="'. $myAssetID .'"'.
 										     ' data-mtl-file="'. basename( get_attached_file( $mtlID ) ) .'"'.
 										     ' data-obj-file="'. basename( get_attached_file( $objID ) ) .'"'.
+                                             ' data-pdb-content="'. $pdb_sample_file_contents  .'"'.
 										     ' data-path-url="'. pathinfo(wp_get_attachment_url($mtlID))['dirname'] .'/"'.
-										     ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile);'.
+										     ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile, this.dataset.pdbContent);'.
 										     'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
 										     '"/>';
 										echo '</li>';
@@ -732,7 +683,7 @@ if($create_new == 0) {
 
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                                 <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
-                                       multiple accept=".obj,.mtl,.jpg"/>
+                                       multiple accept=".obj,.mtl,.jpg,.png"/>
 
 
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
@@ -746,7 +697,25 @@ if($create_new == 0) {
                             <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                                 <h3 class="mdc-typography--title">Screenshot</h3>
 
-                                <img id="sshotPreviewImg" style="width: auto; height: 100px" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                                <?php
+                                
+                                    if($asset_id==null) {
+                                        
+                                        // If asset is not created load a predefault image
+                                        echo '<img id = "sshotPreviewImg" style = "width: auto; height: 100px" src="'.
+                                            plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ).'">';
+
+                                    } else {
+                                        // if asset is edited load the existing screenshot url
+                                        $scrnImageURL = wp_get_attachment_url( get_post_meta($asset_id, "wpunity_asset3d_screenimage",true) );
+                                        echo '<img id = "sshotPreviewImg" style = "width: auto; height: 100px" src="'.$scrnImageURL.'">';
+                                        
+                                        // There is no need to resend the image. I ignore the field operations if it is empty.
+//                                        $scrImgData = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($scrnImageURL));
+//                                        echo '<input class="FullWidth" type="hidden" name="sshotFileInput" value="'.$scrImgData.'" id="sshotFileInput" accept="image/jpeg"/>';
+                                    }
+                                ?>
+
                                 <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
 
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
@@ -1029,7 +998,7 @@ if($create_new == 0) {
 
                     <hr class="WhiteSpaceSeparator">
 
-                    <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Size:</label>
+                    <label for="producer-turbine-size-slider-label" class="mdc-typography--subheading2">Rotor Size (diameter):</label>
                     <input class="mdc-textfield mdc-textfield__input mdc-theme--secondary" id="producer-turbine-size-slider-label" readonly style="box-shadow: none; border-color:transparent; font-weight:bold; width: auto;">
                     <div id="producer-turbine-size-slider"></div>
                     <input type="hidden" id="producerTurbineSizeVal" name="producerTurbineSizeVal" value="">
@@ -1069,7 +1038,7 @@ if($create_new == 0) {
 
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
-		<?php $buttonTitleText = ($create_new == 1 ? "Create asset" : "Update asset"); ?>
+		<?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
         <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
                 data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
 			<?php echo $buttonTitleText; ?>
@@ -1637,9 +1606,6 @@ if($create_new == 0) {
                 document.getElementById("sshotFileInput").value = canvas.toDataURL("image/jpeg");
 
             });
-
-
-
         }
 
         function wpunity_reset_sshot_field() {
@@ -1649,11 +1615,8 @@ if($create_new == 0) {
             /*jQuery("#objectPreviewTitle").hide();*/
         }
 
-
         function loadFileInputLabel() {
-
             var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-
             var inputLabel = document.getElementById('fileUploadInputLabel');
             var input = document.getElementById('fileUploadInput');
             if (objectType === 'pdb') {
@@ -1661,7 +1624,7 @@ if($create_new == 0) {
                 input.accept = ".pdb";
             } else {
                 inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
-                input.accept = ".obj,.mtl,.jpg";
+                input.accept = ".obj,.mtl,.jpg,.png";
             }
         }
     </script>
