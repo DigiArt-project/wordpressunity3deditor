@@ -2,7 +2,6 @@
 
 function load2DSceneEditorScripts() {
 	wp_enqueue_script('wpunity_scripts');
-	/*wp_enqueue_script( 'tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php', array( 'jquery' ), false, true );*/
 }
 add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
 
@@ -87,56 +86,35 @@ get_header(); ?>
                     <div class="WhiteSpaceSeparator"></div>
 
                     <div class="mdc-layout-grid__inner">
-                        <div class="mdc-layout-grid__cell--span-5">
 
-                            <h2 class="mdc-typography--title">Available molecules</h2>
+                        <div class="mdc-layout-grid__cell--span-12">
 
-                            <select title="Available Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="allMoleculesSelectManager">
-                                <optgroup class="mdc-list-group" label="All Molecules" id="allMoleculesGroup">
-									<?php foreach ($molecules as $molecule) { ?>
-                                        <option class="mdc-list-item" data-molecule-id="<?php echo $molecule['moleculeID']; ?>" id="<?php echo 'molecule-'.$molecule['moleculeID']; ?>">
-											<?php echo $molecule['moleculeName']; ?>
-                                        </option>
-									<?php } ?>
-                                </optgroup>
-                                <option class="mdc-list-divider" role="presentation" disabled />
-                            </select>
+                            <ul id="sortable1" class="connectedSortable">
+                                <li class="ui-state-default">Item 1</li>
+                                <li class="ui-state-default">Item 2</li>
+                                <li class="ui-state-default">Item 3</li>
+                                <li class="ui-state-default">Item 4</li>
+                                <li class="ui-state-default">Item 5</li>
+                            </ul>
 
                         </div>
-                        <div class="mdc-layout-grid__cell--span-2" style="position: relative">
 
 
-                            <div style="position: absolute; top:120px; width: 100%;">
+                        <div class="mdc-layout-grid__cell--span-12">
 
-                                <a type="button" id="moleculeAddBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Add molecule to active list" data-mdc-auto-init="MDCRipple">
-                                    <i class="material-icons">arrow_forward</i>
-                                </a>
+                            <!-- TODO: Stathi add asset loop here-->
 
-                                <a type="button" id="moleculeRemoveBtn" class="ToggleMoleculeBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Remove molecule from active list " data-mdc-auto-init="MDCRipple">
-                                    <i class="material-icons">arrow_back</i>
-                                </a>
+                            <ul id="sortable2" class="connectedSortable">
+                                <li class="ui-state-highlight">Item 1</li>
+                                <li class="ui-state-highlight">Item 2</li>
+                                <li class="ui-state-highlight">Item 3</li>
+                                <li class="ui-state-highlight">Item 4</li>
+                                <li class="ui-state-highlight">Item 5</li>
+                            </ul>
 
-
-                            </div>
                         </div>
-                        <div class="mdc-layout-grid__cell--span-5">
 
-                            <h2 class="mdc-typography--title">Active molecules</h2>
 
-                            <select title="Active Molecules" multiple size="6" class="mdc-multi-select mdc-list" id="selectedMoleculesSelectManager">
-                                <optgroup class="mdc-list-group" label="Active Molecules" id="activeMoleculesGroup">
-									<?php if(!empty($savedMolecules)) {
-										foreach ($savedMolecules as $savedMolecule) { ?>
-                                            <option class="mdc-list-item" data-molecule-id="<?php echo $savedMolecule->id; ?>" id="<?php echo 'molecule-'.$savedMolecule->id; ?>">
-												<?php echo $savedMolecule->name; ?>
-                                            </option>
-
-										<?php } ?>
-									<?php } ?>
-                                </optgroup>
-                                <option class="mdc-list-divider" role="presentation" disabled />
-                            </select>
-                        </div>
                     </div>
 
                 </div>
@@ -158,54 +136,20 @@ get_header(); ?>
             </div>
         </div>
     </form>
+
+
+
+
     <script type="text/javascript">
 
         var mdc = window.mdc;
         mdc.autoInit();
 
-        (function() {
-
-            jQuery( "#moleculeAddBtn" ).click(function() {
-
-                /*var activeMolecules = [];
-                var selectedMolecules = [];
-
-                jQuery("#allMoleculesSelectManager option:selected").each(function() {
-                    if(this.dataset.moleculeId) {
-                        selectedMolecules.push(parseInt(this.dataset.moleculeId, 10));
-                    }
-                });
-                jQuery("#selectedMoleculesSelectManager option").each(function() {
-                    if(this.dataset.moleculeId) {
-                        activeMolecules.push(parseInt(this.dataset.moleculeId, 10));
-                    }
-                });*/
-
-                jQuery('#allMoleculesSelectManager option:selected').clone().appendTo('#activeMoleculesGroup');
-                updateSelectedMolecules();
-            });
-
-
-            jQuery( "#moleculeRemoveBtn" ).click(function() {
-                jQuery('#selectedMoleculesSelectManager option:selected').remove();
-                updateSelectedMolecules();
-            });
-
-            function updateSelectedMolecules() {
-
-                var values = jQuery.map(jQuery('#activeMoleculesGroup option'), function(el) {
-
-                    var id = jQuery(el).data('molecule-id');
-
-                    return {
-                        name: jQuery(el).val(),
-                        id: id
-                    }
-                });
-
-                jQuery('#active-molecules-input').val(JSON.stringify(values));
-            }
-        })();
+        jQuery( function() {
+            jQuery( "#sortable1, #sortable2" ).sortable({
+                connectWith: ".connectedSortable"
+            }).disableSelection();
+        } );
 
     </script>
 
