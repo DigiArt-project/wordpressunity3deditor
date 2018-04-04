@@ -103,6 +103,9 @@ get_header(); ?>
                         <div class="mdc-layout-grid__cell--span-12">
 
                             <!-- TODO: Stathi add asset loop here-->
+                            <?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
+
+	                        <?php print_r($molecules); ?>
 
                             <ul id="sortable2" class="connectedSortable">
                                 <li class="ui-state-highlight">Item 1</li>
