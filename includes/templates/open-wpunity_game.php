@@ -226,7 +226,7 @@ $user_id = get_current_user_id();
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3" checked>
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3">
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>
@@ -246,8 +246,6 @@ $user_id = get_current_user_id();
                                 </div>
                                 <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
                             </li>
-
-
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
