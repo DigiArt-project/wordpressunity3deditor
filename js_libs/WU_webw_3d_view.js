@@ -3,6 +3,7 @@
  */
 class WU_webw_3d_view {
 
+
     constructor(elementToBindTo) {
 
         this.renderer = null;
@@ -37,8 +38,19 @@ class WU_webw_3d_view {
 
 
         // - OBJ Specific -
-        this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
-        this.wwObjLoader2.setCrossOrigin('anonymous');
+        //this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
+        //this.wwObjLoader2.setCrossOrigin('anonymous');
+
+        this.workerDirector = new THREE.LoaderSupport.WorkerDirector( THREE.OBJLoader2 );
+        this.logging = {
+            enabled: false,
+            debug: false
+        };
+        this.workerDirector.setLogging( this.logging.enabled, this.logging.debug );
+        this.workerDirector.setCrossOrigin( 'anonymous' );
+        this.workerDirector.setForceWorkerDataCopy( true );
+
+
 
         // Check for the various File API support.
         this.fileApiAvailable = true;
@@ -113,46 +125,126 @@ class WU_webw_3d_view {
 
         var scope = this;
 
-        var materialsLoaded = function (materials) {
+        // Report progress callback
+        var callbackReportProgress = function ( event ) {
+            var	instanceNo = event.detail.instanceNo;
+            var text = event.detail.text;
 
-            // REM : Check the materials here
-            console.log("+++ Report on the materials loaded +++")
 
-            console.log(materials);
+            if ( scope.reportDonwload[ instanceNo ] ) {
+                var msg = 'Worker #' + instanceNo + ': ' + text;
+                if ( scope.logging.enabled ) console.info( msg );
 
-            // for (var key in materials) {
-            //     if (materials.hasOwnProperty(key)) {
-            //         if (materials[key].map != null)
-            //             console.log( materials[key].map.image);
-            //     }
-            // }
-
-            console.log("++++++++++++++++++++++++++++");
+                scope.feedbackArray[ instanceNo ] = msg;
+                scope._reportProgress( scope.feedbackArray.join( '\<br\>' ) );
+            }
         };
 
-        var meshLoaded = function (name, bufferGeometry, material) {
-            console.log("----- Report of mesh loaded -------");
-            console.log('Loaded mesh: ' + name);
-            for (var i = 0; i < material.length; i++)
-                console.log('Material ', i, material[i]);
+        // On Load progress
+        var callbackOnLoad = function ( event ) {
+            var instanceNo = event.detail.instanceNo;
+            scope.reportDonwload[ instanceNo ] = false;
+            scope.allAssets.push( event.detail.loaderRootNode );
+
+            var msg = 'Worker #' + instanceNo + ': Completed loading: ' + event.detail.modelName + ' (#' + scope.workerDirector.objectsCompleted + ')';
+            if ( scope.logging.enabled ) console.info( msg );
+            scope.feedbackArray[ instanceNo ] = msg;
+            scope._reportProgress( scope.feedbackArray.join( '\<br\>' ) );
 
 
-            console.log("----------------------------------")
+            //     jQuery('#previewProgressSlider').hide();
+            //     document.getElementById('previewProgressSliderLine').style.width = 0;
+            //     document.getElementById('previewProgressLabel').innerHTML = "";
+            //     scope._reportProgress('');
+            //     scope.zoomer();
+
+
+            if ( scope.workerDirector.objectsCompleted + 1 === maxQueueSize ) scope.running = false;
         };
 
-        var completedLoading = function () {
-            console.log('Loading complete!');
 
-            jQuery('#previewProgressSlider').hide();
-            document.getElementById('previewProgressSliderLine').style.width = 0;
-            document.getElementById('previewProgressLabel').innerHTML = "";
-            scope._reportProgress('');
-            scope.zoomer();
+        // // On materials Loaded
+        // var materialsLoaded = function (materials) {
+        //     // REM : Check the materials here
+        //     console.log("+++ Report on the materials loaded +++")
+        //     for (var key in materials) {
+        //         if (materials.hasOwnProperty(key)) {
+        //             if (materials[key].map != null) {
+        //                 console.log(materials[key]);
+        //                 materials[key].transparent = true;
+        //             }
+        //         }
+        //     }
+        //     console.log("++++++++++++++++++++++++++++");
+        // };
+
+        // // On Mesh Loaded
+        // var meshLoaded = function (name, bufferGeometry, material) {
+        //     console.log("----- Report of mesh loaded -------");
+        //     console.log('Loaded mesh: ' + name);
+        //     for (var i = 0; i < material.length; i++) {
+        //         console.log('Material ', i, material[i]);
+        //         material[i].transparent = true;
+        //     }
+        //     console.log("----------------------------------")
+        // };
+
+
+        // On Completed Loading
+        // var completedLoading = function () {
+        //     console.log('Loading complete!');
+        //
+        //     jQuery('#previewProgressSlider').hide();
+        //     document.getElementById('previewProgressSliderLine').style.width = 0;
+        //     document.getElementById('previewProgressLabel').innerHTML = "";
+        //     scope._reportProgress('');
+        //     scope.zoomer();
+        // };
+
+        var callbackMeshAlter = function ( event ) {
+            var override = new THREE.LoaderSupport.LoadedMeshUserOverride( false, false );
+
+            var material = event.detail.material;
+            material.transparent = true;
+            var meshName = event.detail.meshName;
+            if ( Validator.isValid( material ) && material.name === 'defaultMaterial' || meshName === 'Mesh_Mesh_head_geo.001_lambert2SG.001' ) {
+
+                var materialOverride = material;
+                materialOverride.color = new THREE.Color( Math.random(), Math.random(), Math.random() );
+                var mesh = new THREE.Mesh( event.detail.bufferGeometry, material );
+                mesh.name = meshName;
+
+                override.addMesh( mesh );
+                override.alteredMesh = true;
+
+            }
+            return override;
         };
-        this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
-        this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
-        this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
-        this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+
+
+
+
+        // this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
+        // this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
+        // this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
+        // this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+
+        var callbacks = new THREE.LoaderSupport.Callbacks();
+        callbacks.setCallbackOnProgress( callbackReportProgress );
+        callbacks.setCallbackOnLoad( callbackOnLoad );
+        callbacks.setCallbackOnMeshAlter( callbackMeshAlter );
+
+        var maxQueueSize = 1024;
+        var maxWebWorkers = 4;
+
+        this.workerDirector.prepareWorkers( callbacks, maxQueueSize, maxWebWorkers );
+
+        // if ( this.logging.enabled )
+        //     console.info( 'Configuring WWManager with queue size ' + this.workerDirector.getMaxQueueSize() + ' and ' + this.workerDirector.getMaxWebWorkers() + ' workers.' );
+
+
+
+
 
         return true;
     }
@@ -170,16 +262,40 @@ class WU_webw_3d_view {
 
     loadFilesUser(objDef) {
 
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
-            objDef.name,
-            objDef.objAsArrayBuffer,
-            objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
-            objDef.mtlAsString,
-        );
-        prepData.setSceneGraphBaseNode(this.pivot);
-        prepData.setStreamMeshes(this.streamMeshes);
-        this.wwObjLoader2.prepareRun(prepData);
-        this.wwObjLoader2.run();
+        // var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
+        //     objDef.name,
+        //     objDef.objAsArrayBuffer,
+        //     objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
+        //     objDef.mtlAsString,
+        // );
+        // prepData.setSceneGraphBaseNode(this.pivot);
+        // prepData.setStreamMeshes(this.streamMeshes);
+        // this.wwObjLoader2.prepareRun(prepData);
+        // this.wwObjLoader2.run();
+
+        var prepData;
+        var modelPrepDatas = [];
+        prepData = new THREE.LoaderSupport.PrepData( 'singlemodel' );
+
+        prepData.addResource( new THREE.LoaderSupport.ResourceDescriptor( '', 'OBJ ').setContent(objDef.objAsArrayBuffer) );
+
+        prepData.addResource( new THREE.LoaderSupport.ResourceDescriptor( '', 'MTL' ).setContent(objDef.mtlAsString) );
+
+
+        prepData.setLogging( false, false );
+        //prepData.scale = 100.0;
+        modelPrepDatas.push( prepData );
+
+
+        var modelPrepData;
+        modelPrepData = modelPrepDatas[ 0 ];
+        modelPrepData.useAsync = true;
+        modelPrepData = modelPrepData.clone();
+
+        modelPrepData.streamMeshesTo = this.pivot;
+        this.workerDirector.enqueueForRun( modelPrepData );
+        this.workerDirector.processQueue();
+
     }
 
     resizeDisplayGL() {

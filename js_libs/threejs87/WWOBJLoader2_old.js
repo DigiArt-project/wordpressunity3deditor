@@ -308,6 +308,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                     if ( materialCreatorMaterials.hasOwnProperty( materialName ) ) {
                         materialNames.push( materialName );
                         scope.materials[ materialName ] = materialCreatorMaterials[ materialName ];
+                        scope.materials[ materialName ].transparent = true;
                     }
                 }
             }
@@ -466,7 +467,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                     if ( materialDescription.default ) {
 
                         material = this.materials[ 'defaultMaterial' ];
-
+                        material.transparent = true;
                     } else if ( materialDescription.flat ) {
 
                         materialName = material.name + '_flat';
@@ -476,12 +477,14 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                             materialClone = material.clone();
                             materialClone.name = materialName;
                             materialClone.flatShading = true;
+                            materialClone.transparent = true;
                             this.materials[ materialName ] = name;
 
                         }
 
                     }
 
+                    material.transparent = true;
                     if ( materialDescription.vertexColors ) material.vertexColors = THREE.VertexColors;
                     if ( createMultiMaterial ) multiMaterials.push( material );
 
@@ -500,6 +503,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 var callbackMeshLoaded;
                 var callbackMeshLoadedResult;
                 var disregardMesh = false;
+                material.transparent = true;
                 for ( var index in this.callbacks.meshLoaded ) {
 
                     callbackMeshLoaded = this.callbacks.meshLoaded[ index ];
@@ -522,7 +526,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 }
 
                 if ( ! disregardMesh ) {
-
+                    material.transparent = true;
                     var mesh = new THREE.Mesh( bufferGeometry, material );
                     mesh.name = meshName;
 
@@ -845,6 +849,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                         materialDescription = {
                             name: rawObjectDescription.materialName,
                             flat: false,
+                            transparent: true,
                             vertexColors: false,
                             default: false
                         };
