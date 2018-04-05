@@ -182,7 +182,7 @@ function wpunity_reset_panels(wu_webw_3d_view) {
 }
 
 
-function loadAssetPreviewer(canvas, multipleFilesInputElem) {
+function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
 
     // Load from selected files
     var _handleFileSelect = function ( event  ) {
@@ -193,33 +193,33 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
         var files = {... event.target.files};
 
         // Clear the previously loaded
-        wpunity_clear_asset_files(canvas);
+        wpunity_clear_asset_files(wu_webw_3d_view_local);
 
         //  Read each file and put the string content in an input dom
         for ( var i = 0, file; file = files[ i ]; i++) {
 
             if ( file.name.indexOf( '\.pdb' ) > 0 ) {
                 nPdb = 1;
-                wpunity_read_file('Text' , file, 'pdb', wpunity_load_file_callback, canvas);
+                wpunity_read_file('Text' , file, 'pdb', wpunity_load_file_callback, wu_webw_3d_view_local);
             }
 
             if ( file.name.indexOf( '\.obj' ) > 0 ) {
                 nObj = 1;
-                wpunity_read_file('ArrayBuffer' , file, 'obj', wpunity_load_file_callback, canvas);
+                wpunity_read_file('ArrayBuffer' , file, 'obj', wpunity_load_file_callback, wu_webw_3d_view_local);
             }
             if ( file.name.indexOf( '\.mtl' ) > 0 ) {
                 nMtl = 1;
-                wpunity_read_file('Text', file, 'mtl', wpunity_load_file_callback, canvas );
+                wpunity_read_file('Text', file, 'mtl', wpunity_load_file_callback, wu_webw_3d_view_local );
             }
             if ( file.name.indexOf( '\.jpg' ) > 0 ) {
                 nJpg ++;
 
-                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
+                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, wu_webw_3d_view_local, file.name);
             }
             if ( file.name.indexOf( '\.png' ) > 0 ) {
                 nPng ++;
 
-                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, canvas, file.name);
+                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, wu_webw_3d_view_local, file.name);
             }
         }
 
@@ -228,19 +228,19 @@ function loadAssetPreviewer(canvas, multipleFilesInputElem) {
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
-        canvas.resizeDisplayGL();
+        wu_webw_3d_view_local.resizeDisplayGL();
     };
 
     window.addEventListener( 'resize', resizeWindow, false );
 
     var render = function () {
         requestAnimationFrame( render );
-        canvas.render();
+        wu_webw_3d_view_local.render();
     };
 
-    canvas.initGL();
-    canvas.resizeDisplayGL();
-    canvas.initPostGL();
+    wu_webw_3d_view_local.initGL();
+    wu_webw_3d_view_local.resizeDisplayGL();
+    wu_webw_3d_view_local.initPostGL();
 
     // kick render loop
     render();
@@ -276,7 +276,7 @@ function checkerCompleteReading(canvas){
 
         if (nMtl == 0) {
             // Start without MTL
-            wu_webw_3d_view.loadFilesUser(objectDefinition);
+            wu_webw_3d_view.loadFilesUser2(objectDefinition);
         } else {
             if (mtlFileContent!==''){
 
@@ -284,7 +284,7 @@ function checkerCompleteReading(canvas){
 
                 if (nJpg==0 && nPng==0){
                     // Start without Textures
-                    wu_webw_3d_view.loadFilesUser(objectDefinition);
+                    wu_webw_3d_view.loadFilesUser2(objectDefinition);
 
                 } else {
 

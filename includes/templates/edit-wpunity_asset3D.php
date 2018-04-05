@@ -8,12 +8,14 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wpunity_scripts');
 
 	wp_enqueue_script('wpunity_load87_threejs');
-    wp_enqueue_script('wpunity_load87_objloader2_support');
+    //wp_enqueue_script('wpunity_load87_objloader2_support');
 	wp_enqueue_script('wpunity_load87_objloader');
 	wp_enqueue_script('wpunity_load87_objloader2');
- 
+    wp_enqueue_script('wpunity_load87_wwobjloader2');
+	
+	
 	wp_enqueue_script('wpunity_load87_pdbloader');
-//	wp_enqueue_script('wpunity_load87_wwobjloader2');
+
 	wp_enqueue_script('wpunity_load87_mtlloader');
 	wp_enqueue_script('wpunity_load87_orbitcontrols');
 	wp_enqueue_script('wpunity_load87_trackballcontrols');

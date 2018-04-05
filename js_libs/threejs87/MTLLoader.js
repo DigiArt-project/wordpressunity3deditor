@@ -511,8 +511,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         if (materialName.indexOf("TwoSided")!==-1)
             this.materials[ materialName ].side  = THREE.DoubleSide;
 
-        console.log("EFFAX : 152");
-        this.materials[ materialName ].transparent = true;
+
         this.materials[ materialName ].side  = THREE.DoubleSide;
 
 
@@ -588,7 +587,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         var texture = new THREE.Texture();
 
         // JPG vs PNG
-        texture.format = THREE.RGBFormat; // isJPEG ? RGBFormat : RGBAFormat;
+        texture.format = THREE.RGBAFormat; // isJPEG ? RGBFormat : RGBAFormat;
 
         var image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
         image.src = textureFileContent;
