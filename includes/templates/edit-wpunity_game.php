@@ -219,13 +219,13 @@ get_header();
 
                     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
 
-                    <a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                    <!--<a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
                         GENERATE NEW
-                    </a>
-                    <div class="mdc-textfield mdc-textfield--disabled mdc-text" style="max-width: 70%; width: 100%;" data-mdc-auto-init="MDCTextfield">
+                    </a>-->
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
-                        <label for="exp-id" class="mdc-textfield__label"></label>
+                        <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
 
@@ -748,9 +748,9 @@ if ( $assets ) :?>
             }
         }
 
-        jQuery("#guid-generator-btn").click(function (e) {
+        /*jQuery("#guid-generator-btn").click(function (e) {
             document.getElementById('exp-id').value = guid();
-        });
+        });*/
 
 
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
@@ -793,7 +793,7 @@ if ( $assets ) :?>
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
 
-        function guid() {
+        /*function guid() {
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
         }
@@ -802,7 +802,7 @@ if ( $assets ) :?>
             return Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1);
-        }
+        }*/
 
     </script>
 <?php get_footer(); ?>
