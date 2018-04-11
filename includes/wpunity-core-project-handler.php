@@ -646,10 +646,24 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $
     foreach($difimgID as $difimg_ID) {
         if(is_numeric($difimg_ID)){
             $attachment_post = get_post($difimg_ID);
+            
+//            $flo = fopen("output_diff_img.txt","a");
+//            fwrite($flo, print_r($attachment_post, true));
+            
+            
             $attachment_file = $attachment_post->guid;
+    
+//            fwrite($flo, $attachment_file);
+//            fclose($flo);
+            
             $attachment_tempname = str_replace('\\', '/', $attachment_file);
             $attachment_name = pathinfo($attachment_tempname);
-            $new_file = $folder .'/' . $attachment_name['filename'] . '.jpg';
+            
+            $ending = 'jpg';
+            if ($attachment_post->post_mime_type=='image/png')
+                $ending = 'png';
+                
+            $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $ending;
             copy($attachment_file,$new_file);
         }
     }

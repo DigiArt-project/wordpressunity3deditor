@@ -25,9 +25,9 @@ class LoaderMulti {
                         objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinal.obj', 'after',
                             function (object) {
 
-                                //object.traverse(function (node) {
-                                //    if (node.material)
-                                //        node.material.side = THREE.DoubleSide;
+                                // object.traverse(function (node) {
+                                //     if (node.material)
+                                //         node.material.side = THREE.DoubleSide;
                                 // });
 
                                 object.name = "Steve";
@@ -76,6 +76,7 @@ class LoaderMulti {
 
                         materials.preload();
 
+
                         var objLoader = new THREE.OBJLoader(manager);
                         objLoader.setMaterials(materials);
                         objLoader.setPath( resources3D[name]['path']);
@@ -86,16 +87,21 @@ class LoaderMulti {
                             function (object) {
                                 object.traverse(function (node) {
 
-                                    //if (node.material)
-                                    //    node.material.side = THREE.DoubleSide;
+                                    if (node.material) {
+                                        if (node.material.name.includes("Transparent"))
+                                            node.material.transparent = true;
+                                            node.material.alphaTest = 0.5; // This is very important to make transparency behind transparency to work
+                                    }
 
-                                    if (node instanceof THREE.Mesh)
+                                    if (node instanceof THREE.Mesh) {
                                         node.isDigiArt3DMesh = true;
+
+                                    }
                                 });
 
                                 object.isDigiArt3DModel = true;
                                 object.name = name;
-                                object.assetid = resources3D[name]['assetid'];;
+                                object.assetid = resources3D[name]['assetid'];
 
                                 object.fnPath = resources3D[name]['path'];
 
@@ -128,6 +134,7 @@ class LoaderMulti {
 
 
                                 object.type_behavior = resources3D[name]['type_behavior'];
+
 
                                 envir.scene.add(object);
                             },

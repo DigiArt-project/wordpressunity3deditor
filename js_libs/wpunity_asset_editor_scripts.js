@@ -276,7 +276,7 @@ function checkerCompleteReading(canvas){
 
         if (nMtl == 0) {
             // Start without MTL
-            wu_webw_3d_view.loadFilesUser2(objectDefinition);
+            wu_webw_3d_view.loadFilesUser(objectDefinition);
         } else {
             if (mtlFileContent!==''){
 
@@ -284,7 +284,7 @@ function checkerCompleteReading(canvas){
 
                 if (nJpg==0 && nPng==0){
                     // Start without Textures
-                    wu_webw_3d_view.loadFilesUser2(objectDefinition);
+                    wu_webw_3d_view.loadFilesUser(objectDefinition);
 
                 } else {
 

@@ -127,6 +127,7 @@ class WU_webw_3d_view {
             for (var key in materials) {
                 console.log( materials[key]);
                 materials[key].transparent = true;
+                materials[key].alphaTest = 0.5;
             }
 
             console.log("++++++++++++++++++++++++++++");

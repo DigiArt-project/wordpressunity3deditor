@@ -480,7 +480,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
                     if ( n < 1 ) {
 
                         params.opacity = n;
-                        params.transparent = true;
+
 
                     }
 
@@ -492,7 +492,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
                     if ( n > 0 ) {
 
                         params.opacity = 1 - n;
-                        params.transparent = true;
+
 
                     }
 
@@ -511,8 +511,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
         if (materialName.indexOf("TwoSided")!==-1)
             this.materials[ materialName ].side  = THREE.DoubleSide;
 
-
-        this.materials[ materialName ].side  = THREE.DoubleSide;
 
 
         return this.materials[ materialName ];

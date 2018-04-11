@@ -58,6 +58,10 @@ function wpunity_assepileAjax() {
 
         error : function(xhr, ajaxOptions, thrownError) {
             console.log("Ajax 1: ERROR: " + thrownError);
+
+            console.log(ajaxOptions);
+
+
             hideCompileProgressSlider();
         }
     });
