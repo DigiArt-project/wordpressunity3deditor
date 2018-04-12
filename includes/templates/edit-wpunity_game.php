@@ -202,15 +202,12 @@ get_header();
                     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO app_key</h3>
 
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                        <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light mdc-textfield--disabled"
                                style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" value="<?php if($project_saved_keys['gioID'] != ''){echo $project_saved_keys['gioID'];} ?>">
-                        <label for="app-key" class="mdc-textfield__label">Insert a valid app_key</label>
+                        <label for="app-key" class="mdc-textfield__label">APP KEY</label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
 
-                    <button id="save-gio-button" class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
-                        SAVE
-                    </button>
                 </div>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
@@ -658,10 +655,6 @@ if ( $assets ) :?>
     <script type="text/javascript">
 
         // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
-        jQuery('#save-gio-button').click(function() {
-            wpunity_saveGIOApKeyAjax();
-        });
-
         jQuery('#save-expid-button').click(function() {
             wpunity_saveExpIDAjax();
         });

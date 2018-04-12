@@ -28,9 +28,9 @@ function wpunity_windEnergy_scene_stats($scene_id){
 					}
 
 					$turbinesInfoGathered[] = ['producerID' => $value['assetid'],
-						'proWatts' => $optGen_power,
-						'proArea' => $optCosts_size * 3,
-						'proCost' => $optCosts_cost
+					                           'proWatts' => $optGen_power,
+					                           'proArea' => $optCosts_size * 3,
+					                           'proCost' => $optCosts_cost
 					];
 				}
 			}
@@ -213,35 +213,35 @@ function wpunity_extrapass_register_form() {
 	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
 
 	?>
-	<p>
-		<label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
-			<input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
-	</p>
-	<script type="text/javascript">
-		jQuery(document).ready(
-			function wpunityGenerateExtraPass(){
-				var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-				document.getElementById('extra_pass').value  = rString;
-			}
-		);
+    <p>
+        <label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
+            <input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
+    </p>
+    <script type="text/javascript">
+        jQuery(document).ready(
+            function wpunityGenerateExtraPass(){
+                var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+                document.getElementById('extra_pass').value  = rString;
+            }
+        );
 
-		jQuery( "#registerform" ).focus(function() {
-			alert( "Handler for .focus() called." );
-		});
-
-
-		function wpunity_randomString(length, chars) {
-			var result = '';
-			for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-			return result;
-		}
+        jQuery( "#registerform" ).focus(function() {
+            alert( "Handler for .focus() called." );
+        });
 
 
-		//		function wpunityGenerateExtraPass(){
-		//			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		//			document.getElementById('extra_pass').value  = rString;
-		//		}
-	</script>
+        function wpunity_randomString(length, chars) {
+            var result = '';
+            for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+            return result;
+        }
+
+
+        //		function wpunityGenerateExtraPass(){
+        //			var rString = wpunity_randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        //			document.getElementById('extra_pass').value  = rString;
+        //		}
+    </script>
 	<?php
 }
 
@@ -272,14 +272,14 @@ add_action( 'edit_user_profile', 'wpunity_extrapass_profile_fields' );
 
 function wpunity_extrapass_profile_fields( $user ) {
 	?>
-	<h3><?php esc_html_e('Extra Information'); ?></h3>
+    <h3><?php esc_html_e('Extra Information'); ?></h3>
 
-	<table class="form-table">
-		<tr>
-			<th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
-			<td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
-		</tr>
-	</table>
+    <table class="form-table">
+        <tr>
+            <th><label for="extra_pass"><?php esc_html_e( 'Extra Password'); ?></label></th>
+            <td><?php echo esc_html( get_the_author_meta( 'extra_pass', $user->ID ) ); ?></td>
+        </tr>
+    </table>
 	<?php
 }
 
@@ -298,8 +298,9 @@ function wpunity_getProjectKeys($project_id) {
 	return $mykeys;
 }
 
-//STEP 1 for GIO data
+// STEP 1 for GIO data
 add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
+
 
 function wpunity_registrationUser_save( $user_id ) {
 
@@ -309,45 +310,45 @@ function wpunity_registrationUser_save( $user_id ) {
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 	$userName = $user_info->user_login;
 
-	$args = array(
-		'method' => 'POST',
-		'timeout' => 45,
-		'redirection' => 5,
-		'httpversion' => '1.0',
-		'blocking' => true,
-		'sslverify' => 0,
-		'headers' => array( 'content-type' => 'application/json' ),
-		'body' => json_encode(array(
-			'user' => array(
-				'email' => $userEmail,
-				'password' => $extraPass,
-				'first_name' => $userName,
-				'company' => 'ENVISAGE'
-			),
-			'app' => array(
-				'add' => false
-			)
-		) ),
-		'cookies' => array()
-	);
+	if ($extraPass) {
 
-	$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
+		$args = array(
+			'method' => 'POST',
+			'timeout' => 45,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking' => true,
+			'sslverify' => 0,
+			'headers' => array( 'content-type' => 'application/json' ),
+			'body' => json_encode(array(
+				'user' => array(
+					'email' => $userEmail,
+					'password' => $extraPass,
+					'first_name' => $userName,
+					'company' => 'ENVISAGE'
+				),
+				'app' => array(
+					'add' => false
+				)
+			) ),
+			'cookies' => array()
+		);
 
-	if ( is_wp_error( $response ) ) {
-		$error_message = $response->get_error_message();
-		print_r($error_message);
-		
-		// Todo: @Tasos place an alert div with message
-		//die();
+		$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
+
+		if ( is_wp_error( $response ) ) {
+			$error_message = $response->get_error_message();
+			print_r($error_message);
+
+			// Todo: @Tasos place an alert div with message
+			//die();
+		}
 
 	} else {
 
-		if ((string)(int)$response[response][code] !== '201') {
-			print_r($response[response][code]);
-			print_r($response[response][message]);
-            // Todo: @Tasos place an alert div with message
-			//die();
-		}
+		print_r("No Extra pass provided");
+		// Todo: @Tasos place an alert div with message
+
 	}
 }
 
@@ -374,7 +375,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 	);
 
 	$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
-	
+
 
 	if (is_wp_error( $token_request ) ) {
 
@@ -386,6 +387,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 	} else {
 
 		$token = json_decode($token_request[body]);
+
 		$token = $token->token;
 
 		$args = array(
@@ -400,23 +402,23 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 			'cookies' => array()
 		);
 
-		
-            $request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
+
+		$request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
 
 		if (is_wp_error( $request ) ) {
 
 			$error_message = $request->get_error_message();
-            print_r($error_message);
-            // Todo: @Tasos place an alert div with message
+			print_r($error_message);
+			// Todo: @Tasos place an alert div with message
 			//die();
 
 		} else {
 
 			if ((string)(int)$request['response']['code'] !== '201') {
-		  
+
 				print_r($request['response']['code']);
 				print_r($request['response']['message']);
-                // Todo: @Tasos place an alert div with message
+				// Todo: @Tasos place an alert div with message
 				//die();
 			}
 
@@ -638,7 +640,7 @@ Characteristics :
 
 		$scene2_id = wp_insert_post( $secondSceneData );
 		$scene3_id = wp_insert_post( $thirdSceneData );
-	
+
 		$attachment2_id = wpunity_upload_img_vid( $image_content2, $scene2_id);
 		$attachment3_id = wpunity_upload_img_vid( $image_content3, $scene3_id);
 		set_post_thumbnail( $scene2_id, $attachment2_id );
@@ -708,7 +710,7 @@ Characteristics :
 
 	$scene1_id = wp_insert_post( $firstSceneData );
 	if($game_category == 'energy_games'){
-	 
+
 		$image_content1 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img1.png";
 		$attachment1_id = wpunity_upload_img_vid( $image_content1, $scene1_id);
 		set_post_thumbnail( $scene1_id, $attachment1_id );
@@ -1212,8 +1214,8 @@ function wpunity_upload_img_vid_directory( $dir ) {
 
 function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
 
- 
- 
+
+
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
@@ -1222,7 +1224,7 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation =
 	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
 	add_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
-	
+
 	$file_return = wp_handle_upload( $file, array('test_form' => false ) );
 	remove_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
 
