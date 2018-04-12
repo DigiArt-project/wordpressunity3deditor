@@ -199,7 +199,7 @@ get_header();
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 
-                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO app_key</h3>
+                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
 
                     <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light mdc-textfield--disabled"
