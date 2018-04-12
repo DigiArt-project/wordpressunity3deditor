@@ -291,7 +291,7 @@ get_header(); ?>
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
-            var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($scene_id)); ?>
+            var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($scene_id)); ?>;
 
             var versionSelector = document.getElementById("analyticsVersionSelector");
             var locationSelector = document.getElementById("analyticsLocationSelector");

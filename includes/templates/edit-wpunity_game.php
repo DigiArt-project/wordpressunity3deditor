@@ -65,7 +65,7 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 // DELETE ASSET AJAX
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
 );
 
 
@@ -136,7 +136,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
 		'wpunity_isRegional' => 0,
-        'wpunity_scene_environment' => 'fields',
+		'wpunity_scene_environment' => 'fields',
 	);
 
 	$scene_information = array(
@@ -219,13 +219,13 @@ get_header();
 
                     <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
 
-                    <a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+                    <!--<a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
                         GENERATE NEW
-                    </a>
-                    <div class="mdc-textfield mdc-textfield--disabled mdc-text" style="max-width: 70%; width: 100%;" data-mdc-auto-init="MDCTextfield">
+                    </a>-->
+                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                         <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
-                        <label for="exp-id" class="mdc-textfield__label"></label>
+                        <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
 
@@ -263,19 +263,47 @@ get_header();
                         </p>
                     </div>
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+
+                        <label class="mdc-typography--title">Scene type</label>
+
+                        <ul>
+
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">2D</label>
+                            </li>
+                            &nbsp;
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">3D</label>
+                            </li>
+                        </ul>
 
                     </div>
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
@@ -582,21 +610,21 @@ if ( $assets ) :?>
 
                         </div>
 
-                        <?php
-                        
-                        //echo current_user_can('administrator');
-                        // For joker assets, If the user is not administrator he should not be able to delete or edit them.
-                        $shouldHideDELETE_EDIT = $asset[isJoker] && !current_user_can('administrator');
-                        ?>
-   
-                        
+						<?php
+
+						//echo current_user_can('administrator');
+						// For joker assets, If the user is not administrator he should not be able to delete or edit them.
+						$shouldHideDELETE_EDIT = $asset[isJoker] && !current_user_can('administrator');
+						?>
+
+
                         <section class="mdc-card__actions">
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>',<?php echo $asset[isCloned];?>)"
                                style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
                             <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset[assetid]; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
-                                <?php
-                                echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
-                                ?>
+								<?php
+								echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+								?>
                             </a>
                         </section>
 
@@ -720,9 +748,9 @@ if ( $assets ) :?>
             }
         }
 
-        jQuery("#guid-generator-btn").click(function (e) {
+        /*jQuery("#guid-generator-btn").click(function (e) {
             document.getElementById('exp-id').value = guid();
-        });
+        });*/
 
 
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
@@ -765,7 +793,7 @@ if ( $assets ) :?>
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
 
-        function guid() {
+        /*function guid() {
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
         }
@@ -774,7 +802,7 @@ if ( $assets ) :?>
             return Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1);
-        }
+        }*/
 
     </script>
 <?php get_footer(); ?>

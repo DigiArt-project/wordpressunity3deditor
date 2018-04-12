@@ -9,9 +9,6 @@ function wpunity_windEnergy_scene_stats($scene_id){
 	$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 	$scene_env = get_post_meta($scene_id, 'wpunity_scene_environment', true);
 
-	print_r($scene_env);
-
-
 	$jsonScene = htmlspecialchars_decode($scene_json);
 	$sceneJsonARR = json_decode($jsonScene, TRUE);
 
