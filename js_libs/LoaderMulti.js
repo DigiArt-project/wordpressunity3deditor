@@ -88,9 +88,12 @@ class LoaderMulti {
                                 object.traverse(function (node) {
 
                                     if (node.material) {
-                                        if (node.material.name.includes("Transparent"))
-                                            node.material.transparent = true;
-                                            node.material.alphaTest = 0.5; // This is very important to make transparency behind transparency to work
+                                        if (node.material.name){
+                                            if (node.material.name.includes("Transparent")) {
+                                                node.material.transparent = true;
+                                                node.material.alphaTest = 0.5; // This is very important to make transparency behind transparency to work
+                                            }
+                                        }
                                     }
 
                                     if (node instanceof THREE.Mesh) {
