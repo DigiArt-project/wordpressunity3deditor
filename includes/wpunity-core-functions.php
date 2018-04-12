@@ -214,7 +214,7 @@ function wpunity_extrapass_register_form() {
 
 	?>
     <p>
-        <label for="extra_pass">Extra Password (required for Analytics)<br />Copy it!<br />
+        <label for="extra_pass">Extra Password (required for Analytics)<br />
             <input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
     </p>
     <script type="text/javascript">
