@@ -87,7 +87,7 @@ get_header(); ?>
 
                     <div class="mdc-layout-grid__inner">
 
-                        <div class="mdc-layout-grid__cell--span-12">
+                        <div class="mdc-layout-grid__cell--span-12 mdc-theme--primary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
 
                             <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner">
                                 <li style="visibility: hidden; min-height: 110px;" class="ui-state-default mdc-layout-grid__cell mdc-layout-grid__cell--span-2">No items</li>
@@ -113,15 +113,12 @@ get_header(); ?>
                                         <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
 											<?php if ($molecules){ ?>
-
                                                 <img width="495" height="330" src="<?php echo 'src'; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-
 											<?php } else { ?>
                                                 <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                                     <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                                 </div>
 											<?php } ?>
-
                                         </div>
 
                                         <div class="mdc-card__primary">
@@ -130,7 +127,6 @@ get_header(); ?>
                                             </p>
                                         </div>
                                     </div>
-
 
                                 </li>
 
