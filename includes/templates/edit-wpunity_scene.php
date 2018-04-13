@@ -326,10 +326,14 @@ get_header(); ?>
 
             function loadSceneAnalyticsIframe(lab, fields) {
 
+                console.log(fields);
+
+                if (!fields.env) {fields.env = 'mountain';}
+
                 var url = "http://52.59.219.11/?" +
                     "lab=" + lab +
                     "&env=" + fields.env +
-                    "&map=" + fields.map +
+                    "&map=" + parseInt(fields.map, 10) +
                     "&watts=" + fields.watts +
                     "&area=" + fields.area +
                     "&cost=" + fields.cost;
