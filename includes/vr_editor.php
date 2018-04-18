@@ -525,23 +525,10 @@ echo '</script>';
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
-        envir.cameraAvatarHelper.visible = false;
-        envir.axisHelper.visible = false;
-        envir.gridHelper.visible = false;
-        if (envir.scene.getObjectByName("myTransformControls"))
-            envir.scene.getObjectByName("myTransformControls").visible=false;
-
-        // Save screenshot data to input
-        envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
-        document.getElementById("wpunity_scene_sshot").value = envir.renderer.domElement.toDataURL("image/jpeg");
-
-        envir.cameraAvatarHelper.visible = true;
-        envir.axisHelper.visible = true;
-        envir.gridHelper.visible = true;
-
-        if (envir.scene.getObjectByName("myTransformControls"))
-            envir.scene.getObjectByName("myTransformControls").visible=true;
-
+        if (typeof is_scene_icon_manually_selected !== 'undefined' )
+            if (!is_scene_icon_manually_selected)
+                takeScreenshot();
+       
         wpunity_saveSceneAjax();
     });
 
@@ -668,6 +655,30 @@ $formRes->init($sceneToLoad);
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
 
+    function takeScreenshot(){
+        
+        envir.cameraAvatarHelper.visible = false;
+        envir.axisHelper.visible = false;
+        envir.gridHelper.visible = false;
+        if (envir.scene.getObjectByName("myTransformControls"))
+            envir.scene.getObjectByName("myTransformControls").visible=false;
+
+        // Save screenshot data to input
+        envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+
+        // if no manually selected file for icon, then take a screenshot of the 3D canvas
+        //if (document.getElementById("wpunity_scene_sshot").src.includes("noimagemagicword"))
+        document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
+
+        envir.cameraAvatarHelper.visible = true;
+        envir.axisHelper.visible = true;
+        envir.gridHelper.visible = true;
+
+        if (envir.scene.getObjectByName("myTransformControls"))
+            envir.scene.getObjectByName("myTransformControls").visible=true;
+    }
+    
+    
     //=================== End of loading ============================================
     //--- initiate PointerLockControls ---------------
     initPointerLock();
@@ -748,3 +759,6 @@ $formRes->init($sceneToLoad);
 
 <!-- Change dat GUI style: Override the inside js style -->
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
+
+
+

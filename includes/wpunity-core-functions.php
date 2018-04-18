@@ -1894,6 +1894,16 @@ goto :EOF
 
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
+    
+//    $fo = fopen("output_post_termalogica.txt","w");
+//    $product_terms = wp_get_post_terms( 4773,  'wpunity_asset3d_cat' );
+//    fwrite($fo, print_r($product_terms, true));
+//    fclose($fo);
+    
+    
+ 
+
+
 	$DS = DIRECTORY_SEPARATOR;
 
 	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';

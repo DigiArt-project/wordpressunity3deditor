@@ -150,10 +150,72 @@ get_header(); ?>
                        class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
                 </div>
             </div>
+            
         </div>
     </div>
 
+
+    <div style="background:yellow">
+        <!-- Set screenshot manually. If not set then take a screenshot of the 3D environment -->
+        <label for="wpunity_scene_sshot_manual_select" class="mdc-textfield__label">
+            Screenshot
+        </label>
+    
+        <!-- Select image -->
+        <input id="wpunity_scene_sshot_manual_select" name="wpunity_scene_sshot_manual_select" type="file" value="" accept="image/jpeg">
+    
+        
+    
+        <!-- Preview image: This is the source of the image that is saved in the database -->
+        <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" style="width:100px" src="<?php echo get_the_post_thumbnail_url( $scene_id );?>" />
+    
+    
+        <!-- Clear selected image and take screenshot from 3D canvas-->
+        <a title="A screenshot of the 3D editor will be used."
+           id="clear-image-button" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Take screenshot</a>
+
+    </div>
+
+    <script type="application/javascript">
+        is_scene_icon_manually_selected = false;
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
+                    is_scene_icon_manually_selected = true;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        jQuery("#wpunity_scene_sshot_manual_select").change(function() {
+            readURL(this);
+            
+        });
+        
+        jQuery("#clear-image-button").click(function() {
+            //document.getElementById("wpunity_scene_sshot").src = "noimagemagicword";
+            //document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
+            //document.getElementById("wpunity_scene_sshot").style.display = "none";
+
+            takeScreenshot();
+            is_scene_icon_manually_selected = false;
+        });
+
+    </script>
+    <!-- End of set screenshot manually -->
+
+
+
     <section>
+        
+        
+        
         <div class="panels">
             <div class="panel active" id="panel-1" role="tabpanel" aria-hidden="false">
 
@@ -226,8 +288,9 @@ get_header(); ?>
                 <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:900px; max-width:1100px;"
                           name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
-                <input id="wpunity_scene_sshot" type="hidden" value="">
-
+                
+            
+            
             </div>
 
 			<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
