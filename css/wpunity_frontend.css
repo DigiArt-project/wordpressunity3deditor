@@ -394,6 +394,15 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     cursor: pointer;
 }
 
+.connectedSortable {
+    cursor: pointer;
+}
+
+.connectedSortable li {
+    list-style-type: none;
+    list-style-image: none;
+}
+
 /* jimver04 additions */
 #backtotop {
     z-index : 100 !important;

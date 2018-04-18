@@ -87,37 +87,61 @@ get_header(); ?>
 
                     <div class="mdc-layout-grid__inner">
 
-                        <div class="mdc-layout-grid__cell--span-12">
+                        <div class="mdc-layout-grid__cell--span-12 mdc-theme--primary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
 
-                            <ul id="sortable1" class="connectedSortable">
-                                <li class="ui-state-default">Item 1</li>
-                                <li class="ui-state-default">Item 2</li>
-                                <li class="ui-state-default">Item 3</li>
-                                <li class="ui-state-default">Item 4</li>
-                                <li class="ui-state-default">Item 5</li>
+                            <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner">
+                                <li style="visibility: hidden; min-height: 110px;" class="ui-state-default mdc-layout-grid__cell mdc-layout-grid__cell--span-2">No items</li>
+
                             </ul>
-
                         </div>
 
 
                         <div class="mdc-layout-grid__cell--span-12">
 
-                            <!-- TODO: Stathi add asset loop here-->
-                            <?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
 
-	                        <?php print_r($molecules); ?>
+							<?php /*$molecules = wpunity_get_all_molecules_of_game($project_id); */?>
+							<?php $molecules = wpunity_get_all_molecules_of_game('14'); ?>
 
-                            <ul id="sortable2" class="connectedSortable">
-                                <li class="ui-state-highlight">Item 1</li>
-                                <li class="ui-state-highlight">Item 2</li>
-                                <li class="ui-state-highlight">Item 3</li>
-                                <li class="ui-state-highlight">Item 4</li>
-                                <li class="ui-state-highlight">Item 5</li>
+							<?php print_r($molecules); ?>
+
+                            <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner">
+
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="min-height: 110px;">
+
+                                    <!-- TODO: Each molecule is of this form-->
+                                    <div class="mdc-card mdc-theme--background" id="<?php echo 'molecule-id' ?>">
+                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+
+											<?php if ($molecules){ ?>
+                                                <img width="495" height="330" src="<?php echo 'src'; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+											<?php } else { ?>
+                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                </div>
+											<?php } ?>
+                                        </div>
+
+                                        <div class="mdc-card__primary">
+                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+												<?php echo 'TITLE';?>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 2</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 3</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 4</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 5</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 6</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 7</li>
+                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 8</li>
+
                             </ul>
 
                         </div>
-
-
                     </div>
 
                 </div>
@@ -150,8 +174,13 @@ get_header(); ?>
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({
-                connectWith: ".connectedSortable"
+                connectWith: ".connectedSortable",
+                change: function(event, ui) {
+                    ui.placeholder.css({visibility: 'visible', background : 'rgba(255, 64, 129, .54)'});
+                }
             }).disableSelection();
+
+
         } );
 
     </script>
