@@ -164,6 +164,13 @@ get_header(); ?>
         <!-- Select image -->
         <input id="wpunity_scene_sshot_manual_select" name="wpunity_scene_sshot_manual_select" type="file" value="" accept="image/jpeg">
     
+        <?php
+          if(get_the_post_thumbnail_url( $scene_id )=='') {
+              echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
+          }else{
+              echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
+          }
+        ?>
         
     
         <!-- Preview image: This is the source of the image that is saved in the database -->
@@ -177,7 +184,7 @@ get_header(); ?>
     </div>
 
     <script type="application/javascript">
-        is_scene_icon_manually_selected = false;
+        
 
         function readURL(input) {
 
