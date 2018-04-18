@@ -181,9 +181,16 @@ get_header(); ?>
                         </div>
 
                         <div class="mdc-layout-grid__cell--span-3">
-
+    
+                        
 							<?php $screenshotImgUrl = get_the_post_thumbnail_url( $scene_id );
-
+                            
+                            if($screenshotImgUrl=='') {
+                                echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
+                            }else{
+                                echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
+                            }
+							
 							if ($screenshotImgUrl) { ?>
 
                                 <div id="featureImgContainer" class="ImageContainer">
@@ -506,7 +513,7 @@ get_header(); ?>
             }
         }
 
-        var manual_scene_icon = false;
+        var is_scene_icon_manually_selected = false;
         function readURL(input) {
 
             if (input.files && input.files[0]) {
@@ -514,7 +521,7 @@ get_header(); ?>
 
                 reader.onload = function(e) {
                     jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
-                    manual_scene_icon = true;
+                    is_scene_icon_manually_selected = true;
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -532,7 +539,7 @@ get_header(); ?>
             //document.getElementById("wpunity_scene_sshot").style.display = "none";
 
             takeScreenshot();
-            manual_scene_icon = false;
+            is_scene_icon_manually_selected = false;
         });
 
 
