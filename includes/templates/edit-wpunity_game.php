@@ -248,6 +248,7 @@ get_header();
                 <div class="mdc-layout-grid__inner">
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
@@ -299,6 +300,19 @@ get_header();
                                 <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">3D</label>
                             </li>
                         </ul>
+
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                            </div>
+                            <label for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
+                        </div>
 
                     </div>
 
