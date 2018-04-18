@@ -203,6 +203,7 @@ get_header(); ?>
                                 </div>
 							<?php } ?>
                         </div>
+
                         <div class="mdc-layout-grid__cell--span-9">
                             <input type="file"
                                    name="wpunity_scene_sshot_manual_select"
@@ -219,11 +220,9 @@ get_header(); ?>
                                    id="clear-image-button" class="mdc-button mdc-button--primary mdc-button--raised">Take a screenshot</a>
 
                             </div>
-
                         </div>
-
-
                     </div>
+
                 </div>
                 <div class="mdc-layout-grid">
 
