@@ -150,79 +150,12 @@ get_header(); ?>
                        class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
                 </div>
             </div>
-            
+
         </div>
     </div>
 
-
-    <div style="background:yellow">
-        <!-- Set screenshot manually. If not set then take a screenshot of the 3D environment -->
-        <label for="wpunity_scene_sshot_manual_select" class="mdc-textfield__label">
-            Screenshot
-        </label>
-    
-        <!-- Select image -->
-        <input id="wpunity_scene_sshot_manual_select" name="wpunity_scene_sshot_manual_select" type="file" value="" accept="image/jpeg">
-    
-        <?php
-          if(get_the_post_thumbnail_url( $scene_id )=='') {
-              echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
-          }else{
-              echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
-          }
-        ?>
-        
-    
-        <!-- Preview image: This is the source of the image that is saved in the database -->
-        <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" style="width:100px" src="<?php echo get_the_post_thumbnail_url( $scene_id );?>" />
-    
-    
-        <!-- Clear selected image and take screenshot from 3D canvas-->
-        <a title="A screenshot of the 3D editor will be used."
-           id="clear-image-button" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Take screenshot</a>
-
-    </div>
-
-    <script type="application/javascript">
-        
-
-        function readURL(input) {
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
-                    is_scene_icon_manually_selected = true;
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        jQuery("#wpunity_scene_sshot_manual_select").change(function() {
-            readURL(this);
-            
-        });
-        
-        jQuery("#clear-image-button").click(function() {
-            //document.getElementById("wpunity_scene_sshot").src = "noimagemagicword";
-            //document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
-            //document.getElementById("wpunity_scene_sshot").style.display = "none";
-
-            takeScreenshot();
-            is_scene_icon_manually_selected = false;
-        });
-
-    </script>
-    <!-- End of set screenshot manually -->
-
-
-
     <section>
-        
-        
-        
+
         <div class="panels">
             <div class="panel active" id="panel-1" role="tabpanel" aria-hidden="false">
 
@@ -242,6 +175,47 @@ get_header(); ?>
                             </div>
 
                         </div>
+
+                        <div class="mdc-layout-grid__cell--span-12">
+                            <h2 class="mdc-typography--title">Scene screenshot</h2>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell--span-3">
+
+							<?php $screenshotImgUrl = get_the_post_thumbnail_url( $scene_id );
+
+							if ($screenshotImgUrl) { ?>
+
+                                <div id="featureImgContainer" class="ImageContainer">
+                                    <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo $screenshotImgUrl; ?>">
+                                </div>
+
+							<?php } else { ?>
+                                <div id="featureImgContainer">
+                                    <img style="width: 160px;" id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                                </div>
+							<?php } ?>
+                        </div>
+                        <div class="mdc-layout-grid__cell--span-9">
+                            <input type="file"
+                                   name="wpunity_scene_sshot_manual_select"
+                                   title="Featured image"
+                                   value=""
+                                   id="wpunity_scene_sshot_manual_select"
+                                   accept="image/x-png,image/gif,image/jpeg" >
+
+                            <div class="CenterContents" style="float: left;">
+
+                                <p class="mdc-typography--subheading1"> <b>or</b> </p>
+                                <!-- Clear selected image and take screenshot from 3D canvas-->
+                                <a title="Capture screenshot from 3D editor"
+                                   id="clear-image-button" class="mdc-button mdc-button--primary mdc-button--raised">Take a screenshot</a>
+
+                            </div>
+
+                        </div>
+
+
                     </div>
                 </div>
                 <div class="mdc-layout-grid">
@@ -249,6 +223,8 @@ get_header(); ?>
                     <div class="mdc-layout-grid__inner">
 
                         <div class="mdc-layout-grid__cell--span-12">
+
+                            <h2 class="mdc-typography--title">3D Editor</h2>
 
                             <div id="scene-vr-editor">
 								<?php
@@ -262,11 +238,11 @@ get_header(); ?>
 								$parentGameSlug = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->slug;
 								$parentGameId = wp_get_object_terms( $scene_id, 'wpunity_scene_pgame')[0]->term_id;
 								$projectGameSlug = $parentGameSlug;
-                                
-                                $scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
-								
+
+								$scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
+
 								$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
-        
+
 								$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
 
 								$scenefolder = $sceneTitle;
@@ -295,9 +271,9 @@ get_header(); ?>
                 <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:900px; max-width:1100px;"
                           name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
-                
-            
-            
+
+
+
             </div>
 
 			<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
@@ -348,6 +324,9 @@ get_header(); ?>
 
 
     <script type="text/javascript">
+
+        var mdc = window.mdc;
+        mdc.autoInit();
 
         var project_id = <?php echo $project_id; ?>;
 
@@ -500,8 +479,7 @@ get_header(); ?>
             }
         }
 
-        var mdc = window.mdc;
-        mdc.autoInit();
+
 
         var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
         var dots = document.querySelector('.dots');
@@ -527,5 +505,36 @@ get_header(); ?>
                 newActivePanel.classList.add('active');
             }
         }
+
+        var manual_scene_icon = false;
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
+                    manual_scene_icon = true;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        jQuery("#wpunity_scene_sshot_manual_select").change(function() {
+            readURL(this);
+
+        });
+
+        jQuery("#clear-image-button").click(function() {
+            //document.getElementById("wpunity_scene_sshot").src = "noimagemagicword";
+            //document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
+            //document.getElementById("wpunity_scene_sshot").style.display = "none";
+
+            takeScreenshot();
+            manual_scene_icon = false;
+        });
+
+
     </script>
 <?php get_footer(); ?>
