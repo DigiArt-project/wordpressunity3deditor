@@ -302,8 +302,8 @@ get_header();
                         </ul>
 
                         <div class="mdc-form-field">
-                            <div class="mdc-checkbox">
-                                <input type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
+                            <div class="mdc-checkbox" id="regional-checkbox-component">
+                                <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
                                 <div class="mdc-checkbox__background">
                                     <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
                                         <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
@@ -668,14 +668,20 @@ if ( $assets ) :?>
 
     <script type="text/javascript">
 
+        var mdc = window.mdc;
+        mdc.autoInit();
+
+        var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
+
+        jQuery('#regional-checkbox-component').click(function () {
+            jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
+        });
+
+
         // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
         jQuery('#save-expid-button').click(function() {
             wpunity_saveExpIDAjax();
         });
-
-        var mdc = window.mdc;
-        mdc.autoInit();
-
 
         var deleteDialog = document.querySelector('#delete-dialog');
         var compileDialog = document.querySelector('#compile-dialog');
