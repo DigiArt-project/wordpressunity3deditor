@@ -103,13 +103,13 @@ class vr_editor_environmentals {
             jQuery("body#header").css("display", "none" );
 
 
-            if (document.getElementById('wpadminbar')) {
-                document.getElementById('wpadminbar').style.zIndex = 0;
-            }
-
-            if (document.getElementById('adminmenuback')) {
-                document.getElementById('adminmenuback').style.zIndex = 0;
-            }
+            // if (document.getElementById('wpadminbar')) {
+            //     document.getElementById('wpadminbar').style.zIndex = 0;
+            // }
+            //
+            // if (document.getElementById('adminmenuback')) {
+            //     document.getElementById('adminmenuback').style.zIndex = 0;
+            // }
 
             if (document.getElementById('adminmenuwrap')) {
                 document.getElementById('adminmenuwrap').style.zIndex = 0;
