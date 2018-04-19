@@ -54,7 +54,8 @@ class WU_webw_3d_view {
     initGL() {
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
-            antialias: true
+            antialias: true,
+            logarithmicDepthBuffer: true
         });
 
         this.scene = new THREE.Scene();

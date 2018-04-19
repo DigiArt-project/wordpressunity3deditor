@@ -359,7 +359,7 @@ class vr_editor_environmentals {
      */
     setRenderer() {
 
-        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
+        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false, logarithmicDepthBuffer: true});
         this.renderer.sortObjects = false;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);

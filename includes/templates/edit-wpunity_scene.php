@@ -184,13 +184,20 @@ get_header(); ?>
     
                         
 							<?php $screenshotImgUrl = get_the_post_thumbnail_url( $scene_id );
-                            
+       
+							//echo $screenshotImgUrl;
+							
+							echo '<script>var is_scene_icon_manually_selected = false;</script>';
+							
+							
                             if($screenshotImgUrl=='') {
                                 echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
                             }else{
                                 echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
                             }
 							
+                            
+                            
 							if ($screenshotImgUrl) { ?>
 
                                 <div id="featureImgContainer" class="ImageContainer">
@@ -276,9 +283,6 @@ get_header(); ?>
 
                 <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:900px; max-width:1100px;"
                           name="wpunity_scene_json_input"> <?php echo get_post_meta( $scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
-
-
-
 
             </div>
 
@@ -512,7 +516,7 @@ get_header(); ?>
             }
         }
 
-        var is_scene_icon_manually_selected = false;
+        
         function readURL(input) {
 
             if (input.files && input.files[0]) {

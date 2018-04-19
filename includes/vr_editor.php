@@ -525,9 +525,10 @@ echo '</script>';
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
-        if (typeof is_scene_icon_manually_selected !== 'undefined' )
-            if (!is_scene_icon_manually_selected)
-                takeScreenshot();
+        console.log("is_scene_icon_manually_selected2: " + is_scene_icon_manually_selected);
+        
+        if(!is_scene_icon_manually_selected)
+            takeScreenshot();
        
         wpunity_saveSceneAjax();
     });
