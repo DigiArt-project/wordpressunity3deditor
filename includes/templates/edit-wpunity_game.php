@@ -131,9 +131,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		)
 	);
 
+    $sceneMetaType = 'scene';//default 'scene' MetaType (3js)
+
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
-		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
 	);
 
@@ -145,13 +146,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         $scene_metas['wpunity_scene_environment'] = 'fields';
     }
 
-    //SCENE EXTRA TYPE FOR CHEMISTRY GAMES
-    $chemType = 'lab';//default value
+    //SCENE TYPE FOR CHEMISTRY GAMES (Lab = scene)
     if($thegameType[0]->slug == 'chemistry_games'){
-        if($_POST['sceneTypeRadio'] == '2d'){$chemType = '2d';}
-        elseif($_POST['sceneTypeRadio'] == '3d'){$chemType = '3d';}
-        $scene_metas['wpunity_chemType']= $chemType;
+        if($_POST['sceneTypeRadio'] == '2d'){$sceneMetaType = 'sceneExam2d';}
+        elseif($_POST['sceneTypeRadio'] == '3d'){$sceneMetaType = 'sceneExam3d';}
     }
+
+    //Add the final MetaType of the Scene
+    $scene_metas['wpunity_scene_metatype']= $sceneMetaType;
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
@@ -419,7 +421,7 @@ if ( $custom_query->have_posts() ) :?>
 
 							//create permalink depending the scene yaml category
 							$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-							if($scene_type == 'sceneExam' ){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+							if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 							$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
 							?>
                             <a href="<?php echo $edit_page_link; ?>">
