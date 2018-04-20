@@ -135,9 +135,23 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		'wpunity_scene_default' => 0,
 		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
-		'wpunity_isRegional' => 0,
-		'wpunity_scene_environment' => 'fields',
 	);
+
+    //REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
+    $isRegional = 0;//default value
+    if($thegameType[0]->slug == 'energy_games'){
+        if($_POST['regionalSceneCheckbox'] == 'on'){$isRegional = 1;}
+        $scene_metas['wpunity_isRegional']= $isRegional;
+        $scene_metas['wpunity_scene_environment'] = 'fields';
+    }
+
+    //SCENE EXTRA TYPE FOR CHEMISTRY GAMES
+    $chemType = 'lab';//default value
+    if($thegameType[0]->slug == 'chemistry_games'){
+        if($_POST['sceneTypeRadio'] == '2d'){$chemType = '2d';}
+        elseif($_POST['sceneTypeRadio'] == '3d'){$chemType = '3d';}
+        $scene_metas['wpunity_chemType']= $chemType;
+    }
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
