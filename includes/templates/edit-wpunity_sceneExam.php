@@ -104,15 +104,15 @@ get_header(); ?>
 								<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
 
 								foreach ($molecules as $molecule) { ?>
-									<?php print_r($molecule); ?>
+									<?php print_r($molecule[moleculeImage]); ?>
 
                                     <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="min-height: 110px;">
 
                                         <div class="mdc-card mdc-theme--background" id="<?php echo $molecule[moleculeID]; ?>">
                                             <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-												<?php if ($molecule[moleculePic]){ ?>
-                                                    <img width="495" height="330" src="<?php echo $molecule[moleculePic]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+												<?php if ($molecule[moleculeImage]){ ?>
+                                                    <img width="495" height="330" src="<?php echo $molecule[moleculeImage]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
 												<?php } else { ?>
                                                     <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                                         <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
