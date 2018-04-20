@@ -320,7 +320,7 @@ get_header();
 
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
-                        <button style="float:right;" class="mdc-button mdc-button--raised mdc-theme--primary-bg" data-mdc-auto-init="MDCRipple" type="submit">
+                        <button style="float:right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                             ADD SCENE
                         </button>
 
@@ -671,11 +671,14 @@ if ( $assets ) :?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
 
-        jQuery('#regional-checkbox-component').click(function () {
-            jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
-        });
+        if (document.getElementById('regional-checkbox-component')) {
+            var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
+
+            jQuery('#regional-checkbox-component').click(function () {
+                jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
+            });
+        }
 
 
         // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
