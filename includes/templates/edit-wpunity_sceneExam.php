@@ -98,46 +98,41 @@ get_header(); ?>
 
                         <div class="mdc-layout-grid__cell--span-12">
 
-
-							<?php /*$molecules = wpunity_get_all_molecules_of_game($project_id); */?>
-							<?php $molecules = wpunity_get_all_molecules_of_game('14'); ?>
-
-							<?php print_r($molecules); ?>
+                            <h2 class="mdc-typography--title">Available molecules</h2>
 
                             <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner">
+								<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
 
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="min-height: 110px;">
+								foreach ($molecules as $molecule) { ?>
+									<?php print_r($molecule); ?>
 
-                                    <!-- TODO: Each molecule is of this form-->
-                                    <div class="mdc-card mdc-theme--background" id="<?php echo 'molecule-id' ?>">
-                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+                                    <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="min-height: 110px;">
 
-											<?php if ($molecules){ ?>
-                                                <img width="495" height="330" src="<?php echo 'src'; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-											<?php } else { ?>
-                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                </div>
-											<?php } ?>
+                                        <div class="mdc-card mdc-theme--background" id="<?php echo $molecule[moleculeID]; ?>">
+                                            <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+
+												<?php if ($molecule[moleculePic]){ ?>
+                                                    <img width="495" height="330" src="<?php echo $molecule[moleculePic]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+												<?php } else { ?>
+                                                    <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                        <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                    </div>
+												<?php } ?>
+                                            </div>
+
+                                            <div class="mdc-card__primary">
+                                                <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+													<?php echo $molecule[moleculeName];?>
+                                                </p>
+                                            </div>
                                         </div>
+                                    </li>
 
-                                        <div class="mdc-card__primary">
-                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-												<?php echo 'TITLE';?>
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </li>
-
+								<?php }?>
 
                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 2</li>
                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 3</li>
                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 4</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 5</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 6</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 7</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 8</li>
 
                             </ul>
 
