@@ -272,8 +272,9 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
-                    <?php if($game_type_obj->string == 'Chemistry'){ ?>
+
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                        <?php if($game_type_obj->string == 'Chemistry'){ ?>
                         <label class="mdc-typography--title">Scene type</label>
 
                         <ul>
@@ -299,8 +300,22 @@ get_header();
                                 </div>
                                 <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">3D</label>
                             </li>
+                            &nbsp;
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
+                            </li>
                         </ul>
+                        <?php } ?>
 
+                        <?php if($game_type_obj->string == 'Energy'){ ?>
+                        <label class="mdc-typography--title">Scene type</label>
                         <div class="mdc-form-field">
                             <div class="mdc-checkbox" id="regional-checkbox-component">
                                 <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
@@ -313,8 +328,9 @@ get_header();
                             </div>
                             <label for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
                         </div>
+                        <?php } ?>
                     </div>
-                    <?php } ?>
+
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
