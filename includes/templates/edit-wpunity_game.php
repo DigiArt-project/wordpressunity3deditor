@@ -272,8 +272,8 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
+                    <?php if($game_type_obj->string == 'Chemistry'){ ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-
                         <label class="mdc-typography--title">Scene type</label>
 
                         <ul>
@@ -313,8 +313,8 @@ get_header();
                             </div>
                             <label for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
                         </div>
-
                     </div>
+                    <?php } ?>
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
