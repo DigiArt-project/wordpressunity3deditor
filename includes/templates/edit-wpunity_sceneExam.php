@@ -104,7 +104,6 @@ get_header(); ?>
 								<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
 
 								foreach ($molecules as $molecule) { ?>
-									<?php print_r($molecule[moleculeImage]); ?>
 
                                     <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="min-height: 110px;">
 
@@ -129,10 +128,6 @@ get_header(); ?>
                                     </li>
 
 								<?php }?>
-
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 2</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 3</li>
-                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">Item 4</li>
 
                             </ul>
 
