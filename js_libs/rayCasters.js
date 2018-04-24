@@ -133,7 +133,7 @@ function activeOverides(event, inters){
     if( objectParent.categoryName === 'Marker')
         displayMarkerProperties(event, name);
 
-    if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook')
+    if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook' || objectParent.categoryName === 'Gate')
         displayMicroscopeTextbookProperties(event, name);
 
     if( objectParent.categoryName === 'Box' ) // for chemistry box
