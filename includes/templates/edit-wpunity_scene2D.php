@@ -92,7 +92,7 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = $scene_type === 'credits' ? 'Credits' : 'Main Menu' ;
-$image_size_label = $scene_type === 'credits' ? '512x256' : '350x200' ;
+$image_size_label = $scene_type === 'credits' ? '512x256' : '1920x1080' ;
 
 get_header(); ?>
 
