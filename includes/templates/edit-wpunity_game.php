@@ -131,13 +131,29 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		)
 	);
 
+    $sceneMetaType = 'scene';//default 'scene' MetaType (3js)
+
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
-		'wpunity_scene_metatype' => 'scene',
 		'wpunity_scene_json_input' => $default_json,
-		'wpunity_isRegional' => 0,
-		'wpunity_scene_environment' => 'fields',
 	);
+
+    //REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
+    $isRegional = 0;//default value
+    if($thegameType[0]->slug == 'energy_games'){
+        if($_POST['regionalSceneCheckbox'] == 'on'){$isRegional = 1;}
+        $scene_metas['wpunity_isRegional']= $isRegional;
+        $scene_metas['wpunity_scene_environment'] = 'fields';
+    }
+
+    //SCENE TYPE FOR CHEMISTRY GAMES (Lab = scene)
+    if($thegameType[0]->slug == 'chemistry_games'){
+        if($_POST['sceneTypeRadio'] == '2d'){$sceneMetaType = 'sceneExam2d';}
+        elseif($_POST['sceneTypeRadio'] == '3d'){$sceneMetaType = 'sceneExam3d';}
+    }
+
+    //Add the final MetaType of the Scene
+    $scene_metas['wpunity_scene_metatype']= $sceneMetaType;
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
@@ -272,8 +288,9 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                        <?php if($game_type_obj->string == 'Chemistry'){ ?>
                         <label class="mdc-typography--title">Scene type</label>
 
                         <ul>
@@ -299,8 +316,22 @@ get_header();
                                 </div>
                                 <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">3D</label>
                             </li>
+                            &nbsp;
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
+                            </li>
                         </ul>
+                        <?php } ?>
 
+                        <?php if($game_type_obj->string == 'Energy'){ ?>
+                        <label class="mdc-typography--title">Scene type</label>
                         <div class="mdc-form-field">
                             <div class="mdc-checkbox" id="regional-checkbox-component">
                                 <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
@@ -313,14 +344,15 @@ get_header();
                             </div>
                             <label for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
                         </div>
-
+                        <?php } ?>
                     </div>
+
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
-                        <button style="float:right;" class="mdc-button mdc-button--raised mdc-theme--primary-bg" data-mdc-auto-init="MDCRipple" type="submit">
+                        <button style="float:right;" class="mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" type="submit">
                             ADD SCENE
                         </button>
 
@@ -389,7 +421,7 @@ if ( $custom_query->have_posts() ) :?>
 
 							//create permalink depending the scene yaml category
 							$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-							if($scene_type == 'sceneExam' ){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+							if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 							$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
 							?>
                             <a href="<?php echo $edit_page_link; ?>">
@@ -671,11 +703,14 @@ if ( $assets ) :?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
 
-        jQuery('#regional-checkbox-component').click(function () {
-            jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
-        });
+        if (document.getElementById('regional-checkbox-component')) {
+            var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
+
+            jQuery('#regional-checkbox-component').click(function () {
+                jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
+            });
+        }
 
 
         // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input

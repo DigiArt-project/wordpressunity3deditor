@@ -1041,8 +1041,10 @@ function wpunity_get_all_molecules_of_game($project_id){
 			$custom_query->the_post();
 			$molecule_id = get_the_ID();
 			$molecule_title = get_the_title();
+			$the_featured_image_ID = $screenimgID = get_post_meta($molecule_id, 'wpunity_asset3d_screenimage', true);
+			$the_featured_image_url = wp_get_attachment_url( $the_featured_image_ID );
 
-			$moleculesIds[] = ['moleculeID'=>$molecule_id, 'moleculeName'=>$molecule_title ];
+			$moleculesIds[] = ['moleculeID'=>$molecule_id, 'moleculeName'=>$molecule_title, 'moleculeImage'=>$the_featured_image_url ];
 		}
 	}
 

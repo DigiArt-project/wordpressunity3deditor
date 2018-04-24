@@ -465,7 +465,7 @@ get_header(); ?>
 
             function ddaIframe(email, pwd, app_key) {
 
-                var url = "https://envisage.goedle.io/dda/strategies.htm?" +
+                var url = "https://envisage.goedle.io/dda/index.htm?" +
                     "email=" + email +
                     "&pwd=" + pwd +
                     "&app_key=" + app_key;
