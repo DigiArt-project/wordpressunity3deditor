@@ -260,7 +260,7 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
 
 
     // Add doors from other scenes
-    var OtherExamMicroScenesNames = ['First ExamMicro Scene'];
+    var OtherExamMicroScenesNames = ['Exam 2D naming puzzle', 'Exam 3D construction puzzle'];
 
 
     // Add options for each intersected object
