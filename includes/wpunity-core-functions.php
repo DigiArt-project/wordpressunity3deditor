@@ -1009,9 +1009,15 @@ function wpunity_get_all_molecules_of_game($project_id){
 	$gameSlug = $game_post->post_name;
 	$assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 	$assetPGameID = $assetPGame->term_id;
-
+    
+    
+    $my_posts = get_page_by_path("chemistry-joker",ARRAY_A,'wpunity_game');
+    
+    $assetJokerGameId = $my_posts['ID'];
+    
 	$moleculesIds = array();
-
+ 
+	
 	// Define custom query parameters
 	$custom_query_args = array(
 		'post_type' => 'wpunity_asset3d',
@@ -1020,8 +1026,8 @@ function wpunity_get_all_molecules_of_game($project_id){
 			'relation' => 'AND',
 			array(
 				'taxonomy' => 'wpunity_asset3d_pgame',
-				'field'    => 'term_id',
-				'terms'    => $assetPGameID,
+				'field'    => 'slug', //'term_id',
+				'terms'    => array($gameSlug, "chemistry-joker") //array($assetPGameID, $assetJokerGameId)
 			),
 			array(
 				'taxonomy' => 'wpunity_asset3d_cat',
@@ -1039,8 +1045,13 @@ function wpunity_get_all_molecules_of_game($project_id){
 	if ( $custom_query->have_posts() ) {
 		while ($custom_query->have_posts()) {
 			$custom_query->the_post();
-			$molecule_id = get_the_ID();
-			$molecule_title = get_the_title();
+            
+            
+            
+            $molecule_id = get_the_ID();
+            
+            
+            $molecule_title = get_the_title();
 			$the_featured_image_ID = $screenimgID = get_post_meta($molecule_id, 'wpunity_asset3d_screenimage', true);
 			$the_featured_image_url = wp_get_attachment_url( $the_featured_image_ID );
 
