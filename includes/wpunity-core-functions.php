@@ -359,36 +359,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 	$userEmail = $user_info->user_email;
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 
-	$args = array(
-		'method' => 'POST',
-		'timeout' => 45,
-		'redirection' => 5,
-		'httpversion' => '1.0',
-		'blocking' => true,
-		'sslverify' => false,
-		'headers' => array( 'content-type' => 'application/json' ),
-		'body' => json_encode(array(
-			'email' => $userEmail,
-			'password' => $extraPass
-		) ),
-		'cookies' => array()
-	);
-
-	$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
-
-
-	if (is_wp_error( $token_request ) ) {
-
-		$error_message = $token_request->get_error_message();
-		print_r($error_message);
-		// Todo: @Tasos place an alert div with message
-		//die();
-
-	} else {
-
-		$token = json_decode($token_request[body]);
-
-		$token = $token->token;
+	if ($extraPass) {
 
 		$args = array(
 			'method' => 'POST',
@@ -396,42 +367,74 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 			'redirection' => 5,
 			'httpversion' => '1.0',
 			'blocking' => true,
-			'sslverify' => 0,
-			'headers' => array( 'content-type' => 'application/json', 'Authorization' => $token ),
-			'body' =>json_encode(array() ),
+			'sslverify' => false,
+			'headers' => array( 'content-type' => 'application/json' ),
+			'body' => json_encode(array(
+				'email' => $userEmail,
+				'password' => $extraPass
+			) ),
 			'cookies' => array()
 		);
 
+		$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
 
-		$request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
 
-		if (is_wp_error( $request ) ) {
+		if (is_wp_error( $token_request ) ) {
 
-			$error_message = $request->get_error_message();
+			$error_message = $token_request->get_error_message();
 			print_r($error_message);
 			// Todo: @Tasos place an alert div with message
 			//die();
 
 		} else {
 
-			if ((string)(int)$request['response']['code'] !== '201') {
+			$token = json_decode($token_request[body]);
 
-				print_r($request['response']['code']);
-				print_r($request['response']['message']);
+			$token = $token->token;
+
+			$args = array(
+				'method' => 'POST',
+				'timeout' => 45,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'sslverify' => 0,
+				'headers' => array( 'content-type' => 'application/json', 'Authorization' => $token ),
+				'body' =>json_encode(array() ),
+				'cookies' => array()
+			);
+
+
+			$request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
+
+			if (is_wp_error( $request ) ) {
+
+				$error_message = $request->get_error_message();
+				print_r($error_message);
 				// Todo: @Tasos place an alert div with message
 				//die();
+
+			} else {
+
+				if ((string)(int)$request['response']['code'] !== '201') {
+
+					print_r($request['response']['code']);
+					print_r($request['response']['message']);
+					// Todo: @Tasos place an alert div with message
+					//die();
+				}
+
+				$keys = json_decode($request[body]);
+
+				$app_key = $keys->app->app_key; //the return value for GIO id
+				$api_key = $keys->app->api_key;
+
+				// Save values to our DB
+				update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
+				update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
 			}
-
-			$keys = json_decode($request[body]);
-
-			$app_key = $keys->app->app_key; //the return value for GIO id
-			$api_key = $keys->app->api_key;
-
-			// Save values to our DB
-			update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
-			update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
 		}
-	}
+    }
 }
 
 
