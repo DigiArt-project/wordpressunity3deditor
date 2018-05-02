@@ -26,7 +26,11 @@ echo ini_get('max_input_time').chr(10);
 // @ini_set( 'memory_limit', '512M');
 @ini_set( 'max_execution_time', '2400' );
 
-
+// Set scope based on project:
+// DigiArt - Virtual Tour: 0
+// Envisage - Virtual Lab: 1
+// Default - Game Project: any other number
+var $project_scope = 0;
 
 
 //===================================== Styles & Scripts ====================================
