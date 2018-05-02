@@ -247,17 +247,17 @@ $user_id = get_current_user_id();
                                 <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
                             </li>
 
-<!--                            <li class="mdc-form-field">-->
-<!--                                <div class="mdc-radio">-->
-<!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">-->
-<!--                                    <div class="mdc-radio__background">-->
-<!--                                        <div class="mdc-radio__outer-circle"></div>-->
-<!--                                        <div class="mdc-radio__inner-circle"></div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
-<!--                                    <i class="material-icons"></i>Archaeology</label>-->
-<!--                            </li>-->
+                            <!--                            <li class="mdc-form-field">-->
+                            <!--                                <div class="mdc-radio">-->
+                            <!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">-->
+                            <!--                                    <div class="mdc-radio__background">-->
+                            <!--                                        <div class="mdc-radio__outer-circle"></div>-->
+                            <!--                                        <div class="mdc-radio__inner-circle"></div>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
+                            <!--                                    <i class="material-icons"></i>Archaeology</label>-->
+                            <!--                            </li>-->
 
                         </ul>
 
@@ -265,7 +265,16 @@ $user_id = get_current_user_id();
 
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
-                        <button type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                        <button id="createNewGameBtn" type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                        <section id="create-game-progress-bar" class="CenterContents" style="display: none;">
+                            <h3 class="mdc-typography--title">Creating game...</h3>
+
+                            <div class="progressSlider">
+                                <div class="progressSliderLine"></div>
+                                <div class="progressSliderSubLine progressIncrease"></div>
+                                <div class="progressSliderSubLine progressDecrease"></div>
+                            </div>
+                        </section>
 
                     </form>
                 </div>
@@ -348,6 +357,20 @@ $user_id = get_current_user_id();
 
         jQuery('#delete-dialog-progress-bar').hide();
         dialog.close();
+
+    });
+
+    jQuery('#createNewGameBtn').click( function (e) {
+        var val = document.getElementById('title').value;
+
+        if (val.length > 2) {
+
+            /*jQuery('#createNewGameBtn').attr("disabled", "disabled");*/
+            jQuery('#createNewGameBtn').hide();
+            jQuery('#create-game-progress-bar').show();
+
+
+        }
 
     });
 
