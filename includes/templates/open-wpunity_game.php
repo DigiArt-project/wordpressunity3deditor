@@ -63,13 +63,30 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-get_header();
-
 $user_id = get_current_user_id();
+
+if ($project_scope == 0) {
+	$full_title = "Virtual Tour";
+	$full_title_lowercase = "virtual tour";
+	$single = "tour";
+	$multiple = "tours";
+} else if ($project_scope == 1){
+	$full_title = "Virtual Lab";
+	$full_title_lowercase = "virtual lab";
+	$single = "lab";
+	$multiple = "labs";
+} else {
+	$full_title = "Game Project";
+	$full_title_lowercase = "game project";
+	$single = "project";
+	$multiple = "projects";
+}
+
+get_header();
 
 ?>
 
-<h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background">Game Project Manager</h1>
+<h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background"><?php echo $full_title; ?> Manager</h1>
 
 
 <!--<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?-->
@@ -88,7 +105,7 @@ $user_id = get_current_user_id();
 
 <?php } else { ?>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new game project or edit an existing one</h2>
+    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new <?php echo $full_title_lowercase; ?> or edit an existing one</h2>
 
 
 <div class="mdc-layout-grid FrontPageStyle">
@@ -97,7 +114,7 @@ $user_id = get_current_user_id();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Existing projects</h2>
+            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Existing <?php echo $multiple; ?></h2>
 
             <hr class="mdc-list-divider">
 
@@ -180,7 +197,7 @@ $user_id = get_current_user_id();
                         games
                     </i>
 
-                    <h3 class="mdc-typography--headline">No Game Projects available</h3>
+                    <h3 class="mdc-typography--headline">No <?php echo $multiple; ?> available</h3>
                     <hr class="WhiteSpaceSeparator">
                     <h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new
                         one</h4>
@@ -199,7 +216,7 @@ $user_id = get_current_user_id();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Create new project</h2>
+            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Create new <?php echo $single; ?></h2>
 
             <hr class="mdc-list-divider">
 
@@ -213,7 +230,7 @@ $user_id = get_current_user_id();
                         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input id="title" name="title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" aria-controls="title-validation-msg"
                                    required="" minlength="3" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                            <label for="title" class="mdc-textfield__label">Enter a title for your project</label>
+                            <label for="title" class="mdc-textfield__label">Enter a title for your <?php echo $single; ?></label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
                         <p class="mdc-textfield-helptext mdc-textfield-helptext--validation-msg"
@@ -221,7 +238,7 @@ $user_id = get_current_user_id();
                             Must be at least 3 characters long
                         </p>
 
-                        <label class="mdc-typography--title NewGameLabel">Choose project type</label>
+                        <label class="mdc-typography--title NewGameLabel">Choose <?php echo $single; ?> type</label>
                         <ul class="RadioButtonList">
 
                             <li class="mdc-form-field">
@@ -247,17 +264,17 @@ $user_id = get_current_user_id();
                                 <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
                             </li>
 
-<!--                            <li class="mdc-form-field">-->
-<!--                                <div class="mdc-radio">-->
-<!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">-->
-<!--                                    <div class="mdc-radio__background">-->
-<!--                                        <div class="mdc-radio__outer-circle"></div>-->
-<!--                                        <div class="mdc-radio__inner-circle"></div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
-<!--                                    <i class="material-icons"></i>Archaeology</label>-->
-<!--                            </li>-->
+                            <!--                            <li class="mdc-form-field">-->
+                            <!--                                <div class="mdc-radio">-->
+                            <!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">-->
+                            <!--                                    <div class="mdc-radio__background">-->
+                            <!--                                        <div class="mdc-radio__outer-circle"></div>-->
+                            <!--                                        <div class="mdc-radio__inner-circle"></div>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
+                            <!--                                    <i class="material-icons"></i>Archaeology</label>-->
+                            <!--                            </li>-->
 
                         </ul>
 
@@ -265,7 +282,16 @@ $user_id = get_current_user_id();
 
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
-                        <button type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                        <button id="createNewGameBtn" type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                        <section id="create-game-progress-bar" class="CenterContents" style="display: none;">
+                            <h3 class="mdc-typography--title">Creating <?php echo $single; ?>...</h3>
+
+                            <div class="progressSlider">
+                                <div class="progressSliderLine"></div>
+                                <div class="progressSliderSubLine progressIncrease"></div>
+                                <div class="progressSliderSubLine progressDecrease"></div>
+                            </div>
+                        </section>
 
                     </form>
                 </div>
@@ -288,7 +314,7 @@ $user_id = get_current_user_id();
                     </h2>
                 </header>
                 <section id="delete-dialog-description" class="mdc-dialog__body mdc-typography--body1">
-                    Are you sure you want to delete your game project? There is no Undo functionality once you delete it.
+                    Are you sure you want to delete your <?php echo $full_title_lowercase; ?>? There is no Undo functionality once you delete it.
                 </section>
 
                 <section id="delete-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
@@ -351,6 +377,14 @@ $user_id = get_current_user_id();
 
     });
 
+    jQuery('#createNewGameBtn').click( function (e) {
+        var val = document.getElementById('title').value;
+
+        if (val.length > 2) {
+            jQuery('#createNewGameBtn').hide();
+            jQuery('#create-game-progress-bar').show();
+        }
+    });
 
 </script>
 <?php get_footer(); ?>

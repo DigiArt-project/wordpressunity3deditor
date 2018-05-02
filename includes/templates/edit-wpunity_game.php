@@ -174,6 +174,16 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
+if ($project_scope == 0) {
+	$single_lowercase = "tour";
+	$single_first = "Tour";
+} else if ($project_scope == 1){
+	$single_lowercase = "lab";
+	$single_first = "Lab";
+} else {
+	$single_lowercase = "project";
+	$single_first = "Project";
+}
 
 get_header();
 ?>
@@ -186,7 +196,7 @@ get_header();
         </h1>
 
         <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
-            COMPILE GAME
+            COMPILE <?php echo $single_lowercase; ?>
         </a>
     </div>
 
@@ -194,12 +204,16 @@ get_header();
         <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Category"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string;?>
     </span>
 
+    <span class="mdc-typography--caption pull-right">
+        <a class="mdc-button mdc-button--primary" id="helpButton" href="#" data-mdc-auto-init="MDCRipple"><i class="material-icons" style="vertical-align: inherit;" title="Help">help_outline</i>&nbsp;Help</a>
+    </span>
+
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected"><?php echo $single_first; ?> Editor</span></li>
     </ul>
 
     <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
@@ -579,6 +593,32 @@ if ( $custom_query->have_posts() ) :?>
                 <div class="mdc-dialog__backdrop"></div>
             </aside>
 
+
+            <!--Help Dialog-->
+            <aside id="help-dialog"
+                   class="mdc-dialog"
+                   role="alertdialog"
+                   aria-labelledby="Help dialog"
+                   aria-describedby="Help" data-mdc-auto-init="MDCDialog">
+                <div class="mdc-dialog__surface">
+                    <header class="mdc-dialog__header">
+                        <h2 id="help-dialog-title" class="mdc-dialog__header__title">
+                            Help
+                        </h2>
+                    </header>
+                    <section id="delete-dialog-description" class="mdc-dialog__body">
+
+                    </section>
+
+                    <footer class="mdc-dialog__footer">
+                        <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised mdc-dialog__footer__button--cancel" id="helpDialogOKBtn">OK</a>
+                    </footer>
+                </div>
+                <div class="mdc-dialog__backdrop"></div>
+            </aside>
+
+
+
         </div>
     </div>
 
@@ -720,6 +760,16 @@ if ( $assets ) :?>
 
         var deleteDialog = document.querySelector('#delete-dialog');
         var compileDialog = document.querySelector('#compile-dialog');
+        var helpDialog = document.querySelector('#help-dialog');
+
+        if (helpDialog) {
+            helpDialog = new mdc.dialog.MDCDialog(helpDialog);
+
+            jQuery( "#helpButton" ).click(function() {
+                helpDialog.show();
+
+            });
+        }
 
         if (deleteDialog) {
             deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
@@ -796,11 +846,6 @@ if ( $assets ) :?>
             }
         }
 
-        /*jQuery("#guid-generator-btn").click(function (e) {
-            document.getElementById('exp-id').value = guid();
-        });*/
-
-
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
 
             //console.log("ID:", deleteDialog.id);
@@ -840,17 +885,6 @@ if ( $assets ) :?>
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
-
-        /*function guid() {
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-        }
-
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        }*/
 
     </script>
 <?php get_footer(); ?>
