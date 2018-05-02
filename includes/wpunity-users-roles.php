@@ -1,14 +1,15 @@
 <?php
 
 function wpunity_add_customroles() {
-//    add_role( 'game_master', 'Game Master',
-//        array(
-//            'read' => true,
-//            'level_0' => true,
-//        )
-//    );
 
     add_role( 'adv_game_master', 'Advanced Game Master',
+        array(
+            'read' => true,
+            'level_0' => true,
+        )
+    );
+
+    add_role( 'teacher', 'Teacher',
         array(
             'read' => true,
             'level_0' => true,
