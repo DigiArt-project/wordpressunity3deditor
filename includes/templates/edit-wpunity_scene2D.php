@@ -94,6 +94,17 @@ require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 $scene_title = $scene_type === 'credits' ? 'Credits' : 'Main Menu' ;
 $image_size_label = $scene_type === 'credits' ? '512x256' : '1920x1080' ;
 
+if ($project_scope == 0) {
+	$single_lowercase = "tour";
+	$single_first = "Tour";
+} else if ($project_scope == 1){
+	$single_lowercase = "lab";
+	$single_first = "Lab";
+} else {
+	$single_lowercase = "project";
+	$single_first = "Project";
+}
+
 get_header(); ?>
 
 
@@ -113,7 +124,7 @@ get_header(); ?>
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected"><?php echo $scene_title; ?> Editor</span></li>
 
@@ -205,7 +216,7 @@ get_header(); ?>
 
 					<?php if ($scene_type === 'credits') { ?>
 
-                        <h2 class="mdc-typography--title">Insert information about the people that created the project or acknowledgements</h2>
+                        <h2 class="mdc-typography--title">Insert information about the people that created the <?php echo $single_lowercase; ?> or acknowledgements</h2>
                         <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
                             <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
                             <label for="creditsTextarea" class="mdc-textfield__label" style="background: none;">Edit Credits text</label>

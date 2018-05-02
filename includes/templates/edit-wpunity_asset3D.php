@@ -235,6 +235,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	exit;
 }
 
+if ($project_scope == 0) {
+	$single_first = "Tour";
+} else if ($project_scope == 1){
+	$single_first = "Lab";
+} else {
+	$single_first = "Project";
+}
+
 get_header();
 ?>
 
@@ -253,7 +261,7 @@ get_header();
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor">Project Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
