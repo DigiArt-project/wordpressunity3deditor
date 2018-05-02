@@ -63,16 +63,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-get_header();
-
 $user_id = get_current_user_id();
 
-if ($scope == 0) {
+if ($project_scope == 0) {
 	$full_title = "Virtual Tour";
 	$full_title_lowercase = "virtual tour";
 	$single = "tour";
 	$multiple = "tours";
-} else if ($scope == 1){
+} else if ($project_scope == 1){
 	$full_title = "Virtual Lab";
 	$full_title_lowercase = "virtual lab";
 	$single = "lab";
@@ -83,6 +81,8 @@ if ($scope == 0) {
 	$single = "project";
 	$multiple = "projects";
 }
+
+get_header();
 
 ?>
 

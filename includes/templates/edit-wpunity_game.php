@@ -174,6 +174,16 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
+if ($project_scope == 0) {
+	$single_lowercase = "tour";
+	$single_first = "Tour";
+} else if ($project_scope == 1){
+	$single_lowercase = "lab";
+	$single_first = "Lab";
+} else {
+	$single_lowercase = "project";
+	$single_first = "Project";
+}
 
 get_header();
 ?>
@@ -186,7 +196,7 @@ get_header();
         </h1>
 
         <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
-            COMPILE GAME
+            COMPILE <?php echo $single_lowercase; ?>
         </a>
     </div>
 
@@ -203,7 +213,7 @@ get_header();
     <ul class="EditPageBreadcrumb">
         <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Project Editor</span></li>
+        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected"><?php echo $single_first; ?> Editor</span></li>
     </ul>
 
     <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
