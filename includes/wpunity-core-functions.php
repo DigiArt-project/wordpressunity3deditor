@@ -1604,7 +1604,7 @@ add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 
 //==========================================================================================================================================
 //==========================================================================================================================================
 
-add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
+//add_action( 'admin_menu', 'wpunity_remove_menus', 999 );
 
 function wpunity_remove_menus() {
 
