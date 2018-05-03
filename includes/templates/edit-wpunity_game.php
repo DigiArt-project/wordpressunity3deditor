@@ -519,7 +519,7 @@ if ( $custom_query->have_posts() ) :?>
 
                     <header class="mdc-dialog__header">
                         <h2 class="mdc-dialog__header__title">
-                            Compile game
+                            Compile <?php echo $single_lowercase; ?>
                         </h2>
                     </header>
 
