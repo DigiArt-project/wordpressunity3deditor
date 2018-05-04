@@ -602,12 +602,28 @@ if ( $custom_query->have_posts() ) :?>
                    aria-describedby="Help" data-mdc-auto-init="MDCDialog">
                 <div class="mdc-dialog__surface">
                     <header class="mdc-dialog__header">
+                        
                         <h2 id="help-dialog-title" class="mdc-dialog__header__title">
                             Help
                         </h2>
                     </header>
-                    <section id="delete-dialog-description" class="mdc-dialog__body">
+                    <section id="delete-dialog-description" class="mdc-dialog__body" style="height:400px;overflow-y: auto;font-size:12pt" >
+                        
+                        <br />
+                        Each Lab has scenes and assets:<br />
+                        <img src="<?php echo $pluginpath;?>/includes/Help/help_material_targeted/games_scenes_assets.png" width="300px"/>
+                        <br />
+                        Blue tiles are scenes:<br />
+                        <img src="<?php echo $pluginpath;?>/includes/Help/help_material_targeted/scene_tile.png" width="300px"/>
 
+                        <br />
+                        Pink tiles are assets:<br />
+                        <img src="<?php echo $pluginpath;?>/includes/Help/help_material_targeted/asset_tile.png" width="300px"/>
+
+                        <br />
+                        Start by pressing edit on a scene:<br />
+                        <img src="<?php echo $pluginpath;?>/includes/Help/help_material_targeted/start_editing_scene.png" width="300px"/>
+                        
                     </section>
 
                     <footer class="mdc-dialog__footer">
