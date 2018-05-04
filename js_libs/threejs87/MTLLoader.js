@@ -505,7 +505,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
         }
 
-        this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
+        this.materials[ materialName ] = new THREE.MeshBasicMaterial( params ); //new THREE.MeshPhongMaterial( params );
 
         // Ververidis
         if (materialName.indexOf("TwoSided")!==-1)

@@ -3,6 +3,8 @@ class vr_editor_environmentals {
 
     constructor(container_3D_all){
 
+        this.is2d = true;
+
         this.ctx = this;
 
         this.container_3D_all = container_3D_all;
@@ -14,29 +16,6 @@ class vr_editor_environmentals {
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
         this.NEAR = 0.01;
         this.FAR = 20000;
-        // this.scene;
-        //
-        // this.renderer;
-        // this.stats;
-        // this.light;
-        // //this.floor;
-        // this.sky;
-        // this.sunSphere;
-        //
-        //
-        // this.browse_controls;
-        // this.initAvatarPosition;
-        // this.cameraOrbit;
-        // this.cameraAvatar;
-        // this.cameraOrbitHelper;
-        // this.cameraAvatarHelper;
-        //
-        // this.outlinePass;
-        // this.composer;
-        // this.renderPass;
-        // this.effectFXAA;
-
-
 
         this.setScene();
         this.setRenderer();
@@ -47,7 +26,7 @@ class vr_editor_environmentals {
         //this.setAxisText();
         //this.setArtificialFloor();
         this.setLight();
-        this.setStats();
+        // this.setStats();
         this.setSky();
         this.setSunSphere();
 
@@ -183,10 +162,14 @@ class vr_editor_environmentals {
      */
     setOrbitCamera() {
         this.cameraOrbit = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
+
         this.cameraOrbit.name = "orbitCamera";
         this.scene.add(this.cameraOrbit);
 
-        this.cameraOrbit.position.set( 50, 50, 50);
+//        this.cameraOrbit.position.set( 0, 50, 0);
+
+
+
 
         //console.log(THREE.OrbitControls);
 
@@ -230,9 +213,9 @@ class vr_editor_environmentals {
         this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
         // Add a helper for this camera
-        this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
-        this.cameraAvatarHelper.name = "cameraAvatarHelper";
-        this.scene.add( this.cameraAvatarHelper );
+        // this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
+        // this.cameraAvatarHelper.name = "cameraAvatarHelper";
+        // this.scene.add( this.cameraAvatarHelper );
     }
 
 
@@ -248,17 +231,12 @@ class vr_editor_environmentals {
 
 
     setSteveWorldPosition(x,y,z,rx,ry){
-
-
-
         envir.avatarControls.getObject().position.x = x;
         envir.avatarControls.getObject().position.y = y;
         envir.avatarControls.getObject().position.z = z;
 
         envir.avatarControls.getObject().children[0].rotation.x = rx;
         envir.avatarControls.getObject().rotation.y = ry;
-
-
     }
 
     //================= Static Environmentals ==============================
@@ -267,91 +245,19 @@ class vr_editor_environmentals {
      Set the scene
      */
     setScene() {
-
         this.scene = new THREE.Scene();
         this.scene.name = "digiartScene";
 
-        // Add Grid
-        this.gridHelper = new THREE.GridHelper(2000, 40);
-        this.gridHelper.name = "myGridHelper";
-        this.scene.add(this.gridHelper);
-
-        // Add Axes helper
-        this.axisHelper = new THREE.AxisHelper( 100 );
-        this.axisHelper.name = "myAxisHelper";
-        this.scene.add(this.axisHelper);
-
+        // // Add Grid
+        // this.gridHelper = new THREE.GridHelper(2000, 40);
+        // this.gridHelper.name = "myGridHelper";
+        // this.scene.add(this.gridHelper);
+        //
+        // // Add Axes helper
+        // this.axisHelper = new THREE.AxisHelper( 100 );
+        // this.axisHelper.name = "myAxisHelper";
+        // this.scene.add(this.axisHelper);
     }
-
-
-    // setRecycleBin(){
-    //
-    //     var ctx = this.ctx;
-    //     var loader = new THREE.TextureLoader();
-    //     loader.load(PLUGIN_PATH_VR + "/images/recycle.png", function ( texture ) {
-    //         texture.wrapS = THREE.RepeatWrapping;
-    //         texture.wrapT = THREE.RepeatWrapping;
-    //         texture.repeat.set( 1, 1 );
-    //         texture.offset = new THREE.Vector2( 0.45, 0 );
-    //         //texture.generateMipmaps = true;
-    //
-    //         var radiusTop = 1.3,
-    //             radiusBottom=1.1,
-    //             height=3.5,
-    //             radiusSegments=64,
-    //             heightSegments=16,
-    //             openEnded=true;
-    //
-    //         var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded);
-    //
-    //         var material    = new THREE.MeshPhongMaterial({transparent:true, opacity:0.6, color: 0xaea6ca, map:texture, side:THREE.DoubleSide});
-    //         var recycleBin = new THREE.Mesh( geometry, material );
-    //
-    //         recycleBin.position.set( -0.3, -0.3, -1 );
-    //         recycleBin.scale.set( 0.03, 0.03, 0.03 );
-    //
-    //         // recycleBin.position.set( -0.08, -0.08, -0.25 );
-    //         // recycleBin.scale.set( 0.005, 0.005, 0.005 );
-    //         recycleBin.name = "recycleBin";
-    //
-    //         ctx.cameraOrbit.add( recycleBin );
-    //     });
-    //
-    // }
-
-    /*
-     X, Y ,Z letters
-     */
-    // setAxisText(){
-    //
-    //     var loader = new THREE.FontLoader();
-    //     loader.scene = this.scene;
-    //
-    //     loader.load('js_libs/threejs79/helvetiker_bold.typeface.json', function ( font ) {
-    //
-    //         for (let letterAx of ['X','Y','Z']) {
-    //             var textGeo = new THREE.TextGeometry("100 m",{
-    //                 font: font ,
-    //                 size: 5,
-    //                 //height: 50,
-    //                 //curveSegments: 12,
-    //                 //bevelThickness: 2,
-    //                 //bevelSize: 5,
-    //                 //bevelEnabled: true
-    //             });
-    //             var color = new THREE.Color();
-    //             color.setRGB(255, 250, 250);
-    //             var textMaterial = new THREE.MeshBasicMaterial({color: color});
-    //             var text = new THREE.Mesh(textGeo, textMaterial);
-    //             text.position.x = letterAx=='X'?100:0;
-    //             text.position.y = letterAx=='Y'?100:0;
-    //             text.position.z = letterAx=='Z'?100:0;
-    //             text.scale.z = 0.01;
-    //             text.name = "myAxisText" +  letterAx;
-    //             loader.scene.add(text)
-    //         }
-    //     } );
-    // }
 
 
     /**
@@ -363,7 +269,7 @@ class vr_editor_environmentals {
         this.renderer.sortObjects = false;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
-        this.renderer.setClearColor( 0xffffff, 0.9 );
+        this.renderer.setClearColor( 0xffffff, 1 );
 
         this.renderer.sortObjects = false;
         this.renderer.name = "myRenderer";
@@ -400,46 +306,37 @@ class vr_editor_environmentals {
      */
     setLight() {
 
+        // this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 );
+        // this.lightSun.position.set( 500, 500, 100 );
+        // this.lightSun.name = "mylightSun";
+        // this.scene.add(this.lightSun);
+        //
+        // this.lightSun2 = new THREE.DirectionalLight( 0xffffff, 1 );
+        // this.lightSun2.position.set( -500, 500, 100 );
+        // this.lightSun2.name = "mylightSun2";
+        // this.scene.add(this.lightSun2);
+        //
+        // this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 );
+        // this.lightOrbit.position.copy( this.cameraOrbit.position );
+        // this.lightOrbit.name = "mylightOrbit";
+        // this.scene.add(this.lightOrbit);
+        // //this.scene.add( new THREE.DirectionalLightHelper( this.lightOrbit, 150 ));
+        //
+        // this.lightAvatar = new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 ); //THREE.DirectionalLight( 0xffffff, 1 );
+        // this.lightAvatar.name = "mylightAvatar";
+        // this.lightAvatar.position.x =  this.cameraAvatar.position.x;
+        // this.lightAvatar.position.y =  this.cameraAvatar.position.y;
+        // this.lightAvatar.position.z =  this.cameraAvatar.position.z;
+        // this.scene.add(this.lightAvatar);
 
-        this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 );
-        this.lightSun.position.set( 500, 500, 100 );
-        this.lightSun.name = "mylightSun";
-        this.scene.add(this.lightSun);
-
-        this.lightSun2 = new THREE.DirectionalLight( 0xffffff, 1 );
-        this.lightSun2.position.set( -500, 500, 100 );
-        this.lightSun2.name = "mylightSun2";
-        this.scene.add(this.lightSun2);
-
-
-
-
-
-        this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 );
-        this.lightOrbit.position.copy( this.cameraOrbit.position );
-        this.lightOrbit.name = "mylightOrbit";
-        this.scene.add(this.lightOrbit);
-        //this.scene.add( new THREE.DirectionalLightHelper( this.lightOrbit, 150 ));
-
-
-        this.lightAvatar = new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 ); //THREE.DirectionalLight( 0xffffff, 1 );
-        this.lightAvatar.name = "mylightAvatar";
-        this.lightAvatar.position.x =  this.cameraAvatar.position.x;
-        this.lightAvatar.position.y =  this.cameraAvatar.position.y;
-        this.lightAvatar.position.z =  this.cameraAvatar.position.z;
-        this.scene.add(this.lightAvatar);
         //this.scene.add( new THREE.PointLightHelper( this.lightAvatar, 1 ));
-
-
-
-
     }
 
     /**
      Set the stats
      */
     setStats() {
-        // Rendering statis (FPS)
+        // Rendering stats (FPS)
         this.stats = new Stats();
         this.stats.name = "myStats";
         this.stats.domElement.style.position = 'absolute';
@@ -598,4 +495,40 @@ class vr_editor_environmentals {
     //     } );
     //
     // }
+
+
+    /*
+     X, Y ,Z letters
+     */
+    // setAxisText(){
+    //
+    //     var loader = new THREE.FontLoader();
+    //     loader.scene = this.scene;
+    //
+    //     loader.load('js_libs/threejs79/helvetiker_bold.typeface.json', function ( font ) {
+    //
+    //         for (let letterAx of ['X','Y','Z']) {
+    //             var textGeo = new THREE.TextGeometry("100 m",{
+    //                 font: font ,
+    //                 size: 5,
+    //                 //height: 50,
+    //                 //curveSegments: 12,
+    //                 //bevelThickness: 2,
+    //                 //bevelSize: 5,
+    //                 //bevelEnabled: true
+    //             });
+    //             var color = new THREE.Color();
+    //             color.setRGB(255, 250, 250);
+    //             var textMaterial = new THREE.MeshBasicMaterial({color: color});
+    //             var text = new THREE.Mesh(textGeo, textMaterial);
+    //             text.position.x = letterAx=='X'?100:0;
+    //             text.position.y = letterAx=='Y'?100:0;
+    //             text.position.z = letterAx=='Z'?100:0;
+    //             text.scale.z = 0.01;
+    //             text.name = "myAxisText" +  letterAx;
+    //             loader.scene.add(text)
+    //         }
+    //     } );
+    // }
+
 }

@@ -12,6 +12,43 @@ var showRayPickLine = false; // Do not show raycast line
 //     event.preventDefault();
 // }
 
+
+
+
+function dragDropVerticalRayCasting (event){
+
+    /* Keep mouse clicks */
+    var mouse = new THREE.Vector2();
+
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
+    mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
+
+    // calculate objects intersecting the picking ray
+    raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
+
+    // Show the myBulletLine (raycast)
+    //if (showRayPickLine)
+        raylineVisualize();
+
+    // // All 3D meshes that can be clicked
+    var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+    //
+    // // Find the intersections (it can be more than one)
+    var intersects = raycasterPick.intersectObjects( activMesh , true );
+
+    console.log(intersects[0].point.x);
+
+    //
+    // if (intersects.length === 0)
+    //     return;
+
+
+    return [intersects[0].point.x,intersects[0].point.y,intersects[0].point.z];
+
+}
+
 /**
  * Detect mouse events
  *
@@ -96,14 +133,16 @@ function onMouseDownSelect( event ) {
 
 function selectorMajor(event, inters){
 
-    transform_controls.attach(inters.object.parent);
+    if (event.button === 0) {
+        transform_controls.attach(inters.object.parent);
 
-    // calculate object physical dimensions
-    findDimensions(transform_controls.object);
+        // calculate object physical dimensions
+        findDimensions(transform_controls.object);
 
-    // highlight
-    envir.outlinePass.selectedObjects = [ inters.object.parent.children[0] ];
-    envir.renderer.setClearColor( 0xffffff, 0.9 );
+        // highlight
+        envir.outlinePass.selectedObjects = [inters.object.parent.children[0]];
+        //envir.renderer.setClearColor( 0xffffff, 0.9 );
+    }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
     if (event.button === 2)

@@ -318,3 +318,27 @@ function findDimensions(grouObj){
 
     return [x,y,z];
 }
+
+
+// Reset
+function resetCameraFor2Dview(){
+
+    var xMax = 0;
+    var zMax = 0;
+
+    for (var i = 0; i < envir.scene.children.length; i++){
+
+        if (envir.scene.children[i].name !== "myTransformControls") {
+            var sizeXYZ_Arr = findDimensions(envir.scene.children[i]);
+
+            console.log("aaz", sizeXYZ_Arr, envir.scene.children[i]);
+
+            xMax = Math.max(sizeXYZ_Arr[0], xMax);
+            zMax = Math.max(sizeXYZ_Arr[2], zMax);
+        }
+    }
+
+    var yDistCamera = Math.max(xMax, zMax);
+    envir.cameraOrbit.position.set( 0, yDistCamera > 0 ? yDistCamera*1.5 : 10, 0);
+}
+

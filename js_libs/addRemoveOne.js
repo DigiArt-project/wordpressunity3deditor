@@ -95,7 +95,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
             // highlight
             envir.outlinePass.selectedObjects = [insertedObject];
-            envir.renderer.setClearColor( 0xffffff, 0.9 );
+            envir.renderer.setClearColor( 0xffffff,  );
 
             envir.scene.add(transform_controls);
 

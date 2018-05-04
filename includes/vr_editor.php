@@ -83,7 +83,6 @@ echo '</script>';
 
 <script type="text/javascript">
 
-
     isComposerOn = true;
 
     //  Save Button implemented with Ajax
@@ -142,6 +141,7 @@ echo '</script>';
     }
 
     function drop_handler(ev) {
+        
         var dataDrag = JSON.parse( ev.dataTransfer.getData("text"));
         var path =     dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
 
@@ -172,13 +172,16 @@ echo '</script>';
 
         var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
 
+
+        var coordsXYZ = dragDropVerticalRayCasting ( ev );
+        
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
             isreward, isCloned, isJoker,
-            envir.getSteveWorldPosition().x,
-            envir.getSteveWorldPosition().y,
-            envir.getSteveWorldPosition().z);
+            coordsXYZ[0],
+            coordsXYZ[1],
+            coordsXYZ[2]);
 
         // Show options
         jQuery('#object-manipulation-toggle').show();
@@ -235,6 +238,7 @@ echo '</script>';
     <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
         <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
         <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
 
 
@@ -490,6 +494,10 @@ echo '</script>';
         transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
     });
 
+    jQuery("#view-2d").click(function() {
+        resetCameraFor2Dview();
+    });
+
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
@@ -586,11 +594,9 @@ echo '</script>';
         if (objItem) {
             transform_controls.attach(objItem);
 
-            findDimensions(transform_controls.object);
-
             // highlight
             envir.outlinePass.selectedObjects = [objItem];
-            envir.renderer.setClearColor( 0xffffff, 0.9 );
+            //envir.renderer.setClearColor( 0xffffff, 0.9 );
 
             envir.scene.add(transform_controls);
 
@@ -605,6 +611,15 @@ echo '</script>';
 
             selected_object_name = name;
         }
+       
+        
+        // Find scene dimension in order to configure camera in 2D view (Y axis distance)
+        resetCameraFor2Dview();
+
+        // controls make them smaller
+        transform_controls.size = 0.25;
+        
+        
     };
 
     function hideObjectPropertiesPanels() {
@@ -658,9 +673,9 @@ $formRes->init($sceneToLoad);
 
     function takeScreenshot(){
         
-        envir.cameraAvatarHelper.visible = false;
-        envir.axisHelper.visible = false;
-        envir.gridHelper.visible = false;
+        //envir.cameraAvatarHelper.visible = false;
+        //envir.axisHelper.visible = false;
+        //envir.gridHelper.visible = false;
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=false;
 
@@ -671,9 +686,9 @@ $formRes->init($sceneToLoad);
         //if (document.getElementById("wpunity_scene_sshot").src.includes("noimagemagicword"))
         document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
 
-        envir.cameraAvatarHelper.visible = true;
-        envir.axisHelper.visible = true;
-        envir.gridHelper.visible = true;
+        //envir.cameraAvatarHelper.visible = true;
+        //envir.axisHelper.visible = true;
+        //envir.gridHelper.visible = true;
 
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=true;
@@ -719,12 +734,12 @@ $formRes->init($sceneToLoad);
         updatePointerLockControls();
 
         transform_controls.update(); // update the axis controls based on the browse controls
-        envir.stats.update();
+        //envir.stats.update();
 
         // light is from camera towards object
-        envir.lightOrbit.position.copy(envir.orbitControls.object.position);
-        envir.lightAvatar.position.copy(envir.avatarControls.getObject().position);
-        envir.lightAvatar.position.y += 1.8;
+        // envir.lightOrbit.position.copy(envir.orbitControls.object.position);
+        // envir.lightAvatar.position.copy(envir.avatarControls.getObject().position);
+        // envir.lightAvatar.position.y += 1.8;
 
         // Now update the translation and rotation input texts
         if (transform_controls.object) {
