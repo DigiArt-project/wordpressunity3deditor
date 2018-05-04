@@ -15,6 +15,8 @@ function wpunity_add_customroles() {
             'level_0' => true,
         )
     );
+
+    
 }
 
 add_action( 'init', 'wpunity_add_customroles');
