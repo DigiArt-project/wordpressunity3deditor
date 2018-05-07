@@ -30,7 +30,7 @@ function dragDropVerticalRayCasting (event){
 
     // Show the myBulletLine (raycast)
     //if (showRayPickLine)
-        raylineVisualize();
+        //raylineVisualize();
 
     // // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
@@ -85,14 +85,15 @@ function onMouseDownSelect( event ) {
 
     // ------------ in case TRS cube is clicked ---------
     if (intersects.length > 0) {
-        if (intersects[0].object.name === 'trs_modeChanger') {
 
+
+        if (intersects[0].object.name === 'trs_modeChanger') {
             if (transform_controls.getMode() === 'rotate')
                 transform_controls.setMode("scale");
-
             else if (transform_controls.getMode() === 'scale')
+                transform_controls.setMode("rottrans");
+            else if (transform_controls.getMode() === 'rottrans')
                 transform_controls.setMode("translate");
-
             else if (transform_controls.getMode() === 'translate')
                 transform_controls.setMode("rotate");
 
@@ -134,14 +135,26 @@ function onMouseDownSelect( event ) {
 function selectorMajor(event, inters){
 
     if (event.button === 0) {
+
         transform_controls.attach(inters.object.parent);
 
         // calculate object physical dimensions
         findDimensions(transform_controls.object);
 
+        // This makes the camera to go on top of the selected item
+        envir.orbitControls.target.x = inters.object.parent.position.x;
+        envir.orbitControls.target.y = inters.object.parent.position.y;
+        envir.orbitControls.target.z = inters.object.parent.position.z;
+        envir.cameraOrbit.position.x = inters.object.parent.position.x;
+        envir.cameraOrbit.position.z = inters.object.parent.position.z;
+
+
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent.children[0]];
         //envir.renderer.setClearColor( 0xffffff, 0.9 );
+
+        // my gizmo is the default one
+        transform_controls.setMode("rottrans");
     }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )

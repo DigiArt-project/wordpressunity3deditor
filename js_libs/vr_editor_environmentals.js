@@ -166,19 +166,18 @@ class vr_editor_environmentals {
         this.cameraOrbit.name = "orbitCamera";
         this.scene.add(this.cameraOrbit);
 
-//        this.cameraOrbit.position.set( 0, 50, 0);
+        this.cameraOrbit.position.set( 0, 50, 0);
 
 
-
-
-        //console.log(THREE.OrbitControls);
 
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
-        this.orbitControls.target.set( 0, 0, 0);
+        //this.orbitControls.target.set( 0, 0, 0);
+
         this.orbitControls.object.zoom = 1.7;
         this.orbitControls.object.updateProjectionMatrix();
         this.orbitControls.name = "orbitControls";
+        this.orbitControls.enableRotate = false;
 
         // Add a helper for debug purpose
         //this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
@@ -210,7 +209,7 @@ class vr_editor_environmentals {
 
         this.scene.add(avatarControlsYawObject);
 
-        this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
+        //this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
         // Add a helper for this camera
         // this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );

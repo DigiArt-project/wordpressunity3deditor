@@ -239,6 +239,7 @@ echo '</script>';
         <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
         <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
         <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+        <a id="view-3d" data-mdc-auto-init="MDCRipple" title="3D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">3D</a>
     </div>
 
 
@@ -496,7 +497,29 @@ echo '</script>';
 
     jQuery("#view-2d").click(function() {
         resetCameraFor2Dview();
+
+        envir.orbitControls.userPanSpeed = 1;
+        
+        envir.orbitControls.object.zoom = 1.7;
+        envir.orbitControls.object.updateProjectionMatrix();
+        envir.orbitControls.name = "orbitControls";
+        envir.orbitControls.enableRotate = false;
+
+
+        // This makes the camera to go on top of the selected item
+        envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
+        envir.orbitControls.target.y = transform_controls.object.position.y;
+        envir.orbitControls.target.z = transform_controls.object.position.z;
+        envir.cameraOrbit.position.x = transform_controls.object.position.x;
+        envir.cameraOrbit.position.z = transform_controls.object.position.z;
+       
     });
+
+    jQuery("#view-3d").click(function() {
+        envir.orbitControls.enableRotate = true;
+    });
+
+
 
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
@@ -610,6 +633,8 @@ echo '</script>';
             showObjectPropertiesPanel(transform_controls.getMode());
 
             selected_object_name = name;
+
+            transform_controls.setMode("rottrans");
         }
        
         
@@ -727,8 +752,7 @@ $formRes->init($sceneToLoad);
     {
         var i;
 
-        // Only for orbit ?
-        // if (avatarControlsEnabled == false)
+        
         envir.orbitControls.update();
 
         updatePointerLockControls();

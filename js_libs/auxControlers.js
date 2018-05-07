@@ -340,5 +340,10 @@ function resetCameraFor2Dview(){
 
     var yDistCamera = Math.max(xMax, zMax);
     envir.cameraOrbit.position.set( 0, yDistCamera > 0 ? yDistCamera*1.5 : 10, 0);
+
+//    envir.cameraOrbit.matrixWorldInverse = new Matrix4();
+//    envir.cameraOrbit.projectionMatrix = new Matrix4();
+
+
 }
 
