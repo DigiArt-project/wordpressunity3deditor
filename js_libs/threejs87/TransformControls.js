@@ -6,8 +6,8 @@
 
     'use strict';
 
-    var lwidth = 0.05;
-    var arrWidth = 0.13;
+    var lwidth = 0.1;
+    var arrWidth = 0.2;
 
     var GizmoMaterial = function ( parameters ) {
 
@@ -564,91 +564,107 @@
     THREE.TransformGizmoScale.prototype = Object.create( THREE.TransformGizmo.prototype );
     THREE.TransformGizmoScale.prototype.constructor = THREE.TransformGizmoScale;
 
-    
+
     //-------------- RotTransGizmo --------------------------------
     THREE.TransformGizmoRotTrans = function () {
 
         THREE.TransformGizmo.call( this );
 
-
+        //--------- In Arrow --------------
         var arrowGeometry = new THREE.Geometry();
 
         // Arrow head
-        var mesh = new THREE.Mesh( new THREE.CylinderGeometry( 0, arrWidth, 0.2, 12, 1, false ) );
-        mesh.position.y = 0.5;
+        var mesh = new THREE.Mesh( new THREE.CylinderGeometry( 0, arrWidth, 0.2, 12, 1, false ));
+        mesh.position.x = 0.5;
+        mesh.rotation.z = - Math.PI / 2;
+
         mesh.updateMatrix();
 
         // Arrow body
         var cylMesh = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
-        cylMesh.position.y = 0;
+        cylMesh.rotation.z = Math.PI / 2;
         cylMesh.updateMatrix();
 
         arrowGeometry.merge( mesh.geometry, mesh.matrix );
         arrowGeometry.merge( cylMesh.geometry, cylMesh.matrix );
 
+        //----------rotate arrow-----------------------
+        var arrowRotGeometry = new THREE.Geometry();
+
+        // Arrow head
+        var meshArr = new THREE.Mesh( new THREE.CylinderGeometry( 0, arrWidth, 0.2, 12, 1, false ) );
+        meshArr.position.x = - 0.37;
+        meshArr.position.z = - 0.92;
+        meshArr.rotation.x =   Math.PI/2;
+        meshArr.rotation.z =  - 1.3 * Math.PI/2;
+        //meshArr.rotation.y = Math.PI/4;
+        meshArr.updateMatrix();
+
+        // Arrow Torus
+        var torMesh = new THREE.Mesh(new THREE.TorusGeometry( 1, lwidth, 2, 24, 1.85*Math.PI ));
+        torMesh.rotation.x =   Math.PI / 2;
+        torMesh.rotation.z = - Math.PI / 2;
+        torMesh.updateMatrix();
+
+
+        arrowRotGeometry.merge( meshArr.geometry, meshArr.matrix );
+        arrowRotGeometry.merge( torMesh.geometry, torMesh.matrix );
+
+        //----------- X mark -----------------
+        var xGeometry = new THREE.Geometry();
+
+        // Arrow body
+        var cylMesh1 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
+        cylMesh1.position.z =  2;
+        cylMesh1.rotation.z = Math.PI/2;
+        cylMesh1.rotation.y = Math.PI/4;
+        cylMesh1.updateMatrix();
+
+
+        var cylMesh2 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
+        cylMesh2.position.z =  2;
+        cylMesh2.rotation.z =    Math.PI/2;
+        cylMesh2.rotation.y =  - Math.PI/4;
+        cylMesh2.updateMatrix();
+
+        xGeometry.merge( cylMesh1.geometry, cylMesh1.matrix );
+        xGeometry.merge( cylMesh2.geometry, cylMesh2.matrix );
+
 
         this.handleGizmos = {
-            X: [
-                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 0.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
+            XZ: [
+                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00, opacity:0.5 } ) ) ]
             ],
             Y: [
-                [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 24, 2*Math.PI ), new GizmoMaterial( { color: 0x00ffff } ) ) ,
-                    [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
+                [ new THREE.Mesh( arrowRotGeometry, new GizmoMaterial( { color: 0x00ffff, opacity:0.5 } ) ) ]
             ],
-            Z: [
-                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 0.5 ], [ Math.PI / 2, 0, 0 ] ],
-            ],
-
-            XZ: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 0.5, 0.5 ), new GizmoMaterial( { color: 0xff00ff, opacity: 0.25 } ) ), [ 0.15, 0, 0.15 ],
-                    [ - Math.PI / 2, 0, 0 ] ]
+            XZY: [
+                [ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000, opacity:0.5 } ) ) ]
             ]
-
-
-            // E: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1.25, lwidth, 2, 24 ), new GizmoMaterial( { color: 0xcccc00 } ) ) ]
-            //     //[ new THREE.Line( new CircleGeometry( 1.25, 'z', 1 ), new GizmoLineMaterial( { color: 0xcccc00 } ) ) ]
-            // ],
-
-            // XYZE: [
-            //     [ new THREE.Line( new CircleGeometry( 1, 'z', 1 ), new GizmoLineMaterial( { color: 0x787878 } ) ) ]
-            // ]
         };
 
         this.pickerGizmos = {
-
-            // X: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, 0.52, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ]
-            // ],
-
-            Y: [
-                [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
+            XZ: [
+                [ new THREE.Mesh( arrowGeometry, pickerMaterial ) ]
             ],
-
-            // Z: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, 0.52, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
-            // ],
-
-            // E: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1.25, 0.12, 2, 24 ), pickerMaterial ) ]
-            // ],
-
-            // XYZE: [
-            //     [ new THREE.Mesh() ]// TODO
-            // ]
-
+            Y: [
+                [ new THREE.Mesh( arrowRotGeometry, pickerMaterial ) ]
+            ],
+            XZY: [
+                [ new THREE.Mesh( xGeometry, pickerMaterial ) ]
+            ]
         };
 
         this.setActivePlane = function ( axis ) {
-
-            if ( axis === "E" ) this.activePlane = this.planes[ "XYZE" ];
-
-            if ( axis === "X" ) this.activePlane = this.planes[ "YZ" ];
-
-            if ( axis === "Y" ) this.activePlane = this.planes[ "XZ" ];
-
-            if ( axis === "Z" ) this.activePlane = this.planes[ "XY" ];
-
+            //
+            //     if ( axis === "E" ) this.activePlane = this.planes[ "XYZE" ];
+            //
+            //     if ( axis === "X" ) this.activePlane = this.planes[ "YZ" ];
+            //
+            //     if ( axis === "Y" ) this.activePlane = this.planes[ "XZ" ];
+            //
+            //     if ( axis === "Z" ) this.activePlane = this.planes[ "XY" ];
+            //
         };
 
         this.update = function ( rotation, eye2 ) {
@@ -678,27 +694,31 @@
 
                 if ( child.name === "X" ) {
 
-                    quaternionX.setFromAxisAngle( unitX, Math.atan2( - eye.y, eye.z ) );
-                    tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
-                    child.quaternion.copy( tempQuaternion );
+                    // quaternionX.setFromAxisAngle( unitX, Math.atan2( - eye.y, eye.z ) );
+                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
+                    // child.quaternion.copy( tempQuaternion );
 
                 }
 
                 if ( child.name === "Y" ) {
 
-                    quaternionY.setFromAxisAngle( unitY, Math.atan2( eye.x, eye.z ) );
-                    tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
-                    child.quaternion.copy( tempQuaternion );
+                    // quaternionY.setFromAxisAngle( unitY, Math.atan2( eye.x, eye.z ) );
+                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
+                    // child.quaternion.copy( tempQuaternion );
 
                 }
 
                 if ( child.name === "Z" ) {
 
-                    quaternionZ.setFromAxisAngle( unitZ, Math.atan2( eye.y, eye.x ) );
-                    tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
-                    child.quaternion.copy( tempQuaternion );
+                    // quaternionZ.setFromAxisAngle( unitZ, Math.atan2( eye.y, eye.x ) );
+                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
+                    // child.quaternion.copy( tempQuaternion );
 
                 }
+
+
+
+
 
             } );
 
@@ -710,9 +730,9 @@
 
     THREE.TransformGizmoRotTrans.prototype = Object.create( THREE.TransformGizmo.prototype );
     THREE.TransformGizmoRotTrans.prototype.constructor = THREE.TransformGizmoRotTrans;
-    
+
     //----------------------------------------------------- End of RotTrans ---------------------------------------------------
-    
+
     THREE.TransformControls = function ( camera, domElement ) {
 
         // TODO: Make non-uniform scale and rotate play nice in hierarchies
@@ -830,11 +850,9 @@
         };
 
         this.attach = function ( object ) {
-
             this.object = object;
             this.visible = true;
             this.update();
-
         };
 
         this.detach = function () {
@@ -904,7 +922,7 @@
             camPosition.setFromMatrixPosition( camera.matrixWorld );
             camRotation.setFromRotationMatrix( tempMatrix.extractRotation( camera.matrixWorld ) );
 
-            scale = worldPosition.distanceTo( camPosition ) / 6 * scope.size;
+            scale = 2 * scope.size; // //worldPosition.distanceTo( camPosition ) / 6 * scope.size;
             this.position.copy( worldPosition );
             this.scale.set( scale, scale, scale );
 
@@ -937,27 +955,19 @@
             if ( scope.object === undefined || _dragging === true || ( event.button !== undefined && event.button !== 0 ) ) return;
 
             var pointer = event.changedTouches ? event.changedTouches[ 0 ] : event;
-
             var intersect = intersectObjects( pointer, _gizmo[ _mode ].pickers.children );
-
             var axis = null;
 
             if ( intersect ) {
-
                 axis = intersect.object.name;
-
                 event.preventDefault();
-
             }
 
             if ( scope.axis !== axis ) {
-
                 scope.axis = axis;
                 scope.update();
                 scope.dispatchEvent( changeEvent );
-
             }
-
         }
 
         function onPointerDown( event ) {
@@ -970,12 +980,7 @@
 
                 var intersect = intersectObjects( pointer, _gizmo[ _mode ].pickers.children );
 
-
-
-
                 if ( intersect ) {
-
-                    console.log(intersect);
 
                     event.stopImmediatePropagation();
 
@@ -1012,10 +1017,9 @@
                 }
 
             }
-
             _dragging = true;
-
         }
+
 
         function onPointerMove( event ) {
 
@@ -1214,13 +1218,116 @@
 
                 }
 
+            } else if (_mode==="rottrans") {
+
+
+                // Rotation
+                if(scope.axis === 'Y') {
+
+                    point.sub(worldPosition);
+                    point.multiply(parentScale);
+                    tempVector.copy(offset).sub(worldPosition);
+                    tempVector.multiply(parentScale);
+
+                    if (scope.space === "world") {
+
+                        rotation.set(Math.atan2(point.z, point.y), Math.atan2(point.x, point.z), Math.atan2(point.y, point.x));
+                        offsetRotation.set(Math.atan2(tempVector.z, tempVector.y), Math.atan2(tempVector.x, tempVector.z), Math.atan2(tempVector.y, tempVector.x));
+
+                        tempQuaternion.setFromRotationMatrix(tempMatrix.getInverse(parentRotationMatrix));
+
+                        if (scope.rotationSnap !== null) {
+
+                            //quaternionX.setFromAxisAngle( unitX, Math.round( ( rotation.x - offsetRotation.x ) / scope.rotationSnap ) * scope.rotationSnap );
+                            quaternionY.setFromAxisAngle(unitY, Math.round((rotation.y - offsetRotation.y) / scope.rotationSnap) * scope.rotationSnap);
+                            //quaternionZ.setFromAxisAngle( unitZ, Math.round( ( rotation.z - offsetRotation.z ) / scope.rotationSnap ) * scope.rotationSnap );
+
+                        } else {
+
+                            //quaternionX.setFromAxisAngle( unitX, rotation.x - offsetRotation.x );
+                            quaternionY.setFromAxisAngle(unitY, rotation.y - offsetRotation.y);
+                            //quaternionZ.setFromAxisAngle( unitZ, rotation.z - offsetRotation.z );
+
+                        }
+
+                        quaternionXYZ.setFromRotationMatrix(worldRotationMatrix);
+
+                        //if ( scope.axis === "X" ) tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
+                        if (scope.axis === "Y") tempQuaternion.multiplyQuaternions(tempQuaternion, quaternionY);
+                        //if ( scope.axis === "Z" ) tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
+
+                        tempQuaternion.multiplyQuaternions(tempQuaternion, quaternionXYZ);
+
+                        scope.object.quaternion.copy(tempQuaternion);
+
+                    }
+                }
+
+
+                // Translation
+                if(scope.axis === 'XZ') {
+
+                    point.sub(offset);
+                    point.multiply(parentScale);
+
+                    if (scope.space === "world" || scope.axis.search("XYZ") !== -1) {
+
+                        if (scope.axis.search("X") === -1) point.x = 0;
+                        if (scope.axis.search("Y") === -1) point.y = 0;
+                        if (scope.axis.search("Z") === -1) point.z = 0;
+
+                        point.applyMatrix4(tempMatrix.getInverse(parentRotationMatrix));
+
+                        scope.object.position.copy(oldPosition);
+                        scope.object.position.add(point);
+
+                    }
+
+                    if (scope.translationSnap !== null) {
+
+                        if (scope.space === "local") {
+
+                            scope.object.position.applyMatrix4(tempMatrix.getInverse(worldRotationMatrix));
+
+                        }
+
+                        if (scope.axis.search("X") !== -1) scope.object.position.x = Math.round(scope.object.position.x / scope.translationSnap) * scope.translationSnap;
+                        if (scope.axis.search("Y") !== -1) scope.object.position.y = Math.round(scope.object.position.y / scope.translationSnap) * scope.translationSnap;
+                        if (scope.axis.search("Z") !== -1) scope.object.position.z = Math.round(scope.object.position.z / scope.translationSnap) * scope.translationSnap;
+
+                        if (scope.space === "local") {
+
+                            scope.object.position.applyMatrix4(worldRotationMatrix);
+
+                        }
+
+                    }
+                }
+
+
+
+
+
+
+
+
             }
+
+
+
+
+
 
             scope.update();
             scope.dispatchEvent( changeEvent );
             scope.dispatchEvent( objectChangeEvent );
 
         }
+
+
+
+
+
 
         function onPointerUp( event ) {
 
@@ -1250,6 +1357,17 @@
                 onPointerHover( event );
 
             }
+
+
+            // DELETE
+            if(scope.axis === 'XZY') {
+
+                //console.log("DELETE");
+
+                deleterFomScene(transform_controls.object.name);
+
+            }
+
 
         }
 

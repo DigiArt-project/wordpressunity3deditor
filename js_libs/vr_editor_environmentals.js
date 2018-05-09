@@ -14,6 +14,7 @@ class vr_editor_environmentals {
         this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
+        this.FRUSTRUM_SIZE = 100; // For orthographic camera
         this.NEAR = 0.01;
         this.FAR = 20000;
 
@@ -48,12 +49,23 @@ class vr_editor_environmentals {
     turboResize(){
         this.SCREEN_WIDTH = this.container_3D_all.clientWidth; // 500; //window.innerWidth;
         this.SCREEN_HEIGHT = this.container_3D_all.clientHeight; // 500; //window.innerHeight;
+
+        this.ASPECT_NEW_RATIO = (this.SCREEN_WIDTH/this.SCREEN_HEIGHT) / this.ASPECT ;
+
         this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
+
+
 
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
+//        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
         this.cameraOrbit.aspect = this.ASPECT;
+
+        this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
+        this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
+
+
         this.cameraOrbit.updateProjectionMatrix();
 
          this.cameraAvatar.aspect = this.ASPECT;
@@ -161,7 +173,13 @@ class vr_editor_environmentals {
      Set the Orbit Camera
      */
     setOrbitCamera() {
-        this.cameraOrbit = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
+
+        console.log("this.ASPECT", this.ASPECT);
+
+        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTRUM_SIZE * this.ASPECT / - 2,
+            this.FRUSTRUM_SIZE * this.ASPECT/ 2, this.FRUSTRUM_SIZE / 2, this.FRUSTRUM_SIZE / - 2,this.NEAR, this.FAR);
+
+        //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
         this.cameraOrbit.name = "orbitCamera";
         this.scene.add(this.cameraOrbit);
@@ -192,6 +210,7 @@ class vr_editor_environmentals {
      *
      */
     setAvatarCamera() {
+
         this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 3000);
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
@@ -212,9 +231,9 @@ class vr_editor_environmentals {
         //this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
         // Add a helper for this camera
-        // this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
-        // this.cameraAvatarHelper.name = "cameraAvatarHelper";
-        // this.scene.add( this.cameraAvatarHelper );
+        //  this.cameraAvatarHelper = new THREE.CameraHelper( this.cameraAvatar );
+        //  this.cameraAvatarHelper.name = "cameraAvatarHelper";
+        //  this.scene.add( this.cameraAvatarHelper );
     }
 
 
@@ -264,7 +283,7 @@ class vr_editor_environmentals {
      */
     setRenderer() {
 
-        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false, logarithmicDepthBuffer: true});
+        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false, logarithmicDepthBuffer: false});
         this.renderer.sortObjects = false;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
@@ -286,8 +305,8 @@ class vr_editor_environmentals {
 
         this.outlinePass.visibleEdgeColor = new THREE.Color( 0xffff00 );
 
-        this.outlinePass.edgeGlow = 1;
-        this.outlinePass.edgeStrength = 2;
+        this.outlinePass.edgeGlow = 5;
+        this.outlinePass.edgeStrength = 5;
         this.outlinePass.edgeThickness = 2;
 
         this.composer.addPass( this.outlinePass );

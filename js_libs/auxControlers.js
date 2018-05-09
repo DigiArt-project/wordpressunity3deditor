@@ -331,7 +331,7 @@ function resetCameraFor2Dview(){
         if (envir.scene.children[i].name !== "myTransformControls") {
             var sizeXYZ_Arr = findDimensions(envir.scene.children[i]);
 
-            console.log("aaz", sizeXYZ_Arr, envir.scene.children[i]);
+            //console.log("aaz", sizeXYZ_Arr, envir.scene.children[i]);
 
             xMax = Math.max(sizeXYZ_Arr[0], xMax);
             zMax = Math.max(sizeXYZ_Arr[2], zMax);

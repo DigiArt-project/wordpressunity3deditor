@@ -751,7 +751,6 @@ $formRes->init($sceneToLoad);
     function update()
     {
         var i;
-
         
         envir.orbitControls.update();
 

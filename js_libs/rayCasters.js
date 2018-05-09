@@ -1,21 +1,12 @@
 // ------------------------ raycasting for picking objects --------------------------------
 
-// Main Raycast object
-var raycasterPick = new THREE.Raycaster();
+/**
+ *   Sets the correct values for the raycaster
+ */
+function raycasterSetter(event){
 
-// option to show or not the ray line
-var showRayPickLine = false; // Do not show raycast line
-
-
-// function onContextMenu(event ){
-//     console.log(event);
-//     event.preventDefault();
-// }
-
-
-
-
-function dragDropVerticalRayCasting (event){
+    // option to show or not the ray line
+    var showRayPickLine = false; // Do not show raycast line
 
     /* Keep mouse clicks */
     var mouse = new THREE.Vector2();
@@ -25,28 +16,39 @@ function dragDropVerticalRayCasting (event){
     mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
     mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
+    // Main Raycast object
+    var raycasterPick = new THREE.Raycaster();
+
     // calculate objects intersecting the picking ray
     raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
 
     // Show the myBulletLine (raycast)
-    //if (showRayPickLine)
-        //raylineVisualize();
+    if (showRayPickLine)
+        raylineVisualize(raycasterPick);
 
-    // // All 3D meshes that can be clicked
+    return raycasterPick;
+}
+
+/**
+ * This raycasting is used for drag n droping objects into the scene in 2D mode in order to
+ * find the correct y (height) to place the object
+ *
+ * @param event
+ * @returns {*[]}
+ */
+function dragDropVerticalRayCasting (event){
+
+    // Init the raycaster
+    var raycasterPick = raycasterSetter(event);
+
+    // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
-    //
+
     // // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
-    console.log(intersects[0].point.x);
-
-    //
-    // if (intersects.length === 0)
-    //     return;
-
 
     return [intersects[0].point.x,intersects[0].point.y,intersects[0].point.z];
-
 }
 
 /**
@@ -59,23 +61,10 @@ function onMouseDownSelect( event ) {
     event.preventDefault();
     event.stopPropagation();
 
-    /* Keep mouse clicks */
-    var mouse = new THREE.Vector2();
-
-    // calculate mouse position in normalized device coordinates
-    // (-1 to +1) for both components
-    mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
-    mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
-
-    // calculate objects intersecting the picking ray
-    raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
-
-    // Show the myBulletLine (raycast)
-    if (showRayPickLine)
-        raylineVisualize();
+    var raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes().concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+    var activMesh = getActiveMeshes().concat([transform_controls.getObjectByName('trs_modeChanger'), envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
 
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
@@ -85,7 +74,6 @@ function onMouseDownSelect( event ) {
 
     // ------------ in case TRS cube is clicked ---------
     if (intersects.length > 0) {
-
 
         if (intersects[0].object.name === 'trs_modeChanger') {
             if (transform_controls.getMode() === 'rotate')
@@ -102,6 +90,13 @@ function onMouseDownSelect( event ) {
 
             return;
         }
+
+        // If Steve is selected
+        if(intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'){
+            transform_controls.attach(envir.avatarControls.getObject());
+            return;
+        }
+
     }
 
     // If only one object is intersected
@@ -118,7 +113,6 @@ function onMouseDownSelect( event ) {
     var i = 0;
 
     for (i = 0; i<intersects.length; i++) {
-        console.log(intersects[i].object.parent.name,intersects.length);
         selectNext = prevSelected === intersects[i].object.parent.name;
         if(selectNext)
             break;
@@ -131,7 +125,12 @@ function onMouseDownSelect( event ) {
 }// onMouseDown
 
 
-
+/**
+ * Select an object
+ *
+ * @param event
+ * @param inters
+ */
 function selectorMajor(event, inters){
 
     if (event.button === 0) {
@@ -142,12 +141,14 @@ function selectorMajor(event, inters){
         findDimensions(transform_controls.object);
 
         // This makes the camera to go on top of the selected item
-        envir.orbitControls.target.x = inters.object.parent.position.x;
-        envir.orbitControls.target.y = inters.object.parent.position.y;
-        envir.orbitControls.target.z = inters.object.parent.position.z;
-        envir.cameraOrbit.position.x = inters.object.parent.position.x;
-        envir.cameraOrbit.position.z = inters.object.parent.position.z;
 
+        if (false) {
+            envir.orbitControls.target.x = inters.object.parent.position.x;
+            envir.orbitControls.target.y = inters.object.parent.position.y;
+            envir.orbitControls.target.z = inters.object.parent.position.z;
+            envir.cameraOrbit.position.x = inters.object.parent.position.x;
+            envir.cameraOrbit.position.z = inters.object.parent.position.z;
+        }
 
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent.children[0]];
@@ -292,12 +293,9 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     var ppDiv = document.getElementById("chemistrySceneSelectPopupDiv");
     var ppSelect = document.getElementById("chemistrySceneSelectComponent");
 
+    // Show the whole popup div
+    showWholePopupDiv(jQuery("#chemistrySceneSelectPopupDiv"), event);
 
-    // Show Selection
-    jQuery("#chemistrySceneSelectPopupDiv").show();
-
-    ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
     // Add options
     var option;
@@ -641,7 +639,7 @@ function getActiveMeshes(){
 }
 
 
-function raylineVisualize(){
+function raylineVisualize(raycasterPick){
 
     var geolinecast = new THREE.Geometry();
 
