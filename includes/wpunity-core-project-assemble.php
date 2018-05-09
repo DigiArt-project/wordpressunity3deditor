@@ -370,14 +370,7 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $
         if(is_numeric($difimg_ID)){
             $attachment_post = get_post($difimg_ID);
 
-//            $flo = fopen("output_diff_img.txt","a");
-//            fwrite($flo, print_r($attachment_post, true));
-
-
             $attachment_file = $attachment_post->guid;
-
-//            fwrite($flo, $attachment_file);
-//            fclose($flo);
 
             $attachment_tempname = str_replace('\\', '/', $attachment_file);
             $attachment_name = pathinfo($attachment_tempname);
@@ -476,9 +469,6 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
         'order'   => 'ASC',
     );
 
-    $fh = fopen("output_sceneselector.txt","w");
-
-
     $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
     if ( $custom_query->have_posts() ) :
@@ -555,6 +545,8 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
         wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'wonderaround-yaml'){
         wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+    }elseif($scene_type_slug == 'wonderaround-lab-yaml'){
+        wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }
 
 }

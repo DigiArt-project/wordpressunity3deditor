@@ -4,7 +4,35 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
 
 function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){}
 
-function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){}
+function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+    //DATA of Chemistry Wander Around Scene
+    $term_meta_wander_around_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_chemistry_pat',true);
+    $scene_name = $scene_post->post_name;
+    $scene_title = $scene_post->post_title;
+    $scene_desc = $scene_post->post_content;
+
+    $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+    $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
+    if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid = wpunity_compile_sprite_upload($featured_image_edu_sprite_id,$gameSlug,$scene_id);}
+
+
+    $file_contentA = wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id); //empty energy scene with Avatar!
+    $file_contentAb = wpunity_addAssets_chemistry_lab_unity($scene_id);//add objects from json
+    $fileA = $game_path . '/' . $scene_name . '.unity';
+    $create_fileA = fopen($fileA, "w") or die("Unable to open file!");
+    fwrite($create_fileA, $file_contentA);
+    fwrite($create_fileA,$file_contentAb);
+    fclose($create_fileA);
+
+    wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
+        $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
+
+    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+    $fileApath_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
+
+}
 
 function wpunity_addAssets_chemistry_lab_unity($scene_id){}
 
