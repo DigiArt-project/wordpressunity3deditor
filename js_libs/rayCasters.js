@@ -96,6 +96,11 @@ function onMouseDownSelect( event ) {
 
         // If Steve is selected
         if(intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'){
+
+            // highlight
+            envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
+
+            // Attach Controls
             transform_controls.attach(envir.avatarControls.getObject());
             return;
         }
@@ -154,8 +159,7 @@ function selectorMajor(event, inters){
         }
 
         // highlight
-        envir.outlinePass.selectedObjects = [inters.object.parent.children[0]];
-        //envir.renderer.setClearColor( 0xffffff, 0.9 );
+        envir.outlinePass.selectedObjects = [inters.object.parent];
 
         // my gizmo is the default one
         transform_controls.setMode("rottrans");
