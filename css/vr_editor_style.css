@@ -160,7 +160,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .RemoveAssetFromSceneBtnStyle {
     position: absolute;
-    left: 530px;
+    left: 372px;
     top: 10px;
     width: 48px;
     min-width: 0;
@@ -244,15 +244,8 @@ canvas { pointer-events:none; z-index:10; }
     width: 42px;
 }
 
-.DoubleSidedObjectToggle {
+.EditorDimensionToggleBtn {
     position: absolute;
-    left: 384px;
-    top: 24px;
-}
-
-
-.DoubleSidedObjectToggleLabel {
-    position: absolute;
-    left: 390px;
-    top: 1px;
+    right: 360px;
+    top: 10px;
 }
