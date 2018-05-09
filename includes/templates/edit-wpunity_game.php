@@ -759,7 +759,6 @@ if ( $assets ) :?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-
         if (document.getElementById('regional-checkbox-component')) {
             var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
 
