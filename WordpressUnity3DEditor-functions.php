@@ -199,8 +199,9 @@ register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
 // Add helper functions file
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
 
-
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-handler.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble-replace.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble-handler.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );

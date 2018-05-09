@@ -4,13 +4,86 @@
 // YAMLS for ASSETS' TYPES default values (CHEMISTRY GAMES)
 /***************************************************************************************************************/
 
-global $ini_asset_room,$ini_asset_gate,$ini_asset_box,$ini_asset_molecule;
+global $ini_asset_room,$ini_asset_gate,$ini_asset_molecule;
 
-$ini_asset_room = array('TO BE ADDED');
+$ini_asset_room = array('--- !u!1001 &___[room_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[room_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[room_position_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[room_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[room_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: ___[room_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: ___[room_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: ___[room_rotation_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[room_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[room_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[room_scale_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ___[room_obj_guid]___, type: 3}
+      propertyPath: m_Name
+      value: ___[room_title]___
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[room_obj_guid]___, type: 3}
+  m_IsPrefabParent: 0
+--- !u!1 &___[room_mesh_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: ___[room_obj_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[room_fid]___}
+--- !u!64 &___[room_mesh_collider_fid]___
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[room_mesh_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
 $ini_asset_gate = array('TO BE ADDED');
-
-$ini_asset_box = array('TO BE ADDED');
 
 $ini_asset_molecule = array('TO BE ADDED');
 
@@ -22,11 +95,6 @@ function wpunity_default_value_room_get(){
 function wpunity_default_value_gate_get(){
   global $ini_asset_gate;
   return $ini_asset_gate[0];
-}
-
-function wpunity_default_value_box_get(){
-  global $ini_asset_box;
-  return $ini_asset_box[0];
 }
 
 function wpunity_default_value_molecule_get(){
