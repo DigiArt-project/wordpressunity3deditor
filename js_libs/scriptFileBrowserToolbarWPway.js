@@ -192,19 +192,19 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                     (f.isJoker==='false'?
                             ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                    '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  + '\'" class="mdc-button mdc-button--dense">Edit</a>')
-                        :
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  + '\'" class="mdc-button mdc-button--dense">Edit</a>')
+                            :
                             ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
                                 '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=false' + '\'" class="mdc-button mdc-button--dense">View</a>')
                     )+
 
                     (f.isJoker==='false'?
-                        ('<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid
-                            + '" onclick="wpunity_deleteAssetAjax('+
-                    f.assetid + ', \'' + gameProjectSlug + '\',' + f.isCloned + ')" class="mdc-button mdc-button--dense">Delete</a>') :
-                        ''
+                            ('<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid
+                                + '" onclick="wpunity_deleteAssetAjax('+
+                                f.assetid + ', \'' + gameProjectSlug + '\',' + f.isCloned + ')" class="mdc-button mdc-button--dense">Delete</a>') :
+                            ''
                     )
-                        +
+                    +
 
                     '</span>' +
                     '<div id="deleteAssetProgressBar-'+ f.assetid + '" class="progressSlider" style="position: absolute;bottom: 0;display: none;">\n' +
@@ -214,12 +214,24 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '</div>' +
                     '</li>' );
 
-
-                // <?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_assetpass . $asset_checked_id ); ?>
-
                 file.appendTo(fileList);
             }
 
+            var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
+
+            var newAssetBtn = jQuery(
+                '<a ' +
+                'draggable="false" ' +
+                'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
+                'class="mdc-button mdc-button--raised mdc-button--primary" ' +
+                'data-mdc-auto-init="MDCRipple" ' +
+                '>' +
+                'Add new' +
+                '</a>');
+
+            newAssetBtn.appendTo(fileList);
+
+            // Don't delete. Needed to auto init the mdc componented after they have loaded.
             mdc.autoInit(document, () => {});
         }
 

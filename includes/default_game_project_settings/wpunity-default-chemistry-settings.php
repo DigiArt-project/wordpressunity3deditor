@@ -32,18 +32,6 @@ function wpunity_assets_taxcategory_chemistry_fill(){
     update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_gate_get(), true);
     update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
-//    wp_insert_term(
-//        'Box', // the term
-//        'wpunity_asset3d_cat', // the taxonomy
-//        array(
-//            'description'=> 'Chemistry Asset Type (Box)',
-//            'slug' => 'box',
-//        )
-//    );
-//    $inserted_term4 = get_term_by('slug', 'box', 'wpunity_asset3d_cat');
-//    update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_box_get(), true);
-//    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 3 , true);
-
     wp_insert_term(
         'Molecule', // the term
         'wpunity_asset3d_cat', // the taxonomy
