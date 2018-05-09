@@ -251,6 +251,10 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     vertical-align: bottom;
 }
 
+.AlignIconToMiddle {
+    vertical-align: sub;
+}
+
 .progressSlider{
     display: block;
     position: relative;

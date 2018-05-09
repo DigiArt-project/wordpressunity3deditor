@@ -204,7 +204,7 @@ echo '</script>';
         var vr_editor = jQuery('#vr_editor_main_div');
         var cw = vr_editor.width();
         vr_editor.css({'height':cw*2/3+'px'});
-        
+
         envir.turboResize();
     }
 
@@ -251,7 +251,7 @@ echo '</script>';
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
         <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            <i class="material-icons">face</i>
+            VIEW
         </a>
     </div>
 
@@ -259,8 +259,12 @@ echo '</script>';
         Full Screen
     </a>
 
+    <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">settings</i>
+    </a>
+
     <!--  Make form to submit user changes -->
-    <div id="infophp" class="VrInfoPhpStyle">
+    <div id="infophp" class="VrInfoPhpStyle" style="visibility: hidden">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
             <span id="scene_loading_message">Downloading ...</span>
             <div id="progressbar">
@@ -274,6 +278,8 @@ echo '</script>';
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
+
+        <h2 class="mdc-typography--headline">Assets</h2>
 
         <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield">
             <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
@@ -296,9 +302,9 @@ echo '</script>';
     </div>
 
     <!-- Interface for Picking two overlapping objects -->
-<!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
-<!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
-<!--    </div>-->
+    <!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
+    <!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
+    <!--    </div>-->
 
 
 
@@ -392,13 +398,13 @@ echo '</script>';
         </a>
 
         <!-- The checkbox-->
-            <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                   style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
-            <label for="artifact_reward_checkbox" class="mdc-textfield__label"
-                   style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+        <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
+               class="mdc-textfield__input mdc-theme--text-primary-on-light"
+               style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+        <label for="artifact_reward_checkbox" class="mdc-textfield__label"
+               style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
 
-        
+
     </div>
 
 
@@ -413,7 +419,7 @@ echo '</script>';
 
         <!-- The checkbox-->
         <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+               class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
         <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"
                style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
 
@@ -431,13 +437,13 @@ echo '</script>';
         </a>
 
         <!-- The checkbox-->
-        
-            <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
-                   class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                   style="margin-left: 29px; width: 150px !important; float: right;">
-            <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
-                Is a reward item?</label>
-    
+
+        <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
+               class="mdc-textfield__input mdc-theme--text-primary-on-light"
+               style="margin-left: 29px; width: 150px !important; float: right;">
+        <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
+            Is a reward item?</label>
+
     </div>
 </div>
 
@@ -526,10 +532,10 @@ echo '</script>';
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
         console.log("is_scene_icon_manually_selected2: " + is_scene_icon_manually_selected);
-        
+
         if(!is_scene_icon_manually_selected)
             takeScreenshot();
-       
+
         wpunity_saveSceneAjax();
     });
 
@@ -657,7 +663,7 @@ $formRes->init($sceneToLoad);
     loaderMulti.load(manager, resources3D);
 
     function takeScreenshot(){
-        
+
         envir.cameraAvatarHelper.visible = false;
         envir.axisHelper.visible = false;
         envir.gridHelper.visible = false;
@@ -678,8 +684,8 @@ $formRes->init($sceneToLoad);
         if (envir.scene.getObjectByName("myTransformControls"))
             envir.scene.getObjectByName("myTransformControls").visible=true;
     }
-    
-    
+
+
     //=================== End of loading ============================================
     //--- initiate PointerLockControls ---------------
     initPointerLock();
@@ -745,15 +751,15 @@ $formRes->init($sceneToLoad);
     // Select event listener
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
-   
+
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-    
-    
-    
+
+
+
     animate();
 
 </script>
