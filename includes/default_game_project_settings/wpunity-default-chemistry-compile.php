@@ -34,7 +34,83 @@ function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id
 
 }
 
-function wpunity_addAssets_chemistry_lab_unity($scene_id){}
+function wpunity_addAssets_chemistry_lab_unity($scene_id){
+    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+
+    $jsonScene = htmlspecialchars_decode ( $scene_json );
+    $sceneJsonARR = json_decode($jsonScene, TRUE);
+
+    $current_fid = 51;
+    $allObjectsYAML = '';
+    $LF = chr(10) ;// line break
+
+    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+        if ($key == 'avatarYawObject') {
+            //do something about AVATAR
+        } else {
+            if ($value['categoryName'] == 'Room') {
+
+                $room_id = $value['assetid'];
+                $asset_type = get_the_terms( $room_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $room_obj = get_post_meta($room_id,'wpunity_asset3d_obj',true);
+
+                $room_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $room_fid = wpunity_create_fids($current_fid++);
+                $room_mesh_fid = wpunity_create_fids($current_fid++); //($room_fid+1)
+                $room_mesh_collider_fid = wpunity_create_fids($current_fid++); // ($room_fid+2)
+                $room_obj_guid =  wpunity_create_guids('obj', $room_obj);
+                $room_position_x = - $value['position'][0]; // x is in the opposite site in unity
+                $room_position_y = $value['position'][1];
+                $room_position_z = $value['position'][2];
+                $room_rotation_x = $value['quaternion'][0];
+                $room_rotation_y = $value['quaternion'][1];
+                $room_rotation_z = $value['quaternion'][2];
+                $room_rotation_w = $value['quaternion'][3];
+                $room_scale_x = $value['scale'][0];
+                $room_scale_y = $value['scale'][1];
+                $room_scale_z = $value['scale'][2];
+                $room_title = get_the_title($room_id);
+
+                $room_finalyaml = wpunity_replace_room_unity($room_yaml,$room_fid,$room_mesh_fid,$room_mesh_collider_fid,$room_obj_guid,$room_position_x,$room_position_y,$room_position_z,$room_rotation_x,$room_rotation_y,$room_rotation_z,$room_rotation_w,$room_scale_x,$room_scale_y,$room_scale_z,$room_title);
+                $allObjectsYAML = $allObjectsYAML . $LF . $room_finalyaml;
+            }
+
+            if ($value['categoryName'] == 'Gate') {
+
+                $gate_id = $value['assetid'];
+                $asset_type = get_the_terms( $gate_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+
+                $gate_obj = get_post_meta($gate_id,'wpunity_asset3d_obj',true);
+
+                $gate_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $gate_fid = wpunity_create_fids($current_fid++);
+                $gate_mesh_fid = wpunity_create_fids($current_fid++);//($gate_fid+1)
+                $gate_mesh_collider_fid = wpunity_create_fids($current_fid++);//($gate_fid+2)
+                $gate_obj_guid = wpunity_create_guids('obj', $gate_obj);
+                $gate_position_x = - $value['position'][0]; // x is in the opposite site in unity
+                $gate_position_y = $value['position'][1];
+                $gate_position_z = $value['position'][2];
+                $gate_rotation_x = $value['quaternion'][0];
+                $gate_rotation_y = $value['quaternion'][1];
+                $gate_rotation_z = $value['quaternion'][2];
+                $gate_rotation_w = $value['quaternion'][3];
+                $gate_scale_x = $value['scale'][0];
+                $gate_scale_y = $value['scale'][1];
+                $gate_scale_z = $value['scale'][2];
+                $moleculeNamingScene_fid = $value['sceneName_target'];
+
+                $gate_finalyaml = wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid);
+                $allObjectsYAML = $allObjectsYAML . $LF . $gate_finalyaml;
+            }
+        }
+    }
+
+    //return all objects
+    return $allObjectsYAML;
+}
 
 
 //==========================================================================================================================================
