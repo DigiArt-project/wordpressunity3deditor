@@ -189,6 +189,9 @@ echo '</script>';
 
         showObjectPropertiesPanel(transform_controls.getMode());
 
+        if (envir.is2d)
+            transform_controls.setMode("rottrans");
+        
         ev.preventDefault();
     }
 
@@ -501,6 +504,9 @@ echo '</script>';
     });
 
     jQuery("#view-2d").click(function() {
+
+        envir.is2d = true;
+        
         resetCameraFor2Dview();
 
         envir.orbitControls.userPanSpeed = 1;
@@ -521,6 +527,9 @@ echo '</script>';
     });
 
     jQuery("#view-3d").click(function() {
+
+        envir.is2d = false;
+        
         envir.orbitControls.enableRotate = true;
     });
 
@@ -622,7 +631,7 @@ echo '</script>';
         if (objItem) {
             transform_controls.attach(objItem);
 
-            findDimensions(transform_controls.object);
+            //findDimensions(transform_controls.object);
 
             // highlight
             envir.outlinePass.selectedObjects = [objItem];

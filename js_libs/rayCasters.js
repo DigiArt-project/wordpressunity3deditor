@@ -44,6 +44,9 @@ function dragDropVerticalRayCasting (event){
     // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
 
+    if (activMesh.length == 0)
+        return [0,0,0];
+
     // // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 

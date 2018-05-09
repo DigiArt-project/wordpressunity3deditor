@@ -922,7 +922,7 @@
             camPosition.setFromMatrixPosition( camera.matrixWorld );
             camRotation.setFromRotationMatrix( tempMatrix.extractRotation( camera.matrixWorld ) );
 
-            scale = 2 * scope.size; // //worldPosition.distanceTo( camPosition ) / 6 * scope.size;
+            scale = scope.size; // //worldPosition.distanceTo( camPosition ) / 6 * scope.size;
             this.position.copy( worldPosition );
             this.scale.set( scale, scale, scale );
 
