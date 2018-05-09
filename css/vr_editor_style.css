@@ -160,7 +160,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .RemoveAssetFromSceneBtnStyle {
     position: absolute;
-    left: 430px;
+    left: 530px;
     top: 10px;
     width: 48px;
     min-width: 0;
