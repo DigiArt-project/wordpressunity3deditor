@@ -83,7 +83,101 @@ MeshCollider:
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
-$ini_asset_gate = array('TO BE ADDED');
+$ini_asset_gate = array('--- !u!1001 &___[gate_fid]___
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[gate_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[gate_position_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[gate_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: ___[gate_rotation_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: ___[gate_rotation_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: ___[gate_rotation_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: ___[gate_rotation_w]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.x
+      value: ___[gate_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.y
+      value: ___[gate_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalScale.z
+      value: ___[gate_scale_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[gate_obj_guid]___, type: 3}
+  m_IsPrefabParent: 0
+--- !u!1 &___[gate_mesh_fid]___ stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: ___[gate_obj_guid]___, type: 3}
+  m_PrefabInternal: {fileID: ___[gate_fid]___}
+--- !u!65 &___[gate_mesh_collider_fid]___
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[gate_mesh_fid]___}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.28190455, y: 0.15075701, z: 0.41001028}
+  m_Center: {x: 7.9136996e-11, y: 0.075502194, z: 0.10668291}
+--- !u!114 &1164632353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[gate_mesh_fid]___}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd2f0278cc4f9743b689e41b0994a4b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interactionCanvas: {fileID: 1048944797}
+  crosshair: {fileID: 254592000}
+  defaultMat: {fileID: 2100000, guid: 54c38eb35b5848443a34928936331d6b, type: 2}
+  outlinedMat: {fileID: 2100000, guid: 829f166bc0690f54ba3cc13532d84976, type: 2}
+  interactable: 0
+  sceneLoader: {fileID: 227587222}
+  cursor: {fileID: 0}
+  clip: {fileID: 8300000, guid: 28f48e6af139f4947b1e28ed02729467, type: 3}
+  sceneToLoad: ___[moleculeNamingScene_fid]___
+  scoreManager: {fileID: 1872727004}');
 
 $ini_asset_molecule = array('TO BE ADDED');
 
