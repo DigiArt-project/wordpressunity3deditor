@@ -92,7 +92,26 @@ function wpunity_replace_room_unity($room_yaml,$room_fid,$room_mesh_fid,$room_me
     return $file_content_return;
 }
 
-function wpunity_replace_gate_unity(){}
+function wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid){
+    $file_content_return = str_replace("___[gate_fid]___",$gate_fid,$gate_yaml);
+    $file_content_return = str_replace("___[gate_mesh_fid]___",$gate_mesh_fid,$file_content_return);
+    $file_content_return = str_replace("___[gate_mesh_collider_fid]___",$gate_mesh_collider_fid,$file_content_return);
+    $file_content_return = str_replace("___[gate_obj_guid]___",$gate_obj_guid,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_x]___",$gate_position_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_y]___",$gate_position_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_z]___",$gate_position_z,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_x]___",$gate_rotation_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_y]___",$gate_rotation_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_z]___",$gate_rotation_z,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_w]___",$gate_rotation_w,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_x]___",$gate_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_y]___",$gate_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_z]___",$gate_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[moleculeNamingScene_fid]___",$moleculeNamingScene_fid,$file_content_return);
+
+    return $file_content_return;
+
+}
 
 function wpunity_replace_molecule_unity(){}
 
