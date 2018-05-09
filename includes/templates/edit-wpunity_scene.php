@@ -387,7 +387,6 @@ get_header(); ?>
 
 						<?php endwhile;?>
 
-
                         <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
 
                             <div class="mdc-card mdc-theme--secondary-light-bg">
@@ -490,6 +489,41 @@ get_header(); ?>
                             </div>
                         </div>
 
+                        <!--Delete Scene Dialog-->
+                        <aside id="delete-dialog"
+                               class="mdc-dialog"
+                               role="alertdialog"
+                               aria-labelledby="Delete scene dialog"
+                               aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
+                            <div class="mdc-dialog__surface">
+                                <header class="mdc-dialog__header">
+                                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                                        Delete scene?
+                                    </h2>
+                                </header>
+                                <section id="delete-dialog-description" class="mdc-dialog__body">
+                                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+                                </section>
+
+                                <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
+                                    <h3 class="mdc-typography--title">Deleting...</h3>
+
+                                    <div class="progressSlider">
+                                        <div class="progressSliderLine"></div>
+                                        <div class="progressSliderSubLine progressIncrease"></div>
+                                        <div class="progressSliderSubLine progressDecrease"></div>
+                                    </div>
+                                </section>
+
+                                <footer class="mdc-dialog__footer">
+                                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
+                                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
+                                </footer>
+                            </div>
+                            <div class="mdc-dialog__backdrop"></div>
+                        </aside>
+
+
                     </div>
                 </div>
 			<?php endif; ?>
@@ -549,14 +583,16 @@ get_header(); ?>
         var optionsDialog = document.querySelector('#options-dialog');
         if (optionsDialog) {
             optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
-
-
             jQuery( "#optionsPopupBtn" ).click(function() {
                 optionsDialog.show();
             });
-
         }
 
+        var deleteDialog = document.querySelector('#delete-dialog');
+        if (deleteDialog) {
+            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
+            deleteDialog.focusTrap_.deactivate();
+        }
 
         var project_id = <?php echo $project_id; ?>;
 
@@ -767,6 +803,36 @@ get_header(); ?>
             takeScreenshot();
             is_scene_icon_manually_selected = false;
         });
+
+        jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
+
+            //console.log("ID:", deleteDialog.id);
+
+            jQuery('#delete-scene-dialog-progress-bar').show();
+
+            jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
+            jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
+
+            wpunity_deleteSceneAjax(deleteDialog.id);
+        });
+
+        jQuery("#deleteSceneDialogCancelBtn").click(function (e) {
+
+            jQuery('#delete-scene-dialog-progress-bar').hide();
+            deleteDialog.close();
+        });
+
+        function deleteScene(id) {
+
+            var dialogTitle = document.getElementById("delete-dialog-title");
+            var dialogDescription = document.getElementById("delete-dialog-description");
+            var sceneTitle = document.getElementById(id+"-title").textContent.trim();
+
+            dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
+            dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
+            deleteDialog.id = id;
+            deleteDialog.show();
+        }
 
 
     </script>
