@@ -654,7 +654,7 @@ get_header(); ?>
                     "&area=" + fields.area +
                     "&cost=" + fields.cost;
 
-                window.open(url, null, "width=520,height=600");
+                window.open(url, "_blank", "width=520,height=600");
                 /*win.document.write('<iframe width="520" height="600" src="'+ url +'" frameborder="0"></iframe>');*/
 
                 /*var iframe = jQuery('#scene-analytics-iframe');
