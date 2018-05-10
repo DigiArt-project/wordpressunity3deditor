@@ -105,8 +105,16 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
             };
 
             var jsonDataDrag = JSON.stringify(dragData);
-
             e.originalEvent.dataTransfer.setData("text/plain", jsonDataDrag);
+
+            var img = document.createElement("img");
+            img.src = e.target.attributes.getNamedItem("data-sshot-url").value;
+            img.style.width = "100px";
+            img.style.height = "100px";
+            img.width = 100;
+            img.height = 100;
+
+            e.originalEvent.dataTransfer.setDragImage(img, 0, 0);
 
         },
         drag: function(e) {
@@ -182,6 +190,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-doorName_source="'+ f.doorName_source +
                     '" data-doorName_target="'+ f.doorName_target +
                     '" data-sceneName_target="'+ f.sceneName_target +
+                    '" data-sshot-url="'+ f.screenImagePath +
                     '" data-isreward="'+ f.isreward +
                     '" data-isCloned="'+ f.isCloned +
                     '" data-isJoker="'+ f.isJoker +
