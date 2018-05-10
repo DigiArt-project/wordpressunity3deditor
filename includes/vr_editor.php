@@ -511,7 +511,7 @@ echo '</script>';
 
         envir.orbitControls.userPanSpeed = 1;
         
-        envir.orbitControls.object.zoom = 1.7;
+        envir.orbitControls.object.zoom = 1;
         envir.orbitControls.object.updateProjectionMatrix();
         envir.orbitControls.name = "orbitControls";
         envir.orbitControls.enableRotate = false;
@@ -634,7 +634,7 @@ echo '</script>';
             //findDimensions(transform_controls.object);
 
             // highlight
-            envir.outlinePass.selectedObjects = [objItem];
+            envir.outlinePass.selectedObjects = [objItem.parent];
             //envir.renderer.setClearColor( 0xffffff, 0.9 );
 
             envir.scene.add(transform_controls);
@@ -658,7 +658,7 @@ echo '</script>';
         resetCameraFor2Dview();
 
         // controls make them smaller
-        transform_controls.size = 0.25;
+        transform_controls.size = 0.7;
         
         
     };

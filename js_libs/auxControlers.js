@@ -320,29 +320,79 @@ function findDimensions(grouObj){
 }
 
 
+// Find dimensions of the selected object
+function findLimits(grouObj){
+
+    grouObj.remove( grouObj.getObjectByName('bbox') );
+    grouObj.remove( grouObj.getObjectByName('x_dim_line') );
+
+    // ======= bbox ========================
+    var box = new THREE.BoxHelper( grouObj, 0xff00ff );
+
+    box.geometry.computeBoundingBox();
+    box.name = "bbox";
+
+    // var finalVec = new THREE.Vector3().subVectors(box.geometry.boundingBox.min, box.geometry.boundingBox.max);
+    //
+    // var x = Math.abs(finalVec.x);
+    // var y = Math.abs(finalVec.y);
+    // var z = Math.abs(finalVec.z);
+
+    return [box.geometry.boundingBox.min, box.geometry.boundingBox.max];
+}
+
+
 // Reset
 function resetCameraFor2Dview(){
 
     var xMax = 0;
+    var xMin = 0;
     var zMax = 0;
+    var zMin = 0;
+    var yMax = 0;
+    var yMin = 0;
 
-    for (var i = 0; i < envir.scene.children.length; i++){
+    for (var i = 0; i < envir.scene.children.length; i++) {
 
         if (envir.scene.children[i].name !== "myTransformControls") {
-            var sizeXYZ_Arr = findDimensions(envir.scene.children[i]);
+            var sizeXYZ_Arr = findLimits(envir.scene.children[i]);
 
-            //console.log("aaz", sizeXYZ_Arr, envir.scene.children[i]);
 
-            xMax = Math.max(sizeXYZ_Arr[0], xMax);
-            zMax = Math.max(sizeXYZ_Arr[2], zMax);
+            xMin = Math.min(sizeXYZ_Arr[0].x, xMin);
+            xMax = Math.max(sizeXYZ_Arr[1].x, xMax);
+
+            yMin = Math.min(sizeXYZ_Arr[0].y, yMin);
+            yMax = Math.max(sizeXYZ_Arr[1].y, yMax);
+
+            zMin = Math.min(sizeXYZ_Arr[0].z, zMin);
+            zMax = Math.max(sizeXYZ_Arr[1].z, zMax);
+
         }
     }
 
-    var yDistCamera = Math.max(xMax, zMax);
-    envir.cameraOrbit.position.set( 0, yDistCamera > 0 ? yDistCamera*1.5 : 10, 0);
 
-//    envir.cameraOrbit.matrixWorldInverse = new Matrix4();
-//    envir.cameraOrbit.projectionMatrix = new Matrix4();
+    if(envir.cameraOrbit.type === 'PerspectiveCamera') {
+
+        var yDistCamera = Math.max(xMax - xMin, zMax - zMin);
+
+        envir.cameraOrbit.position.set(0, yDistCamera > 0 ? yDistCamera * 1.5 : 10, 0);
+
+    } else if(envir.cameraOrbit.type  === 'OrthographicCamera') {
+
+
+        console.log("resetCameraFor2Dview");
+
+        // envir.FRUSTRUM_SIZE = Math.max(xMax - xMin, zMax - zMin);
+
+        // envir.ASPECT = 2;
+        //
+        // envir.cameraOrbit.left  =  envir.FRUSTRUM_SIZE * envir.ASPECT / -2;
+        // envir.cameraOrbit.right =  envir.FRUSTRUM_SIZE * envir.ASPECT / 2;
+        // envir.cameraOrbit.top   = envir.FRUSTRUM_SIZE / 2;
+        // envir.cameraOrbit.down  = envir.FRUSTRUM_SIZE/ -2;
+        //
+        // envir.cameraOrbit.updateProjectionMatrix();
+    }
 
 
 }

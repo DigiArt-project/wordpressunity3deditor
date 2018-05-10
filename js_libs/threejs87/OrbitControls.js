@@ -45,7 +45,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 
     // Set to true to enable damping (inertia)
     // If damping is enabled, you must call controls.update() in your animation loop
-    this.enableDamping = false;
+    this.enableDamping = true;
     this.dampingFactor = 0.25;
 
     // This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
@@ -67,16 +67,13 @@ THREE.OrbitControls = function ( object, domElement ) {
     this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
 
     // Set to false to disable use of the keys
-    this.enableKeys = false; // VERVERIDIS
+    this.enableKeys = true; // VERVERIDIS
 
     // The four arrow keys
-    this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
+    this.keys = { LEFT: 39, UP: 38, RIGHT: 37, BOTTOM: 40 };
 
-// Mouse buttons
-    //this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
-
-    // VERVERIDIS
-    this.mouseButtons = { ORBIT: THREE.MOUSE.RIGHT, ZOOM: THREE.MOUSE.LEFT, PAN: THREE.MOUSE.MIDDLE };
+    // Mouse buttons
+    this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
 
     // for reset
     this.target0 = this.target.clone();
@@ -508,7 +505,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 
     function handleMouseWheel( event ) {
 
-        // console.log( 'handleMouseWheel' );
+//        console.log( 'handleMouseWheel' );
 
         if ( event.deltaY < 0 ) {
 
@@ -616,6 +613,8 @@ THREE.OrbitControls = function ( object, domElement ) {
         dollyEnd.set( 0, distance );
 
         dollyDelta.subVectors( dollyEnd, dollyStart );
+
+
 
         if ( dollyDelta.y > 0 ) {
 
