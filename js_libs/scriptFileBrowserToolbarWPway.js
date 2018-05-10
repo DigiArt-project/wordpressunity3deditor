@@ -163,7 +163,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 f.screenImagePath = f.screenImagePath ? f.screenImagePath : "../wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
 
 
-                img = '<span class="mdc-list-item__start-detail CenterContents"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
+                img = '<span class="mdc-list-item__start-detail CenterContents" style="width:72px; margin-right: 8px;"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
                 var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; position: relative;">' +
                     '<a class="mdc-list-item editor-asset-tile-style" style="align-items:baseline; left:0; padding:6px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
@@ -220,14 +220,14 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
             var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
 
             var newAssetBtn = jQuery(
-                '<a ' +
+                '<br><a ' +
                 'draggable="false" ' +
                 'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
-                'class="mdc-button mdc-button--raised mdc-button--primary" ' +
+                'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
                 'data-mdc-auto-init="MDCRipple" ' +
                 '>' +
                 'Add new' +
-                '</a>');
+                '</a><br>');
 
             newAssetBtn.appendTo(fileList);
 

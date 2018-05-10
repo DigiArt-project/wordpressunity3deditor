@@ -242,10 +242,6 @@ echo '</script>';
         <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
     </div>
 
-    <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
-        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
-    </div>
-
     <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
        title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">delete</i>
@@ -255,6 +251,10 @@ echo '</script>';
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
+
+    <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
+        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+    </div>
 
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
@@ -287,10 +287,10 @@ echo '</script>';
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
-        <h2 class="mdc-typography--headline">Assets</h2>
+        <h2 class="mdc-typography--title">Assets</h2>
 
         <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield">
-            <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
+            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find..." >
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
             <div class="mdc-textfield__bottom-line"></div>
         </div>
@@ -304,7 +304,7 @@ echo '</script>';
 
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
 
-        <div class="bt_close_file_toolbar mdc-typography">
+        <div class="bt_close_file_toolbar mdc-typography mdc-button--raised mdc-button mdc-button">
             Open
         </div>
     </div>
