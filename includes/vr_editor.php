@@ -501,9 +501,8 @@ echo '</script>';
 
     jQuery("#editor-dimension-btn").click(function() {
 
-        envir.is2d = true;
-        
         findSceneDimensions();
+        
         if (envir.is2d) {
             envir.orbitControls.enableRotate = true;
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
@@ -532,15 +531,6 @@ echo '</script>';
 
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
-
-    jQuery("#view-3d").click(function() {
-
-        envir.is2d = false;
-        
-        envir.orbitControls.enableRotate = true;
-    });
-
-
 
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
