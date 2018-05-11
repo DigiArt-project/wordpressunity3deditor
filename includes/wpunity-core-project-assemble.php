@@ -353,16 +353,16 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $
         wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
     }
 
-    //MTL FILE
-    $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true);
-    if(is_numeric($mtlID)){
-        $attachment_post = get_post($mtlID);
-        $attachment_file = $attachment_post->guid;
-        $attachment_tempname = str_replace('\\', '/', $attachment_file);
-        $attachment_name = pathinfo($attachment_tempname);
-        $new_file = $folder .'/' . $attachment_name['filename'] . '.mtl';
-        copy($attachment_file,$new_file);
-    }
+        //MTL FILE
+        $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true);
+        if(is_numeric($mtlID)){
+            $attachment_post = get_post($mtlID);
+            $attachment_file = $attachment_post->guid;
+            $attachment_tempname = str_replace('\\', '/', $attachment_file);
+            $attachment_name = pathinfo($attachment_tempname);
+            $new_file = $folder .'/' . $attachment_name['filename'] . '.mtl';
+            copy($attachment_file,$new_file);
+        }
 
     //Diffusion Image FILE
     $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);

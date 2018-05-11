@@ -173,7 +173,7 @@ echo '</script>';
 
 
         var coordsXYZ = dragDropVerticalRayCasting ( ev );
-        
+
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
@@ -191,7 +191,7 @@ echo '</script>';
 
         if (envir.is2d)
             transform_controls.setMode("rottrans");
-        
+
         ev.preventDefault();
     }
 
@@ -240,10 +240,7 @@ echo '</script>';
     <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
         <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
         <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
-        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
-        <a id="view-3d" data-mdc-auto-init="MDCRipple" title="3D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">3D</a>
     </div>
-
 
     <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
        title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
@@ -254,6 +251,10 @@ echo '</script>';
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
+
+    <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
+        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+    </div>
 
     <!-- The button to start walking in the 3d environment -->
     <div id="blocker" class="VrWalkInButtonStyle">
@@ -286,10 +287,10 @@ echo '</script>';
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
-        <h2 class="mdc-typography--headline">Assets</h2>
+        <h2 class="mdc-typography--title">Assets</h2>
 
         <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield">
-            <input type="search" class="mdc-textfield__input mdc-typography--title" placeholder="Find an asset.." >
+            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find..." >
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
             <div class="mdc-textfield__bottom-line"></div>
         </div>
@@ -303,7 +304,7 @@ echo '</script>';
 
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
 
-        <div class="bt_close_file_toolbar mdc-typography">
+        <div class="bt_close_file_toolbar mdc-typography mdc-button--raised mdc-button mdc-button">
             Open
         </div>
     </div>
@@ -467,6 +468,8 @@ echo '</script>';
 
     // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
     var envir = new vr_editor_environmentals(container_3D_all);
+    envir.is2d = true;
+
 
     // Controls with axes (Transform, Rotate, Scale)
     var transform_controls = new THREE.TransformControls( envir.cameraOrbit, envir.renderer.domElement );
@@ -496,27 +499,36 @@ echo '</script>';
         transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
     });
 
-    jQuery("#view-2d").click(function() {
+    jQuery("#editor-dimension-btn").click(function() {
 
         envir.is2d = true;
         
         findSceneDimensions();
+        if (envir.is2d) {
+            envir.orbitControls.enableRotate = true;
+            jQuery("#view-2d").text("3D").attr("title", "3D mode");
+            envir.is2d = false;
+        } else {
 
-        envir.orbitControls.userPanSpeed = 1;
-        
-        envir.orbitControls.object.zoom = 1;
-        envir.orbitControls.object.updateProjectionMatrix();
-        envir.orbitControls.name = "orbitControls";
-        envir.orbitControls.enableRotate = false;
+            findSceneDimensions();
 
+            envir.orbitControls.userPanSpeed = 1;
+            
+            envir.orbitControls.object.zoom = 1;
+            envir.orbitControls.object.updateProjectionMatrix();
+            envir.orbitControls.name = "orbitControls";
+            envir.orbitControls.enableRotate = false;
 
-        // This makes the camera to go on top of the selected item
-        envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
-        envir.orbitControls.target.y = transform_controls.object.position.y;
-        envir.orbitControls.target.z = transform_controls.object.position.z;
-        envir.cameraOrbit.position.x = transform_controls.object.position.x;
-        envir.cameraOrbit.position.z = transform_controls.object.position.z;
-       
+            // This makes the camera to go on top of the selected item
+            envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
+            envir.orbitControls.target.y = transform_controls.object.position.y;
+            envir.orbitControls.target.z = transform_controls.object.position.z;
+            envir.cameraOrbit.position.x = transform_controls.object.position.x;
+            envir.cameraOrbit.position.z = transform_controls.object.position.z;
+
+            jQuery("#view-2d").text("2D").attr("title", "2D mode");
+            envir.is2d = true;
+        }
     });
 
     jQuery("#view-3d").click(function() {
@@ -703,7 +715,7 @@ $formRes->init($sceneToLoad);
     loaderMulti.load(manager, resources3D);
 
     function takeScreenshot(){
-        
+
         //envir.cameraAvatarHelper.visible = false;
         //envir.axisHelper.visible = false;
         //envir.gridHelper.visible = false;
@@ -757,7 +769,7 @@ $formRes->init($sceneToLoad);
     function update()
     {
         var i;
-        
+
         envir.orbitControls.update();
 
         updatePointerLockControls();
