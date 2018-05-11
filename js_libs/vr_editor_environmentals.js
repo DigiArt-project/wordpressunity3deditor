@@ -62,7 +62,7 @@ class vr_editor_environmentals {
 
         //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
-        console.log("TURBO RESIZE");
+        //console.log("TURBO RESIZE");
 
         //----------------------------------------------
 
