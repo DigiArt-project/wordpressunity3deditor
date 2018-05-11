@@ -219,8 +219,8 @@ echo '</script>';
 </script>
 
 <!-- All go here -->
-<div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
-
+<div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" style="border:2px solid black">
+    
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -318,7 +318,7 @@ echo '</script>';
 
     <!-- Interface for Changing the door properties -->
     <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 240px; max-width:300px">
+         style="min-width: 240px; max-width:300px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
@@ -332,27 +332,20 @@ echo '</script>';
             <div class="mdc-textfield__bottom-line"></div>
         </div>
 
-
-
         <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
            style="vertical-align: text-bottom;">directions</i>
         <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
                 class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
         </select>
 
-
-
-
         <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
                class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
         <label for="door_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
-
-
     </div>
 
     <!-- Interface for Changing the Marker properties -->
     <div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 240px; max-width:300px">
+         style="min-width: 240px; max-width:300px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindMarkerProperties(); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
@@ -369,7 +362,7 @@ echo '</script>';
     </div>
 
     <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
-    <div id="chemistrySceneSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+    <div id="chemistrySceneSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
            onclick='this.parentNode.style.display = "none"; clearAndUnbindMicroscopeTextbookProperties(); return false;'>
@@ -382,8 +375,8 @@ echo '</script>';
     </div>
 
 
-    <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
-    <div id="chemistryBoxPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px;">
+    <!-- Popup menu to Select a scene to go, from Microscope or Textbook or Gate-->
+    <div id="chemistryBoxPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
            onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>
@@ -397,7 +390,7 @@ echo '</script>';
 
 
     <!-- Popup menu to for Reward item checkbox, from Artifact -->
-    <div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+    <div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
 
         <!-- The close button-->
         <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -417,7 +410,7 @@ echo '</script>';
 
 
     <!-- Popup menu to for Reward item checkbox, from POI IT -->
-    <div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+    <div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
 
         <!-- The close button-->
         <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -436,7 +429,7 @@ echo '</script>';
 
 
     <!-- Popup menu to for Reward item checkbox, from POI Video -->
-    <div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;">
+    <div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
 
         <!-- The close button-->
         <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -508,21 +501,23 @@ echo '</script>';
 
     jQuery("#editor-dimension-btn").click(function() {
 
+        envir.is2d = true;
+        
+        findSceneDimensions();
         if (envir.is2d) {
             envir.orbitControls.enableRotate = true;
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
             envir.is2d = false;
         } else {
 
-            resetCameraFor2Dview();
+            findSceneDimensions();
 
             envir.orbitControls.userPanSpeed = 1;
-
-            envir.orbitControls.object.zoom = 1.7;
+            
+            envir.orbitControls.object.zoom = 1;
             envir.orbitControls.object.updateProjectionMatrix();
             envir.orbitControls.name = "orbitControls";
             envir.orbitControls.enableRotate = false;
-
 
             // This makes the camera to go on top of the selected item
             envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
@@ -537,6 +532,15 @@ echo '</script>';
 
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
+
+    jQuery("#view-3d").click(function() {
+
+        envir.is2d = false;
+        
+        envir.orbitControls.enableRotate = true;
+    });
+
+
 
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
@@ -637,7 +641,7 @@ echo '</script>';
             //findDimensions(transform_controls.object);
 
             // highlight
-            envir.outlinePass.selectedObjects = [objItem];
+            envir.outlinePass.selectedObjects = [objItem.parent];
             //envir.renderer.setClearColor( 0xffffff, 0.9 );
 
             envir.scene.add(transform_controls);
@@ -655,15 +659,12 @@ echo '</script>';
 
             transform_controls.setMode("rottrans");
         }
-
-
+        
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
-        resetCameraFor2Dview();
+        findSceneDimensions();
 
         // controls make them smaller
-        transform_controls.size = 0.25;
-
-
+        transform_controls.size = 0.7;
     };
 
     function hideObjectPropertiesPanels() {

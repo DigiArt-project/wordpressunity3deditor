@@ -642,7 +642,7 @@ get_header(); ?>
 
             function loadSceneAnalyticsIframe(lab, fields) {
 
-                console.log(fields);
+                //console.log(fields);
 
                 if (!fields.env) {fields.env = 'mountain';}
 

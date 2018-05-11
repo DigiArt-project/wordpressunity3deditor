@@ -3,6 +3,7 @@
     background-color: #eee;
     position: relative;
     width: 100%;
+    min-width:600px;
     height: 600px;
     z-index: 999;
 }

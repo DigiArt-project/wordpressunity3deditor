@@ -14,9 +14,11 @@ class vr_editor_environmentals {
         this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
-        this.FRUSTRUM_SIZE = 100; // For orthographic camera
+        this.FRUSTUM_SIZE = 100; // For orthographic camera only
+        this.SCENE_DIMENSION_SURFACE = 100; // It is the max of x z dimensions of the scene (found when all objects are loaded)
+
         this.NEAR = 0.01;
-        this.FAR = 20000;
+        this.FAR = 0.01; // keep the camera empty until everything is loaded
 
         this.setScene();
         this.setRenderer();
@@ -55,21 +57,29 @@ class vr_editor_environmentals {
         this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
 
 
-
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
-//        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
-        this.cameraOrbit.aspect = this.ASPECT;
+        //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
-        this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
-        this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
+        console.log("TURBO RESIZE");
+
+        //----------------------------------------------
+
+        updateCameraGivenSceneLimits();
+
+        // this.cameraOrbit.aspect = this.ASPECT;
+        //
+        // this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
+        // this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
+        //
+        // this.cameraOrbit.updateProjectionMatrix();
 
 
-        this.cameraOrbit.updateProjectionMatrix();
-
+        //----------------------------------------------------------------
          this.cameraAvatar.aspect = this.ASPECT;
          this.cameraAvatar.updateProjectionMatrix();
+         //---------------------------------------------------------------
 
         this.composer.renderer.setSize( envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT );
         this.composer.renderer.setPixelRatio(this.ASPECT);
@@ -174,10 +184,11 @@ class vr_editor_environmentals {
      */
     setOrbitCamera() {
 
-        console.log("this.ASPECT", this.ASPECT);
+        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
+                                                          this.FRUSTUM_SIZE * this.ASPECT /   2,
+                                                          this.FRUSTUM_SIZE /   2,
+                                                          this.FRUSTUM_SIZE / - 2, this.NEAR, this.FAR);
 
-        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTRUM_SIZE * this.ASPECT / - 2,
-            this.FRUSTRUM_SIZE * this.ASPECT/ 2, this.FRUSTRUM_SIZE / 2, this.FRUSTRUM_SIZE / - 2,this.NEAR, this.FAR);
 
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
@@ -192,7 +203,7 @@ class vr_editor_environmentals {
         this.orbitControls.userPanSpeed = 1;
         //this.orbitControls.target.set( 0, 0, 0);
 
-        this.orbitControls.object.zoom = 1.7;
+        this.orbitControls.object.zoom = 1;
         this.orbitControls.object.updateProjectionMatrix();
         this.orbitControls.name = "orbitControls";
         this.orbitControls.enableRotate = false;
@@ -201,9 +212,6 @@ class vr_editor_environmentals {
         //this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
         //this.scene.add( this.cameraOrbitHelper );
     }
-
-
-
 
     /**
      *  Set the Avatar camera
@@ -354,15 +362,15 @@ class vr_editor_environmentals {
      Set the stats
      */
     setStats() {
-        // Rendering stats (FPS)
-        this.stats = new Stats();
-        this.stats.name = "myStats";
-        this.stats.domElement.style.position = 'absolute';
-        this.stats.domElement.style.bottom = '35px';
-        this.stats.domElement.style.left = '10px';
-        this.stats.domElement.style.zIndex = 100;
-
-        this.container_3D_all.appendChild( this.stats.domElement );
+        // // Rendering stats (FPS)
+        // this.stats = new Stats();
+        // this.stats.name = "myStats";
+        // this.stats.domElement.style.position = 'absolute';
+        // this.stats.domElement.style.bottom = '35px';
+        // this.stats.domElement.style.left = '10px';
+        // this.stats.domElement.style.zIndex = 100;
+        //
+        // this.container_3D_all.appendChild( this.stats.domElement );
     }
 
 
@@ -412,107 +420,6 @@ class vr_editor_environmentals {
     }
 
 
-    setTerrain(){
-        var data = this.generateHeight( 1024, 1024 );
-        var texture = new THREE.CanvasTexture( this.generateTexture( data, 1024, 1024 ) );
-        var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-        var quality = 16, step = 1024 / quality;
-        var geometry = new THREE.PlaneGeometry( 2000, 2000, quality - 1, quality - 1 );
-        geometry.rotateX( - Math.PI / 2 );
-        for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
-            var x = i % quality, y = Math.floor( i / quality );
-            geometry.vertices[ i ].y = data[ ( x * step ) + ( y * step ) * 1024 ] * 2 - 128;
-        }
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.name = "myTerrain";
-        this.scene.add( mesh );
-
-
-    }
-
-    generateHeight( width, height ) {
-        var data = new Uint8Array( width * height ), perlin = new ImprovedNoise(),
-            size = width * height, quality = 2, z = Math.random() * 100;
-        for ( var j = 0; j < 4; j ++ ) {
-            quality *= 4;
-            for ( var i = 0; i < size; i ++ ) {
-                var x = i % width, y = ~~ ( i / width );
-                data[ i ] += Math.abs( perlin.noise( x / quality, y / quality, z ) * 0.5 ) * quality + 10;
-            }
-        }
-        return data;
-    }
-
-    generateTexture( data, width, height ) {
-        var canvas, context, image, imageData, level, diff, vector3, sun, shade;
-        vector3 = new THREE.Vector3( 0, 0, 0 );
-        sun = new THREE.Vector3( 1, 1, 1 );
-        sun.normalize();
-        canvas = document.createElement( 'canvas' );
-        canvas.width = width;
-        canvas.height = height;
-        context = canvas.getContext( '2d' );
-        context.fillStyle = '#000';
-        context.fillRect( 0, 0, width, height );
-        image = context.getImageData( 0, 0, width, height );
-        imageData = image.data;
-        for ( var i = 0, j = 0, l = imageData.length; i < l; i += 4, j ++  ) {
-            vector3.x = data[ j - 1 ] - data[ j + 1 ];
-            vector3.y = 2;
-            vector3.z = data[ j - width ] - data[ j + width ];
-            vector3.normalize();
-            shade = vector3.dot( sun );
-            imageData[ i ] = ( 96 + shade * 128 ) * ( data[ j ] * 0.007 );
-            imageData[ i + 1 ] = ( 32 + shade * 96 ) * ( data[ j ] * 0.007 );
-            imageData[ i + 2 ] = ( shade * 96 ) * ( data[ j ] * 0.007 );
-        }
-        context.putImageData( image, 0, 0 );
-        return canvas;
-    }
-
-
-    // /**
-    //  Set the floor (debug only)
-    //  */
-    // setArtificialFloor() {
-    //
-    //     var floorSize = 32;
-    //
-    //     // Floor
-    //     var fpath_texture = "images/DigiArt_512sq.png";
-    //
-    //     var ctx = this.ctx;
-    //     var loader = new THREE.TextureLoader();
-    //     loader.load( fpath_texture, function ( floorTexture ) {
-    //
-    //         //var geometry = new THREE.SphereGeometry( 200, 20, 20 );
-    //         //
-    //         //var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-    //         //var mesh = new THREE.Mesh( geometry, material );
-    //         //group.add( mesh );
-    //
-    //
-    //         floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    //         floorTexture.repeat.set(floorSize, floorSize);
-    //         var floorMaterial = new THREE.MeshBasicMaterial({
-    //             map: floorTexture,
-    //             visible:false,
-    //             side: THREE.DoubleSide,
-    //             transparent: true,
-    //             opacity: 0.01
-    //
-    //         });
-    //         var floorbufferGeometry = new THREE.PlaneBufferGeometry(floorSize * 512, floorSize * 512, 4, 4);
-    //
-    //         ctx.floor = new THREE.Mesh(floorbufferGeometry, floorMaterial);
-    //         ctx.floor.name = 'myfloor';
-    //         ctx.floor.position.y = 0;
-    //         ctx.floor.rotation.x = -Math.PI / 2;
-    //
-    //         ctx.scene.add(ctx.floor);
-    //     } );
-    //
-    // }
 
 
     /*

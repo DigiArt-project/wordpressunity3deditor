@@ -505,7 +505,19 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
         }
 
-        this.materials[ materialName ] = new THREE.MeshBasicMaterial( params ); //new THREE.MeshPhongMaterial( params );
+
+        if (materialName === 'steveViewMaterial')
+            this.materials[ materialName ] = new THREE.MeshBasicMaterial( {depthTest:false, depthWrite:false,
+                side:THREE.FrontSide, transparent:true, color: 0xffffff, opacity: 0.25} );
+        else {
+            delete params.shininess;
+            delete params.specular;
+            params.transparent = true;
+            this.materials[materialName] = new THREE.MeshBasicMaterial(params); //new THREE.MeshPhongMaterial( params );
+        }
+
+
+
 
         // Ververidis
         if (materialName.indexOf("TwoSided")!==-1)

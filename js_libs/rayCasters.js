@@ -95,8 +95,19 @@ function onMouseDownSelect( event ) {
         }
 
         // If Steve is selected
-        if(intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'){
+        if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
+                  || intersects[0].object.name === 'SteveMesh' ) && event.button === 1 ){
+
+            // highlight
+            envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
+
+            // Attach Controls
             transform_controls.attach(envir.avatarControls.getObject());
+
+            // Steve can not be deleted
+            transform_controls.children[3].handleGizmos.XZY[0][0].visible = false;
+            jQuery("#removeAssetBtn").hide();
+
             return;
         }
 
@@ -140,6 +151,12 @@ function selectorMajor(event, inters){
 
         transform_controls.attach(inters.object.parent);
 
+        // X for deleting object is visible (only Steve can not be deleted)
+        transform_controls.children[3].handleGizmos.XZY[0][0].visible = true;
+
+        // Show also the UI button
+        jQuery("#removeAssetBtn").show();
+
         // calculate object physical dimensions
         findDimensions(transform_controls.object);
 
@@ -154,8 +171,7 @@ function selectorMajor(event, inters){
         }
 
         // highlight
-        envir.outlinePass.selectedObjects = [inters.object.parent.children[0]];
-        //envir.renderer.setClearColor( 0xffffff, 0.9 );
+        envir.outlinePass.selectedObjects = [inters.object.parent];
 
         // my gizmo is the default one
         transform_controls.setMode("rottrans");
