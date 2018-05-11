@@ -4,6 +4,7 @@ class vr_editor_environmentals {
     constructor(container_3D_all){
 
         this.is2d = true;
+        this.isDebug = true; // Debug mode
 
         this.ctx = this;
 
@@ -189,7 +190,6 @@ class vr_editor_environmentals {
                                                           this.FRUSTUM_SIZE /   2,
                                                           this.FRUSTUM_SIZE / - 2, this.NEAR, this.FAR);
 
-
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
         this.cameraOrbit.name = "orbitCamera";
@@ -197,12 +197,9 @@ class vr_editor_environmentals {
 
         this.cameraOrbit.position.set( 0, 50, 0);
 
-
-
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
         //this.orbitControls.target.set( 0, 0, 0);
-
         this.orbitControls.object.zoom = 1;
         this.orbitControls.object.updateProjectionMatrix();
         this.orbitControls.name = "orbitControls";
@@ -275,9 +272,11 @@ class vr_editor_environmentals {
         this.scene.name = "digiartScene";
 
         // // Add Grid
-        // this.gridHelper = new THREE.GridHelper(2000, 40);
-        // this.gridHelper.name = "myGridHelper";
-        // this.scene.add(this.gridHelper);
+        this.gridHelper = new THREE.GridHelper(2000, 40);
+        this.gridHelper.name = "myGridHelper";
+        this.scene.add(this.gridHelper);
+        this.gridHelper.visible = false;
+
         //
         // // Add Axes helper
         // this.axisHelper = new THREE.AxisHelper( 100 );
@@ -295,7 +294,11 @@ class vr_editor_environmentals {
         this.renderer.sortObjects = false;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
-        this.renderer.setClearColor( 0xffffff, 1 );
+
+        // This does not work well for outlining objects in white background
+        this.renderer.setClearColor( 0xeeeeee, 1);
+
+        //this.scene.background = new THREE.Color( 0xffffff );
 
         this.renderer.sortObjects = false;
         this.renderer.name = "myRenderer";
@@ -311,7 +314,7 @@ class vr_editor_environmentals {
         this.outlinePass = new THREE.OutlinePass(
             new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, this.cameraOrbit);
 
-        this.outlinePass.visibleEdgeColor = new THREE.Color( 0xffff00 );
+        this.outlinePass.visibleEdgeColor = new THREE.Color( 0x00aa00 );
 
         this.outlinePass.edgeGlow = 5;
         this.outlinePass.edgeStrength = 5;

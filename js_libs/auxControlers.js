@@ -354,7 +354,7 @@ function findSceneDimensions(){
 
     for (var i = 0; i < envir.scene.children.length; i++) {
 
-        if (envir.scene.children[i].name !== "myTransformControls") {
+        if (envir.scene.children[i].name !== "myTransformControls" && envir.scene.children[i].name !== "myGridHelper") {
             var sizeXYZ_Arr = findObjectLimits(envir.scene.children[i]);
 
 
@@ -383,6 +383,8 @@ function updateCameraGivenSceneLimits(){
 
     //console.log("resetCameraFor2Dview");
 
+
+
     if(envir.cameraOrbit.type === 'PerspectiveCamera') {
 
         envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
@@ -395,11 +397,13 @@ function updateCameraGivenSceneLimits(){
 
         envir.cameraOrbit.left   = envir.FRUSTUM_SIZE * envir.ASPECT / -2 * 0.8; // shift it a little bit to the left
         envir.cameraOrbit.right  = envir.FRUSTUM_SIZE * envir.ASPECT /  2 * 1.2; // shift it a little bit to the left
-        envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 0.8; // shift it a little bit to the top
-        envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1.2; // shift it a little bit to the top
-        envir.cameraOrbit.far = 20000;
 
-        envir.cameraOrbit.updateProjectionMatrix();
+        envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 1; // *0.8 shift it a little bit to the top
+        envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1; // *1.2 shift it a little bit to the top
+        envir.cameraOrbit.far = 20000;
     }
+
+
+    envir.cameraOrbit.updateProjectionMatrix();
 }
 

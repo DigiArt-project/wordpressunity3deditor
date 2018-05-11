@@ -122,7 +122,8 @@ echo '</script>';
 
         });
 
-        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
+        if (!envir.isDebug)
+            wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
     function removeSavedText(){
@@ -500,36 +501,66 @@ echo '</script>';
     });
 
     jQuery("#editor-dimension-btn").click(function() {
-
+       
         findSceneDimensions();
+        updateCameraGivenSceneLimits();
+
+
+        envir.cameraOrbit.position.x = 0;
+        envir.cameraOrbit.position.y = 50;
+        envir.cameraOrbit.position.z = 0;
+        
+        envir.cameraOrbit.rotation._x = - Math.PI/2;
+        envir.cameraOrbit.rotation._y = 0;
+        envir.cameraOrbit.rotation._z = 0;
+
+        envir.orbitControls.object.zoom = 1;
+
+
+        envir.orbitControls.target.x = 0;
+        envir.orbitControls.target.y = 0;
+        envir.orbitControls.target.z = 0;
+
+        
+        
         
         if (envir.is2d) {
+
+
+            envir.orbitControls.object.position.x = 50;
+            envir.orbitControls.object.position.y = 50;
+            envir.orbitControls.object.position.z = 50;
+            
             envir.orbitControls.enableRotate = true;
+            envir.gridHelper.visible = true;
+            
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
+            
             envir.is2d = false;
+
         } else {
 
-            findSceneDimensions();
-
-            envir.orbitControls.userPanSpeed = 1;
             
-            envir.orbitControls.object.zoom = 1;
-            envir.orbitControls.object.updateProjectionMatrix();
-            envir.orbitControls.name = "orbitControls";
-            envir.orbitControls.enableRotate = false;
+
 
             // This makes the camera to go on top of the selected item
-            envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
-            envir.orbitControls.target.y = transform_controls.object.position.y;
-            envir.orbitControls.target.z = transform_controls.object.position.z;
-            envir.cameraOrbit.position.x = transform_controls.object.position.x;
-            envir.cameraOrbit.position.z = transform_controls.object.position.z;
+            // envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
+            // envir.orbitControls.target.y = transform_controls.object.position.y;
+            // envir.orbitControls.target.z = transform_controls.object.position.z;
+            // envir.cameraOrbit.position.x = transform_controls.object.position.x;
+            // envir.cameraOrbit.position.z = transform_controls.object.position.z;
 
+            
+            envir.orbitControls.enableRotate = false;
+            envir.gridHelper.visible = false;
+            
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
         }
 
-        jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
+
+        envir.orbitControls.object.updateProjectionMatrix();
+
     });
 
     jQuery('#toggleUIBtn').click(function() {
@@ -631,7 +662,8 @@ echo '</script>';
             //findDimensions(transform_controls.object);
 
             // highlight
-            envir.outlinePass.selectedObjects = [objItem.parent];
+            envir.outlinePass.selectedObjects = [objItem];
+            
             //envir.renderer.setClearColor( 0xffffff, 0.9 );
 
             envir.scene.add(transform_controls);

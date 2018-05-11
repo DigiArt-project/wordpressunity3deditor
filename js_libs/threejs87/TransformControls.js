@@ -576,6 +576,7 @@
         // Arrow head
         var mesh = new THREE.Mesh( new THREE.CylinderGeometry( 0, arrWidth, 0.2, 12, 1, false ));
         mesh.position.x = 0.5;
+        mesh.position.z = - 1.5;
         mesh.rotation.z = - Math.PI / 2;
 
         mesh.updateMatrix();
@@ -583,6 +584,7 @@
         // Arrow body
         var cylMesh = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
         cylMesh.rotation.z = Math.PI / 2;
+        cylMesh.position.z = - 1.5;
         cylMesh.updateMatrix();
 
         arrowGeometry.merge( mesh.geometry, mesh.matrix );

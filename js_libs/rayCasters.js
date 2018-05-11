@@ -96,7 +96,7 @@ function onMouseDownSelect( event ) {
 
         // If Steve is selected
         if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
-                  || intersects[0].object.name === 'SteveMesh' ) && event.button === 1 ){
+                  || intersects[0].object.name === 'SteveMesh' ) && event.button === 0 ){
 
             // highlight
             envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
@@ -106,6 +106,7 @@ function onMouseDownSelect( event ) {
 
             // Steve can not be deleted
             transform_controls.children[3].handleGizmos.XZY[0][0].visible = false;
+            transform_controls.size = 1;
             jQuery("#removeAssetBtn").hide();
 
             return;
@@ -154,11 +155,17 @@ function selectorMajor(event, inters){
         // X for deleting object is visible (only Steve can not be deleted)
         transform_controls.children[3].handleGizmos.XZY[0][0].visible = true;
 
+        var dims = findDimensions(transform_controls.object);
+
+        var sizeT = Math.max(...dims);
+
+        transform_controls.size = sizeT > 1 ? sizeT : 1;
+
         // Show also the UI button
         jQuery("#removeAssetBtn").show();
 
         // calculate object physical dimensions
-        findDimensions(transform_controls.object);
+
 
         // This makes the camera to go on top of the selected item
 
@@ -169,6 +176,9 @@ function selectorMajor(event, inters){
             envir.cameraOrbit.position.x = inters.object.parent.position.x;
             envir.cameraOrbit.position.z = inters.object.parent.position.z;
         }
+
+
+
 
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent];

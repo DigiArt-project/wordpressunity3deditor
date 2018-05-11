@@ -413,7 +413,7 @@ THREE.OBJLoader = ( function () {
 
         parse: function ( text ) {
 
-            console.time( 'OBJLoader' );
+            //console.time( 'OBJLoader' );
 
             var state = new ParserState();
 
@@ -732,7 +732,8 @@ THREE.OBJLoader = ( function () {
 
             }
 
-            console.timeEnd( 'OBJLoader' );
+            // console.log(mesh.name);
+            // console.timeEnd( 'OBJLoader' ) ;
 
             return container;
 
