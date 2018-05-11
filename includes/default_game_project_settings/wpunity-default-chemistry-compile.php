@@ -1,8 +1,101 @@
 <?php
 
-function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){}
+function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+    //DATA of mainmenu
+    $term_meta_s_mainmenu = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_mainmenu_chem',true);
+    $title_text = $scene_post->post_title;
+    //$is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) ); //Future Addition to Yaml
+    $is_bt_settings_active = 1; //Always ON
+    //$is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) ); //Future Addition to Yaml
+    $is_help_bt_active = 1; //Always ON
+    //$is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) ); //Future Addition to Yaml
+    $is_login_bt_active = 1; //Always ON
+    $is_exit_button_active = 1;  //Always ON
+    $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
+    $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
+
+    if($featured_image_sprite_id != ''){
+        $featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id, $gameSlug, $scene_id);
+    }
+
+    $file_content = wpunity_replace_mainmenu_chem_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active);
+
+    $file = $game_path . '/' . 'S_MainMenu.unity';
+    $create_file = fopen($file, "w") or die("Unable to open file!");
+    fwrite($create_file, $file_content);
+    fclose($create_file);
+
+    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
+
+    //Add Static Pages to cs & BuildSettings (Main Menu must be first)
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
+
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
+
+    if($is_bt_settings_active == '1'){
+        //CREATE SETTINGS/OPTIONS Unity file
+        $term_meta_s_settings = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_options_chem',true);
+        $file_content2 = wpunity_replace_settings_chem_unity($term_meta_s_settings);
+
+        $file2 = $game_path . '/' . 'S_Settings.unity';
+        $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+        fwrite($create_file2,$file_content2);
+        fclose($create_file2);
+
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Settings.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file2_path_CS = 'Assets/scenes/' . 'S_Settings.unity';
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file2_path_CS);
+    }
+
+    if($is_help_bt_active == '1'){
+        //CREATE HELP Unity file
+        $term_meta_s_help = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_help_chem',true);
+        $text_help_scene = get_post_meta($scene_id,'wpunity_scene_help_text',true);
+        $img_help_scene_id = get_post_meta($scene_id,'wpunity_scene_helpimg',true);
+        $img_help_scene_guid = 'dad02368a81759f4784c7dbe752b05d6'; //if there's no Featured Image (custom field at Main Menu)
+        if($img_help_scene_id != ''){$img_help_scene_guid = wpunity_compile_sprite_upload($img_help_scene_id,$gameSlug,$scene_id);}
+        $file_content3 = wpunity_replace_help_chem_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid);
+
+        $file3 = $game_path . '/' . 'S_Help.unity';
+        $create_file3 = fopen($file3, "w") or die("Unable to open file!");
+        fwrite($create_file3, $file_content3);
+        fclose($create_file3);
+
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Help.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file3_path_CS = 'Assets/scenes/' . 'S_Help.unity';
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file3_path_CS);
+    }
+
+    if($is_login_bt_active == '1'){
+        //CREATE Login Unity file
+        $term_meta_s_login = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_login_chem',true);
+        $file_content4 = wpunity_replace_login_chem_unity($term_meta_s_login);
+
+        $file4 = $game_path . '/S_Login.unity';
+        $create_file4 = fopen($file4, "w") or die("Unable to open file!");
+        fwrite($create_file4,$file_content4);
+        fclose($create_file4);
+
+        wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Login.unity');//Update the EditorBuildSettings.asset by adding new Scene
+        $file4_path_CS = 'Assets/scenes/' . 'S_Login.unity';
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file4_path_CS);
+    }
+
+
+}
 
 function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){}
+
+function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){}
+
+function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){}
 
 function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
     //DATA of Chemistry Wander Around Scene
@@ -116,6 +209,33 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
 //==========================================================================================================================================
 //==========================================================================================================================================
 
+function wpunity_replace_mainmenu_chem_unity($term_meta_s_mainmenu,$title_text,$featured_image_sprite_guid,$is_bt_settings_active,$is_help_bt_active,$is_exit_button_active,$is_login_bt_active){
+    $file_content_return = str_replace("___[mainmenu_featured_image_sprite]___",$featured_image_sprite_guid,$term_meta_s_mainmenu);
+    $file_content_return = str_replace("___[mainmenu_title_text]___",$title_text,$file_content_return);
+
+    //$file_content_return = str_replace("___[mainmenu_is_bt_settings_active]___",$is_bt_settings_active,$file_content_return);
+    //$file_content_return = str_replace("___[mainmenu_is_help_bt_active]___",$is_help_bt_active,$file_content_return);
+    //$file_content_return = str_replace("___[mainmenu_is_exit_button_active]___",$is_exit_button_active,$file_content_return);
+    //$file_content_return = str_replace("___[mainmenu_is_login_bt_active]___",$is_login_bt_active,$file_content_return);
+
+    return $file_content_return;
+
+}
+
+function wpunity_replace_settings_chem_unity($term_meta_s_settings){
+    return $term_meta_s_settings;
+}
+
+function wpunity_replace_help_chem_unity($term_meta_s_help,$text_help_scene,$img_help_scene_guid){
+    $file_content_return = str_replace("___[text_help_scene]___",$text_help_scene,$term_meta_s_help);
+    $file_content_return = str_replace("___[img_help_scene]___",$img_help_scene_guid,$file_content_return);
+
+    return $file_content_return;
+}
+
+function wpunity_replace_login_chem_unity($term_meta_s_login){
+    return $term_meta_s_login;
+}
 
 function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id){
 
