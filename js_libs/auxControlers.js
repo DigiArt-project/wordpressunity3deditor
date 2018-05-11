@@ -320,8 +320,8 @@ function findDimensions(grouObj){
 }
 
 
-// Find dimensions of the selected object
-function findLimits(grouObj){
+// Find Limits (world coordinates) of the selected object
+function findObjectLimits(grouObj){
 
     grouObj.remove( grouObj.getObjectByName('bbox') );
     grouObj.remove( grouObj.getObjectByName('x_dim_line') );
@@ -343,7 +343,7 @@ function findLimits(grouObj){
 
 
 // Reset
-function resetCameraFor2Dview(){
+function findSceneDimensions(){
 
     var xMax = 0;
     var xMin = 0;
@@ -355,7 +355,7 @@ function resetCameraFor2Dview(){
     for (var i = 0; i < envir.scene.children.length; i++) {
 
         if (envir.scene.children[i].name !== "myTransformControls") {
-            var sizeXYZ_Arr = findLimits(envir.scene.children[i]);
+            var sizeXYZ_Arr = findObjectLimits(envir.scene.children[i]);
 
 
             xMin = Math.min(sizeXYZ_Arr[0].x, xMin);
@@ -370,30 +370,36 @@ function resetCameraFor2Dview(){
         }
     }
 
+    envir.SCENE_DIMENSION_SURFACE = Math.max(xMax - xMin, zMax - zMin);
+
+    envir.SCENE_DIMENSION_SURFACE *= 0.6;
+
+    // In empty scene lets fix it to 10
+    envir.SCENE_DIMENSION_SURFACE = envir.SCENE_DIMENSION_SURFACE > 0 ? envir.SCENE_DIMENSION_SURFACE * 1.5 : 10;
+}
+
+
+function updateCameraGivenSceneLimits(){
+
+    console.log("resetCameraFor2Dview");
 
     if(envir.cameraOrbit.type === 'PerspectiveCamera') {
 
-        var yDistCamera = Math.max(xMax - xMin, zMax - zMin);
-
-        envir.cameraOrbit.position.set(0, yDistCamera > 0 ? yDistCamera * 1.5 : 10, 0);
+        envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
 
     } else if(envir.cameraOrbit.type  === 'OrthographicCamera') {
 
+        envir.FRUSTUM_SIZE = envir.SCENE_DIMENSION_SURFACE;
 
-        console.log("resetCameraFor2Dview");
+        envir.ASPECT = envir.container_3D_all.clientWidth / envir.container_3D_all.clientHeight;
 
-        // envir.FRUSTRUM_SIZE = Math.max(xMax - xMin, zMax - zMin);
+        envir.cameraOrbit.left   = envir.FRUSTUM_SIZE * envir.ASPECT / -2 * 0.8; // shift it a little bit to the left
+        envir.cameraOrbit.right  = envir.FRUSTUM_SIZE * envir.ASPECT /  2 * 1.2; // shift it a little bit to the left
+        envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 0.8; // shift it a little bit to the top
+        envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1.2; // shift it a little bit to the top
+        envir.cameraOrbit.far = 20000;
 
-        // envir.ASPECT = 2;
-        //
-        // envir.cameraOrbit.left  =  envir.FRUSTRUM_SIZE * envir.ASPECT / -2;
-        // envir.cameraOrbit.right =  envir.FRUSTRUM_SIZE * envir.ASPECT / 2;
-        // envir.cameraOrbit.top   = envir.FRUSTRUM_SIZE / 2;
-        // envir.cameraOrbit.down  = envir.FRUSTRUM_SIZE/ -2;
-        //
-        // envir.cameraOrbit.updateProjectionMatrix();
+        envir.cameraOrbit.updateProjectionMatrix();
     }
-
-
 }
 

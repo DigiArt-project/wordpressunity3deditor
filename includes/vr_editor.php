@@ -507,7 +507,7 @@ echo '</script>';
 
         envir.is2d = true;
         
-        resetCameraFor2Dview();
+        findSceneDimensions();
 
         envir.orbitControls.userPanSpeed = 1;
         
@@ -652,15 +652,12 @@ echo '</script>';
 
             transform_controls.setMode("rottrans");
         }
-       
         
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
-        resetCameraFor2Dview();
+        findSceneDimensions();
 
         // controls make them smaller
         transform_controls.size = 0.7;
-        
-        
     };
 
     function hideObjectPropertiesPanels() {

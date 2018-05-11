@@ -14,9 +14,11 @@ class vr_editor_environmentals {
         this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
-        this.FRUSTRUM_SIZE = 100; // For orthographic camera
+        this.FRUSTUM_SIZE = 100; // For orthographic camera only
+        this.SCENE_DIMENSION_SURFACE = 100; // It is the max of x z dimensions of the scene (found when all objects are loaded)
+
         this.NEAR = 0.01;
-        this.FAR = 20000;
+        this.FAR = 0.01; // keep the camera empty until everything is loaded
 
         this.setScene();
         this.setRenderer();
@@ -55,22 +57,29 @@ class vr_editor_environmentals {
         this.ASPECT = this.SCREEN_WIDTH/this.SCREEN_HEIGHT;
 
 
-
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
 
         //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
         console.log("TURBO RESIZE");
-        this.cameraOrbit.aspect = this.ASPECT;
 
-        this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
-        this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
+        //----------------------------------------------
 
-        this.cameraOrbit.updateProjectionMatrix();
+        updateCameraGivenSceneLimits();
 
+        // this.cameraOrbit.aspect = this.ASPECT;
+        //
+        // this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
+        // this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
+        //
+        // this.cameraOrbit.updateProjectionMatrix();
+
+
+        //----------------------------------------------------------------
          this.cameraAvatar.aspect = this.ASPECT;
          this.cameraAvatar.updateProjectionMatrix();
+         //---------------------------------------------------------------
 
         this.composer.renderer.setSize( envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT );
         this.composer.renderer.setPixelRatio(this.ASPECT);
@@ -175,8 +184,11 @@ class vr_editor_environmentals {
      */
     setOrbitCamera() {
 
-        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTRUM_SIZE * this.ASPECT / - 2,
-            this.FRUSTRUM_SIZE * this.ASPECT/ 2, this.FRUSTRUM_SIZE / 2, this.FRUSTRUM_SIZE / - 2,this.NEAR, this.FAR);
+        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
+                                                          this.FRUSTUM_SIZE * this.ASPECT /   2,
+                                                          this.FRUSTUM_SIZE /   2,
+                                                          this.FRUSTUM_SIZE / - 2, this.NEAR, this.FAR);
+
 
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
@@ -200,9 +212,6 @@ class vr_editor_environmentals {
         //this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
         //this.scene.add( this.cameraOrbitHelper );
     }
-
-
-
 
     /**
      *  Set the Avatar camera
