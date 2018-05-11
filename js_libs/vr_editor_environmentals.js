@@ -4,7 +4,7 @@ class vr_editor_environmentals {
     constructor(container_3D_all){
 
         this.is2d = true;
-        this.isDebug = true; // Debug mode
+        this.isDebug = false; // Debug mode
 
         this.ctx = this;
 
