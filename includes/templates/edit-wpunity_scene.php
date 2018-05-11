@@ -748,8 +748,6 @@ get_header(); ?>
             }
         }
 
-
-
         var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
         var dots = document.querySelector('.dots');
         var panels = document.querySelector('.panels');

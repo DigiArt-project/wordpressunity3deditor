@@ -220,7 +220,7 @@ echo '</script>';
 
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" style="border:2px solid black">
-    
+
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -502,7 +502,7 @@ echo '</script>';
     jQuery("#editor-dimension-btn").click(function() {
 
         findSceneDimensions();
-        
+
         if (envir.is2d) {
             envir.orbitControls.enableRotate = true;
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
@@ -512,7 +512,7 @@ echo '</script>';
             findSceneDimensions();
 
             envir.orbitControls.userPanSpeed = 1;
-            
+
             envir.orbitControls.object.zoom = 1;
             envir.orbitControls.object.updateProjectionMatrix();
             envir.orbitControls.name = "orbitControls";
@@ -649,7 +649,7 @@ echo '</script>';
 
             transform_controls.setMode("rottrans");
         }
-        
+
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 
