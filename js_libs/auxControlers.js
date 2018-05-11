@@ -381,7 +381,7 @@ function findSceneDimensions(){
 
 function updateCameraGivenSceneLimits(){
 
-    console.log("resetCameraFor2Dview");
+    //console.log("resetCameraFor2Dview");
 
     if(envir.cameraOrbit.type === 'PerspectiveCamera') {
 
