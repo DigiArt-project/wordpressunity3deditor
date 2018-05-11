@@ -139,7 +139,6 @@ get_header(); ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
                         <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk Student</a>
-                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">DDA</a>
 
 					<?php } ?>
 
@@ -564,12 +563,6 @@ get_header(); ?>
                 </div>
             </div>
 
-            <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 1240px;">
-                    <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-                </div>
-            </div>
-
 		<?php } ?>
 
     </div>
@@ -621,10 +614,6 @@ get_header(); ?>
             // Start Goedle Iframes
             if (project_keys.expID) {
                 loadAtRiskIframe(project_keys.expID);
-            }
-
-            if (project_keys.gioID) {
-                ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
             }
             // End Goedle Iframes
 
@@ -711,31 +700,6 @@ get_header(); ?>
                 }
 
                 jQuery(parent.document).find("atRiskIframeContent").each(function () {
-                    if (this.contentDocument == window.document) {
-                        // if the href of the iframe is not same as
-                        // the value of src attribute then reload it
-                        if (this.src != url) {
-                            this.src = this.src;
-                        }
-                    }
-                });
-                return true;
-            }
-
-            function ddaIframe(email, pwd, app_key) {
-
-                var url = "https://envisage.goedle.io/dda/index.htm?" +
-                    "email=" + email +
-                    "&pwd=" + pwd +
-                    "&app_key=" + app_key;
-
-                var iframe = jQuery('#ddaIframeContent');
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
-
-                jQuery(parent.document).find("ddaIframeContent").each(function () {
                     if (this.contentDocument == window.document) {
                         // if the href of the iframe is not same as
                         // the value of src attribute then reload it

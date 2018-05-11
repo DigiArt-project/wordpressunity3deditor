@@ -125,7 +125,16 @@ get_header(); ?>
                             <div class="WhiteSpaceSeparator"></div>
 
                             <h2 class="mdc-typography--title">JSON Output</h2>
-                            <span id="molecule-json-field" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light"></span>
+                            <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield" style="width: 50%;">
+                                <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly>
+                                <label for="molecule-json-field" class="mdc-textfield__label"> </label>
+                                <div class="mdc-textfield__bottom-line"></div>
+                            </div>
+                            <br>
+
+                            <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
+
 
                             <div class="WhiteSpaceSeparator"></div>
 
@@ -134,9 +143,7 @@ get_header(); ?>
                             <div class="mdc-layout-grid__inner">
 
                                 <div class="mdc-layout-grid__cell--span-12 mdc-theme--secondary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
-
                                     <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
-
                                     </ul>
                                 </div>
 
@@ -154,7 +161,7 @@ get_header(); ?>
 
                                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
-                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule[moleculeID];?>">
+                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule[moleculeID];?>" data-molec-type="<?php echo $molecule[moleculeType]; ?>">
                                                         <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
 															<?php if ($molecule[moleculeImage]){ ?>
@@ -258,17 +265,17 @@ get_header(); ?>
                 receive: function(event, ui) {
 
                     var arr = [];
+                    var typeArr = [];
                     jQuery('div','#sortable1').each(function(){
 
                         if (jQuery(this).attr('id')) {
                             arr.push(jQuery(this).attr('id'));
+                            typeArr.push(jQuery(this).attr('data-molec-type'));
                         }
-
                     });
 
                     jQuery("#active-molecules-input").val(arr);
-
-                    jQuery('#molecule-json-field').html(JSON.stringify(arr));
+                    jQuery('#molecule-json-field').val(JSON.stringify(typeArr));
                 }
 
             }).disableSelection();
@@ -299,6 +306,14 @@ get_header(); ?>
             });
             return true;
         }
+
+
+        jQuery("#copy-output-btn").click(function() {
+            var copyText = document.getElementById("molecule-json-field");
+            copyText.select();
+            document.execCommand("Copy");
+            alert("Strategy copied: " + copyText.value);
+        });
 
     </script>
 
