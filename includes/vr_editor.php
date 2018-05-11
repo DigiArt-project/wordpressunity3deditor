@@ -253,7 +253,7 @@ echo '</script>';
     </a>
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
-        <a id="view-2d" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
 
     <!-- The button to start walking in the 3d environment -->
@@ -501,12 +501,11 @@ echo '</script>';
 
     jQuery("#editor-dimension-btn").click(function() {
 
-        envir.is2d = true;
-        
         findSceneDimensions();
+        
         if (envir.is2d) {
             envir.orbitControls.enableRotate = true;
-            jQuery("#view-2d").text("3D").attr("title", "3D mode");
+            jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
             envir.is2d = false;
         } else {
 
@@ -526,19 +525,12 @@ echo '</script>';
             envir.cameraOrbit.position.x = transform_controls.object.position.x;
             envir.cameraOrbit.position.z = transform_controls.object.position.z;
 
-            jQuery("#view-2d").text("2D").attr("title", "2D mode");
+            jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
         }
+
+        jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
-
-    jQuery("#view-3d").click(function() {
-
-        envir.is2d = false;
-        
-        envir.orbitControls.enableRotate = true;
-    });
-
-
 
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
