@@ -221,7 +221,7 @@ echo '</script>';
 
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" style="border:2px solid black">
-    
+
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -558,9 +558,10 @@ echo '</script>';
             envir.is2d = true;
         }
 
-
         envir.orbitControls.object.updateProjectionMatrix();
+        jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
 
+        
     });
 
     jQuery('#toggleUIBtn').click(function() {
@@ -681,7 +682,7 @@ echo '</script>';
 
             transform_controls.setMode("rottrans");
         }
-        
+
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 

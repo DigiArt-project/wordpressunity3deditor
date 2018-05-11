@@ -28,6 +28,10 @@ $sceneSlug = $scene_post->post_title;
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 
+$userid = get_current_user_id();
+$user_data = get_userdata( $userid );
+$user_email = $user_data->user_email;
+
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 	$input_molecules = $_POST['active-molecules-input'];
 	update_post_meta($scene_id, 'wpunity_input_molecules', $input_molecules);
@@ -55,6 +59,11 @@ if ($project_scope == 0) {
 
 get_header(); ?>
 
+    <style>
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .mdc-tab { min-width: 0; }
+    </style>
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
@@ -78,100 +87,173 @@ get_header(); ?>
 
     </ul>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><?php echo $sceneSlug; ?></h2>
 
-    <form name="edit_exam_scene_form" action="" id="edit_exam_scene_form" method="POST" enctype="multipart/form-data">
-        <div class="mdc-layout-grid">
 
-            <div class="mdc-layout-grid__inner">
+    <div class="mdc-toolbar">
+        <div class="mdc-toolbar__row" style="min-height: 0;">
+            <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start">
+                <span class="mdc-toolbar__title"> <?php echo $sceneSlug; ?> </span>
+            </div>
 
-                <div class="mdc-layout-grid__cell--span-12">
+            <!--Set tab buttons-->
+            <div class="mdc-toolbar__section mdc-toolbar__section--align-start" style="justify-content: flex-end">
+                <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
+                    <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Build Strategy</a>
+                    <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">DDA</a>
+                    <span class="mdc-tab-bar__indicator"></span>
+                </nav>
+            </div>
 
-                    <h2 class="mdc-typography--title">Molecule selector</h2>
-                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
-                            Select molecules to insert them into the Exam. The active molecules order dictates the sequence of appearance in the Unity game.</span>
+        </div>
+    </div>
 
-                    <div class="WhiteSpaceSeparator"></div>
+    <div class="panels">
+        <div class="panel active" id="panel-1" role="tabpanel" aria-hidden="false">
 
-                    <h2 class="mdc-typography--title">Active molecules</h2>
+            <div class="mdc-layout-grid">
 
+                <form name="edit_exam_scene_form" action="" id="edit_exam_scene_form" method="POST" enctype="multipart/form-data">
                     <div class="mdc-layout-grid__inner">
-
-                        <div class="mdc-layout-grid__cell--span-12 mdc-theme--secondary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
-
-                            <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
-
-                            </ul>
-                        </div>
-
 
                         <div class="mdc-layout-grid__cell--span-12">
 
-                            <h2 class="mdc-typography--title">Available molecules</h2>
+                            <h2 class="mdc-typography--title">Build strategy</h2>
+                            <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
+                            Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game.
+                            You have to copy the JSON output, and paste it as a strategy in the DDA under "add strategy"</span>
 
-                            <div class="mdc-layout-grid__cell--span-12" style="border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
+                            <div class="WhiteSpaceSeparator"></div>
 
-                                <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
-									<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
-
-									foreach ($molecules as $molecule) { ?>
-
-                                        <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-
-                                            <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule[moleculeID]; ?>">
-                                                <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
-
-													<?php if ($molecule[moleculeImage]){ ?>
-                                                        <img width="495" height="330" src="<?php echo $molecule[moleculeImage]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-													<?php } else { ?>
-                                                        <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                            <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                        </div>
-													<?php } ?>
-                                                </div>
-
-                                                <div class="mdc-card__primary">
-                                                    <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-														<?php echo $molecule[moleculeName];?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </li>
-
-									<?php }?>
-
-                                </ul>
+                            <h2 class="mdc-typography--title">JSON Output</h2>
+                            <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield" style="width: 50%;">
+                                <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly>
+                                <label for="molecule-json-field" class="mdc-textfield__label"> </label>
+                                <div class="mdc-textfield__bottom-line"></div>
                             </div>
+                            <br>
+
+                            <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
+
+
+                            <div class="WhiteSpaceSeparator"></div>
+
+                            <h2 class="mdc-typography--title">Active molecules</h2>
+
+                            <div class="mdc-layout-grid__inner">
+
+                                <div class="mdc-layout-grid__cell--span-12 mdc-theme--secondary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
+                                    <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
+                                    </ul>
+                                </div>
+
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Available molecules</h2>
+
+                                    <div class="mdc-layout-grid__cell--span-12" style="border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
+
+                                        <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
+											<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
+
+											foreach ($molecules as $molecule) { ?>
+
+                                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+
+                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule[moleculeID];?>" data-molec-type="<?php echo $molecule[moleculeType]; ?>">
+                                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+
+															<?php if ($molecule[moleculeImage]){ ?>
+                                                                <img width="495" height="330" src="<?php echo $molecule[moleculeImage]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+															<?php } else { ?>
+                                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                                </div>
+															<?php } ?>
+                                                        </div>
+
+                                                        <div class="mdc-card__primary">
+                                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+																<?php echo $molecule[moleculeName];?>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+
+											<?php }?>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <input type="hidden" name="active-molecules-input" id="active-molecules-input" value="[]" />
+
+                        <div class="mdc-layout-grid__cell--span-12">
+
+                            <hr class="WhiteSpaceSeparator">
+
+							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                            <input type="hidden" name="submitted" id="submitted" value="true" />
+
+                            <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
+                                Submit changes
+                            </button>
                         </div>
                     </div>
-
-                </div>
-
-
-                <input type="hidden" name="active-molecules-input" id="active-molecules-input" value="[]" />
-
-                <div class="mdc-layout-grid__cell--span-12">
-
-                    <hr class="WhiteSpaceSeparator">
-
-					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                    <input type="hidden" name="submitted" id="submitted" value="true" />
-
-                    <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
-                        Submit changes
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
-    </form>
 
+        <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
+            <div style="min-height: 1240px;">
+                <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+            </div>
+        </div>
 
-
+    </div>
 
     <script type="text/javascript">
 
+        var project_keys = [];
+        project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id)); ?>;
+        var user_email = "<?php echo $user_email; ?>";
+
+        if (project_keys.gioID) {
+            ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
+        }
+
         var mdc = window.mdc;
         mdc.autoInit();
+
+        var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
+        var dots = document.querySelector('.dots');
+        var panels = document.querySelector('.panels');
+
+        dynamicTabBar.preventDefaultOnClick = true;
+
+        dynamicTabBar.listen('MDCTabBar:change', function (t) {
+            var dynamicTabBar = t.detail;
+            var nthChildIndex = dynamicTabBar.activeTabIndex;
+
+            updatePanel(nthChildIndex);
+        });
+
+
+        function updatePanel(index) {
+            var activePanel = panels.querySelector('.panel.active');
+            if (activePanel) {
+                activePanel.classList.remove('active');
+            }
+            var newActivePanel = panels.querySelector('.panel:nth-child(' + (index + 1) + ')');
+            if (newActivePanel) {
+                newActivePanel.classList.add('active');
+            }
+        }
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({
@@ -183,21 +265,55 @@ get_header(); ?>
                 receive: function(event, ui) {
 
                     var arr = [];
+                    var typeArr = [];
                     jQuery('div','#sortable1').each(function(){
 
                         if (jQuery(this).attr('id')) {
-                            console.log(jQuery(this).attr('id'));
                             arr.push(jQuery(this).attr('id'));
+                            typeArr.push(jQuery(this).attr('data-molec-type'));
                         }
-
                     });
 
                     jQuery("#active-molecules-input").val(arr);
+                    jQuery('#molecule-json-field').val(JSON.stringify(typeArr));
                 }
 
             }).disableSelection();
 
         } );
+
+        function ddaIframe(email, pwd, app_key) {
+
+            var url = "https://envisage.goedle.io/dda/index.htm?" +
+                "email=" + email +
+                "&pwd=" + pwd +
+                "&app_key=" + app_key;
+
+            var iframe = jQuery('#ddaIframeContent');
+            if (iframe.length) {
+                iframe.attr('src', url);
+                return false;
+            }
+
+            jQuery(parent.document).find("ddaIframeContent").each(function () {
+                if (this.contentDocument == window.document) {
+                    // if the href of the iframe is not same as
+                    // the value of src attribute then reload it
+                    if (this.src != url) {
+                        this.src = this.src;
+                    }
+                }
+            });
+            return true;
+        }
+
+
+        jQuery("#copy-output-btn").click(function() {
+            var copyText = document.getElementById("molecule-json-field");
+            copyText.select();
+            document.execCommand("Copy");
+            alert("Strategy copied: " + copyText.value);
+        });
 
     </script>
 
