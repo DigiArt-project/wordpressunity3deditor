@@ -239,10 +239,14 @@ get_header(); ?>
 													echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
 												}
 
-												if ($screenshotImgUrl) { ?>
+												if ($screenshotImgUrl) {
+
+                                                    $dataScreenshot = file_get_contents($screenshotImgUrl);
+                                                    $dataScreenshotbase64 = 'data:image/jpeg;base64,' . base64_encode($dataScreenshot);
+                                                    ?>
 
                                                     <div id="featureImgContainer" class="ImageContainer">
-                                                        <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo $screenshotImgUrl; ?>">
+                                                        <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo $dataScreenshotbase64;?>">
                                                     </div>
 
 												<?php } else { ?>

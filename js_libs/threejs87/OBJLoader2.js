@@ -18,7 +18,7 @@ THREE.OBJLoader2 = (function () {
     var OBJLOADER2_VERSION = '1.4.1';
 
     function OBJLoader2( manager ) {
-        console.log( "Using THREE.OBJLoader2 version: " + OBJLOADER2_VERSION );
+        //console.log( "Using THREE.OBJLoader2 version: " + OBJLOADER2_VERSION );
         this.manager = Validator.verifyInput( manager, THREE.DefaultLoadingManager );
 
         this.path = '';
