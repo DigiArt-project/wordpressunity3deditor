@@ -14,6 +14,8 @@ $project_id    = sanitize_text_field( $project_id );
 $game_post     = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
 
+$project_saved_keys = wpunity_getProjectKeys($project_id);
+
 $userid = get_current_user_id();
 $user_data = get_userdata( $userid );
 $user_email = $user_data->user_email;
@@ -45,6 +47,18 @@ $allScenePGameID = $allScenePGame->term_id;
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
+
+// DELETE SCENE AJAX
+wp_enqueue_script( 'ajax-script_deletescene', $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js', array('jquery') );
+wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
+	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+);
+
+//FOR SAVING extra keys
+wp_enqueue_script( 'ajax-script_savegio', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
+wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
+	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
+);
 
 wp_enqueue_script( 'ajax-script_filebrowse', $pluginpath.'/js_libs/scriptFileBrowserToolbarWPway.js', array('jquery') );
 wp_localize_script( 'ajax-script_filebrowse', 'my_ajax_object_fbrowse', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
@@ -272,6 +286,45 @@ get_header(); ?>
                                             </div>
                                         </div>
 
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                                            <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
+
+                                            <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                                                <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light mdc-textfield--disabled"
+                                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" value="<?php if($project_saved_keys['gioID'] != ''){echo $project_saved_keys['gioID'];} ?>">
+                                                <label for="app-key" class="mdc-textfield__label">APP KEY</label>
+                                                <div class="mdc-textfield__bottom-line"></div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+
+                                            <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
+
+                                            <!--<a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
+												GENERATE NEW
+											</a>-->
+                                            <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                                                <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
+                                                <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
+                                                <div class="mdc-textfield__bottom-line"></div>
+                                            </div>
+
+                                            <br>
+
+                                            <a title="Save Experiment ID"
+                                               id="save-expid-button" class="mdc-button mdc-button--primary mdc-button--raised FullWidth">SAVE</a>
+
+
+                                        </div>
                                     </div>
                                 </div>
 
@@ -594,6 +647,20 @@ get_header(); ?>
         var scene_id = <?php echo $current_scene_id; ?>;
         var game_type = "<?php echo strtolower($game_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
+
+        // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
+        jQuery('#save-expid-button').click(function() {
+            wpunity_saveExpIDAjax();
+        });
+
+        if (document.getElementById('regional-checkbox-component')) {
+            var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
+
+            jQuery('#regional-checkbox-component').click(function () {
+                jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
+            });
+        }
+
 
         // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {
