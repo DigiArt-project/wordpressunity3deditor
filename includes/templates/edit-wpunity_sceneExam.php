@@ -305,6 +305,21 @@ get_header(); ?>
 
                     jQuery("#active-molecules-input").val(arr);
                     jQuery('#molecule-json-field').val(JSON.stringify(typeArr));
+                },
+                create: function(event, ui) {
+
+                    var arr = [];
+                    var typeArr = [];
+                    jQuery('div','#sortable1').each(function(){
+
+                        if (jQuery(this).attr('id')) {
+                            arr.push(jQuery(this).attr('id'));
+                            typeArr.push(jQuery(this).attr('data-molec-type'));
+                        }
+                    });
+
+                    jQuery("#active-molecules-input").val(arr);
+                    jQuery('#molecule-json-field').val(JSON.stringify(typeArr));
                 }
 
             }).disableSelection();
