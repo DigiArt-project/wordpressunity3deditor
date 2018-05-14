@@ -161,11 +161,11 @@ get_header(); ?>
 
                                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
-                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule[moleculeID];?>" data-molec-type="<?php echo $molecule[moleculeType]; ?>">
+                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
                                                         <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-															<?php if ($molecule[moleculeImage]){ ?>
-                                                                <img width="495" height="330" src="<?php echo $molecule[moleculeImage]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+															<?php if ($molecule['moleculeImage']){ ?>
+                                                                <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
 															<?php } else { ?>
                                                                 <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                                                     <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
@@ -175,7 +175,7 @@ get_header(); ?>
 
                                                         <div class="mdc-card__primary">
                                                             <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-																<?php echo $molecule[moleculeName];?>
+																<?php echo $molecule['moleculeName'];?>
                                                             </p>
                                                         </div>
                                                     </div>
