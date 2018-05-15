@@ -99,7 +99,6 @@ get_header(); ?>
             <div class="mdc-toolbar__section mdc-toolbar__section--align-start" style="justify-content: flex-end">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Build Strategy</a>
-                    <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">DDA</a>
                     <span class="mdc-tab-bar__indicator"></span>
                 </nav>
             </div>
@@ -120,23 +119,12 @@ get_header(); ?>
                             <h2 class="mdc-typography--title">Build strategy</h2>
                             <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                             Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game.
-                            You have to copy the JSON output, and paste it as a strategy in the DDA under "add strategy"</span>
+                            </span>
 
-                            <div class="WhiteSpaceSeparator"></div>
+                            <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="text"
+                                   style="display: none;" readonly>
 
-                            <h2 class="mdc-typography--title">JSON Output</h2>
-                            <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield" style="width: 50%;">
-                                <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly>
-                                <label for="molecule-json-field" class="mdc-textfield__label"> </label>
-                                <div class="mdc-textfield__bottom-line"></div>
-                            </div>
-                            <br>
-
-                            <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
-
-                            <?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
-
+							<?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
 
                             <div class="WhiteSpaceSeparator"></div>
 
@@ -146,33 +134,33 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12 mdc-theme--secondary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
                                     <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
-                                        <?php foreach ($molecules as $molecule) { ?>
-                                            <?php if (in_array($molecule['moleculeID'], $savedMolecules)) { ?>
+										<?php foreach ($molecules as $molecule) { ?>
+											<?php if (in_array($molecule['moleculeID'], $savedMolecules)) { ?>
 
                                                 <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
                                                     <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
                                                         <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-                                                            <?php if ($molecule['moleculeImage']){ ?>
+															<?php if ($molecule['moleculeImage']){ ?>
                                                                 <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-                                                            <?php } else { ?>
+															<?php } else { ?>
                                                                 <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                                                     <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                                                 </div>
-                                                            <?php } ?>
+															<?php } ?>
                                                         </div>
 
                                                         <div class="mdc-card__primary">
                                                             <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                                <?php echo $molecule['moleculeName'];?>
+																<?php echo $molecule['moleculeName'];?>
                                                             </p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                            <?php  } ?>
+											<?php  } ?>
 
-                                        <?php }?>
+										<?php }?>
                                     </ul>
                                 </div>
 
@@ -185,30 +173,30 @@ get_header(); ?>
 
                                         <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
 											<?php foreach ($molecules as $molecule) { ?>
-                                                <?php if (!in_array($molecule['moleculeID'], $savedMolecules)) { ?>
+												<?php if (!in_array($molecule['moleculeID'], $savedMolecules)) { ?>
 
                                                     <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
                                                         <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
                                                             <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-                                                                <?php if ($molecule['moleculeImage']){ ?>
+																<?php if ($molecule['moleculeImage']){ ?>
                                                                     <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-                                                                <?php } else { ?>
+																<?php } else { ?>
                                                                     <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                                                         <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                                                     </div>
-                                                                <?php } ?>
+																<?php } ?>
                                                             </div>
 
                                                             <div class="mdc-card__primary">
                                                                 <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                                    <?php echo $molecule['moleculeName'];?>
+																	<?php echo $molecule['moleculeName'];?>
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     </li>
-                                                <?php  } ?>
+												<?php  } ?>
 
 											<?php }?>
 
@@ -238,23 +226,9 @@ get_header(); ?>
             </div>
         </div>
 
-        <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-            <div style="min-height: 1240px;">
-                <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-            </div>
-        </div>
-
     </div>
 
     <script type="text/javascript">
-
-        var project_keys = [];
-        project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id)); ?>;
-        var user_email = "<?php echo $user_email; ?>";
-
-        if (project_keys.gioID) {
-            ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
-        }
 
         var mdc = window.mdc;
         mdc.autoInit();
@@ -325,31 +299,6 @@ get_header(); ?>
             }).disableSelection();
 
         } );
-
-        function ddaIframe(email, pwd, app_key) {
-
-            var url = "https://envisage.goedle.io/dda/index.htm?" +
-                "email=" + email +
-                "&pwd=" + pwd +
-                "&app_key=" + app_key;
-
-            var iframe = jQuery('#ddaIframeContent');
-            if (iframe.length) {
-                iframe.attr('src', url);
-                return false;
-            }
-
-            jQuery(parent.document).find("ddaIframeContent").each(function () {
-                if (this.contentDocument == window.document) {
-                    // if the href of the iframe is not same as
-                    // the value of src attribute then reload it
-                    if (this.src != url) {
-                        this.src = this.src;
-                    }
-                }
-            });
-            return true;
-        }
 
 
         jQuery("#copy-output-btn").click(function() {
