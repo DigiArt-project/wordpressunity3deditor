@@ -653,24 +653,6 @@ get_header(); ?>
 							<?php } ?>
 						<?php endwhile; ?>
 
-                        <?php if ($game_type_obj->string === "Chemistry") { ?>
-
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-
-                                <h3 class="mdc-typography--title">Strategy JSON</h3>
-                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
-                                    <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                    <label for="molecule-json-field" class="mdc-textfield__label"> </label>
-                                    <div class="mdc-textfield__bottom-line"></div>
-                                </div>
-                                <br>
-
-
-                            </div>
-
-                        <?php } ?>
-
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
                             <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
@@ -739,6 +721,22 @@ get_header(); ?>
             </div>
 
             <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                            <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly>
+                            <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
+                            <div class="mdc-textfield__bottom-line"></div>
+                        </div>
+                        <br>
+                        <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
+                    </div>
+                </div>
+
+                <br>
+
                 <div style="min-height: 1240px;">
                     <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
@@ -1005,6 +1003,13 @@ get_header(); ?>
 
             jQuery('#delete-scene-dialog-progress-bar').hide();
             deleteDialog.close();
+        });
+
+        jQuery("#copy-output-btn").click(function() {
+            var copyText = document.getElementById("molecule-json-field");
+            copyText.select();
+            document.execCommand("Copy");
+            alert("Strategy copied: " + copyText.value);
         });
 
         function deleteScene(id) {
