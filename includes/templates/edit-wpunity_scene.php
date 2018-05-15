@@ -653,6 +653,24 @@ get_header(); ?>
 							<?php } ?>
 						<?php endwhile; ?>
 
+                        <?php if ($game_type_obj->string === "Chemistry") { ?>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+
+                                <h3 class="mdc-typography--title">Strategy JSON</h3>
+                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                                    <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                    <label for="molecule-json-field" class="mdc-textfield__label"> </label>
+                                    <div class="mdc-textfield__bottom-line"></div>
+                                </div>
+                                <br>
+
+
+                            </div>
+
+                        <?php } ?>
+
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
                             <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
@@ -678,7 +696,6 @@ get_header(); ?>
 
                             <a title="Save Experiment ID"
                                id="save-expid-button" class="mdc-button mdc-button--primary mdc-button--raised FullWidth">SAVE</a>
-
 
                         </div>
 
