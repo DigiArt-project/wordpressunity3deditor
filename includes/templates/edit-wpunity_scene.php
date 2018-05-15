@@ -47,6 +47,19 @@ $allScenePGameID = $allScenePGame->term_id;
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
+// COMPILE Ajax
+$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+
+$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
+wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
+	array( 'ajax_url' => admin_url( 'admin-ajax.php'),
+	       'id' => $project_id,
+	       'slug' => $gameSlug,
+	       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
+	       'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
+	)
+);
 
 // DELETE SCENE AJAX
 wp_enqueue_script( 'ajax-script_deletescene', $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js', array('jquery') );
@@ -89,10 +102,13 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 if ($project_scope == 0) {
+	$single_lowercase = "tour";
 	$single_first = "Tour";
 } else if ($project_scope == 1){
+	$single_lowercase = "lab";
 	$single_first = "Lab";
 } else {
+	$single_lowercase = "project";
 	$single_first = "Project";
 }
 
@@ -110,6 +126,10 @@ get_header(); ?>
             <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
 			<?php echo $game_post->post_title; ?>
         </h1>
+
+        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
+            COMPILE <?php echo $single_lowercase; ?>
+        </a>
 
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
             Add a new 3D asset
@@ -518,6 +538,7 @@ get_header(); ?>
                     <aside id="delete-dialog"
                            class="mdc-dialog"
                            role="alertdialog"
+                           style="z-index: 1000;"
                            aria-labelledby="Delete scene dialog"
                            aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
                         <div class="mdc-dialog__surface">
@@ -744,6 +765,94 @@ get_header(); ?>
 
 		<?php } ?>
 
+
+        <!--Compile Dialog-->
+        <aside id="compile-dialog"
+               class="mdc-dialog"
+               role="alertdialog"
+               style="z-index: 1000;"
+               data-game-slug="<?php echo $gameSlug; ?>"
+               data-project-id="<?php echo $project_id; ?>"
+               aria-labelledby="my-mdc-dialog-label"
+               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+
+                <header class="mdc-dialog__header">
+                    <h2 class="mdc-dialog__header__title">
+                        Compile <?php echo $single_lowercase; ?>
+                    </h2>
+                </header>
+
+                <section class="mdc-dialog__body">
+
+                    <h3 class="mdc-typography--subheading2"> Platform </h3>
+
+                    <div id="platform-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 40%;">
+                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
+                        <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
+                            <ul class="mdc-list mdc-simple-menu__items">
+                                <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;" tabindex="-1">
+                                    Select a platform
+                                </li>
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-windows" tabindex="0">
+                                    Windows
+                                </li>
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-linux" tabindex="0">
+                                    Linux
+                                </li>
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-mac" tabindex="0">
+                                    Mac OS
+                                </li>
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-web" tabindex="0">
+                                    Web
+                                </li>
+                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-android" tabindex="0">
+                                    Android
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <input id="platformInput" type="hidden">
+
+
+                    <div class="mdc-typography--caption mdc-theme--text-primary-on-background" style="float: right;"> <i title="Memory Usage" class="material-icons AlignIconToBottom">memory</i> <span  id="unityTaskMemValue">0</span> KB </div>
+
+                    <hr class="WhiteSpaceSeparator">
+
+                    <h2 id="compileProgressTitle" style="display: none" class="CenterContents mdc-typography--headline">
+                        Step: 1/4
+                    </h2>
+
+                    <div class="progressSlider" id="compileProgressDeterminate" style="display: none;">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLineDeterminate" id="progressSliderSubLineDeterminateValue"></div>
+                    </div>
+
+                    <div class="progressSlider" id="compileProgressSlider" style="display: none;">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLine progressIncrease"></div>
+                        <div class="progressSliderSubLine progressDecrease"></div>
+                    </div>
+
+
+                    <div id="compilationProgressText" class="CenterContents mdc-typography--title"></div>
+
+                    <div class="CenterContents">
+                        <a class="mdc-typography--title" href="" id="wpunity-ziplink" style="display:none;"> <i style="vertical-align: text-bottom" class="material-icons">file_download</i> Download Zip</a>
+                        <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;margin-left:30px" target="_blank">Web link</a>
+                    </div>
+
+                </section>
+
+                <footer class="mdc-dialog__footer">
+                    <a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
+                    <a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised LinkDisabled">Proceed</a>
+                </footer>
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+
     </div>
 
 
@@ -764,6 +873,62 @@ get_header(); ?>
         if (deleteDialog) {
             deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
             deleteDialog.focusTrap_.deactivate();
+        }
+
+        var compileDialog = document.querySelector('#compile-dialog');
+        if (compileDialog) {
+
+            compileDialog = new mdc.dialog.MDCDialog(compileDialog);
+            compileDialog.focusTrap_.deactivate();
+
+
+            jQuery( "#compileGameBtn" ).click(function() {
+                compileDialog.show();
+            });
+        }
+
+        jQuery( "#compileCancelBtn" ).click(function(e) {
+
+            var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
+
+            console.log(pid);
+
+            if (pid) {
+                wpunity_killtask_compile(pid);
+            }
+        });
+
+        jQuery( "#compileProceedBtn" ).click(function() {
+
+            jQuery( "#platform-select" ).addClass( "mdc-select--disabled" ).attr( "aria-disabled","true" );
+            jQuery( "#compileProgressSlider" ).show();
+            jQuery( "#compileProgressTitle" ).show();
+
+            jQuery( "#compileProceedBtn" ).addClass( "LinkDisabled" );
+            jQuery( "#compileCancelBtn" ).addClass( "LinkDisabled" );
+
+            jQuery( "#wpunity-ziplink" ).hide();
+            jQuery( "#wpunity-weblink" ).hide();
+
+            jQuery( "#compilationProgressText" ).html("");
+
+            jQuery('#unityTaskMemValue').html("0");
+
+            wpunity_assepileAjax();
+        });
+
+        var MDCSelect = mdc.select.MDCSelect;
+        var platformDropdown = document.getElementById('platform-select');
+
+        if (platformDropdown) {
+
+            var platformSelect = MDCSelect.attachTo(platformDropdown);
+
+            platformDropdown.addEventListener('MDCSelect:change', function() {
+                jQuery( "#platformInput" ).attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
+                jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
+            });
+
         }
 
         var project_id = <?php echo $project_id; ?>;
@@ -1024,6 +1189,15 @@ get_header(); ?>
             deleteDialog.show();
         }
 
+        function hideCompileProgressSlider() {
+            jQuery( "#compileProgressSlider" ).hide();
+            jQuery( "#compileProgressTitle" ).hide();
+            jQuery( "#compileProgressDeterminate" ).hide();
+            jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+
+            jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
+            jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
+        }
 
     </script>
 <?php get_footer(); ?>
