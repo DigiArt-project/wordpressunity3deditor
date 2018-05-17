@@ -289,7 +289,6 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
 
         var dims = findDimensions(transform_controls.object);
 
-
         gui_controls_funs.dg_dim_x = dims[0];
         gui_controls_funs.dg_dim_y = dims[1];
         gui_controls_funs.dg_dim_z = dims[2];

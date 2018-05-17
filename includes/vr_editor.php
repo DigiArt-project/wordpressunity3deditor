@@ -537,11 +537,9 @@ echo '</script>';
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
             
             envir.is2d = false;
+            transform_controls.setMode("translate");
 
         } else {
-
-            
-
 
             // This makes the camera to go on top of the selected item
             // envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
@@ -556,6 +554,7 @@ echo '</script>';
             
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
+            transform_controls.setMode("rottrans");
         }
 
         envir.orbitControls.object.updateProjectionMatrix();
@@ -656,16 +655,14 @@ echo '</script>';
             objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
         }
 
+        
+        
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
 
-            //findDimensions(transform_controls.object);
-
             // highlight
             envir.outlinePass.selectedObjects = [objItem];
-            
-            //envir.renderer.setClearColor( 0xffffff, 0.9 );
 
             envir.scene.add(transform_controls);
 
@@ -681,13 +678,18 @@ echo '</script>';
             selected_object_name = name;
 
             transform_controls.setMode("rottrans");
+
+            var dims = findDimensions(transform_controls.object);
+
+            var sizeT = Math.max(...dims);
+
+            transform_controls.size = sizeT > 1 ? sizeT : 1;
+            
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
-
-        // controls make them smaller
-        transform_controls.size = 0.7;
+        
     };
 
     function hideObjectPropertiesPanels() {

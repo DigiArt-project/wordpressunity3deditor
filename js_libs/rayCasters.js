@@ -160,12 +160,12 @@ function selectorMajor(event, inters){
         var sizeT = Math.max(...dims);
 
         transform_controls.size = sizeT > 1 ? sizeT : 1;
+        transform_controls.setMode( envir.is2d ? "rottrans" : "translate" );
 
         // Show also the UI button
         jQuery("#removeAssetBtn").show();
 
         // calculate object physical dimensions
-
 
         // This makes the camera to go on top of the selected item
 
@@ -177,14 +177,8 @@ function selectorMajor(event, inters){
             envir.cameraOrbit.position.z = inters.object.parent.position.z;
         }
 
-
-
-
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent];
-
-        // my gizmo is the default one
-        transform_controls.setMode("rottrans");
     }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
