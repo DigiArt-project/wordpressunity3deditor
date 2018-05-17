@@ -78,11 +78,15 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
     fileList.on({
         click: function(e) {
             //alert("Drag n drop zip files onto 3D space");
+
             e.preventDefault();
         },
 
         dragstart: function(e) {
 
+            var img = document.createElement("img");
+            img.src = "../wp-content/plugins/wordpressunity3deditor/images/ic_asset.png";
+            e.originalEvent.dataTransfer.setDragImage(img, 32, 32);
 
             var dragData = {
                 "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
@@ -106,15 +110,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
             var jsonDataDrag = JSON.stringify(dragData);
             e.originalEvent.dataTransfer.setData("text/plain", jsonDataDrag);
-
-            var img = document.createElement("img");
-            img.src = e.target.attributes.getNamedItem("data-sshot-url").value;
-            img.style.width = "100px";
-            img.style.height = "100px";
-            img.width = 100;
-            img.height = 100;
-
-            e.originalEvent.dataTransfer.setDragImage(img, 0, 0);
 
         },
         drag: function(e) {
