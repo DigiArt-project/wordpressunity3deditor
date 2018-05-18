@@ -346,9 +346,7 @@ get_header();
     dialog.focusTrap_.deactivate();
 
     function loadGameDescription() {
-
         var checked = parseInt(jQuery( ":checked" ).val(), 10);
-
         if (checked === 2) {
             jQuery("#game-description-label").html("A Wind Energy park simulation with many areas and parameters");
         } else if (checked === 3) {
@@ -356,10 +354,6 @@ get_header();
         } else {
             jQuery("#game-description-label").html("A first person view game about visiting a museum");
         }
-
-        console.log(checked);
-
-
     }
 
     function deleteGame(id) {
