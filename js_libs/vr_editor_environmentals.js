@@ -5,6 +5,8 @@ class vr_editor_environmentals {
 
         this.is2d = true;
         this.isDebug = false; // Debug mode
+        //this.isRendering = true;
+
 
         this.ctx = this;
 
@@ -31,7 +33,7 @@ class vr_editor_environmentals {
         //this.setAxisText();
         //this.setArtificialFloor();
         this.setLight();
-        // this.setStats();
+//         this.setStats();
         this.setSky();
         this.setSunSphere();
 
@@ -381,17 +383,17 @@ class vr_editor_environmentals {
     /**
      Set the stats
      */
-    setStats() {
-        // // Rendering stats (FPS)
-        // this.stats = new Stats();
-        // this.stats.name = "myStats";
-        // this.stats.domElement.style.position = 'absolute';
-        // this.stats.domElement.style.bottom = '35px';
-        // this.stats.domElement.style.left = '10px';
-        // this.stats.domElement.style.zIndex = 100;
-        //
-        // this.container_3D_all.appendChild( this.stats.domElement );
-    }
+    // setStats() {
+    //     // // Rendering stats (FPS)
+    //     this.stats = new Stats();
+    //     this.stats.name = "myStats";
+    //     this.stats.domElement.style.position = 'absolute';
+    //     this.stats.domElement.style.bottom = '35px';
+    //     this.stats.domElement.style.left = '10px';
+    //     this.stats.domElement.style.zIndex = 100;
+    //
+    //     this.container_3D_all.appendChild( this.stats.domElement );
+    // }
 
 
     setSky(){
