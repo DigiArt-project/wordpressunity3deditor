@@ -268,7 +268,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     if (isset($_POST['sshotFileInput']) ) {
         if (strlen($_POST['sshotFileInput'])>0) {
             
-            $screenShotFile_id = wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID, $gameSlug);
+            $screenShotFile_id = wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID, $gameSlug, 'jpg');
             update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id, 'jpg');
         }
     }

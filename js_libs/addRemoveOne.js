@@ -77,7 +77,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
 
-        envir.renderer.clear(true, true, true); // clear buffers
+
 
     };
 

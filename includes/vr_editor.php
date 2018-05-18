@@ -7,7 +7,7 @@
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/dat.gui.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>-->
 
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CopyShader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/FXAAShader.js'></script>
@@ -574,6 +574,8 @@ echo '</script>';
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
 
+        
+        
         if (btn.data('toggle') === 'on') {
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
@@ -582,7 +584,12 @@ echo '</script>';
 
             hideEditorUI();
 
+            
+            
         } else {
+
+            
+            
             btn.removeClass('mdc-theme--text-hint-on-light');
             btn.addClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility</i>');
@@ -705,6 +712,22 @@ echo '</script>';
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
+
+
+
+        envir.scene.traverse(function(obj) {
+            if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
+
+
+                var s = '';
+                var obj2 = obj;
+                // while (obj2 !== envir.scene) {
+                //     s += '-';
+                //     obj2 = obj2.parent;
+                // }
+                console.log(s + " " + obj.name + " (" + obj.categoryName + ")" ); // + " " + obj.type + ' ' + obj.name
+            }
+        });
         
     };
 
@@ -730,6 +753,9 @@ echo '</script>';
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
+
+        transform_controls.visible  = true;
+        envir.getSteveFrustum().visible = true;
     }
 
     function hideEditorUI() {
@@ -743,6 +769,9 @@ echo '</script>';
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
+
+        transform_controls.visible  = false;
+        envir.getSteveFrustum().visible = false;
     }
 </script>
 
@@ -790,7 +819,6 @@ $formRes->init($sceneToLoad);
 
     function animate()
     {
-        // 60fps
         id_animation_frame = requestAnimationFrame( animate );
 
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)

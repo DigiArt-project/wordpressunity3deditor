@@ -75,6 +75,8 @@ class LoaderMulti {
                 }else {
 
 
+
+
                     mtlLoader.setPath(resources3D[name]['path']);
 
                     mtlLoader.load(resources3D[name]['mtl'], function (materials) {

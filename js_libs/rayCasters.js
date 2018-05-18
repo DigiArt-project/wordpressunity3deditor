@@ -93,6 +93,8 @@ function onMouseDownSelect( event ) {
     // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"), //transform_controls.getObjectByName('trs_modeChanger')
 
+
+
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
@@ -155,8 +157,6 @@ function onMouseDownSelect( event ) {
  */
 function selectorMajor(event, inters){
 
-    console.log("selectorMajor");
-
     if (event.button === 0) {
 
         transform_controls.attach(inters.object.parent);
@@ -181,6 +181,8 @@ function selectorMajor(event, inters){
 
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent];
+
+
     }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
