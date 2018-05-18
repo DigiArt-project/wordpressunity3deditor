@@ -1104,7 +1104,10 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
-
+   
+			if (trim($jsonScene) === '')
+			    continue;
+       
 			if (count($sceneJsonARR['objects']) > 0)
 				foreach ($sceneJsonARR['objects'] as $key => $value) {
 					if ($key !== 'avatarYawObject') {
@@ -1158,6 +1161,10 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
+			
+            if (trim($jsonScene)==='')
+                continue;
+			
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
 
 			if (count($sceneJsonARR['objects']) > 0)

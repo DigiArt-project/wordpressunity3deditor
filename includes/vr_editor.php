@@ -3,6 +3,7 @@
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OrbitControls.js'></script>
 
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CSS2DRenderer.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/dat.gui.js'></script>
@@ -478,7 +479,7 @@ echo '</script>';
 
     //transform_controls.addEventListener( 'change', checkForRecycle );
 
-    envir.addCubeToControls(transform_controls);
+    //envir.addCubeToControls(transform_controls);
 
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
@@ -521,11 +522,14 @@ echo '</script>';
         envir.orbitControls.target.y = 0;
         envir.orbitControls.target.z = 0;
 
-        
-        
+
+
+        jQuery("#translate-switch").click();
         
         if (envir.is2d) {
 
+            
+            jQuery("#object-manipulation-toggle")[0].style.display = "";
 
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
@@ -538,9 +542,12 @@ echo '</script>';
             
             envir.is2d = false;
             transform_controls.setMode("translate");
+            
 
         } else {
-
+            
+            jQuery("#object-manipulation-toggle")[0].style.display = "none";
+            
             // This makes the camera to go on top of the selected item
             // envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
             // envir.orbitControls.target.y = transform_controls.object.position.y;
@@ -641,11 +648,8 @@ echo '</script>';
         var objItem;
         var trs_tmp;
         var name;
-
+        
         for (name in resources3D  ) {
-
-            if (name == 'avatarYawObject')
-                continue;
 
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
@@ -654,8 +658,7 @@ echo '</script>';
             objItem.rotation.set( trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
         }
-
-        
+      
         
         // place controls to last inserted obj
         if (objItem) {
@@ -679,12 +682,16 @@ echo '</script>';
 
             transform_controls.setMode("rottrans");
 
-            var dims = findDimensions(transform_controls.object);
+            if (selected_object_name != 'avatarYawObject') {
+                var dims = findDimensions(transform_controls.object);
+                var sizeT = Math.max(...dims);
+            } else {
+                var sizeT = 1;
+                transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
+                jQuery("#removeAssetBtn").hide();
+            }
 
-            var sizeT = Math.max(...dims);
-
-            transform_controls.size = sizeT > 1 ? sizeT : 1;
-            
+            transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
@@ -737,7 +744,7 @@ $formRes->init($sceneToLoad);
 ?>
 
 <script>
-
+    
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
 
@@ -785,6 +792,9 @@ $formRes->init($sceneToLoad);
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
 
+        envir.labelRenderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+        
+        
         if (isComposerOn)
             envir.composer.render();
 
@@ -826,8 +836,13 @@ $formRes->init($sceneToLoad);
     }
 
     // Select event listener
+
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
+    
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
+
+    
 
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });

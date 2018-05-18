@@ -6,8 +6,29 @@
 
     'use strict';
 
+    // linewidth
     var lwidth = 0.1;
+
+    // arrow width
     var arrWidth = 0.2;
+
+    // 2D info label
+    var textInfo = document.createElement('div');
+    textInfo.className = 'label';
+    textInfo.style.color = 'rgb(' + 255 + ',' + 255 + ',' + 255 + ')';
+    textInfo.style.background= 'rgb(' + 210 + ',' + 210 + ',' + 210 + ')';
+    textInfo.style.padding = "5px";
+    textInfo.style.borderRadius="20px";
+    textInfo.textContent = "";
+
+    var labelInfo = new THREE.CSS2DObject(textInfo);
+
+    // lines denoting angle for rotation mode
+    var angle_line_geometryX = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
+    var angle_line_geometryY = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,0,1.1], 3 ) );
+    var angle_line_geometryZ = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
+
+
 
     var GizmoMaterial = function ( parameters ) {
 
@@ -15,7 +36,7 @@
 
         this.depthTest = false;
         this.depthWrite = false;
-        this.side = THREE.FrontSide;
+        this.side = THREE.DoubleSide; //THREE.FrontSide;
         this.transparent = true;
 
         this.setValues( parameters );
@@ -81,7 +102,16 @@
     GizmoLineMaterial.prototype.constructor = GizmoLineMaterial;
 
 
+
     var pickerMaterial = new GizmoMaterial( { visible: false, transparent: true } );
+
+
+    var angle_lineX = new THREE.Line( angle_line_geometryX, new GizmoLineMaterial( { color: 0xff0000 } ) );
+    angle_lineX.visible = false;
+    var angle_lineY = new THREE.Line( angle_line_geometryY, new GizmoLineMaterial( { color: 0x00ff00 } ) );
+    angle_lineY.visible = false;
+    var angle_lineZ = new THREE.Line( angle_line_geometryZ, new GizmoLineMaterial( { color: 0x0000ff } ) );
+    angle_lineZ.visible = false;
 
 
     THREE.TransformGizmo = function () {
@@ -98,7 +128,7 @@
             this.add( this.pickers );
             this.add( this.planes );
 
-            //// PLANES
+            //// Planes for Translate
 
             var planeGeometry = new THREE.PlaneBufferGeometry( 50, 50, 2, 2 );
             var planeMaterial = new THREE.MeshBasicMaterial( { visible: false, side: THREE.DoubleSide } );
@@ -241,44 +271,58 @@
         arrowGeometry.merge( mesh.geometry, mesh.matrix );
         arrowGeometry.merge( cylMesh.geometry, cylMesh.matrix );
 
+        var lineGeometryX = new THREE.Geometry();
+        lineGeometryX.vertices.push( new THREE.Vector3( -100000, 0, 0 ), new THREE.Vector3( 100000, 0, 0 ));
+
+        var lineGeometryY = new THREE.Geometry();
+        lineGeometryY.vertices.push( new THREE.Vector3( 0, -100000, 0), new THREE.Vector3( 0, 100000, 0 ));
+
+        var lineGeometryZ = new THREE.Geometry();
+        lineGeometryZ.vertices.push( new THREE.Vector3( 0, 0, -100000), new THREE.Vector3( 0, 0, 100000 ));
+
+
 
         this.handleGizmos = {
 
             X: [
-                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
+                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ],
+                [ new THREE.Line( lineGeometryX, new GizmoLineMaterial( { color: 0xff0000, opacity : 0 } ) ) ]
             ],
 
             Y: [
                 [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 0, 1.5, 0 ] ],
+                [ new THREE.Line( lineGeometryY, new GizmoLineMaterial( { color: 0x00ff00, opacity : 0 } ) ) ]
             ],
 
             Z: [
                 [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ],
+                [ new THREE.Line( lineGeometryZ, new GizmoLineMaterial( { color: 0x00ff00, opacity : 0 } ) ) ]
             ],
 
-            XYZ: [
-                [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 } ) ), [ 0, 0, 0 ], [ 0, 0, 0 ] ]
-            ],
-
-            XY: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xffff00, opacity: 0.25 } ) ), [ 1.5, 1.5, 0 ] ]
-            ],
-
-            YZ: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0x00ffff, opacity: 0.25 } ) ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
-            ],
-
-            XZ: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xff00ff, opacity: 0.25 } ) ), [ 1.5, 0, 1.5 ],
-                    [ - Math.PI / 2, 0, 0 ] ]
-            ]
+            // XYZ: [
+            //     [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 } ) ), [ 0, 0, 0 ], [ 0, 0, 0 ] ]
+            // ],
+            //
+            // XY: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xffff00, opacity: 0.25 } ) ), [ 1.5, 1.5, 0 ] ]
+            // ],
+            //
+            // YZ: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0x00ffff, opacity: 0.25 } ) ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
+            // ],
+            //
+            // XZ: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xff00ff, opacity: 0.25 } ) ), [ 1.5, 0, 1.5 ],
+            //         [ - Math.PI / 2, 0, 0 ] ]
+            // ]
 
         };
 
         this.pickerGizmos = {
 
             X: [
-                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
+                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ],
+
             ],
 
             Y: [
@@ -289,21 +333,21 @@
                 [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ]
             ],
 
-            XYZ: [
-                [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), pickerMaterial ) ]
-            ],
-
-            XY: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 1.5, 0 ] ]
-            ],
-
-            YZ: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
-            ],
-
-            XZ: [
-                [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 0, 1.5 ], [ - Math.PI / 2, 0, 0 ] ]
-            ]
+            // XYZ: [
+            //     [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), pickerMaterial ) ]
+            // ],
+            //
+            // XY: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 1.5, 0 ] ]
+            // ],
+            //
+            // YZ: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
+            // ],
+            //
+            // XZ: [
+            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 0, 1.5 ], [ - Math.PI / 2, 0, 0 ] ]
+            // ]
 
         };
 
@@ -358,88 +402,88 @@
         THREE.TransformGizmo.call( this );
 
         var rotGeometryOuter = new THREE.Geometry();
-        var rotGeometryInner = new THREE.Geometry();
 
-        // Arrow head
-        var torMesh = new THREE.Mesh( new THREE.TorusGeometry( 1, lwidth, 4, 24, 2*Math.PI ) );
-        // mesh.position.y = 0.5;
-        torMesh.updateMatrix();
+        var ringMesh = new THREE.Mesh(new THREE.RingGeometry(1 + 2*lwidth, 1 + lwidth, 64, 16, (2 - 1/8) * Math.PI,  Math.PI/4) );
+        ringMesh.updateMatrix();
 
-        // Arrow body
-        var planeMesh = new THREE.Mesh( new THREE.CylinderGeometry( 0.8, 0.8, 0.01, 32 )  );
-        planeMesh.rotation.x = Math.PI/2;
-        planeMesh.updateMatrix();
 
-        rotGeometryOuter.merge( torMesh.geometry, torMesh.matrix );
-        rotGeometryInner.merge( planeMesh.geometry, planeMesh.matrix );
+        var arrowPlanarMesh1 = new THREE.Mesh( new THREE.RingGeometry( 0.001, 0.1, 1, 1) );
+        arrowPlanarMesh1.position.set(1.045, -0.487, 0);
+        arrowPlanarMesh1.rotation.set(0, 0, 0.71 * Math.PI);
+        arrowPlanarMesh1.updateMatrix();
+
+        var arrowPlanarMesh2 = new THREE.Mesh( new THREE.RingGeometry( 0.001, 0.1, 1, 1) );
+        arrowPlanarMesh2.position.set(1.045,  0.487, 0);
+        arrowPlanarMesh2.rotation.set(0, 0, -0.71 * Math.PI);
+        arrowPlanarMesh2.updateMatrix();
+
+        rotGeometryOuter.merge( ringMesh.geometry, ringMesh.matrix );
+        rotGeometryOuter.merge( arrowPlanarMesh1.geometry, arrowPlanarMesh1.matrix );
+        rotGeometryOuter.merge( arrowPlanarMesh2.geometry, arrowPlanarMesh2.matrix );
+
+
+        var CircleGeometry = function ( radius, facing, arc ) {
+
+            var geometry = new THREE.BufferGeometry();
+            var vertices = [];
+            arc = arc ? arc : 1;
+
+            for ( var i = 0; i <= 64 * arc; ++ i ) {
+
+                if ( facing === 'x' ) {
+                    vertices.push(0, Math.cos(i / 32 * Math.PI) * radius, Math.sin(i / 32 * Math.PI) * radius);
+
+                    vertices.push(0, Math.cos(i / 32 * Math.PI) * radius*1.05, Math.sin(i / 32 * Math.PI) * radius*1.05);
+                    vertices.push(0, Math.cos(i / 32 * Math.PI) * radius*0.95, Math.sin(i / 32 * Math.PI) * radius*0.95);
+
+                    vertices.push(0, Math.cos(i / 32 * Math.PI) * radius, Math.sin(i / 32 * Math.PI) * radius);
+                }
+
+
+                if ( facing === 'y' ) {
+
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius, 0, Math.sin(i / 32 * Math.PI) * radius);
+
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius*1.05, 0, Math.sin(i / 32 * Math.PI) * radius*1.05);
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius*0.95, 0, Math.sin(i / 32 * Math.PI) * radius*0.95);
+
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius, 0, Math.sin(i / 32 * Math.PI) * radius);
+                }
+
+                if ( facing === 'z' ){
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius, Math.sin(i / 32 * Math.PI) * radius, 0);
+
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius*1.05, Math.sin(i / 32 * Math.PI) * radius*1.05, 0);
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius*0.95, Math.sin(i / 32 * Math.PI) * radius*0.95, 0);
+
+                    vertices.push(Math.cos(i / 32 * Math.PI) * radius, Math.sin(i / 32 * Math.PI) * radius, 0);
+                }
+            }
+
+            geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            return geometry;
+        };
 
 
         this.handleGizmos = {
             X: [
-
-                [ new THREE.Mesh( rotGeometryOuter, new GizmoMaterial( { color: 0xff0000, opacity: 0.25 } ) ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ],
-                [ new THREE.Mesh( rotGeometryInner, new GizmoMaterial( { color: 0xff0000, opacity: 0.1 } ) ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ]
-
-                // [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 24, Math.PI ), new GizmoMaterial( { color: 0xff0000, opacity: 0.25 } ) ) ,
-                //     [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ]
+                [ new THREE.Mesh( rotGeometryOuter, new GizmoMaterial( { color: 0xff0000, opacity: 0.75 } ) ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, Math.PI / 4 ] ],
+                [ new THREE.Line( new CircleGeometry( 1, 'x', 2*Math.PI ), new GizmoLineMaterial( { color: 0xff0000, opacity : 0 } ) ) ]
             ],
             Y: [
-
-                [ new THREE.Mesh( rotGeometryOuter, new GizmoMaterial( { color: 0x00ff00, opacity: 0.25 } ) ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ],
-                [ new THREE.Mesh( rotGeometryInner, new GizmoMaterial( { color: 0x00ff00, opacity: 0.1 } ) ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
-
-                // [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 24, Math.PI ), new GizmoMaterial( { color: 0x00ffff, opacity: 0.25  } ) ) ,
-                //     [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
-
-                //[ new THREE.Line( new CircleGeometry( 1, 'y', 0.5 ), new GizmoLineMaterial( { color: 0x00ff00 } ) ) ]
+                [ new THREE.Mesh( rotGeometryOuter, new GizmoMaterial( { color: 0x00ff00, opacity: 0.75 } ) ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, - Math.PI / 4 ] ],
+                [ new THREE.Line( new CircleGeometry( 1, 'y', 2*Math.PI ), new GizmoLineMaterial( { color: 0x00ff00, opacity : 0 } ) ) ]
             ],
             Z: [
-                [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 24, Math.PI ), new GizmoMaterial( { color: 0x0000ff, opacity: 0.25 } ) ) ,
-                    [ 0, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
-//				[ new THREE.Line( new CircleGeometry( 1, 'z', 0.5 ), new GizmoLineMaterial( { color: 0x0000ff } ) ) ]
-            ],
-
-            // E: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1.25, lwidth, 2, 24 ), new GizmoMaterial( { color: 0xcccc00 } ) ) ]
-            //     //[ new THREE.Line( new CircleGeometry( 1.25, 'z', 1 ), new GizmoLineMaterial( { color: 0xcccc00 } ) ) ]
-            // ],
-
-            // XYZE: [
-            //     [ new THREE.Line( new CircleGeometry( 1, 'z', 1 ), new GizmoLineMaterial( { color: 0x787878 } ) ) ]
-            // ]
-
+                [ new THREE.Mesh( rotGeometryOuter, new GizmoMaterial( { color: 0x0000ff, opacity: 0.75 } ) ) , [ 0, 0, 0 ], [ 0,  0,  - Math.PI / 4 ] ],
+                [ new THREE.Line( new CircleGeometry( 1, 'z', 2*Math.PI ), new GizmoLineMaterial( { color: 0x0000ff, opacity : 0 } ) ) ]
+            ]
         };
 
         this.pickerGizmos = {
-
-            X: [
-
-                [ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ],
-                [ new THREE.Mesh( rotGeometryInner, pickerMaterial ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ]
-
-              // [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, 0.52, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ 0, - Math.PI / 2, - Math.PI / 2 ] ]
-            ],
-
-            Y: [
-
-                [ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ],
-                [ new THREE.Mesh( rotGeometryInner, pickerMaterial ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
-
-                //[ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, lwidth, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ Math.PI / 2, 0, 0 ] ]
-            ],
-
-            Z: [
-                [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1, 0.52, 4, 12, 2*Math.PI ), pickerMaterial ), [ 0, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
-            ],
-
-            // E: [
-            //     [ new THREE.Mesh( new THREE.TorusBufferGeometry( 1.25, 0.12, 2, 24 ), pickerMaterial ) ]
-            // ],
-
-            // XYZE: [
-            //     [ new THREE.Mesh() ]// TODO
-            // ]
-
+            X: [[ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, Math.PI / 4 ] ]],
+            Y: [[ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, - Math.PI / 4 ]   ]],
+            Z: [[ new THREE.Mesh( rotGeometryOuter, pickerMaterial ), [ 0, 0, 0 ], [ 0, 0, - Math.PI / 4 ]]]
         };
 
         this.setActivePlane = function ( axis ) {
@@ -547,30 +591,30 @@
         this.handleGizmos = {
             //X: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 1.5, 0, 0 ] ]],
             //X: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 0.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ]]],
-             Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 1.5, 0, 0 ]]],
+            Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 1.5, 0, 0 ]]],
             // Z: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 0.5 ], [ Math.PI / 2, 0, 0 ]]],
-            XYZ: [[new THREE.Mesh( new THREE.BoxBufferGeometry( arrWidth, arrWidth, arrWidth ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 }))]]
+            //XYZ: [[new THREE.Mesh( new THREE.BoxBufferGeometry( arrWidth, arrWidth, arrWidth ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 }))]]
         };
 
 
         this.pickerGizmos = {
 
             //X: [
-                //[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
-                //[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0.6, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
+            //[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
+            //[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0.6, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
             //],
-             Y: [
-                 [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
-            //     [ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0.6, 0 ] ]
-             ],
+            Y: [
+                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
+                //     [ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0.6, 0 ] ]
+            ],
             //
             // Z: [
             //     [ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0, 0.6 ], [ Math.PI / 2, 0, 0 ] ]
             // ],
 
-            XYZ: [
-                [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.4, 0.4, 0.4 ), pickerMaterial ) ]
-            ]
+            // XYZ: [
+            //     [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.4, 0.4, 0.4 ), pickerMaterial ) ]
+            // ]
 
         };
 
@@ -663,15 +707,15 @@
         var xGeometry = new THREE.Geometry();
 
         // Arrow body
-        var cylMesh1 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
-        cylMesh1.position.z =  2;
+        var cylMesh1 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth/2, lwidth/2, 0.5, 16, 1, false ));
+        cylMesh1.position.z =  1.75;
         cylMesh1.rotation.z = Math.PI/2;
         cylMesh1.rotation.y = Math.PI/4;
         cylMesh1.updateMatrix();
 
 
-        var cylMesh2 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth, lwidth, 1, 16, 1, false ));
-        cylMesh2.position.z =  2;
+        var cylMesh2 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth/2, lwidth/2, 0.5, 16, 1, false ));
+        cylMesh2.position.z =  1.75;
         cylMesh2.rotation.z =    Math.PI/2;
         cylMesh2.rotation.y =  - Math.PI/4;
         cylMesh2.updateMatrix();
@@ -691,6 +735,8 @@
                 [ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000, opacity:0.5 } ) ) ]
             ]
         };
+
+
 
         this.pickerGizmos = {
             XZ: [
@@ -792,6 +838,10 @@
         domElement = ( domElement !== undefined ) ? domElement : document;
 
         this.object = undefined;
+        this.bbox = undefined;
+
+
+
         this.visible = false;
         this.translationSnap = null;
         this.rotationSnap = null;
@@ -800,6 +850,13 @@
         this.axis = null;
 
         var scope = this;
+
+
+        scope.add( angle_lineX );
+        scope.add( angle_lineY );
+        scope.add( angle_lineZ );
+
+
 
         var _mode = "translate";
         var _dragging = false;
@@ -900,6 +957,98 @@
 
         this.attach = function ( object ) {
             this.object = object;
+
+            this.bboxX = new THREE.BoxHelper( this.object, 0xff0000 );
+
+            this.bboxX.geometry.index.array[0] = 0;
+            this.bboxX.geometry.index.array[1] = 0;
+            this.bboxX.geometry.index.array[2] = 0;
+            this.bboxX.geometry.index.array[3] = 0;
+
+            this.bboxX.geometry.index.array[6] = 0;
+            this.bboxX.geometry.index.array[7] = 0;
+            this.bboxX.geometry.index.array[8] = 0;
+            this.bboxX.geometry.index.array[9] = 0;
+            this.bboxX.geometry.index.array[10] = 0;
+            this.bboxX.geometry.index.array[11] = 0;
+            this.bboxX.geometry.index.array[12] = 0;
+            this.bboxX.geometry.index.array[13] = 0;
+            this.bboxX.geometry.index.array[14] = 0;
+            this.bboxX.geometry.index.array[15] = 0;
+            this.bboxX.geometry.index.array[16] = 0;
+            this.bboxX.geometry.index.array[17] = 0;
+            this.bboxX.geometry.index.array[18] = 0;
+            this.bboxX.geometry.index.array[19] = 0;
+            this.bboxX.geometry.index.array[20] = 0;
+            this.bboxX.geometry.index.array[21] = 0;
+            this.bboxX.geometry.index.array[22] = 0;
+            this.bboxX.geometry.index.array[23] = 0;
+            this.bboxX.name = "bboxX";
+            this.bboxX.geometry.attributes.position.array[8] *= 1.25;
+            this.bboxX.geometry.attributes.position.array[11] *= 1.25;
+
+
+            //-------------- Y ---------------------------------
+            this.bboxY = new THREE.BoxHelper( this.object, 0x00ff00 );
+            this.bboxY.geometry.index.array[0] = 0;
+            this.bboxY.geometry.index.array[1] = 0;
+            this.bboxY.geometry.index.array[2] = 0;
+            this.bboxY.geometry.index.array[3] = 0;
+            this.bboxY.geometry.index.array[4] = 0;
+            this.bboxY.geometry.index.array[5] = 0;
+            this.bboxY.geometry.index.array[6] = 0;
+            this.bboxY.geometry.index.array[7] = 0;
+            this.bboxY.geometry.index.array[8] = 0;
+            this.bboxY.geometry.index.array[9] = 0;
+            this.bboxY.geometry.index.array[10] = 0;
+            this.bboxY.geometry.index.array[11] = 0;
+            this.bboxY.geometry.index.array[12] = 0;
+            this.bboxY.geometry.index.array[13] = 0;
+            //this.bboxY.geometry.index.array[14] = 0;
+            //this.bboxY.geometry.index.array[15] = 0;
+            this.bboxY.geometry.index.array[16] = 0;
+            this.bboxY.geometry.index.array[17] = 0;
+            this.bboxY.geometry.index.array[18] = 0;
+            this.bboxY.geometry.index.array[19] = 0;
+            this.bboxY.geometry.index.array[20] = 0;
+            this.bboxY.geometry.index.array[21] = 0;
+            this.bboxY.geometry.index.array[22] = 0;
+            this.bboxY.geometry.index.array[23] = 0;
+            this.bboxY.name = "bboxY";
+            this.bboxY.geometry.attributes.position.array[21]  *= 1.25;
+            this.bboxY.geometry.attributes.position.array[12]  *= 1.25;
+
+
+            //-------------- Z ---------------------------------
+            this.bboxZ = new THREE.BoxHelper( this.object, 0x5555ff );
+            this.bboxZ.geometry.index.array[0] = 0;
+            this.bboxZ.geometry.index.array[1] = 0;
+            this.bboxZ.geometry.index.array[2] = 0;
+            this.bboxZ.geometry.index.array[3] = 0;
+            this.bboxZ.geometry.index.array[4] = 0;
+            this.bboxZ.geometry.index.array[5] = 0;
+            this.bboxZ.geometry.index.array[6] = 0;
+            this.bboxZ.geometry.index.array[7] = 0;
+            this.bboxZ.geometry.index.array[8] = 0;
+            this.bboxZ.geometry.index.array[9] = 0;
+            this.bboxZ.geometry.index.array[10] = 0;
+            this.bboxZ.geometry.index.array[11] = 0;
+            this.bboxZ.geometry.index.array[12] = 0;
+            this.bboxZ.geometry.index.array[13] = 0;
+            this.bboxZ.geometry.index.array[14] = 0;
+            this.bboxZ.geometry.index.array[15] = 0;
+            this.bboxZ.geometry.index.array[16] = 0;
+            this.bboxZ.geometry.index.array[17] = 0;
+            this.bboxZ.geometry.index.array[18] = 0;
+            this.bboxZ.geometry.index.array[19] = 0;
+            this.bboxZ.geometry.index.array[20] = 0;
+            // this.bboxY.geometry.index.array[21] = 0;
+            // this.bboxY.geometry.index.array[22] = 0;
+            // this.bboxY.geometry.index.array[23] = 0;
+            this.bboxZ.name = "bboxZ";
+            this.bboxZ.geometry.attributes.position.array[21]  *= 1.25;
+            this.bboxZ.geometry.attributes.position.array[9]   *= 1.25;
+
             this.visible = true;
             this.update();
         };
@@ -922,7 +1071,7 @@
 
             _mode = mode ? mode : _mode;
 
-            if ( _mode === "scale" ) scope.space = "local";
+            //if ( _mode === "scale" ) scope.space = "world";
 
             for ( var type in _gizmo ) _gizmo[ type ].visible = ( type === _mode );
 
@@ -971,6 +1120,9 @@
             camPosition.setFromMatrixPosition( camera.matrixWorld );
             camRotation.setFromRotationMatrix( tempMatrix.extractRotation( camera.matrixWorld ) );
 
+            // console.log("object", scope.object.name);
+            // console.log("scope.size", scope.size);
+
             scale = scope.size; // //worldPosition.distanceTo( camPosition ) / 6 * scope.size;
             this.position.copy( worldPosition );
             this.scale.set( scale, scale, scale );
@@ -1001,6 +1153,13 @@
 
         function onPointerHover( event ) {
 
+            //console.log("onPointerHover");
+
+            if(_mode === "rotate") {
+                // magic_line.visible = true;
+
+            }
+
             if ( scope.object === undefined || _dragging === true || ( event.button !== undefined && event.button !== 0 ) ) return;
 
             var pointer = event.changedTouches ? event.changedTouches[ 0 ] : event;
@@ -1017,6 +1176,8 @@
                 scope.update();
                 scope.dispatchEvent( changeEvent );
             }
+
+
         }
 
         function onPointerDown( event ) {
@@ -1046,6 +1207,7 @@
 
                     _gizmo[ _mode ].setActivePlane( scope.axis, eye );
 
+
                     var planeIntersect = intersectObjects( pointer, [ _gizmo[ _mode ].activePlane ] );
 
                     if ( planeIntersect ) {
@@ -1067,10 +1229,129 @@
 
             }
             _dragging = true;
+
+
+
+            if (_mode === "rotate") {
+                scope.add( labelInfo );
+                labelInfo.element.innerHTML = '0';
+
+                if (scope.axis === "X") {
+                    labelInfo.position.set(0, 1.21, 0);
+                    textInfo.style.color = 'rgb(' + 255 + ',' + 0 + ',' + 0 + ')';
+                    angle_lineX.quaternion.copy(new THREE.Quaternion());
+                    angle_lineX.visible = true;
+                } else if (scope.axis === "Y") {
+                    labelInfo.position.set(0, 0, 1.21);
+                    textInfo.style.color = 'rgb(' + 0 + ',' + 255 + ',' + 0 + ')';
+                    angle_lineY.quaternion.copy(new THREE.Quaternion());
+                    angle_lineY.visible = true;
+                } else if (scope.axis === "Z") {
+                    labelInfo.position.set(0, 1.21, 0);
+                    textInfo.style.color = 'rgb(' + 0 + ',' + 0 + ',' + 255 + ')';
+                    angle_lineZ.quaternion.copy(new THREE.Quaternion());
+                    angle_lineZ.visible = true;
+                }
+            } else if (_mode === "translate"){
+
+                scope.add( labelInfo );
+                textInfo.style.color = scope.axis === 'X' ? 'red' : (scope.axis === 'Y'?'green':'blue') ;
+
+                // Make some invisible
+                if(scope.axis!=null)
+                if (scope.axis.length === 1){
+                    // _gizmo.translate.handleGizmos.XY[0][0].visible = false;
+                    // _gizmo.translate.handleGizmos.XZ[0][0].visible = false;
+                    // _gizmo.translate.handleGizmos.YZ[0][0].visible = false;
+
+                    _gizmo.translate.handleGizmos.X[0][0].visible = false;
+                    _gizmo.translate.handleGizmos.Y[0][0].visible = false;
+                    _gizmo.translate.handleGizmos.Z[0][0].visible = false;
+
+                    if (scope.axis === "X"){
+
+                        labelInfo.element.innerHTML = "" + Math.round(scope.object.position.x*100)/100 + "";
+                        labelInfo.position.set(1, 0.5, 0);
+
+                    } else if (scope.axis === "Y"){
+
+                        labelInfo.element.innerHTML = "" + Math.round(scope.object.position.y*100)/100 + "";
+                        labelInfo.position.set(0.5, 1, 0);
+
+                    } else if (scope.axis === "Z") {
+
+                        labelInfo.element.innerHTML = "" + Math.round(scope.object.position.z*100)/100 + "";
+                        labelInfo.position.set(0, 0.5, 1);
+
+                    }
+                }
+
+                // if (scope.axis.length === 2){
+                //     _gizmo.translate.handleGizmos.X[0][0].visible = false;
+                //     _gizmo.translate.handleGizmos.Y[0][0].visible = false;
+                //     _gizmo.translate.handleGizmos.Z[0][0].visible = false;
+                //
+                //     if (scope.axis === "XY"){
+                //
+                //         labelInfo.element.innerHTML = "<span style='color:green'>" + Math.round(scope.object.position.y*100)/100 + "</span>, " +
+                //                                       "<span style='color:red'>"   + Math.round(scope.object.position.x*100)/100 + "</span>";
+                //
+                //         labelInfo.position.set(1.5, 1.5, 0);
+                //
+                //         _gizmo.translate.handleGizmos.XZ[0][0].visible = false;
+                //         _gizmo.translate.handleGizmos.YZ[0][0].visible = false;
+                //     } else if (scope.axis === "XZ"){
+                //
+                //         labelInfo.element.innerHTML = "<span style='color:blue'>" + Math.round(scope.object.position.z*100)/100 + "</span>, " +
+                //                                        "<span style='color:red'>" + Math.round(scope.object.position.x*100)/100 + "</span>";
+                //         labelInfo.position.set(1.5, 0, 1.5);
+                //
+                //         _gizmo.translate.handleGizmos.XY[0][0].visible = false;
+                //         _gizmo.translate.handleGizmos.YZ[0][0].visible = false;
+                //     } else if (scope.axis === "YZ"){
+                //
+                //         labelInfo.element.innerHTML = "<span style='color:blue'>" +  Math.round(scope.object.position.z*100)/100 + "</span>, " +
+                //                                       "<span style='color:green'>" + Math.round(scope.object.position.y*100)/100 + "</span>" ;
+                //
+                //         labelInfo.position.set(0, 1.5, 1.5);
+                //
+                //         _gizmo.translate.handleGizmos.XY[0][0].visible = false;
+                //         _gizmo.translate.handleGizmos.XZ[0][0].visible = false;
+                //     }
+                //}
+
+
+            } else if (_mode === "scale"){
+                scope.add( labelInfo );
+                labelInfo.element.innerHTML = '' + scope.object.scale.y + '';
+
+                var dims = findBoundingBox();
+
+                labelInfo.element.innerHTML = '<span style="color:red">' + Math.round(dims[0]*100)/100 + '</span>,' +
+                    '<span style="color:green">' + Math.round(dims[1]*100)/100 + '</span>,' +
+                    '<span style="color:blue">' + Math.round(dims[2]*100)/100 + '</span>';
+
+
+                scope.object.add(scope.bboxX);
+                scope.object.add(scope.bboxY);
+                scope.object.add(scope.bboxZ);
+
+                _gizmo.scale.handleGizmos.Y[0][0].visible = false;
+
+                labelInfo.position.set(1.21, 1.21, 0);
+
+            }
+
+
+            scope.update();
+            scope.dispatchEvent( changeEvent );
+            scope.dispatchEvent( objectChangeEvent );
         }
 
 
         function onPointerMove( event ) {
+
+            //console.log("onPointerMove");
 
             if ( scope.object === undefined || scope.axis === null || _dragging === false || ( event.button !== undefined && event.button !== 0 ) ) return;
 
@@ -1138,44 +1419,66 @@
 
                 }
 
+
+                if (scope.axis === "X") {
+                    labelInfo.element.innerHTML = "" + Math.round(scope.object.position.x * 100) / 100 + "";
+                } else if (scope.axis === "Y") {
+                    labelInfo.element.innerHTML = "" + Math.round(scope.object.position.y * 100) / 100 + "";
+                } else if (scope.axis === "Z") {
+                    labelInfo.element.innerHTML = "" + Math.round(scope.object.position.z * 100) / 100 + "";
+                } else if (scope.axis === "XY") {
+                    labelInfo.element.innerHTML = "<span style='color:green'>" + Math.round(scope.object.position.y * 100) / 100 + "<span>, " +
+                        "<span style='color:red'>" + Math.round(scope.object.position.x * 100) / 100 + "<span>";
+                } else if (scope.axis === "XZ"){
+                    labelInfo.element.innerHTML = "<span style='color:blue'>" + Math.round(scope.object.position.z * 100) / 100 + "</span>, " +
+                        "<span style='color:red'>" + Math.round(scope.object.position.x * 100) / 100 + "</span>";
+
+                } else if (scope.axis === "YZ"){
+                    labelInfo.element.innerHTML = "<span style='color:blue'>" + Math.round(scope.object.position.z * 100) / 100 + "</span>, " +
+                        "<span style='color:green'>" + Math.round(scope.object.position.y * 100) / 100 + "<span>";
+                }
+
+
             } else if ( _mode === "scale" ) {
 
                 point.sub( offset );
                 point.multiply( parentScale );
 
-                if ( scope.space === "local" ) {
-
-                    if ( scope.axis === "XYZ" ) {
-
-
-
-                        scale = 1 + ( ( point.y ) / Math.max( oldScale.x, oldScale.y, oldScale.z ) );
-
-                        scope.object.scale.x = oldScale.x * scale;
-                        scope.object.scale.y = oldScale.y * scale;
-                        scope.object.scale.z = oldScale.z * scale;
-
-                    } else {
+                // if ( scope.space === "local" ) {
+                //
+                //     if ( scope.axis === "XYZ" ) {
+                //
+                //         scale = 1 + ( ( point.y ) / Math.max( oldScale.x, oldScale.y, oldScale.z ) );
+                //
+                //         scope.object.scale.x = oldScale.x * scale;
+                //         scope.object.scale.y = oldScale.y * scale;
+                //         scope.object.scale.z = oldScale.z * scale;
+                //
+                //     } else {
 
                         point.applyMatrix4( tempMatrix.getInverse( worldRotationMatrix ) );
 
-                        var sc = oldScale.y * ( 1 + point.y / oldScale.y );
-                        if( sc > 0 ) {
+                        var sc =  ( 1 + 0.1* point.y / oldScale.y );
+                        if( sc <= 0 )
+                            sc = 0.001;
 
-                            scope.object.scale.set(sc, sc, sc);
+                        scope.object.scale.set(sc, sc, sc);
+                        // scope.object.scale.x = oldScale.x * (1 + point.x / oldScale.x);
+                        // scope.object.scale.y = oldScale.y * (1 + point.y / oldScale.y);
+                        // scope.object.scale.z = oldScale.z * (1 + point.z / oldScale.z);
+                        // if (scope.axis === "X") scope.object.scale.x = oldScale.x * (1 + point.x / oldScale.x);
+                        // if (scope.axis === "Y") scope.object.scale.y = oldScale.y * (1 + point.y / oldScale.y);
+                        // if (scope.axis === "Z") scope.object.scale.z = oldScale.z * (1 + point.z / oldScale.z);
+//                    }
 
 
-                            // scope.object.scale.x = oldScale.x * (1 + point.x / oldScale.x);
-                            // scope.object.scale.y = oldScale.y * (1 + point.y / oldScale.y);
-                            // scope.object.scale.z = oldScale.z * (1 + point.z / oldScale.z);
-                            // if (scope.axis === "X") scope.object.scale.x = oldScale.x * (1 + point.x / oldScale.x);
-                            // if (scope.axis === "Y") scope.object.scale.y = oldScale.y * (1 + point.y / oldScale.y);
-                            // if (scope.axis === "Z") scope.object.scale.z = oldScale.z * (1 + point.z / oldScale.z);
-                        }
+                    var dims = findBoundingBox();
 
-                    }
+                    labelInfo.element.innerHTML = '<span style="color:red">'   + Math.round(dims[0]*100)/100 + '</span>,' +
+                        '<span style="color:green">' + Math.round(dims[1]*100)/100 + '</span>,' +
+                        '<span style="color:blue">'  + Math.round(dims[2]*100)/100 + '</span>';
 
-                }
+//                }
 
             } else if ( _mode === "rotate" ) {
 
@@ -1248,6 +1551,8 @@
 
                 } else if ( scope.space === "world" ) {
 
+
+
                     rotation.set( Math.atan2( point.z, point.y ), Math.atan2( point.x, point.z ), Math.atan2( point.y, point.x ) );
                     offsetRotation.set( Math.atan2( tempVector.z, tempVector.y ), Math.atan2( tempVector.x, tempVector.z ), Math.atan2( tempVector.y, tempVector.x ) );
 
@@ -1269,14 +1574,64 @@
 
                     quaternionXYZ.setFromRotationMatrix( worldRotationMatrix );
 
-                    if ( scope.axis === "X" ) tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
-                    if ( scope.axis === "Y" ) tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
-                    if ( scope.axis === "Z" ) tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
+                    // X Arrow
+                    _gizmo.rotate.handleGizmos.X[0][0].visible = false;
+                    _gizmo.rotate.handleGizmos.X[0][1].visible = false;
+                    _gizmo.rotate.handleGizmos.X[0][2].visible = false;
+
+                    // Y Arrow
+                    _gizmo.rotate.handleGizmos.Y[0][0].visible = false;
+                    _gizmo.rotate.handleGizmos.Y[0][1].visible = false;
+                    _gizmo.rotate.handleGizmos.Y[0][2].visible = false;
+
+                    // Z arrow
+                    _gizmo.rotate.handleGizmos.Z[0][0].visible = false;
+                    _gizmo.rotate.handleGizmos.Z[0][1].visible = false;
+                    _gizmo.rotate.handleGizmos.Z[0][2].visible = false;
+
+
+                    if ( scope.axis === "X" ) {
+                        tempQuaternion.multiplyQuaternions(tempQuaternion, quaternionX);
+                        angle_lineX.quaternion.copy( quaternionX );
+
+                        // Y and Z angle lines
+                        _gizmo.rotate.handleGizmos.Y[1][0].visible = false;
+                        _gizmo.rotate.handleGizmos.Z[1][0].visible = false;
+                    } else if ( scope.axis === "Y" ) {
+                        tempQuaternion.multiplyQuaternions(tempQuaternion, quaternionY);
+                        angle_lineY.quaternion.copy( quaternionY );
+
+                        // Y and Z angle lines
+                        _gizmo.rotate.handleGizmos.X[1][0].visible = false;
+                        _gizmo.rotate.handleGizmos.Z[1][0].visible = false;
+
+                    } else if ( scope.axis === "Z" ) {
+                        tempQuaternion.multiplyQuaternions(tempQuaternion, quaternionZ);
+                        angle_lineZ.quaternion.copy( quaternionZ );
+
+                        // Y and Z angle lines
+                        _gizmo.rotate.handleGizmos.X[1][0].visible = false;
+                        _gizmo.rotate.handleGizmos.Y[1][0].visible = false;
+                    }
 
                     tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionXYZ );
 
                     scope.object.quaternion.copy( tempQuaternion );
 
+                    // label X
+                    if (scope.axis === "X") {
+                        var labelpos_new = new THREE.Vector3(0,1.21,0).applyQuaternion(quaternionX);
+                        var angle_in_radians = labelpos_new.angleTo(new THREE.Vector3(0, 1, 0));
+                    } else if (scope.axis === "Y"){
+                        var labelpos_new = new THREE.Vector3(0, 0, 1.21).applyQuaternion( quaternionY );
+                        var angle_in_radians = labelpos_new.angleTo(new THREE.Vector3(0, 0, 1));
+                    } else if (scope.axis === "Z"){
+                        var labelpos_new = new THREE.Vector3(0,1.21,0).applyQuaternion( quaternionZ );
+                        var angle_in_radians = labelpos_new.angleTo(new THREE.Vector3(0, 1, 0));
+                    }
+
+                    labelInfo.position.copy(labelpos_new);
+                    textInfo.textContent = Math.round(angle_in_radians * 180 / Math.PI);
                 }
 
             } else if (_mode==="rottrans") {
@@ -1364,33 +1719,59 @@
 
                     }
                 }
-
-
-
-
-
-
-
-
             }
-
-
-
-
 
 
             scope.update();
             scope.dispatchEvent( changeEvent );
             scope.dispatchEvent( objectChangeEvent );
-
         }
 
 
 
-
-
-
         function onPointerUp( event ) {
+
+            scope.remove( labelInfo);
+
+            if(_mode === "rotate"){
+
+                angle_lineX.visible = false;
+                angle_lineY.visible = false;
+                angle_lineZ.visible = false;
+
+                _gizmo.rotate.handleGizmos.X[0][0].visible = true;
+                _gizmo.rotate.handleGizmos.X[0][1].visible = true;
+                _gizmo.rotate.handleGizmos.X[0][2].visible = true;
+                _gizmo.rotate.handleGizmos.X[1][0].visible = true;
+
+                _gizmo.rotate.handleGizmos.Y[0][0].visible = true;
+                _gizmo.rotate.handleGizmos.Y[0][1].visible = true;
+                _gizmo.rotate.handleGizmos.Y[0][2].visible = true;
+                _gizmo.rotate.handleGizmos.Y[1][0].visible = true;
+
+                _gizmo.rotate.handleGizmos.Z[0][0].visible = true;
+                _gizmo.rotate.handleGizmos.Z[0][1].visible = true;
+                _gizmo.rotate.handleGizmos.Z[0][2].visible = true;
+                _gizmo.rotate.handleGizmos.Z[1][0].visible = true;
+
+            } else if (_mode === "translate"){
+
+                _gizmo.translate.handleGizmos.X[0][0].visible = true;
+                _gizmo.translate.handleGizmos.Y[0][0].visible = true;
+                _gizmo.translate.handleGizmos.Z[0][0].visible = true;
+                // _gizmo.translate.handleGizmos.XY[0][0].visible = true;
+                // _gizmo.translate.handleGizmos.XZ[0][0].visible = true;
+                // _gizmo.translate.handleGizmos.YZ[0][0].visible = true;
+
+            } else if (_mode === "scale"){
+
+                _gizmo.scale.handleGizmos.Y[0][0].visible = true;
+
+                scope.object.remove ( scope.bboxX ) ;
+                scope.object.remove ( scope.bboxY ) ;
+                scope.object.remove ( scope.bboxZ ) ;
+
+            }
 
             event.preventDefault(); // Prevent MouseEvent on mobile
 
@@ -1400,15 +1781,12 @@
 
                 mouseUpEvent.mode = _mode;
                 scope.dispatchEvent( mouseUpEvent );
-
             }
 
             _dragging = false;
 
             if ( 'TouchEvent' in window && event instanceof TouchEvent ) {
-
                 // Force "rollover"
-
                 scope.axis = null;
                 scope.update();
                 scope.dispatchEvent( changeEvent );
@@ -1429,7 +1807,9 @@
 
             }
 
-
+            scope.update();
+            scope.dispatchEvent( changeEvent );
+            scope.dispatchEvent( objectChangeEvent );
         }
 
         function intersectObjects( pointer, objects ) {
@@ -1444,6 +1824,22 @@
             var intersections = ray.intersectObjects( objects, true );
             return intersections[ 0 ] ? intersections[ 0 ] : false;
 
+        }
+
+        // Estimate bounding box for finding the dimensions
+        function findBoundingBox(){
+
+            var helperbbox = new THREE.BoxHelper( scope.object, 0xff00ff );
+            helperbbox.geometry.computeBoundingBox();
+
+            var finalVec = new THREE.Vector3().subVectors(helperbbox.geometry.boundingBox.min, helperbbox.geometry.boundingBox.max);
+
+            var x = Math.abs(finalVec.x);
+            var y = Math.abs(finalVec.y);
+            var z = Math.abs(finalVec.z);
+
+
+            return [x,y,z];
         }
 
     };

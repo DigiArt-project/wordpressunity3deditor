@@ -61,6 +61,8 @@ class vr_editor_environmentals {
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
 
+        this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+
         //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
         //console.log("TURBO RESIZE");
@@ -167,17 +169,17 @@ class vr_editor_environmentals {
     }
 
 
-    addCubeToControls(transform_controls){
-
-        // Change trs mode by click on the purple cube
-        var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-        var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
-
-        var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
-        cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
-        cubeForModeChangeDetec.name = "trs_modeChanger";
-        transform_controls.add( cubeForModeChangeDetec );
-    }
+    // addCubeToControls(transform_controls){
+    //
+    //     // Change trs mode by click on the purple cube
+    //     var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+    //     var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
+    //
+    //     var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
+    //     cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
+    //     cubeForModeChangeDetec.name = "trs_modeChanger";
+    //     transform_controls.add( cubeForModeChangeDetec );
+    // }
 
 
     /**
@@ -291,6 +293,17 @@ class vr_editor_environmentals {
     setRenderer() {
 
         this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false, logarithmicDepthBuffer: false});
+
+        this.labelRenderer = new THREE.CSS2DRenderer();
+        this.labelRenderer.domElement.style.position = 'absolute';
+        this.labelRenderer.domElement.style.top = '0';
+        this.labelRenderer.domElement.style.fontSize = "25pt";
+
+        this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
+        this.labelRenderer.domElement.style.pointerEvents = 'none';
+
+        this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+
         this.renderer.sortObjects = false;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
@@ -303,6 +316,8 @@ class vr_editor_environmentals {
         this.renderer.sortObjects = false;
         this.renderer.name = "myRenderer";
         this.container_3D_all.appendChild( this.renderer.domElement );
+
+        this.container_3D_all.appendChild(this.labelRenderer.domElement);
     }
 
     setComposer(){

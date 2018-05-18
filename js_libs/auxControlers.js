@@ -354,8 +354,8 @@ function findSceneDimensions(){
     for (var i = 0; i < envir.scene.children.length; i++) {
 
         if (envir.scene.children[i].name !== "myTransformControls" && envir.scene.children[i].name !== "myGridHelper") {
-            var sizeXYZ_Arr = findObjectLimits(envir.scene.children[i]);
 
+            var sizeXYZ_Arr = findObjectLimits(envir.scene.children[i]);
 
             xMin = Math.min(sizeXYZ_Arr[0].x, xMin);
             xMax = Math.max(sizeXYZ_Arr[1].x, xMax);
@@ -370,8 +370,6 @@ function findSceneDimensions(){
     }
 
     envir.SCENE_DIMENSION_SURFACE = Math.max(xMax - xMin, zMax - zMin);
-
-    envir.SCENE_DIMENSION_SURFACE *= 0.6;
 
     // In empty scene lets fix it to 10
     envir.SCENE_DIMENSION_SURFACE = envir.SCENE_DIMENSION_SURFACE > 0 ? envir.SCENE_DIMENSION_SURFACE * 1.5 : 10;

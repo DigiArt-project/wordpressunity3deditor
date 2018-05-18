@@ -54,6 +54,36 @@ function dragDropVerticalRayCasting (event){
     return [intersects[0].point.x,intersects[0].point.y,intersects[0].point.z];
 }
 
+
+function onMouseDoubleClickFocus( event ) {
+
+    console.log("double click");
+
+    // // This makes the camera to go on top of the selected item
+    if (envir.is2d) {
+        envir.orbitControls.target.x = transform_controls.object.position.x;
+        envir.orbitControls.target.y = transform_controls.object.position.y;
+        envir.orbitControls.target.z = transform_controls.object.position.z;
+        envir.cameraOrbit.position.x = transform_controls.object.position.x;
+        envir.cameraOrbit.position.z = transform_controls.object.position.z;
+
+        envir.cameraOrbit.lookAt()
+
+    } else {
+
+        envir.orbitControls.target.x = transform_controls.object.position.x;
+        envir.orbitControls.target.y = transform_controls.object.position.y;
+        envir.orbitControls.target.z = transform_controls.object.position.z;
+
+    }
+
+
+        //envir.orbitControls.object.zoom = 10 / transform_controls.size;
+             envir.orbitControls.object.updateProjectionMatrix();
+        //}
+    // //}
+}
+
 /**
  * Detect mouse events
  *
@@ -67,7 +97,7 @@ function onMouseDownSelect( event ) {
     var raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes().concat([transform_controls.getObjectByName('trs_modeChanger'), envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
+    var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"), //transform_controls.getObjectByName('trs_modeChanger')
 
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
@@ -75,24 +105,8 @@ function onMouseDownSelect( event ) {
     if (intersects.length === 0)
         return;
 
-    // ------------ in case TRS cube is clicked ---------
+    // ------------ in case Steve (camera) is clicked ---------
     if (intersects.length > 0) {
-
-        if (intersects[0].object.name === 'trs_modeChanger') {
-            if (transform_controls.getMode() === 'rotate')
-                transform_controls.setMode("scale");
-            else if (transform_controls.getMode() === 'scale')
-                transform_controls.setMode("rottrans");
-            else if (transform_controls.getMode() === 'rottrans')
-                transform_controls.setMode("translate");
-            else if (transform_controls.getMode() === 'translate')
-                transform_controls.setMode("rotate");
-
-            jQuery('input:radio[name=object-manipulation-switch]').val([transform_controls.getMode()]);
-            showObjectPropertiesPanel(transform_controls.getMode());
-
-            return;
-        }
 
         // If Steve is selected
         if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
@@ -105,8 +119,8 @@ function onMouseDownSelect( event ) {
             transform_controls.attach(envir.avatarControls.getObject());
 
             // Steve can not be deleted
-            transform_controls.children[3].handleGizmos.XZY[0][0].visible = false;
             transform_controls.size = 1;
+            transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
             jQuery("#removeAssetBtn").hide();
 
             return;
@@ -148,34 +162,28 @@ function onMouseDownSelect( event ) {
  */
 function selectorMajor(event, inters){
 
+    console.log("selectorMajor");
+
     if (event.button === 0) {
 
         transform_controls.attach(inters.object.parent);
 
         // X for deleting object is visible (only Steve can not be deleted)
-        transform_controls.children[3].handleGizmos.XZY[0][0].visible = true;
+        transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
         var dims = findDimensions(transform_controls.object);
 
         var sizeT = Math.max(...dims);
 
         transform_controls.size = sizeT > 1 ? sizeT : 1;
+
         transform_controls.setMode( envir.is2d ? "rottrans" : "translate" );
+
+        if (!envir.is2d)
+            jQuery("#" + transform_controls.getMode() + "-switch").click();
 
         // Show also the UI button
         jQuery("#removeAssetBtn").show();
-
-        // calculate object physical dimensions
-
-        // This makes the camera to go on top of the selected item
-
-        if (false) {
-            envir.orbitControls.target.x = inters.object.parent.position.x;
-            envir.orbitControls.target.y = inters.object.parent.position.y;
-            envir.orbitControls.target.z = inters.object.parent.position.z;
-            envir.cameraOrbit.position.x = inters.object.parent.position.x;
-            envir.cameraOrbit.position.z = inters.object.parent.position.z;
-        }
 
         // highlight
         envir.outlinePass.selectedObjects = [inters.object.parent];
