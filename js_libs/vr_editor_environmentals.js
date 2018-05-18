@@ -18,6 +18,7 @@ class vr_editor_environmentals {
         this.FRUSTUM_SIZE = 100; // For orthographic camera only
         this.SCENE_DIMENSION_SURFACE = 100; // It is the max of x z dimensions of the scene (found when all objects are loaded)
 
+
         this.NEAR = 0.01;
         this.FAR = 0.01; // keep the camera empty until everything is loaded
 
@@ -208,8 +209,8 @@ class vr_editor_environmentals {
         this.orbitControls.enableRotate = false;
 
         // Add a helper for debug purpose
-        //this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
-        //this.scene.add( this.cameraOrbitHelper );
+        // this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
+        // this.scene.add( this.cameraOrbitHelper );
     }
 
     /**
@@ -281,9 +282,9 @@ class vr_editor_environmentals {
 
         //
         // // Add Axes helper
-        // this.axisHelper = new THREE.AxisHelper( 100 );
-        // this.axisHelper.name = "myAxisHelper";
-        // this.scene.add(this.axisHelper);
+        //  this.axisHelper = new THREE.AxisHelper( 1 );
+        //  this.axisHelper.name = "myAxisHelper";
+        //  this.scene.add(this.axisHelper);
     }
 
 
@@ -304,16 +305,17 @@ class vr_editor_environmentals {
 
         this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
 
-        this.renderer.sortObjects = false;
+        this.renderer.sortObjects = true;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
 
-        // This does not work well for outlining objects in white background
+        // This does  work well for outlining objects in white background
         this.renderer.setClearColor( 0xeeeeee, 1);
 
+            // This don't
         //this.scene.background = new THREE.Color( 0xffffff );
 
-        this.renderer.sortObjects = false;
+        this.renderer.sortObjects = true;
         this.renderer.name = "myRenderer";
         this.container_3D_all.appendChild( this.renderer.domElement );
 

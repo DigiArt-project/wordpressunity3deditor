@@ -31,91 +31,91 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "trs": selected_object_trs
     };
 
-    //   Load the extra item in 3D environment or get it from recycle bin ============================
 
-    // envir.cameraOrbit.children[0] is the recycle bin
-    //var objInRecycleBin; // = envir.cameraOrbit.children[0].getObjectByName(nameModel3D);
 
-    // Restore from recycle bin
-    //if(typeof objInRecycleBin != "undefined") {
+    // Make progress bar visible
+    jQuery("#progress").get(0).style.display = "block";
 
-        // resources3D[nameModel3D] = delArchive[nameModel3D];
-        //
-        // //----------- Add meshes -----------
-        // //objInRecycleBin.traverse(function (node) {
-        // //    //if (node.material)
-        // //    //    node.material.side = THREE.DoubleSide;
-        // //});
-        // ////---------------------------------
-        //
-        // // envir.cameraOrbit.children[0] is the recycle Bin
-        // envir.cameraOrbit.children[0].remove(objInRecycleBin);
-        //
-        // objInRecycleBin.scale.set(s,s,s);
-        // objInRecycleBin.position.set(x,y,z);
-        // objInRecycleBin.rotation.set(r1,r2,r3);
-        // envir.scene.add(objInRecycleBin);
-        //
-        // transform_controls.attach(objInRecycleBin);
-        //
-        // // highlight
-        // envir.outlinePass.selectedObjects = [objInRecycleBin];
-        // envir.renderer.setClearColor( 0xffffff, 0.9 );
+    var manager = new THREE.LoadingManager();
 
-        // Load it if it is not in recycle bin
-    //} else {
+    manager.onProgress = function (item, loaded, total) {
+        //console.log( item, loaded, total );
+    };
 
-        // Make progress bar visible
-        jQuery("#progress").get(0).style.display = "block";
+    // When all are finished loading
+    manager.onLoad = function () {
 
-        var manager = new THREE.LoadingManager();
+        var insertedObject = envir.scene.getObjectByName(nameModel3D);
 
-        manager.onProgress = function (item, loaded, total) {
-            //console.log( item, loaded, total );
-        };
+        if(!insertedObject) {
+            jQuery( "#dialog-message" ).dialog( "open" );
+        }
 
-        // When all are finished loading
-        manager.onLoad = function () {
+        var trs_tmp = resources3D[nameModel3D]['trs'];
 
-            var insertedObject = envir.scene.getObjectByName(nameModel3D);
+        insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+        insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+        insertedObject.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+        insertedObject.parent = envir.scene;
 
-            if(!insertedObject) {
-                jQuery( "#dialog-message" ).dialog( "open" );
-            }
+        // place controls to last inserted obj
+        transform_controls.attach(insertedObject);
 
-            var trs_tmp = resources3D[nameModel3D]['trs'];
+        // highlight
+        envir.outlinePass.selectedObjects = [insertedObject];
+        envir.renderer.setClearColor( 0xeeeeee, 1 );
+        //envir.scene.add(transform_controls);
 
-            insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            insertedObject.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
-            insertedObject.parent = envir.scene;
+        transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+        transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+        transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-            // place controls to last inserted obj
-            transform_controls.attach(insertedObject);
+        selected_object_name = nameModel3D;
 
-            // highlight
-            envir.outlinePass.selectedObjects = [insertedObject];
-            envir.renderer.setClearColor( 0xffffff,  );
+        var dims = findDimensions(transform_controls.object);
+        var sizeT = Math.max(...dims);
+        transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
-            envir.scene.add(transform_controls);
 
-            transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+        envir.renderer.clear(true, true, true); // clear buffers
 
-            selected_object_name = nameModel3D;
-        };
+    };
 
-        var extraResource = {};
-        extraResource[nameModel3D] = resources3D[nameModel3D];
+    var extraResource = {};
+    extraResource[nameModel3D] = resources3D[nameModel3D];
 
-        var loaderMulti = new LoaderMulti();
-        
-        console.log(extraResource);
-        
-        loaderMulti.load(manager, extraResource);
-    //}
+    var loaderMulti = new LoaderMulti();
 
+    //console.log(extraResource);
+
+    loaderMulti.load(manager, extraResource);
+}
+
+/**
+ *
+ * Delete from scene
+ *
+ * @param nameToRemove
+ */
+function deleterFomScene(nameToRemove){
+
+    var container = document.paramsform;
+
+    // Delete Variables
+    //delArchive[nameToRemove] = resources3D[nameToRemove];
+    delete resources3D[nameToRemove];
+
+    // Remove from scene and add to recycle bin
+    var objectSelected = envir.scene.getObjectByName(nameToRemove);
+
+    transform_controls.detach(objectSelected);
+
+    // prevent orbiting
+    document.dispatchEvent(new CustomEvent("mouseup", { "detail": "Example of an event" }));
+
+    envir.scene.remove(objectSelected);
+
+    transform_controls.detach();
 }
 
 // /**
@@ -235,29 +235,3 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 // }
 
 
-/**
- *
- * -- Put in recycle bin --
- *
- * @param nameToRemove
- */
-function deleterFomScene(nameToRemove){
-
-    var container = document.paramsform;
-
-    // Delete Variables
-    //delArchive[nameToRemove] = resources3D[nameToRemove];
-    delete resources3D[nameToRemove];
-
-    // Remove from scene and add to recycle bin
-    var objectSelected = envir.scene.getObjectByName(nameToRemove);
-
-    transform_controls.detach(objectSelected);
-
-    // prevent orbiting
-    document.dispatchEvent(new CustomEvent("mouseup", { "detail": "Example of an event" }));
-
-    envir.scene.remove(objectSelected);
-
-    transform_controls.detach();
-}

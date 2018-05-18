@@ -49,12 +49,12 @@
             if ( highlighted ) {
 
                 this.color.setRGB( 1, 1, 0 );
-                this.opacity = 0.5;
+                this.opacity = 1;
 
             } else {
 
                 this.color.copy( this.oldColor );
-                this.opacity = this.oldOpacity;
+                this.opacity = 1; // this.oldOpacity;
 
             }
 
@@ -108,10 +108,13 @@
 
     var angle_lineX = new THREE.Line( angle_line_geometryX, new GizmoLineMaterial( { color: 0xff0000 } ) );
     angle_lineX.visible = false;
+    angle_lineX.renderOrder = 1;
     var angle_lineY = new THREE.Line( angle_line_geometryY, new GizmoLineMaterial( { color: 0x00ff00 } ) );
     angle_lineY.visible = false;
+    angle_lineY.renderOrder = 1;
     var angle_lineZ = new THREE.Line( angle_line_geometryZ, new GizmoLineMaterial( { color: 0x0000ff } ) );
     angle_lineZ.visible = false;
+    angle_lineZ.renderOrder = 1;
 
 
     THREE.TransformGizmo = function () {
@@ -298,57 +301,21 @@
                 [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ],
                 [ new THREE.Line( lineGeometryZ, new GizmoLineMaterial( { color: 0x00ff00, opacity : 0 } ) ) ]
             ],
-
-            // XYZ: [
-            //     [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 } ) ), [ 0, 0, 0 ], [ 0, 0, 0 ] ]
-            // ],
-            //
-            // XY: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xffff00, opacity: 0.25 } ) ), [ 1.5, 1.5, 0 ] ]
-            // ],
-            //
-            // YZ: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0x00ffff, opacity: 0.25 } ) ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
-            // ],
-            //
-            // XZ: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), new GizmoMaterial( { color: 0xff00ff, opacity: 0.25 } ) ), [ 1.5, 0, 1.5 ],
-            //         [ - Math.PI / 2, 0, 0 ] ]
-            // ]
-
         };
 
+        this.handleGizmos.X[0][0].renderOrder = 1;
+        this.handleGizmos.Y[0][0].renderOrder = 1;
+        this.handleGizmos.Z[0][0].renderOrder = 1;
+
+        this.handleGizmos.X[0][1].renderOrder = 1;
+        this.handleGizmos.Y[0][1].renderOrder = 1;
+        this.handleGizmos.Z[0][1].renderOrder = 1;
+
+
         this.pickerGizmos = {
-
-            X: [
-                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ],
-
-            ],
-
-            Y: [
-                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 1.5, 0 ] ]
-            ],
-
-            Z: [
-                [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ]
-            ],
-
-            // XYZ: [
-            //     [ new THREE.Mesh( new THREE.OctahedronGeometry( 0.01, 0 ), pickerMaterial ) ]
-            // ],
-            //
-            // XY: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 1.5, 0 ] ]
-            // ],
-            //
-            // YZ: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 0, 1.5, 1.5 ], [ 0, Math.PI / 2, 0 ] ]
-            // ],
-            //
-            // XZ: [
-            //     [ new THREE.Mesh( new THREE.PlaneBufferGeometry( 1.5, 1.5 ), pickerMaterial ), [ 1.5, 0, 1.5 ], [ - Math.PI / 2, 0, 0 ] ]
-            // ]
-
+            X: [[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]],
+            Y: [[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 1.5, 0 ] ]],
+            Z: [[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ]]
         };
 
         this.setActivePlane = function ( axis, eye ) {
@@ -480,6 +447,14 @@
             ]
         };
 
+        this.handleGizmos.X[0][0].renderOrder = 1;
+        this.handleGizmos.X[0][1].renderOrder = 1;
+        this.handleGizmos.Y[0][0].renderOrder = 1;
+        this.handleGizmos.Y[0][1].renderOrder = 1;
+        this.handleGizmos.Z[0][0].renderOrder = 1;
+        this.handleGizmos.Z[0][1].renderOrder = 1;
+
+
         this.pickerGizmos = {
             X: [[ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ 0, - Math.PI / 2, Math.PI / 4 ] ]],
             Y: [[ new THREE.Mesh( rotGeometryOuter, pickerMaterial ) ,  [ 0, 0, 0 ], [ Math.PI / 2, 0, - Math.PI / 4 ]   ]],
@@ -589,33 +564,16 @@
         arrowGeometry.merge( cylMesh.geometry, cylMesh.matrix );
 
         this.handleGizmos = {
-            //X: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 1.5, 0, 0 ] ]],
-            //X: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ 0.5, 0, 0 ], [ 0, 0, - Math.PI / 2 ]]],
-            Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 1.5, 0, 0 ]]],
-            // Z: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 0.5 ], [ Math.PI / 2, 0, 0 ]]],
-            //XYZ: [[new THREE.Mesh( new THREE.BoxBufferGeometry( arrWidth, arrWidth, arrWidth ), new GizmoMaterial( { color: 0xffffff, opacity: 0.25 }))]]
+            Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 1.5, 0, 0 ]]]
         };
 
 
-        this.pickerGizmos = {
+        this.handleGizmos.Y[0][0].renderOrder = 1;
 
-            //X: [
-            //[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
-            //[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0.6, 0, 0 ], [ 0, 0, - Math.PI / 2 ] ]
-            //],
+        this.pickerGizmos = {
             Y: [
                 [ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 1.5, 0, 0 ] ]
-                //     [ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0.6, 0 ] ]
-            ],
-            //
-            // Z: [
-            //     [ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0, 0.6 ], [ Math.PI / 2, 0, 0 ] ]
-            // ],
-
-            // XYZ: [
-            //     [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.4, 0.4, 0.4 ), pickerMaterial ) ]
-            // ]
-
+            ]
         };
 
         this.setActivePlane = function ( axis, eye ) {
@@ -725,29 +683,19 @@
 
 
         this.handleGizmos = {
-            XZ: [
-                [ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00, opacity:0.5 } ) ) ]
-            ],
-            Y: [
-                [ new THREE.Mesh( arrowRotGeometry, new GizmoMaterial( { color: 0x00ffff, opacity:0.5 } ) ) ]
-            ],
-            XZY: [
-                [ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000, opacity:0.5 } ) ) ]
-            ]
+            XZ: [[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ) ]],
+            Y:  [[ new THREE.Mesh( arrowRotGeometry, new GizmoMaterial( { color: 0x00ffff } ) )]],
+            XZY:[[ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000 } ) ) ]]
         };
 
-
+        this.handleGizmos.XZ[0][0].renderOrder = 1;
+        this.handleGizmos.Y[0][0].renderOrder = 1;
+        this.handleGizmos.XZY[0][0].renderOrder = 1;
 
         this.pickerGizmos = {
-            XZ: [
-                [ new THREE.Mesh( arrowGeometry, pickerMaterial ) ]
-            ],
-            Y: [
-                [ new THREE.Mesh( arrowRotGeometry, pickerMaterial ) ]
-            ],
-            XZY: [
-                [ new THREE.Mesh( xGeometry, pickerMaterial ) ]
-            ]
+            XZ: [[ new THREE.Mesh( arrowGeometry, pickerMaterial ) ]],
+             Y: [[ new THREE.Mesh( arrowRotGeometry, pickerMaterial )]],
+            XZY: [[ new THREE.Mesh( xGeometry, pickerMaterial ) ]]
         };
 
         this.setActivePlane = function ( axis ) {
@@ -788,33 +736,22 @@
                 tempQuaternion.setFromEuler( worldRotation );
 
                 if ( child.name === "X" ) {
-
                     // quaternionX.setFromAxisAngle( unitX, Math.atan2( - eye.y, eye.z ) );
                     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
                     // child.quaternion.copy( tempQuaternion );
-
                 }
 
                 if ( child.name === "Y" ) {
-
                     // quaternionY.setFromAxisAngle( unitY, Math.atan2( eye.x, eye.z ) );
                     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
                     // child.quaternion.copy( tempQuaternion );
-
                 }
 
                 if ( child.name === "Z" ) {
-
                     // quaternionZ.setFromAxisAngle( unitZ, Math.atan2( eye.y, eye.x ) );
                     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
                     // child.quaternion.copy( tempQuaternion );
-
                 }
-
-
-
-
-
             } );
 
         };
@@ -840,8 +777,6 @@
         this.object = undefined;
         this.bbox = undefined;
 
-
-
         this.visible = false;
         this.translationSnap = null;
         this.rotationSnap = null;
@@ -855,8 +790,6 @@
         scope.add( angle_lineX );
         scope.add( angle_lineY );
         scope.add( angle_lineZ );
-
-
 
         var _mode = "translate";
         var _dragging = false;

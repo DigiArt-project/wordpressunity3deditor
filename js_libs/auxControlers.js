@@ -372,7 +372,7 @@ function findSceneDimensions(){
     envir.SCENE_DIMENSION_SURFACE = Math.max(xMax - xMin, zMax - zMin);
 
     // In empty scene lets fix it to 10
-    envir.SCENE_DIMENSION_SURFACE = envir.SCENE_DIMENSION_SURFACE > 0 ? envir.SCENE_DIMENSION_SURFACE * 1.5 : 10;
+    //envir.SCENE_DIMENSION_SURFACE = envir.SCENE_DIMENSION_SURFACE > 0 ? envir.SCENE_DIMENSION_SURFACE * 1.5 : 10;
 }
 
 
@@ -392,8 +392,8 @@ function updateCameraGivenSceneLimits(){
 
         envir.ASPECT = envir.container_3D_all.clientWidth / envir.container_3D_all.clientHeight;
 
-        envir.cameraOrbit.left   = envir.FRUSTUM_SIZE * envir.ASPECT / -2 * 0.8; // shift it a little bit to the left
-        envir.cameraOrbit.right  = envir.FRUSTUM_SIZE * envir.ASPECT /  2 * 1.2; // shift it a little bit to the left
+        envir.cameraOrbit.left   = envir.FRUSTUM_SIZE * envir.ASPECT / -2; // * 0.8; // shift it a little bit to the left
+        envir.cameraOrbit.right  = envir.FRUSTUM_SIZE * envir.ASPECT /  2; // * 1.2; // shift it a little bit to the left
 
         envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 1; // *0.8 shift it a little bit to the top
         envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1; // *1.2 shift it a little bit to the top

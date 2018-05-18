@@ -50,6 +50,8 @@ function dragDropVerticalRayCasting (event){
     // // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
+    if(intersects.length == 0)
+        return [0,0,0];
 
     return [intersects[0].point.x,intersects[0].point.y,intersects[0].point.z];
 }
@@ -66,22 +68,14 @@ function onMouseDoubleClickFocus( event ) {
         envir.orbitControls.target.z = transform_controls.object.position.z;
         envir.cameraOrbit.position.x = transform_controls.object.position.x;
         envir.cameraOrbit.position.z = transform_controls.object.position.z;
-
-        envir.cameraOrbit.lookAt()
-
     } else {
-
         envir.orbitControls.target.x = transform_controls.object.position.x;
         envir.orbitControls.target.y = transform_controls.object.position.y;
         envir.orbitControls.target.z = transform_controls.object.position.z;
-
     }
 
-
-        //envir.orbitControls.object.zoom = 10 / transform_controls.size;
-             envir.orbitControls.object.updateProjectionMatrix();
-        //}
-    // //}
+    //envir.orbitControls.object.zoom = 10 / transform_controls.size;
+    envir.orbitControls.object.updateProjectionMatrix();
 }
 
 /**
@@ -114,9 +108,8 @@ function onMouseDownSelect( event ) {
 
             // highlight
             envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
-
-            // Attach Controls
-            transform_controls.attach(envir.avatarControls.getObject());
+            transform_controls.attach(intersects[0].object.parent);
+            envir.renderer.setClearColor( 0xeeeeee, 1);
 
             // Steve can not be deleted
             transform_controls.size = 1;
@@ -167,6 +160,7 @@ function selectorMajor(event, inters){
     if (event.button === 0) {
 
         transform_controls.attach(inters.object.parent);
+        envir.renderer.setClearColor( 0xeeeeee  );
 
         // X for deleting object is visible (only Steve can not be deleted)
         transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;

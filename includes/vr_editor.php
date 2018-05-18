@@ -658,7 +658,6 @@ echo '</script>';
             objItem.rotation.set( trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
         }
-      
         
         // place controls to last inserted obj
         if (objItem) {
@@ -686,6 +685,13 @@ echo '</script>';
                 var dims = findDimensions(transform_controls.object);
                 var sizeT = Math.max(...dims);
             } else {
+
+                
+                //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
+                //transform_controls.attach(intersects[0].object.parent);
+                //envir.renderer.setClearColor( 0xff00aa, 1);
+
+
                 var sizeT = 1;
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
                 jQuery("#removeAssetBtn").hide();

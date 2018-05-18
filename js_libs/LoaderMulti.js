@@ -46,9 +46,11 @@ class LoaderMulti {
                                 steveShieldMesh.name = 'SteveShieldMesh';
                                 //--------------------------
 
-
-
                                 object.add(steveShieldMesh);
+
+                                object.renderOrder = 1;
+
+
 
                                 envir.scene.add(object);
                                 envir.setSteveToAvatarControls();
@@ -140,6 +142,9 @@ class LoaderMulti {
 
 
                                 object.type_behavior = resources3D[name]['type_behavior'];
+
+
+
 
 
                                 envir.scene.add(object);

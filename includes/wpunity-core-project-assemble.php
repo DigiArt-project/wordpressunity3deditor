@@ -484,7 +484,7 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
             $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
             $scene_type_slug = $scene_type[0]->slug;
 
-            if ($scene_type_slug == 'wonderaround-yaml' || $scene_type_slug == 'educational-energy' ){
+            if ($scene_type_slug == 'wonderaround-yaml' || $scene_type_slug == 'educational-energy' || $scene_type_slug == 'wonderaround-lab-yaml' ){
                 $scenes_counter++;
             }
 
@@ -508,6 +508,11 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
         $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_arch',true);
         $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_arch',true);
         $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title_arch',true);
+    }elseif($gameType[0]->slug == 'chemistry_games'){
+        $mainMenuTerm = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml');
+        $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_chem',true);
+        $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_chem',true);
+        $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title_chem',true);
     }
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
@@ -535,18 +540,26 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
 
     if($scene_type_slug == 'mainmenu-yaml'){
         wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
-    }if($scene_type_slug == 'mainmenu-arch-yaml'){
+    }elseif($scene_type_slug == 'mainmenu-arch-yaml'){
         wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+    }elseif($scene_type_slug == 'mainmenu-chem-yaml'){
+        wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($scene_type_slug == 'credentials-arch-yaml'){
         wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($scene_type_slug == 'credentials-yaml'){
         wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+    }elseif($scene_type_slug == 'credentials-chem-yaml'){
+        wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($scene_type_slug == 'educational-energy'){
         wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'wonderaround-yaml'){
         wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'wonderaround-lab-yaml'){
         wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+    }elseif($scene_type_slug == 'exam2d-chem-yaml'){
+        wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+    }elseif($scene_type_slug == 'exam3d-chem-yaml'){
+        wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }
 
 }

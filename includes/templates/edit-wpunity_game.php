@@ -218,58 +218,8 @@ get_header();
 
     <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 
-
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Game analytics keys</h2>
-    <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Change keys</a>
-
-
-    <div class="EditPageAccordionPanel">
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-
-                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
-
-                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light mdc-textfield--disabled"
-                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" value="<?php if($project_saved_keys['gioID'] != ''){echo $project_saved_keys['gioID'];} ?>">
-                        <label for="app-key" class="mdc-textfield__label">APP KEY</label>
-                        <div class="mdc-textfield__bottom-line"></div>
-                    </div>
-
-                </div>
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
-                    <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
-
-                    <!--<a id="guid-generator-btn" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">
-                        GENERATE NEW
-                    </a>-->
-                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                        <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
-                        <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
-                        <div class="mdc-textfield__bottom-line"></div>
-                    </div>
-
-                    <br>
-                    <button id="save-expid-button" class="mdc-button mdc-button--raised mdc-theme--primary-bg FullWidth" data-mdc-auto-init="MDCRipple" type="submit">
-                        SAVE
-                    </button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
     <a class="mdc-button mdc-button--primary EditPageAccordion" data-mdc-auto-init="MDCRipple"><i class="material-icons ButtonIcon" >add</i> Add New Scene</a>
-
 
     <div class="EditPageAccordionPanel">
         <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
@@ -766,12 +716,6 @@ if ( $assets ) :?>
                 jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
             });
         }
-
-
-        // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
-        jQuery('#save-expid-button').click(function() {
-            wpunity_saveExpIDAjax();
-        });
 
         var deleteDialog = document.querySelector('#delete-dialog');
         var compileDialog = document.querySelector('#compile-dialog');
