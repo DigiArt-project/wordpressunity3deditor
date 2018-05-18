@@ -239,7 +239,7 @@ get_header();
                         </p>
 
                         <label class="mdc-typography--title NewGameLabel">Choose <?php echo $single; ?> type</label>
-                        <ul class="RadioButtonList">
+                        <ul class="RadioButtonList" onclick="loadGameDescription();">
 
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
@@ -277,6 +277,8 @@ get_header();
                             <!--                            </li>-->
 
                         </ul>
+
+                        <span id="game-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">A Wind Energy park simulation with many areas and parameters</span>
 
                         <hr class="WhiteSpaceSeparator">
 
@@ -343,6 +345,23 @@ get_header();
     var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
     dialog.focusTrap_.deactivate();
 
+    function loadGameDescription() {
+
+        var checked = parseInt(jQuery( ":checked" ).val(), 10);
+
+        if (checked === 2) {
+            jQuery("#game-description-label").html("A Wind Energy park simulation with many areas and parameters");
+        } else if (checked === 3) {
+            jQuery("#game-description-label").html("A Chemistry lab with 2D and 3D puzzles about molecules");
+        } else {
+            jQuery("#game-description-label").html("A first person view game about visiting a museum");
+        }
+
+        console.log(checked);
+
+
+    }
+
     function deleteGame(id) {
 
         var dialogTitle = document.getElementById("delete-dialog-title");
@@ -388,6 +407,3 @@ get_header();
 
 </script>
 <?php get_footer(); ?>
-
-
-
