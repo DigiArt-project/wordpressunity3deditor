@@ -574,6 +574,8 @@ echo '</script>';
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
 
+        
+        
         if (btn.data('toggle') === 'on') {
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
@@ -582,7 +584,12 @@ echo '</script>';
 
             hideEditorUI();
 
+            
+            
         } else {
+
+            
+            
             btn.removeClass('mdc-theme--text-hint-on-light');
             btn.addClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility</i>');
@@ -746,6 +753,9 @@ echo '</script>';
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
+
+        transform_controls.visible  = true;
+        envir.getSteveFrustum().visible = true;
     }
 
     function hideEditorUI() {
@@ -759,6 +769,9 @@ echo '</script>';
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
+
+        transform_controls.visible  = false;
+        envir.getSteveFrustum().visible = false;
     }
 </script>
 
@@ -806,7 +819,6 @@ $formRes->init($sceneToLoad);
 
     function animate()
     {
-    
         id_animation_frame = requestAnimationFrame( animate );
 
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)

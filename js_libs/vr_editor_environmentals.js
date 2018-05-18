@@ -257,6 +257,10 @@ class vr_editor_environmentals {
         return envir.avatarControls.getObject().position;
     }
 
+    getSteveFrustum(){
+        return envir.avatarControls.getObject();
+    }
+
 
     setSteveWorldPosition(x,y,z,rx,ry){
         envir.avatarControls.getObject().position.x = x;
