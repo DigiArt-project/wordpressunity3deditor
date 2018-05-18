@@ -459,7 +459,7 @@ echo '</script>';
 
     // Selected object name
     var selected_object_name = '';
-
+    
 
     // Add gui to gui container_3D_all
     var guiContainer = document.getElementById('gui-container');
@@ -698,6 +698,9 @@ echo '</script>';
             }
 
             transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
+
+            // Starting in 2D mode we do not want the play be able to change into rotation and scale
+            jQuery("#object-manipulation-toggle").hide();
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
