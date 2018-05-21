@@ -253,6 +253,7 @@ echo '</script>';
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
+    
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
@@ -268,6 +269,12 @@ echo '</script>';
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
+
+
+    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary"><i class="material-icons">rotate_90_degrees_ccw</i></a>
+    </div>
+    
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">settings</i>
@@ -528,37 +535,25 @@ echo '</script>';
         
         if (envir.is2d) {
 
-            
-            jQuery("#object-manipulation-toggle")[0].style.display = "";
-
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
             
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
-            
+
+            jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
             
             envir.is2d = false;
             transform_controls.setMode("translate");
-            
 
         } else {
-            
-            jQuery("#object-manipulation-toggle")[0].style.display = "none";
-            
-            // This makes the camera to go on top of the selected item
-            // envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
-            // envir.orbitControls.target.y = transform_controls.object.position.y;
-            // envir.orbitControls.target.z = transform_controls.object.position.z;
-            // envir.cameraOrbit.position.x = transform_controls.object.position.x;
-            // envir.cameraOrbit.position.z = transform_controls.object.position.z;
 
-            
             envir.orbitControls.enableRotate = false;
             envir.gridHelper.visible = false;
-            
+
+            jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
             transform_controls.setMode("rottrans");
@@ -566,30 +561,22 @@ echo '</script>';
 
         envir.orbitControls.object.updateProjectionMatrix();
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
-
-        
     });
 
+    // First person view
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
 
-        
-        
         if (btn.data('toggle') === 'on') {
+            
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
-
             hideEditorUI();
-
-            
             
         } else {
-
-            
-            
             btn.removeClass('mdc-theme--text-hint-on-light');
             btn.addClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility</i>');
@@ -599,8 +586,34 @@ echo '</script>';
         }
     });
 
+    // FULL SCREEN
     jQuery('#fullScreenBtn').click(function() {
         envir.makeFullScreen();
+    });
+
+    // Autor rotate in 3D
+    jQuery('#toggleTour3DaroundBtn').click(function() {
+
+        var btn = jQuery('#toggle-tour-around-btn');
+
+        if (envir.is2d)
+            jQuery("#editor-dimension-btn").click();
+            
+        if (btn.data('toggle') === 'off') {
+           
+            envir.orbitControls.enableRotate = true;
+            envir.orbitControls.autoRotate = true;
+            envir.orbitControls.autoRotateSpeed = 0.6;
+
+            btn.data('toggle', 'on');
+
+        } else {
+            
+            envir.orbitControls.autoRotate = false;
+            btn.data('toggle', 'off');
+        }
+
+        btn.toggleClass('mdc-theme--secondary-bg');
     });
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
@@ -692,12 +705,10 @@ echo '</script>';
                 var dims = findDimensions(transform_controls.object);
                 var sizeT = Math.max(...dims);
             } else {
-
-                
+               
                 //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
                 //transform_controls.attach(intersects[0].object.parent);
                 //envir.renderer.setClearColor( 0xff00aa, 1);
-
 
                 var sizeT = 1;
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
@@ -713,11 +724,8 @@ echo '</script>';
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 
-
-
         envir.scene.traverse(function(obj) {
             if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
-
 
                 var s = '';
                 var obj2 = obj;
