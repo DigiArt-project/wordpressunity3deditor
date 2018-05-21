@@ -250,3 +250,10 @@ canvas { pointer-events:none; z-index:10; }
     right: 360px;
     top: 10px;
 }
+
+
+.EditorTourToggleBtn {
+    position: absolute;
+    right: 360px;
+    top: 50px;
+}
