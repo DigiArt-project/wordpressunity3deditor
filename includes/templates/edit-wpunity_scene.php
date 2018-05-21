@@ -276,9 +276,9 @@ get_header(); ?>
 
 												if ($screenshotImgUrl) {
 
-                                                    $dataScreenshot = file_get_contents($screenshotImgUrl);
-                                                    $dataScreenshotbase64 = 'data:image/jpeg;base64,' . base64_encode($dataScreenshot);
-                                                    ?>
+													$dataScreenshot = file_get_contents($screenshotImgUrl);
+													$dataScreenshotbase64 = 'data:image/jpeg;base64,' . base64_encode($dataScreenshot);
+													?>
 
                                                     <div id="featureImgContainer" class="ImageContainer">
                                                         <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo $dataScreenshotbase64;?>">
@@ -1202,6 +1202,5 @@ get_header(); ?>
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
-
     </script>
 <?php get_footer(); ?>
