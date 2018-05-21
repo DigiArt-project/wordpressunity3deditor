@@ -13,10 +13,16 @@ class LoaderMulti {
 
                 var mtlLoader = new THREE.MTLLoader();
 
+
+
+
                 // Load Steve
                 if (name == 'avatarYawObject') {
 
                     //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
+
+
+                    // STEVE is the CAMERA MESH
 
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
 
@@ -71,6 +77,7 @@ class LoaderMulti {
                     });
 
 
+                    // STEVE OLD IS THE HUMAN MESH
 
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinalOld.mtl", function (materials) {
 
