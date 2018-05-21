@@ -23,8 +23,10 @@ var torgue = new THREE.Vector3();
  */
 function initPointerLock() {
 
-    var blocker = document.getElementById('blocker');
-    var instructions = document.getElementById('instructions');
+    var firstPersonBlocker = document.getElementById('firstPersonBlocker');
+    var firstPersonBlockerBtn = document.getElementById('firstPersonBlockerBtn');
+
+
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
     avatarControlsEnabled = false;
@@ -43,8 +45,9 @@ function initPointerLock() {
                 envir.avatarControls.enabled = true;
                 envir.orbitControls.enabled = false;
 
+
                 //envir.cameraOrbit.getObjectByName("recycleBin").visible = false;
-                blocker.style.display = 'none';
+                firstPersonBlocker.style.display = 'none';
 
                 // When in AVATAR the avatarControls position is the orbit controls target
                 envir.avatarControls.getObject().position = envir.orbitControls.target;
@@ -62,6 +65,7 @@ function initPointerLock() {
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
 
 
+
             } else {
                 // ------------- ORBIT --------------------------
                 avatarControlsEnabled = false;
@@ -74,17 +78,25 @@ function initPointerLock() {
                 //    envir.avatarControls.getObject().rotation.y += 0.85;
 
                 // envir.cameraOrbit.getObjectByName("recycleBin").visible=true;
-                blocker.style.display = '-webkit-box';
-                blocker.style.display = '-moz-box';
-                blocker.style.display = 'box';
-                instructions.style.display = '';
+                firstPersonBlocker.style.display = '-webkit-box';
+                firstPersonBlocker.style.display = '-moz-box';
+                firstPersonBlocker.style.display = 'box';
+                firstPersonBlockerBtn.style.display = '';
+                jQuery('#thirdPersonBlocker')[0].style.display = '';
+
+                envir.thirdPersonView = false;
+
+                envir.scene.getObjectByName("SteveOld").visible = false;
+                envir.scene.getObjectByName("Steve").visible = true;
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
             }
         };
 
         var pointerlockerror = function (event) {
-            instructions.style.display = '';
+            firstPersonBlockerBtn.style.display = '';
+
+            jQuery('#thirdPersonBlocker')[0].style.display = "";
         };
 
         // Hook pointer lock state change events
@@ -96,9 +108,9 @@ function initPointerLock() {
         document.addEventListener('mozpointerlockerror', pointerlockerror, false);
         document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
-        instructions.addEventListener('click', function (event) {
+        firstPersonBlockerBtn.addEventListener('click', function (event) {
 
-            instructions.style.display = 'none';
+            firstPersonBlockerBtn.style.display = 'none';
 
             // Ask the browser to lock the pointer
             element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -108,7 +120,7 @@ function initPointerLock() {
         }, false);
 
     } else {
-        instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+        firstPersonBlockerBtn.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }
 }
 

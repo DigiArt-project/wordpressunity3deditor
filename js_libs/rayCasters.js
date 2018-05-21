@@ -93,8 +93,6 @@ function onMouseDownSelect( event ) {
     // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"), //transform_controls.getObjectByName('trs_modeChanger')
 
-
-
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
@@ -110,7 +108,13 @@ function onMouseDownSelect( event ) {
 
             // highlight
             envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
-            transform_controls.attach(intersects[0].object.parent);
+
+
+            console.log(intersects[0].object.parent);
+
+
+            transform_controls.attach(envir.scene.getObjectByName("avatarYawObject"));
+
             envir.renderer.setClearColor( 0xeeeeee, 1);
 
             // Steve can not be deleted

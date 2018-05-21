@@ -254,17 +254,26 @@ echo '</script>';
         <i class="material-icons">visibility</i>
     </a>
     
-
+    <!--    2D or 3D-->
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
 
     <!-- The button to start walking in the 3d environment -->
-    <div id="blocker" class="VrWalkInButtonStyle">
-        <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+    <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
+        <a type="button" id="firstPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
             VIEW
         </a>
     </div>
+
+    <div id="thirdPersonBlocker" class="thirdPersonVrWalkInButtonStyle">
+        <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">person</i></a>
+    </div>
+
+
+    
+    
 
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
@@ -534,7 +543,7 @@ echo '</script>';
         jQuery("#translate-switch").click();
         
         if (envir.is2d) {
-
+            
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
@@ -557,6 +566,10 @@ echo '</script>';
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
             transform_controls.setMode("rottrans");
+
+            envir.scene.getObjectByName("SteveOld").visible = false;
+            envir.scene.getObjectByName("Steve").visible = true;
+            
         }
 
         envir.orbitControls.object.updateProjectionMatrix();
@@ -585,6 +598,25 @@ echo '</script>';
             showEditorUI();
         }
     });
+
+
+    // Toggle 3rd person view
+    jQuery('#thirdPersonBlockerBtn').click(function() {
+
+        envir.thirdPersonView = true;
+
+        envir.scene.getObjectByName("SteveOld").visible = true;
+        envir.scene.getObjectByName("Steve").visible = false;
+        
+        var btnDiv = jQuery('#thirdPersonBlocker');
+        btnDiv[0].style.display = "none";
+
+        var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
+        btnFirst.click();
+    
+    });
+    
+    
 
     // FULL SCREEN
     jQuery('#fullScreenBtn').click(function() {
@@ -665,6 +697,9 @@ echo '</script>';
     // When all are finished loading place them in the correct position
     manager.onLoad = function () {
 
+        
+        console.log("1 envir.avatarControls.getObject().rotation", envir.avatarControls.getObject().rotation);
+        
         var objItem;
         var trs_tmp;
         var name;
@@ -673,11 +708,14 @@ echo '</script>';
 
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
-
-            objItem.position.set( trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            objItem.rotation.set( trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            
+            if (name != 'avatarYawObject') {
+                objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+                objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            }
         }
+
         
         // place controls to last inserted obj
         if (objItem) {
@@ -688,9 +726,11 @@ echo '</script>';
 
             envir.scene.add(transform_controls);
 
-            transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            if (selected_object_name != 'avatarYawObject') {
+                transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+                transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            }
 
             jQuery('#object-manipulation-toggle').show();
             jQuery('#axis-manipulation-buttons').show();
@@ -719,6 +759,7 @@ echo '</script>';
 
             // Starting in 2D mode we do not want the play be able to change into rotation and scale
             jQuery("#object-manipulation-toggle").hide();
+
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
@@ -757,7 +798,12 @@ echo '</script>';
         jQuery("#double-sided-switch").show();
         jQuery("#removeAssetBtn").show();
         jQuery("#fullScreenBtn").show();
-        jQuery("#blocker").show();
+
+        jQuery("#toggleTour3DaroundBtn").show();
+        jQuery("#editor-dimension-btn").show();
+        jQuery("#toggleView3rdPerson").show();
+        
+        jQuery("#firstPersonBlocker").show();
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
@@ -773,13 +819,23 @@ echo '</script>';
         jQuery("#double-sided-switch").hide();
         jQuery("#removeAssetBtn").hide();
         jQuery("#fullScreenBtn").hide();
-        jQuery("#blocker").hide();
+
+        
+        jQuery("#editor-dimension-btn").hide();
+        jQuery("#toggleTour3DaroundBtn").hide();
+        jQuery("#toggleView3rdPerson").hide();
+        
+        
+        jQuery("#firstPersonBlocker").hide();
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
 
         transform_controls.visible  = false;
-        envir.getSteveFrustum().visible = false;
+
+        // if in 3rd person view then show the cameraobject
+        envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
+
     }
 </script>
 
@@ -834,10 +890,17 @@ $formRes->init($sceneToLoad);
 //            id_animation_frame = requestAnimationFrame( animate );
 //        }, 1000 / 25 );
 
+        
+        // Select the proper camera (orbit, or avatar, or thirdPersonView)
+        var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
+        
         // Render it
-        envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+        envir.renderer.render( envir.scene, curr_camera);
 
-        envir.labelRenderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+        envir.labelRenderer.render( envir.scene, curr_camera);
+        
+
+        
         
         
         if (isComposerOn)

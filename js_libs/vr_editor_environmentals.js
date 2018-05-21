@@ -5,7 +5,9 @@ class vr_editor_environmentals {
 
         this.is2d = true;
         this.isDebug = false; // Debug mode
-        //this.isRendering = true;
+
+        this.thirdPersonView = false;
+
 
 
         this.ctx = this;
@@ -85,6 +87,12 @@ class vr_editor_environmentals {
         //----------------------------------------------------------------
          this.cameraAvatar.aspect = this.ASPECT;
          this.cameraAvatar.updateProjectionMatrix();
+
+
+        this.cameraThirdPerson.aspect = this.ASPECT;
+        this.cameraThirdPerson.updateProjectionMatrix();
+
+
          //---------------------------------------------------------------
 
         this.composer.renderer.setSize( envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT );
@@ -225,6 +233,8 @@ class vr_editor_environmentals {
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
 
+
+
         this.scene.add(this.cameraAvatar);
 
         this.avatarControls = new THREE.PointerLockControls( this.cameraAvatar, this.renderer.domElement );
@@ -237,6 +247,15 @@ class vr_editor_environmentals {
         avatarControlsYawObject.position.set(this.initAvatarPosition.x, this.initAvatarPosition.y, this.initAvatarPosition.z);
 
         this.scene.add(avatarControlsYawObject);
+
+
+        this.cameraThirdPerson = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 3000);
+        this.cameraThirdPerson.position.set(0, 4, 5);
+        this.cameraThirdPerson.rotation.x = -0.2;
+        this.cameraThirdPerson.name = "cameraThirdPerson";
+
+        avatarControlsYawObject.add(this.cameraThirdPerson);
+
 
         //this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
@@ -253,6 +272,13 @@ class vr_editor_environmentals {
         this.avatarControls.getObject().add(Steve );
     }
 
+    setSteveOldToAvatarControls(){
+        var SteveOld = envir.scene.getObjectByName("SteveOld");
+        SteveOld.rotation.set(0, Math.PI/2, 0);
+        this.avatarControls.getObject().add(SteveOld );
+    }
+
+
     getSteveWorldPosition(){
         return envir.avatarControls.getObject().position;
     }
@@ -262,13 +288,17 @@ class vr_editor_environmentals {
     }
 
 
+
+
     setSteveWorldPosition(x,y,z,rx,ry){
         envir.avatarControls.getObject().position.x = x;
         envir.avatarControls.getObject().position.y = y;
         envir.avatarControls.getObject().position.z = z;
 
+
         envir.avatarControls.getObject().children[0].rotation.x = rx;
         envir.avatarControls.getObject().rotation.y = ry;
+
     }
 
     //================= Static Environmentals ==============================

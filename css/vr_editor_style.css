@@ -257,3 +257,9 @@ canvas { pointer-events:none; z-index:10; }
     right: 360px;
     top: 50px;
 }
+
+.thirdPersonVrWalkInButtonStyle {
+    position: absolute;
+    right: 260px;
+    top: 50px;
+}

@@ -349,6 +349,12 @@ THREE.SceneExporter.prototype = {
                 //console.log(output);
             } else {
 
+
+                console.log(o);
+
+                console.log(o.children[0]);
+
+
                 var quatCombined = new THREE.Quaternion();
                 var camEulerCombined = new THREE.Euler(- o.children[0].rotation._x, (Math.PI - o.rotation.y)%(2*Math.PI), 0, 'YXZ');
                 quatCombined.setFromEuler(camEulerCombined);

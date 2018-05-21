@@ -22,6 +22,8 @@ class ParseJSON {
                 $mtl = '';
                 $type_behavior = 'avatar';
 
+                
+                
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = 0;

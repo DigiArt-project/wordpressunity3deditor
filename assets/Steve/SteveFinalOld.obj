@@ -1,7 +1,7 @@
 # Blender v2.75 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib SteveFinal.mtl
-g Steve
+mtllib SteveFinalOld.mtl
+g SteveOld
 v -0.122722 0.706622 -0.041079
 v -0.122722 0.706622 0.226376
 v 0.122827 0.706622 0.226376

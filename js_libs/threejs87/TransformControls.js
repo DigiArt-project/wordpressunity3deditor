@@ -1627,8 +1627,12 @@
 
                         point.applyMatrix4(tempMatrix.getInverse(parentRotationMatrix));
 
+
+
                         scope.object.position.copy(oldPosition);
                         scope.object.position.add(point);
+
+
 
                     }
 
