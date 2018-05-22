@@ -682,13 +682,19 @@ echo '</script>';
     // Autor rotate in 3D
     jQuery('#toggleTour3DaroundBtn').click(function() {
 
+        console.log("1");
+        
         var btn = jQuery('#toggle-tour-around-btn');
 
         if (envir.is2d)
             jQuery("#editor-dimension-btn").click();
             
+        
+        
         if (btn.data('toggle') === 'off') {
-           
+
+            console.log("2");
+            
             envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
