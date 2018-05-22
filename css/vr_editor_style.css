@@ -159,6 +159,35 @@ canvas { pointer-events:none; z-index:10; }
     cursor: pointer;
 }
 
+.HierarchyToggleStyle {
+    position: absolute;
+    top: 140px;
+    background: transparent;
+}
+
+.HierarchyToggleStyle i {
+    cursor: pointer;
+}
+
+.HierarchyToggleOn {
+    left: 20%;
+}
+
+.HierarchyToggleOff {
+    left: 0;
+}
+
+
+.HierarchyViewerStyle {
+    max-height: 100%;
+    width: 20%;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 140px;
+    background-color: rgb(244,244,244);
+}
+
 .RemoveAssetFromSceneBtnStyle {
     position: absolute;
     left: 372px;
@@ -169,7 +198,7 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
-.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i {
+.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i {
     padding-top: 4px;
 }
 
@@ -251,11 +280,10 @@ canvas { pointer-events:none; z-index:10; }
     top: 10px;
 }
 
-
 .EditorTourToggleBtn {
     position: absolute;
-    right: 360px;
-    top: 50px;
+    right: 460px;
+    top: 10px;
 }
 
 .thirdPersonVrWalkInButtonStyle {

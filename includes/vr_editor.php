@@ -253,8 +253,14 @@ echo '</script>';
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
-    
-    <!--    2D or 3D-->
+
+
+    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+            <i class="material-icons">rotate_90_degrees_ccw</i>
+        </a>
+    </div>
+
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
@@ -301,6 +307,45 @@ echo '</script>';
         <div class="result"></div>
         <div id="result_download"></div>
     </div>
+
+
+    <!--Hierarchy Viewer-->
+
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
+        <i class="material-icons">menu</i>
+    </a>
+    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer">
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+        
+    </ul>
+
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -497,6 +542,19 @@ echo '</script>';
 
     //envir.addCubeToControls(transform_controls);
 
+    jQuery("#hierarchy-toggle-btn").click(function() {
+
+        if (jQuery("#hierarchy-toggle-btn").hasClass("HierarchyToggleOn")) {
+
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOff").removeClass("HierarchyToggleOn");
+        } else {
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
+        }
+
+        jQuery("#hierarchy-viewer").toggle("slow");
+    });
+
+
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
         transform_controls.setMode(value);
@@ -504,9 +562,7 @@ echo '</script>';
     });
 
     jQuery("#removeAssetBtn").click(function(){
-
         deleterFomScene(transform_controls.object.name);
-
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -518,7 +574,7 @@ echo '</script>';
     });
 
     jQuery("#editor-dimension-btn").click(function() {
-       
+
         findSceneDimensions();
         updateCameraGivenSceneLimits();
 
@@ -526,7 +582,7 @@ echo '</script>';
         envir.cameraOrbit.position.x = 0;
         envir.cameraOrbit.position.y = 50;
         envir.cameraOrbit.position.z = 0;
-        
+
         envir.cameraOrbit.rotation._x = - Math.PI/2;
         envir.cameraOrbit.rotation._y = 0;
         envir.cameraOrbit.rotation._z = 0;
@@ -541,19 +597,19 @@ echo '</script>';
 
 
         jQuery("#translate-switch").click();
-        
+
         if (envir.is2d) {
             
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
-            
+
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
-            
+
             envir.is2d = false;
             transform_controls.setMode("translate");
 
@@ -582,13 +638,13 @@ echo '</script>';
         var icon = jQuery('#toggleUIBtn i');
 
         if (btn.data('toggle') === 'on') {
-            
+
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
             hideEditorUI();
-            
+
         } else {
             btn.removeClass('mdc-theme--text-hint-on-light');
             btn.addClass('mdc-theme--secondary');
@@ -697,9 +753,6 @@ echo '</script>';
     // When all are finished loading place them in the correct position
     manager.onLoad = function () {
 
-        
-        console.log("1 envir.avatarControls.getObject().rotation", envir.avatarControls.getObject().rotation);
-        
         var objItem;
         var trs_tmp;
         var name;
@@ -944,21 +997,16 @@ $formRes->init($sceneToLoad);
     }
 
     // Select event listener
-
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
-    
+
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
-
-    
 
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-
-
 
     animate();
 
