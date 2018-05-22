@@ -40,11 +40,11 @@ function loadTypesAssetsDataScripts() {
 	}
 
 
-
+    $mypost = $_GET['post'];
 // Some parameters to pass in the classification.js  ajax
 	wp_localize_script('wpunity_classification_request', 'phpvars',
-		array('path' => get_post_meta($post->ID, 'wpunity_asset3d_pathData', true).'/',
-		      'obj' => get_post_meta($post->ID, 'wpunity_asset3d_obj', true)
+		array('path' => get_post_meta($mypost->ID, 'wpunity_asset3d_pathData', true).'/',
+		      'obj' => get_post_meta($mypost->ID, 'wpunity_asset3d_obj', true)
 		)
 	);
 }

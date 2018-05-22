@@ -161,9 +161,11 @@ function wpunity_scenes_types_archaeology_standard_cre(){
     }
 }
 
-add_action('create_wpunity_scene_yaml', 'wpunity_scenes_types_archaeology_fields_cre' , $tt_id);
+add_action('create_wpunity_scene_yaml', 'wpunity_scenes_types_archaeology_fields_cre');
 
-function wpunity_scenes_types_archaeology_fields_cre($tt_id){
+function wpunity_scenes_types_archaeology_fields_cre($term_id){
+
+    $tt_id = $term_id;
 
     $term_insterted = get_term_by('id', $tt_id, 'wpunity_scene_yaml');
 
