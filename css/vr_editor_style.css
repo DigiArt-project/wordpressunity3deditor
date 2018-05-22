@@ -169,7 +169,7 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
-.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i {
+.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i {
     padding-top: 4px;
 }
 
@@ -251,9 +251,8 @@ canvas { pointer-events:none; z-index:10; }
     top: 10px;
 }
 
-
 .EditorTourToggleBtn {
     position: absolute;
-    right: 360px;
-    top: 50px;
+    right: 460px;
+    top: 10px;
 }

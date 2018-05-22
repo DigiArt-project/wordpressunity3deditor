@@ -253,7 +253,13 @@ echo '</script>';
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
     </a>
-    
+
+
+    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+            <i class="material-icons">rotate_90_degrees_ccw</i>
+        </a>
+    </div>
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
@@ -269,12 +275,6 @@ echo '</script>';
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
-
-
-    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
-        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary"><i class="material-icons">rotate_90_degrees_ccw</i></a>
-    </div>
-    
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">settings</i>
