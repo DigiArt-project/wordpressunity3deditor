@@ -33,6 +33,23 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         fileList = filemanager.find('.data'),
         closeButton = jQuery('.bt_close_file_toolbar');
 
+    // Create drag image BEFORE event is fired - THEN call it inside the event
+    function createDragImage() {
+        var img = jQuery('<img>');
+        img.attr('src', '../wp-content/plugins/wordpressunity3deditor/images/ic_asset.png');
+        img.css({
+            "top": 0,
+            "left": 0,
+            "position": "absolute",
+            "pointerEvents": "none"
+        }).appendTo(document.body);
+        setTimeout(function() {
+            img.remove();
+        });
+        return img[0];
+    }
+    var dragImg = createDragImage();
+
     render(responseData, gameProjectSlug, urlforAssetEdit );
 
     // Hiding and showing the search box
@@ -78,11 +95,13 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
     fileList.on({
         click: function(e) {
             //alert("Drag n drop zip files onto 3D space");
+
             e.preventDefault();
         },
 
         dragstart: function(e) {
 
+            e.originalEvent.dataTransfer.setDragImage(dragImg, 32, 32);
 
             var dragData = {
                 "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
@@ -106,15 +125,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
             var jsonDataDrag = JSON.stringify(dragData);
             e.originalEvent.dataTransfer.setData("text/plain", jsonDataDrag);
-
-            var img = document.createElement("img");
-            img.src = e.target.attributes.getNamedItem("data-sshot-url").value;
-            img.style.width = "100px";
-            img.style.height = "100px";
-            img.width = 100;
-            img.height = 100;
-
-            e.originalEvent.dataTransfer.setDragImage(img, 0, 0);
 
         },
         drag: function(e) {

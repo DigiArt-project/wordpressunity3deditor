@@ -3,10 +3,11 @@
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OrbitControls.js'></script>
 
+<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CSS2DRenderer.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/dat.gui.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>
+<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>-->
 
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CopyShader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/FXAAShader.js'></script>
@@ -122,7 +123,8 @@ echo '</script>';
 
         });
 
-        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
+        if (!envir.isDebug)
+            wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
     function removeSavedText(){
@@ -252,6 +254,13 @@ echo '</script>';
         <i class="material-icons">visibility</i>
     </a>
 
+
+    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+            <i class="material-icons">rotate_90_degrees_ccw</i>
+        </a>
+    </div>
+
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
@@ -283,6 +292,45 @@ echo '</script>';
         <div class="result"></div>
         <div id="result_download"></div>
     </div>
+
+
+    <!--Hierarchy Viewer-->
+
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
+        <i class="material-icons">menu</i>
+    </a>
+    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer">
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+        
+    </ul>
+
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -477,7 +525,20 @@ echo '</script>';
 
     //transform_controls.addEventListener( 'change', checkForRecycle );
 
-    envir.addCubeToControls(transform_controls);
+    //envir.addCubeToControls(transform_controls);
+
+    jQuery("#hierarchy-toggle-btn").click(function() {
+
+        if (jQuery("#hierarchy-toggle-btn").hasClass("HierarchyToggleOn")) {
+
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOff").removeClass("HierarchyToggleOn");
+        } else {
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
+        }
+
+        jQuery("#hierarchy-viewer").toggle("slow");
+    });
+
 
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
@@ -486,9 +547,7 @@ echo '</script>';
     });
 
     jQuery("#removeAssetBtn").click(function(){
-
         deleterFomScene(transform_controls.object.name);
-
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -502,46 +561,69 @@ echo '</script>';
     jQuery("#editor-dimension-btn").click(function() {
 
         findSceneDimensions();
+        updateCameraGivenSceneLimits();
+
+
+        envir.cameraOrbit.position.x = 0;
+        envir.cameraOrbit.position.y = 50;
+        envir.cameraOrbit.position.z = 0;
+
+        envir.cameraOrbit.rotation._x = - Math.PI/2;
+        envir.cameraOrbit.rotation._y = 0;
+        envir.cameraOrbit.rotation._z = 0;
+
+        envir.orbitControls.object.zoom = 1;
+
+
+        envir.orbitControls.target.x = 0;
+        envir.orbitControls.target.y = 0;
+        envir.orbitControls.target.z = 0;
+
+
+
+        jQuery("#translate-switch").click();
 
         if (envir.is2d) {
+
+            envir.orbitControls.object.position.x = 50;
+            envir.orbitControls.object.position.y = 50;
+            envir.orbitControls.object.position.z = 50;
+
             envir.orbitControls.enableRotate = true;
+            envir.gridHelper.visible = true;
+
+            jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
+
             envir.is2d = false;
+            transform_controls.setMode("translate");
+
         } else {
 
-            findSceneDimensions();
-
-            envir.orbitControls.userPanSpeed = 1;
-
-            envir.orbitControls.object.zoom = 1;
-            envir.orbitControls.object.updateProjectionMatrix();
-            envir.orbitControls.name = "orbitControls";
             envir.orbitControls.enableRotate = false;
+            envir.gridHelper.visible = false;
 
-            // This makes the camera to go on top of the selected item
-            envir.orbitControls.target.x = transform_controls.object.position.x; //  inters.object.parent.position.x;
-            envir.orbitControls.target.y = transform_controls.object.position.y;
-            envir.orbitControls.target.z = transform_controls.object.position.z;
-            envir.cameraOrbit.position.x = transform_controls.object.position.x;
-            envir.cameraOrbit.position.z = transform_controls.object.position.z;
-
+            jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
             envir.is2d = true;
+            transform_controls.setMode("rottrans");
         }
 
+        envir.orbitControls.object.updateProjectionMatrix();
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
 
+    // First person view
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
         var icon = jQuery('#toggleUIBtn i');
 
         if (btn.data('toggle') === 'on') {
+
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
-
             hideEditorUI();
 
         } else {
@@ -554,8 +636,34 @@ echo '</script>';
         }
     });
 
+    // FULL SCREEN
     jQuery('#fullScreenBtn').click(function() {
         envir.makeFullScreen();
+    });
+
+    // Autor rotate in 3D
+    jQuery('#toggleTour3DaroundBtn').click(function() {
+
+        var btn = jQuery('#toggle-tour-around-btn');
+
+        if (envir.is2d)
+            jQuery("#editor-dimension-btn").click();
+
+        if (btn.data('toggle') === 'off') {
+
+            envir.orbitControls.enableRotate = true;
+            envir.orbitControls.autoRotate = true;
+            envir.orbitControls.autoRotateSpeed = 0.6;
+
+            btn.data('toggle', 'on');
+
+        } else {
+
+            envir.orbitControls.autoRotate = false;
+            btn.data('toggle', 'off');
+        }
+
+        btn.toggleClass('mdc-theme--secondary-bg');
     });
 
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
@@ -613,9 +721,6 @@ echo '</script>';
 
         for (name in resources3D  ) {
 
-            if (name == 'avatarYawObject')
-                continue;
-
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
 
@@ -628,11 +733,8 @@ echo '</script>';
         if (objItem) {
             transform_controls.attach(objItem);
 
-            //findDimensions(transform_controls.object);
-
             // highlight
-            envir.outlinePass.selectedObjects = [objItem.parent];
-            //envir.renderer.setClearColor( 0xffffff, 0.9 );
+            envir.outlinePass.selectedObjects = [objItem];
 
             envir.scene.add(transform_controls);
 
@@ -648,13 +750,43 @@ echo '</script>';
             selected_object_name = name;
 
             transform_controls.setMode("rottrans");
+
+            if (selected_object_name != 'avatarYawObject') {
+                var dims = findDimensions(transform_controls.object);
+                var sizeT = Math.max(...dims);
+            } else {
+
+                //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
+                //transform_controls.attach(intersects[0].object.parent);
+                //envir.renderer.setClearColor( 0xff00aa, 1);
+
+                var sizeT = 1;
+                transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
+                jQuery("#removeAssetBtn").hide();
+            }
+
+            transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
+
+            // Starting in 2D mode we do not want the play be able to change into rotation and scale
+            jQuery("#object-manipulation-toggle").hide();
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 
-        // controls make them smaller
-        transform_controls.size = 0.7;
+        envir.scene.traverse(function(obj) {
+            if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
+
+                var s = '';
+                var obj2 = obj;
+                // while (obj2 !== envir.scene) {
+                //     s += '-';
+                //     obj2 = obj2.parent;
+                // }
+                console.log(s + " " + obj.name + " (" + obj.categoryName + ")" ); // + " " + obj.type + ' ' + obj.name
+            }
+        });
+
     };
 
     function hideObjectPropertiesPanels() {
@@ -679,6 +811,9 @@ echo '</script>';
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
+
+        transform_controls.visible  = true;
+        envir.getSteveFrustum().visible = true;
     }
 
     function hideEditorUI() {
@@ -692,6 +827,9 @@ echo '</script>';
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
+
+        transform_controls.visible  = false;
+        envir.getSteveFrustum().visible = false;
     }
 </script>
 
@@ -739,7 +877,6 @@ $formRes->init($sceneToLoad);
 
     function animate()
     {
-        // 60fps
         id_animation_frame = requestAnimationFrame( animate );
 
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
@@ -749,6 +886,9 @@ $formRes->init($sceneToLoad);
 
         // Render it
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+
+        envir.labelRenderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+
 
         if (isComposerOn)
             envir.composer.render();
@@ -791,6 +931,8 @@ $formRes->init($sceneToLoad);
     }
 
     // Select event listener
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
+
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
 
@@ -799,8 +941,6 @@ $formRes->init($sceneToLoad);
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-
-
 
     animate();
 

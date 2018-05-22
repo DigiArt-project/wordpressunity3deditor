@@ -346,7 +346,7 @@ THREE.SceneExporter.prototype = {
                     //'	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
                 //===============================================
-                console.log(output);
+                //console.log(output);
             } else {
 
                 var quatCombined = new THREE.Quaternion();

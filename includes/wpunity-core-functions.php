@@ -976,30 +976,30 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 
 }
 
-function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
-
-	$texture_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.jpg";
-	$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
-	$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
-
-	$textureFile_id = wpunity_upload_Assetimg64($texture_content, 'texture_'.$assetTitleForm, $asset_newID, $gameSlug);
-	$textureFile_filename = basename(get_attached_file($textureFile_id));
-
-	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*/ui", "map_Kd " . $textureFile_filename, $mtl_content);
-	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
-	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
-
-	// OBJ
-	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
-	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
-	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
-	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
-
-	// Set value of attachment IDs at custom fields
-	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
-	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
-	update_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
-}
+//function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
+//
+//	$texture_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.jpg";
+//	$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
+//	$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
+//
+//	$textureFile_id = wpunity_upload_Assetimg64($texture_content, 'texture_'.$assetTitleForm, $asset_newID, $gameSlug);
+//	$textureFile_filename = basename(get_attached_file($textureFile_id));
+//
+//	$mtl_content = preg_replace("/.*\b" . 'map_Kd' . "\b.*/ui", "map_Kd " . $textureFile_filename, $mtl_content);
+//	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
+//	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
+//
+//	// OBJ
+//	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
+//	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
+//	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
+//	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
+//
+//	// Set value of attachment IDs at custom fields
+//	update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
+//	update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
+//	update_post_meta( $asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id );
+//}
 
 //==========================================================================================================================================
 //==========================================================================================================================================
@@ -1104,7 +1104,10 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
-
+   
+			if (trim($jsonScene) === '')
+			    continue;
+       
 			if (count($sceneJsonARR['objects']) > 0)
 				foreach ($sceneJsonARR['objects'] as $key => $value) {
 					if ($key !== 'avatarYawObject') {
@@ -1158,6 +1161,10 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
+			
+            if (trim($jsonScene)==='')
+                continue;
+			
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
 
 			if (count($sceneJsonARR['objects']) > 0)
@@ -1333,7 +1340,7 @@ function wpunity_upload_filter( $args  ) {
  * @return bool|int|WP_Error
  *
  */
-function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug) {
+function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug, $type) {
 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
@@ -1342,7 +1349,7 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 	$upload_dir = wp_upload_dir();
 	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
-	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.png';
+	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.'.$type;
 
 	$image_upload = file_put_contents($upload_path . $hashed_filename,
 		base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
@@ -2033,11 +2040,11 @@ function wpunity_save_scene_async_action_callback()
 	// put meta in scene. True, false, or id of meta if does not exist
 	$res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
 
-	$attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
-		$_POST['scene_id'], get_post($_POST['scene_id'])->post_name );
+	if (isset($_POST['scene_screenshot']))
+	    $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
+		    $_POST['scene_id'], get_post($_POST['scene_id'])->post_name, 'jpg' );
 
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
-
 
 	$scene_new_info = array(
 		'ID' => $_POST['scene_id'],
@@ -2046,9 +2053,6 @@ function wpunity_save_scene_async_action_callback()
 	);
 
 	wp_update_post($scene_new_info);
-
-
-
 
 	echo $res ? 'true' : 'false';
 	wp_die();

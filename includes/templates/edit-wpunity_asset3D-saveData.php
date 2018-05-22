@@ -162,6 +162,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 
     $textureNamesIn = [];
     $tContent = [];
+    $tContentExt = []; // store the extensions
 
     // Texture
     if (isset($_POST['textureFileInput'])) {
@@ -169,6 +170,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         foreach (array_keys($_POST['textureFileInput']) as $texture) {
             $tname = str_replace(['.jpg','.png'], '', $texture);
             $tContent[$tname] = $_POST['textureFileInput'][$texture];
+            $tContentExt[$tname] =  strpos($texture, "jpg") !== false ? 'jpg' : 'png';
             $textureNamesIn[] = $tname;
         }
 
@@ -178,7 +180,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             
             $textureFile_id = wpunity_upload_Assetimg64(
                 $tContent[$textureNamesIn[$i]], 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm,
-                $asset_newID, $gameSlug);
+                $asset_newID, $gameSlug, $tContentExt[$textureNamesIn[$i]]);
 
             $textureFile_filename = basename(get_attached_file($textureFile_id));
 
@@ -265,8 +267,9 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     // SCREENSHOT
     if (isset($_POST['sshotFileInput']) ) {
         if (strlen($_POST['sshotFileInput'])>0) {
-            $screenShotFile_id = wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID, $gameSlug);
-            update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
+            
+            $screenShotFile_id = wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID, $gameSlug, 'jpg');
+            update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id, 'jpg');
         }
     }
 

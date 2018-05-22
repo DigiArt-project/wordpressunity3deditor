@@ -4,6 +4,9 @@ class vr_editor_environmentals {
     constructor(container_3D_all){
 
         this.is2d = true;
+        this.isDebug = false; // Debug mode
+        //this.isRendering = true;
+
 
         this.ctx = this;
 
@@ -17,6 +20,7 @@ class vr_editor_environmentals {
         this.FRUSTUM_SIZE = 100; // For orthographic camera only
         this.SCENE_DIMENSION_SURFACE = 100; // It is the max of x z dimensions of the scene (found when all objects are loaded)
 
+
         this.NEAR = 0.01;
         this.FAR = 0.01; // keep the camera empty until everything is loaded
 
@@ -29,7 +33,7 @@ class vr_editor_environmentals {
         //this.setAxisText();
         //this.setArtificialFloor();
         this.setLight();
-        // this.setStats();
+//         this.setStats();
         this.setSky();
         this.setSunSphere();
 
@@ -59,6 +63,8 @@ class vr_editor_environmentals {
 
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.renderer.setPixelRatio(this.ASPECT);
+
+        this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
 
         //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
 
@@ -166,17 +172,17 @@ class vr_editor_environmentals {
     }
 
 
-    addCubeToControls(transform_controls){
-
-        // Change trs mode by click on the purple cube
-        var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-        var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
-
-        var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
-        cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
-        cubeForModeChangeDetec.name = "trs_modeChanger";
-        transform_controls.add( cubeForModeChangeDetec );
-    }
+    // addCubeToControls(transform_controls){
+    //
+    //     // Change trs mode by click on the purple cube
+    //     var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+    //     var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
+    //
+    //     var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
+    //     cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
+    //     cubeForModeChangeDetec.name = "trs_modeChanger";
+    //     transform_controls.add( cubeForModeChangeDetec );
+    // }
 
 
     /**
@@ -189,7 +195,6 @@ class vr_editor_environmentals {
                                                           this.FRUSTUM_SIZE /   2,
                                                           this.FRUSTUM_SIZE / - 2, this.NEAR, this.FAR);
 
-
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
         this.cameraOrbit.name = "orbitCamera";
@@ -197,20 +202,17 @@ class vr_editor_environmentals {
 
         this.cameraOrbit.position.set( 0, 50, 0);
 
-
-
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
         //this.orbitControls.target.set( 0, 0, 0);
-
         this.orbitControls.object.zoom = 1;
         this.orbitControls.object.updateProjectionMatrix();
         this.orbitControls.name = "orbitControls";
         this.orbitControls.enableRotate = false;
 
         // Add a helper for debug purpose
-        //this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
-        //this.scene.add( this.cameraOrbitHelper );
+        // this.cameraOrbitHelper = new THREE.CameraHelper( this.cameraOrbit );
+        // this.scene.add( this.cameraOrbitHelper );
     }
 
     /**
@@ -255,6 +257,10 @@ class vr_editor_environmentals {
         return envir.avatarControls.getObject().position;
     }
 
+    getSteveFrustum(){
+        return envir.avatarControls.getObject();
+    }
+
 
     setSteveWorldPosition(x,y,z,rx,ry){
         envir.avatarControls.getObject().position.x = x;
@@ -275,14 +281,16 @@ class vr_editor_environmentals {
         this.scene.name = "digiartScene";
 
         // // Add Grid
-        // this.gridHelper = new THREE.GridHelper(2000, 40);
-        // this.gridHelper.name = "myGridHelper";
-        // this.scene.add(this.gridHelper);
+        this.gridHelper = new THREE.GridHelper(2000, 40);
+        this.gridHelper.name = "myGridHelper";
+        this.scene.add(this.gridHelper);
+        this.gridHelper.visible = false;
+
         //
         // // Add Axes helper
-        // this.axisHelper = new THREE.AxisHelper( 100 );
-        // this.axisHelper.name = "myAxisHelper";
-        // this.scene.add(this.axisHelper);
+        //  this.axisHelper = new THREE.AxisHelper( 1 );
+        //  this.axisHelper.name = "myAxisHelper";
+        //  this.scene.add(this.axisHelper);
     }
 
 
@@ -292,14 +300,32 @@ class vr_editor_environmentals {
     setRenderer() {
 
         this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: false, logarithmicDepthBuffer: false});
-        this.renderer.sortObjects = false;
+
+        this.labelRenderer = new THREE.CSS2DRenderer();
+        this.labelRenderer.domElement.style.position = 'absolute';
+        this.labelRenderer.domElement.style.top = '0';
+        this.labelRenderer.domElement.style.fontSize = "25pt";
+
+        this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
+        this.labelRenderer.domElement.style.pointerEvents = 'none';
+
+        this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+
+        this.renderer.sortObjects = true;
         //this.renderer.setPixelRatio(this.ASPECT); //window.devicePixelRatio);
         this.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
-        this.renderer.setClearColor( 0xffffff, 1 );
 
-        this.renderer.sortObjects = false;
+        // This does  work well for outlining objects in white background
+        this.renderer.setClearColor( 0xeeeeee, 1);
+
+            // This don't
+        //this.scene.background = new THREE.Color( 0xffffff );
+
+        this.renderer.sortObjects = true;
         this.renderer.name = "myRenderer";
         this.container_3D_all.appendChild( this.renderer.domElement );
+
+        this.container_3D_all.appendChild(this.labelRenderer.domElement);
     }
 
     setComposer(){
@@ -311,7 +337,7 @@ class vr_editor_environmentals {
         this.outlinePass = new THREE.OutlinePass(
             new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, this.cameraOrbit);
 
-        this.outlinePass.visibleEdgeColor = new THREE.Color( 0xffff00 );
+        this.outlinePass.visibleEdgeColor = new THREE.Color( 0x00aa00 );
 
         this.outlinePass.edgeGlow = 5;
         this.outlinePass.edgeStrength = 5;
@@ -361,17 +387,17 @@ class vr_editor_environmentals {
     /**
      Set the stats
      */
-    setStats() {
-        // // Rendering stats (FPS)
-        // this.stats = new Stats();
-        // this.stats.name = "myStats";
-        // this.stats.domElement.style.position = 'absolute';
-        // this.stats.domElement.style.bottom = '35px';
-        // this.stats.domElement.style.left = '10px';
-        // this.stats.domElement.style.zIndex = 100;
-        //
-        // this.container_3D_all.appendChild( this.stats.domElement );
-    }
+    // setStats() {
+    //     // // Rendering stats (FPS)
+    //     this.stats = new Stats();
+    //     this.stats.name = "myStats";
+    //     this.stats.domElement.style.position = 'absolute';
+    //     this.stats.domElement.style.bottom = '35px';
+    //     this.stats.domElement.style.left = '10px';
+    //     this.stats.domElement.style.zIndex = 100;
+    //
+    //     this.container_3D_all.appendChild( this.stats.domElement );
+    // }
 
 
     setSky(){

@@ -11,15 +11,18 @@ class LoaderMulti {
         for (var n in resources3D) {
             (function (name) {
 
+                var mtlLoader = new THREE.MTLLoader();
+
                 // Load Steve
                 if (name == 'avatarYawObject') {
 
-                    var mtlLoader = new THREE.MTLLoader();
+                    //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
+
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
 
                         materials.preload();
 
-                        var objloader = new THREE.OBJLoader();
+                        var objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
                         objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinal.obj', 'after',
@@ -43,9 +46,11 @@ class LoaderMulti {
                                 steveShieldMesh.name = 'SteveShieldMesh';
                                 //--------------------------
 
-
-
                                 object.add(steveShieldMesh);
+
+                                object.renderOrder = 1;
+
+
 
                                 envir.scene.add(object);
                                 envir.setSteveToAvatarControls();
@@ -68,7 +73,9 @@ class LoaderMulti {
                     });
 
                 }else {
-                    var mtlLoader = new THREE.MTLLoader();
+
+
+
 
                     mtlLoader.setPath(resources3D[name]['path']);
 
@@ -137,6 +144,9 @@ class LoaderMulti {
 
 
                                 object.type_behavior = resources3D[name]['type_behavior'];
+
+
+
 
 
                                 envir.scene.add(object);
