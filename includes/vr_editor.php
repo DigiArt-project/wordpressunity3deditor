@@ -293,6 +293,45 @@ echo '</script>';
         <div id="result_download"></div>
     </div>
 
+
+    <!--Hierarchy Viewer-->
+
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
+        <i class="material-icons">menu</i>
+    </a>
+    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer">
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+
+        <li class="mdc-list-item" id="">
+            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
+               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
+            </a>
+            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
+               title="Delete project"
+               onclick="">
+                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
+                   title="Delete">
+                    delete
+                </i>
+            </a>
+        </li>
+        
+    </ul>
+
+
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
@@ -466,7 +505,7 @@ echo '</script>';
 
     // Selected object name
     var selected_object_name = '';
-    
+
 
     // Add gui to gui container_3D_all
     var guiContainer = document.getElementById('gui-container');
@@ -488,6 +527,19 @@ echo '</script>';
 
     //envir.addCubeToControls(transform_controls);
 
+    jQuery("#hierarchy-toggle-btn").click(function() {
+
+        if (jQuery("#hierarchy-toggle-btn").hasClass("HierarchyToggleOn")) {
+
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOff").removeClass("HierarchyToggleOn");
+        } else {
+            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
+        }
+
+        jQuery("#hierarchy-viewer").toggle("slow");
+    });
+
+
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
         transform_controls.setMode(value);
@@ -495,9 +547,7 @@ echo '</script>';
     });
 
     jQuery("#removeAssetBtn").click(function(){
-
         deleterFomScene(transform_controls.object.name);
-
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
@@ -509,7 +559,7 @@ echo '</script>';
     });
 
     jQuery("#editor-dimension-btn").click(function() {
-       
+
         findSceneDimensions();
         updateCameraGivenSceneLimits();
 
@@ -517,7 +567,7 @@ echo '</script>';
         envir.cameraOrbit.position.x = 0;
         envir.cameraOrbit.position.y = 50;
         envir.cameraOrbit.position.z = 0;
-        
+
         envir.cameraOrbit.rotation._x = - Math.PI/2;
         envir.cameraOrbit.rotation._y = 0;
         envir.cameraOrbit.rotation._z = 0;
@@ -532,19 +582,19 @@ echo '</script>';
 
 
         jQuery("#translate-switch").click();
-        
+
         if (envir.is2d) {
 
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
-            
+
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
-            
+
             envir.is2d = false;
             transform_controls.setMode("translate");
 
@@ -569,13 +619,13 @@ echo '</script>';
         var icon = jQuery('#toggleUIBtn i');
 
         if (btn.data('toggle') === 'on') {
-            
+
             btn.addClass('mdc-theme--text-hint-on-light');
             btn.removeClass('mdc-theme--secondary');
             icon.html('<i class="material-icons">visibility_off</i>');
             btn.data('toggle', 'off');
             hideEditorUI();
-            
+
         } else {
             btn.removeClass('mdc-theme--text-hint-on-light');
             btn.addClass('mdc-theme--secondary');
@@ -598,9 +648,9 @@ echo '</script>';
 
         if (envir.is2d)
             jQuery("#editor-dimension-btn").click();
-            
+
         if (btn.data('toggle') === 'off') {
-           
+
             envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
@@ -608,7 +658,7 @@ echo '</script>';
             btn.data('toggle', 'on');
 
         } else {
-            
+
             envir.orbitControls.autoRotate = false;
             btn.data('toggle', 'off');
         }
@@ -668,7 +718,7 @@ echo '</script>';
         var objItem;
         var trs_tmp;
         var name;
-        
+
         for (name in resources3D  ) {
 
             trs_tmp = resources3D[name]['trs'];
@@ -678,7 +728,7 @@ echo '</script>';
             objItem.rotation.set( trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
         }
-        
+
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
@@ -705,7 +755,7 @@ echo '</script>';
                 var dims = findDimensions(transform_controls.object);
                 var sizeT = Math.max(...dims);
             } else {
-               
+
                 //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
                 //transform_controls.attach(intersects[0].object.parent);
                 //envir.renderer.setClearColor( 0xff00aa, 1);
@@ -736,7 +786,7 @@ echo '</script>';
                 console.log(s + " " + obj.name + " (" + obj.categoryName + ")" ); // + " " + obj.type + ' ' + obj.name
             }
         });
-        
+
     };
 
     function hideObjectPropertiesPanels() {
@@ -790,7 +840,7 @@ $formRes->init($sceneToLoad);
 ?>
 
 <script>
-    
+
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
 
@@ -838,8 +888,8 @@ $formRes->init($sceneToLoad);
         envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
 
         envir.labelRenderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
-        
-        
+
+
         if (isComposerOn)
             envir.composer.render();
 
@@ -881,21 +931,16 @@ $formRes->init($sceneToLoad);
     }
 
     // Select event listener
-
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
-    
+
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
-
-    
 
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-
-
 
     animate();
 
