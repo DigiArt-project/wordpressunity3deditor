@@ -256,10 +256,12 @@ echo '</script>';
 
 
     <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
-        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
+           class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
             <i class="material-icons">rotate_90_degrees_ccw</i>
         </a>
     </div>
+    
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
@@ -286,9 +288,7 @@ echo '</script>';
     </a>
 
 
-    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
-        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary"><i class="material-icons">rotate_90_degrees_ccw</i></a>
-    </div>
+
     
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
@@ -314,38 +314,7 @@ echo '</script>';
     <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
         <i class="material-icons">menu</i>
     </a>
-    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer">
-
-        <li class="mdc-list-item" id="">
-            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
-               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
-            </a>
-            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
-               title="Delete project"
-               onclick="">
-                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
-                   title="Delete">
-                    delete
-                </i>
-            </a>
-        </li>
-
-        <li class="mdc-list-item" id="">
-            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
-               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
-            </a>
-            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
-               title="Delete project"
-               onclick="">
-                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
-                   title="Delete">
-                    delete
-                </i>
-            </a>
-        </li>
-        
-    </ul>
-
+    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer"></ul>
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -681,19 +650,14 @@ echo '</script>';
 
     // Autor rotate in 3D
     jQuery('#toggleTour3DaroundBtn').click(function() {
-
-        console.log("1");
         
         var btn = jQuery('#toggle-tour-around-btn');
 
         if (envir.is2d)
             jQuery("#editor-dimension-btn").click();
-            
-        
+      
         
         if (btn.data('toggle') === 'off') {
-
-            console.log("2");
             
             envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
@@ -827,13 +791,54 @@ echo '</script>';
         envir.scene.traverse(function(obj) {
             if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
 
-                var s = '';
-                var obj2 = obj;
+                // Find also children
+                // var s = '';
+                // var obj2 = obj;
                 // while (obj2 !== envir.scene) {
                 //     s += '-';
                 //     obj2 = obj2.parent;
                 // }
-                console.log(s + " " + obj.name + " (" + obj.categoryName + ")" ); // + " " + obj.type + ' ' + obj.name
+                //console.log(); // + " " + obj.type + ' ' + obj.name
+                
+                
+                // Make the html for the delete button Avatar should not be deleted
+                var deleteButtonHTML =  '';
+                
+                if (obj.name != 'avatarYawObject'){
+                     var deleteButtonHTML =
+                         '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"' +
+                            ' title="Delete game object" onclick="' +
+                            // Delete object from scene and remove it from the hierarchy viewer
+                         'deleterFomScene(\'' + obj.name + '\'); jQuery(\'#hierarchy-viewer\').find(\'#' + obj.name + '\').remove();'
+                            + '">' +
+                                '<i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete </i>'+
+                         '</a>';
+                }
+
+                // Split the object name into 2 parts: The first part is the asset name and the second the date inserted in the scene
+                if (obj.name != 'avatarYawObject') {
+                    var game_object_nameA_assetName = obj.name.substring(0, obj.name.length - 11);
+                    var game_object_nameB_dateCreated = unixTimestamp_to_time(obj.name.substring(obj.name.length - 10, obj.name.length));
+
+                    // get its type also
+                    //var game_object_nameC_Type = obj.type;
+                } else {
+                    var game_object_nameA_assetName = "Player";
+                    var game_object_nameB_dateCreated = "";
+                }
+
+                // Add as a list item
+                jQuery('#hierarchy-viewer').append(
+                    '<li class="mdc-list-item" id="'+ obj.name  + '">' +
+                        '<a href="javascript:void(0);" class="mdc-list-item" style="font-size: 9pt; line-height:12pt" '+
+                            'data-mdc-auto-init="MDCRipple" title="" onclick="onMouseDoubleClickFocus(event,\'' + obj.name + '\')">'+
+                                '<span id="" class="mdc-list-item__text">' +
+                                    game_object_nameA_assetName + '<br />' +
+                                          '<span style="font-size:7pt; color:grey">' + game_object_nameB_dateCreated + '</span>' +
+                                 '</span>'+
+                        '</a>' +
+                            deleteButtonHTML +
+                    '</li>');
             }
         });
         
