@@ -76,8 +76,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var sizeT = Math.max(...dims);
         transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
-
-
+        envir.addInHierarchyViewer(insertedObject);
 
     };
 
@@ -114,6 +113,8 @@ function deleterFomScene(nameToRemove){
     document.dispatchEvent(new CustomEvent("mouseup", { "detail": "Example of an event" }));
 
     envir.scene.remove(objectSelected);
+
+    jQuery('#hierarchy-viewer').find('#' + nameToRemove).remove();
 
     transform_controls.detach();
 }

@@ -110,6 +110,10 @@ function onMouseDownSelect( event ) {
         if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
                   || intersects[0].object.name === 'SteveMesh' ) && event.button === 0 ){
 
+
+            envir.setBackgroundColorHierarchyViewer("avatarYawObject");
+
+
             // highlight
             envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
 
@@ -164,6 +168,11 @@ function selectorMajor(event, objectSel){
 
     if (event.button === 0) {
 
+        // set the selected color of the hierarchy viewer
+        envir.setBackgroundColorHierarchyViewer(objectSel.name);
+
+
+
         transform_controls.attach(objectSel);
         envir.renderer.setClearColor( 0xeeeeee  );
 
@@ -203,39 +212,6 @@ function selectorMajor(event, objectSel){
         activeOverides(event, objectSel);
 
 }
-
-
-// Right click raycast operations
-function activeOverides(event, inters){
-
-    var objectParent  = inters.object.parent;
-    var name = objectParent.name;
-
-    if( objectParent.categoryName === 'Artifact')
-        displayArtifactProperties(event, name);
-
-    if( objectParent.categoryName === 'Points of Interest (Image-Text)')
-        displayPoiImageTextProperties(event, name);
-
-    if( objectParent.categoryName === 'Points of Interest (Video)')
-        displayPoiVideoProperties(event, name);
-
-    if( objectParent.categoryName === 'Door')
-        displayDoorProperties(event, name);
-
-    if( objectParent.categoryName === 'Marker')
-        displayMarkerProperties(event, name);
-
-    if( objectParent.categoryName === 'Microscope' || objectParent.categoryName === 'Textbook' || objectParent.categoryName === 'Gate')
-        displayMicroscopeTextbookProperties(event, name);
-
-    if( objectParent.categoryName === 'Box' ) // for chemistry box
-        displayBoxProperties(event, name);
-}
-
-
-
-
 
 
 /**
@@ -313,6 +289,42 @@ function displayBoxProperties(event, nameBoxSource){
 
         clearAndUnbind("chemistryBoxComponent");
     });
+}
+
+
+
+
+
+
+// Right click raycast operations
+function activeOverides(event, object){
+
+    console.log(object);
+
+    //var objectParent  = inters.object.parent;
+    var name = object.name;
+    var categ = object.categoryName;
+
+    if( categ === 'Artifact')
+        displayArtifactProperties(event, name);
+
+    if( categ === 'Points of Interest (Image-Text)')
+        displayPoiImageTextProperties(event, name);
+
+    if( categ === 'Points of Interest (Video)')
+        displayPoiVideoProperties(event, name);
+
+    if( categ === 'Door')
+        displayDoorProperties(event, name);
+
+    if( categ === 'Marker')
+        displayMarkerProperties(event, name);
+
+    if( categ === 'Microscope' || categ === 'Textbook' || categ === 'Gate')
+        displayMicroscopeTextbookProperties(event, name);
+
+    if( categ === 'Box' ) // for chemistry box
+        displayBoxProperties(event, name);
 }
 
 

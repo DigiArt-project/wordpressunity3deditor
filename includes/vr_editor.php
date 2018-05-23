@@ -547,7 +547,6 @@ echo '</script>';
         findSceneDimensions();
         updateCameraGivenSceneLimits();
 
-
         envir.cameraOrbit.position.x = 0;
         envir.cameraOrbit.position.y = 50;
         envir.cameraOrbit.position.z = 0;
@@ -563,8 +562,6 @@ echo '</script>';
         envir.orbitControls.target.y = 0;
         envir.orbitControls.target.z = 0;
 
-
-
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
@@ -578,6 +575,7 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
+            
 
             envir.is2d = false;
             transform_controls.setMode("translate");
@@ -589,6 +587,7 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
+            
             envir.is2d = true;
             transform_controls.setMode("rottrans");
 
@@ -788,59 +787,7 @@ echo '</script>';
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 
-        envir.scene.traverse(function(obj) {
-            if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
-
-                // Find also children
-                // var s = '';
-                // var obj2 = obj;
-                // while (obj2 !== envir.scene) {
-                //     s += '-';
-                //     obj2 = obj2.parent;
-                // }
-                //console.log(); // + " " + obj.type + ' ' + obj.name
-                
-                
-                // Make the html for the delete button Avatar should not be deleted
-                var deleteButtonHTML =  '';
-                
-                if (obj.name != 'avatarYawObject'){
-                     var deleteButtonHTML =
-                         '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"' +
-                            ' title="Delete game object" onclick="' +
-                            // Delete object from scene and remove it from the hierarchy viewer
-                         'deleterFomScene(\'' + obj.name + '\'); jQuery(\'#hierarchy-viewer\').find(\'#' + obj.name + '\').remove();'
-                            + '">' +
-                                '<i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete </i>'+
-                         '</a>';
-                }
-
-                // Split the object name into 2 parts: The first part is the asset name and the second the date inserted in the scene
-                if (obj.name != 'avatarYawObject') {
-                    var game_object_nameA_assetName = obj.name.substring(0, obj.name.length - 11);
-                    var game_object_nameB_dateCreated = unixTimestamp_to_time(obj.name.substring(obj.name.length - 10, obj.name.length));
-
-                    // get its type also
-                    //var game_object_nameC_Type = obj.type;
-                } else {
-                    var game_object_nameA_assetName = "Player";
-                    var game_object_nameB_dateCreated = "";
-                }
-
-                // Add as a list item
-                jQuery('#hierarchy-viewer').append(
-                    '<li class="mdc-list-item" id="'+ obj.name  + '">' +
-                        '<a href="javascript:void(0);" class="mdc-list-item" style="font-size: 9pt; line-height:12pt" '+
-                            'data-mdc-auto-init="MDCRipple" title="" onclick="onMouseDoubleClickFocus(event,\'' + obj.name + '\')">'+
-                                '<span id="" class="mdc-list-item__text">' +
-                                    game_object_nameA_assetName + '<br />' +
-                                          '<span style="font-size:7pt; color:grey">' + game_object_nameB_dateCreated + '</span>' +
-                                 '</span>'+
-                        '</a>' +
-                            deleteButtonHTML +
-                    '</li>');
-            }
-        });
+        envir.setHierarchyViewer();
         
     };
 
@@ -862,12 +809,18 @@ echo '</script>';
         jQuery("#double-sided-switch").show();
         jQuery("#removeAssetBtn").show();
         jQuery("#fullScreenBtn").show();
+        jQuery("#hierarchy-viewer").show();
+        jQuery("#hierarchy-toggle-btn").show();
+        
+        jQuery("#optionsPopupBtn").show();
 
         jQuery("#toggleTour3DaroundBtn").show();
         jQuery("#editor-dimension-btn").show();
         jQuery("#toggleView3rdPerson").show();
         
         jQuery("#firstPersonBlocker").show();
+        jQuery("#thirdPersonBlocker").show();
+        
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
@@ -883,6 +836,10 @@ echo '</script>';
         jQuery("#double-sided-switch").hide();
         jQuery("#removeAssetBtn").hide();
         jQuery("#fullScreenBtn").hide();
+        jQuery("#hierarchy-viewer").hide();
+        jQuery("#hierarchy-toggle-btn").hide();
+        jQuery("#optionsPopupBtn").hide();
+        
 
         
         jQuery("#editor-dimension-btn").hide();
@@ -891,9 +848,11 @@ echo '</script>';
         
         
         jQuery("#firstPersonBlocker").hide();
+        jQuery("#thirdPersonBlocker").hide();
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
+        
 
         transform_controls.visible  = false;
 

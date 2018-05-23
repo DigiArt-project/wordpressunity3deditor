@@ -1742,6 +1742,7 @@
 
                 deleterFomScene(transform_controls.object.name);
 
+
             }
 
             scope.update();
