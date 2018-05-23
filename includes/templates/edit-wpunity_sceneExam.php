@@ -118,7 +118,7 @@ get_header(); ?>
 
                             <h2 class="mdc-typography--title">Build strategy</h2>
                             <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
-                            Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game.
+                            Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game. You can create more than one strategies.
                             </span>
 
                             <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="text"
@@ -162,6 +162,12 @@ get_header(); ?>
 
 										<?php }?>
                                     </ul>
+                                </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Saved strategies</h2>
+
                                 </div>
 
 
