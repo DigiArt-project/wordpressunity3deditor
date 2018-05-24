@@ -76,8 +76,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var sizeT = Math.max(...dims);
         transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
-
-
+        envir.addInHierarchyViewer(insertedObject);
 
     };
 
@@ -115,8 +114,25 @@ function deleterFomScene(nameToRemove){
 
     envir.scene.remove(objectSelected);
 
+    jQuery('#hierarchy-viewer').find('#' + nameToRemove).remove();
+
     transform_controls.detach();
 }
+
+
+function unixTimestamp_to_time( tStr){
+
+    var unix_timestamp = parseInt(tStr);
+
+    var date = new Date(unix_timestamp*1000);
+    var hours = date.getHours();
+    var minutes = "0" + date.getMinutes();
+    var seconds = "0" + date.getSeconds();
+    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear() + ' ' + formattedTime;
+}
+
 
 // /**
 //  *    ----------- Check for Recycle Bin Drag ----------------------------

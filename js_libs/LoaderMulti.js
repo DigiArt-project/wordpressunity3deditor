@@ -13,10 +13,16 @@ class LoaderMulti {
 
                 var mtlLoader = new THREE.MTLLoader();
 
+
+
+
                 // Load Steve
                 if (name == 'avatarYawObject') {
 
                     //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
+
+
+                    // STEVE is the CAMERA MESH
 
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
 
@@ -50,8 +56,6 @@ class LoaderMulti {
 
                                 object.renderOrder = 1;
 
-
-
                                 envir.scene.add(object);
                                 envir.setSteveToAvatarControls();
                                 envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
@@ -71,6 +75,48 @@ class LoaderMulti {
                             }
                         );
                     });
+
+
+                    // STEVE OLD IS THE HUMAN MESH
+
+                    mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinalOld.mtl", function (materials) {
+
+                        materials.preload();
+
+                        var objloader = new THREE.OBJLoader(manager);
+                        objloader.setMaterials(materials);
+
+                        objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinalOld.obj', 'after',
+                            function (object) {
+
+                                object.name = "SteveOld";
+                                object.children[0].name = "SteveMeshOld";
+                                object.renderOrder = 1;
+                                object.visible = false;
+
+                                envir.scene.add(object);
+
+                                envir.setSteveOldToAvatarControls();
+
+                                envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
+                                    resources3D[name]['trs']['translation'][1],
+                                    resources3D[name]['trs']['translation'][2],
+                                    resources3D[name]['trs']['rotation'][0],
+                                    resources3D[name]['trs']['rotation'][1]
+                                );
+
+                                if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
+                                    jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                    jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                }
+
+
+
+                            }
+                        );
+                    });
+
+
 
                 }else {
 

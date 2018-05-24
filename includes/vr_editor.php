@@ -256,25 +256,40 @@ echo '</script>';
 
 
     <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
-        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
+           class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
             <i class="material-icons">rotate_90_degrees_ccw</i>
         </a>
     </div>
+    
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
 
     <!-- The button to start walking in the 3d environment -->
-    <div id="blocker" class="VrWalkInButtonStyle">
-        <a type="button" id="instructions" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+    <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
+        <a type="button" id="firstPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
             VIEW
         </a>
     </div>
 
+    <div id="thirdPersonBlocker" class="thirdPersonVrWalkInButtonStyle">
+        <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">person</i></a>
+    </div>
+
+
+    
+    
+
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
+
+
+
+    
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">settings</i>
@@ -299,38 +314,7 @@ echo '</script>';
     <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
         <i class="material-icons">menu</i>
     </a>
-    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer">
-
-        <li class="mdc-list-item" id="">
-            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
-               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
-            </a>
-            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
-               title="Delete project"
-               onclick="">
-                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
-                   title="Delete">
-                    delete
-                </i>
-            </a>
-        </li>
-
-        <li class="mdc-list-item" id="">
-            <a href="" class="mdc-list-item" data-mdc-auto-init="MDCRipple"
-               title=""> <span id="" class="mdc-list-item__text">TEXT</span>
-            </a>
-            <a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"
-               title="Delete project"
-               onclick="">
-                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
-                   title="Delete">
-                    delete
-                </i>
-            </a>
-        </li>
-        
-    </ul>
-
+    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer"></ul>
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -505,7 +489,7 @@ echo '</script>';
 
     // Selected object name
     var selected_object_name = '';
-
+    
 
     // Add gui to gui container_3D_all
     var guiContainer = document.getElementById('gui-container');
@@ -563,7 +547,6 @@ echo '</script>';
         findSceneDimensions();
         updateCameraGivenSceneLimits();
 
-
         envir.cameraOrbit.position.x = 0;
         envir.cameraOrbit.position.y = 50;
         envir.cameraOrbit.position.z = 0;
@@ -579,12 +562,10 @@ echo '</script>';
         envir.orbitControls.target.y = 0;
         envir.orbitControls.target.z = 0;
 
-
-
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
-
+            
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
@@ -594,6 +575,7 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
+            
 
             envir.is2d = false;
             transform_controls.setMode("translate");
@@ -605,8 +587,13 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
+            
             envir.is2d = true;
             transform_controls.setMode("rottrans");
+
+            envir.scene.getObjectByName("SteveOld").visible = false;
+            envir.scene.getObjectByName("Steve").visible = true;
+            
         }
 
         envir.orbitControls.object.updateProjectionMatrix();
@@ -636,6 +623,25 @@ echo '</script>';
         }
     });
 
+
+    // Toggle 3rd person view
+    jQuery('#thirdPersonBlockerBtn').click(function() {
+
+        envir.thirdPersonView = true;
+
+        envir.scene.getObjectByName("SteveOld").visible = true;
+        envir.scene.getObjectByName("Steve").visible = false;
+        
+        var btnDiv = jQuery('#thirdPersonBlocker');
+        btnDiv[0].style.display = "none";
+
+        var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
+        btnFirst.click();
+    
+    });
+    
+    
+
     // FULL SCREEN
     jQuery('#fullScreenBtn').click(function() {
         envir.makeFullScreen();
@@ -643,14 +649,15 @@ echo '</script>';
 
     // Autor rotate in 3D
     jQuery('#toggleTour3DaroundBtn').click(function() {
-
+        
         var btn = jQuery('#toggle-tour-around-btn');
 
         if (envir.is2d)
             jQuery("#editor-dimension-btn").click();
-
+      
+        
         if (btn.data('toggle') === 'off') {
-
+            
             envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
@@ -658,7 +665,7 @@ echo '</script>';
             btn.data('toggle', 'on');
 
         } else {
-
+            
             envir.orbitControls.autoRotate = false;
             btn.data('toggle', 'off');
         }
@@ -718,17 +725,20 @@ echo '</script>';
         var objItem;
         var trs_tmp;
         var name;
-
+        
         for (name in resources3D  ) {
 
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
-
-            objItem.position.set( trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            objItem.rotation.set( trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            objItem.scale.set( trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            
+            if (name != 'avatarYawObject') {
+                objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+                objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            }
         }
 
+        
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
@@ -738,9 +748,11 @@ echo '</script>';
 
             envir.scene.add(transform_controls);
 
-            transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-            transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-            transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            if (selected_object_name != 'avatarYawObject') {
+                transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+                transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            }
 
             jQuery('#object-manipulation-toggle').show();
             jQuery('#axis-manipulation-buttons').show();
@@ -755,7 +767,7 @@ echo '</script>';
                 var dims = findDimensions(transform_controls.object);
                 var sizeT = Math.max(...dims);
             } else {
-
+               
                 //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
                 //transform_controls.attach(intersects[0].object.parent);
                 //envir.renderer.setClearColor( 0xff00aa, 1);
@@ -769,24 +781,14 @@ echo '</script>';
 
             // Starting in 2D mode we do not want the play be able to change into rotation and scale
             jQuery("#object-manipulation-toggle").hide();
+
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
 
-        envir.scene.traverse(function(obj) {
-            if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
-
-                var s = '';
-                var obj2 = obj;
-                // while (obj2 !== envir.scene) {
-                //     s += '-';
-                //     obj2 = obj2.parent;
-                // }
-                console.log(s + " " + obj.name + " (" + obj.categoryName + ")" ); // + " " + obj.type + ' ' + obj.name
-            }
-        });
-
+        envir.setHierarchyViewer();
+        
     };
 
     function hideObjectPropertiesPanels() {
@@ -807,7 +809,18 @@ echo '</script>';
         jQuery("#double-sided-switch").show();
         jQuery("#removeAssetBtn").show();
         jQuery("#fullScreenBtn").show();
-        jQuery("#blocker").show();
+        jQuery("#hierarchy-viewer").show();
+        jQuery("#hierarchy-toggle-btn").show();
+        
+        jQuery("#optionsPopupBtn").show();
+
+        jQuery("#toggleTour3DaroundBtn").show();
+        jQuery("#editor-dimension-btn").show();
+        jQuery("#toggleView3rdPerson").show();
+        
+        jQuery("#firstPersonBlocker").show();
+        jQuery("#thirdPersonBlocker").show();
+        
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
@@ -823,13 +836,29 @@ echo '</script>';
         jQuery("#double-sided-switch").hide();
         jQuery("#removeAssetBtn").hide();
         jQuery("#fullScreenBtn").hide();
-        jQuery("#blocker").hide();
+        jQuery("#hierarchy-viewer").hide();
+        jQuery("#hierarchy-toggle-btn").hide();
+        jQuery("#optionsPopupBtn").hide();
+        
+
+        
+        jQuery("#editor-dimension-btn").hide();
+        jQuery("#toggleTour3DaroundBtn").hide();
+        jQuery("#toggleView3rdPerson").hide();
+        
+        
+        jQuery("#firstPersonBlocker").hide();
+        jQuery("#thirdPersonBlocker").hide();
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
+        
 
         transform_controls.visible  = false;
-        envir.getSteveFrustum().visible = false;
+
+        // if in 3rd person view then show the cameraobject
+        envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
+
     }
 </script>
 
@@ -840,7 +869,7 @@ $formRes->init($sceneToLoad);
 ?>
 
 <script>
-
+    
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
 
@@ -884,12 +913,19 @@ $formRes->init($sceneToLoad);
 //            id_animation_frame = requestAnimationFrame( animate );
 //        }, 1000 / 25 );
 
+        
+        // Select the proper camera (orbit, or avatar, or thirdPersonView)
+        var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
+        
         // Render it
-        envir.renderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+        envir.renderer.render( envir.scene, curr_camera);
 
-        envir.labelRenderer.render( envir.scene, avatarControlsEnabled ? envir.cameraAvatar : envir.cameraOrbit);
+        envir.labelRenderer.render( envir.scene, curr_camera);
+        
 
-
+        
+        
+        
         if (isComposerOn)
             envir.composer.render();
 
