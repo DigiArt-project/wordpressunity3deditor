@@ -879,7 +879,7 @@ get_header(); ?>
 
                 <section class="mdc-dialog__body">
 
-                    <h3 class="mdc-typography--subheading2"> Description </h3>
+                    <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
 
                     <div class="mdc-layout-grid">
                         <div class="mdc-layout-grid__inner" id="avail-molecules-list">
@@ -1033,14 +1033,11 @@ get_header(); ?>
             });
         }
 
-        jQuery( ".MoleculeCheckbox" ).click(function(event) {
-
+        jQuery( ".MoleculeCheckbox" ).click(function() {
             var molecIds = jQuery("#avail-molecules-list input:checkbox:checked").map(function(){
                 return jQuery(this).val();
-            }).get(); // <----
-
+            }).get();
             jQuery( "#availableMoleculesInput" ).val(JSON.stringify(molecIds));
-
         });
 
 
