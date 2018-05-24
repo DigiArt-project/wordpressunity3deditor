@@ -127,8 +127,13 @@ get_header(); ?>
 			<?php echo $game_post->post_title; ?>
         </h1>
 
+
         <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
             COMPILE <?php echo $single_lowercase; ?>
+        </a>
+
+        <a id="moleculesPopupBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--primary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple"  style="margin-right: 24px;">
+            SELECT MOLECULES
         </a>
 
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
@@ -857,6 +862,45 @@ get_header(); ?>
             <div class="mdc-dialog__backdrop"></div>
         </aside>
 
+        <!--Compile Dialog-->
+        <aside id="molecules-dialog"
+               class="mdc-dialog"
+               role="alertdialog"
+               style="z-index: 1000;"
+               aria-labelledby="my-mdc-dialog-label"
+               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+
+                <header class="mdc-dialog__header">
+                    <h2 class="mdc-dialog__header__title">
+                        Select Molecules
+                    </h2>
+                </header>
+
+                <section class="mdc-dialog__body">
+
+                    <h3 class="mdc-typography--subheading2"> Description </h3>
+
+                    <div class="mdc-layout-grid">
+                        <div class="mdc-layout-grid__inner">
+
+                            <!--Stathi load all molecules here with a Foreach-->
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                                <span>molecule</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="mdc-dialog__footer">
+                    <a type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised mdc-dialog__footer__button--accept">OK</a>
+                </footer>
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+
     </div>
 
 
@@ -870,6 +914,14 @@ get_header(); ?>
             optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
             jQuery( "#optionsPopupBtn" ).click(function() {
                 optionsDialog.show();
+            });
+        }
+
+        var moleculesDialog = document.querySelector('#molecules-dialog');
+        if (moleculesDialog) {
+            moleculesDialog = new mdc.dialog.MDCDialog(moleculesDialog);
+            jQuery( "#moleculesPopupBtn" ).click(function() {
+                moleculesDialog.show();
             });
         }
 
