@@ -885,9 +885,22 @@ get_header(); ?>
                         <div class="mdc-layout-grid__inner">
 
                             <!--Stathi load all molecules here with a Foreach-->
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-                                <span>molecule</span>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-form-field">
+                                <div class="mdc-form-field">
+                                    <div class="mdc-checkbox">
+                                        <input name="molecule1Checkbox" type="checkbox" id="molecule-1-checkbox" class="mdc-checkbox__native-control">
+                                        <div class="mdc-checkbox__background">
+                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                            </svg>
+                                            <div class="mdc-checkbox__mixedmark"></div>
+                                        </div>
+                                    </div>
+                                    <label class="CursorPointer" for="molecule-1-checkbox" style="padding: 0; margin: 0;">Molecule 1</label>
+                                </div>
+
                             </div>
+
 
 
                         </div>

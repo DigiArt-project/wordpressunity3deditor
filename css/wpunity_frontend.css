@@ -407,6 +407,10 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     list-style-image: none;
 }
 
+.CursorPointer {
+    cursor: pointer;
+}
+
 /* jimver04 additions */
 #backtotop {
     z-index : 100 !important;
