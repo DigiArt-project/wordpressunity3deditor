@@ -882,26 +882,34 @@ get_header(); ?>
                     <h3 class="mdc-typography--subheading2"> Description </h3>
 
                     <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__inner" id="avail-molecules-list">
 
                             <!--Stathi load all molecules here with a Foreach-->
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-form-field">
-                                <div class="mdc-form-field">
-                                    <div class="mdc-checkbox">
-                                        <input name="molecule1Checkbox" type="checkbox" id="molecule-1-checkbox" class="mdc-checkbox__native-control">
-                                        <div class="mdc-checkbox__background">
-                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                            </svg>
-                                            <div class="mdc-checkbox__mixedmark"></div>
+
+							<?php if ($game_type_obj->string === "Chemistry") {
+
+								$molecules = wpunity_get_all_molecules_of_game($project_id);
+								foreach ($molecules as $molecule) { ?>
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-form-field">
+                                        <div class="mdc-form-field">
+                                            <div class="mdc-checkbox">
+                                                <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox">
+                                                <div class="mdc-checkbox__background">
+                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                                    </svg>
+                                                    <div class="mdc-checkbox__mixedmark"></div>
+                                                </div>
+                                            </div>
+                                            <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
                                         </div>
                                     </div>
-                                    <label class="CursorPointer" for="molecule-1-checkbox" style="padding: 0; margin: 0;">Molecule 1</label>
-                                </div>
 
-                            </div>
+								<?php } ?>
+							<?php } ?>
 
-
+                            <input id="availableMoleculesInput" type="hidden" value="[]">
 
                         </div>
                     </div>
@@ -1024,6 +1032,16 @@ get_header(); ?>
                 jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
             });
         }
+
+        jQuery( ".MoleculeCheckbox" ).click(function(event) {
+
+            var molecIds = jQuery("#avail-molecules-list input:checkbox:checked").map(function(){
+                return jQuery(this).val();
+            }).get(); // <----
+
+            jQuery( "#availableMoleculesInput" ).val(JSON.stringify(molecIds));
+
+        });
 
 
         // For the time being we have analytics only for Energy
