@@ -198,7 +198,7 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
-.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i {
+.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i, .ThirdPersonVrWalkInButtonStyle a i {
     padding-top: 4px;
 }
 
@@ -276,18 +276,18 @@ canvas { pointer-events:none; z-index:10; }
 
 .EditorDimensionToggleBtn {
     position: absolute;
-    right: 360px;
+    right: 420px;
     top: 10px;
 }
 
 .EditorTourToggleBtn {
     position: absolute;
-    right: 460px;
+    right: 500px;
     top: 10px;
 }
 
-.thirdPersonVrWalkInButtonStyle {
+.ThirdPersonVrWalkInButtonStyle {
     position: absolute;
-    right: 260px;
-    top: 50px;
+    right: 340px;
+    top: 10px;
 }

@@ -274,22 +274,17 @@ echo '</script>';
         </a>
     </div>
 
-    <div id="thirdPersonBlocker" class="thirdPersonVrWalkInButtonStyle">
+    <div id="thirdPersonBlocker" class="ThirdPersonVrWalkInButtonStyle">
         <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">person</i></a>
     </div>
 
-
-    
-    
 
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
 
 
-
-    
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">settings</i>
