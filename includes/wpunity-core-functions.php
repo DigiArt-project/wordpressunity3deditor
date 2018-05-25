@@ -1051,6 +1051,24 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 //==========================================================================================================================================
 //Important GET functions
 
+function wpunity_get_all_Available_molecules_of_game($scene_id){
+
+	$available_moleculeIDs = get_post_meta($scene_id, 'wpunity_available_molecules', true);
+
+	$moleculesData = array();
+
+	foreach ($available_moleculeIDs as $moleculeID) {
+
+		$molecule_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
+		$molecule_title = get_the_title($moleculeID);
+		$the_featured_image_ID = $screenimgID = get_post_meta($moleculeID, 'wpunity_asset3d_screenimage', true);
+		$the_featured_image_url = wp_get_attachment_url( $the_featured_image_ID );
+
+		$moleculesData[] = ['moleculeID'=>$moleculeID, 'moleculeName'=>$molecule_title, 'moleculeImage'=>$the_featured_image_url, 'moleculeType'=>$molecule_type  ];
+	}
+
+}
+
 //Get All MOLECULES of specific game by given project ID
 function wpunity_get_all_molecules_of_game($project_id){
 
