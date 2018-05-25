@@ -166,13 +166,6 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
 
-                                    <h2 class="mdc-typography--title">Saved strategies</h2>
-
-                                </div>
-
-
-                                <div class="mdc-layout-grid__cell--span-12">
-
                                     <h2 class="mdc-typography--title">Available molecules</h2>
 
                                     <div class="mdc-layout-grid__cell--span-12" style="border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
@@ -209,6 +202,21 @@ get_header(); ?>
                                         </ul>
                                     </div>
                                 </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+                                    <a id="add-strategy-btn" class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" data-mdc-auto-init="MDCRipple">Add strategy</a>
+                                </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Saved strategies</h2>
+                                    <ul id="saved-strategies">
+
+                                    </ul>
+
+
+                                </div>
+
                             </div>
 
                         </div>
@@ -235,6 +243,8 @@ get_header(); ?>
     </div>
 
     <script type="text/javascript">
+
+        var examTitle = "<?php echo $game_post->post_title; ?>";
 
         var mdc = window.mdc;
         mdc.autoInit();
@@ -263,6 +273,24 @@ get_header(); ?>
                 newActivePanel.classList.add('active');
             }
         }
+
+        function deleteStrategy(id) {
+            jQuery('#'+id).remove();
+        }
+
+        jQuery("#add-strategy-btn").click(function() {
+
+            var new_id1 = makeid();
+            var new_id2 = makeid();
+
+            var strategy = jQuery("#molecule-json-field").val();
+
+            if (strategy.length > 2) {
+                var strategyId =examTitle+""+new_id1+"strat"+new_id2;
+                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span><a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+            }
+
+        });
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({
@@ -313,6 +341,16 @@ get_header(); ?>
             document.execCommand("Copy");
             alert("Strategy copied: " + copyText.value);
         });
+
+        function makeid() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < 5; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
 
     </script>
 
