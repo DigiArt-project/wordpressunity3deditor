@@ -1,9 +1,12 @@
 <?php
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
+if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+$parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $editgamePage = wpunity_getEditpage('game');
+$editscenePage = wpunity_getEditpage('scene');
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -26,13 +29,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
 
 	$game_type_chosen_id = '';
+    $game_type_chosen_slug = '';
 
 	if($game_type_radioButton == 1){
 		$game_type_chosen_id = $archaeology_tax->term_id;
+        $game_type_chosen_slug = 'archaeology_games';
 	}else if($game_type_radioButton == 2){
 		$game_type_chosen_id = $energy_tax->term_id;
+        $game_type_chosen_slug = 'energy_games';
 	}else if($game_type_radioButton == 3){
 		$game_type_chosen_id = $chemistry_tax->term_id;
+        $game_type_chosen_slug = 'chemistry_games';
 	}
 
 	$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
@@ -58,7 +65,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$game_id = wp_insert_post($game_information);
 
 	if($game_id){
-		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id ));
+        //In latest version, the first (and main) scene, is the edit 3D Scene view
+        $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_type_chosen_slug);//first 3D scene id
+        $edit_scene_page_id = $editscenePage[0]->ID;
+        $loadMainSceneLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type'];
+        wp_redirect( $loadMainSceneLink );
 		exit;
 	}
 }
@@ -159,9 +170,15 @@ get_header();
 
 						$game_type_obj = wpunity_return_game_type($id);
 
+                        $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );
+                        $game_category     = $all_game_category[0]->slug;
+                        $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_category);//first 3D scene id
+                        $edit_scene_page_id = $editscenePage[0]->ID;
+                        $loadMainSceneLink = esc_url( (get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type']));
+
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                            <a href="<?php echo esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id); ?>"
+                            <a href="<?php echo $loadMainSceneLink; ?>"
                                class="mdc-list-item" data-mdc-auto-init="MDCRipple"
                                title="Open <?php echo $game_title; ?>">
 
