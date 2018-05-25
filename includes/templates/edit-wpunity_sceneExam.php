@@ -211,9 +211,7 @@ get_header(); ?>
 
                                     <h2 class="mdc-typography--title">Saved strategies</h2>
                                     <ul id="saved-strategies">
-                                        <li>
 
-                                        </li>
                                     </ul>
 
 
@@ -246,6 +244,8 @@ get_header(); ?>
 
     <script type="text/javascript">
 
+        var examTitle = "<?php echo $game_post->post_title; ?>";
+
         var mdc = window.mdc;
         mdc.autoInit();
 
@@ -274,15 +274,20 @@ get_header(); ?>
             }
         }
 
+        function deleteStrategy(id) {
+            jQuery('#'+id).remove();
+        }
+
         jQuery("#add-strategy-btn").click(function() {
+
+            var new_id1 = makeid();
+            var new_id2 = makeid();
 
             var strategy = jQuery("#molecule-json-field").val();
 
             if (strategy.length > 2) {
-
-                var newDiv = jQuery("<li></li>");
-
-                jQuery( "#saved-strategies" ).append( newDiv );
+                var strategyId =examTitle+""+new_id1+"strat"+new_id2;
+                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span><a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
         });
@@ -336,6 +341,16 @@ get_header(); ?>
             document.execCommand("Copy");
             alert("Strategy copied: " + copyText.value);
         });
+
+        function makeid() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < 5; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
 
     </script>
 

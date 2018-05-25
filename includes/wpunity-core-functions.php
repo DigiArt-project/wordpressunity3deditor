@@ -1070,7 +1070,7 @@ function wpunity_get_all_Available_molecules_of_game($scene_id){
 }
 
 //Get All MOLECULES of specific game by given project ID
-function wpunity_get_all_molecules_of_game($project_id){
+function wpunity_get_all_molecules_of_game($project_id) {
 
 	$game_post = get_post($project_id);
 	$gameSlug = $game_post->post_name;
