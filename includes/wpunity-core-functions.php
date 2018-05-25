@@ -1051,6 +1051,24 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 //==========================================================================================================================================
 //Important GET functions
 
+function wpunity_get_all_Available_molecules_of_game($scene_id){
+
+	$available_moleculeIDs = get_post_meta($scene_id, 'wpunity_available_molecules', true);
+
+	$moleculesData = array();
+
+	foreach ($available_moleculeIDs as $moleculeID) {
+
+		$molecule_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
+		$molecule_title = get_the_title($moleculeID);
+		$the_featured_image_ID = $screenimgID = get_post_meta($moleculeID, 'wpunity_asset3d_screenimage', true);
+		$the_featured_image_url = wp_get_attachment_url( $the_featured_image_ID );
+
+		$moleculesData[] = ['moleculeID'=>$moleculeID, 'moleculeName'=>$molecule_title, 'moleculeImage'=>$the_featured_image_url, 'moleculeType'=>$molecule_type  ];
+	}
+
+}
+
 //Get All MOLECULES of specific game by given project ID
 function wpunity_get_all_molecules_of_game($project_id){
 
@@ -2085,7 +2103,7 @@ function wpunity_save_scene_async_action_callback()
 {
 	// put meta in scene. True, false, or id of meta if does not exist
 	$res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
-	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules', json_encode($_POST['available_molecules'],true));
+	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	if (isset($_POST['scene_screenshot']))
 	    $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
