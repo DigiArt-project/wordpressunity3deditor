@@ -176,6 +176,9 @@ get_header();
                         $edit_scene_page_id = $editscenePage[0]->ID;
                         $loadMainSceneLink = esc_url( (get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type']));
 
+                        $isJokerGame = false;//if it's a joker game, link to old edit-game template
+                        if( $post->post_name == 'archaeology-joker' || $post->post_name == 'energy-joker' || $post->post_name == 'chemistry-joker'){ $isJokerGame = true;}
+                        if($isJokerGame){$loadMainSceneLink = esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id);}
 						?>
                         <li class="mdc-list-item" id="<?php echo $game_id; ?>">
                             <a href="<?php echo $loadMainSceneLink; ?>"
