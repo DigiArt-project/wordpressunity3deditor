@@ -132,9 +132,11 @@ get_header(); ?>
             COMPILE <?php echo $single_lowercase; ?>
         </a>
 
+        <?php if ( $game_type_obj->string === "Chemistry" ) { ?>
         <a id="moleculesPopupBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--primary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple"  style="margin-right: 24px;">
             SELECT MOLECULES
         </a>
+        <?php } ?>
 
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
             Add a new 3D asset
