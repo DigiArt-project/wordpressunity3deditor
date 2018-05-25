@@ -2085,7 +2085,7 @@ function wpunity_save_scene_async_action_callback()
 {
 	// put meta in scene. True, false, or id of meta if does not exist
 	$res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
-	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules', json_encode($_POST['available_molecules'],true));
+	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	if (isset($_POST['scene_screenshot']))
 	    $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
