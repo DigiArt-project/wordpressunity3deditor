@@ -166,13 +166,6 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
 
-                                    <h2 class="mdc-typography--title">Saved strategies</h2>
-
-                                </div>
-
-
-                                <div class="mdc-layout-grid__cell--span-12">
-
                                     <h2 class="mdc-typography--title">Available molecules</h2>
 
                                     <div class="mdc-layout-grid__cell--span-12" style="border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
@@ -209,6 +202,23 @@ get_header(); ?>
                                         </ul>
                                     </div>
                                 </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+                                    <a id="add-strategy-btn" class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" data-mdc-auto-init="MDCRipple">Add strategy</a>
+                                </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Saved strategies</h2>
+                                    <ul id="saved-strategies">
+                                        <li>
+
+                                        </li>
+                                    </ul>
+
+
+                                </div>
+
                             </div>
 
                         </div>
@@ -263,6 +273,19 @@ get_header(); ?>
                 newActivePanel.classList.add('active');
             }
         }
+
+        jQuery("#add-strategy-btn").click(function() {
+
+            var strategy = jQuery("#molecule-json-field").val();
+
+            if (strategy.length > 2) {
+
+                var newDiv = jQuery("<li></li>");
+
+                jQuery( "#saved-strategies" ).append( newDiv );
+            }
+
+        });
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({
