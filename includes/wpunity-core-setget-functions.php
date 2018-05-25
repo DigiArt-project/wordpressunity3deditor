@@ -109,6 +109,24 @@ function wpunity_getEditpage($type){
 //	return $yamloptions["wpunity_mat_meta_pat"];
 //}
 
+function wpunity_getUnity_exe_folder(){
+	$generaloptions = get_option( 'general_settings' );
+	if($generaloptions["wpunity_unity_exe_folder"]) {
+		return $generaloptions["wpunity_unity_exe_folder"];
+	}else{
+		return 'C:\Program Files\Unity';
+	}
+}
+
+function wpunity_getRemote_api_folder(){
+	$generaloptions = get_option( 'general_settings' );
+	if($generaloptions["wpunity_remote_api_folder"]) {
+		return $generaloptions["wpunity_remote_api_folder"];
+	}else{
+		return 'http://myurl/';
+	}
+}
+
 //==========================================================================================================================================
 
 //TODO check them
