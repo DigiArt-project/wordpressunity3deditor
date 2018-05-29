@@ -9,6 +9,7 @@ class PDBLoader {
     public function __construct($content){
         $this->_content = $content;
     }
+
     
     public function trim($text) {
         return preg_replace('/\s\s*$/', '', preg_replace('/^\s\s*/', '', $text, 1), 1);
@@ -18,8 +19,6 @@ class PDBLoader {
         
         $res = strtoupper($text[0]);
         
-        echo $text;
-        
         if(strlen($text)>1)
             $res .= strtolower(substr($text,1));
         
@@ -27,10 +26,9 @@ class PDBLoader {
     }
     
     public function hash($s, $e) {
-        return 's' + min($s, $e) + 'e' + max($s, $e);
+       
+        return 's' . min($s, $e) . 'e' . max($s, $e);
     }
-    
-    
     
     public function buildGeometry($atoms, $bonds) {
     
