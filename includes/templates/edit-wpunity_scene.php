@@ -135,12 +135,6 @@ get_header(); ?>
             COMPILE <?php echo $single_lowercase; ?>
         </a>
 
-        <?php if ( $game_type_obj->string === "Chemistry" ) { ?>
-        <a id="moleculesPopupBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--primary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple"  style="margin-right: 24px;">
-            SELECT MOLECULES
-        </a>
-        <?php } ?>
-
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
             Add a new 3D asset
         </a>
@@ -866,66 +860,6 @@ get_header(); ?>
             <div class="mdc-dialog__backdrop"></div>
         </aside>
 
-        <!--Compile Dialog-->
-        <aside id="molecules-dialog"
-               class="mdc-dialog"
-               role="alertdialog"
-               style="z-index: 1000;"
-               aria-labelledby="my-mdc-dialog-label"
-               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
-            <div class="mdc-dialog__surface">
-
-                <header class="mdc-dialog__header">
-                    <h2 class="mdc-dialog__header__title">
-                        Select Molecules
-                    </h2>
-                </header>
-
-                <section class="mdc-dialog__body">
-
-                    <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
-
-                    <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__inner" id="avail-molecules-list">
-
-                            <!--Stathi load all molecules here with a Foreach-->
-
-							<?php if ($game_type_obj->string === "Chemistry") {
-
-								$molecules = wpunity_get_all_molecules_of_game($project_id);
-								foreach ($molecules as $molecule) { ?>
-
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 mdc-form-field">
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox">
-                                                <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox">
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                            </div>
-                                            <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
-                                        </div>
-                                    </div>
-
-								<?php } ?>
-							<?php } ?>
-
-                            <input id="availableMoleculesInput" type="hidden" value="[]">
-
-                        </div>
-                    </div>
-                </section>
-
-                <footer class="mdc-dialog__footer">
-                    <a type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised mdc-dialog__footer__button--accept">OK</a>
-                </footer>
-            </div>
-            <div class="mdc-dialog__backdrop"></div>
-        </aside>
-
     </div>
 
 
@@ -939,14 +873,6 @@ get_header(); ?>
             optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
             jQuery( "#optionsPopupBtn" ).click(function() {
                 optionsDialog.show();
-            });
-        }
-
-        var moleculesDialog = document.querySelector('#molecules-dialog');
-        if (moleculesDialog) {
-            moleculesDialog = new mdc.dialog.MDCDialog(moleculesDialog);
-            jQuery( "#moleculesPopupBtn" ).click(function() {
-                moleculesDialog.show();
             });
         }
 
@@ -1036,13 +962,6 @@ get_header(); ?>
                 jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
             });
         }
-
-        jQuery( ".MoleculeCheckbox" ).click(function() {
-            var molecIds = jQuery("#avail-molecules-list input:checkbox:checked").map(function(){
-                return jQuery(this).val();
-            }).get();
-            jQuery( "#availableMoleculesInput" ).val(JSON.stringify(molecIds));
-        });
 
 
         // For the time being we have analytics only for Energy
