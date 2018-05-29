@@ -402,7 +402,7 @@ get_header(); ?>
 										$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
 										if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 										$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-                                        ?>
+										?>
                                         <a href="<?php echo $edit_page_link; ?>">
 
 											<?php if(has_post_thumbnail($scene_id)) { ?>
@@ -713,6 +713,16 @@ get_header(); ?>
 
 				<?php endif; ?>
             </div>
+
+            <div class="mdc-layout-grid">
+                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Archetypal Clusters</h2>
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <iframe id="scene-analytics-iframe" style="width: 500px; height: 600px;"></iframe>
+                    </div>
+                </div>
+            </div>
+
         </div>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
@@ -1012,14 +1022,13 @@ get_header(); ?>
                     "&area=" + fields.area +
                     "&cost=" + fields.cost;
 
-                window.open(url, "_blank", "width=520,height=600");
-                /*win.document.write('<iframe width="520" height="600" src="'+ url +'" frameborder="0"></iframe>');*/
+                /*window.open(url, "_blank", "width=520,height=600");*/
 
-                /*var iframe = jQuery('#scene-analytics-iframe');
+                var iframe = jQuery('#scene-analytics-iframe');
                 if (iframe.length) {
                     iframe.attr('src', url);
                     return false;
-                }*/
+                }
                 return true;
             }
 

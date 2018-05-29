@@ -227,7 +227,7 @@ get_header(); ?>
                             <input type="hidden" name="submitted" id="submitted" value="true" />
 
                             <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
-                                Submit changes
+                                Save strategies
                             </button>
                         </div>
                     </div>
@@ -334,6 +334,9 @@ get_header(); ?>
                 var strategyId =examTitle+""+new_id1+"strat"+new_id2;
                 jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
+
+            // create JSON structure for GIO
+            console.log()
 
         });
 
