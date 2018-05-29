@@ -121,19 +121,53 @@ get_header(); ?>
                             Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game. You can create more than one strategies.
                             </span>
 
-                            <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="text"
-                                   style="display: none;" readonly>
-
 							<?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
 
                             <div class="WhiteSpaceSeparator"></div>
 
-                            <h2 class="mdc-typography--title">Active molecules</h2>
-
                             <div class="mdc-layout-grid__inner">
 
-                                <div class="mdc-layout-grid__cell--span-12 mdc-theme--secondary-light-bg" style="border: 4px solid rgba(63,81,181, .23);">
-                                    <ul id="sortable1" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Available molecules to use in a strategy</h2>
+
+                                    <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
+										<?php foreach ($molecules as $molecule) { ?>
+											<?php if (!in_array($molecule['moleculeID'], $savedMolecules)) { ?>
+
+                                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+
+                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
+                                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+
+															<?php if ($molecule['moleculeImage']){ ?>
+                                                                <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+															<?php } else { ?>
+                                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                                </div>
+															<?php } ?>
+                                                        </div>
+
+                                                        <div class="mdc-card__primary">
+                                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+																<?php echo $molecule['moleculeName'];?>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+											<?php  } ?>
+
+										<?php }?>
+
+                                    </ul>
+                                </div>
+
+                                <div class="mdc-layout-grid__cell--span-12">
+
+                                    <h2 class="mdc-typography--title">Active molecules</h2>
+
+                                    <ul id="sortable1" class="connectedSortable mdc-theme--secondary-light-bg mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23);">
 										<?php foreach ($molecules as $molecule) { ?>
 											<?php if (in_array($molecule['moleculeID'], $savedMolecules)) { ?>
 
@@ -165,56 +199,12 @@ get_header(); ?>
                                 </div>
 
                                 <div class="mdc-layout-grid__cell--span-12">
-
-                                    <h2 class="mdc-typography--title">Available molecules</h2>
-
-                                    <div class="mdc-layout-grid__cell--span-12" style="border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
-
-                                        <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px;">
-											<?php foreach ($molecules as $molecule) { ?>
-												<?php if (!in_array($molecule['moleculeID'], $savedMolecules)) { ?>
-
-                                                    <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-
-                                                        <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
-                                                            <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
-
-																<?php if ($molecule['moleculeImage']){ ?>
-                                                                    <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-																<?php } else { ?>
-                                                                    <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                                        <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                                    </div>
-																<?php } ?>
-                                                            </div>
-
-                                                            <div class="mdc-card__primary">
-                                                                <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-																	<?php echo $molecule['moleculeName'];?>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-												<?php  } ?>
-
-											<?php }?>
-
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="mdc-layout-grid__cell--span-12">
                                     <a id="add-strategy-btn" class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" data-mdc-auto-init="MDCRipple">Add strategy</a>
                                 </div>
 
                                 <div class="mdc-layout-grid__cell--span-12">
-
                                     <h2 class="mdc-typography--title">Saved strategies</h2>
-                                    <ul id="saved-strategies">
-
-                                    </ul>
-
-
+                                    <ul id="saved-strategies"></ul>
                                 </div>
 
                             </div>
@@ -223,6 +213,10 @@ get_header(); ?>
 
 
                         <input type="hidden" name="active-molecules-input" id="active-molecules-input" value="[]" />
+
+                        <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="hidden">
+
+                        <input type="hidden" name="json-strategies-input" id="json-molecules-input" value="[]" />
 
                         <div class="mdc-layout-grid__cell--span-12">
 
@@ -278,6 +272,8 @@ get_header(); ?>
             jQuery('#'+id).remove();
         }
 
+        var strategyJSON = [];
+
         jQuery("#add-strategy-btn").click(function() {
 
             var new_id1 = makeid();
@@ -287,7 +283,7 @@ get_header(); ?>
 
             if (strategy.length > 2) {
                 var strategyId =examTitle+""+new_id1+"strat"+new_id2;
-                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span><a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
         });
