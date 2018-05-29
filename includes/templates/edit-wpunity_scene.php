@@ -32,6 +32,9 @@ $sceneTitle = $scene_post->post_name;
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
+$editscenePage = wpunity_getEditpage('scene');
+$editscene2DPage = wpunity_getEditpage('scene2D');
+$editsceneExamPage = wpunity_getEditpage('sceneExam');
 
 
 $urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$current_scene_id . '&wpunity_asset=' ); // . asset_id
@@ -400,13 +403,12 @@ get_header(); ?>
 										<?php
 
 										$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-										$scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
 
 										//create permalink depending the scene yaml category
 										$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
 										if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
 										$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-										?>
+                                        ?>
                                         <a href="<?php echo $edit_page_link; ?>">
 
 											<?php if(has_post_thumbnail($scene_id)) { ?>
