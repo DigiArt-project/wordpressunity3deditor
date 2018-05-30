@@ -400,10 +400,10 @@ class WU_webw_3d_view {
                 start.multiplyScalar(75);
                 end.multiplyScalar(75);
 
-                var HALF_PI = +Math.PI * .5;
+                var HALF_PI = + Math.PI * .5;
                 var distance = start.distanceTo(end);
 
-                var cylinder = new THREE.CylinderGeometry(10,10,distance,10,10,false);
+                var cylinder = new THREE.CylinderGeometry(10, 10, distance, 10, 10, false);
 
                 var orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
                 var offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
