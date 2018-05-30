@@ -217,7 +217,7 @@ get_header(); ?>
 
                         <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="hidden">
 
-                        <input type="hidden" name="json-strategies-input" id="json-molecules-input" value="[]" />
+                        <input type="hidden" name="json-strategies-input" id="json-strategies-input" value="[]" />
 
                         <div class="mdc-layout-grid__cell--span-12">
 
@@ -321,9 +321,9 @@ get_header(); ?>
             jQuery('#'+id).remove();
         }
 
-        var strategyJSON = [];
-
         jQuery("#add-strategy-btn").click(function() {
+
+            var savedStrategiesList = jQuery( "#saved-strategies" );
 
             var new_id1 = makeid();
             var new_id2 = makeid();
@@ -331,13 +331,21 @@ get_header(); ?>
             var strategy = jQuery("#molecule-json-field").val();
 
             if (strategy.length > 2) {
-                var strategyId =examTitle+""+new_id1+"strat"+new_id2;
-                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+                var strategyId = examTitle+""+new_id1+"strat"+new_id2;
+                savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
-            // create JSON structure for GIO
-            console.log()
+            var json = {};
+            jQuery( savedStrategiesList.children() ).each(function( index ) {
 
+                var id = jQuery( this ).attr('id');
+                var val = jQuery( "span", this ).text();
+                val = JSON.parse(val);
+                json[id] = val;
+
+            });
+
+            jQuery("#json-strategies-input").val(JSON.stringify(json));
         });
 
         jQuery( function() {
