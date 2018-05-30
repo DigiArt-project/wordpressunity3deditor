@@ -299,7 +299,9 @@ function displayBoxProperties(event, nameBoxSource){
 // Right click raycast operations
 function activeOverides(event, object){
 
-    console.log(object);
+
+    if (object.name === "Steve")
+        alert("Do not right click the camera or its front part");
 
     //var objectParent  = inters.object.parent;
     var name = object.name;
