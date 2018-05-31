@@ -58,15 +58,17 @@ $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 
-$preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true);
+$preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
+
+if ($preSavedStrategies) {$preSavedStrategies = json_decode($preSavedStrategies);}
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    $savedStrategies = $_POST['json-strategies-input'];
-    update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
+	$savedStrategies = $_POST['json-strategies-input'];
+	update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
 
-    wp_redirect($goBackTo_MainLab_link);
-    exit;
+	wp_redirect($goBackTo_MainLab_link);
+	exit;
 }
 
 get_header(); ?>
@@ -217,7 +219,20 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
                                     <h2 class="mdc-typography--title">Saved strategies</h2>
-                                    <ul id="saved-strategies"></ul>
+                                    <ul id="saved-strategies">
+
+										<?php if ($preSavedStrategies) {
+											foreach ($preSavedStrategies as $key => $val) { ?>
+                                                <li class="mdc-list-item" id='<?php echo $key; ?>'>
+                                                    <span class="mdc-list-item__text"><?php echo json_encode($val); ?></span>&nbsp;
+                                                    <a onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project">
+                                                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
+                                                    </a>
+                                                </li>
+											<?php } ?>
+										<?php } ?>
+
+                                    </ul>
                                 </div>
 
                             </div>
@@ -249,7 +264,7 @@ get_header(); ?>
 
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
             <form name="create_new_strategy_form" action="" id="create_new_strategy_form" method="POST" enctype="multipart/form-data">
-                <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                 <div class="mdc-layout-grid">
 
                     <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
@@ -257,10 +272,10 @@ get_header(); ?>
                     <div class="mdc-layout-grid__inner" id="avail-molecules-list">
 
                         <!--Stathi load all molecules here with a Foreach-->
-                        <?php if ($game_type_obj->string === "Chemistry") {
+						<?php if ($game_type_obj->string === "Chemistry") {
 
-                            $molecules = wpunity_get_all_molecules_of_game($project_id);
-                            foreach ($molecules as $molecule) { ?>
+							$molecules = wpunity_get_all_molecules_of_game($project_id);
+							foreach ($molecules as $molecule) { ?>
 
                                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
                                     <div class="mdc-form-field">
@@ -277,8 +292,8 @@ get_header(); ?>
                                     </div>
                                 </div>
 
-                            <?php } ?>
-                        <?php } ?>
+							<?php } ?>
+						<?php } ?>
 
                         <input id="availableMoleculesInput" type="hidden" value="[]">
 
