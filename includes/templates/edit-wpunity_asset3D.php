@@ -84,6 +84,8 @@ $perma_structure = get_option('permalink_structure') ? true : false;
 $parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
 $parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
+if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 
 $project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET['wpunity_game'] )) : null ;
 $asset_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
@@ -113,27 +115,6 @@ if (!isset($_GET['wpunity_asset'])) {
 	}
 }
 
-//echo "isEditable=".$isEditable;
-//echo " <br /> ";
-//echo "assetPGameID=" . $assetPGameID;
-//echo " <br /> ";
-//echo "assetCatID=" . $assetCatID;
-//echo " <br /> ";
-//echo "assetTitleForm=" . $assetTitleForm;
-//echo " <br /> ";
-//echo "assetDescForm=" . $assetDescForm;
-//echo " <br /> ";
-//echo "gameSlug=" . $gameSlug;
-//echo " <br /> ";
-//echo "game_post=" . print_r($game_post,true);
-//echo " <br /> ";
-//echo "game_type_obj=" . print_r($game_type_obj, true);
-//echo " <br /> ";
-//echo "assetPGame=" . print_r($assetPGame, true);
-//echo " <br /> ";
-//echo "assetPGameSlug=" . $assetPGameSlug;
-//echo " <br /> ";
-//echo "asset_id=" . $asset_id;
 
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_id != null) {
@@ -170,6 +151,17 @@ if($asset_id != null) {
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
 $editscenePage = wpunity_getEditpage('scene');
+$newAssetPage = wpunity_getEditpage('asset');
+$editscene2DPage = wpunity_getEditpage('scene2D');
+$editsceneExamPage = wpunity_getEditpage('sceneExam');
+
+$all_game_category = get_the_terms( $project_id, 'wpunity_game_type' );
+$game_category  = $all_game_category[0]->slug;
+
+$scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//first 3D scene id
+$edit_scene_page_id = $editscenePage[0]->ID;
+$goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+$goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 
 // If form is submitted
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -228,9 +220,9 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 
 	if($scene_id == 0)
-		wp_redirect(esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id));
+		wp_redirect($goBackTo_MainLab_link);
 	else
-		wp_redirect(esc_url(get_permalink($editscenePage[0]->ID)) . $parameter_scenepass . $scene_id .'&wpunity_game='.$project_id.'&scene_type=scene');
+		wp_redirect($goBackTo_MainLab_link);
 
 	exit;
 }
@@ -248,7 +240,7 @@ get_header();
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <a title="Back" href="<?php echo $goBackTo_MainLab_link; ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
 			<?php echo $game_post->post_title; ?>
         </h1>
     </div>
@@ -259,9 +251,9 @@ get_header();
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
     </ul>
