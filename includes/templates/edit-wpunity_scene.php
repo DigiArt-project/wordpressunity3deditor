@@ -584,33 +584,102 @@ get_header(); ?>
 			?>
 
 
-            <div class="mdc-layout-grid">
+            <!--Load all molecules-->
+			<?php if($game_type_obj->string === "Chemistry"){?>
 
-                <!-- Scenes -->
-				<?php
-				$custom_query_args = array(
-					'post_type' => 'wpunity_scene',
-					'posts_per_page' => -1,
-					'tax_query' => array(
-						array(
-							'taxonomy' => 'wpunity_scene_pgame',
-							'field'    => 'term_id',
-							'terms'    => $allScenePGameID,
-						),
+                <div class="mdc-layout-grid">
+                    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Molecules</h2>
+                </div>
+
+				<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
+				if ( $molecules ) :?>
+
+                    <div class="mdc-layout-grid">
+
+                        <div class="mdc-layout-grid__inner">
+
+							<?php foreach ($molecules as $molecule) { ?>
+
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+
+                                    <div class="mdc-card mdc-theme--background" id="<?php echo $molecule['moleculeID']; ?>">
+                                        <div class="SceneThumbnail">
+                                            <a href="#">
+
+												<?php if ($molecule['moleculeImage']){ ?>
+
+                                                    <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+
+												<?php } else { ?>
+                                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                    </div>
+												<?php } ?>
+                                            </a>
+                                        </div>
+
+                                        <div class="mdc-card__primary">
+                                            <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeType'];?></a>
+                                            </h1>
+                                        </div>
+
+										<?php
+
+										//echo current_user_can('administrator');
+										// For joker assets, If the user is not administrator he should not be able to delete or edit them.
+										$shouldHideDELETE_EDIT = $molecule['isJoker'] && !current_user_can('administrator');
+										?>
+
+
+                                        <section class="mdc-card__actions">
+                                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
+                                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
+                                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+												<?php
+												echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+												?>
+                                            </a>
+                                        </section>
+
+                                    </div>
+                                </div>
+							<?php } ?>
+
+                        </div>
+                    </div>
+				<?php endif; ?>
+			<?php } ?>
+
+
+
+
+            <!-- Scenes -->
+			<?php
+			$custom_query_args = array(
+				'post_type' => 'wpunity_scene',
+				'posts_per_page' => -1,
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'wpunity_scene_pgame',
+						'field'    => 'term_id',
+						'terms'    => $allScenePGameID,
 					),
-					'orderby' => 'ID',
-					'order' => 'DESC',
-					/*'paged' => $paged,*/
-				);
+				),
+				'orderby' => 'ID',
+				'order' => 'DESC',
+				/*'paged' => $paged,*/
+			);
 
-				$custom_query = new WP_Query( $custom_query_args );
+			$custom_query = new WP_Query( $custom_query_args );
 
-				// Pagination fix
-				$temp_query = $wp_query;
-				$wp_query   = NULL;
-				$wp_query   = $custom_query;
-				?>
+			// Pagination fix
+			$temp_query = $wp_query;
+			$wp_query   = NULL;
+			$wp_query   = $custom_query;
+			?>
 
+            <div class="mdc-layout-grid">
 				<?php if ( $custom_query->have_posts() ) :?>
 
                     <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Game settings</h2>
@@ -711,7 +780,9 @@ get_header(); ?>
 
                     </div>
 
-				<?php endif; ?>
+				<?php endif;
+				wp_reset_query();
+				?>
             </div>
 
             <div class="mdc-layout-grid">
