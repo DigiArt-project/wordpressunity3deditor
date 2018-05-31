@@ -27,19 +27,14 @@ $sceneSlug = $scene_post->post_title;
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
+$newAssetPage = wpunity_getEditpage('asset');
+$editscenePage = wpunity_getEditpage('scene');
+$editscene2DPage = wpunity_getEditpage('scene2D');
+$editsceneExamPage = wpunity_getEditpage('sceneExam');
 
 $userid = get_current_user_id();
 $user_data = get_userdata( $userid );
 $user_email = $user_data->user_email;
-
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-	$input_molecules = $_POST['active-molecules-input'];
-	update_post_meta($scene_id, 'wpunity_input_molecules', $input_molecules);
-
-	wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-	exit;
-
-}
 
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
@@ -57,6 +52,25 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
+
+$scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games');//first 3D scene id
+$edit_scene_page_id = $editscenePage[0]->ID;
+$goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+$goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
+
+$preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
+
+if ($preSavedStrategies) {$preSavedStrategies = json_decode($preSavedStrategies);}
+
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+
+	$savedStrategies = $_POST['json-strategies-input'];
+	update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
+
+	wp_redirect($goBackTo_MainLab_link);
+	exit;
+}
+
 get_header(); ?>
 
     <style>
@@ -67,7 +81,7 @@ get_header(); ?>
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <a title="Back" href="<?php echo $goBackTo_MainLab_link; ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
 			<?php echo $game_post->post_title; ?>
         </h1>
 
@@ -79,9 +93,9 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected"><?php echo $scene_title; ?> Editor</span></li>
 
@@ -205,7 +219,20 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
                                     <h2 class="mdc-typography--title">Saved strategies</h2>
-                                    <ul id="saved-strategies"></ul>
+                                    <ul id="saved-strategies">
+
+										<?php if ($preSavedStrategies) {
+											foreach ($preSavedStrategies as $key => $val) { ?>
+                                                <li class="mdc-list-item" id='<?php echo $key; ?>'>
+                                                    <span class="mdc-list-item__text"><?php echo json_encode($val); ?></span>&nbsp;
+                                                    <a onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project">
+                                                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
+                                                    </a>
+                                                </li>
+											<?php } ?>
+										<?php } ?>
+
+                                    </ul>
                                 </div>
 
                             </div>
@@ -217,7 +244,7 @@ get_header(); ?>
 
                         <input title="strategyJson" id="molecule-json-field" name="molecule-json-field" type="hidden">
 
-                        <input type="hidden" name="json-strategies-input" id="json-molecules-input" value="[]" />
+                        <input type="hidden" name="json-strategies-input" id="json-strategies-input" value="[]" />
 
                         <div class="mdc-layout-grid__cell--span-12">
 
@@ -236,56 +263,63 @@ get_header(); ?>
         </div>
 
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-            <div class="mdc-layout-grid">
+            <form name="create_new_strategy_form" action="" id="create_new_strategy_form" method="POST" enctype="multipart/form-data">
+				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                <div class="mdc-layout-grid">
 
-                <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
+                    <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
 
-                <div class="mdc-layout-grid__inner" id="avail-molecules-list">
+                    <div class="mdc-layout-grid__inner" id="avail-molecules-list">
 
-                    <!--Stathi load all molecules here with a Foreach-->
-					<?php if ($game_type_obj->string === "Chemistry") {
+                        <!--Stathi load all molecules here with a Foreach-->
+						<?php if ($game_type_obj->string === "Chemistry") {
 
-						$molecules = wpunity_get_all_molecules_of_game($project_id);
-						foreach ($molecules as $molecule) { ?>
+							$molecules = wpunity_get_all_molecules_of_game($project_id);
+							foreach ($molecules as $molecule) { ?>
 
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
-                                <div class="mdc-form-field">
-                                    <div class="mdc-checkbox">
-                                        <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox">
-                                        <div class="mdc-checkbox__background">
-                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                            </svg>
-                                            <div class="mdc-checkbox__mixedmark"></div>
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
+                                    <div class="mdc-form-field">
+                                        <div class="mdc-checkbox">
+                                            <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox">
+                                            <div class="mdc-checkbox__background">
+                                                <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                    <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                                </svg>
+                                                <div class="mdc-checkbox__mixedmark"></div>
+                                            </div>
                                         </div>
+                                        <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
                                     </div>
-                                    <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
                                 </div>
-                            </div>
 
+							<?php } ?>
 						<?php } ?>
-					<?php } ?>
 
-                    <input id="availableMoleculesInput" type="hidden" value="[]">
+                        <input id="availableMoleculesInput" type="hidden" value="[]">
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <div class="mdc-layout-grid">
-                <div class="mdc-layout-grid__inner">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                        <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
-                            Submit changes
-                        </button>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            <button style="margin-bottom: 24px; width: 100%; height: 48px;" class="mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple" type="submit">
+                                Submit changes
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
     </div>
 
     <script type="text/javascript">
+
+        window.onload = function() {
+            addStrategiesToInput();
+        };
 
         var examTitle = "<?php echo $game_post->post_title; ?>";
 
@@ -319,11 +353,12 @@ get_header(); ?>
 
         function deleteStrategy(id) {
             jQuery('#'+id).remove();
+            addStrategiesToInput();
         }
 
-        var strategyJSON = [];
-
         jQuery("#add-strategy-btn").click(function() {
+
+            var savedStrategiesList = jQuery( "#saved-strategies" );
 
             var new_id1 = makeid();
             var new_id2 = makeid();
@@ -331,14 +366,30 @@ get_header(); ?>
             var strategy = jQuery("#molecule-json-field").val();
 
             if (strategy.length > 2) {
-                var strategyId =examTitle+""+new_id1+"strat"+new_id2;
-                jQuery( "#saved-strategies" ).append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+                var strategyId = examTitle+""+new_id1+"strat"+new_id2;
+                savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
-            // create JSON structure for GIO
-            console.log()
-
+           addStrategiesToInput();
         });
+
+
+        function addStrategiesToInput() {
+
+            var savedStrategiesList = jQuery( "#saved-strategies" );
+            var json = {};
+            jQuery( savedStrategiesList.children() ).each(function( index ) {
+
+                var id = jQuery( this ).attr('id');
+                var val = jQuery( "span", this ).text();
+                val = JSON.parse(val);
+                json[id] = val;
+
+            });
+
+            jQuery("#json-strategies-input").val(JSON.stringify(json));
+
+        }
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({

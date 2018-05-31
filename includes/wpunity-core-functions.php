@@ -500,14 +500,14 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
 	$mainmenuSceneTitle = 'Main Menu'; //Title for Main Menu
 	$mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
-	$firstSceneTitle = 'First Scene'; //Title for First Menu
+	$firstSceneTitle = 'Lab'; //Title for First Menu
 	$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
 	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
 	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 	if($game_category == 'chemistry_games'){
-		$exam2dSceneTitle = 'Exam 2D naming puzzle'; //Title for Exam Scene
+		$exam2dSceneTitle = 'Molecule Naming'; //Title for Exam Scene
 		$exam2dSceneSlug = $gameSlug . '-exam2d'; //Slug for Exam Scene
-		$exam3dSceneTitle = 'Exam 3D construction puzzle';
+		$exam3dSceneTitle = 'Molecule Construction';
 		$exam3dSceneSlug = $gameSlug . '-exam3d';
 	}
 
@@ -720,7 +720,7 @@ Characteristics :
 		// Create Exam Scene Data
 		$exam2dSceneData = array(
 			'post_title'    => $exam2dSceneTitle,
-			'post_content' => 'Auto-created scene',
+			'post_content' => 'Create Molecule Naming puzzle game',
 			'post_name' => $exam2dSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status'   => 'publish',
@@ -738,7 +738,7 @@ Characteristics :
 
 		$exam3dSceneData = array(
 			'post_title'    => $exam3dSceneTitle,
-			'post_content' => 'Auto-created scene',
+			'post_content' => 'Create Molecule Construction puzzle game',
 			'post_name' => $exam3dSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status'   => 'publish',
