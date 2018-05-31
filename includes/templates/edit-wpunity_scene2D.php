@@ -28,6 +28,10 @@ $sceneSlug = $scene_post->post_title;
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
+$newAssetPage = wpunity_getEditpage('asset');
+$editscenePage = wpunity_getEditpage('scene');
+$editscene2DPage = wpunity_getEditpage('scene2D');
+$editsceneExamPage = wpunity_getEditpage('sceneExam');
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
@@ -105,12 +109,20 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
+$all_game_category = get_the_terms( $project_id, 'wpunity_game_type' );
+$game_category  = $all_game_category[0]->slug;
+
+$scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//first 3D scene id
+$edit_scene_page_id = $editscenePage[0]->ID;
+$goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+$goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
+
 get_header(); ?>
 
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
+            <a title="Back" href="<?php echo $goBackTo_MainLab_link; ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
 			<?php echo $game_post->post_title; ?>
         </h1>
 
@@ -122,9 +134,9 @@ get_header(); ?>
     <hr class="mdc-list-divider">
 
     <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>" title="Go back to Project selection">Home</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ); ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
+        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
         <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
         <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected"><?php echo $scene_title; ?> Editor</span></li>
 
