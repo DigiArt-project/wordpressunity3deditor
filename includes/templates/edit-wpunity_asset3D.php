@@ -1,34 +1,24 @@
 <?php
 
-/**
- *   Create asset
- */
+
+//Create asset
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
-
 	wp_enqueue_script('wpunity_load87_threejs');
-	//wp_enqueue_script('wpunity_load87_objloader2_support');
 	wp_enqueue_script('wpunity_load87_objloader');
 	wp_enqueue_script('wpunity_load87_objloader2');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
-
-
 	wp_enqueue_script('wpunity_load87_pdbloader');
-
 	wp_enqueue_script('wpunity_load87_mtlloader');
 	wp_enqueue_script('wpunity_load87_orbitcontrols');
 	wp_enqueue_script('wpunity_load87_trackballcontrols');
 
 	// For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_CSS2DRenderer');
-
 	wp_enqueue_script('WU_webw_3d_view');
-
 	wp_enqueue_script('wu_3d_view_pdb');
-
 	wp_enqueue_script('wpunity_asset_editor_scripts');
-//    wp_enqueue_script('wpunity_asset_editor_scripts_urlloading');
 	wp_enqueue_script('flot');
 	wp_enqueue_script('flot-axis-labels');
 
@@ -37,7 +27,6 @@ function loadAsset3DManagerScripts() {
 
 	// to capture screenshot of the 3D molecule and its tags
 	wp_enqueue_script('wpunity_html2canvas');
-
 
 	$pluginpath = dirname (plugin_dir_url( __DIR__  ));
 
@@ -53,37 +42,14 @@ function loadAsset3DManagerScripts() {
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
 
 
-// Default Values
-$mean_speed_wind = 14;
-$var_speed_wind = 30;
-$min_speed_wind = 0;
-$max_speed_wind = 40;
-$income_when_overpower = 0.5;
-$income_when_correct_power = 1;
-$income_when_under_power = 0;
-$access_penalty = 0;
-$archaeology_penalty = 0;
-$natural_reserve_penalty = 0;
-$hvdistance_penalty = 0;
-$min_consumption = 50;
-$max_consumption = 150;
-$mean_consumption = 100;
-$var_consumption = 50;
-$optCosts_size = 90;
-$optCosts_dmg = 0.005;
-$optCosts_cost = 3;
-$optCosts_repaid = 1;
-$optGen_class = 'A';
-$optGen_speed = 10;
-$optGen_power = 3;
-$optProductionVal = null;
+$mean_speed_wind = 14;$var_speed_wind = 30;$min_speed_wind = 0;$max_speed_wind = 40;$income_when_overpower = 0.5;
+$income_when_correct_power = 1;$income_when_under_power = 0;$access_penalty = 0;$archaeology_penalty = 0;
+$natural_reserve_penalty = 0;$hvdistance_penalty = 0;$min_consumption = 50;$max_consumption = 150;
+$mean_consumption = 100;$var_consumption = 50;$optCosts_size = 90;$optCosts_dmg = 0.005;$optCosts_cost = 3;
+$optCosts_repaid = 1;$optGen_class = 'A';$optGen_speed = 10;$optGen_power = 3;$optProductionVal = null;
 
 
 $perma_structure = get_option('permalink_structure') ? true : false;
-
-$parameter_pass = $perma_structure ? '?wpunity_game=' : '&wpunity_game=';
-$parameter_scenepass = $perma_structure ? '?wpunity_scene=' : '&wpunity_scene=';
-$parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 
@@ -102,7 +68,6 @@ $assetPGameSlug = $assetPGame->slug;
 
 $isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
 
-//$asset_id_avail_joker = [332, 3850, 3455];
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
 if (!isset($_GET['wpunity_asset'])) {
@@ -180,13 +145,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		// Edit an existing asset: Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($asset_id, $assetTitleForm, $assetDescForm);
 	}
-	//upload the featured image for POI image-text
-//			$new_asset_featured_image =  $_FILES['poi-img-featured-image'];
-//			if($new_asset_featured_image){
-//				$attachment_new_id = wpunity_upload_img( $new_asset_featured_image, $asset_inserted_id);
-//				update_post_meta( $asset_inserted_id, '_thumbnail_id', $attachment_new_id );
-//				//set_post_thumbnail( ,  );
-//			}
 
 	// Create new or updated of main fields edit successfull
 	if($asset_id != 0 || $asset_updatedConf == 1) {
