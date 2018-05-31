@@ -317,6 +317,10 @@ get_header(); ?>
 
     <script type="text/javascript">
 
+        window.onload = function() {
+            addStrategiesToInput();
+        };
+
         var examTitle = "<?php echo $game_post->post_title; ?>";
 
         var mdc = window.mdc;
@@ -349,6 +353,7 @@ get_header(); ?>
 
         function deleteStrategy(id) {
             jQuery('#'+id).remove();
+            addStrategiesToInput();
         }
 
         jQuery("#add-strategy-btn").click(function() {
@@ -365,6 +370,13 @@ get_header(); ?>
                 savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
+           addStrategiesToInput();
+        });
+
+
+        function addStrategiesToInput() {
+
+            var savedStrategiesList = jQuery( "#saved-strategies" );
             var json = {};
             jQuery( savedStrategiesList.children() ).each(function( index ) {
 
@@ -376,7 +388,8 @@ get_header(); ?>
             });
 
             jQuery("#json-strategies-input").val(JSON.stringify(json));
-        });
+
+        }
 
         jQuery( function() {
             jQuery( "#sortable1, #sortable2" ).sortable({
