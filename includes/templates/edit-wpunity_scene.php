@@ -710,7 +710,7 @@ get_header(); ?>
 
                                         <div class="mdc-card__primary">
                                             <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeType'];?></a>
+                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeName'];?></a>
                                             </h1>
                                         </div>
 
