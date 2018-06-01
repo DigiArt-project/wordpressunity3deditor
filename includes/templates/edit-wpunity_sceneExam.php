@@ -85,6 +85,10 @@ get_header(); ?>
 			<?php echo $game_post->post_title; ?>
         </h1>
 
+        <a id="addNewMoleculeBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
+            ADD NEW MOLECULE
+        </a>
+
     </div>
 
     <span class="mdc-typography--caption">
