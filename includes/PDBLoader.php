@@ -236,52 +236,65 @@ return [$_materialPattern, $patternAtomMatMeta];
     }
 
     
-    public function __getAnAtom(){
+    public function __getAnAtom(
+        $atomName,
+        $atom_go,
+        $atom_transform,
+        $atom_mesh,
+        $atom_mesh_renderer,
+        $atom_script,
+        $atom_collider,
+        $atom_position_x,
+        $atom_position_y,
+        $atom_position_z,
+        $molecule_transform,
+        $atom_material_guid
+    ){
 
 return "
 % ATOM
---- !u!1 &___[atom_go]___
+--- !u!1 &".$atom_go."
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: ___[atom_transform]___}                 // inter
-  - component: {fileID: ___[atom_mesh]___}
-  - component: {fileID: ___[atom_mesh_renderer]___}
-  - component: {fileID: ___[atom_script]___}
-  - component: {fileID: ___[atom_collider]___}
+  - component: {fileID: ".$atom_transform."}
+  - component: {fileID: ".$atom_mesh."}
+  - component: {fileID: ".$atom_mesh_renderer."}
+  - component: {fileID: ".$atom_script."}
+  - component: {fileID: .".$atom_collider."}
   m_Layer: 0
-  m_Name: Chloride_transp
-  m_TagString: chloride
+  m_Name: ".$atomName."_transp
+  m_TagString: ".$atomName."
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
   
 % POSITION OF ATOM
---- !u!4 &___[atom_transform]___                                    // inter
+--- !u!4 &".$atom_transform."
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[atom_go]___}
+  m_GameObject: {fileID: ".$atom_go."}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: ___[atom_position_x]___, y: ___[atom_position_y]___, z: ___[atom_position_z]___}
+  m_LocalPosition: {x: ".$atom_position_x.", y: ".$atom_position_y.", z: ".$atom_position_z."}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: ___[molecule_transform]___}                        //inter
+  m_Father: {fileID: ".$molecule_transform."}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 
 % MESH RENDERER OF ATOM
---- !u!23 &___[atom_mesh_renderer]___
+--- !u!23 &".$atom_mesh_renderer."
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[atom_go]___}
+  m_GameObject: {fileID: ".$atom_go."}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -290,7 +303,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ___[atom_material_guid]___, type: 2}
+  - {fileID: 2100000, guid: ".$atom_material_guid.", type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -312,22 +325,22 @@ MeshRenderer:
   m_SortingOrder: 0
   
 % MESH FILTER (SPHERE)
---- !u!33 &___[atom_mesh]___
+--- !u!33 &".$atom_mesh."
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[atom_go]___}
+  m_GameObject: {fileID: ".$atom_go."}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   
   
 % BOX COLLIDER
---- !u!65 &___[atom_collider]___
+--- !u!65 &".$atom_collider."
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[atom_go]___}
+  m_GameObject: {fileID: ".$atom_go."}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -336,12 +349,12 @@ BoxCollider:
   m_Center: {x: 0, y: 0, z: 0}
   
 % ATOM SCRIPT
---- !u!114 &___[atom_script]___
+--- !u!114 &".$atom_script."
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[atom_go]___}
+  m_GameObject: {fileID: ".$atom_go."}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32d9a756212078f4f95179bc563ee98c, type: 3}
@@ -354,23 +367,41 @@ MonoBehaviour:
 
     }
     
-public function _getABond(){
+public function _getABond(
+    
+            $bond_go,
+            $bond_transform,
+            $bond_cylinder,
+            $bond_renderer,
+            $bond_position_x,
+            $bond_position_y,
+            $bond_position_z,
+            $bond_rotation_x,
+            $bond_rotation_y,
+            $bond_rotation_z,
+            $bond_rotation_w,
+            $bond_scale_x,
+            $bond_scale_y,
+            $bond_scale_z,
+            $molecule_transform
+    
+){
 
 
 
 return "
 % BOND
 % Game Object
---- !u!1 &___[bond_go]___
+--- !u!1 &".$bond_go."
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: ___[bond_transform]___}              // inter
-  - component: {fileID: ___[bond_cylinder]___}
-  - component: {fileID: ___[bond_renderer]___}
+  - component: {fileID: ".$bond_transform."}
+  - component: {fileID: ".$bond_cylinder."}
+  - component: {fileID: ".$bond_renderer."}
   m_Layer: 0
   m_Name: bond
   m_TagString: Bond
@@ -381,28 +412,28 @@ GameObject:
   
   
 % POSITION
---- !u!4 &___[bond_transform]___
+--- !u!4 &".$bond_transform."
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[bond_go]___}
-  m_LocalRotation: {x: ___[bond_rotation_x]___, y: ___[bond_rotation_y]___, z: ___[bond_rotation_z]___, w: ___[bond_rotation_w]___}
-  m_LocalPosition: {x: ___[bond_position_x]___, y: ___[bond_position_y]___, z: ___[bond_position_z]___}
-  m_LocalScale: {x: ___[bond_scale_x]___, y: ___[bond_scale_y]___, z: ___[bond_scale_z]___}
+  m_GameObject: {fileID: ".$bond_go."}
+  m_LocalRotation: {x: ".$bond_rotation_x.", y: ".$bond_rotation_y.", z: ".$bond_rotation_z.", w: ".$bond_rotation_w."}
+  m_LocalPosition: {x: ".$bond_position_x.", y: ".$bond_position_y.", z: ".$bond_position_z."}
+  m_LocalScale: {x: ".$bond_scale_x.", y: ".$bond_scale_y.", z: ".$bond_scale_z."}
   m_Children: []
-  m_Father: {fileID: ___[molecule_transform]___}                          // Inteconnection with molecule
+  m_Father: {fileID: ".$molecule_transform."}                          // Inteconnection with molecule
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   
   
 % MESH RENDERER
---- !u!23 &___[bond_renderer]___
+--- !u!23 &".$bond_renderer."
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[bond_go]___}
+  m_GameObject: {fileID: ".$bond_go."}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -434,19 +465,37 @@ MeshRenderer:
   
   
 % MESH FILTER (CYLINDER)
---- !u!33 &___[bond_cylinder]___
+--- !u!33 &".$bond_cylinder."
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[bond_go]___}
+  m_GameObject: {fileID: ".$bond_go."}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 ";
 
 }
     
     
-    public function __getAnEmptyMolecule(){
+    public function __getAnEmptyMolecule($molecule_name,
+                                         $molecule_root_go ,
+                                         $molecule_go ,
+                                         $molecule_root_transform,
+                                         $molecule_transform,
+                                         $molecule_script_1,
+                                         $molecule_script_2,
+                                         $bond_transform_arr,
+                                         $atom_transform_arr){
+        
+        
+        $Children = "m_Children:".chr(10);
+        
+        for ($i=0; $i<count($bond_transform_arr); $i++)
+            $Children .= "  - {fileID: ".$bond_transform_arr[$i]."}".chr(10);
+    
+    
+        for ($i=0; $i<count($atom_transform_arr); $i++)
+            $Children .= "  - {fileID: ".$atom_transform_arr[$i]."}".chr(10);
         
         return
 "
@@ -462,20 +511,20 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: ___[molecule_root_go]___}
+  m_RootGameObject: {fileID: ".$molecule_root_go."}
   m_IsPrefabParent: 1
 
 % The ROOT GO
---- !u!1 &___[molecule_root_go]___
+--- !u!1 &". $molecule_root_go. "
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: ___[molecule_root_transform]___}
+  - component: {fileID: ". $molecule_root_transform."}
   m_Layer: 0
-  m_Name: ___[molecule_name]___
+  m_Name: ".$molecule_name."
   m_TagString: Molecule
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -483,34 +532,34 @@ GameObject:
   m_IsActive: 1
 
 % POSITION OF THE ROOT GO
---- !u!4 &___[molecule_root_transform]___
+--- !u!4 &".$molecule_root_transform."
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[molecule_root_go]___}
+  m_GameObject: {fileID: ".$molecule_root_go."}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
-  - {fileID: ___[molecule_transform]___}
+  - {fileID: ".$molecule_transform."}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   
 % MOLECULE
---- !u!1 &___[molecule_go]___
+--- !u!1 &".$molecule_go."
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: ___[molecule_transform]___}               // This is the interconnection with the atoms and bonds
-  - component: {fileID: ___[molecule_script_1]___}
-  - component: {fileID: ___[molecule_script_2]___}
+  - component: {fileID: ".$molecule_transform."}
+  - component: {fileID: ".$molecule_script_1."}
+  - component: {fileID: ".$molecule_script_2."}
   m_Layer: 0
-  m_Name: ___[molecule_name]___
+  m_Name: ".$molecule_name."
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,29 +567,26 @@ GameObject:
   m_IsActive: 1
 
 % MOLECULE POSITION
---- !u!4 &___[molecule_transform]___
+--- !u!4 &".$molecule_transform."
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[molecule_go]___}
+  m_GameObject: {fileID: ".$molecule_go."}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: ___[bond_transform]___}                     // Interconnection with Bond
-  - {fileID: ___[atom_transform]___}                      // Interconnection with Atom (Chloride)
-  - {fileID: ___[atom_transform]___}                      // Interconnection with Atom (Natrium)
-  m_Father: {fileID: ___[molecule_root_transform]___}
+  ".$Children."
+  m_Father: {fileID: ".$molecule_root_transform."}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 % MOLECULE SCRIPT 1
---- !u!114 &___[molecule_script_1]___
+--- !u!114 &".$molecule_script_1."
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[molecule_go]___}
+  m_GameObject: {fileID: ".$molecule_go."}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b781c3734fe48f9458ba43f591a454a9, type: 3}
@@ -548,12 +594,12 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   placedElements: []
 % MOLECULE SCRIPT 2
---- !u!114 &___[molecule_script_2]___
+--- !u!114 &".$molecule_script_2."
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: ___[molecule_go]___}
+  m_GameObject: {fileID: ".$molecule_go."}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fdb46f4bdae46654484a63153b2637c6, type: 3}
@@ -684,8 +730,7 @@ NativeFormatImporter:
                 if ($e === '') {
                     $e = strtolower($this->trim(substr($lines[$i], 12, 2)));
                 }
-
-                
+              
 
                 array_push($atoms, array($x, $y, $z, $this->CPK[$e], $this->capitalize($e)));
 
@@ -730,6 +775,82 @@ NativeFormatImporter:
         return str_pad($seed , 16, "0", STR_PAD_LEFT);
     }
     
+    
+    // VECTOR FUNCTIONS
+    
+    // Find magnitude of a vector
+    function magn($vec)
+    {
+        $norm = 0;
+        $components = count($vec);
+        
+        for ($i = 0; $i < $components; $i++)
+            $norm += $vec[$i] * $vec[$i];
+        
+        return sqrt($norm);
+    }
+    
+    // Normalize vector
+    function normalize($vec)
+    {
+        $norm = $this->magn($vec);
+        $components = count($vec);
+        
+        for ($i = 0; $i < $components; $i++)
+            $vec[$i] = $vec[$i] / $norm ;
+        
+        return $vec;
+    }
+    
+    // distance between two vectors
+    function dist($vec1, $vec2){
+        $dist = 0;
+    
+        $components = count($vec1);
+    
+        for ($i = 0; $i < $components; $i++) {
+            $corD = $vec2[$i] - $vec1[$i];
+            $dist += $corD*$corD ;
+        }
+    
+        return sqrt($dist);
+    }
+    
+    function addVec($vec1, $vec2){
+        $resV = [];
+    
+        $components = count($vec1);
+    
+        for ($i = 0; $i < $components; $i++) {
+            $resV[] = $vec2[$i] + $vec1[$i];
+        }
+    
+        return $resV;
+        
+    }
+
+    function subtractVec($startV, $endV){
+        $resV = [];
+        $components = count($startV);
+        
+        for ($i = 0; $i < $components; $i++) {
+            $resV[] = $endV[$i] - $startV[$i];
+        }
+        
+        return $resV;
+    }
+    
+    // Normalize vector
+    function multScalar($vec, $scalar)
+    {
+        $components = count($vec);
+        
+        for ($i = 0; $i < $components; $i++)
+            $vec[$i] = $vec[$i] * $scalar ;
+        
+        return $vec;
+    }
+    
 }
 
 $dirFormAtomMaterials = "Materials";
@@ -751,16 +872,19 @@ $pdbloader = new PDBLoader($str);
 $mol = $pdbloader->parser();
 
 //$jsonMol =  json_encode($mol, JSON_PRETTY_PRINT);
+//print_r($jsonMol);
+
 
 $atoms = $mol['atoms'];
+$bondsVertices = $mol['verticesBonds'];
 
 
 // ====================================== Make the materials for each atom ============================
 for ($i=0 ; $i<count($atoms); $i++){
     
-    $atomSymbol = $atoms[$i][4];
+    $atomSymbolCurr = $atoms[$i][4];
     
-    $atomName = $pdbloader->atomNames[strtolower($atomSymbol)];
+    $atomNameCurr = $pdbloader->atomNames[strtolower($atomSymbolCurr)];
     
     $red = $atoms[$i][3][0];
     $green = $atoms[$i][3][1];
@@ -775,11 +899,11 @@ for ($i=0 ; $i<count($atoms); $i++){
     if(!is_dir($dirFormAtomMaterials))
         mkdir($dirFormAtomMaterials);
 
-    $fh = fopen( $dirFormAtomMaterials .DIRECTORY_SEPARATOR. $atomName . "_transp.mat", "w");
+    $fh = fopen( $dirFormAtomMaterials .DIRECTORY_SEPARATOR. $atomNameCurr . "_transp.mat", "w");
     fwrite($fh, $mat_meta[0]);
     fclose($fh);
 
-    $fh = fopen($dirFormAtomMaterials .DIRECTORY_SEPARATOR. $atomName . "_transp.mat.meta", "w");
+    $fh = fopen($dirFormAtomMaterials .DIRECTORY_SEPARATOR. $atomNameCurr . "_transp.mat.meta", "w");
     fwrite($fh, $mat_meta[1]);
     fclose($fh);
 }
@@ -788,80 +912,198 @@ for ($i=0 ; $i<count($atoms); $i++){
 
 // ========  Make the Molecules 3D YAMLs =============
 
-// Make the dir for the prefabs
-$dirForMoleculePrefabs = "Prefabs";
-
-if(!is_dir($dirForMoleculePrefabs))
-    mkdir($dirForMoleculePrefabs);
 
 //----------------------
 $post_id = "123";
 $molecule_name = "water";
 $molecule_formula = "H20";
 
-$mol_guid_pad = "542";     // my fixed suffix for the guid of the molecules
 
 
+//=================== Molecule =============================================
 
+$mol_guid_pad = "9";     // my fixed suffix for the guid of the molecules
 $molecule_guid = str_pad($post_id.$mol_guid_pad , 32, "0", STR_PAD_LEFT);
 
-//---------------------
+$mol_fid_pad = "4";
+$seedsuf = $post_id.$mol_guid_pad.$mol_fid_pad;
 
+$molecule_root_go        = $pdbloader->makeAnFid($seedsuf."1");
+$molecule_go             = $pdbloader->makeAnFid($seedsuf."2");
+$molecule_root_transform = $pdbloader->makeAnFid($seedsuf."3");
+$molecule_transform      = $pdbloader->makeAnFid($seedsuf."4");  // inter
+$molecule_script_1       = $pdbloader->makeAnFid($seedsuf."5");
+$molecule_script_2       = $pdbloader->makeAnFid($seedsuf."6");
+
+$bond_transform_arr          = [];   // inter
+$atom_transform_arr          = [];   // inter
+
+
+
+// ===================== Atoms loop ==============================
+
+$atom_fid_pad = "7";
+$seedsufatom = $seedsuf . $atom_fid_pad;
+
+for ($i=0 ; $i<count($atoms); $i++) {
+    
+    // Make the params out of the JSON
+    $atomSymbol[] = $atoms[$i][4];
+    
+    $atomName[] = $pdbloader->atomNames[strtolower(end($atomSymbol))];
+    
+    $x = $atoms[$i][0];
+    $y = $atoms[$i][1];
+    $z = $atoms[$i][2];
+    
+    $red = $atoms[$i][3][0];
+    $green = $atoms[$i][3][1];
+    $blue = $atoms[$i][3][2];
+    
+    // atom vars
+    $atom_go[]            = $pdbloader->makeAnFid($seedsufatom."1".$i);
+    
+    $atom_transform_arr[] = $pdbloader->makeAnFid($seedsufatom."2".$i);  // inter
+    
+    $atom_mesh[]          = $pdbloader->makeAnFid($seedsufatom."3".$i);
+    $atom_mesh_renderer[] = $pdbloader->makeAnFid($seedsufatom."4".$i);
+    $atom_script[]        = $pdbloader->makeAnFid($seedsufatom."5".$i);
+    $atom_collider[]      = $pdbloader->makeAnFid($seedsufatom."6".$i);
+    $atom_position_x[] = $x;
+    $atom_position_y[] = $y;
+    $atom_position_z[] = $z;
+    //$molecule_transform = ""; // inter
+    $atom_material_transparent_guid[] = str_pad("a".$red."b".$green."c".$blue, 32, "0", STR_PAD_LEFT );
+
+}
+
+
+
+//=====  $bonds Containts two vertices X N bonds =======================
+
+$bond_fid_pad = "8";
+$seedsufbond = $seedsuf . $bond_fid_pad;
+
+$NBonds = count($bondsVertices ) /2/3;
+
+for ($i =0 ; $i < $NBonds ; $i++){
+    
+    // bond vars
+    $bond_go[]        = $pdbloader->makeAnFid($seedsufbond."1".$i);
+    $bond_transform_arr[] = $pdbloader->makeAnFid($seedsufbond."2".$i);; // inter
+    $bond_cylinder[]    = $pdbloader->makeAnFid($seedsufbond."3".$i);
+    $bond_renderer[]    = $pdbloader->makeAnFid($seedsufbond."4".$i);
+    
+    
+    // Transform START - END into POSITION, ROTATION, SCALE
+    $bondStart[] = [$bondsVertices[3*2*$i], $bondsVertices[3*2*$i + 1], $bondsVertices[3*2*$i + 2]];
+    $bondEnd[]   = [$bondsVertices[3*2*$i + 3], $bondsVertices[3*$i + 4], $bondsVertices[3*$i + 5]];
+    
+    $endV = end($bondEnd);
+    $startV = end($bondStart);
+    
+    // Position is in the middle of start - end
+    $position = $pdbloader->multScalar( $pdbloader->addVec($endV , $startV) , 0.5);
+    
+    $bond_position_x[] =  $position[0];
+    $bond_position_y[] =  $position[1];
+    $bond_position_z[] =  $position[2];
+    
+    // Rotation
+    $directionV  = $pdbloader->normalize( $pdbloader->subtractVec($startV, $endV) );
+    $cylDefaultOrientation = [0,1,0];
+    $rotAxis = $pdbloader->normalize( $pdbloader->addVec($directionV, $cylDefaultOrientation) );
+    
+    $bond_rotation_x[] = $rotAxis[0];
+    $bond_rotation_y[] = $rotAxis[1];
+    $bond_rotation_z[] = $rotAxis[2];
+    $bond_rotation_w[] = 0;
+    
+    // SCALE
+    $bond_scale_x[] = "0.1";
+    $bond_scale_y[] = $pdbloader->dist($endV,$startV) / 2;
+    $bond_scale_z[] = "0.1";
+    
+    //$molecule_transform = ""; // inter
+   
+}
+
+// ======== Make the pattern replacements and save the prefab ========
+
+// Make the dir for the prefabs
+$dirForMoleculePrefabs = "Prefabs";
+
+if(!is_dir($dirForMoleculePrefabs))
+    mkdir($dirForMoleculePrefabs);
+
+
+// Make the file of the prefab 
 $fg = fopen($dirForMoleculePrefabs . DIRECTORY_SEPARATOR . $molecule_name . ".prefab","w");
 
 
-$mol_fid_pad = "5";
-
 // Empty mol vars
-$mol = $pdbloader->__getAnEmptyMolecule();
-fwrite($fg, $mol);
+$molYAML = $pdbloader->__getAnEmptyMolecule($molecule_name,
+                                            $molecule_root_go ,
+                                            $molecule_go ,
+                                            $molecule_root_transform,
+                                            $molecule_transform,
+                                            $molecule_script_1,
+                                            $molecule_script_2,
+                                            $bond_transform_arr,
+                                            $atom_transform_arr);
 
-$molecule_root_go        = $pdbloader->makeAnFid($post_id.$mol_guid_pad.$mol_fid_pad."1");
-$molecule_go             = $pdbloader->makeAnFid($post_id.$mol_guid_pad.$mol_fid_pad."2");
-$molecule_root_transform = "";
-$molecule_transform = "";  // inter
-$molecule_script_1 = "";
-$molecule_script_2 = "";
-$bond_transform = "";   // inter
-$atom_transform = "";   // inter
+fwrite($fg, $molYAML);
 
 
-//
-//// atom vars
-//$atom_go = "";
-//$atom_transform = ""; // inter
-//$atom_mesh = "";
-//$atom_mesh_renderer = "";
-//$atom_script = "";
-//$atom_collider = "";
-//$atom_position_x = "";
-//$atom_position_y = "";
-//$atom_position_z = "";
-//$molecule_transform = ""; // inter
-//$atom_material_guid = "";
-//
-//// bond vars
-//$bond_go = "";
-//$bond_transform = ""; // inter
-//$bond_cylinder = "";
-//$bond_renderer = "";
-    //$bond_rotation_x = "";
-    //$bond_rotation_y = "";
-    //$bond_rotation_z = "";
-    //$bond_position_x = "";
-    //$bond_position_y = "";
-    //$bond_position_z = "";
-    //$bond_scale_x = "";
-    //$bond_scale_y = "";
-    //$bond_scale_z = "";
-//$molecule_transform = ""; // inter
 
+// ATOMS
+for ($i=0 ; $i<count($atoms); $i++) {
+
+    $atomYAML = $pdbloader->__getAnAtom(
+                                $atomName[$i],
+                                $atom_go[$i],
+                                $atom_transform_arr[$i],
+                                $atom_mesh[$i],
+                                $atom_mesh_renderer[$i],
+                                $atom_script[$i],
+                                $atom_collider[$i],
+                                $atom_position_x[$i],
+                                $atom_position_y[$i],
+                                $atom_position_z[$i],
+                                $molecule_transform,
+                                $atom_material_transparent_guid[$i]
+                           );
+
+    fwrite($fg, $atomYAML);
+}
+
+// BONDS
+for ($i =0 ; $i < $NBonds ; $i++){
+
+    $bondYAML = $pdbloader->_getABond(
+            $bond_go[$i],
+            $bond_transform_arr[$i],
+            $bond_cylinder[$i],
+            $bond_renderer[$i],
+            $bond_position_x[$i],
+            $bond_position_y[$i],
+            $bond_position_z[$i],
+            $bond_rotation_x[$i],
+            $bond_rotation_y[$i],
+            $bond_rotation_z[$i],
+            $bond_rotation_w[$i],
+            $bond_scale_x[$i],
+            $bond_scale_y[$i],
+            $bond_scale_z[$i],
+            $molecule_transform
+      );
+
+    fwrite($fg, $bondYAML);
+}
 
 fclose($fg);
 
-
-
-// Save also the meta of the prefab
+// ================ Save also the meta of the prefab ====================
 $fh = fopen($dirForMoleculePrefabs.DIRECTORY_SEPARATOR.$molecule_name.".prefab.meta", "w" );
 fwrite($fh, $pdbloader->makeMolMetaYAML($molecule_guid));
 fclose($fh);
