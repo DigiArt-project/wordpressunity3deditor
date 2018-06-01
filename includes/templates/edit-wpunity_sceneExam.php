@@ -148,30 +148,28 @@ get_header(); ?>
 
                                     <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
 										<?php foreach ($molecules as $molecule) { ?>
-											<?php if (!in_array($molecule['moleculeID'], $savedMolecules)) { ?>
 
-                                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                                            <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
-                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
-                                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+                                                <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
+                                                    <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-															<?php if ($molecule['moleculeImage']){ ?>
-                                                                <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-															<?php } else { ?>
-                                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                                </div>
-															<?php } ?>
-                                                        </div>
-
-                                                        <div class="mdc-card__primary">
-                                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-																<?php echo $molecule['moleculeName'];?>
-                                                            </p>
-                                                        </div>
+														<?php if ($molecule['moleculeImage']){ ?>
+                                                            <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+														<?php } else { ?>
+                                                            <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                                <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                            </div>
+														<?php } ?>
                                                     </div>
-                                                </li>
-											<?php  } ?>
+
+                                                    <div class="mdc-card__primary">
+                                                        <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+															<?php echo $molecule['moleculeName'];?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </li>
 
 										<?php }?>
 
@@ -179,37 +177,8 @@ get_header(); ?>
                                 </div>
 
                                 <div class="mdc-layout-grid__cell--span-12">
-
                                     <h2 class="mdc-typography--title">Active molecules</h2>
-
                                     <ul id="sortable1" class="connectedSortable mdc-theme--secondary-light-bg mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23);">
-										<?php foreach ($molecules as $molecule) { ?>
-											<?php if (in_array($molecule['moleculeID'], $savedMolecules)) { ?>
-
-                                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-
-                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
-                                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
-
-															<?php if ($molecule['moleculeImage']){ ?>
-                                                                <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-															<?php } else { ?>
-                                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                                </div>
-															<?php } ?>
-                                                        </div>
-
-                                                        <div class="mdc-card__primary">
-                                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-																<?php echo $molecule['moleculeName'];?>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-											<?php  } ?>
-
-										<?php }?>
                                     </ul>
                                 </div>
 
@@ -271,7 +240,6 @@ get_header(); ?>
 
                     <div class="mdc-layout-grid__inner" id="avail-molecules-list">
 
-                        <!--Stathi load all molecules here with a Foreach-->
 						<?php if ($game_type_obj->string === "Chemistry") {
 
 							$molecules = wpunity_get_all_molecules_of_game($project_id);
@@ -370,7 +338,7 @@ get_header(); ?>
                 savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
-           addStrategiesToInput();
+            addStrategiesToInput();
         });
 
 
