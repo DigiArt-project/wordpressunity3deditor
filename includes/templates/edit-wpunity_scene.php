@@ -621,12 +621,10 @@ get_header(); ?>
                                 </section>
 
                                 <section class="mdc-card__primary">
-                                    <button style="float:right;" class="mdc-button mdc-button--compact mdc-card__action mdc-theme--primary" data-mdc-auto-init="MDCRipple" type="submit">
+                                    <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
+                                            data-mdc-auto-init="MDCRipple" type="submit">
                                         ADD NEW
                                     </button>
-    <!--                                <a style="float: right;" data-mdc-auto-init="MDCRipple" title="Add new scene"-->
-    <!--                                   class="mdc-button mdc-button--compact mdc-card__action mdc-theme--primary"-->
-    <!--                                   href="#">ADD NEW</a>-->
 
                                 </section>
                             </div>
@@ -712,7 +710,7 @@ get_header(); ?>
 
                                         <div class="mdc-card__primary">
                                             <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeType'];?></a>
+                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeName'];?></a>
                                             </h1>
                                         </div>
 
