@@ -45,7 +45,16 @@ function wpunity_getAllStrategies_byGame($project_id){
 	// Reset postdata
 	wp_reset_postdata();
 
-	return $assetStrategies;
+	$strategies = [];
+	foreach ($assetStrategies as $strategy) {
+
+		array_push($strategies, $strategy['examStrategy']);
+		array_push($strategies, ',');
+	}
+
+	array_pop ( $strategies );
+
+	return $strategies;
 }
 
 //==========================================================================================================================================

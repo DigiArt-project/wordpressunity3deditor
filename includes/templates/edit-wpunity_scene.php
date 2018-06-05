@@ -923,9 +923,15 @@ get_header(); ?>
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
+                        <?php
+                        $strategies = wpunity_getAllStrategies_byGame($project_id);
+                        $strategies = implode($strategies);
+
+                        ?>
+
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly>
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php echo $strategies; ?>'>
                             <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
