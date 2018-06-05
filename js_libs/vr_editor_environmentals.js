@@ -198,10 +198,11 @@ class vr_editor_environmentals {
      */
     setOrbitCamera() {
 
-        this.cameraOrbit =  new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
+        this.cameraOrbit =
+            new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
                                                           this.FRUSTUM_SIZE * this.ASPECT /   2,
                                                           this.FRUSTUM_SIZE /   2,
-                                                          this.FRUSTUM_SIZE / - 2, this.NEAR, this.FAR);
+                                                          this.FRUSTUM_SIZE / - 2, -1400, this.FAR);
 
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
@@ -229,7 +230,7 @@ class vr_editor_environmentals {
      */
     setAvatarCamera() {
 
-        this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 3000);
+        this.cameraAvatar = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 4000);
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
 
