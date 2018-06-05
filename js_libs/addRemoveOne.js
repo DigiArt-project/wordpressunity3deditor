@@ -66,16 +66,29 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         envir.renderer.setClearColor( 0xeeeeee, 1 );
         //envir.scene.add(transform_controls);
 
+        // Position
         transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
         transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
         selected_object_name = nameModel3D;
 
+        // Dimensions
         var dims = findDimensions(transform_controls.object);
         var sizeT = Math.max(...dims);
         transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
+
+        // insertedObject.children.add
+        if (categoryName==="Producer"){
+
+            var plane = makeProducerPlane();
+
+            insertedObject.add(plane);
+        }
+
+
+        // Add in scene
         envir.addInHierarchyViewer(insertedObject);
 
     };
@@ -133,6 +146,29 @@ function unixTimestamp_to_time( tStr){
     return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear() + ' ' + formattedTime;
 }
 
+function makeProducerPlane(){
+
+
+    var geometry = new THREE.Geometry();
+
+    geometry.vertices.push(
+        new THREE.Vector3( -50,  -50,  50 ),
+        new THREE.Vector3( -50,  -50, -50 ),
+        new THREE.Vector3(  50,  -50,  50 ),
+        new THREE.Vector3(  50,  -50, -50 ),
+    );
+
+    geometry.faces.push( new THREE.Face3( 0, 1, 2 ) );
+    geometry.faces.push( new THREE.Face3( 1, 2, 3 ) );
+
+
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, opacity: 0.5});
+    material.opacity = 0.2;
+    var plane = new THREE.Mesh( geometry, material );
+
+    return plane;
+
+}
 
 // /**
 //  *    ----------- Check for Recycle Bin Drag ----------------------------
