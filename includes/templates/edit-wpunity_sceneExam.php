@@ -42,7 +42,7 @@ require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 $scene_title = 'Exam';
 $molecules = wpunity_get_all_molecules_of_game($project_id);//ALL available Molecules of a GAME
 $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
-$savedMolecules = explode(',', $savedMoleculesVal);
+$savedMoleculesVal = json_decode($savedMoleculesVal);
 
 if ($project_scope == 0) {
 	$single_first = "Tour";
@@ -72,8 +72,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 }
 
 if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
-    $saveEnabledMolecules = $_POST['availableMoleculesInput'];
-    update_post_meta($project_id, 'wpunity_exam_enabled_molecules', $saveEnabledMolecules);
+	$saveEnabledMolecules = $_POST['availableMoleculesInput'];
+	update_post_meta($project_id, 'wpunity_exam_enabled_molecules', $saveEnabledMolecules);
 //    wp_redirect();
 //    exit;
 }
@@ -156,41 +156,43 @@ get_header(); ?>
                                     <h2 class="mdc-typography--title">Available molecules to use in a strategy</h2>
 
                                     <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
-										<?php foreach ($molecules as $molecule) { ?>
+										<?php
+										foreach ($molecules as $molecule) {
+											if (in_array($molecule['moleculeID'], $savedMoleculesVal)) { ?>
 
-                                            <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                                                <li class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 
-                                                <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
-                                                    <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
+                                                    <div class="mdc-card mdc-theme--background molecule" id="<?php echo $molecule['moleculeID'];?>" data-molec-type="<?php echo $molecule['moleculeType']; ?>">
+                                                        <div style="min-height: 110px; min-width: 100%; max-height: 110px; text-align: center; overflow: hidden; position: relative; ">
 
-														<?php if ($molecule['moleculeImage']){ ?>
-                                                            <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-														<?php } else { ?>
-                                                            <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                                <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                            </div>
-														<?php } ?>
+															<?php if ($molecule['moleculeImage']){ ?>
+                                                                <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+															<?php } else { ?>
+                                                                <div style="min-height: 110px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                                                    <i style="font-size: 48px; padding-top: 30px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                                                </div>
+															<?php } ?>
+                                                        </div>
+
+                                                        <div class="mdc-card__primary">
+                                                            <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+																<?php echo $molecule['moleculeName'];?>
+                                                            </p>
+                                                        </div>
+
+                                                        <section class="mdc-card__actions">
+                                                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
+                                                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
+                                                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+																<?php
+																echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+																?>
+                                                            </a>
+                                                        </section>
+
                                                     </div>
-
-                                                    <div class="mdc-card__primary">
-                                                        <p class="mdc-card__title mdc-typography--subheading2" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-															<?php echo $molecule['moleculeName'];?>
-                                                        </p>
-                                                    </div>
-
-                                                    <section class="mdc-card__actions">
-                                                        <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
-                                                           style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                                                        <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
-			                                                <?php
-			                                                echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
-			                                                ?>
-                                                        </a>
-                                                    </section>
-
-                                                </div>
-                                            </li>
-
+                                                </li>
+											<?php }?>
 										<?php }?>
 
                                     </ul>
@@ -259,28 +261,28 @@ get_header(); ?>
 
                     <div class="mdc-layout-grid__inner" id="avail-molecules-list">
 
-						<?php if ($game_type_obj->string === "Chemistry") {
+						<?php
+						foreach ($molecules as $molecule) {
+							$checked = in_array($molecule['moleculeID'], $savedMoleculesVal) ? 'checked' : '';
+							?>
 
-							foreach ($molecules as $molecule) { ?>
-
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
-                                    <div class="mdc-form-field">
-                                        <div class="mdc-checkbox">
-                                            <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox">
-                                            <div class="mdc-checkbox__background">
-                                                <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                    <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                                </svg>
-                                                <div class="mdc-checkbox__mixedmark"></div>
-                                            </div>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
+                                <div class="mdc-form-field">
+                                    <div class="mdc-checkbox">
+                                        <input name="<?php echo $molecule['moleculeID'];?>Checkbox" type="checkbox" value="<?php echo $molecule['moleculeID'];?>" id="<?php echo $molecule['moleculeID'];?>-checkbox" class="mdc-checkbox__native-control MoleculeCheckbox" <?php echo $checked; ?>>
+                                        <div class="mdc-checkbox__background">
+                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                            </svg>
+                                            <div class="mdc-checkbox__mixedmark"></div>
                                         </div>
-                                        <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
                                     </div>
+                                    <label class="CursorPointer" for="<?php echo $molecule['moleculeID'];?>-checkbox" style="padding: 0; margin: 0;"><?php echo $molecule['moleculeName'];?></label>
                                 </div>
+                            </div>
 
-							<?php } ?>
 						<?php } ?>
-                        <?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
+						<?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
                         <input type="hidden" name="submitted2" id="submitted2" value="true" />
                         <input id="availableMoleculesInput" name="availableMoleculesInput" type="hidden" value="[]">
 

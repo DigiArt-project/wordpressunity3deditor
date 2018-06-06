@@ -1088,9 +1088,9 @@ get_header(); ?>
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
 
             // Start Goedle Iframes
-            /*if (project_keys.expID) {*/
+            if (project_keys.expID) {
                 loadAtRiskIframe(project_keys.expID);
-            /*}*/
+            }
             // End Goedle Iframes
 
 
