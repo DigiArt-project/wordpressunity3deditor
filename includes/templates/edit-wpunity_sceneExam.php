@@ -172,6 +172,17 @@ get_header(); ?>
 															<?php echo $molecule['moleculeName'];?>
                                                         </p>
                                                     </div>
+
+                                                    <section class="mdc-card__actions">
+                                                        <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
+                                                           style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
+                                                        <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+			                                                <?php
+			                                                echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+			                                                ?>
+                                                        </a>
+                                                    </section>
+
                                                 </div>
                                             </li>
 
