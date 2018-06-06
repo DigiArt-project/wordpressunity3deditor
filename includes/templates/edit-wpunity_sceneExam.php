@@ -40,8 +40,8 @@ wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
 $scene_title = 'Exam';
-$molecules = wpunity_get_all_molecules_of_game($project_id);
-$savedMoleculesVal = get_post_meta($scene_id, 'wpunity_input_molecules',true);
+$molecules = wpunity_get_all_molecules_of_game($project_id);//ALL available Molecules of a GAME
+$savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
 $savedMolecules = explode(',', $savedMoleculesVal);
 
 if ($project_scope == 0) {
@@ -69,6 +69,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	wp_redirect($goBackTo_MainLab_link);
 	exit;
+}
+
+if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
+    $saveEnabledMolecules = $_POST['availableMoleculesInput'];
+    update_post_meta($project_id, 'wpunity_exam_enabled_molecules', $saveEnabledMolecules);
+//    wp_redirect();
+//    exit;
 }
 
 get_header(); ?>
@@ -139,8 +146,6 @@ get_header(); ?>
                             <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light">
                             Select molecules to create a strategy. The active molecules order dictates the sequence of appearance in the Unity game. You can create more than one strategies.
                             </span>
-
-							<?php $molecules = wpunity_get_all_molecules_of_game($project_id); ?>
 
                             <div class="WhiteSpaceSeparator"></div>
 
@@ -247,8 +252,7 @@ get_header(); ?>
         </div>
 
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-            <form name="create_new_strategy_form" action="" id="create_new_strategy_form" method="POST" enctype="multipart/form-data">
-				<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+            <form name="create_new_strategy_form2" action="" id="create_new_strategy_form2" method="POST" enctype="multipart/form-data">
                 <div class="mdc-layout-grid">
 
                     <h3 class="mdc-typography--subheading2"> Choose the molecules that will be available for use in the exams </h3>
@@ -257,7 +261,6 @@ get_header(); ?>
 
 						<?php if ($game_type_obj->string === "Chemistry") {
 
-							$molecules = wpunity_get_all_molecules_of_game($project_id);
 							foreach ($molecules as $molecule) { ?>
 
                                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 mdc-form-field">
@@ -277,8 +280,9 @@ get_header(); ?>
 
 							<?php } ?>
 						<?php } ?>
-
-                        <input id="availableMoleculesInput" type="hidden" value="[]">
+                        <?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
+                        <input type="hidden" name="submitted2" id="submitted2" value="true" />
+                        <input id="availableMoleculesInput" name="availableMoleculesInput" type="hidden" value="[]">
 
                     </div>
 
