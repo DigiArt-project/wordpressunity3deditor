@@ -256,14 +256,14 @@ get_header(); ?>
             </div>
 
             <!--Set tab buttons-->
-            <div class="mdc-toolbar__section mdc-toolbar__section--align-start" style="justify-content: flex-end">
+            <div class="mdc-toolbar__section">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
-                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk Student</a>
-                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">DDA</a>
+                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
+                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
 
 					<?php } ?>
 
