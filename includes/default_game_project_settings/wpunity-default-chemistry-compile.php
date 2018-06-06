@@ -119,9 +119,42 @@ function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$
 
 }
 
-function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){}
+function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
 
-function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){}
+    $exam_slug = $scene_post->post_name;
+
+    $term_meta_exam2d_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_exam_pat',true);
+    $file_contentA = wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$scene_id);
+
+    $fileA = $game_path . '/' . $exam_slug . '.unity';
+    $create_fileA = fopen($fileA, "w") or die("Unable to open file!");
+    fwrite($create_fileA, $file_contentA);
+    fclose($create_fileA);
+
+    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+    $fileApath_forCS = 'Assets/scenes/' . $exam_slug . '.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
+}
+
+function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+
+    $exam_slug = $scene_post->post_name;
+
+    $term_meta_exam3d_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_exam3d_pat',true);
+    $file_contentA = wpunity_replace_chemistry_exam3D_unity($term_meta_exam3d_chem,$scene_id);
+
+    $fileA = $game_path . '/' . $exam_slug . '.unity';
+    $create_fileA = fopen($fileA, "w") or die("Unable to open file!");
+    fwrite($create_fileA, $file_contentA);
+    fclose($create_fileA);
+
+    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+    $fileApath_forCS = 'Assets/scenes/' . $exam_slug . '.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
+
+}
 
 function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
     //DATA of Chemistry Wander Around Scene
@@ -144,11 +177,11 @@ function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id
     fwrite($create_fileA,$file_contentAb);
     fclose($create_fileA);
 
-    wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
+    wpunity_compile_append_scene_to_s_selector($scene_id, /*$scene_name*/'S_Lab', $scene_title, $scene_desc, $scene_type_ID,
         $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    $fileApath_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+    $fileApath_forCS = 'Assets/scenes/' . /*$scene_name*/'S_Lab' . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
 
@@ -298,6 +331,28 @@ function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scen
 
     $file_content_return = str_replace("___[player_rotation_x]___",$x_player_rot,$file_content_return);
     $file_content_return = str_replace("___[player_rotation_y]___",$y_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_z]___",$z_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_w]___",$w_player_rot,$file_content_return);
+
+    return $file_content_return;
+
+}
+
+function wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$scene_id){
+
+
+    $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_exam2d_chem);
+    $file_content_return = str_replace("___[player_rotation_z]___",$z_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[player_rotation_w]___",$w_player_rot,$file_content_return);
+
+    return $file_content_return;
+
+}
+
+function wpunity_replace_chemistry_exam3D_unity($term_meta_exam3d_chem,$scene_id){
+
+
+    $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_exam3d_chem);
     $file_content_return = str_replace("___[player_rotation_z]___",$z_player_rot,$file_content_return);
     $file_content_return = str_replace("___[player_rotation_w]___",$w_player_rot,$file_content_return);
 
