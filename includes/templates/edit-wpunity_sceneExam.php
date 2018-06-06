@@ -57,7 +57,8 @@ $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games')
 $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
-$refresh_to_examPage = esc_url( get_permalink($editsceneExamPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type);
+$refresh_to_examPage =  get_permalink($editsceneExamPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type;
+$gotoAdd_newAsset_page = get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_Scenepass . $scene_id;
 
 $preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
 
@@ -93,7 +94,7 @@ get_header(); ?>
 			<?php echo $game_post->post_title; ?>
         </h1>
 
-        <a id="addNewMoleculeBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
+        <a href="<?php echo $gotoAdd_newAsset_page; ?>" id="addNewMoleculeBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
             ADD NEW MOLECULE
         </a>
 
