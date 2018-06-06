@@ -57,6 +57,7 @@ $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games')
 $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
+$refresh_to_examPage = esc_url( get_permalink($editsceneExamPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type);
 
 $preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
 
@@ -74,8 +75,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
 	$saveEnabledMolecules = $_POST['availableMoleculesInput'];
 	update_post_meta($project_id, 'wpunity_exam_enabled_molecules', $saveEnabledMolecules);
-//    wp_redirect();
-//    exit;
+    wp_redirect($refresh_to_examPage);
+    exit;
 }
 
 get_header(); ?>
