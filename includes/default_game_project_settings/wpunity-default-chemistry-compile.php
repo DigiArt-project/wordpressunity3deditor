@@ -124,7 +124,7 @@ function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene
     $exam_slug = $scene_post->post_name;
 
     $term_meta_exam2d_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_exam_pat',true);
-    $file_contentA = wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$scene_id);
+    $file_contentA = wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$gameSlug);
 
     $fileA = $game_path . '/' . $exam_slug . '.unity';
     $create_fileA = fopen($fileA, "w") or die("Unable to open file!");
@@ -338,16 +338,76 @@ function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scen
 
 }
 
-function wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$scene_id){
+function wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$gameSlug){
 
+    $available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
+    $defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
 
-    $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_exam2d_chem);
-    $file_content_return = str_replace("___[player_rotation_z]___",$z_player_rot,$file_content_return);
-    $file_content_return = str_replace("___[player_rotation_w]___",$w_player_rot,$file_content_return);
+    $file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$term_meta_exam2d_chem);
+    $file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
 
     return $file_content_return;
 
 }
+
+function wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug){
+    /* 4 kena:
+    - name: ___[mole_formula_name]___
+        formula: ___[mole_formula_type]___
+     */
+
+    $args = array(
+        'name'        => $gameSlug,
+        'post_type'   => 'wpunity_game',
+        'post_status' => 'publish',
+        'numberposts' => 1
+    );
+    $my_post = get_posts($args);
+    $project_id = $my_post[0]->ID;
+
+    $availableMole = '';
+    $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
+    $savedMoleculesVal = json_decode($savedMoleculesVal);
+
+    foreach ($savedMoleculesVal as $moleculeID) {
+        $moleName = get_the_title( $moleculeID );
+        $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
+        $firstLine = '- name: ' . $moleName;
+        $secondLine = str_repeat('&nbsp;', 4) . 'formula: ' . $mole_type;
+        $availableMole .= $firstLine . "<br>" . PHP_EOL; // line change;
+        $availableMole .= $secondLine . "<br>" . PHP_EOL; // line change;
+    }
+
+    return $availableMole;
+}
+
+function wpunity_replace_chemistry_exam_defaulStrategy($gameSlug){
+    /*
+    - ___[mole_formula_type]___
+    */
+
+    $args = array(
+        'name'        => $gameSlug,
+        'post_type'   => 'wpunity_game',
+        'post_status' => 'publish',
+        'numberposts' => 1
+    );
+    $my_post = get_posts($args);
+    $project_id = $my_post[0]->ID;
+
+    $availableMole = '';
+    $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
+    $savedMoleculesVal = json_decode($savedMoleculesVal);
+
+    foreach ($savedMoleculesVal as $moleculeID) {
+        $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
+        $secondLine = '- ' . $mole_type;
+        $availableMole .= $secondLine . "<br>" . PHP_EOL; // line change;
+    }
+
+    return $availableMole;
+}
+
 
 function wpunity_replace_chemistry_exam3D_unity($term_meta_exam3d_chem,$scene_id){
 
