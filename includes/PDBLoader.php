@@ -40,7 +40,7 @@ $dirMolecules = "Molecules";
 // TEST AMMONIA
 
 $molecule_name = "ammonia";
-$pdb_str = "HEADER    ammonia".'\n'.
+$pdb_str = "HEADER".'\n'.
     "COMPND".'\n'.
     "TITLE".'\n'.
     "ATOM      1  N           1       0.257  -0.363   0.000  1.00  0.11".'\n'.

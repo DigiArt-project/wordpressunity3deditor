@@ -2062,6 +2062,7 @@ function wpunity_game_zip_action_callback()
 			if (!$file->isDir()) {
 				// Get real and relative path for current file
 				$filePath = $file->getRealPath();
+				
 				$relativePath = substr($filePath, strlen($rootPath) + 1);
 
 				// Add current file to archive
