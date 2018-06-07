@@ -84,17 +84,6 @@ wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'scene_id' => $current_scene_id )
 );
 
-
-//$scene_new_info = array(
-//    'ID' => $current_scene_id,
-//    'post_title' => esc_attr(strip_tags()),
-//    'post_content' => esc_attr(strip_tags()),
-//);
-//
-//wp_update_post($scene_new_info);
-
-
-
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
@@ -113,6 +102,15 @@ if ($project_scope == 0) {
 } else {
 	$single_lowercase = "project";
 	$single_first = "Project";
+}
+
+if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
+    $expID = $_POST['exp-id'];
+    update_post_meta( $project_id, 'wpunity_project_expID', $expID);
+
+    $loadMainSceneLink = get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . 'scene';
+    wp_redirect( $loadMainSceneLink );
+    exit;
 }
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -783,19 +781,23 @@ get_header(); ?>
 
 
                             <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
+                            <form name="create_new_expid_form" action="" id="create_new_expid_form" method="POST" enctype="multipart/form-data">
 
-                            <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                                       style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
-                                <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
-                                <div class="mdc-textfield__bottom-line"></div>
-                            </div>
+                                <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                                    <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
+                                    <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
+                                    <div class="mdc-textfield__bottom-line"></div>
+                                </div>
 
                             <br>
 
-                            <a title="Save Experiment ID"
-                               id="save-expid-button" class="mdc-button mdc-button--primary mdc-button--raised FullWidth">SAVE</a>
-
+<!--                            <a title="Save Experiment ID"-->
+<!--                               id="save-expid-button" class="mdc-button mdc-button--primary mdc-button--raised FullWidth">SAVE</a>-->
+                                <?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
+                                <input type="hidden" name="submitted2" id="submitted2" value="true" />
+                                <button id="save-expid-button" type="submit" class="mdc-button mdc-button--primary mdc-button--raised FullWidth" data-mdc-auto-init="MDCRipple"> SAVE</button>
+                            </form>
                         </div>
 
                     </div>
