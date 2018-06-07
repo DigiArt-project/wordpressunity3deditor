@@ -414,4 +414,54 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
 //==========================================================================================================================================
 
+function wpunity_getAllexams_byGame($project_id,$addMenu){
+
+	$allExamScenes = [];
+
+	$project_slug = get_post_field( 'post_name', $project_id );
+	if($addMenu){$sceneTypes = array('exam2d-chem-yaml','exam3d-chem-yaml','mainmenu-chem-yaml');}
+	else{$sceneTypes = array('exam2d-chem-yaml','exam3d-chem-yaml');}
+
+	$queryargs = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'orderby'   => 'ID',
+		'order' => 'DESC',
+		'tax_query' => array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field' => 'slug',
+				'terms' => $project_slug
+			),
+			array(
+				'taxonomy' => 'wpunity_scene_yaml',
+				'field' => 'slug',
+				'terms' => $sceneTypes,
+			)
+		)
+	);
+
+	$custom_query = new WP_Query( $queryargs );
+
+	if ( $custom_query->have_posts() ) :
+		while ( $custom_query->have_posts() ) :
+			$custom_query->the_post();
+			$examID = get_the_ID();
+			$examName = get_the_title($examID);
+
+			$allExamScenes[] = [
+				'examID' => $examID,
+				'examName' => $examName,
+			];
+
+		endwhile;
+	endif;
+
+	// Reset postdata
+	wp_reset_postdata();
+
+	return $allExamScenes;
+}
+
 ?>

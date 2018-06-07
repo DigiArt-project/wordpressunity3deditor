@@ -559,7 +559,7 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
     }elseif($scene_type_slug == 'exam2d-chem-yaml'){
         wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'exam3d-chem-yaml'){
-        wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }
 
 }

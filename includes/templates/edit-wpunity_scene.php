@@ -256,14 +256,14 @@ get_header(); ?>
             </div>
 
             <!--Set tab buttons-->
-            <div class="mdc-toolbar__section mdc-toolbar__section--align-start" style="justify-content: flex-end">
+            <div class="mdc-toolbar__section">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
-                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk Student</a>
-                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">DDA</a>
+                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
+                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
 
 					<?php } ?>
 
@@ -674,76 +674,6 @@ get_header(); ?>
 			?>
 
 
-            <!--Load all molecules-->
-			<?php if($game_type_obj->string === "Chemistry"){?>
-
-                <div class="mdc-layout-grid">
-                    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Molecules</h2>
-                </div>
-
-				<?php $molecules = wpunity_get_all_molecules_of_game($project_id);
-				if ( $molecules ) :?>
-
-                    <div class="mdc-layout-grid">
-
-                        <div class="mdc-layout-grid__inner">
-
-							<?php foreach ($molecules as $molecule) { ?>
-
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-
-                                    <div class="mdc-card mdc-theme--background" id="<?php echo $molecule['moleculeID']; ?>">
-                                        <div class="SceneThumbnail">
-                                            <a href="#">
-
-												<?php if ($molecule['moleculeImage']){ ?>
-
-                                                    <img width="495" height="330" src="<?php echo $molecule['moleculeImage']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-
-												<?php } else { ?>
-                                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                                    </div>
-												<?php } ?>
-                                            </a>
-                                        </div>
-
-                                        <div class="mdc-card__primary">
-                                            <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                <a class="mdc-theme--secondary" href=""><?php echo $molecule['moleculeName'];?></a>
-                                            </h1>
-                                        </div>
-
-										<?php
-
-										//echo current_user_can('administrator');
-										// For joker assets, If the user is not administrator he should not be able to delete or edit them.
-										$shouldHideDELETE_EDIT = $molecule['isJoker'] && !current_user_can('administrator');
-										?>
-
-
-                                        <section class="mdc-card__actions">
-                                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
-                                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
-												<?php
-												echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
-												?>
-                                            </a>
-                                        </section>
-
-                                    </div>
-                                </div>
-							<?php } ?>
-
-                        </div>
-                    </div>
-				<?php endif; ?>
-			<?php } ?>
-
-
-
-
             <!-- Scenes -->
 			<?php
 			$custom_query_args = array(
@@ -931,7 +861,7 @@ get_header(); ?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php echo $strategies; ?>'>
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='[<?php echo $strategies; ?>]'>
                             <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
