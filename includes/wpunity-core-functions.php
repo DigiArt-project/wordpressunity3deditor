@@ -259,10 +259,9 @@ function wpunity_extrapass_register_form() {
 	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
 
 	?>
-    <p>
-        <label for="extra_pass">Extra Password (required for Analytics)<br />
-            <input type="text" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly /></label>
-    </p>
+
+    <input type="hidden" name="extra_pass" id="extra_pass" class="input" value="<?php echo esc_attr(  $extrapass  ); ?>" size="25" readonly />
+
     <script type="text/javascript">
         jQuery(document).ready(
             function wpunityGenerateExtraPass(){
@@ -480,7 +479,7 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 				update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
 			}
 		}
-    }
+	}
 }
 
 
@@ -1079,15 +1078,15 @@ function wpunity_get_all_molecules_of_game($project_id) {
 	$gameSlug = $game_post->post_name;
 	$assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
 	$assetPGameID = $assetPGame->term_id;
-    
-    
-    $my_posts = get_page_by_path("chemistry-joker",ARRAY_A,'wpunity_game');
-    
-    $assetJokerGameId = $my_posts['ID'];
-    
+
+
+	$my_posts = get_page_by_path("chemistry-joker",ARRAY_A,'wpunity_game');
+
+	$assetJokerGameId = $my_posts['ID'];
+
 	$moleculesIds = array();
- 
-	
+
+
 	// Define custom query parameters
 	$custom_query_args = array(
 		'post_type' => 'wpunity_asset3d',
@@ -1115,13 +1114,13 @@ function wpunity_get_all_molecules_of_game($project_id) {
 	if ( $custom_query->have_posts() ) {
 		while ($custom_query->have_posts()) {
 			$custom_query->the_post();
-            
-            
-            
-            $molecule_id = get_the_ID();
-            
-            $molecule_type = get_post_meta($molecule_id, 'wpunity_molecule_ChemicalTypeVal', true);
-            $molecule_title = get_the_title();
+
+
+
+			$molecule_id = get_the_ID();
+
+			$molecule_type = get_post_meta($molecule_id, 'wpunity_molecule_ChemicalTypeVal', true);
+			$molecule_title = get_the_title();
 			$the_featured_image_ID = $screenimgID = get_post_meta($molecule_id, 'wpunity_asset3d_screenimage', true);
 			$the_featured_image_url = wp_get_attachment_url( $the_featured_image_ID );
 
@@ -1171,10 +1170,10 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
-   
+
 			if (trim($jsonScene) === '')
-			    continue;
-       
+				continue;
+
 			if (count($sceneJsonARR['objects']) > 0)
 				foreach ($sceneJsonARR['objects'] as $key => $value) {
 					if ($key !== 'avatarYawObject') {
@@ -1228,10 +1227,10 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 
 			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
-			
-            if (trim($jsonScene)==='')
-                continue;
-			
+
+			if (trim($jsonScene)==='')
+				continue;
+
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
 
 			if (count($sceneJsonARR['objects']) > 0)
@@ -1953,14 +1952,14 @@ goto :EOF
 
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
-    
+
 //    $fo = fopen("output_post_termalogica.txt","w");
 //    $product_terms = wp_get_post_terms( 4773,  'wpunity_asset3d_cat' );
 //    fwrite($fo, print_r($product_terms, true));
 //    fclose($fo);
-    
-    
- 
+
+
+
 
 
 	$DS = DIRECTORY_SEPARATOR;
@@ -2064,7 +2063,7 @@ function wpunity_game_zip_action_callback()
 			if (!$file->isDir()) {
 				// Get real and relative path for current file
 				$filePath = $file->getRealPath();
-				
+
 				$relativePath = substr($filePath, strlen($rootPath) + 1);
 
 				// Add current file to archive
@@ -2112,8 +2111,8 @@ function wpunity_save_scene_async_action_callback()
 	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	if (isset($_POST['scene_screenshot']))
-	    $attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
-		    $_POST['scene_id'], get_post($_POST['scene_id'])->post_name, 'jpg' );
+		$attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
+			$_POST['scene_id'], get_post($_POST['scene_id'])->post_name, 'jpg' );
 
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
 
