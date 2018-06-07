@@ -1833,7 +1833,7 @@ function wpunity_fetch_video_action_callback(){
 function wpunity_assepile_action_callback(){
 
 	$DS = DIRECTORY_SEPARATOR;
-	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	$gameFormat = $_REQUEST['gameFormat'];
 
@@ -1909,15 +1909,17 @@ goto :EOF
 
 			$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
-		} else { // LINUX SERVER
-			$os_bin = 'sh';
-			$txt = "#/bin/bash"."\n".
-			       "projectPath=`pwd`"."\n".
-			       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
-			       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -executeMethod HandyBuilder.build";// " -executeMethod HandyBuilder.build";  //;  //. ; "-buildWindowsPlayer ' build/mygame.exe'"; //
-
-			// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
-			$compile_command = 'nohup sh starter_artificial.sh> /dev/null 2>/dev/null & echo $! >>pid.txt';
+		} else {
+		
+//		    // LINUX SERVER
+//			$os_bin = 'sh';
+//			$txt = "#/bin/bash"."\n".
+//			       "projectPath=`pwd`"."\n".
+//			       "xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24:32' /opt/Unity/Editor/Unity ".
+//			       "-batchmode -nographics -logfile stdout.log -force-opengl -quit -projectPath \${projectPath} -executeMethod HandyBuilder.build";// " -executeMethod HandyBuilder.build";  //;  //. ; "-buildWindowsPlayer ' build/mygame.exe'"; //
+//
+//			// 2: run sh (nohup     '/dev ...' ensures that it is asynchronous called)
+//			$compile_command = 'nohup sh starter_artificial.sh> /dev/null 2>/dev/null & echo $! >>pid.txt';
 		}
 
 		// 1 : Generate bat or sh
@@ -1934,11 +1936,11 @@ goto :EOF
 			fwrite($fga, $compile_command);
 			fclose($fga);
 		} else {
-			$res = putenv("HOME=/home/jimver04");
-			shell_exec($compile_command);
-			$fpid = fopen("pid.txt","r");
-			$unity_pid = fgets($fpid);
-			fclose($fpid);
+//			$res = putenv("HOME=/home/jimver04");
+//			shell_exec($compile_command);
+//			$fpid = fopen("pid.txt","r");
+//			$unity_pid = fgets($fpid);
+//			fclose($fpid);
 		}
 		//---------------------------------------
 		chdir($init_gcwd);
@@ -1963,34 +1965,33 @@ function wpunity_monitor_compiling_action_callback(){
 
 	$DS = DIRECTORY_SEPARATOR;
 
-	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+	$os = 'win'; // strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	// Monitor stdout.log
 	$stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
 
 	if ($os === 'lin') {
 
-
-		//pid is the sh process id. First get the xvfbrun process ID
-		$phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
-
-		// from the xvfbrun process ID get the Unity process ID
-		$phpcomd2 = exec("ps -ef | grep Unity | awk -v myvar=".$phpcomd1." '$3==myvar {print $2;}';");
-
-		$processUnityCSV = exec('ps --no-headers -p ' . $phpcomd2 . ' -o size'); // ,%cpu
-
-		// Write to wp-admin dir the shell_exec cmd result
-//        $hf = fopen('output.txt', 'w');
-//        fwrite($hf, $phpcomd1);
-//        fwrite($hf, $phpcomd2);
-//        fclose($hf);
-
-		$processUnityCSV = round(((float)($processUnityCSV))/1000,0);
-
-		if ($processUnityCSV==0)
-			$processUnityCSV = "";
-		else
-			$processUnityCSV = "".$processUnityCSV."";
+//		//pid is the sh process id. First get the xvfbrun process ID
+//		$phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
+//
+//		// from the xvfbrun process ID get the Unity process ID
+//		$phpcomd2 = exec("ps -ef | grep Unity | awk -v myvar=".$phpcomd1." '$3==myvar {print $2;}';");
+//
+//		$processUnityCSV = exec('ps --no-headers -p ' . $phpcomd2 . ' -o size'); // ,%cpu
+//
+//		// Write to wp-admin dir the shell_exec cmd result
+////        $hf = fopen('output.txt', 'w');
+////        fwrite($hf, $phpcomd1);
+////        fwrite($hf, $phpcomd2);
+////        fclose($hf);
+//
+//		$processUnityCSV = round(((float)($processUnityCSV))/1000,0);
+//
+//		if ($processUnityCSV==0)
+//			$processUnityCSV = "";
+//		else
+//			$processUnityCSV = "".$processUnityCSV."";
 
 
 	} else {
@@ -2008,18 +2009,19 @@ function wpunity_monitor_compiling_action_callback(){
 function wpunity_killtask_compiling_action_callback(){
 	$DS = DIRECTORY_SEPARATOR;
 
-	$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
+	$os = 'win'; //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	if ($os === 'lin') {
-		//pid is the sh process id. First get the xvfbrun process ID
-		$phpcomd  = "xvfbrun_ID=$(ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}');";
 
-		// from the xvfbrun process ID get the Unity process ID
-		$phpcomd .= "unity_pid=$(ps -ef | grep Unity | awk -v myvar=\"\$xvfbrun_ID\" '$3==myvar {print $2;}');";
-
-		// kill Unity
-		$phpcomd .= "kill `echo \"\$unity_pid\"`";
-		$killres = exec($phpcomd);
+//		//pid is the sh process id. First get the xvfbrun process ID
+//		$phpcomd  = "xvfbrun_ID=$(ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}');";
+//
+//		// from the xvfbrun process ID get the Unity process ID
+//		$phpcomd .= "unity_pid=$(ps -ef | grep Unity | awk -v myvar=\"\$xvfbrun_ID\" '$3==myvar {print $2;}');";
+//
+//		// kill Unity
+//		$phpcomd .= "kill `echo \"\$unity_pid\"`";
+//		$killres = exec($phpcomd);
 
 	}else {
 		$phpcomd = 'Taskkill /PID '.$_POST['pid'].' /F';
