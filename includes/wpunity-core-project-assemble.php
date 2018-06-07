@@ -26,6 +26,24 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 }
 
 function wpunity_compile_make_molecules_prefabs($gameID, $gameSlug){
+
+//    $projectLocalPath = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\\";
+//    $projectName = "chemtest";
+//    $molecule_post_id = "123";
+//    $molecule_post_name = "water";
+//    $pdb_str =
+//        "HEADER".'\n'.
+//        "COMPND".'\n'.
+//        "TITLE".'\n'.
+//        "SOURCE".'\n'.
+//        "HETATM    1  H   HOH     1      -0.174  -0.813  0".'\n'.
+//        "HETATM    2  H   HOH     1      -0.174   0.820  0".'\n'.
+//        "HETATM    3  O   HOH     1       0.403   0.004  0".'\n'.
+//        "CONECT    1    3".'\n'.
+//        "CONECT    2    3".'\n'.
+//        "END";
+//
+  
     
     // 1. Get all the checkboxed molecules for the game
     //
@@ -33,6 +51,7 @@ function wpunity_compile_make_molecules_prefabs($gameID, $gameSlug){
     //
     //      2.a Make the molecule
     
+        
     
         // addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str);
         

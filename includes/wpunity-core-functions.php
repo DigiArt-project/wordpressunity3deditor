@@ -1830,38 +1830,7 @@ function wpunity_fetch_video_action_callback(){
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
 function wpunity_assepile_action_callback(){
-    
-    $projectLocalPath = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\\";
-    $projectName = "chemtest";
-    $molecule_post_id = "123";
-    $molecule_post_name = "water";
-    $pdb_str =
-        "HEADER".'\n'.
-        "COMPND".'\n'.
-        "TITLE".'\n'.
-        "SOURCE".'\n'.
-        "HETATM    1  H   HOH     1      -0.174  -0.813  0".'\n'.
-        "HETATM    2  H   HOH     1      -0.174   0.820  0".'\n'.
-        "HETATM    3  O   HOH     1       0.403   0.004  0".'\n'.
-        "CONECT    1    3".'\n'.
-        "CONECT    2    3".'\n'.
-        "END";
-    
-//    $fa = fopen("outputMoles.txt","w");
-//    fwrite($fa, $projectLocalPath);
-//    fwrite($fa, $projectName);
-//    fwrite($fa, $molecule_post_id);
-//    fwrite($fa, $molecule_post_name);
-//    fwrite($fa, $pdb_str);
-//    fclose($fa);
-    
-    addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str);
-    
-    
-    die();
-    
-    
-    
+ 
 	$DS = DIRECTORY_SEPARATOR;
 	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
@@ -1891,11 +1860,6 @@ function wpunity_assepile_action_callback(){
 
 
 	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
-    
-    
- 
-	
-	
 	
 	//wp_die();
 
