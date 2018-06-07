@@ -26,6 +26,23 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 }
 
 function wpunity_compile_make_molecules_prefabs($gameID, $gameSlug){
+    $upload = wp_upload_dir();
+    $upload_dir = $upload['basedir'];
+    $projectLocalPath = str_replace('\\','/',$upload_dir);
+
+    $projectName = $gameSlug;
+
+    $molecules = wpunity_get_all_molecules_of_game($gameID);//ALL available Molecules of a GAME
+    foreach ($molecules as $molecule) {
+        $molecule_post_id = $molecule['moleculeID'];
+        $molecule_post_name = $molecule['moleculeName'];
+        $pdb_id = get_post_meta($molecule_post_id,'wpunity_asset3d_pdb',true);
+        $pdb_path = wp_get_attachment_url( $pdb_id );
+        $pdb_str = file_get_contents($pdb_path);
+
+        addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str);
+    }
+
 
 //    $projectLocalPath = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\\";
 //    $projectName = "chemtest";
