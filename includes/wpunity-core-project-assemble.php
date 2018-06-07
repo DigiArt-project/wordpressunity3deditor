@@ -19,8 +19,26 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 
     wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
 
+    if ($gameType == "chemistry_games")
+        wpunity_compile_make_molecules_prefabs($gameID, $gameSlug);
+    
     return 'true';
 }
+
+function wpunity_compile_make_molecules_prefabs($gameID, $gameSlug){
+    
+    // 1. Get all the checkboxed molecules for the game
+    //
+    // 2. iterate for each checkboxed molecule
+    //
+    //      2.a Make the molecule
+    
+    
+        // addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str);
+        
+        
+}
+
 
 //==========================================================================================================================================
 //==========================================================================================================================================

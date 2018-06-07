@@ -216,6 +216,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_setti
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-compile.php' );
 
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
+
 // ===================== Obsolete ===================================
 
 /**

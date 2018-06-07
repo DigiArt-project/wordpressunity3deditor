@@ -1830,7 +1830,38 @@ function wpunity_fetch_video_action_callback(){
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
 function wpunity_assepile_action_callback(){
-
+    
+    $projectLocalPath = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\\";
+    $projectName = "chemtest";
+    $molecule_post_id = "123";
+    $molecule_post_name = "water";
+    $pdb_str =
+        "HEADER".'\n'.
+        "COMPND".'\n'.
+        "TITLE".'\n'.
+        "SOURCE".'\n'.
+        "HETATM    1  H   HOH     1      -0.174  -0.813  0".'\n'.
+        "HETATM    2  H   HOH     1      -0.174   0.820  0".'\n'.
+        "HETATM    3  O   HOH     1       0.403   0.004  0".'\n'.
+        "CONECT    1    3".'\n'.
+        "CONECT    2    3".'\n'.
+        "END";
+    
+//    $fa = fopen("outputMoles.txt","w");
+//    fwrite($fa, $projectLocalPath);
+//    fwrite($fa, $projectName);
+//    fwrite($fa, $molecule_post_id);
+//    fwrite($fa, $molecule_post_name);
+//    fwrite($fa, $pdb_str);
+//    fclose($fa);
+    
+    addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str);
+    
+    
+    die();
+    
+    
+    
 	$DS = DIRECTORY_SEPARATOR;
 	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
@@ -1860,7 +1891,12 @@ function wpunity_assepile_action_callback(){
 
 
 	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
-
+    
+    
+ 
+	
+	
+	
 	//wp_die();
 
 	// Wait 4 seconds to erase previous project before starting compiling the new one
@@ -2187,5 +2223,37 @@ function fake_compile_for_a_test_project()
 }
 
 //==========================================================================================================================================
+
+/**
+ * Make the molecule prefab
+ *
+ * @param $projectLocalPath :  "C:\\xampp7\htdocs\wordpress\wp-content\uploads\\"
+ * @param $projectName      :  "chemtest"
+ * @param $molecule_post_id :   "123"
+ * @param $molecule_post_name :  "water"
+ * @param $pdb_str           :   The string of the pdb file
+ */
+function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str ){
+   
+    //$prefab_path = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\chemtestUnity\Assets\StandardAssets\Prefabs\\";
+    $prefab_path = $projectLocalPath.$projectName."Unity\Assets\StandardAssets\Prefabs\\";
+    
+    $dirMaterials =  $prefab_path."Elements\Transparent";
+    $dirMolecules =  $prefab_path."Molecules";
+    
+    // Create the parser class
+    $pdbloader = new PDBLoader($pdb_str);
+   
+    
+    // parse the pdb into atoms and verticesBonds
+    $molecule = $pdbloader->parser();
+
+    // Make the materials and their metas
+    $pdbloader->saveTheMaterial($molecule['atoms'], $dirMaterials);
+   
+    // Make the prefab and its meta
+    $pdbloader->makeThePrefab($molecule_post_id, $molecule_post_name, $molecule['atoms'], $molecule['verticesBonds'], $dirMolecules);
+}
+
 
 ?>

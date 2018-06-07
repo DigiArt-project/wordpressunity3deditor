@@ -13,12 +13,12 @@ if(!is_dir($gameFolder))
 
 
 
-echo unzipGameProjectFolder($zipFile, $path);
 
-//if(  )
-//    echo "UNZIPPED";
-//else
-//    echo "Error 1023: Unzip problem";
+
+if( unzipGameProjectFolder($zipFile, $path) == true)
+    echo "UNZIPPED";
+else
+    echo "Error 1023: Unzip problem";
 
 
 function unzipGameProjectFolder($file, $path){

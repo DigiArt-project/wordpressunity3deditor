@@ -7,26 +7,28 @@
  *
  */
 
-//--TESTING DATA --
+////--TESTING DATA --
+//
+//// POST_ID: This is inserted into fids and guids to ensure that there are not replications
+//$post_id = "123";
+//
+//// Real paths
 
-// POST_ID: This is inserted into fids and guids to ensure that there are not replications
-$post_id = "123";
-
-// Real paths
 //$gameName = "chemtestUnity";
 //$prefab_path = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\chemtestUnity\Assets\StandardAssets\Prefabs\\";
 //$dirMaterials = $prefab_path."Elements\Transparent";
 //$dirMolecules = $prefab_path."Molecules";
-
-// DEBUG paths are a little bit shorter
-$dirMaterials = "Molecules";
-$dirMolecules = "Molecules";
-
-// TEST WATER
-
-
-//$molecule_name = "wAter";
-//$pdb_str = "HEADER".'\n'.
+//
+//// DEBUG paths are a little bit shorter
+//$dirMaterials = "Molecules";
+//$dirMolecules = "Molecules";
+//
+//// TEST WATER
+//
+//
+////$molecule_name = "wAter";
+//$pdb_str =
+//"HEADER".'\n'.
 //"COMPND".'\n'.
 //"TITLE".'\n'.
 //"SOURCE".'\n'.
@@ -36,33 +38,33 @@ $dirMolecules = "Molecules";
 //"CONECT    1    3".'\n'.
 //"CONECT    2    3".'\n'.
 //"END";
-
-// TEST AMMONIA
-
-$molecule_name = "ammonia";
-$pdb_str = "HEADER".'\n'.
-    "COMPND".'\n'.
-    "TITLE".'\n'.
-    "ATOM      1  N           1       0.257  -0.363   0.000  1.00  0.11".'\n'.
-    "ATOM      2  H           1       0.257   0.727   0.000  1.00  0.11".'\n'.
-    "ATOM      3  H           1       0.771  -0.727   0.890  1.00  0.11".'\n'.
-    "ATOM      4  H           1       0.771  -0.727  -0.890  1.00  0.11".'\n'.
-    "CONECT    1    2".'\n'.
-    "CONECT    1    3".'\n'.
-    "CONECT    1    4".'\n'.
-    "END";
+//
+//// TEST AMMONIA
+//
+//$molecule_name = "ammonia";
+//$pdb_str = "HEADER".'\n'.
+//    "COMPND".'\n'.
+//    "TITLE".'\n'.
+//    "ATOM      1  N           1       0.257  -0.363   0.000  1.00  0.11".'\n'.
+//    "ATOM      2  H           1       0.257   0.727   0.000  1.00  0.11".'\n'.
+//    "ATOM      3  H           1       0.771  -0.727   0.890  1.00  0.11".'\n'.
+//    "ATOM      4  H           1       0.771  -0.727  -0.890  1.00  0.11".'\n'.
+//    "CONECT    1    2".'\n'.
+//    "CONECT    1    3".'\n'.
+//    "CONECT    1    4".'\n'.
+//    "END";
 
 // Create the parser class
-$pdbloader = new PDBLoader($pdb_str);
-
-// parse the pdb into atoms and verticesBonds
-$molecule = $pdbloader->parser();
-
-// Make the materials and their metas
-$pdbloader->saveTheMaterial($molecule['atoms'],$dirMaterials);
-
-// Make the prefab and its meta
-$pdbloader->makeThePrefab($post_id, $molecule_name, $molecule['atoms'], $molecule['verticesBonds'],$dirMolecules);
+//$pdbloader = new PDBLoader($pdb_str);
+//
+//// parse the pdb into atoms and verticesBonds
+//$molecule = $pdbloader->parser();
+//
+//// Make the materials and their metas
+//$pdbloader->saveTheMaterial($molecule['atoms'], $dirMaterials);
+//
+//// Make the prefab and its meta
+//$pdbloader->makeThePrefab($post_id, $molecule_name, $molecule['atoms'], $molecule['verticesBonds'],$dirMolecules);
 
 
 /**
