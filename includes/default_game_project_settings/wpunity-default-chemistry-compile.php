@@ -302,9 +302,10 @@ function wpunity_replace_help_chem_unity($term_meta_s_help,$text_help_scene,$img
 }
 
 function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title){
+
     $file_content_return = str_replace("___[WanderAroundScene]___",$WanderAroundScene_title,$term_meta_s_login);
 
-    return $term_meta_s_login;
+    return $file_content_return;
 }
 
 function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id){
