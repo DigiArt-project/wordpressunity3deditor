@@ -42,7 +42,7 @@ require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 $scene_title = 'Exam';
 $molecules = wpunity_get_all_molecules_of_game($project_id);//ALL available Molecules of a GAME
 $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
-$savedMoleculesVal = json_decode($savedMoleculesVal);
+$savedMoleculesVal = json_decode($savedMoleculesVal) ? json_decode($savedMoleculesVal) : array();
 
 if ($project_scope == 0) {
 	$single_first = "Tour";
