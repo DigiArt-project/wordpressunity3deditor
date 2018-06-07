@@ -137,6 +137,15 @@ function wpunity_getRemote_api_folder(){
 	}
 }
 
+function wpunity_getRemote_server_path(){
+	$generaloptions = get_option( 'general_settings' );
+	if($generaloptions["wpunity_server_path"]) {
+		return $generaloptions["wpunity_server_path"];
+	}else{
+		return 'C:/xampp/htdocs/COMPILE_UNITY3D_GAMES/';
+	}
+}
+
 function wpunity_get_ftpCredentials(){
 	$generaloptions = get_option( 'general_settings' );
 
