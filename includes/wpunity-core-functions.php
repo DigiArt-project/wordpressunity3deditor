@@ -1931,7 +1931,7 @@ goto :EOF
 
 		if ($os === 'win') {
 			$unity_pid = shell_exec($compile_command);
-			$fga = fopen("output2.txt", "w");
+			$fga = fopen("execution_hint.txt", "w");
 			fwrite($fga, $compile_command);
 			fclose($fga);
 		} else {

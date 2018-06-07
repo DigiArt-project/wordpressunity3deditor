@@ -1,24 +1,40 @@
 <?php
 
 
-$gameFolder = $_GET["game"]."Unity";
-$zipFile = $_GET["game"]."Unity.zip";
+$gameFolder = $_GET["game"] . "Unity";
+
+if( $_GET["action"] == "unzip" ) {
+    
+    $zipFile = $_GET["game"] . "Unity.zip";
+    
+    $pathToDecompress = realpath( $zipFile );
+    $path = pathinfo( $pathToDecompress, PATHINFO_DIRNAME ).'/'.$gameFolder;
+    
+    if(!is_dir($gameFolder))
+        mkdir($gameFolder);
+    
+    
+    if( unzipGameProjectFolder($zipFile, $path) == true)
+        echo "UNZIPPED";
+    else
+        echo "Error 1023: Unzip problem";
+        
+} else if ( $_GET["action"] == "start" ) {
+
+    echo "S1";
+    
+    exec("start /b ".$gameFolder."/starter_artificial.bat /c");
+    
+    echo "S2";
+    return "aaa";
+    
+} else if ( $_GET["action"] == "stop" ) {
 
 
-$pathToDecompress = realpath( $zipFile );
-$path = pathinfo( $pathToDecompress, PATHINFO_DIRNAME ).'/'.$gameFolder;
+} else if ( $_GET["action"] == "monitor" ) {
 
-if(!is_dir($gameFolder))
-    mkdir($gameFolder);
+}
 
-
-
-
-
-if( unzipGameProjectFolder($zipFile, $path) == true)
-    echo "UNZIPPED";
-else
-    echo "Error 1023: Unzip problem";
 
 
 function unzipGameProjectFolder($file, $path){
