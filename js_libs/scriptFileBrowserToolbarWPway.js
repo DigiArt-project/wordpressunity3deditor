@@ -119,6 +119,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "doorName_target":e.target.attributes.getNamedItem("data-doorName_target").value,
                 "isreward":e.target.attributes.getNamedItem("data-isreward").value,
                 "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value,
+                "sceneID_target":e.target.attributes.getNamedItem("data-sceneID_target").value,
                 "isCloned":e.target.attributes.getNamedItem("data-isCloned").value,
                 "isJoker":e.target.attributes.getNamedItem("data-isJoker").value
             };
@@ -200,6 +201,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-doorName_source="'+ f.doorName_source +
                     '" data-doorName_target="'+ f.doorName_target +
                     '" data-sceneName_target="'+ f.sceneName_target +
+                    '" data-sceneID_target="'+ f.sceneID_target +
                     '" data-sshot-url="'+ f.screenImagePath +
                     '" data-isreward="'+ f.isreward +
                     '" data-isCloned="'+ f.isCloned +

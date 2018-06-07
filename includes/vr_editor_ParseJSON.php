@@ -44,6 +44,7 @@ class ParseJSON {
                 $doorName_source = $value->doorName_source;
                 $doorName_target = $value->doorName_target;
                 $sceneName_target = $value->sceneName_target;
+                $sceneID_target = $value->sceneID_target;
 
                 $isreward = $value->isreward;
                 $isCloned = $value->isCloned;
@@ -79,6 +80,7 @@ class ParseJSON {
                                             '","doorName_source":"'.$doorName_source.
                                             '","doorName_target":"'.$doorName_target.
                                             '","sceneName_target":"'.$sceneName_target.
+                                            '","sceneID_target":"'.$sceneID_target.
                                             '","isreward":"'.$isreward.
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.

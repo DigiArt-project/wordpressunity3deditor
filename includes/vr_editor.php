@@ -51,6 +51,7 @@ echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
 echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
 echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
+echo "var scenesTargetChemistry=".json_encode(wpunity_getAllexams_byGame($project_id, true)).";";
 echo '</script>';
 ?>
 
@@ -164,6 +165,7 @@ echo '</script>';
         var doorName_source = dataDrag.doorName_source;
         var doorName_target = dataDrag.doorName_target;
         var sceneName_target = dataDrag.sceneName_target;
+        var sceneID_target = dataDrag.sceneID_target;
         var isreward = dataDrag.isreward;
         var isCloned = dataDrag.isCloned;
         var isJoker = dataDrag.isJoker;
@@ -179,7 +181,7 @@ echo '</script>';
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-            isreward, isCloned, isJoker,
+            sceneID_target, isreward, isCloned, isJoker,
             coordsXYZ[0],
             coordsXYZ[1],
             coordsXYZ[2]);
@@ -402,8 +404,8 @@ echo '</script>';
     </div>
 
 
-    <!-- Popup menu to Select a scene to go, from Microscope or Textbook or Gate-->
-    <div id="chemistryBoxPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
+    <!-- Popup menu to Select a scene to go, from Gate-->
+    <div id="chemistryGatePopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
            onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>
@@ -411,7 +413,7 @@ echo '</script>';
         </a>
 
         <i title="Select a functional Category label" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">label</i>
-        <select title="Select a functional category label" id="chemistryBoxComponent" class="mdc-select">
+        <select title="Select a functional category label" id="chemistryGateComponent" class="mdc-select">
         </select>
     </div>
 

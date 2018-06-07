@@ -337,6 +337,7 @@ THREE.SceneExporter.prototype = {
                     '   "doorName_source" : ' + '"' + o.doorName_source  + '"' + ',',
                     '   "doorName_target" : ' + '"' + o.doorName_target  + '"' + ',',
                     '   "sceneName_target" : ' + '"' + o.sceneName_target  + '"' + ',',
+                    '   "sceneID_target" : ' + '"' + o.sceneID_target  + '"' + ',',
                     '   "isreward" : ' + '"' + o.isreward  + '"' + ',',
                     '   "isCloned" : ' + '"' + o.isCloned  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',

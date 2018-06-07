@@ -307,6 +307,7 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
                 'doorName_source'=>'', //$doorName_source,   the asset does not save door but the json
                 'doorName_target'=>'', //$doorName_target,
                 'sceneName_target'=>'', //$sceneName_target
+                'sceneID_target'=>'', //$sceneName_target
                 'isreward'=> '0',
                 'isJokerAsset'=> $isJoker,
                 'isCloned'=> $isCloned,
@@ -414,7 +415,7 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
 //==========================================================================================================================================
 
-function wpunity_getAllexams_byGame($project_id,$addMenu){
+function wpunity_getAllexams_byGame($project_id, $addMenu){
 
 	$allExamScenes = [];
 

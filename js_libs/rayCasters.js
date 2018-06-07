@@ -220,15 +220,15 @@ function selectorMajor(event, objectSel){
 function displayBoxProperties(event, nameBoxSource){
 
     // Save the previous Box values (in case of  direct mouse click on another Box)
-    jQuery("#chemistryBoxComponent").trigger("change");
+    jQuery("#chemistryGateComponent").trigger("change");
 
-    clearAndUnbind("chemistryBoxComponent");
+    clearAndUnbind("chemistryGateComponent");
 
-    var ppDiv = document.getElementById("chemistryBoxPopupDiv");
-    var ppSelect = document.getElementById("chemistryBoxComponent");
+    var ppDiv = document.getElementById("chemistryGatePopupDiv");
+    var ppSelect = document.getElementById("chemistryGateComponent");
 
     // Show Selection
-    jQuery("#chemistryBoxPopupDiv").show();
+    jQuery("#chemistryGatePopupDiv").show();
 
     ppDiv.style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     ppDiv.style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
@@ -273,10 +273,10 @@ function displayBoxProperties(event, nameBoxSource){
     // mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
     // On popup change
-    jQuery("#chemistryBoxComponent").change(function(e) {
+    jQuery("#chemistryGateComponent").change(function(e) {
 
         // Get the value
-        var valfgroup = jQuery("#chemistryBoxComponent").val();
+        var valfgroup = jQuery("#chemistryGateComponent").val();
 
         if (!valfgroup)
             return;
@@ -285,9 +285,9 @@ function displayBoxProperties(event, nameBoxSource){
 
             envir.scene.getObjectByName(nameBoxSource).chemical_functional_group = valfgroup.trim();
         }
-        jQuery("#chemistryBoxPopupDiv").hide();
+        jQuery("#chemistryGatePopupDiv").hide();
 
-        clearAndUnbind("chemistryBoxComponent");
+        clearAndUnbind("chemistryGateComponent");
     });
 }
 
@@ -322,8 +322,8 @@ function activeOverides(event, object){
     if( categ === 'Marker')
         displayMarkerProperties(event, name);
 
-    if( categ === 'Microscope' || categ === 'Textbook' || categ === 'Gate')
-        displayMicroscopeTextbookProperties(event, name);
+    if( categ === 'Gate')
+        displayGateProperties(event, name);
 
     if( categ === 'Box' ) // for chemistry box
         displayBoxProperties(event, name);
@@ -334,10 +334,9 @@ function activeOverides(event, object){
  *  Microscope and Textbook
  *
  * @param event
- * @param nameMicroscopeTextbookSource
+ * @param nameGateSource
  */
-function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource) {
-
+function displayGateProperties(event, nameGateSource) {
 
     // Save the previous MicroscopeTextbook values (in case of  direct mouse click on another microscope or textbook)
     jQuery("#chemistrySceneSelectComponent").trigger("change");
@@ -363,15 +362,12 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     ppSelect.add(option);
 
 
-    // Add doors from other scenes
-    var OtherExamMicroScenesNames = ['Exam 2D naming puzzle', 'Exam 3D construction puzzle'];
-
-
+    //scenesTargetChemistry
     // Add options for each intersected object
-    for (var sceneName of OtherExamMicroScenesNames ) {
+    for (var sceneNameAndID of scenesTargetChemistry ) {
         option = document.createElement("option");
-        option.text = sceneName;
-        option.value = sceneName;
+        option.text = sceneNameAndID.examName;
+        option.value = sceneNameAndID.examID;
         option.style.background = "#fff";
         ppSelect.add(option);
     }
@@ -385,26 +381,28 @@ function displayMicroscopeTextbookProperties(event, nameMicroscopeTextbookSource
     // -------------------
 
     // Set from saved value
-    // if(envir.scene.getObjectByName(nameDoorSource).doorName_target)
-    //     jQuery("#popupDoorSelect").val ( envir.scene.getObjectByName(nameDoorSource).doorName_target + " at " +
-    //         envir.scene.getObjectByName(nameDoorSource).sceneName_target );
+    if(envir.scene.getObjectByName(nameGateSource).sceneID_target) {
 
-    // mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
+        jQuery("#chemistrySceneSelectComponent").val(
+            envir.scene.getObjectByName(nameGateSource).sceneID_target
+        );
+    }
 
-
+    //mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
     // On popup change
     jQuery("#chemistrySceneSelectComponent").change(function(e) {
 
         // Get the value
-        var valTargetScene = jQuery("#chemistrySceneSelectComponent").val();
+        var valTargetScene = jQuery("#chemistrySceneSelectComponent").find('option:selected').val();
+        var nameTargetScene = jQuery("#chemistrySceneSelectComponent").find('option:selected').text();
 
         if (!valTargetScene)
             return;
 
-        if (valTargetScene && valTargetScene != "Cancel" && valTargetScene != "Select") {
-
-            envir.scene.getObjectByName(nameMicroscopeTextbookSource).sceneName_target = valTargetScene.trim();
+        if (nameTargetScene && nameTargetScene != "Cancel" && nameTargetScene != "Select") {
+            envir.scene.getObjectByName(nameGateSource).sceneName_target = nameTargetScene;
+            envir.scene.getObjectByName(nameGateSource).sceneID_target = valTargetScene;
         }
         jQuery("#chemistrySceneSelectPopupDiv").hide();
 
@@ -565,7 +563,7 @@ function displayDoorProperties(event, name){
     popUpDoorPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     popUpDoorPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
-    mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
+    //mdc.textfield.MDCTextfield.attachTo(document.getElementById('chemistryGateComponent'));
 
     doorid.change(function(e) {
         var nameDoorSource_simple = jQuery("#doorid").val();
@@ -794,10 +792,10 @@ function showWholePopupDiv(popUpDiv, event){
 //
 // function clearAndUnbindBoxProperties(){
 //
-//     var ppSelect = document.getElementById("chemistryBoxComponent");
+//     var ppSelect = document.getElementById("chemistryGateComponent");
 //
 //     for (var i = ppSelect.options.length; i-->0;)
 //         ppSelect.options[i] = null;
 //
-//     jQuery("#chemistryBoxComponent").unbind('change');
+//     jQuery("#chemistryGateComponent").unbind('change');
 // }
