@@ -5,11 +5,19 @@ function load2DSceneEditorScripts() {
 }
 add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
 
+// DELETE ASSET AJAX
+wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
+wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+);
 
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
-if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+if( $perma_structure){$parameter_assetpass = '?wpunity_asset=';} else{$parameter_assetpass = '&wpunity_asset=';}
+
 
 $scene_id = intval( $_GET['wpunity_scene'] );
 $scene_id = sanitize_text_field( $scene_id );
@@ -58,7 +66,7 @@ $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 $refresh_to_examPage =  get_permalink($editsceneExamPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type;
-$gotoAdd_newAsset_page = get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . $parameter_Scenepass . $scene_id;
+$gotoAdd_newAsset_page = get_permalink($newAssetPage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id ;
 
 $preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
 
@@ -181,11 +189,10 @@ get_header(); ?>
 																<?php echo $molecule['moleculeName'];?>
                                                             </p>
                                                         </div>
-
                                                         <section class="mdc-card__actions">
                                                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
                                                                style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                                                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+                                                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $gotoAdd_newAsset_page . '&wpunity_asset=' . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
 																<?php
 																echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
 																?>
