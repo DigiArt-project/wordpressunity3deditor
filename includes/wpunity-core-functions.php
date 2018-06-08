@@ -1874,19 +1874,25 @@ function wpunity_assepile_action_callback(){
 		//-----------------------------
 
 		//--Uploads/myGameProjectUnity--
-		$upload_dir = wp_upload_dir()['basedir'];
-		$upload_dir = str_replace('\\','/',$upload_dir);
+		
+        // Todo: Add more option
+        $upload_dir = wp_upload_dir()['basedir']; //
+        
+        $upload_dir = str_replace('\\','/',$upload_dir);
 		$game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
-
+        
+        $remote_game_server_folder_dir = $game_dirpath;  // 'C:\xampp\htdocs\COMPILE_UNITY3D_GAMES\\'. $_REQUEST['gameSlug'] . 'Unity' ;
+		
 		if ($os === 'win') {
 			$os_bin = 'bat';
 			$txt = '@echo off'."\n"; // change line always with double quote
-			$txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile '.$game_dirpath.'\stdout.log -projectPath '. $game_dirpath . ' -executeMethod HandyBuilder.build';
+			$txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile "'.
+                $remote_game_server_folder_dir.'\stdout.log" -projectPath "'. $remote_game_server_folder_dir . '" -executeMethod HandyBuilder.build';
 
 			$txt .= "\n";
-			$txt .= 'ECHO %PID%';
+			$txt .= "ECHO %PID%";
 			$txt .= "\n";
-			$txt .= 'exit'; // exit command useful for not showing again the command prompt
+			$txt .= "exit"; // exit command useful for not showing again the command prompt
 			$txt .= "\n";
 			$txt .= '
 :spawn command args
@@ -1931,7 +1937,7 @@ goto :EOF
 
 		if ($os === 'win') {
 			$unity_pid = shell_exec($compile_command);
-			$fga = fopen("output2.txt", "w");
+			$fga = fopen("execution_hint.txt", "w");
 			fwrite($fga, $compile_command);
 			fclose($fga);
 		} else {
@@ -1957,10 +1963,6 @@ function wpunity_monitor_compiling_action_callback(){
 //    $product_terms = wp_get_post_terms( 4773,  'wpunity_asset3d_cat' );
 //    fwrite($fo, print_r($product_terms, true));
 //    fclose($fo);
-
-
-
-
 
 	$DS = DIRECTORY_SEPARATOR;
 
