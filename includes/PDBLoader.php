@@ -695,8 +695,12 @@ MeshFilter:
         $z = null;
         $e = null;
         
-        $lines = explode('\n', $this->_pdbContent);
-       
+        //$lines = explode("\n", $this->_pdbContent);
+        $lines = preg_split('/\n|\r\n?/', $this->_pdbContent);
+        
+        $fl = fopen("outputLines.txt","w");
+        fwrite($fl, print_r($lines, true));
+        fclose($fl);
         
         for ($i = 0; $i < count($lines); $i++) {
             

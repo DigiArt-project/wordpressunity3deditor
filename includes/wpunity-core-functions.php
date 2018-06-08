@@ -2207,11 +2207,22 @@ function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_po
     $dirMaterials =  $prefab_path."Elements\Transparent";
     $dirMolecules =  $prefab_path."Molecules";
     
+    $fh = fopen("outputPREKA.txt","w");
+    
+    
+    fwrite($fh, print_r($pdb_str,true));
+    
     // Create the parser class
     $pdbloader = new PDBLoader($pdb_str);
+   
+    
     
     // parse the pdb into atoms and verticesBonds
     $molecule = $pdbloader->parser();
+    
+    //fwrite($fh, print_r($molecule,true));
+    fclose($fh);
+    
 
     // Make the materials and their metas
     $pdbloader->saveTheMaterial($molecule['atoms'], $dirMaterials);
