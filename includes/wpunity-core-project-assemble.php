@@ -19,7 +19,11 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 
     wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
 
-    if ($gameType == "chemistry_games")
+//    $fc = fopen("outputKLOA.txt","w");
+//    fwrite($fc, $gameType);
+//    fclose($fc);
+    
+    if ($gameType == "Chemistry")
         wpunity_compile_make_molecules_prefabs($gameID, $gameSlug);
     
     return 'true';
@@ -31,8 +35,14 @@ function wpunity_compile_make_molecules_prefabs($gameID, $gameSlug){
     $projectLocalPath = str_replace('\\','/',$upload_dir);
 
     $projectName = $gameSlug;
-
     $molecules = wpunity_get_all_molecules_of_game($gameID);//ALL available Molecules of a GAME
+   
+    
+//    $fb  = fopen("outputPREKA.txt","w");
+//    fwrite($fb, $projectLocalPath);
+//    fwrite($fb, print_r($molecules, true));
+//    fclose($fb);
+    
     foreach ($molecules as $molecule) {
         $molecule_post_id = $molecule['moleculeID'];
         $molecule_post_name = $molecule['moleculeName'];

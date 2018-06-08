@@ -18,19 +18,24 @@ if( $_GET["action"] == "unzip" ) {
         echo "UNZIPPED";
     else
         echo "Error 1023: Unzip problem";
-        
+    
 } else if ( $_GET["action"] == "start" ) {
-
-    echo "S1";
     
-    exec("start /b ".$gameFolder."/starter_artificial.bat /c");
+    $pid = shell_exec("start /b ".$gameFolder."\starter_artificial.bat /c");
     
-    echo "S2";
-    return "aaa";
+    echo $pid;
+    
+    return;
     
 } else if ( $_GET["action"] == "stop" ) {
-
-
+    
+    $phpcomd = 'Taskkill /PID '.$_GET['pid'].' /F';
+    $killres = exec($phpcomd);
+    
+    echo $killres;
+    
+    return;
+    
 } else if ( $_GET["action"] == "monitor" ) {
 
 }

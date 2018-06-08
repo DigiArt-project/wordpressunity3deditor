@@ -2200,16 +2200,15 @@ function fake_compile_for_a_test_project()
  * @param $pdb_str           :   The string of the pdb file
  */
 function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str ){
-   
+    
     //$prefab_path = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\chemtestUnity\Assets\StandardAssets\Prefabs\\";
-    $prefab_path = $projectLocalPath.$projectName."Unity\Assets\StandardAssets\Prefabs\\";
+    $prefab_path = $projectLocalPath."\\".$projectName."Unity\Assets\StandardAssets\Prefabs\\";
     
     $dirMaterials =  $prefab_path."Elements\Transparent";
     $dirMolecules =  $prefab_path."Molecules";
     
     // Create the parser class
     $pdbloader = new PDBLoader($pdb_str);
-   
     
     // parse the pdb into atoms and verticesBonds
     $molecule = $pdbloader->parser();
