@@ -117,56 +117,7 @@ function wpunity_getEditpage($type){
 
 //==========================================================================================================================================
 
-////Get Settings Values (Generic Yaml Patterns
-//
-////Get 'Folder.meta Pattern'
-//function wpunity_getFolderMetaPattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_folder_meta_pat"];;
-//}
-//
-////Get 'each_scene.unity meta pattern'
-//function wpunity_getSceneUnityMetaPattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_scene_meta_pat"];
-//}
-//
-////Get 'obj.meta Pattern'
-//function wpunity_getYaml_obj_dotmeta_pattern(){
-//
-//	$yamloptions = get_option( 'yaml_settings' );
-//
-//    $fj = fopen("output_yamlsettings.txt","w");
-//    fwrite($fj, print_r($yamloptions,true));
-//
-//    fclose($fj);
-//
-//	return $yamloptions["wpunity_obj_meta_pat"];
-//}
-//
-////Get 'jpg.meta Pattern'
-//function wpunity_getYaml_jpg_dotmeta_pattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_jpg_meta_pat"];
-//}
-//
-////Get 'The jpg sprite meta pattern'
-//function wpunity_getYaml_jpg_sprite_pattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_jpgsprite_meta_pat"];
-//}
-//
-////Get 'Material (.mat) Pattern'
-//function wpunity_getYaml_mat_pattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_mat_pat"];
-//}
-//
-////Get 'mat.meta Pattern'
-//function wpunity_getYaml_mat_dotmeta_pattern(){
-//	$yamloptions = get_option( 'yaml_settings' );
-//	return $yamloptions["wpunity_mat_meta_pat"];
-//}
+////Get Settings Values
 
 function wpunity_getUnity_exe_folder(){
 	$generaloptions = get_option( 'general_settings' );
@@ -184,6 +135,24 @@ function wpunity_getRemote_api_folder(){
 	}else{
 		return 'http://myurl/';
 	}
+}
+
+function wpunity_getRemote_server_path(){
+	$generaloptions = get_option( 'general_settings' );
+	if($generaloptions["wpunity_server_path"]) {
+		return $generaloptions["wpunity_server_path"];
+	}else{
+		return 'C:/xampp/htdocs/COMPILE_UNITY3D_GAMES/';
+	}
+}
+
+function wpunity_get_ftpCredentials(){
+	$generaloptions = get_option( 'general_settings' );
+
+	$ftp_credentials = array('address' => $generaloptions["wpunity_ftp_address"],'username' => $generaloptions["wpunity_ftp_username"], 'password' => $generaloptions["wpunity_ftp_pass"]);
+
+	return $ftp_credentials;
+
 }
 
 //==========================================================================================================================================

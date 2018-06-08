@@ -302,9 +302,10 @@ function wpunity_replace_help_chem_unity($term_meta_s_help,$text_help_scene,$img
 }
 
 function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title){
+
     $file_content_return = str_replace("___[WanderAroundScene]___",$WanderAroundScene_title,$term_meta_s_login);
 
-    return $term_meta_s_login;
+    return $file_content_return;
 }
 
 function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id){
@@ -369,13 +370,16 @@ function wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug){
     $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
     $savedMoleculesVal = json_decode($savedMoleculesVal);
 
+    $count = 0;
     foreach ($savedMoleculesVal as $moleculeID) {
         $moleName = get_the_title( $moleculeID );
         $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
         $firstLine = '- name: ' . $moleName;
-        $secondLine = str_repeat('&nbsp;', 4) . 'formula: ' . $mole_type;
-        $availableMole .= $firstLine . "<br>" . PHP_EOL; // line change;
-        $availableMole .= $secondLine . "<br>" . PHP_EOL; // line change;
+        $secondLine = str_repeat(' ', 4) . 'formula: ' . $mole_type;
+        if($count==0){$availableMole .= $firstLine . PHP_EOL;} // line change;
+        else{$availableMole .= str_repeat(' ', 2) . $firstLine . PHP_EOL;} // line change;
+        $availableMole .= $secondLine . PHP_EOL; // line change;
+        $count++;
     }
 
     return $availableMole;
@@ -399,12 +403,14 @@ function wpunity_replace_chemistry_exam_defaulStrategy($gameSlug){
     $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
     $savedMoleculesVal = json_decode($savedMoleculesVal);
 
+    $count = 0;
     foreach ($savedMoleculesVal as $moleculeID) {
         $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
-        $secondLine = '- ' . $mole_type;
-        $defaulStrategy .= $secondLine . "<br>" . PHP_EOL; // line change;
+        if($count==0){$secondLine = '- ' . $mole_type;}
+        else{$secondLine = str_repeat(' ', 2) . '- ' . $mole_type;}
+        $defaulStrategy .= $secondLine . PHP_EOL; // line change;
+        $count++;
     }
-
     return $defaulStrategy;
 }
 
@@ -425,12 +431,14 @@ function wpunity_replace_chemistry_exam_molePrefabs($gameSlug){
     $molePrefabs = '';
     $savedMoleculesVal = get_post_meta($project_id, 'wpunity_exam_enabled_molecules',true);//The enabled molecules for Exams
     $savedMoleculesVal = json_decode($savedMoleculesVal);
-
+    $count = 0;
     foreach ($savedMoleculesVal as $moleculeID) {
         $mole_pref = $moleculeID . '9';
         $mole_pref = str_pad($mole_pref, 32 , "0", STR_PAD_LEFT);
-        $secondLine = '- {fileID: 123941, guid: ' . $mole_pref . ', type: 2}';
-        $molePrefabs .= $secondLine . "<br>" . PHP_EOL; // line change;
+        if($count==0){$secondLine = '- {fileID: 123941, guid: ' . $mole_pref . ', type: 2}';}
+        else{$secondLine = str_repeat(' ', 2) . '- {fileID: 123941, guid: ' . $mole_pref . ', type: 2}';}
+        $molePrefabs .= $secondLine . PHP_EOL; // line change;
+        $count++;
     }
 
     return $molePrefabs;

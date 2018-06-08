@@ -37,6 +37,10 @@ class ImcSettingsPage {
         $this->general_settings = array_merge( array(
             'wpunity_unity_exe_folder' => 'C:\Program Files\Unity',
             'wpunity_remote_api_folder' => 'http://myurl/',
+            'wpunity_ftp_address' => '',
+            'wpunity_ftp_username' => '',
+            'wpunity_ftp_pass' => '',
+            'wpunity_server_path' => 'C:/xampp/htdocs/COMPILE_UNITY3D_GAMES/',
         ), $this->general_settings );
 
     }
@@ -56,6 +60,13 @@ class ImcSettingsPage {
 
         add_settings_field( 'wpunity_remote_api_folder', __('Remote Game server API'), array( &$this, 'field_wpunity_remote_api_folder' ), $this->general_settings_key, 'section_general' );
 
+        add_settings_field( 'wpunity_ftp_address', __('FTP Address'), array( &$this, 'field_wpunity_ftp_address' ), $this->general_settings_key, 'section_general' );
+
+        add_settings_field( 'wpunity_ftp_username', __('FTP Username'), array( &$this, 'field_wpunity_ftp_username' ), $this->general_settings_key, 'section_general' );
+
+        add_settings_field( 'wpunity_ftp_pass', __('FTP Password'), array( &$this, 'field_wpunity_ftp_pass' ), $this->general_settings_key, 'section_general' );
+
+        add_settings_field( 'wpunity_server_path', __('Remote Server path'), array( &$this, 'field_wpunity_server_path' ), $this->general_settings_key, 'section_general' );
     }
 
 
@@ -84,6 +95,30 @@ class ImcSettingsPage {
         <?php
     }
 
+    function field_wpunity_ftp_address(){
+        ?>
+        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_address'] ); ?>" />
+        <?php
+    }
+
+    function field_wpunity_ftp_username(){
+        ?>
+        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_username]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_username]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_username'] ); ?>" />
+        <?php
+    }
+
+    function field_wpunity_ftp_pass(){
+        ?>
+        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_pass'] ); ?>" />
+        <?php
+    }
+
+    function field_wpunity_server_path(){
+        ?>
+        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" id="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" value="<?php echo esc_attr( $this->general_settings['wpunity_server_path'] ); ?>" />
+        <?php
+    }
+
     /***************************************************************************************/
 
     /*
@@ -102,7 +137,7 @@ class ImcSettingsPage {
      * to render the tabs.
      */
     function render_options() {
-        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->yaml_settings_key;
+        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->general_settings_key;
 
         ?>
             <div class="wrap">
@@ -129,7 +164,7 @@ class ImcSettingsPage {
      * render_options method.
      */
     function render_tabs() {
-        $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->yaml_settings_key;
+        $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->general_settings_key;
 
         screen_icon();
         echo '<h2 class="nav-tab-wrapper">';
