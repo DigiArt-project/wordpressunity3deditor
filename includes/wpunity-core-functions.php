@@ -1875,12 +1875,20 @@ function wpunity_assepile_action_callback(){
 
 		//--Uploads/myGameProjectUnity--
 		
+        
+        
         // Todo: Add more option
         $upload_dir = wp_upload_dir()['basedir']; //
         
         $upload_dir = str_replace('\\','/',$upload_dir);
 		$game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
         
+        $ff = fopen("outputFF.txt","w");
+        fwrite($ff, print_r(wpunity_get_ftpCredentials(),true));
+        fclose($ff);
+        return;
+        
+		
         $remote_game_server_folder_dir = $game_dirpath;  // 'C:\xampp\htdocs\COMPILE_UNITY3D_GAMES\\'. $_REQUEST['gameSlug'] . 'Unity' ;
 		
 		if ($os === 'win') {
@@ -1998,7 +2006,7 @@ function wpunity_monitor_compiling_action_callback(){
 	} else {
 		//$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
 		$phpcomd = 'TASKLIST /FI "pid eq '.$_POST['pid'].'" /v /fo CSV';
-		$processUnityCSV = exec($phpcomd);
+		$processUnityCSV = shell_exec($phpcomd);
 	}
 
 	echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
