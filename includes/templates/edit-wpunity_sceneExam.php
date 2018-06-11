@@ -8,9 +8,8 @@ add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
 // DELETE ASSET AJAX
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
-    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
 );
-
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 
@@ -190,7 +189,7 @@ get_header(); ?>
                                                             </p>
                                                         </div>
                                                         <section class="mdc-card__actions">
-                                                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>)"
+                                                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action"
                                                                style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
                                                             <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $gotoAdd_newAsset_page . '&wpunity_asset=' . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
 																<?php
@@ -260,6 +259,42 @@ get_header(); ?>
                     </div>
                 </form>
             </div>
+
+            <!--Delete molecule Dialog-->
+            <aside id="delete-dialog"
+                   class="mdc-dialog"
+                   role="alertdialog"
+                   style="z-index: 1000;"
+                   aria-labelledby="Delete molecule dialog"
+                   aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
+                <div class="mdc-dialog__surface">
+                    <header class="mdc-dialog__header">
+                        <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                            Delete molecule?
+                        </h2>
+                    </header>
+                    <section id="delete-dialog-description" class="mdc-dialog__body">
+                        Are you sure you want to delete this molecule? There is no Undo functionality once you delete it.
+                    </section>
+
+                    <section id="delete-molec-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
+                        <h3 class="mdc-typography--title">Deleting...</h3>
+
+                        <div class="progressSlider">
+                            <div class="progressSliderLine"></div>
+                            <div class="progressSliderSubLine progressIncrease"></div>
+                            <div class="progressSliderSubLine progressDecrease"></div>
+                        </div>
+                    </section>
+
+                    <footer class="mdc-dialog__footer">
+                        <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteMolecDialogCancelBtn">Cancel</a>
+                        <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteMolecDialogDeleteBtn">Delete</a>
+                    </footer>
+                </div>
+                <div class="mdc-dialog__backdrop"></div>
+            </aside>
+
         </div>
 
         <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
@@ -313,6 +348,10 @@ get_header(); ?>
 
     </div>
 
+
+
+
+
     <script type="text/javascript">
 
         window.onload = function() {
@@ -337,6 +376,32 @@ get_header(); ?>
             updatePanel(nthChildIndex);
         });
 
+        var deleteDialog = document.querySelector('#delete-dialog');
+        if (deleteDialog) {
+            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
+            deleteDialog.focusTrap_.deactivate();
+        }
+
+        jQuery("#deleteMolecDialogDeleteBtn").click(function () {
+
+            console.log("HAI");
+
+            jQuery('#delete-molec-dialog-progress-bar').show();
+
+            jQuery( "#deleteMolecDialogDeleteBtn" ).addClass( "LinkDisabled" );
+            jQuery( "#deleteMolecDialogCancelBtn" ).addClass( "LinkDisabled" );
+
+            console.log(this);
+
+            /*wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>);*/
+
+        });
+
+        jQuery("#deleteMolecDialogCancelBtn").click(function (e) {
+
+            jQuery('#delete-scene-dialog-progress-bar').hide();
+            deleteDialog.close();
+        });
 
         function updatePanel(index) {
             var activePanel = panels.querySelector('.panel.active');
