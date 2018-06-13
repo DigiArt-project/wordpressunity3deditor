@@ -1070,7 +1070,6 @@ get_header(); ?>
         }
 
 
-        // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
@@ -1088,8 +1087,7 @@ get_header(); ?>
                 loadSceneAnalyticsIframe(game_type+'tool', null, '11111111');
             }
 
-
-            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
 
             // Start Goedle Iframes
             if (project_keys.expID) {
@@ -1142,13 +1140,13 @@ get_header(); ?>
                 return true;
             }
 
-            function loadAnalyticsIframe(version, location) {
+            function loadAnalyticsIframe(version, location, game_type) {
 
-                var url = "http://52.59.219.11/?" +
+                var url = "http://18.184.232.215/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
-                    "&lab=" + game_type + //"&game_type="+game_type+
+                    "&lab=" + game_type +
                     "&version=" + version +
                     "&gamemaster_id=" + game_master_id +
                     "&location=" + location;
