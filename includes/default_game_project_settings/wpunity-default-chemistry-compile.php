@@ -436,7 +436,7 @@ function wpunity_replace_chemistry_exam_molePrefabs($gameSlug){
         $mole_pref = $moleculeID . '9';
         $mole_pref = str_pad($mole_pref, 32 , "0", STR_PAD_LEFT);
         $mole_pref_id = $moleculeID . '941';
-        $mole_pref_id = str_pad($mole_pref, 32 , "0", STR_PAD_LEFT);
+        $mole_pref_id = str_pad($mole_pref_id, 32 , "0", STR_PAD_LEFT);
         if($count==0){$secondLine = '- {fileID: ' . $mole_pref_id . ', guid: ' . $mole_pref . ', type: 2}';}
         else{$secondLine = str_repeat(' ', 2) . '- {fileID: ' . $mole_pref_id . ', guid: ' . $mole_pref . ', type: 2}';}
         $molePrefabs .= $secondLine . PHP_EOL; // line change;
