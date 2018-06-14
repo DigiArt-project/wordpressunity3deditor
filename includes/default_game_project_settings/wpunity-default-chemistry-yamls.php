@@ -21584,7 +21584,7 @@ Prefab:
         type: 2}
       propertyPath: MoleculesCtrl
       value:
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1332066888}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ea642b2ef1fd56c4396cef9316ac09d4, type: 2}
   m_IsPrefabParent: 0
