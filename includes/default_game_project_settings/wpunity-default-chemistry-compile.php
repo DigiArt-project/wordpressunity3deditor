@@ -416,7 +416,7 @@ function wpunity_replace_chemistry_exam_defaulStrategy($gameSlug){
 
 function wpunity_replace_chemistry_exam_molePrefabs($gameSlug){
     /*
-    - {fileID: 123941, guid: ___[molecule_pref]___, type: 2}
+    - {fileID: ___[prefab_fileId]___, guid: ___[prefab_guid]___, type: 2}
     */
 
     $args = array(
@@ -435,8 +435,10 @@ function wpunity_replace_chemistry_exam_molePrefabs($gameSlug){
     foreach ($savedMoleculesVal as $moleculeID) {
         $mole_pref = $moleculeID . '9';
         $mole_pref = str_pad($mole_pref, 32 , "0", STR_PAD_LEFT);
-        if($count==0){$secondLine = '- {fileID: 123941, guid: ' . $mole_pref . ', type: 2}';}
-        else{$secondLine = str_repeat(' ', 2) . '- {fileID: 123941, guid: ' . $mole_pref . ', type: 2}';}
+        $mole_pref_id = $moleculeID . '941';
+        $mole_pref_id = str_pad($mole_pref, 32 , "0", STR_PAD_LEFT);
+        if($count==0){$secondLine = '- {fileID: ' . $mole_pref_id . ', guid: ' . $mole_pref . ', type: 2}';}
+        else{$secondLine = str_repeat(' ', 2) . '- {fileID: ' . $mole_pref_id . ', guid: ' . $mole_pref . ', type: 2}';}
         $molePrefabs .= $secondLine . PHP_EOL; // line change;
         $count++;
     }

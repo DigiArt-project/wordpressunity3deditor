@@ -20728,7 +20728,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "| Formula :"
+  m_Text: "| Formula : "
 --- !u!222 &982680834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21883,7 +21883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692411304174151489e77f80c6a4411b, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  MoleculesCtrl: {fileID: 0}
+  MoleculesCtrl: {fileID: 1332066888}
 --- !u!4 &1699848125
 Transform:
   m_ObjectHideFlags: 0
@@ -22931,6 +22931,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2084023424}');
+
 
 
 function wpunity_default_value_chemwonderaround_unity_chemistry_get(){
