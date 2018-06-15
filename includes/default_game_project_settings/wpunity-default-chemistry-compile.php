@@ -253,7 +253,14 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
                 $gate_scale_x = $value['scale'][0];
                 $gate_scale_y = $value['scale'][1];
                 $gate_scale_z = $value['scale'][2];
-                $moleculeNamingScene_fid = $value['sceneName_target'];
+                $gate_targetID = $value['sceneID_target'];
+                $gate_type = get_the_terms( $gate_targetID, 'wpunity_scene_yaml' );
+                $gate_type_slug = $gate_type[0]->slug;//We changed the Main Menu unity name so we have to check and replace
+                if($gate_type_slug == 'mainmenu-chem-yaml'){
+                    $moleculeNamingScene_fid = 'S_MainMenu';
+                }else {
+                    $moleculeNamingScene_fid = $value['sceneName_target'];
+                }
 
                 $gate_finalyaml = wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid);
                 $allObjectsYAML = $allObjectsYAML . $LF . $gate_finalyaml;
