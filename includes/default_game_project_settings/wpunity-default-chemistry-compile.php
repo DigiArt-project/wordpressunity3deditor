@@ -256,13 +256,27 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
                 $gate_targetID = $value['sceneID_target'];
                 $gate_type = get_the_terms( $gate_targetID, 'wpunity_scene_yaml' );
                 $gate_type_slug = $gate_type[0]->slug;//We changed the Main Menu unity name so we have to check and replace
+                $interactable_value = '0';//temp values
+                $scoreManager_Fid = '0';//temp values
                 if($gate_type_slug == 'mainmenu-chem-yaml'){
                     $moleculeNamingScene_fid = 'S_MainMenu';
-                }else {
+                    $interactable_value = '2';
+                    $scoreManager_Fid = '1599989332634340';
+                }elseif($gate_type_slug == 'exam2d-chem-yaml') {
+                    $moleculeNamingScene_fid = $value['sceneName_target'];
+                    $interactable_value = '0';
+                    $scoreManager_Fid = '0';
+                }elseif($gate_type_slug == 'exam3d-chem-yaml') {
+                    $moleculeNamingScene_fid = $value['sceneName_target'];
+                    $interactable_value = '1';
+                    $scoreManager_Fid = '0';
+                }else{
                     $moleculeNamingScene_fid = $value['sceneName_target'];
                 }
 
-                $gate_finalyaml = wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid);
+                $gate_finalyaml = wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid);
+
+                //$gate_finalyaml = wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid);
                 $allObjectsYAML = $allObjectsYAML . $LF . $gate_finalyaml;
             }
         }
@@ -507,6 +521,29 @@ function wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_me
     return $file_content_return;
 
 }
+
+function wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid){
+    $file_content_return = str_replace("___[gate_fid]___",$gate_fid,$gate_yaml);
+    $file_content_return = str_replace("___[gate_mesh_fid]___",$gate_mesh_fid,$file_content_return);
+    $file_content_return = str_replace("___[gate_mesh_collider_fid]___",$gate_mesh_collider_fid,$file_content_return);
+    $file_content_return = str_replace("___[gate_obj_guid]___",$gate_obj_guid,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_x]___",$gate_position_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_y]___",$gate_position_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_position_z]___",$gate_position_z,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_x]___",$gate_rotation_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_y]___",$gate_rotation_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_z]___",$gate_rotation_z,$file_content_return);
+    $file_content_return = str_replace("___[gate_rotation_w]___",$gate_rotation_w,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_x]___",$gate_scale_x,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_y]___",$gate_scale_y,$file_content_return);
+    $file_content_return = str_replace("___[gate_scale_z]___",$gate_scale_z,$file_content_return);
+    $file_content_return = str_replace("___[Scene_To_Load]___",$moleculeNamingScene_fid,$file_content_return);
+    $file_content_return = str_replace("___[interactable_value]___",$interactable_value,$file_content_return);
+    $file_content_return = str_replace("___[scoreManager_Fid]___",$scoreManager_Fid,$file_content_return);
+
+    return $file_content_return;
+}
+
 
 function wpunity_replace_molecule_unity(){}
 

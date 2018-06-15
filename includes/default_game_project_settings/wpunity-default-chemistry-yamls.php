@@ -83,7 +83,8 @@ MeshCollider:
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
-$ini_asset_gate = array('--- !u!1001 &___[gate_fid]___
+$ini_asset_gate = array('# Envisage - GATE Yaml
+--- !u!1001 &___[gate_fid]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -92,15 +93,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.x
-      value: ___[gate_position_x]___
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.y
-      value: ___[gate_position_y]___
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.z
-      value: ___[gate_position_z]___
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_LocalRotation.x
@@ -120,7 +121,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_LocalScale.x
@@ -137,6 +138,22 @@ Prefab:
     - target: {fileID: 100002, guid: ___[gate_obj_guid]___, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: ___[gate_position_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: ___[gate_position_z]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: ___[gate_obj_guid]___, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: ___[gate_position_y]___
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ___[gate_obj_guid]___, type: 3}
@@ -155,9 +172,67 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.28190455, y: 0.15075701, z: 0.41001028}
-  m_Center: {x: 7.9136996e-11, y: 0.075502194, z: 0.10668291}
---- !u!114 &1164632353
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &54
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 00030000000000000000000000000445, type: 3}
+      propertyPath: m_Name
+      value: asdasd
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 00030000000000000000000000000445, type: 3}
+  m_IsPrefabParent: 0
+--- !u!114 &55
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -170,14 +245,48 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   interactionCanvas: {fileID: 1048944797}
   crosshair: {fileID: 254592000}
-  defaultMat: {fileID: 2100000, guid: 54c38eb35b5848443a34928936331d6b, type: 2}
-  outlinedMat: {fileID: 2100000, guid: 829f166bc0690f54ba3cc13532d84976, type: 2}
-  interactable: 0
+  defaultMat: {fileID: 0}
+  outlinedMat: {fileID: 0}
+  interactable: ___[interactable_value]___
   sceneLoader: {fileID: 227587222}
-  cursor: {fileID: 0}
+  cursor: {fileID: 806409091}
   clip: {fileID: 8300000, guid: 28f48e6af139f4947b1e28ed02729467, type: 3}
-  sceneToLoad: ___[moleculeNamingScene_fid]___
-  scoreManager: {fileID: 1872727004}');
+  sceneToLoad: ___[Scene_To_Load]___
+  scoreManager: {fileID: ___[scoreManager_Fid]___}
+--- !u!23 &56
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: ___[gate_mesh_fid]___}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0');
 
 $ini_asset_molecule = array('TO BE ADDED');
 
