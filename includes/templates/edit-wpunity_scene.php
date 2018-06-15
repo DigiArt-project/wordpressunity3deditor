@@ -853,9 +853,8 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
 						<?php
-						$strategies = wpunity_getAllStrategies_byGame($project_id);
-						$strategies = implode($strategies);
-
+						$strategies = wpunity_combineGameStrategies($project_id);
+						$strategies = json_encode($strategies);
 						?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
