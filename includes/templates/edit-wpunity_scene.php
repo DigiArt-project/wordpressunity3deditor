@@ -46,6 +46,26 @@ $gameSlug = $game_post->post_name;
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
+if ($game_type_obj->string === "Chemistry") {
+
+	$analytics_molecule_list = array('HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4');
+	$analytics_molecule_checklist = array(0,0,0,0,0,0,0,0);
+	$molecules = wpunity_get_all_molecules_of_game($project_id);
+	$molecule_list = [];
+	foreach ($molecules as $molecule) {
+		array_push($molecule_list, $molecule['moleculeType']);
+	}
+
+	foreach ($analytics_molecule_list as $idx => $molecule) {
+		if (in_array( $molecule, $molecule_list)) {
+			$analytics_molecule_checklist[$idx] = 1;
+		}
+	}
+	$analytics_molecule_checklist = implode("", $analytics_molecule_checklist);
+
+}
+
+
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -999,6 +1019,8 @@ get_header(); ?>
             });
         }
 
+
+
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
@@ -1083,7 +1105,9 @@ get_header(); ?>
             if (game_type === "energy") {
                 loadSceneAnalyticsIframe(game_type+'tool', energy_stats, null);
             } else {
-                loadSceneAnalyticsIframe(game_type+'tool', null, '11111111');
+
+                var analytics_molecules_checklist = '<?php echo $analytics_molecule_checklist; ?>';
+                loadSceneAnalyticsIframe(game_type+'tool', null, analytics_molecules_checklist);
             }
 
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
