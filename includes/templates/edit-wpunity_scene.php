@@ -879,7 +879,7 @@ get_header(); ?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='[<?php echo $strategies; ?>]'>
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php echo $strategies; ?>'>
                             <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>

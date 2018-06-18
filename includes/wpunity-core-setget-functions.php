@@ -100,8 +100,7 @@ function wpunity_combineGameStrategies($project_id){
 	// Reset postdata
 	wp_reset_postdata();
 
-
-	$exam_strategies = [];
+	$strategies = [];
 
 	foreach ($assetStrategies as $exam) {
 
@@ -109,21 +108,13 @@ function wpunity_combineGameStrategies($project_id){
 
 		$exam_strategy = json_decode($exam['examStrategy']);
 
-
-		$strategies = [];
-
 		foreach ($exam_strategy as $arr) {
-
-			array_push($strategies, $arr);
-
+			$object = (object) array($scene_id => $arr);
+			array_push($strategies, $object);
 		}
-
-		$exam_strategies[$scene_id] = $strategies;
-
-
 	}
 
-	return $exam_strategies;
+	return $strategies;
 }
 
 
