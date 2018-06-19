@@ -242,6 +242,8 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
                 $gate_fid = wpunity_create_fids($current_fid++);
                 $gate_mesh_fid = wpunity_create_fids($current_fid++);//($gate_fid+1)
                 $gate_mesh_collider_fid = wpunity_create_fids($current_fid++);//($gate_fid+2)
+                $gate_fid4 = wpunity_create_fids($current_fid++);
+                $gate_fid5 = wpunity_create_fids($current_fid++);
                 $gate_obj_guid = wpunity_create_guids('obj', $gate_obj);
                 $gate_position_x = - $value['position'][0]; // x is in the opposite site in unity
                 $gate_position_y = $value['position'][1];
@@ -274,7 +276,7 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
                     $moleculeNamingScene_fid = $value['sceneName_target'];
                 }
 
-                $gate_finalyaml = wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid);
+                $gate_finalyaml = wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid,$gate_fid4,$gate_fid5);
 
                 //$gate_finalyaml = wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid);
                 $allObjectsYAML = $allObjectsYAML . $LF . $gate_finalyaml;
@@ -529,8 +531,10 @@ function wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_me
 
 }
 
-function wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid){
+function wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid,$gate_fid4,$gate_fid5){
     $file_content_return = str_replace("___[gate_fid]___",$gate_fid,$gate_yaml);
+    $file_content_return = str_replace("___[gate_fid4]___",$gate_fid4,$gate_yaml);
+    $file_content_return = str_replace("___[gate_fid5]___",$gate_fid5,$gate_yaml);
     $file_content_return = str_replace("___[gate_mesh_fid]___",$gate_mesh_fid,$file_content_return);
     $file_content_return = str_replace("___[gate_mesh_collider_fid]___",$gate_mesh_collider_fid,$file_content_return);
     $file_content_return = str_replace("___[gate_obj_guid]___",$gate_obj_guid,$file_content_return);

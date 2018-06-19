@@ -174,7 +174,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1001 &54
+--- !u!1001 &___[gate_fid4]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -232,7 +232,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00030000000000000000000000000445, type: 3}
   m_IsPrefabParent: 0
---- !u!114 &55
+--- !u!114 &___[gate_fid5]___
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
