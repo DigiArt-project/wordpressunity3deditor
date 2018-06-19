@@ -330,23 +330,30 @@ function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_
 }
 
 function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id){
-
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-
-    $jsonScene = htmlspecialchars_decode ( $scene_json );
-    $sceneJsonARR = json_decode($jsonScene, TRUE);
-
-    foreach ($sceneJsonARR['objects'] as $key => $value ) {
-        if ($key == 'avatarYawObject') {
-            $x_pos = - $value['position'][0]; // x is in the opposite site in unity
-            $y_pos = $value['position'][1];
-            $z_pos = $value['position'][2];
-            $x_player_rot = $value['quaternion_player'][0];
-            $y_player_rot = $value['quaternion_player'][1];
-            $z_player_rot = $value['quaternion_player'][2];
-            $w_player_rot = $value['quaternion_player'][3];
-        }
-    }
+    //STATHIS TEMP
+        $x_pos = 1; // x is in the opposite site in unity
+            $y_pos = 1;
+            $z_pos = 1;
+            $x_player_rot = 0;
+            $y_player_rot = 0;
+            $z_player_rot = 0;
+            $w_player_rot = 0;
+//    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+//
+//    $jsonScene = htmlspecialchars_decode ( $scene_json );
+//    $sceneJsonARR = json_decode($jsonScene, TRUE);
+//
+//    foreach ($sceneJsonARR['objects'] as $key => $value ) {
+//        if ($key == 'avatarYawObject') {
+//            $x_pos = - $value['position'][0]; // x is in the opposite site in unity
+//            $y_pos = $value['position'][1];
+//            $z_pos = $value['position'][2];
+//            $x_player_rot = $value['quaternion_player'][0];
+//            $y_player_rot = $value['quaternion_player'][1];
+//            $z_player_rot = $value['quaternion_player'][2];
+//            $w_player_rot = $value['quaternion_player'][3];
+//        }
+//    }
     $file_content_return = str_replace("___[player_position_x]___",$x_pos,$term_meta_wander_around_chem);
     $file_content_return = str_replace("___[player_position_y]___",$y_pos,$file_content_return);
     $file_content_return = str_replace("___[player_position_z]___",$z_pos,$file_content_return);
