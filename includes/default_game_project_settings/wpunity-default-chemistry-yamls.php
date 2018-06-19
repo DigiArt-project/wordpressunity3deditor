@@ -1880,7 +1880,8 @@ global $ini_scene_chemistry_unity_pattern,$ini_scene_main_menu_chem_unity_patter
 global $ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 global $ini_scene_chem_exam,$ini_scene_chem_exam3d;
 
-$ini_scene_chemistry_unity_pattern = array ('%YAML 1.1
+$ini_scene_chemistry_unity_pattern = array ('#ENVISAGE LAB wander-around yaml
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
@@ -2344,7 +2345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &254591997
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2668,7 +2669,7 @@ Prefab:
         type: 2}
       propertyPath: logTexts.Array.data[0]
       value: "The number of exercises you solved in both quizzes is not what I expected.
-I believe you can do better, give it another try.  You have been awarded the
+        I believe you can do better, give it another try.  You have been awarded the
         "Chemistry lab assistant" badge. "
       objectReference: {fileID: 0}
     - target: {fileID: 114016839438512074, guid: fa863ece858329f42b1ace19851feec8,
@@ -2825,7 +2826,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -1.9250042, y: 0}
   m_SizeDelta: {x: 3.85, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2991,10 +2992,10 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 2c4cdebb88651be4e912c89ea02468e3, type: 3}
+    m_Font: {fileID: 12800000, guid: 937d849fd61453e4e8501ea3ab449fb5, type: 3}
     m_FontSize: 29
     m_FontStyle: 1
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
@@ -3631,7 +3632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &923116936
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3727,7 +3728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &930532926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3964,7 +3965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1029511692
 RectTransform:
   m_ObjectHideFlags: 0
