@@ -588,7 +588,7 @@ echo '</script>';
             envir.is2d = true;
             transform_controls.setMode("rottrans");
 
-            envir.scene.getObjectByName("SteveOld").visible = false;
+            envir.scene.getObjectByName("SteveOld").visible = true;//STATHIS TEMP
             envir.scene.getObjectByName("Steve").visible = true;
             
         }

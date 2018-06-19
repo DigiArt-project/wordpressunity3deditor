@@ -444,7 +444,7 @@ get_header(); ?>
 						<iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
 					</div>-->
 
-            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
+            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="/*STATHIS TEMPvisibility:hidden;*/ width:100%; height:400; /*display: none;*/"
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
 

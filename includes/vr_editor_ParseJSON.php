@@ -8,6 +8,8 @@ class ParseJSON {
 
     public function init($sceneToLoad)
     {
+
+        $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
 
