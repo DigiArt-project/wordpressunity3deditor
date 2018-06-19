@@ -83,7 +83,7 @@ MeshCollider:
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
-$ini_asset_gate = array('# Envisage - GATE Yaml
+$ini_asset_gate = array('# ENVISAGE - GATE Yaml
 --- !u!1001 &___[gate_fid]___
 Prefab:
   m_ObjectHideFlags: 0
