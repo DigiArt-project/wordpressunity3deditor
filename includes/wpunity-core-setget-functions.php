@@ -108,10 +108,16 @@ function wpunity_combineGameStrategies($project_id){
 
 		$exam_strategy = json_decode($exam['examStrategy']);
 
-		foreach ($exam_strategy as $arr) {
-			$object = (object) array($scene_id => $arr);
-			array_push($strategies, $object);
+		if ($exam_strategy) {
+
+			foreach ($exam_strategy as $arr) {
+				$object = (object) array($scene_id => $arr);
+				array_push($strategies, $object);
+			}
+
 		}
+
+
 	}
 
 	return $strategies;

@@ -1133,7 +1133,7 @@ get_header(); ?>
             function loadSceneAnalyticsIframe(lab, energy_fields, chemistry) {
 
                 var url = "";
-                var ip_addr = "http://18.184.232.215/?";
+                var ip_addr = "https://analytics.envisage-h2020.eu/?";
 
                 if (energy_fields) {
 
@@ -1165,7 +1165,7 @@ get_header(); ?>
 
             function loadAnalyticsIframe(version, location, game_type) {
 
-                var url = "http://18.184.232.215/?" +
+                var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
