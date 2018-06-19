@@ -533,8 +533,8 @@ function wpunity_replace_gate_unity($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_me
 
 function wpunity_replace_gate_unity2($gate_yaml,$gate_fid,$gate_mesh_fid,$gate_mesh_collider_fid,$gate_obj_guid,$gate_position_x,$gate_position_y,$gate_position_z,$gate_rotation_x,$gate_rotation_y,$gate_rotation_z,$gate_rotation_w,$gate_scale_x,$gate_scale_y,$gate_scale_z,$moleculeNamingScene_fid,$interactable_value,$scoreManager_Fid,$gate_fid4,$gate_fid5){
     $file_content_return = str_replace("___[gate_fid]___",$gate_fid,$gate_yaml);
-    $file_content_return = str_replace("___[gate_fid4]___",$gate_fid4,$gate_yaml);
-    $file_content_return = str_replace("___[gate_fid5]___",$gate_fid5,$gate_yaml);
+    $file_content_return = str_replace("___[gate_fid4]___",$gate_fid4,$file_content_return);
+    $file_content_return = str_replace("___[gate_fid5]___",$gate_fid5,$file_content_return);
     $file_content_return = str_replace("___[gate_mesh_fid]___",$gate_mesh_fid,$file_content_return);
     $file_content_return = str_replace("___[gate_mesh_collider_fid]___",$gate_mesh_collider_fid,$file_content_return);
     $file_content_return = str_replace("___[gate_obj_guid]___",$gate_obj_guid,$file_content_return);
