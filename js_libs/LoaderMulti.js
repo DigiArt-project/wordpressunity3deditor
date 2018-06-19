@@ -23,7 +23,7 @@ class LoaderMulti {
 
 
                     // STEVE is the CAMERA MESH
-
+                    /*
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
 
                         materials.preload();
@@ -75,10 +75,10 @@ class LoaderMulti {
                             }
                         );
                     });
-
+                    */
 
                     // STEVE OLD IS THE HUMAN MESH
-
+                    /* STATHIS TEMP
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinalOld.mtl", function (materials) {
 
                         materials.preload();
@@ -115,7 +115,7 @@ class LoaderMulti {
                             }
                         );
                     });
-
+                    */
 
 
                 }else {
