@@ -272,11 +272,11 @@ class vr_editor_environmentals {
         Steve.rotation.set(0, Math.PI/2, 0);
         this.avatarControls.getObject().add(Steve );
     }
-
+    //STATHIS TEMP
     setSteveOldToAvatarControls(){
-        var SteveOld = envir.scene.getObjectByName("SteveOld");
-        SteveOld.rotation.set(0, Math.PI/2, 0);
-        this.avatarControls.getObject().add(SteveOld );
+        //var SteveOld = envir.scene.getObjectByName("SteveOld");
+        //SteveOld.rotation.set(0, Math.PI/2, 0);
+        //this.avatarControls.getObject().add(SteveOld );
     }
 
 
