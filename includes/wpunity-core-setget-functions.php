@@ -57,6 +57,73 @@ function wpunity_getAllStrategies_byGame($project_id){
 	return $strategies;
 }
 
+
+function wpunity_combineGameStrategies($project_id){
+
+	$assetStrategies = [];
+	$project_slug = get_post_field( 'post_name', $project_id );
+	$queryargs = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field' => 'slug',
+				'terms' => $project_slug
+			),
+			array(
+				'taxonomy' => 'wpunity_scene_yaml',
+				'field' => 'slug',
+				'terms' => array('exam2d-chem-yaml','exam3d-chem-yaml'),
+			)
+		)
+	);
+
+	$custom_query = new WP_Query( $queryargs );
+	if ( $custom_query->have_posts() ) :
+		while ( $custom_query->have_posts() ) :
+			$custom_query->the_post();
+			$examID = get_the_ID();
+			$examName = get_the_title($examID);
+			$examStrategy = get_post_meta($examID, 'wpunity_exam_strategy', true);
+
+			$assetStrategies[] = [
+				'examID' => $examID,
+				'examName' => $examName,
+				'examStrategy' => $examStrategy,
+			];
+
+		endwhile;
+	endif;
+
+	// Reset postdata
+	wp_reset_postdata();
+
+	$strategies = [];
+
+	foreach ($assetStrategies as $exam) {
+
+		$scene_id = $exam['examID'];
+
+		$exam_strategy = json_decode($exam['examStrategy']);
+
+		if ($exam_strategy) {
+
+			foreach ($exam_strategy as $arr) {
+				$object = (object) array($scene_id => $arr);
+				array_push($strategies, $object);
+			}
+
+		}
+
+
+	}
+
+	return $strategies;
+}
+
+
 //==========================================================================================================================================
 
 //GET page by given type (depending the template) - breacrumb and links for front-end

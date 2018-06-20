@@ -525,11 +525,11 @@ add_action( 'edited_wpunity_scene_yaml', 'wpunity_scenes_taxyaml_customFields_ch
 function wpunity_scenes_taxyaml_customFields_chemistry_save( $term_id ) {
 
     if ( isset( $_POST['wpunity_yamlmeta_chemistry_energy'] ) ) {
-        $term_meta_wonderaround_pat = $_POST['wpunity_yamlmeta_chemistry_energy'];
-        if($term_meta_wonderaround_pat == ''){
-            update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', wpunity_default_value_chemwonderaround_unity_chemistry_get());
+        $term_meta_wonderaround_chem_pat = $_POST['wpunity_yamlmeta_chemistry_energy'];
+        if($term_meta_wonderaround_chem_pat == ''){
+            update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_pat', wpunity_default_value_chemwonderaround_unity_chemistry_get());
         }else{
-            update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_energy', $term_meta_wonderaround_pat);
+            update_term_meta($term_id, 'wpunity_yamlmeta_chemistry_pat', $term_meta_wonderaround_chem_pat);
         }
     }
 

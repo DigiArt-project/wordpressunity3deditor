@@ -46,6 +46,26 @@ $gameSlug = $game_post->post_name;
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
+if ($game_type_obj->string === "Chemistry") {
+
+	$analytics_molecule_list = array('HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4');
+	$analytics_molecule_checklist = array(0,0,0,0,0,0,0,0);
+	$molecules = wpunity_get_all_molecules_of_game($project_id);
+	$molecule_list = [];
+	foreach ($molecules as $molecule) {
+		array_push($molecule_list, $molecule['moleculeType']);
+	}
+
+	foreach ($analytics_molecule_list as $idx => $molecule) {
+		if (in_array( $molecule, $molecule_list)) {
+			$analytics_molecule_checklist[$idx] = 1;
+		}
+	}
+	$analytics_molecule_checklist = implode("", $analytics_molecule_checklist);
+
+}
+
+
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -123,32 +143,32 @@ if ($project_scope == 0) {
 }
 
 if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
-    $expID = $_POST['exp-id'];
-    update_post_meta( $project_id, 'wpunity_project_expID', $expID);
+	$expID = $_POST['exp-id'];
+	update_post_meta( $project_id, 'wpunity_project_expID', $expID);
 
-    $loadMainSceneLink = get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . 'scene';
-    wp_redirect( $loadMainSceneLink );
-    exit;
+	$loadMainSceneLink = get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . 'scene';
+	wp_redirect( $loadMainSceneLink );
+	exit;
 }
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    $newSceneType = $_POST['sceneTypeRadio'];
+	$newSceneType = $_POST['sceneTypeRadio'];
 
-    $sceneMetaType = 'scene';//default 'scene' MetaType (3js)
-    $game_type_chosen_slug = '';
+	$sceneMetaType = 'scene';//default 'scene' MetaType (3js)
+	$game_type_chosen_slug = '';
 
-    $thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
-    if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';}
+	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
+	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';}
     elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';}
     elseif($thegameType[0]->slug == 'chemistry_games'){
-        $game_type_chosen_slug = 'chemistry_games';
-        if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
+		$game_type_chosen_slug = 'chemistry_games';
+		if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
         elseif($newSceneType == '2d'){$newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam2d';}
         elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
-    }
+	}
 
-    $default_json = '{
+	$default_json = '{
 	"metadata": {
 		"formatVersion" : 4.0,
 		"type"		    : "scene",
@@ -172,49 +192,49 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 }
 ';
-    $scene_taxonomies = array(
-        'wpunity_scene_pgame' => array(
-            $allScenePGameID,
-        ),
-        'wpunity_scene_yaml' => array(
-            $newscene_yaml_tax->term_id,
-        )
-    );
+	$scene_taxonomies = array(
+		'wpunity_scene_pgame' => array(
+			$allScenePGameID,
+		),
+		'wpunity_scene_yaml' => array(
+			$newscene_yaml_tax->term_id,
+		)
+	);
 
-    $scene_metas = array(
-        'wpunity_scene_default' => 0,
-        'wpunity_scene_json_input' => $default_json,
-    );
+	$scene_metas = array(
+		'wpunity_scene_default' => 0,
+		'wpunity_scene_json_input' => $default_json,
+	);
 
-    //REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
-    $isRegional = 0;//default value
-    if($thegameType[0]->slug == 'energy_games'){
-        if($_POST['regionalSceneCheckbox'] == 'on'){$isRegional = 1;}
-        $scene_metas['wpunity_isRegional']= $isRegional;
-        $scene_metas['wpunity_scene_environment'] = 'fields';
-    }
+	//REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
+	$isRegional = 0;//default value
+	if($thegameType[0]->slug == 'energy_games'){
+		if($_POST['regionalSceneCheckbox'] == 'on'){$isRegional = 1;}
+		$scene_metas['wpunity_isRegional']= $isRegional;
+		$scene_metas['wpunity_scene_environment'] = 'fields';
+	}
 
-    //Add the final MetaType of the Scene
-    $scene_metas['wpunity_scene_metatype']= $sceneMetaType;
+	//Add the final MetaType of the Scene
+	$scene_metas['wpunity_scene_metatype']= $sceneMetaType;
 
-    $scene_information = array(
-        'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
-        'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
-        'post_type' => 'wpunity_scene',
-        'post_status' => 'publish',
-        'tax_input' => $scene_taxonomies,
-        'meta_input' => $scene_metas,
-    );
+	$scene_information = array(
+		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
+		'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
+		'post_type' => 'wpunity_scene',
+		'post_status' => 'publish',
+		'tax_input' => $scene_taxonomies,
+		'meta_input' => $scene_metas,
+	);
 
-    $scene_id = wp_insert_post($scene_information);
+	$scene_id = wp_insert_post($scene_information);
 
-    if($scene_id){
-        if($sceneMetaType == 'sceneExam2d' || $sceneMetaType == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-        else{$edit_scene_page_id = $editscenePage[0]->ID;}
-        $loadMainSceneLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $sceneMetaType;
-        wp_redirect( $loadMainSceneLink );
-        exit;
-    }
+	if($scene_id){
+		if($sceneMetaType == 'sceneExam2d' || $sceneMetaType == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+		else{$edit_scene_page_id = $editscenePage[0]->ID;}
+		$loadMainSceneLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $sceneMetaType;
+		wp_redirect( $loadMainSceneLink );
+		exit;
+	}
 }
 
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
@@ -442,7 +462,7 @@ get_header(); ?>
 						<iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
 					</div>-->
 
-            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
+            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="/*STATHIS TEMPvisibility:hidden;*/ width:100%; height:400; /*display: none;*/"
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
 
@@ -543,7 +563,7 @@ get_header(); ?>
 
                     <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
                         <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
-                            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                             <input type="hidden" name="submitted" id="submitted" value="true" />
                             <div class="mdc-card mdc-theme--secondary-light-bg">
 
@@ -583,7 +603,7 @@ get_header(); ?>
                                     <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
 
                                     <!--Scene Type-->
-                                    <?php if($game_type_obj->string === "Chemistry"){ ?>
+									<?php if($game_type_obj->string === "Chemistry"){ ?>
                                         <ul>
                                             <li class="mdc-form-field">
                                                 <div class="mdc-radio">
@@ -618,9 +638,9 @@ get_header(); ?>
                                                 <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
                                             </li>
                                         </ul>
-                                    <?php } ?>
+									<?php } ?>
 
-                                    <?php if($game_type_obj->string === "Energy"){ ?>
+									<?php if($game_type_obj->string === "Energy"){ ?>
                                         <div class="mdc-form-field">
                                             <div class="mdc-checkbox" id="regional-checkbox-component">
                                                 <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
@@ -633,7 +653,7 @@ get_header(); ?>
                                             </div>
                                             <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
                                         </div>
-                                    <?php } ?>
+									<?php } ?>
                                 </section>
 
                                 <section class="mdc-card__primary">
@@ -808,11 +828,8 @@ get_header(); ?>
                                     <div class="mdc-textfield__bottom-line"></div>
                                 </div>
 
-                            <br>
-
-<!--                            <a title="Save Experiment ID"-->
-<!--                               id="save-expid-button" class="mdc-button mdc-button--primary mdc-button--raised FullWidth">SAVE</a>-->
-                                <?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
+                                <br>
+								<?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
                                 <input type="hidden" name="submitted2" id="submitted2" value="true" />
                                 <button id="save-expid-button" type="submit" class="mdc-button mdc-button--primary mdc-button--raised FullWidth" data-mdc-auto-init="MDCRipple"> SAVE</button>
                             </form>
@@ -873,15 +890,14 @@ get_header(); ?>
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
-                        <?php
-                        $strategies = wpunity_getAllStrategies_byGame($project_id);
-                        $strategies = implode($strategies);
-
-                        ?>
+						<?php
+						$strategies = wpunity_combineGameStrategies($project_id);
+						$strategies = json_encode($strategies);
+						?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='[<?php echo $strategies; ?>]'>
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php echo $strategies; ?>'>
                             <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
@@ -1021,6 +1037,8 @@ get_header(); ?>
             });
         }
 
+
+
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
@@ -1091,7 +1109,6 @@ get_header(); ?>
         }
 
 
-        // For the time being we have analytics only for Energy
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
@@ -1103,9 +1120,15 @@ get_header(); ?>
             var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
-            loadSceneAnalyticsIframe('energytool', energy_stats);
+            if (game_type === "energy") {
+                loadSceneAnalyticsIframe(game_type+'tool', energy_stats, null);
+            } else {
 
-            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
+                var analytics_molecules_checklist = '<?php echo $analytics_molecule_checklist; ?>';
+                loadSceneAnalyticsIframe(game_type+'tool', null, analytics_molecules_checklist);
+            }
+
+            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
 
             // Start Goedle Iframes
             if (project_keys.expID) {
@@ -1125,21 +1148,30 @@ get_header(); ?>
             });
 
 
-            function loadSceneAnalyticsIframe(lab, fields) {
+            function loadSceneAnalyticsIframe(lab, energy_fields, chemistry) {
 
-                console.log(fields);
+                var url = "";
+                var ip_addr = "https://analytics.envisage-h2020.eu/?";
 
-                if (!fields.env) {fields.env = 'mountain';}
+                if (energy_fields) {
 
-                var url = "http://52.59.219.11/?" +
-                    "lab=" + lab +
-                    "&env=" + fields.env +
-                    "&map=" + parseInt(fields.map, 10) +
-                    "&watts=" + fields.watts +
-                    "&area=" + fields.area +
-                    "&cost=" + fields.cost;
+                    if (!energy_fields.env) {energy_fields.env = 'mountain';}
 
-                /*window.open(url, "_blank", "width=520,height=600");*/
+                    url = ip_addr +
+                        "lab=" + lab +
+                        "&env=" + energy_fields.env +
+                        "&map=" + parseInt(energy_fields.map, 10) +
+                        "&watts=" + energy_fields.watts +
+                        "&area=" + energy_fields.area +
+                        "&cost=" + energy_fields.cost;
+
+                } else {
+
+                    url = ip_addr +
+                        "lab=" + lab +
+                        "&settings=" + chemistry;
+
+                }
 
                 var iframe = jQuery('#scene-analytics-iframe');
                 if (iframe.length) {
@@ -1149,13 +1181,13 @@ get_header(); ?>
                 return true;
             }
 
-            function loadAnalyticsIframe(version, location) {
+            function loadAnalyticsIframe(version, location, game_type) {
 
-                var url = "http://52.59.219.11/?" +
+                var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
-                    "&lab=" + game_type + //"&game_type="+game_type+
+                    "&lab=" + game_type +
                     "&version=" + version +
                     "&gamemaster_id=" + game_master_id +
                     "&location=" + location;
