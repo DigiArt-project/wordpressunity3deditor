@@ -266,17 +266,16 @@ class vr_editor_environmentals {
         //  this.scene.add( this.cameraAvatarHelper );
     }
 
-    //STATHIS TEMP
     setSteveToAvatarControls(){
-        //var Steve = envir.scene.getObjectByName("Steve");
-        //Steve.rotation.set(0, Math.PI/2, 0);
-        //this.avatarControls.getObject().add(Steve );
+        var Steve = envir.scene.getObjectByName("Steve");
+        Steve.rotation.set(0, Math.PI/2, 0);
+        this.avatarControls.getObject().add(Steve );
     }
-    //STATHIS TEMP
+
     setSteveOldToAvatarControls(){
-        //var SteveOld = envir.scene.getObjectByName("SteveOld");
-        //SteveOld.rotation.set(0, Math.PI/2, 0);
-        //this.avatarControls.getObject().add(SteveOld );
+        var SteveOld = envir.scene.getObjectByName("SteveOld");
+        SteveOld.rotation.set(0, Math.PI/2, 0);
+        this.avatarControls.getObject().add(SteveOld );
     }
 
 

@@ -626,7 +626,7 @@ echo '</script>';
 
         envir.thirdPersonView = true;
 
-        envir.scene.getObjectByName("SteveOld").visible = false; //STATHIS TEMP
+        envir.scene.getObjectByName("SteveOld").visible = true;
         envir.scene.getObjectByName("Steve").visible = false;
         
         var btnDiv = jQuery('#thirdPersonBlocker');
