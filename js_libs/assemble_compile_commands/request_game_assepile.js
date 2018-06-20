@@ -1,12 +1,9 @@
 function wpunity_assepileAjax() {
 
- 
-
     var platform = jQuery( "#platformInput" ).attr( "value" );
     var compilationProgressText = jQuery( "#compilationProgressText" );
     window.unity_pid = -1;
     jQuery( "#compileCancelBtn" ).attr('data-unity-pid', window.unity_pid);
-
 
     // STEPS:
     var steps = [];
@@ -52,6 +49,7 @@ function wpunity_assepileAjax() {
         },
 
         success : function(unity_pid) {
+
             console.log("Ajax 1 unity_pid:" + unity_pid);
 
             window.unity_pid = unity_pid.replace(/^\s+|\s+$/g , "");
@@ -93,11 +91,14 @@ function wpunity_assepileAjax() {
                 },
                 success : function(response) {
 
+                    console.log("ASSEPILE1:", response);
+
                     var jsonArr = JSON.parse(response);
                     var os = jsonArr.os;
                     var procMonitor = jsonArr.CSV;
 
-                    console.log("procMonitor length", procMonitor, procMonitor.length);
+                    if (procMonitor!=null)
+                        console.log("procMonitor length", procMonitor, procMonitor.length);
 
                     var logfile = jsonArr.LOGFILE;
 
@@ -119,14 +120,13 @@ function wpunity_assepileAjax() {
 
                         if (os === 'win') {
                             var infoArr = procMonitor.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                            var memVal = infoArr[4].slice(1, -2);
+                            console.log(infoArr[12]);
+
+                            var memVal = infoArr[12].slice(1, -2);
                             jQuery('#unityTaskMemValue').html(memVal);
                         } else {
                             jQuery('#unityTaskMemValue').html(procMonitor);
                         }
-
-
-
 
                         var currstep = 1;
                         for (var i=0; i<totalSteps; i++)
@@ -220,7 +220,7 @@ function wpunity_assepileAjax() {
             type : 'POST',
             timeout: 1200000, // 20 min
             data : {'action': 'wpunity_game_zip_action',
-                'dirpath': dir_gamepath},
+                    'dirpath': dir_gamepath},
 
             success : function(response){
                 //document.getElementById('wpunity_zipgame_report').innerHTML = response;

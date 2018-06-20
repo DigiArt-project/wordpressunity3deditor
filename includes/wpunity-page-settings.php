@@ -35,6 +35,7 @@ class ImcSettingsPage {
         $this->general_settings = (array) get_option( $this->general_settings_key );
 
         $this->general_settings = array_merge( array(
+            'wpunity_unity_local_or_remote' => 'remote',
             'wpunity_unity_exe_folder' => 'C:\Program Files\Unity',
             'wpunity_remote_api_folder' => 'http://myurl/',
             'wpunity_ftp_address' => '',
@@ -55,7 +56,11 @@ class ImcSettingsPage {
 
         register_setting( $this->general_settings_key, $this->general_settings_key );
         add_settings_section( 'section_general', __('General Settings'), array( &$this, 'section_general_desc' ), $this->general_settings_key );
-
+    
+    
+        add_settings_field( 'wpunity_unity_local_or_remote', __('Compile in this server or remote server?'),
+            array( &$this, 'field_wpunity_unity_local_or_remote' ), $this->general_settings_key, 'section_general' );
+        
         add_settings_field( 'wpunity_unity_exe_folder', __('Path of Unity exe file'), array( &$this, 'field_wpunity_unity_exe_folder' ), $this->general_settings_key, 'section_general' );
 
         add_settings_field( 'wpunity_remote_api_folder', __('Remote Game server API'), array( &$this, 'field_wpunity_remote_api_folder' ), $this->general_settings_key, 'section_general' );
@@ -80,11 +85,18 @@ class ImcSettingsPage {
 
 
     /*************************** GENERAL TAB FIELDS: ****************************************/
-
+    
+    function field_wpunity_unity_local_or_remote(){
+        ?>
+        <input type="text"  name="<?php echo $this->general_settings_key; ?>[wpunity_unity_local_or_remote]"
+               id="<?php echo $this->general_settings_key; ?>[wpunity_unity_local_or_remote]" value="<?php echo esc_attr( $this->general_settings['wpunity_unity_local_or_remote'] ); ?>" /> (Options: 'local' or 'remote' strings)
+        <?php
+    }
+    
 
     function field_wpunity_unity_exe_folder(){
         ?>
-        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_unity_exe_folder]" id="<?php echo $this->general_settings_key; ?>[wpunity_unity_exe_folder]" value="<?php echo esc_attr( $this->general_settings['wpunity_unity_exe_folder'] ); ?>" />
+        <input type="text" style="width:70%" name="<?php echo $this->general_settings_key; ?>[wpunity_unity_exe_folder]" id="<?php echo $this->general_settings_key; ?>[wpunity_unity_exe_folder]" value="<?php echo esc_attr( $this->general_settings['wpunity_unity_exe_folder'] ); ?>" />
         <?php
     }
 
@@ -97,7 +109,7 @@ class ImcSettingsPage {
 
     function field_wpunity_ftp_address(){
         ?>
-        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_address'] ); ?>" />
+        <input type="text" style="width:70%" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_address]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_address'] ); ?>" />
         <?php
     }
 
@@ -115,7 +127,7 @@ class ImcSettingsPage {
 
     function field_wpunity_server_path(){
         ?>
-        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" id="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" value="<?php echo esc_attr( $this->general_settings['wpunity_server_path'] ); ?>" />
+        <input type="text" style="width:70%" name="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" id="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" value="<?php echo esc_attr( $this->general_settings['wpunity_server_path'] ); ?>" />
         <?php
     }
 

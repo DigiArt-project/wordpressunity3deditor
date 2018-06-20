@@ -51,7 +51,25 @@ $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
 // COMPILE Ajax
-$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+if(wpunity_getUnity_local_or_remote() != 'remote') {
+    
+    $gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+    $gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $gameSlug . 'Unity/';
+    
+} else {
+    
+    
+    $ftp_cre = wpunity_get_ftpCredentials();
+    $ftp_host = $ftp_cre['address'];
+    
+    $gamesFolder = 'COMPILE_UNITY3D_GAMES';
+    
+    
+    $gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
+    $gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
+    
+}
+
 
 $thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
 wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
@@ -60,7 +78,7 @@ wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
 	       'id' => $project_id,
 	       'slug' => $gameSlug,
 	       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
-	       'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
+	       'gameUnityProject_urlpath' => $gameUnityProject_urlpath
 	)
 );
 

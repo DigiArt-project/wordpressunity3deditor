@@ -118,6 +118,15 @@ function wpunity_getEditpage($type){
 //==========================================================================================================================================
 
 ////Get Settings Values
+function wpunity_getUnity_local_or_remote(){
+    $generaloptions = get_option( 'general_settings' );
+    
+    if($generaloptions["wpunity_unity_local_or_remote"]) {
+        return $generaloptions["wpunity_unity_local_or_remote"];
+    }else{
+        return 'local';
+    }
+}
 
 function wpunity_getUnity_exe_folder(){
 	$generaloptions = get_option( 'general_settings' );
