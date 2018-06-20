@@ -66,6 +66,10 @@ if ($game_type_obj->string === "Chemistry") {
 }
 
 
+
+$upload_dir = wp_upload_dir()['basedir'];
+$upload_dir = str_replace('\\','/',$upload_dir);
+
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -73,7 +77,7 @@ $pluginpath = str_replace('\\','/',$pluginpath);
 // COMPILE Ajax
 if(wpunity_getUnity_local_or_remote() != 'remote') {
     
-    $gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
+    $gameUnityProject_dirpath = $upload_dir . '\\' . $gameSlug . 'Unity';
     $gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $gameSlug . 'Unity/';
     
 } else {

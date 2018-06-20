@@ -35,7 +35,6 @@ $pluginpath = str_replace('\\','/',$pluginpath);
 $upload_dir = wp_upload_dir()['basedir'];
 $upload_dir = str_replace('\\','/',$upload_dir);
 
-
 // COMPILE Ajax
 $gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
 

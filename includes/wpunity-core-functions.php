@@ -2104,18 +2104,15 @@ goto :EOF
 
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
-
-//    $fo = fopen("output_post_termalogica.txt","w");
-//    $product_terms = wp_get_post_terms( 4773,  'wpunity_asset3d_cat' );
-//    fwrite($fo, print_r($product_terms, true));
-//    fclose($fo);
-
-	$DS = DIRECTORY_SEPARATOR;
+    
+    $DS = DIRECTORY_SEPARATOR;
+    
+   
 
 	$os = 'win'; // strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	// Monitor stdout.log
-	$stdoutSTR = file_get_contents($game_dirpath = $_POST['dirpath'].$DS."stdout.log");
+	
 
 	if ($os === 'lin') {
 
@@ -2142,11 +2139,23 @@ function wpunity_monitor_compiling_action_callback(){
 
 
 	} else {
-	    if(wpunity_getUnity_local_or_remote() === 'local') {
+	    if(wpunity_getUnity_local_or_remote() == 'local') {
             //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
             $phpcomd = 'TASKLIST /FI "pid eq ' . $_POST['pid'] . '" /v /fo CSV';
             $processUnityCSV = shell_exec($phpcomd);
-        
+
+            $pathStdOut = $_POST['dirpath']."\stdout.log";
+
+            $stdoutSTR = file_get_contents( $pathStdOut );
+
+            $fo = fopen("output_post_termalogica.txt","w");
+            //$product_terms = $_POST['dirpath'].$DS."stdout.log";
+
+            fwrite($fo, "pathStdOut".$pathStdOut );
+            fwrite($fo, "stdoutSTR".$stdoutSTR );
+
+            fclose($fo);
+
             echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
         }else{
         
@@ -2242,6 +2251,13 @@ function wpunity_game_zip_action_callback()
         $rootPath = realpath($game_dirpath) . '/builds';
         $zip_file = realpath($game_dirpath) . '/game.zip';
     
+        $fa = fopen("outputZIP.txt","w");
+        fwrite($fa,"ROOTPATH:".$rootPath);
+        fwrite($fa, "\n");
+        fwrite($fa,"zip_file:".$zip_file);
+        fclose($fa);
+        
+        
         // Initialize archive object
         $zip = new ZipArchive();
         $resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);

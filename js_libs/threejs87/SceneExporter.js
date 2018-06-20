@@ -116,8 +116,8 @@ THREE.SceneExporter.prototype = {
                         // What remains here is the (Groups) = 3d models obj to load
                         // and Object3D avatarYawObject
 
-                    if (node.name === "bbox" || node.name === "xline" || node.name === "yline" || node.name === "zline" )
-                        continue
+                    if (node.name === "bbox" || node.name === "xline" || node.name === "yline" || node.name === "zline" || node.name == 'SteveOld' )
+                        continue;
 
                     linesArray.push(ObjectString(node, pad));
                     nobjects += 1;
