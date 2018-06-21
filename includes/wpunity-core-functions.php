@@ -1,4 +1,11 @@
 <?php
+
+function wpunity_addStrategy_APIcall($project_id){
+
+	$allStrategies = wpunity_getAllStrategies_byGame($project_id);
+
+}
+
 //==========================================================================================================================================
 //==========================================================================================================================================
 
@@ -537,30 +544,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$exam3dSceneYAMLID = $exam3dSceneYAML->term_id;
 	}
 
-	$default_json = '{
-	"metadata": {
-		"formatVersion" : 4.0,
-		"type"		    : "scene",
-		"generatedBy"	: "SceneExporter.js",
-		"objects"       : 1},
-
-	"urlBaseType": "relativeToScene",
-
-	"objects" :
-	{
-		"avatarYawObject" : {
-			"position" : [0,0,0],
-			"rotation" : [0,0,0],
-			"scale"	   : [1,1,1],
-			"visible"  : true,
-			"children" : {
-			}
-		}
-
-	}
-
-}
-';
+	$default_json = wpunity_getDefaultJSONscene();
 
 	// Create Main Menu Scene Data
 	$mainmenuSceneData = array(

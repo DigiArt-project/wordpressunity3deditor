@@ -64,7 +64,8 @@ public class ObjectInteraction : MonoBehaviour
         {
             interactionCanvas.enabled = false;
             cursor.UnLockCursor();
-            scoreManager.DisplayScore();
+            //scoreManager.DisplayScore();
+            sceneLoader.LoadScene("S_MainMenu");
         }
         SoundManager.instance.PlaySingle(clip);
     }

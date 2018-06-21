@@ -94,7 +94,6 @@ if ($project_scope == 0) {
 }
 
 get_header();
-
 ?>
 
 <h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background"><?php echo $full_title; ?> Manager</h1>
