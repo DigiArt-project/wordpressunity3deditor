@@ -98,30 +98,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');}
     elseif($thegameType[0]->slug == 'chemistry_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
 
-    $default_json = '{
-	"metadata": {
-		"formatVersion" : 4.0,
-		"type"		    : "scene",
-		"generatedBy"	: "SceneExporter.js",
-		"objects"       : 1},
+    $default_json = wpunity_getDefaultJSONscene();
 
-	"urlBaseType": "relativeToScene",
-
-	"objects" :
-	{
-		"avatarYawObject" : {
-			"position" : [0,0,0],
-			"rotation" : [0,0,0],
-			"scale"	   : [1,1,1],
-			"visible"  : true,
-			"children" : {
-			}
-		}
-
-	}
-
-}
-';
     $scene_taxonomies = array(
         'wpunity_scene_pgame' => array(
             $allScenePGameID,

@@ -172,30 +172,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
 	}
 
-	$default_json = '{
-	"metadata": {
-		"formatVersion" : 4.0,
-		"type"		    : "scene",
-		"generatedBy"	: "SceneExporter.js",
-		"objects"       : 1},
-
-	"urlBaseType": "relativeToScene",
-
-	"objects" :
-	{
-		"avatarYawObject" : {
-			"position" : [0,0,0],
-			"rotation" : [0,0,0],
-			"scale"	   : [1,1,1],
-			"visible"  : true,
-			"children" : {
-			}
-		}
-
-	}
-
-}
-';
+	$default_json = wpunity_getDefaultJSONscene();
+	
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
