@@ -396,20 +396,20 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $
         $attachment_name = pathinfo($attachment_tempname);
         $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
 
-        if($asset_type[0]->name == 'Site'){
+        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room'){
             $new_file = $folder .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
         }
 
         copy($attachment_file, $new_file);
 
-        if($asset_type[0]->name == 'Site')
+        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room')
             wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
         else
             wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, '');
 
         $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
 
-        if($asset_type[0]->name == 'Site'){
+        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room'){
             $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .
                 '/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
         }
