@@ -173,7 +173,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 
 	$default_json = wpunity_getDefaultJSONscene();
-	
+
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
 			$allScenePGameID,
