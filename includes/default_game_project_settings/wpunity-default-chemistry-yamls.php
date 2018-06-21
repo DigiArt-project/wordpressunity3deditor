@@ -6,8 +6,7 @@
 
 global $ini_asset_room,$ini_asset_gate,$ini_asset_molecule;
 
-$ini_asset_room = array('# ENVISAGE - ROOM Yaml
---- !u!1001 &___[room_fid]___
+$ini_asset_room = array('--- !u!1001 &___[room_fid]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -84,8 +83,7 @@ MeshCollider:
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
-$ini_asset_gate = array('# ENVISAGE - GATE Yaml
---- !u!1001 &___[gate_fid]___
+$ini_asset_gate = array('--- !u!1001 &___[gate_fid]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1847,8 +1845,7 @@ global $ini_scene_chemistry_unity_pattern,$ini_scene_main_menu_chem_unity_patter
 global $ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 global $ini_scene_chem_exam,$ini_scene_chem_exam3d;
 
-$ini_scene_chemistry_unity_pattern = array('# ENVISAGE - LAB yaml
-%YAML 1.1
+$ini_scene_chemistry_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
