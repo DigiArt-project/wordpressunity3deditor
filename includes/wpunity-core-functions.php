@@ -2165,11 +2165,18 @@ function wpunity_monitor_compiling_action_callback(){
         
             $gamesFolder = 'COMPILE_UNITY3D_GAMES';
         
-            $gameProject = basename($_POST['dirpath']);
+            $fo = fopen("outputMonitor.txt","w");
+            
+            $dirpath = $_POST['dirpath'];
+        
+            $dirpath = str_replace('\\\\', '\\', $dirpath);
+            $dirpath = str_replace('//', '/', $dirpath);
+            
+            $gameProject = basename($dirpath);
             
             $monitorCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=monitor&game=".$gameProject."&pid=".$_POST['pid'];
             
-            $fo = fopen("outputMonitor.txt","w");
+            
             
             fwrite($fo, $monitorCompile_url);
             

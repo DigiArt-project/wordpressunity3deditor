@@ -82,16 +82,13 @@ if(wpunity_getUnity_local_or_remote() != 'remote') {
     
 } else {
     
-    
     $ftp_cre = wpunity_get_ftpCredentials();
     $ftp_host = $ftp_cre['address'];
     
     $gamesFolder = 'COMPILE_UNITY3D_GAMES';
     
-    
     $gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
     $gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
-    
 }
 
 
