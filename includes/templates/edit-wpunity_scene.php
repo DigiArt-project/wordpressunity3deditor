@@ -866,26 +866,24 @@ get_header(); ?>
             </div>
 
             <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <div class="mdc-layout-grid">
+                <!--<div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
 						<?php
-						$strategies = wpunity_combineGameStrategies($project_id);
+/*						$strategies = wpunity_combineGameStrategies($project_id);
 						$strategies = json_encode($strategies);
-						?>
+						*/?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php echo $strategies; ?>'>
+                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php /*echo $strategies; */?>'>
                             <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
                         <br>
                         <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
                     </div>
-                </div>
-
-                <br>
+                </div>-->
 
                 <div style="min-height: 1240px;">
                     <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
@@ -1314,12 +1312,12 @@ get_header(); ?>
             deleteDialog.close();
         });
 
-        jQuery("#copy-output-btn").click(function() {
+        /*jQuery("#copy-output-btn").click(function() {
             var copyText = document.getElementById("molecule-json-field");
             copyText.select();
             document.execCommand("Copy");
             alert("Strategy copied: " + copyText.value);
-        });
+        });*/
 
         function deleteScene(id) {
 
