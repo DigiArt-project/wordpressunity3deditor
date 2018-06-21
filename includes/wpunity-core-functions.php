@@ -2,7 +2,115 @@
 
 function wpunity_addStrategy_APIcall($project_id){
 
-	$allStrategies = wpunity_getAllStrategies_byGame($project_id);
+	$user_id = get_current_user_id();
+	$user_info = get_userdata($user_id);
+	$userEmail = $user_info->user_email;
+	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
+
+	$project_keys = wpunity_getProjectKeys($project_id);
+
+	/*$allStrategies = wpunity_getAllStrategies_byGame($project_id);*/
+
+	$allStrategies = wpunity_combineGameStrategies($project_id);
+	$allStrategies = json_encode($allStrategies);
+
+	$args = array(
+		'method' => 'POST',
+		'timeout' => 45,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'blocking' => true,
+		'sslverify' => false,
+		'headers' => array( 'content-type' => 'application/json' ),
+		'body' => json_encode(array(
+			'email' => $userEmail,
+			'password' => $extraPass
+		) ),
+		'cookies' => array()
+	);
+
+	$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
+
+	if (is_wp_error( $token_request ) ) {
+
+		$error_message = $token_request->get_error_message();
+		print_r($error_message);
+
+	} else {
+
+		$token = json_decode( $token_request[ body ] );
+
+		$token = $token->token;
+
+		// Create ID from game version and project id
+		$strategy_id = 1;
+
+
+		$args = array(
+			'method'      => 'POST',
+			'timeout'     => 45,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking'    => true,
+			'sslverify'   => 0,
+			'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
+			'body'        => json_encode( array(
+				'type'       => 'strategy',
+				'id'         => $strategy_id,
+				'attributes' => array(
+					'config' => $allStrategies
+				)
+			) ),
+			'cookies'     => array()
+		);
+
+		$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/", $args );
+
+		if ( is_wp_error( $request ) ) {
+
+			$error_message = $request->get_error_message();
+			print_r( $error_message );
+
+		} else {
+
+			$args = array(
+				'method'      => 'POST',
+				'timeout'     => 45,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking'    => true,
+				'sslverify'   => 0,
+				'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
+				'body'        => json_encode( array(
+					'type'       => 'test',
+					'id'         => $strategy_id,
+					'attributes' => array(
+						'count' => 1000
+					)
+				) ),
+				'cookies'     => array()
+			);
+
+			$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
+
+			if ( is_wp_error( $request ) ) {
+
+				$error_message = $request->get_error_message();
+				print_r( $error_message );
+
+			} else {
+
+				if ( (string) (int) $request['response']['code'] !== '201' ) {
+
+					print_r( $request['response']['code'] );
+					print_r( $request['response']['message'] );
+					// Todo: @Tasos place an alert div with message
+					//die();
+				}
+			}
+		}
+	}
+
 
 }
 
@@ -1814,7 +1922,7 @@ function wpunity_fetch_video_action_callback(){
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 
 function wpunity_assepile_action_callback(){
- 
+
 	$DS = DIRECTORY_SEPARATOR;
 	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
@@ -1843,7 +1951,7 @@ function wpunity_assepile_action_callback(){
 	$gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
 
 	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
-	
+
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
 	// Do not delete library folder if it takes too long
@@ -1855,40 +1963,40 @@ function wpunity_assepile_action_callback(){
 		//-----------------------------
 
 		//--Uploads/myGameProjectUnity--
-        
-        // Todo: Add more option
-        $upload_dir = wp_upload_dir()['basedir']; //
-        
-        $upload_dir = str_replace('\\','/',$upload_dir);
+
+		// Todo: Add more option
+		$upload_dir = wp_upload_dir()['basedir']; //
+
+		$upload_dir = str_replace('\\','/',$upload_dir);
 		$game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
-        
-        $ff = fopen("outputFF.txt","w");
+
+		$ff = fopen("outputFF.txt","w");
 //        fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
 //        fwrite($ff, print_r(wpunity_get_ftpCredentials(),true));
 //        fwrite($ff, print_r(wpunity_getUnity_exe_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_api_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_server_path(),true)."\n");
-        
-        
-        //fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
-        
-        $remote_game_server_folder_dir = wpunity_getUnity_local_or_remote()=='local' ?
-            $game_dirpath : (wpunity_getRemote_server_path().$_REQUEST['gameSlug'] . 'Unity');
-        
-        
-        //fwrite($ff, $remote_game_server_folder_dir);
-        
-        //fclose($ff);
-        
-        
-        
-        //'C:\xampp\htdocs\COMPILE_UNITY3D_GAMES\\'. $_REQUEST['gameSlug'] . 'Unity' ;
-		
+
+
+		//fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
+
+		$remote_game_server_folder_dir = wpunity_getUnity_local_or_remote()=='local' ?
+			$game_dirpath : (wpunity_getRemote_server_path().$_REQUEST['gameSlug'] . 'Unity');
+
+
+		//fwrite($ff, $remote_game_server_folder_dir);
+
+		//fclose($ff);
+
+
+
+		//'C:\xampp\htdocs\COMPILE_UNITY3D_GAMES\\'. $_REQUEST['gameSlug'] . 'Unity' ;
+
 		if ($os === 'win') {
 			$os_bin = 'bat';
 			$txt = '@echo off'."\n"; // change line always with double quote
 			$txt .= 'call :spawn "C:\Program Files\Unity\Editor\Unity.exe" -quit -batchmode -logFile "'.
-                $remote_game_server_folder_dir.'\stdout.log" -projectPath "'. $remote_game_server_folder_dir . '" -executeMethod HandyBuilder.build';
+			        $remote_game_server_folder_dir.'\stdout.log" -projectPath "'. $remote_game_server_folder_dir . '" -executeMethod HandyBuilder.build';
 
 			$txt .= "\n";
 			$txt .= "ECHO %PID%";
@@ -1916,7 +2024,7 @@ goto :EOF
 			$compile_command = 'start /b '.$game_dirpath.$DS.'starter_artificial.bat /c';
 
 		} else {
-		
+
 //		    // LINUX SERVER
 //			$os_bin = 'sh';
 //			$txt = "#/bin/bash"."\n".
@@ -1936,141 +2044,141 @@ goto :EOF
 
 		chdir($game_dirpath);
 
-        $fj = fopen("outputIII.txt","w");
+		$fj = fopen("outputIII.txt","w");
 
 		if ($os === 'win') {
-		    if(wpunity_getUnity_local_or_remote() != 'remote') {
-                $unity_pid = shell_exec($compile_command);
-                $fga = fopen("execution_hint.txt", "w");
-                fwrite($fga, $compile_command);
-                fclose($fga);
-            } else {
+			if(wpunity_getUnity_local_or_remote() != 'remote') {
+				$unity_pid = shell_exec($compile_command);
+				$fga = fopen("execution_hint.txt", "w");
+				fwrite($fga, $compile_command);
+				fclose($fga);
+			} else {
 
-		        // remote
-		        $ftp_cre = wpunity_get_ftpCredentials();
-      
-                $ftp_host = $ftp_cre['address'];
-                $ftp_user_name = $ftp_cre['username'];
-                $ftp_user_pass = $ftp_cre['password'];
-                
-                $gameProject = $_REQUEST['gameSlug'] . 'Unity';
-                
-                $zipFile = $gameProject.'.zip';
-                
-                $gamesFolder = 'COMPILE_UNITY3D_GAMES';
-                $remote_file = $gamesFolder.'/'.$zipFile;
-                
-                $unzip_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=unzip";
-                $startCompile_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=start";
-                
-                // -------------- Zip the project to send it for remote compile -------------------
-                    
-                    /* Exclude Files */
-                    $exclude_files = array();
-                    //$exclude_files[] = realpath($zip_file_name);
-                    //$exclude_files[] = realpath('zip.php');
-                
-                    /* Path of current folder, need empty or null param for current folder */
-                    $root_path = realpath($game_dirpath);
-                
-                    /* Initialize archive object */
-                    $zip = new ZipArchive();
-                    $zip_open = $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-                
-                    /* Create recursive files list */
-                    $files = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($root_path),
-                        RecursiveIteratorIterator::LEAVES_ONLY
-                    );
-                
-                    /* For each files, get each path and add it in zip */
-                    if (!empty($files)) {
-                    
-                        foreach ($files as $name => $file) {
-                        
-                            /* get path of the file */
-                            $file_path = $file->getRealPath();
-                        
-                            /* only if it's a file and not directory, and not excluded. */
-                            if (!is_dir($file_path) && !in_array($file_path, $exclude_files)) {
-                            
-                                /* get relative path */
-                //                $file_relative_path = str_replace($root_path, '', $file_path);
-                            
-                                $file_relative_path = substr($file_path, strlen($root_path) + 1);
-                            
-                                /* Add file to zip archive */
-                                $zip_addfile = $zip->addFile($file_path, $file_relative_path);
-                            }
-                        }
-                    } else {
-                        return "ERROR 767: the folder was empty!";
-                        wp_die();
-                    }
-            
-                    /* Create ZIP after closing the object. */
-                    $zip_close = $zip->close();
-                    
-                    //--------------- FTP TRANSFER ------------------------------------------------
-                
-                    /* Connect using basic FTP */
-                    $connect_it = ftp_connect($ftp_host);
-                    
-                    /* Login to FTP */
-                    $login_result = ftp_login($connect_it, $ftp_user_name, $ftp_user_pass);
-                    
-                    $fileHandle = fopen($zipFile, "r");
-            
-                    if ($login_result === true) {
-                        $ret = ftp_nb_fput($connect_it, $remote_file, $fileHandle, FTP_BINARY);
-        
-                        fwrite($fj, "remote_file FILE:". $remote_file );
-                        
-                        while ($ret == FTP_MOREDATA) {
-                            // Do whatever you want
-                            // Call some javascript
-                            // Continue uploading...
-                            $ret = ftp_nb_continue($connect_it);
-                        }
-                    
-                        /* Close the connection */
-                        ftp_close($connect_it);
-                    
-                        if ($ret == FTP_FAILED) {
-                            echo "There was an error uploading the file...";
-                            wp_die();
-                        } else if ($ret == FTP_FINISHED) {
-                            //return true;
-                        }
-                    }
+				// remote
+				$ftp_cre = wpunity_get_ftpCredentials();
+
+				$ftp_host = $ftp_cre['address'];
+				$ftp_user_name = $ftp_cre['username'];
+				$ftp_user_pass = $ftp_cre['password'];
+
+				$gameProject = $_REQUEST['gameSlug'] . 'Unity';
+
+				$zipFile = $gameProject.'.zip';
+
+				$gamesFolder = 'COMPILE_UNITY3D_GAMES';
+				$remote_file = $gamesFolder.'/'.$zipFile;
+
+				$unzip_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=unzip";
+				$startCompile_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=start";
+
+				// -------------- Zip the project to send it for remote compile -------------------
+
+				/* Exclude Files */
+				$exclude_files = array();
+				//$exclude_files[] = realpath($zip_file_name);
+				//$exclude_files[] = realpath('zip.php');
+
+				/* Path of current folder, need empty or null param for current folder */
+				$root_path = realpath($game_dirpath);
+
+				/* Initialize archive object */
+				$zip = new ZipArchive();
+				$zip_open = $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+				/* Create recursive files list */
+				$files = new RecursiveIteratorIterator(
+					new RecursiveDirectoryIterator($root_path),
+					RecursiveIteratorIterator::LEAVES_ONLY
+				);
+
+				/* For each files, get each path and add it in zip */
+				if (!empty($files)) {
+
+					foreach ($files as $name => $file) {
+
+						/* get path of the file */
+						$file_path = $file->getRealPath();
+
+						/* only if it's a file and not directory, and not excluded. */
+						if (!is_dir($file_path) && !in_array($file_path, $exclude_files)) {
+
+							/* get relative path */
+							//                $file_relative_path = str_replace($root_path, '', $file_path);
+
+							$file_relative_path = substr($file_path, strlen($root_path) + 1);
+
+							/* Add file to zip archive */
+							$zip_addfile = $zip->addFile($file_path, $file_relative_path);
+						}
+					}
+				} else {
+					return "ERROR 767: the folder was empty!";
+					wp_die();
+				}
+
+				/* Create ZIP after closing the object. */
+				$zip_close = $zip->close();
+
+				//--------------- FTP TRANSFER ------------------------------------------------
+
+				/* Connect using basic FTP */
+				$connect_it = ftp_connect($ftp_host);
+
+				/* Login to FTP */
+				$login_result = ftp_login($connect_it, $ftp_user_name, $ftp_user_pass);
+
+				$fileHandle = fopen($zipFile, "r");
+
+				if ($login_result === true) {
+					$ret = ftp_nb_fput($connect_it, $remote_file, $fileHandle, FTP_BINARY);
+
+					fwrite($fj, "remote_file FILE:". $remote_file );
+
+					while ($ret == FTP_MOREDATA) {
+						// Do whatever you want
+						// Call some javascript
+						// Continue uploading...
+						$ret = ftp_nb_continue($connect_it);
+					}
+
+					/* Close the connection */
+					ftp_close($connect_it);
+
+					if ($ret == FTP_FAILED) {
+						echo "There was an error uploading the file...";
+						wp_die();
+					} else if ($ret == FTP_FINISHED) {
+						//return true;
+					}
+				}
 
 
-                fwrite($fj, "UNZIP URL". $unzip_url);
-                
-                //------------------ UNZIP AND COMPILE --------------------------
-            
-                if (file_get_contents($unzip_url)) //, array("timeout"=>1), $info) )
-                {
-                    
-                    fwrite($fj, "START COMPILE: " . $startCompile_url);
-                    
-                    // Start the compiling
-                    $unity_pid = file_get_contents($startCompile_url);
-    
-                    fwrite($fj, "\n" );
-                    fwrite($fj, "PROCC:". $unity_pid);
-                    fwrite($fj, "\n" );
-                    
-                } else {
-                    echo "<br />Error 798: UNZIPing problem";
-                    wp_die();
-                }
-            
-                fwrite($fj, "4 UNZIP and COMPILE");
+				fwrite($fj, "UNZIP URL". $unzip_url);
 
-            }
+				//------------------ UNZIP AND COMPILE --------------------------
+
+				if (file_get_contents($unzip_url)) //, array("timeout"=>1), $info) )
+				{
+
+					fwrite($fj, "START COMPILE: " . $startCompile_url);
+
+					// Start the compiling
+					$unity_pid = file_get_contents($startCompile_url);
+
+					fwrite($fj, "\n" );
+					fwrite($fj, "PROCC:". $unity_pid);
+					fwrite($fj, "\n" );
+
+				} else {
+					echo "<br />Error 798: UNZIPing problem";
+					wp_die();
+				}
+
+				fwrite($fj, "4 UNZIP and COMPILE");
+
+			}
 		} else {
-		    // LINUX
+			// LINUX
 //			$res = putenv("HOME=/home/jimver04");
 //			shell_exec($compile_command);
 //			$fpid = fopen("pid.txt","r");
@@ -2088,15 +2196,15 @@ goto :EOF
 
 //---- AJAX MONITOR: read compile stdout.log file and return content.
 function wpunity_monitor_compiling_action_callback(){
-    
-    $DS = DIRECTORY_SEPARATOR;
-    
-   
+
+	$DS = DIRECTORY_SEPARATOR;
+
+
 
 	$os = 'win'; // strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	// Monitor stdout.log
-	
+
 
 	if ($os === 'lin') {
 
@@ -2123,54 +2231,54 @@ function wpunity_monitor_compiling_action_callback(){
 
 
 	} else {
-	    if(wpunity_getUnity_local_or_remote() == 'local') {
-            //$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
-            $phpcomd = 'TASKLIST /FI "pid eq ' . $_POST['pid'] . '" /v /fo CSV';
-            $processUnityCSV = shell_exec($phpcomd);
+		if(wpunity_getUnity_local_or_remote() == 'local') {
+			//$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
+			$phpcomd = 'TASKLIST /FI "pid eq ' . $_POST['pid'] . '" /v /fo CSV';
+			$processUnityCSV = shell_exec($phpcomd);
 
-            $pathStdOut = $_POST['dirpath']."\stdout.log";
+			$pathStdOut = $_POST['dirpath']."\stdout.log";
 
-            $stdoutSTR = file_get_contents( $pathStdOut );
+			$stdoutSTR = file_get_contents( $pathStdOut );
 
-            $fo = fopen("output_post_termalogica.txt","w");
-            //$product_terms = $_POST['dirpath'].$DS."stdout.log";
+			$fo = fopen("output_post_termalogica.txt","w");
+			//$product_terms = $_POST['dirpath'].$DS."stdout.log";
 
-            fwrite($fo, "pathStdOut".$pathStdOut );
-            fwrite($fo, "stdoutSTR".$stdoutSTR );
+			fwrite($fo, "pathStdOut".$pathStdOut );
+			fwrite($fo, "stdoutSTR".$stdoutSTR );
 
-            fclose($fo);
+			fclose($fo);
 
-            echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
-        }else{
-        
-            $ftp_cre = wpunity_get_ftpCredentials();
-        
-            $ftp_host = $ftp_cre['address'];
-        
-            $gamesFolder = 'COMPILE_UNITY3D_GAMES';
-        
-            $fo = fopen("outputMonitor.txt","w");
-            
-            $dirpath = $_POST['dirpath'];
-        
-            $dirpath = str_replace('\\\\', '\\', $dirpath);
-            $dirpath = str_replace('//', '/', $dirpath);
-            
-            $gameProject = basename($dirpath);
-            
-            $monitorCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=monitor&game=".$gameProject."&pid=".$_POST['pid'];
-            
-            
-            
-            fwrite($fo, $monitorCompile_url);
-            
-            $res = file_get_contents($monitorCompile_url);
-            
-            echo $res; // json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
-        }
+			echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
+		}else{
+
+			$ftp_cre = wpunity_get_ftpCredentials();
+
+			$ftp_host = $ftp_cre['address'];
+
+			$gamesFolder = 'COMPILE_UNITY3D_GAMES';
+
+			$fo = fopen("outputMonitor.txt","w");
+
+			$dirpath = $_POST['dirpath'];
+
+			$dirpath = str_replace('\\\\', '\\', $dirpath);
+			$dirpath = str_replace('//', '/', $dirpath);
+
+			$gameProject = basename($dirpath);
+
+			$monitorCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=monitor&game=".$gameProject."&pid=".$_POST['pid'];
+
+
+
+			fwrite($fo, $monitorCompile_url);
+
+			$res = file_get_contents($monitorCompile_url);
+
+			echo $res; // json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
+		}
 	}
 
-	
+
 
 	wp_die();
 }
@@ -2194,32 +2302,32 @@ function wpunity_killtask_compiling_action_callback(){
 //		$killres = exec($phpcomd);
 
 	}else {
-        
-        if(wpunity_getUnity_local_or_remote() != 'remote') {
-            $phpcomd = 'Taskkill /PID ' . $_POST['pid'] . ' /F';
-            $killres = shell_exec($phpcomd);
-        } else{
-    
-            $ftp_cre = wpunity_get_ftpCredentials();
-    
-            $ftp_host = $ftp_cre['address'];
-    
-            $gamesFolder = 'COMPILE_UNITY3D_GAMES';
-    
-            
-            
-            $stopCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=stop&pid=".$_POST['pid'];
-            
-            $fi = fopen("outputSTOP.txt","w");
-            fwrite($fi, "stopCompile_url:". $stopCompile_url);
-            
-            
-            
-            $killres = file_get_contents($stopCompile_url);
-    
-            fwrite($fi, "killres:" . $killres);
-            fclose($fi);
-        }
+
+		if(wpunity_getUnity_local_or_remote() != 'remote') {
+			$phpcomd = 'Taskkill /PID ' . $_POST['pid'] . ' /F';
+			$killres = shell_exec($phpcomd);
+		} else{
+
+			$ftp_cre = wpunity_get_ftpCredentials();
+
+			$ftp_host = $ftp_cre['address'];
+
+			$gamesFolder = 'COMPILE_UNITY3D_GAMES';
+
+
+
+			$stopCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=stop&pid=".$_POST['pid'];
+
+			$fi = fopen("outputSTOP.txt","w");
+			fwrite($fi, "stopCompile_url:". $stopCompile_url);
+
+
+
+			$killres = file_get_contents($stopCompile_url);
+
+			fwrite($fi, "killres:" . $killres);
+			fclose($fi);
+		}
 	}
 
 	echo $killres;
@@ -2229,77 +2337,77 @@ function wpunity_killtask_compiling_action_callback(){
 //---- AJAX COMPILE 3: Zip the builds folder ---
 function wpunity_game_zip_action_callback()
 {
-    
-    if(wpunity_getUnity_local_or_remote() != 'remote') {
-        $DS = DIRECTORY_SEPARATOR;
-    
-        // TEST
-        //$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
-    
-        // Real
-        $game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
-    
-        $rootPath = realpath($game_dirpath) . '/builds';
-        $zip_file = realpath($game_dirpath) . '/game.zip';
-    
-        $fa = fopen("outputZIP.txt","w");
-        fwrite($fa,"ROOTPATH:".$rootPath);
-        fwrite($fa, "\n");
-        fwrite($fa,"zip_file:".$zip_file);
-        fclose($fa);
-        
-        
-        // Initialize archive object
-        $zip = new ZipArchive();
-        $resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-    
-        if ($resZip === TRUE) {
-        
-            // Create recursive directory iterator
-            /** @var SplFileInfo[] $files */
-            $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($rootPath),
-                RecursiveIteratorIterator::LEAVES_ONLY
-            );
-        
-            foreach ($files as $name => $file) {
-                // Skip directories (they would be added automatically)
-                if (!$file->isDir()) {
-                    // Get real and relative path for current file
-                    $filePath = $file->getRealPath();
-                
-                    $relativePath = substr($filePath, strlen($rootPath) + 1);
-                
-                    // Add current file to archive
-                    $zip->addFile($filePath, $relativePath);
-                }
-            }
-        
-            // Zip archive will be created only after closing object
-            $zip->close();
-            echo 'Zip successfully finished [2]';
-            wp_die();
-        } else {
-            echo 'Failed to zip, code:' . $resZip;
-            wp_die();
-        }
-    } else{
-    
-        $ftp_cre = wpunity_get_ftpCredentials();
-    
-        $ftp_host = $ftp_cre['address'];
-    
-        $gamesFolder = 'COMPILE_UNITY3D_GAMES';
-        
-        $gameProject = basename($_POST['dirpath']);
-        
-        $zipBuild_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?game=".$gameProject."&action=zipbuild";
-        
-        echo file_get_contents($zipBuild_url);
-        
-        wp_die();
-        
-    }
+
+	if(wpunity_getUnity_local_or_remote() != 'remote') {
+		$DS = DIRECTORY_SEPARATOR;
+
+		// TEST
+		//$game_dirpath = realpath(dirname(__FILE__).'/..').$DS.'test_compiler'.$DS.'game_windows';
+
+		// Real
+		$game_dirpath = $_POST['dirpath']; //realpath(dirname(__FILE__).'/..').$DS.'games_assemble'.$DS.'dune';
+
+		$rootPath = realpath($game_dirpath) . '/builds';
+		$zip_file = realpath($game_dirpath) . '/game.zip';
+
+		$fa = fopen("outputZIP.txt","w");
+		fwrite($fa,"ROOTPATH:".$rootPath);
+		fwrite($fa, "\n");
+		fwrite($fa,"zip_file:".$zip_file);
+		fclose($fa);
+
+
+		// Initialize archive object
+		$zip = new ZipArchive();
+		$resZip = $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+		if ($resZip === TRUE) {
+
+			// Create recursive directory iterator
+			/** @var SplFileInfo[] $files */
+			$files = new RecursiveIteratorIterator(
+				new RecursiveDirectoryIterator($rootPath),
+				RecursiveIteratorIterator::LEAVES_ONLY
+			);
+
+			foreach ($files as $name => $file) {
+				// Skip directories (they would be added automatically)
+				if (!$file->isDir()) {
+					// Get real and relative path for current file
+					$filePath = $file->getRealPath();
+
+					$relativePath = substr($filePath, strlen($rootPath) + 1);
+
+					// Add current file to archive
+					$zip->addFile($filePath, $relativePath);
+				}
+			}
+
+			// Zip archive will be created only after closing object
+			$zip->close();
+			echo 'Zip successfully finished [2]';
+			wp_die();
+		} else {
+			echo 'Failed to zip, code:' . $resZip;
+			wp_die();
+		}
+	} else{
+
+		$ftp_cre = wpunity_get_ftpCredentials();
+
+		$ftp_host = $ftp_cre['address'];
+
+		$gamesFolder = 'COMPILE_UNITY3D_GAMES';
+
+		$gameProject = basename($_POST['dirpath']);
+
+		$zipBuild_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?game=".$gameProject."&action=zipbuild";
+
+		echo file_get_contents($zipBuild_url);
+
+		wp_die();
+
+	}
 }
 
 
@@ -2419,35 +2527,35 @@ function fake_compile_for_a_test_project()
  * @param $pdb_str           :   The string of the pdb file
  */
 function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_post_id, $molecule_post_name, $pdb_str ){
-    
-    //$prefab_path = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\chemtestUnity\Assets\StandardAssets\Prefabs\\";
-    $prefab_path = $projectLocalPath."\\".$projectName."Unity\Assets\StandardAssets\Prefabs\\";
-    
-    $dirMaterials =  $prefab_path."Elements\Transparent";
-    $dirMolecules =  $prefab_path."Molecules";
-    
-    $fh = fopen("outputPREKA.txt","w");
-    
-    
-    fwrite($fh, print_r($pdb_str,true));
-    
-    // Create the parser class
-    $pdbloader = new PDBLoader($pdb_str);
-   
-    
-    
-    // parse the pdb into atoms and verticesBonds
-    $molecule = $pdbloader->parser();
-    
-    //fwrite($fh, print_r($molecule,true));
-    fclose($fh);
-    
 
-    // Make the materials and their metas
-    $pdbloader->saveTheMaterial($molecule['atoms'], $dirMaterials);
-   
-    // Make the prefab and its meta
-    $pdbloader->makeThePrefab($molecule_post_id, $molecule_post_name, $molecule['atoms'], $molecule['verticesBonds'], $dirMolecules);
+	//$prefab_path = "C:\\xampp7\htdocs\wordpress\wp-content\uploads\chemtestUnity\Assets\StandardAssets\Prefabs\\";
+	$prefab_path = $projectLocalPath."\\".$projectName."Unity\Assets\StandardAssets\Prefabs\\";
+
+	$dirMaterials =  $prefab_path."Elements\Transparent";
+	$dirMolecules =  $prefab_path."Molecules";
+
+	$fh = fopen("outputPREKA.txt","w");
+
+
+	fwrite($fh, print_r($pdb_str,true));
+
+	// Create the parser class
+	$pdbloader = new PDBLoader($pdb_str);
+
+
+
+	// parse the pdb into atoms and verticesBonds
+	$molecule = $pdbloader->parser();
+
+	//fwrite($fh, print_r($molecule,true));
+	fclose($fh);
+
+
+	// Make the materials and their metas
+	$pdbloader->saveTheMaterial($molecule['atoms'], $dirMaterials);
+
+	// Make the prefab and its meta
+	$pdbloader->makeThePrefab($molecule_post_id, $molecule_post_name, $molecule['atoms'], $molecule['verticesBonds'], $dirMolecules);
 }
 
 
