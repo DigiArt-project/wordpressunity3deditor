@@ -82,16 +82,13 @@ if(wpunity_getUnity_local_or_remote() != 'remote') {
     
 } else {
     
-    
     $ftp_cre = wpunity_get_ftpCredentials();
     $ftp_host = $ftp_cre['address'];
     
     $gamesFolder = 'COMPILE_UNITY3D_GAMES';
     
-    
     $gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
     $gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
-    
 }
 
 
@@ -444,7 +441,7 @@ get_header(); ?>
 						<iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
 					</div>-->
 
-            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="/*STATHIS TEMPvisibility:hidden;*/ width:100%; height:400; /*display: none;*/"
+            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
 

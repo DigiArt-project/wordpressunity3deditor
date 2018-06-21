@@ -83,8 +83,7 @@ MeshCollider:
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ___[room_obj_guid]___, type: 3}');
 
-$ini_asset_gate = array('# ENVISAGE - GATE Yaml
---- !u!1001 &___[gate_fid]___
+$ini_asset_gate = array('--- !u!1001 &___[gate_fid]___
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1846,8 +1845,7 @@ global $ini_scene_chemistry_unity_pattern,$ini_scene_main_menu_chem_unity_patter
 global $ini_scene_login_chem_unity_pattern,$ini_scene_reward_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern,$ini_scene_selector_chem_unity_pattern2,$ini_scene_selector_chem_text;
 global $ini_scene_chem_exam,$ini_scene_chem_exam3d;
 
-$ini_scene_chemistry_unity_pattern = array ('#ENVISAGE LAB wander-around yaml
-%YAML 1.1
+$ini_scene_chemistry_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
@@ -2079,6 +2077,71 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 17869497}
+--- !u!1 &22957921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 22957922}
+  - component: {fileID: 22957923}
+  m_Layer: 9
+  m_Name: Point light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &22957922
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22957921}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.79, y: 0.089999914, z: 7.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1049919805}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &22957923
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22957921}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 20
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &23288342
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,7 +2173,7 @@ Transform:
   - {fileID: 1048944794}
   - {fileID: 923116936}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &41414292
 GameObject:
@@ -2311,7 +2374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &254591997
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2635,7 +2698,7 @@ Prefab:
         type: 2}
       propertyPath: logTexts.Array.data[0]
       value: "The number of exercises you solved in both quizzes is not what I expected.
-        I believe you can do better, give it another try.  You have been awarded the
+I believe you can do better, give it another try.  You have been awarded the
         "Chemistry lab assistant" badge. "
       objectReference: {fileID: 0}
     - target: {fileID: 114016839438512074, guid: fa863ece858329f42b1ace19851feec8,
@@ -2792,7 +2855,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -1.9250042, y: 0}
   m_SizeDelta: {x: 3.85, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3014,7 +3077,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4795357146255656, guid: d96e2996417f73d43b58f80956bd1927, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 82723325584739438, guid: d96e2996417f73d43b58f80956bd1927,
         type: 2}
@@ -3931,7 +3994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029511692
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4142,6 +4205,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1630605515}
+  - {fileID: 1833314353}
+  - {fileID: 22957922}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4604,7 +4669,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4194833833431550, guid: c4d6444502ba61f4c8e6acd3e1ea6d3e, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114060574274684530, guid: c4d6444502ba61f4c8e6acd3e1ea6d3e,
         type: 2}
@@ -5184,7 +5249,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1431218767
 GameObject:
@@ -5538,7 +5603,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 0.928, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -5861,6 +5926,71 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1788685330}
+--- !u!1 &1833314352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1833314353}
+  - component: {fileID: 1833314354}
+  m_Layer: 9
+  m_Name: Point light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1833314353
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1833314352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.96, y: 0.09, z: 7.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1049919805}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &1833314354
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1833314352}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 20
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &1971748960
 GameObject:
   m_ObjectHideFlags: 0
@@ -6310,7 +6440,8 @@ CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2137086218}');
+  m_GameObject: {fileID: 2137086218}
+');
 
 $ini_scene_main_menu_chem_unity_pattern = array('%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
