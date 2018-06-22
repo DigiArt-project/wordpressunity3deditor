@@ -35,6 +35,7 @@ function wpunity_addStrategy_APIcall($project_id){
 
 		$error_message = $token_request->get_error_message();
 		print_r($error_message);
+		print_r("1");
 
 	} else {
 
@@ -43,7 +44,8 @@ function wpunity_addStrategy_APIcall($project_id){
 		$token = $token->token;
 
 		// Create ID from game version and project id
-		$strategy_id = 1;
+        $rand_id = rand(0,1000);
+		$strategy_id = $user_id."".$project_id."".$rand_id;
 
 
 		$args = array(
@@ -70,6 +72,7 @@ function wpunity_addStrategy_APIcall($project_id){
 
 			$error_message = $request->get_error_message();
 			print_r( $error_message );
+			print_r("2");
 
 		} else {
 
@@ -97,6 +100,7 @@ function wpunity_addStrategy_APIcall($project_id){
 
 				$error_message = $request->get_error_message();
 				print_r( $error_message );
+				print_r("3");
 
 			} else {
 
@@ -104,6 +108,7 @@ function wpunity_addStrategy_APIcall($project_id){
 
 					print_r( $request['response']['code'] );
 					print_r( $request['response']['message'] );
+					print_r("4");
 					// Todo: @Tasos place an alert div with message
 					//die();
 				}
@@ -111,6 +116,7 @@ function wpunity_addStrategy_APIcall($project_id){
 		}
 	}
 
+	die();
 
 }
 
