@@ -116,7 +116,7 @@ function wpunity_addStrategy_APIcall($project_id){
 					print_r( $request['response']['code'] );
 					print_r( $request['response']['message'] );
 					print_r("4");
-					die();
+					/*die();*/
 
 					// Todo: @Tasos place an alert div with message
 					//die();
