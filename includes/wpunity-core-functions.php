@@ -33,8 +33,8 @@ function wpunity_addStrategy_APIcall($project_id){
 	if (is_wp_error( $token_request ) ) {
 
 		$error_message = $token_request->get_error_message();
-		print_r($error_message);
-		print_r("1");
+		/*print_r($error_message);
+		print_r("1");*/
 
 	} else {
 
@@ -70,14 +70,14 @@ function wpunity_addStrategy_APIcall($project_id){
 		if ( is_wp_error( $request ) ) {
 
 			$error_message = $request->get_error_message();
-			print_r( $error_message );
-			print_r("2");
+			/*print_r( $error_message );
+			print_r("2");*/
 
 		} else {
 
-			print_r( "strategies-request");
+			/*print_r( "strategies-request");
 			print_r( $request['response']['code'] );
-			print_r( $request['response']['message'] );
+			print_r( $request['response']['message'] );*/
 
 			$args = array(
 				'method'      => 'POST',
@@ -106,16 +106,16 @@ function wpunity_addStrategy_APIcall($project_id){
 			if ( is_wp_error( $request ) ) {
 
 				$error_message = $request->get_error_message();
-				print_r( $error_message );
-				print_r("3");
+				/*print_r( $error_message );
+				print_r("3");*/
 
 			} else {
 
 				if ( (string) (int) $request['response']['code'] !== '201' ) {
 
-					print_r( $request['response']['code'] );
+					/*print_r( $request['response']['code'] );
 					print_r( $request['response']['message'] );
-					print_r("4");
+					print_r("4");*/
 					/*die();*/
 
 					// Todo: @Tasos place an alert div with message

@@ -392,20 +392,12 @@ get_header(); ?>
             });
         }
 
-
-
-
-
         jQuery("#deleteMolecDialogDeleteBtn").click(function () {
-
-            console.log("HAI");
 
             jQuery('#delete-molec-dialog-progress-bar').show();
 
             jQuery( "#deleteMolecDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteMolecDialogCancelBtn" ).addClass( "LinkDisabled" );
-
-            console.log(this);
 
             /*wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>);*/
 
