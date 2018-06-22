@@ -140,14 +140,17 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     
     if ($post_type == 'wpunity_game' && $new_status == 'publish') {
     
-        $fh = fopen("output_folder_Game.txt","a");
-        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
-        fclose($fh);
+//        $fh = fopen("output_folder_Game.txt","a");
+//        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
+//        fclose($fh);
         
         if(($gameSlug != 'archaeology-joker') && ($gameSlug != 'energy-joker') && ($gameSlug != 'chemistry-joker')){
 
             $gameTitle = $post->post_title;
             $gameID = $post->ID;
+
+            //TEMPORARY
+            update_post_meta( $gameID, 'wpunity_project_expID', '82a5dc78-dd27-43db-be12-f5440bbc9dd5');
 
             wp_insert_term(
                 'Apple', // the term
