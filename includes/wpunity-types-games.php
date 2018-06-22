@@ -149,6 +149,9 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             $gameTitle = $post->post_title;
             $gameID = $post->ID;
 
+            //TEMPORARY
+            update_post_meta( $gameID, 'wpunity_project_expID', '82a5dc78-dd27-43db-be12-f5440bbc9dd5');
+
             wp_insert_term(
                 'Apple', // the term
                 'product', // the taxonomy
