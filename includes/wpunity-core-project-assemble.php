@@ -5,6 +5,8 @@
 
 function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlatform, $gameType){
 
+    wpunity_addStrategy_APIcall($gameID);
+
     wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
 
     wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
