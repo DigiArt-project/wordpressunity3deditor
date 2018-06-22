@@ -863,6 +863,9 @@ MeshFilter:
             // get the colors to make the mat and its meta
             $mat_meta = $this->_atomMaterialPattern (  $red, $green, $blue, $mat_meta_id );
         
+            
+            
+            
             // Make the dir if does not exist
             if(!is_dir($dirFormAtomMaterials))
                 mkdir($dirFormAtomMaterials);
