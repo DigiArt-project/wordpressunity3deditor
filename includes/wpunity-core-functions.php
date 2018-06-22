@@ -97,9 +97,9 @@ function wpunity_addStrategy_APIcall($project_id){
 				'cookies'     => array()
 			);
 
-			var_dump($args);
+			/*var_dump($args);
 
-			print_r( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/");
+			print_r( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/");*/
 
 			$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
 

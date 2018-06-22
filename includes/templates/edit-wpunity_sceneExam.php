@@ -387,7 +387,16 @@ get_header(); ?>
             deleteDialog.focusTrap_.deactivate();
 
             jQuery("#deleteAssetBtn").click(function () {
-                deleteDialog.show();
+                //deleteDialog.show();
+
+                console.log(this);
+
+
+
+
+
+
+
 
             });
         }
@@ -398,6 +407,8 @@ get_header(); ?>
 
             jQuery( "#deleteMolecDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteMolecDialogCancelBtn" ).addClass( "LinkDisabled" );
+
+            console.log(this.attr("id"));
 
             /*wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>);*/
 
