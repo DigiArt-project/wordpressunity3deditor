@@ -140,9 +140,9 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
     
     if ($post_type == 'wpunity_game' && $new_status == 'publish') {
     
-        $fh = fopen("output_folder_Game.txt","a");
-        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
-        fclose($fh);
+//        $fh = fopen("output_folder_Game.txt","a");
+//        fwrite($fh, $post_type . " " . $new_status ." ". $gameSlug .'\n' );
+//        fclose($fh);
         
         if(($gameSlug != 'archaeology-joker') && ($gameSlug != 'energy-joker') && ($gameSlug != 'chemistry-joker')){
 
