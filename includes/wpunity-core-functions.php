@@ -12,7 +12,6 @@ function wpunity_addStrategy_APIcall($project_id){
 	/*$allStrategies = wpunity_getAllStrategies_byGame($project_id);*/
 
 	$allStrategies = wpunity_combineGameStrategies($project_id);
-	$allStrategies = json_encode($allStrategies);
 
 	$args = array(
 		'method' => 'POST',
@@ -76,6 +75,10 @@ function wpunity_addStrategy_APIcall($project_id){
 
 		} else {
 
+			print_r( "strategies-request");
+			print_r( $request['response']['code'] );
+			print_r( $request['response']['message'] );
+
 			$args = array(
 				'method'      => 'POST',
 				'timeout'     => 45,
@@ -94,6 +97,10 @@ function wpunity_addStrategy_APIcall($project_id){
 				'cookies'     => array()
 			);
 
+			var_dump($args);
+
+			print_r( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/");
+
 			$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
 
 			if ( is_wp_error( $request ) ) {
@@ -109,14 +116,14 @@ function wpunity_addStrategy_APIcall($project_id){
 					print_r( $request['response']['code'] );
 					print_r( $request['response']['message'] );
 					print_r("4");
+					/*die();*/
+
 					// Todo: @Tasos place an alert div with message
 					//die();
 				}
 			}
 		}
 	}
-
-	die();
 
 }
 
