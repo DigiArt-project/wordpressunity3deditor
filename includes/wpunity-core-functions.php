@@ -2533,12 +2533,20 @@ function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_po
 
 	$dirMaterials =  $prefab_path."Elements\Transparent";
 	$dirMolecules =  $prefab_path."Molecules";
-
+    
+    $dirMaterials = str_replace('\\', '/', $dirMaterials);
+    $dirMolecules = str_replace('\\', '/', $dirMolecules);
+	
+	
 	$fh = fopen("outputPREKA.txt","w");
 
 
 	fwrite($fh, print_r($pdb_str,true));
-
+    
+    fwrite($fh,"\n");
+    fwrite($fh, "dirMaterials:" . $dirMaterials);
+    fwrite($fh,"\n");
+    
 	// Create the parser class
 	$pdbloader = new PDBLoader($pdb_str);
 
