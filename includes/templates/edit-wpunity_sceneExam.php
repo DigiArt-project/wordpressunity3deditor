@@ -385,7 +385,16 @@ get_header(); ?>
         if (deleteDialog) {
             deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
             deleteDialog.focusTrap_.deactivate();
+
+            jQuery("#deleteAssetBtn").click(function () {
+                deleteDialog.show();
+
+            });
         }
+
+
+
+
 
         jQuery("#deleteMolecDialogDeleteBtn").click(function () {
 
