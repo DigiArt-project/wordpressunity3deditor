@@ -1,5 +1,8 @@
 <?php
 
+$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+$pluginpath = str_replace('\\','/',$pluginpath);
+
 function load2DSceneEditorScripts() {
 	wp_enqueue_script('wpunity_scripts');
 }
