@@ -9,10 +9,7 @@ function wpunity_addStrategy_APIcall($project_id){
 
 	$project_keys = wpunity_getProjectKeys($project_id);
 
-	/*$allStrategies = wpunity_getAllStrategies_byGame($project_id);*/
-
 	$allStrategies = wpunity_combineGameStrategies($project_id);
-	$allStrategies = json_encode($allStrategies);
 
 	$args = array(
 		'method' => 'POST',
@@ -34,8 +31,8 @@ function wpunity_addStrategy_APIcall($project_id){
 	if (is_wp_error( $token_request ) ) {
 
 		$error_message = $token_request->get_error_message();
-		print_r($error_message);
-		print_r("1");
+		/*print_r($error_message);
+		print_r("1");*/
 
 	} else {
 
@@ -44,7 +41,7 @@ function wpunity_addStrategy_APIcall($project_id){
 		$token = $token->token;
 
 		// Create ID from game version and project id
-        $rand_id = rand(0,1000);
+		$rand_id = rand(0,1000);
 		$strategy_id = $user_id."".$project_id."".$rand_id;
 
 
@@ -57,24 +54,30 @@ function wpunity_addStrategy_APIcall($project_id){
 			'sslverify'   => 0,
 			'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
 			'body'        => json_encode( array(
-				'type'       => 'strategy',
-				'id'         => $strategy_id,
-				'attributes' => array(
-					'config' => $allStrategies
+				'data' => array(
+					'type'       => 'strategy',
+					'id'         => $strategy_id,
+					'attributes' => array(
+						'config' => $allStrategies
+					)
 				)
 			) ),
 			'cookies'     => array()
 		);
 
-		$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/", $args );
+		$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/", $args );
 
 		if ( is_wp_error( $request ) ) {
 
 			$error_message = $request->get_error_message();
-			print_r( $error_message );
-			print_r("2");
+			/*print_r( $error_message );
+			print_r("2");*/
 
 		} else {
+
+			/*print_r( "strategies-request");
+			print_r( $request['response']['code'] );
+			print_r( $request['response']['message'] );*/
 
 			$args = array(
 				'method'      => 'POST',
@@ -85,38 +88,38 @@ function wpunity_addStrategy_APIcall($project_id){
 				'sslverify'   => 0,
 				'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
 				'body'        => json_encode( array(
-					'type'       => 'test',
-					'id'         => $strategy_id,
-					'attributes' => array(
-						'count' => 1000
+					'data' => array(
+						'type'       => 'test',
+						'attributes' => array(
+							'count' => 1000
+						)
 					)
+
 				) ),
 				'cookies'     => array()
 			);
 
-			$request = wp_remote_post( "http://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
+			$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
 
 			if ( is_wp_error( $request ) ) {
 
 				$error_message = $request->get_error_message();
-				print_r( $error_message );
-				print_r("3");
+				/*print_r( $error_message );
+				print_r("3");*/
 
 			} else {
 
 				if ( (string) (int) $request['response']['code'] !== '201' ) {
 
-					print_r( $request['response']['code'] );
-					print_r( $request['response']['message'] );
-					print_r("4");
+				/*	print_r( $request['response']['code'] );
+					print_r( $request['response']['message'] );*/
+
 					// Todo: @Tasos place an alert div with message
 					//die();
 				}
 			}
 		}
 	}
-
-	die();
 
 }
 
@@ -2539,20 +2542,20 @@ function addMoleculePrefabToAssets($projectLocalPath, $projectName, $molecule_po
 
 	$dirMaterials =  $prefab_path."Elements\Transparent";
 	$dirMolecules =  $prefab_path."Molecules";
-    
-    $dirMaterials = str_replace('\\', '/', $dirMaterials);
-    $dirMolecules = str_replace('\\', '/', $dirMolecules);
-	
-	
+
+	$dirMaterials = str_replace('\\', '/', $dirMaterials);
+	$dirMolecules = str_replace('\\', '/', $dirMolecules);
+
+
 	$fh = fopen("outputPREKA.txt","w");
 
 
 	fwrite($fh, print_r($pdb_str,true));
-    
-    fwrite($fh,"\n");
-    fwrite($fh, "dirMaterials:" . $dirMaterials);
-    fwrite($fh,"\n");
-    
+
+	fwrite($fh,"\n");
+	fwrite($fh, "dirMaterials:" . $dirMaterials);
+	fwrite($fh,"\n");
+
 	// Create the parser class
 	$pdbloader = new PDBLoader($pdb_str);
 

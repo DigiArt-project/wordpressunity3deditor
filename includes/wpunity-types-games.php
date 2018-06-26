@@ -149,11 +149,31 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             $gameTitle = $post->post_title;
             $gameID = $post->ID;
 
+            //TEMPORARY
+            update_post_meta( $gameID, 'wpunity_project_expID', '82a5dc78-dd27-43db-be12-f5440bbc9dd5');
+
+            wp_insert_term(
+                'Apple', // the term
+                'product', // the taxonomy
+                array(
+                    'description'=> 'A yummy apple.',
+                    'slug' => 'apple',
+                )
+            );
+
             //Create a parent game tax category for the scenes
-            wp_insert_term($gameTitle,'wpunity_scene_pgame',$gameSlug,'Scene of a Game');
+            wp_insert_term($gameTitle,'wpunity_scene_pgame', array(
+                'description'=> 'Scene of a Game',
+                'slug' => $gameSlug,
+                )
+            );
 
             //Create a parent game tax category for the assets
-            wp_insert_term($gameTitle,'wpunity_asset3d_pgame',$gameSlug,'Asset of a Game');
+            wp_insert_term($gameTitle,'wpunity_asset3d_pgame',array(
+                'description'=> 'Asset of a Game',
+                'slug' => $gameSlug,
+                )
+            );
 
             //Create Default Scenes for this "Game"
             wpunity_create_default_scenes_for_game($gameSlug,$gameTitle,$gameID);

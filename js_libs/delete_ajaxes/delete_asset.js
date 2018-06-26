@@ -27,6 +27,11 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
             res = JSON.parse(res);
             console.log("Asset with id=" + res + " was succesfully deleted");
 
+            if (deleteDialog) {
+                jQuery('#delete-scene-dialog-progress-bar').hide();
+                deleteDialog.close();
+            }
+
             // remove asset from scene (if we are at scene editor
             if (typeof envir != "undefined") {
                 // Remove objects from scene

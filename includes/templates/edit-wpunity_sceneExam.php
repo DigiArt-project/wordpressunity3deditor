@@ -1,5 +1,8 @@
 <?php
 
+$pluginpath = dirname (plugin_dir_url( __DIR__  ));
+$pluginpath = str_replace('\\','/',$pluginpath);
+
 function load2DSceneEditorScripts() {
 	wp_enqueue_script('wpunity_scripts');
 }
@@ -28,6 +31,7 @@ $project_id = sanitize_text_field( $project_id );
 
 $game_post = get_post($project_id);
 $game_type_obj = wpunity_return_game_type($project_id);
+$gameSlug = $game_post->post_name;
 
 $scene_post = get_post($scene_id);
 $sceneSlug = $scene_post->post_title;
@@ -190,7 +194,7 @@ get_header(); ?>
                                                         </div>
                                                         <section class="mdc-card__actions">
                                                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action"
-                                                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
+                                                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>" onclick="deleteMolecule('<?php echo $molecule['moleculeID']?>','<?php echo $gameSlug; ?>')">DELETE</a>
                                                             <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $gotoAdd_newAsset_page . '&wpunity_asset=' . $molecule['moleculeID']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
 																<?php
 																echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
@@ -382,18 +386,22 @@ get_header(); ?>
             deleteDialog.focusTrap_.deactivate();
         }
 
-        jQuery("#deleteMolecDialogDeleteBtn").click(function () {
+        function deleteMolecule(id, game_slug) {
 
-            console.log("HAI");
+            deleteDialog.id = id;
+            deleteDialog.game_slug = game_slug;
+            deleteDialog.show();
+
+        }
+
+        jQuery("#deleteMolecDialogDeleteBtn").click(function () {
 
             jQuery('#delete-molec-dialog-progress-bar').show();
 
             jQuery( "#deleteMolecDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteMolecDialogCancelBtn" ).addClass( "LinkDisabled" );
 
-            console.log(this);
-
-            /*wpunity_deleteAssetAjax(<?php echo $molecule['moleculeID'];?>,'<?php echo $gameSlug ?>',<?php echo $molecule['isCloned'];?>);*/
+            wpunity_deleteAssetAjax(deleteDialog.id, deleteDialog.game_slug);
 
         });
 
