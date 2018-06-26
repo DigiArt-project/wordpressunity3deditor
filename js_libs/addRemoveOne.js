@@ -1,6 +1,8 @@
 function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
                           categoryName, categoryID, diffImages, diffImageIDs, image1id,
-                          doorName_source, doorName_target, sceneName_target, sceneID_target, isreward, isCloned, isJoker,
+                          doorName_source, doorName_target, sceneName_target, sceneID_target, archaeology_penalty,
+                          hv_penalty, natural_penalty,
+                          isreward, isCloned, isJoker,
                           x, y, z, r1=0, r2=0, r3=0, s=1){
 
     // Add javascript variables for viewing the object correctly
@@ -26,6 +28,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "doorName_target":doorName_target,
         "sceneName_target":sceneName_target,
         "sceneID_target":sceneID_target,
+        "archaeology_penalty":archaeology_penalty,
+        "hv_penalty":hv_penalty,
+        "natural_penalty":natural_penalty,
         "isreward":isreward,
         "isCloned":isCloned,
         "isJoker":isJoker,
@@ -79,14 +84,37 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var sizeT = Math.max(...dims);
         transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
+        jQuery("#removeAssetBtn").show();
+        transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
-        // insertedObject.children.add
         if (categoryName==="Producer"){
 
-            var plane = makeProducerPlane();
+            //var plane = makeProducerPlane();
 
-            insertedObject.add(plane);
+            //insertedObject.add(plane);
+
+            var clonos = [];
+
+            var NClones = 6;
+            for (var i=0; i<NClones; i++){
+
+                clonos[i] = new THREE.Mesh();
+                clonos[i].copy(insertedObject);
+                clonos[i].position.set((i+1)*100, 0, 0);
+                clonos[i].children[0].material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent:true, opacity: 0.8/(i+1)});
+                clonos[i].children[1].material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent:true, opacity: 0.8/(i+1)});
+                clonos[i].name=  "clonosTurbine1";
+            }
+
+            for (var i=0; i<NClones; i++) {
+                insertedObject.add(clonos[i]);
+            }
+
+
+            insertedObject.position.set(0, 100, 0);
         }
+
+
 
 
         // Add in scene
@@ -148,7 +176,6 @@ function unixTimestamp_to_time( tStr){
 }
 
 function makeProducerPlane(){
-
 
     var geometry = new THREE.Geometry();
 

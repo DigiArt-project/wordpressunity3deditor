@@ -363,6 +363,9 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
                 'doorName_target'=>'', //$doorName_target,
                 'sceneName_target'=>'', //$sceneName_target
                 'sceneID_target'=>'', //$sceneName_target
+                'archaeology_penalty'=>'0',
+                'hv_penalty'=>'0',
+                'natural_penalty'=>'0',
                 'isreward'=> '0',
                 'isJokerAsset'=> $isJoker,
                 'isCloned'=> $isCloned,

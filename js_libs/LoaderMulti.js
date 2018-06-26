@@ -185,6 +185,11 @@ class LoaderMulti {
                                 object.doorName_target = resources3D[name]['doorName_target'];
                                 object.sceneName_target = resources3D[name]['sceneName_target'];
                                 object.sceneID_target = resources3D[name]['sceneID_target'];
+
+                                object.archaeology_penalty = resources3D[name]['archaeology_penalty'];
+                                object.hv_penalty = resources3D[name]['hv_penalty'];
+                                object.natural_penalty = resources3D[name]['natural_penalty'];
+
                                 object.isreward = resources3D[name]['isreward'];
                                 object.isCloned = resources3D[name]['isCloned'];
 

@@ -124,6 +124,10 @@ function onMouseDownSelect( event ) {
             // Steve can not be deleted
             transform_controls.size = 1;
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
+
+            console.log("RAYCASTERS");
+            console.log(transform_controls);
+
             jQuery("#removeAssetBtn").hide();
 
             return;
@@ -165,13 +169,10 @@ function onMouseDownSelect( event ) {
  */
 function selectorMajor(event, objectSel){
 
-
     if (event.button === 0) {
 
         // set the selected color of the hierarchy viewer
         envir.setBackgroundColorHierarchyViewer(objectSel.name);
-
-
 
         transform_controls.attach(objectSel);
         envir.renderer.setClearColor( 0xeeeeee  );
@@ -182,6 +183,7 @@ function selectorMajor(event, objectSel){
 
         if (objectSel.name === "avatarYawObject") {
             // case of selecting by hierarchy viewer
+
             transform_controls.size = 1;
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
             jQuery("#removeAssetBtn").hide();
@@ -192,8 +194,10 @@ function selectorMajor(event, objectSel){
             var sizeT = Math.max(...dims);
 
             transform_controls.size = sizeT > 1 ? sizeT : 1;
-        }
 
+            jQuery("#removeAssetBtn").show();
+            transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
+        }
 
         transform_controls.setMode( envir.is2d ? "rottrans" : "translate" );
 
@@ -601,41 +605,51 @@ function displayDoorProperties(event, name){
 function displayMarkerProperties(event, name){
 
     var popUpMarkerPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
-    var popupMarkerSelect = jQuery("#popupMarkerSelect");
+
+    // The three select penalties
+    var selectArchPenalty   = jQuery("#archaeology_penalty");
+    var selectHVPenalty     = jQuery("#hv_distance_penalty");
+    var selectNaturalPenalty= jQuery("#natural_resource_proximity_penalty");
 
     // Save the previous marker values (in case of  direct mouse click on another marker)
-    popupMarkerSelect.trigger("change");
+    selectArchPenalty.trigger("change");
+    selectHVPenalty.trigger("change");
+    selectNaturalPenalty.trigger("change");
 
-    clearAndUnbind("popupMarkerSelect");
+    // Clear values and unbind and select function
+    clearAndUnbind("archaeology_penalty", null, null);
+    clearAndUnbind("hv_distance_penalty", null, null);
+    clearAndUnbind("natural_resource_proximity_penalty", null, null);
 
+    // Create options
+    createOption(selectArchPenalty[0], "0", "0", true, false, "#fff");
+    createOption(selectArchPenalty[0], "-2", "-2", false, false, "#fff");
 
-    var scenesNonRegionalSTR = [];
+    createOption(selectHVPenalty[0], "0", "0", true, false, "#fff");
+    createOption(selectHVPenalty[0], "-2", "-2", false, false, "#fff");
 
-    for (var l=0; l < scenesNonRegional.length; l++)
-        scenesNonRegionalSTR.push ( scenesNonRegional[l].sceneSlug );
+    createOption(selectNaturalPenalty[0], "0", "0", true, false, "#fff");
+    createOption(selectNaturalPenalty[0], "-2", "-2", false, false, "#fff");
 
-    // Create options for the select widget
-    createOption(popupMarkerSelect[0], "Select a scene", "Select a scene", true, true, "#fff");
-
-    for (var sceneNameAndSlug of scenesNonRegionalSTR )
-        createOption(popupMarkerSelect[0], sceneNameAndSlug, sceneNameAndSlug, false, false, "#fff");
-
-    if(envir.scene.getObjectByName(name).sceneName_target)
-        popupMarkerSelect.val ( envir.scene.getObjectByName(name).sceneName_target );
+    // Load selected values from 3D scene
+    selectArchPenalty.val( envir.scene.getObjectByName(name).archaeology_penalty );
+    selectHVPenalty.val( envir.scene.getObjectByName(name).hv_penalty );
+    selectNaturalPenalty.val( envir.scene.getObjectByName(name).natural_penalty );
 
     // Show the whole popup div
     showWholePopupDiv(popUpMarkerPropertiesDiv, event);
 
     // On popup change
-    popupMarkerSelect.change(function(e) {
-        var valScene = popupMarkerSelect.val();
+    selectArchPenalty.change(function(e) {
+        envir.scene.getObjectByName(name).archaeology_penalty = selectArchPenalty.val();
+    });
 
-        if (!valScene)
-            return;
+    selectHVPenalty.change(function(e) {
+        envir.scene.getObjectByName(name).hv_penalty = selectHVPenalty.val();
+    });
 
-        if (valScene && valScene != "Select a scene")
-            envir.scene.getObjectByName(name).sceneName_target = valScene.trim();
-
+    selectNaturalPenalty.change(function(e) {
+        envir.scene.getObjectByName(name).natural_penalty = selectNaturalPenalty.val();
     });
 
     return;
@@ -651,7 +665,8 @@ function clearAndUnbind(selectName=null, idstr=null, chkboxname=null){
 
     // Clear the select DOM
     if (selectName) {
-        var selectDOM = document.getElementById(selectName);
+
+        var selectDOM = document.getElementById( selectName );
         for (var i = selectDOM.options.length; i-- > 0;)
             selectDOM.options[i] = null;
 

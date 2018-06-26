@@ -166,6 +166,10 @@ echo '</script>';
         var doorName_target = dataDrag.doorName_target;
         var sceneName_target = dataDrag.sceneName_target;
         var sceneID_target = dataDrag.sceneID_target;
+        var archaeology_penalty = dataDrag.archaeology_penalty;
+        var hv_penalty          = dataDrag.hv_penalty;
+        var natural_penalty     = dataDrag.natural_penalty;
+        
         var isreward = dataDrag.isreward;
         var isCloned = dataDrag.isCloned;
         var isJoker = dataDrag.isJoker;
@@ -181,7 +185,11 @@ echo '</script>';
         // Asset is added to canvas
         addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
             categoryName, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-            sceneID_target, isreward, isCloned, isJoker,
+            sceneID_target,
+            archaeology_penalty,
+            hv_penalty,
+            natural_penalty,
+            isreward, isCloned, isJoker,
             coordsXYZ[0],
             coordsXYZ[1],
             coordsXYZ[2]);
@@ -363,6 +371,7 @@ echo '</script>';
 
         <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
            style="vertical-align: text-bottom;">directions</i>
+        
         <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
                 class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
         </select>
@@ -376,17 +385,59 @@ echo '</script>';
     <div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
          style="min-width: 240px; max-width:300px; display:none">
 
-        <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindMarkerProperties(); return false;'>
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
-        <p class="mdc-typography--subheading1" style=""> Marker options </p>
+        <p class="mdc-typography--subheading1" style=""> Marker options</p>
+    
+        <table>
+            <tr>
+                <td>
+                    <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
+                </td>
+                <td>
+                    <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
+                </td>
+                <td>
+                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                </td>
+            </tr>
 
-        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
-           style="vertical-align: text-bottom;">directions</i>
-        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"
-                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
-        </select>
+            <tr>
+                <td>
+                    <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
+                </td>
+                <td>
+                    <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
+                    </select>
+                </td>
+                <td>
+                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
+                </td>
+                <td>
+                    <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
+                    </select>
+                </td>
+                <td>
+                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                </td>
+            </tr>
+        </table>
+        
+        
+<!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
+<!--           style="vertical-align: text-bottom;">directions</i>-->
+<!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
+<!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
+<!--        </select>-->
 
     </div>
 
@@ -763,6 +814,8 @@ echo '</script>';
             if (selected_object_name != 'avatarYawObject') {
                 var dims = findDimensions(transform_controls.object);
                 var sizeT = Math.max(...dims);
+                jQuery("#removeAssetBtn").show();
+                transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
             } else {
                
                 //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];

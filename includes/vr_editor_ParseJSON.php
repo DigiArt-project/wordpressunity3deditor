@@ -48,6 +48,11 @@ class ParseJSON {
                 $sceneName_target = $value->sceneName_target;
                 $sceneID_target = $value->sceneID_target;
 
+                $archaeology_penalty = $value->archaeology_penalty;
+                $hv_penalty = $value->hv_penalty;
+                $natural_penalty = $value->natural_penalty;
+                
+                
                 $isreward = $value->isreward;
                 $isCloned = $value->isCloned;
                 $isJoker = $value->isJoker;
@@ -83,6 +88,9 @@ class ParseJSON {
                                             '","doorName_target":"'.$doorName_target.
                                             '","sceneName_target":"'.$sceneName_target.
                                             '","sceneID_target":"'.$sceneID_target.
+                                            '","archaeology_penalty":"'.$archaeology_penalty.
+                                            '","hv_penalty":"'.$hv_penalty.
+                                            '","natural_penalty":"'.$natural_penalty.
                                             '","isreward":"'.$isreward.
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.

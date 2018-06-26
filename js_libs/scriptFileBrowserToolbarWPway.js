@@ -120,6 +120,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "isreward":e.target.attributes.getNamedItem("data-isreward").value,
                 "sceneName_target":e.target.attributes.getNamedItem("data-sceneName_target").value,
                 "sceneID_target":e.target.attributes.getNamedItem("data-sceneID_target").value,
+                "archaeology_penalty":e.target.attributes.getNamedItem("data-archaeology_penalty").value,
+                "hv_penalty":e.target.attributes.getNamedItem("data-hv_penalty").value,
+                "natural_penalty":e.target.attributes.getNamedItem("data-natural_penalty").value,
                 "isCloned":e.target.attributes.getNamedItem("data-isCloned").value,
                 "isJoker":e.target.attributes.getNamedItem("data-isJoker").value
             };
@@ -202,6 +205,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-doorName_target="'+ f.doorName_target +
                     '" data-sceneName_target="'+ f.sceneName_target +
                     '" data-sceneID_target="'+ f.sceneID_target +
+                    '" data-archaeology_penalty="'+ f.archaeology_penalty +
+                    '" data-hv_penalty="'+ f.hv_penalty +
+                    '" data-natural_penalty="'+ f.natural_penalty +
                     '" data-sshot-url="'+ f.screenImagePath +
                     '" data-isreward="'+ f.isreward +
                     '" data-isCloned="'+ f.isCloned +
