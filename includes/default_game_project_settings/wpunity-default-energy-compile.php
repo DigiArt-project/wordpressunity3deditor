@@ -3,11 +3,15 @@
 function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
     //DATA of mainmenu
     $term_meta_s_mainmenu = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_mainmenu',true);
-    $title_text = $scene_post->post_title;
-    $is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) );
-    $is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) );
-    $is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) );
-    $is_exit_button_active = 1;//TODO
+
+    //$is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) );
+    //$is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) );
+    //$is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) );
+
+    $is_bt_settings_active = 1;//Always ON
+    $is_help_bt_active = 1;//Always ON
+    $is_login_bt_active = 1;//Always ON
+
     $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
 
