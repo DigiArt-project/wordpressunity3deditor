@@ -2228,7 +2228,7 @@ function wpunity_default_value_unityConnect_energy_get(){
 // YAMLS for SCENES default values (ENERGY GAMES)
 /***************************************************************************************************************/
 
-function wpunity_getYAML_energy($myscene_type){
+function wpunity_getSceneYAML_energy($myscene_type){
   $def_json = '';
 
   if($myscene_type == 'menu') {

@@ -588,12 +588,22 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     fwrite($create_file, $term_meta_s_reward);
     fclose($create_file);
 
+    if($gameType[0]->slug == 'archaeology_games') {
+        $file2 = $game_path . '/' . 'S_SceneSelector.unity';
+        $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
+        $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+        fwrite($create_file2, $file_content);
+        fclose($create_file2);
+    }elseif($gameType[0]->slug == 'chemistry_games'){
+        $file2 = $game_path . '/' . 'S_SceneSelector.unity';
+        $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
+        $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+        fwrite($create_file2, $file_content);
+        fclose($create_file2);
+    }elseif($gameType[0]->slug == 'energy_games'){
+        wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+    }
 
-    $file2 = $game_path . '/' . 'S_SceneSelector.unity';
-    $file_content = str_replace("___[text_title_scene_selector]___",$term_meta_s_selector_title,$term_meta_s_selector);
-    $create_file2 = fopen($file2, "w") or die("Unable to open file!");
-    fwrite($create_file2, $file_content);
-    fclose($create_file2);
 }
 
 //Create MainMenu scene and others
