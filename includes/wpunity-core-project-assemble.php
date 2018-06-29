@@ -303,33 +303,39 @@ function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 //2. Create Project Settings files (16 files)
 function wpunity_compile_settings_gen($gameID,$gameSlug){
 
-    $all_game_category = get_the_terms( $gameID, 'wpunity_game_type' );
-    $game_category = $all_game_category[0]->term_id;
+    $gameType = wp_get_post_terms( $gameID, 'wpunity_game_type' );
+    $fileFolder = 'archaeology';
+
+    if($gameType[0]->slug == 'energy_games') {$fileFolder = 'energy';}
+    if($gameType[0]->slug == 'chemistry_games') {$fileFolder = 'chemistry';}
+
 
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity';
 
-    wpunity_compile_settings_files_gen($gameID, $game_path,'AudioManager.asset',get_term_meta($game_category,'wpunity_audio_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'ClusterInputManager.asset',get_term_meta($game_category,'wpunity_cluster_input_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'DynamicsManager.asset',get_term_meta($game_category,'wpunity_dynamics_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorBuildSettings.asset',get_term_meta($game_category,'wpunity_editor_build_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorSettings.asset',get_term_meta($game_category,'wpunity_editor_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'GraphicsSettings.asset',get_term_meta($game_category,'wpunity_graphics_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'InputManager.asset',get_term_meta($game_category,'wpunity_input_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'NavMeshAreas.asset',get_term_meta($game_category,'wpunity_nav_mesh_areas_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'NetworkManager.asset',get_term_meta($game_category,'wpunity_network_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'Physics2DSettings.asset',get_term_meta($game_category,'wpunity_physics2d_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectSettings.asset',get_term_meta($game_category,'wpunity_project_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectVersion.asset',get_term_meta($game_category,'wpunity_project_version_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'QualitySettings.asset',get_term_meta($game_category,'wpunity_quality_settings_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'TagManager.asset',get_term_meta($game_category,'wpunity_tag_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'TimeManager.asset',get_term_meta($game_category,'wpunity_time_manager_term',true));
-    wpunity_compile_settings_files_gen($gameID, $game_path,'UnityConnectSettings.asset',get_term_meta($game_category,'wpunity_unity_connect_settings_term',true));
+    wpunity_compile_settings_files_gen($gameID, $game_path,'AudioManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ClusterInputManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'DynamicsManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorBuildSettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'EditorSettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'GraphicsSettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'InputManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'NavMeshAreas.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'NetworkManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'Physics2DSettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectSettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'ProjectVersion.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'QualitySettings.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'TagManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'TimeManager.asset',$fileFolder);
+    wpunity_compile_settings_files_gen($gameID, $game_path,'UnityConnectSettings.asset',$fileFolder);
 }
 
-function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileYaml){
+function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileFolder){
+
+    $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
 
     if($fileName === 'ProjectSettings.asset'){
 
@@ -595,11 +601,8 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
         fwrite($create_file2, $file_content);
         fclose($create_file2);
     }elseif($gameType[0]->slug == 'chemistry_games'){
-        $file2 = $game_path . '/' . 'S_SceneSelector.unity';
-        $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
-        $create_file2 = fopen($file2, "w") or die("Unable to open file!");
-        fwrite($create_file2, $file_content);
-        fclose($create_file2);
+        //do nothing
+        wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($gameType[0]->slug == 'energy_games'){
         wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }
