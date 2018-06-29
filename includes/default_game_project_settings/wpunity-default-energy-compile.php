@@ -37,6 +37,8 @@ function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_
     $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
 
+    //STATHIS 1 or 0
+    //$file_content_selector = wpunity_replace_sceneselector_energy_unity($term_meta_s_selector,$mountains_activation,$seashore_activation,$fields_activation);
 
     if($is_bt_settings_active == '1'){
         //CREATE SETTINGS/OPTIONS Unity file
