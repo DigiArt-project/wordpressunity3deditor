@@ -59,7 +59,7 @@ function wpunity_assets_taxcategory_chemistry_fill(){
         )
     );
     $inserted_term1 = get_term_by('slug', 'room', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_room_get(), true);
+    //update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_room_get(), true);
     update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
     wp_insert_term(
@@ -71,7 +71,7 @@ function wpunity_assets_taxcategory_chemistry_fill(){
         )
     );
     $inserted_term2 = get_term_by('slug', 'gate', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_gate_get(), true);
+    //update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_gate_get(), true);
     update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
     wp_insert_term(
@@ -83,7 +83,7 @@ function wpunity_assets_taxcategory_chemistry_fill(){
         )
     );
     $inserted_term5 = get_term_by('slug', 'molecule', 'wpunity_asset3d_cat');
-    update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_molecule_get(), true);
+    //update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_molecule_get(), true);
     update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 3 , true);
 
 }
