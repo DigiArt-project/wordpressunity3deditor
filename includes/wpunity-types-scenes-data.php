@@ -5,6 +5,8 @@
 //This imc_prefix will be added before all of our custom fields
 $wpunity_prefix = 'wpunity_scene_';
 
+//$def_json = wpunity_getDefaultJSONscene('energy');
+
 //All information about our meta box
 $wpunity_databox4 = array(
     'id' => 'wpunity-scenes-databox',
@@ -17,7 +19,7 @@ $wpunity_databox4 = array(
             'desc' => 'Scene Json Input',
             'id' => $wpunity_prefix . 'json_input',
             'type' => 'textarea',
-            'std' => wpunity_getDefaultJSONscene('energy')
+            'std' => ''
         ),
         array(
             'name' => 'Scene Latitude',
