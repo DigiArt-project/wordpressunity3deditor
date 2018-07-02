@@ -852,7 +852,7 @@ Prefab:
       propertyPath: logTexts.Array.data[0]
       value: "The number of exercises you solved in both quizzes is not what I expected.
 I believe you can do better, give it another try.  You have been awarded the
-        "Chemistry lab assistant" badge. "
+        \"Chemistry lab assistant\" badge. "
       objectReference: {fileID: 0}
     - target: {fileID: 114016839438512074, guid: fa863ece858329f42b1ace19851feec8,
         type: 2}
