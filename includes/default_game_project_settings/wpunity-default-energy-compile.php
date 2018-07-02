@@ -53,9 +53,9 @@ function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_
 
 
     //Add Static Pages to cs & BuildSettings (Main Menu must be first)
-//    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-//    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
-//    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
+    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    //$file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+    //wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
 
 
     if($is_bt_settings_active == '1'){
@@ -136,6 +136,12 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     $scene_title = $scene_post->post_title;
     $scene_desc = $scene_post->post_content;
 
+    //S_Mountains, S_Fields, S_Seashore fixed unity filenames
+    $scene_env = get_post_meta($scene_id,'wpunity_scene_environment',true);
+    $scene_unity_title = 'S_Mountains';
+    if($scene_env == 'seashore'){$scene_unity_title = 'S_Seashore';}
+    if($scene_env == 'fields'){$scene_unity_title = 'S_Fields';}
+
 
     $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
@@ -144,7 +150,7 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
 
     $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
     $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
-    $file7 = $game_path . '/' . $scene_name . '.unity';
+    $file7 = $game_path . '/' . $scene_unity_title . '.unity';
     $create_file7 = fopen($file7, "w") or die("Unable to open file!");
     fwrite($create_file7, $file_content7);
     fwrite($create_file7,$file_content7b);
@@ -152,7 +158,7 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
 
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    $file7path_forCS = 'Assets/scenes/' . $scene_name . '.unity';
+    $file7path_forCS = 'Assets/scenes/' . $scene_unity_title . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file7path_forCS);
 }
