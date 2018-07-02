@@ -445,6 +445,37 @@ get_header(); ?>
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
 
 
+            <!--Add information for Wind Energy games-->
+			<?php if($game_type_obj->string === "Energy") { ?>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner mdc-theme--text-primary-on-light">
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <h2 class="mdc-typography--title">Average wind speed</h2>
+                            <p class="mdc-typography--subheading2">Mountains: 10 m/s</p>
+                            <p class="mdc-typography--subheading2">Fields: 8.5 m/s</p>
+                            <p class="mdc-typography--subheading2">Seashore: 7.5 m/s</p>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <h2 class="mdc-typography--title">Access cost</h2>
+                            <p class="mdc-typography--subheading2">Mountains: 3 $</p>
+                            <p class="mdc-typography--subheading2">Fields: 2 $</p>
+                            <p class="mdc-typography--subheading2">Seashore: 1 $</p>
+                        </div>
+
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                            <h2 class="mdc-typography--title">Turbine Types</h2>
+                            <p class="mdc-typography--subheading2">Mountains ( Wind class I ): A, B, C</p>
+                            <p class="mdc-typography--subheading2">Fields ( Wind class II ): D, E, F</p>
+                            <p class="mdc-typography--subheading2">Seashore ( Wind class III ): G, H, I</p>
+                        </div>
+
+                    </div>
+                </div>
+			<?php } ?>
+
+
             <div class="mdc-layout-grid">
 
 
@@ -549,117 +580,116 @@ get_header(); ?>
 						<?php } ?>
 					<?php endwhile;?>
 
-                <?php if($game_type_obj->string !== "Energy") { ?>
+					<?php if($game_type_obj->string !== "Energy") { ?>
 
 
+                        <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
+                            <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
+								<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                                <input type="hidden" name="submitted" id="submitted" value="true" />
+                                <div class="mdc-card mdc-theme--secondary-light-bg">
 
-                    <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
-                        <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
-							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                            <input type="hidden" name="submitted" id="submitted" value="true" />
-                            <div class="mdc-card mdc-theme--secondary-light-bg">
+                                    <section class="mdc-card__primary">
 
-                                <section class="mdc-card__primary">
+                                        <h1 class="mdc-card__title mdc-typography--title"
+                                            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Add new">
+                                            <i class="material-icons AlignIconToMiddle">add</i>
+                                            Add new scene
+                                        </h1>
 
-                                    <h1 class="mdc-card__title mdc-typography--title"
-                                        style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Add new">
-                                        <i class="material-icons AlignIconToMiddle">add</i>
-                                        Add new scene
-                                    </h1>
-
-                                    <!--Title-->
-                                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                        <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
-                                        <div class="mdc-textfield__bottom-line"></div>
-                                    </div>
-                                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                                       id="title-validation-msg">
-                                        Between 3 - 25 characters
-                                    </p>
-
-                                    <!--Description-->
-                                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                        <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                               maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                        <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
-                                        <div class="mdc-textfield__bottom-line"></div>
-                                    </div>
-
-                                    <br>
-                                </section>
-
-                                <section class="mdc-card__primary">
-
-                                    <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-
-                                    <!--Scene Type-->
-									<?php if($game_type_obj->string === "Chemistry"){ ?>
-                                        <ul>
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">Molecule Naming</label>
-                                            </li>
-                                            &nbsp;
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">Molecule Construction</label>
-                                            </li>
-                                            &nbsp;
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
-                                            </li>
-                                        </ul>
-									<?php } ?>
-
-									<?php if($game_type_obj->string === "Energy"){ ?>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox" id="regional-checkbox-component">
-                                                <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                            </div>
-                                            <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
+                                        <!--Title-->
+                                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                                   aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                            <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
+                                            <div class="mdc-textfield__bottom-line"></div>
                                         </div>
-									<?php } ?>
-                                </section>
+                                        <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
+                                           id="title-validation-msg">
+                                            Between 3 - 25 characters
+                                        </p>
 
-                                <section class="mdc-card__primary">
-                                    <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
-                                            data-mdc-auto-init="MDCRipple" type="submit">
-                                        ADD NEW
-                                    </button>
+                                        <!--Description-->
+                                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
+                                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                                   maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                                            <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
+                                            <div class="mdc-textfield__bottom-line"></div>
+                                        </div>
 
-                                </section>
-                            </div>
-                        </form>
-                    </div>
+                                        <br>
+                                    </section>
 
-                <?php } ?>
+                                    <section class="mdc-card__primary">
+
+                                        <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
+
+                                        <!--Scene Type-->
+										<?php if($game_type_obj->string === "Chemistry"){ ?>
+                                            <ul>
+                                                <li class="mdc-form-field">
+                                                    <div class="mdc-radio">
+                                                        <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
+                                                        <div class="mdc-radio__background">
+                                                            <div class="mdc-radio__outer-circle"></div>
+                                                            <div class="mdc-radio__inner-circle"></div>
+                                                        </div>
+                                                    </div>
+                                                    <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">Molecule Naming</label>
+                                                </li>
+                                                &nbsp;
+                                                <li class="mdc-form-field">
+                                                    <div class="mdc-radio">
+                                                        <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
+                                                        <div class="mdc-radio__background">
+                                                            <div class="mdc-radio__outer-circle"></div>
+                                                            <div class="mdc-radio__inner-circle"></div>
+                                                        </div>
+                                                    </div>
+                                                    <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">Molecule Construction</label>
+                                                </li>
+                                                &nbsp;
+                                                <li class="mdc-form-field">
+                                                    <div class="mdc-radio">
+                                                        <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
+                                                        <div class="mdc-radio__background">
+                                                            <div class="mdc-radio__outer-circle"></div>
+                                                            <div class="mdc-radio__inner-circle"></div>
+                                                        </div>
+                                                    </div>
+                                                    <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
+                                                </li>
+                                            </ul>
+										<?php } ?>
+
+										<?php if($game_type_obj->string === "Energy"){ ?>
+                                            <div class="mdc-form-field">
+                                                <div class="mdc-checkbox" id="regional-checkbox-component">
+                                                    <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
+                                                    <div class="mdc-checkbox__background">
+                                                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                                        </svg>
+                                                        <div class="mdc-checkbox__mixedmark"></div>
+                                                    </div>
+                                                </div>
+                                                <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
+                                            </div>
+										<?php } ?>
+                                    </section>
+
+                                    <section class="mdc-card__primary">
+                                        <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
+                                                data-mdc-auto-init="MDCRipple" type="submit">
+                                            ADD NEW
+                                        </button>
+
+                                    </section>
+                                </div>
+                            </form>
+                        </div>
+
+					<?php } ?>
 
                     <!--Delete Scene Dialog-->
                     <aside id="delete-dialog"
@@ -699,9 +729,9 @@ get_header(); ?>
 
                 </div>
             </div>
-			<?php endif;
-			wp_reset_query();
-			?>
+		<?php endif;
+		wp_reset_query();
+		?>
 
 
             <!-- Scenes -->
