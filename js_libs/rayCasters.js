@@ -44,8 +44,6 @@ function dragDropVerticalRayCasting (event){
     // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
 
-    console.log("activMesh", activMesh);
-
     if (activMesh.length == 0)
         return [0,0,0];
 
