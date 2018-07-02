@@ -501,7 +501,7 @@ function wpunity_compile_objmeta_cre($folder, $objName, $objID, $suffix = ""){
 guid: ___[obj_guid]___
 timeCreated: ___[unx_time_created]___
 licenseType: Free
-";      // wpunity_getYaml_obj_dotmeta_pattern();
+[junk line]";      // wpunity_getYaml_obj_dotmeta_pattern();
 
     $objMetaContent = wpunity_replace_objmeta($objMetaPattern, $objID);
 

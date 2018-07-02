@@ -404,6 +404,9 @@ function wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug){
     $count = 0;
     foreach ($savedMoleculesVal as $moleculeID) {
         $moleName = get_the_title( $moleculeID );
+    
+        $moleName[0] = strtoupper($moleName[0]);
+        
         $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
         $firstLine = '- name: ' . $moleName;
         $secondLine = str_repeat(' ', 4) . 'formula: ' . $mole_type;

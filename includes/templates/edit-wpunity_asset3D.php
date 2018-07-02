@@ -466,7 +466,7 @@ if($asset_id != null) {
                         <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                             <input id="moleculeChemicalType" name="moleculeChemicalType" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                            <label for="moleculeChemicalType" class="mdc-textfield__label"> Chemical Type (e.g.: H20)</label>
+                            <label for="moleculeChemicalType" class="mdc-textfield__label"> Chemical Type (e.g.: H2O)</label>
                             <div class="mdc-textfield__bottom-line"></div>
                         </div>
 
