@@ -411,6 +411,10 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     cursor: pointer;
 }
 
+.CursorDefault {
+    cursor: default;
+}
+
 /* jimver04 additions */
 #backtotop {
     z-index : 100 !important;

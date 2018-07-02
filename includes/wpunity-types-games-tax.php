@@ -462,9 +462,9 @@ function wpunity_games_projectSettings_fields_save( $term_id ) {
     }
 }
 
-add_action( 'wpunity_game_type_edit_form_fields', 'wpunity_games_projectSettings_fields', 10, 2 );
+//add_action( 'wpunity_game_type_edit_form_fields', 'wpunity_games_projectSettings_fields', 10, 2 );
 
-add_action( 'edited_wpunity_game_type', 'wpunity_games_projectSettings_fields_save', 10, 2 );
+//add_action( 'edited_wpunity_game_type', 'wpunity_games_projectSettings_fields_save', 10, 2 );
 
 //==========================================================================================================================================
 

@@ -76,19 +76,19 @@ $pluginpath = str_replace('\\','/',$pluginpath);
 
 // COMPILE Ajax
 if(wpunity_getUnity_local_or_remote() != 'remote') {
-    
-    $gameUnityProject_dirpath = $upload_dir . '\\' . $gameSlug . 'Unity';
-    $gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $gameSlug . 'Unity/';
-    
+
+	$gameUnityProject_dirpath = $upload_dir . '\\' . $gameSlug . 'Unity';
+	$gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $gameSlug . 'Unity/';
+
 } else {
-    
-    $ftp_cre = wpunity_get_ftpCredentials();
-    $ftp_host = $ftp_cre['address'];
-    
-    $gamesFolder = 'COMPILE_UNITY3D_GAMES';
-    
-    $gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
-    $gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
+
+	$ftp_cre = wpunity_get_ftpCredentials();
+	$ftp_host = $ftp_cre['address'];
+
+	$gamesFolder = 'COMPILE_UNITY3D_GAMES';
+
+	$gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
+	$gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
 }
 
 
@@ -484,11 +484,17 @@ get_header(); ?>
 						$scene_title = get_the_title();
 						$scene_desc = get_the_content();
 
+						$is_regional = get_post_meta($scene_id,'wpunity_isRegional', true);
+
 						$current_card_bg = $current_scene_id == $scene_id ? 'mdc-theme--primary-light-bg' : '';
 
 						$scene_type = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
 
-						if($scene_type !== 'menu' && $scene_type !== 'credits') { ?>
+						if($scene_type !== 'menu' && $scene_type !== 'credits') {
+
+
+
+							?>
 
                             <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
 
@@ -523,6 +529,9 @@ get_header(); ?>
                                         <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
                                             style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
                                             <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
+											<?php if ($is_regional) { ?>
+                                                <i title="Regional scene" class="material-icons AlignIconToBottom CursorDefault mdc-theme--primary" style="float: right;">public</i>
+											<?php } ?>
                                         </h1>
                                         <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
                                             &#8203;<?php echo $scene_desc; ?>
@@ -870,9 +879,9 @@ get_header(); ?>
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
 
 						<?php
-/*						$strategies = wpunity_combineGameStrategies($project_id);
-						$strategies = json_encode($strategies);
-						*/?>
+				/*						$strategies = wpunity_combineGameStrategies($project_id);
+										$strategies = json_encode($strategies);
+										*/?>
 
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
                             <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
@@ -1098,11 +1107,11 @@ get_header(); ?>
             var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
 
             if (game_type === "energy") {
-                loadSceneAnalyticsIframe(game_type+'tool', energy_stats, null);
+                loadPISAClusterIframe(game_type+'tool', energy_stats, null);
             } else {
 
                 var analytics_molecules_checklist = '<?php echo $analytics_molecule_checklist; ?>';
-                loadSceneAnalyticsIframe(game_type+'tool', null, analytics_molecules_checklist);
+                loadPISAClusterIframe(game_type+'tool', null, analytics_molecules_checklist);
             }
 
             loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
@@ -1125,7 +1134,7 @@ get_header(); ?>
             });
 
 
-            function loadSceneAnalyticsIframe(lab, energy_fields, chemistry) {
+            function loadPISAClusterIframe(lab, energy_fields, chemistry) {
 
                 var url = "";
                 var ip_addr = "https://analytics.envisage-h2020.eu/?";
@@ -1311,13 +1320,6 @@ get_header(); ?>
             jQuery('#delete-scene-dialog-progress-bar').hide();
             deleteDialog.close();
         });
-
-        /*jQuery("#copy-output-btn").click(function() {
-            var copyText = document.getElementById("molecule-json-field");
-            copyText.select();
-            document.execCommand("Copy");
-            alert("Strategy copied: " + copyText.value);
-        });*/
 
         function deleteScene(id) {
 
