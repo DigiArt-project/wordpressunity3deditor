@@ -335,7 +335,7 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
 
 function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileFolder){
 
-    $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
+    $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
 
     if($fileName === 'ProjectSettings.asset'){
 

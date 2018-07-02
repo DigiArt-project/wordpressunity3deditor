@@ -2,7 +2,7 @@
 
 function wpunity_getDefaultJSONscene(){
 
-	$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene.json");
+	$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
 
 	return $def_json;
 }
