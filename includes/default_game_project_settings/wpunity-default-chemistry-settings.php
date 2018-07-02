@@ -8,9 +8,9 @@ function wpunity_getAssetYAML_chemistry($myasset_type){
     $def_json = '';
 
     if($myasset_type == 'room') {
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-room.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/assets/chemistry-room.txt");
     }elseif($myasset_type == 'gate'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-gate.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/assets/chemistry-gate.txt");
     }
 
     return $def_json;
