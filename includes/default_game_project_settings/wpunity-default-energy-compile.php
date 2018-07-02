@@ -53,9 +53,9 @@ function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_
 
 
     //Add Static Pages to cs & BuildSettings (Main Menu must be first)
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
+//    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+//    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+//    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
 
 
     if($is_bt_settings_active == '1'){
