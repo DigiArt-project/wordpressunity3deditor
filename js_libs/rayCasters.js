@@ -61,9 +61,8 @@ function onMouseDoubleClickFocus( event , objectName) {
 
     if (arguments.length === 2) {
         selectorMajor(event, envir.scene.getObjectByName(objectName) );
-
-
     }
+
 
     // // This makes the camera to go on top of the selected item
     if (envir.is2d) {
@@ -71,6 +70,7 @@ function onMouseDoubleClickFocus( event , objectName) {
         envir.orbitControls.target.y = transform_controls.object.position.y;
         envir.orbitControls.target.z = transform_controls.object.position.z;
         envir.cameraOrbit.position.x = transform_controls.object.position.x;
+        envir.cameraOrbit.position.y = transform_controls.object.position.y + 30;
         envir.cameraOrbit.position.z = transform_controls.object.position.z;
     } else {
         envir.orbitControls.target.x = transform_controls.object.position.x;
@@ -110,9 +110,7 @@ function onMouseDownSelect( event ) {
         if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
                   || intersects[0].object.name === 'SteveMesh' ) && event.button === 0 ){
 
-
             envir.setBackgroundColorHierarchyViewer("avatarYawObject");
-
 
             // highlight
             envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
@@ -124,9 +122,6 @@ function onMouseDownSelect( event ) {
             // Steve can not be deleted
             transform_controls.size = 1;
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
-
-            console.log("RAYCASTERS");
-            console.log(transform_controls);
 
             jQuery("#removeAssetBtn").hide();
 

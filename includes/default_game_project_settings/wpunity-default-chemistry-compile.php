@@ -1,16 +1,22 @@
 <?php
 
+function wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+
+}
+
 function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
     //DATA of mainmenu
-    $term_meta_s_mainmenu = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_mainmenu_chem',true);
+    $term_meta_s_mainmenu = wpunity_getSceneYAML_chemistry('menu');
     $title_text = $scene_post->post_title;
+
     //$is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) ); //Future Addition to Yaml
-    $is_bt_settings_active = 1; //Always ON
-    //$is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) ); //Future Addition to Yaml
-    $is_help_bt_active = 1; //Always ON
     //$is_login_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_login',true) ); //Future Addition to Yaml
+    //$is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) ); //Future Addition to Yaml
+    $is_bt_settings_active = 0; //Always OFF
+    $is_help_bt_active = 1; //Always ON
     $is_login_bt_active = 1; //Always ON
     $is_exit_button_active = 1;  //Always ON
+
     $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
 
@@ -35,13 +41,13 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
     $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
 
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
+    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    //$file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
+    //wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
 
     if($is_bt_settings_active == '1'){
         //CREATE SETTINGS/OPTIONS Unity file
-        $term_meta_s_settings = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_options_chem',true);
+        $term_meta_s_settings = wpunity_getSceneYAML_chemistry('settings');
         $file_content2 = wpunity_replace_settings_chem_unity($term_meta_s_settings);
 
         $file2 = $game_path . '/' . 'S_Settings.unity';
@@ -56,7 +62,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
 
     if($is_help_bt_active == '1'){
         //CREATE HELP Unity file
-        $term_meta_s_help = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_help_chem',true);
+        $term_meta_s_help = wpunity_getSceneYAML_chemistry('help');
         $text_help_scene = get_post_meta($scene_id,'wpunity_scene_help_text',true);
         $img_help_scene_id = get_post_meta($scene_id,'wpunity_scene_helpimg',true);
         $img_help_scene_guid = 'dad02368a81759f4784c7dbe752b05d6'; //if there's no Featured Image (custom field at Main Menu)
@@ -76,7 +82,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
 
     if($is_login_bt_active == '1'){
         //CREATE Login Unity file
-        $term_meta_s_login = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_login_chem',true);
+        $term_meta_s_login = wpunity_getSceneYAML_chemistry('login');
         $WanderAroundScene_title = 'S_Lab';
 
         $file_content4 = wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title);
@@ -96,7 +102,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
 
 function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
     //DATA of Credits Scene
-    $term_meta_s_credits = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_credentials_chem',true);
+    $term_meta_s_credits = wpunity_getSceneYAML_chemistry('credits');
     $credits_content = $scene_post->post_content;
 
     $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
@@ -123,7 +129,7 @@ function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene
 
     $exam_slug = $scene_post->post_name;
 
-    $term_meta_exam2d_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_exam_pat',true);
+    $term_meta_exam2d_chem = wpunity_getSceneYAML_chemistry('exam2d');
     $file_contentA = wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$gameSlug);
 
     $fileA = $game_path . '/' . $exam_slug . '.unity';
@@ -141,7 +147,7 @@ function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene
 
     $exam_slug = $scene_post->post_name;
 
-    $term_meta_exam3d_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_exam3d_pat',true);
+    $term_meta_exam3d_chem = wpunity_getSceneYAML_chemistry('exam3d');
     $file_contentA = wpunity_replace_chemistry_exam3D_unity($term_meta_exam3d_chem,$gameSlug);
 
     $fileA = $game_path . '/' . $exam_slug . '.unity';
@@ -158,7 +164,7 @@ function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene
 
 function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
     //DATA of Chemistry Wander Around Scene
-    $term_meta_wander_around_chem = get_term_meta($scene_type_ID,'wpunity_yamlmeta_chemistry_pat',true);
+    $term_meta_wander_around_chem = wpunity_getSceneYAML_chemistry('lab');
     $scene_name = $scene_post->post_name;
     $scene_title = $scene_post->post_title;
     $scene_desc = $scene_post->post_content;
@@ -176,9 +182,6 @@ function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id
     fwrite($create_fileA, $file_contentA);
     fwrite($create_fileA,$file_contentAb);
     fclose($create_fileA);
-
-    wpunity_compile_append_scene_to_s_selector($scene_id, /*$scene_name*/'S_Lab', $scene_title, $scene_desc, $scene_type_ID,
-        $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . /*$scene_name*/'S_Lab' . '.unity';
@@ -209,7 +212,7 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
 
                 $room_obj = get_post_meta($room_id,'wpunity_asset3d_obj',true);
 
-                $room_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $room_yaml = wpunity_getAssetYAML_chemistry('room');
                 $room_fid = wpunity_create_fids($current_fid++);
                 $room_mesh_fid = wpunity_create_fids($current_fid++); //($room_fid+1)
                 $room_mesh_collider_fid = wpunity_create_fids($current_fid++); // ($room_fid+2)
@@ -238,7 +241,7 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
 
                 $gate_obj = get_post_meta($gate_id,'wpunity_asset3d_obj',true);
 
-                $gate_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $gate_yaml = wpunity_getAssetYAML_chemistry('gate');
                 $gate_fid = wpunity_create_fids($current_fid++);
                 $gate_mesh_fid = wpunity_create_fids($current_fid++);//($gate_fid+1)
                 $gate_mesh_collider_fid = wpunity_create_fids($current_fid++);//($gate_fid+2)
