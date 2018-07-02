@@ -634,6 +634,8 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$exam3dSceneSlug = $gameSlug . '-exam3d';
 	}
 
+	$default_json = '';
+
 	if($game_category == 'energy_games'){
 		$firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -641,6 +643,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('energy');
 	}elseif($game_category == 'archaeology_games'){
 		$firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -648,6 +651,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('archaeology');
 	}elseif($game_category == 'chemistry_games'){
 		$firstSceneYAML = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene (Chemistry)
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -659,9 +663,8 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$exam2dSceneYAMLID = $exam2dSceneYAML->term_id;
 		$exam3dSceneYAML = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam 3d Scene (Chemistry)
 		$exam3dSceneYAMLID = $exam3dSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('chemistry');
 	}
-
-	$default_json = wpunity_getDefaultJSONscene();
 
 	// Create Main Menu Scene Data
 	$mainmenuSceneData = array(

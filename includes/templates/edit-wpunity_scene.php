@@ -159,17 +159,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$sceneMetaType = 'scene';//default 'scene' MetaType (3js)
 	$game_type_chosen_slug = '';
 
+    $default_json = '';
 	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
-	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';}
-    elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';}
+	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';$default_json = wpunity_getDefaultJSONscene('archaeology');}
+    elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';$default_json = wpunity_getDefaultJSONscene('energy');}
     elseif($thegameType[0]->slug == 'chemistry_games'){
 		$game_type_chosen_slug = 'chemistry_games';
+        $default_json = wpunity_getDefaultJSONscene('chemistry');
 		if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
         elseif($newSceneType == '2d'){$newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam2d';}
         elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
 	}
-
-	$default_json = wpunity_getDefaultJSONscene();
 
 	$scene_taxonomies = array(
 		'wpunity_scene_pgame' => array(
@@ -309,7 +309,11 @@ get_header(); ?>
 							$meta_json = get_post_meta($current_scene_id, 'wpunity_scene_json_input', true);
 
 							// Do not put esc_attr, crashes the universe in 3D
-							$sceneToLoad = $meta_json ? $meta_json : file_get_contents( plugins_url()."/wordpressunity3deditor/assets/standard_scene.json");
+                            if ( $game_type_obj->string === "Energy" ) {
+                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
+                            }else{
+                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
+                            }
 
 							// Find scene dir string
 							$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;

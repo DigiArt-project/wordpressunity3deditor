@@ -17,7 +17,7 @@ $wpunity_databox4 = array(
             'desc' => 'Scene Json Input',
             'id' => $wpunity_prefix . 'json_input',
             'type' => 'textarea',
-            'std' => file_get_contents( plugins_url()."/wordpressunity3deditor/assets/standard_scene.json")
+            'std' => wpunity_getDefaultJSONscene('energy')
         ),
         array(
             'name' => 'Scene Latitude',

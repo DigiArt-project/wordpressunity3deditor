@@ -1,8 +1,13 @@
 <?php
 
-function wpunity_getDefaultJSONscene(){
-
+function wpunity_getDefaultJSONscene($mygameType){
 	$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene.json");
+
+	if($mygameType == 'energy') {
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene_energy.json");
+	}elseif($mygameType == 'chemistry'){
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene_chemistry.json");
+	}
 
 	return $def_json;
 }
