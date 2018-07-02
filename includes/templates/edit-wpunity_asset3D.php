@@ -742,7 +742,7 @@ if($asset_id != null) {
 
         <div id="terrainPanel" class="mdc-layout-grid" style="display: none;">
 
-            <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__inner" style="display: none;">
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
