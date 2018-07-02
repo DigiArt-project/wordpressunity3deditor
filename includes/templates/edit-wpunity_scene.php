@@ -549,6 +549,10 @@ get_header(); ?>
 						<?php } ?>
 					<?php endwhile;?>
 
+                <?php if($game_type_obj->string !== "Energy") { ?>
+
+
+
                     <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
                         <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
 							<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
@@ -654,6 +658,8 @@ get_header(); ?>
                             </div>
                         </form>
                     </div>
+
+                <?php } ?>
 
                     <!--Delete Scene Dialog-->
                     <aside id="delete-dialog"
