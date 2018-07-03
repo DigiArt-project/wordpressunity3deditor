@@ -590,7 +590,7 @@
 
             if ( axis === "Y" ) {
 
-                this.activePlane = this.planes[ "XY" ];
+                this.activePlane = this.planes[ "YZ" ];
                 if ( Math.abs( eye.x ) > Math.abs( eye.z ) ) this.activePlane = this.planes[ "YZ" ];
 
             }

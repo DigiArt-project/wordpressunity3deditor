@@ -97,8 +97,12 @@ function onMouseDownSelect( event ) {
     // All 3D meshes that can be clicked
     var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"), //transform_controls.getObjectByName('trs_modeChanger')
 
+    //console.log(activMesh);
+
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
+
+    //console.log(intersects);
 
     if (intersects.length === 0)
         return;
