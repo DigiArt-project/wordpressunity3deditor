@@ -1937,7 +1937,7 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-    $fa = fopen("output_COMPILE.txt","w");
+    //$fa = fopen("output_COMPILE.txt","w");
     
     
 	$DS = DIRECTORY_SEPARATOR;
@@ -1966,27 +1966,23 @@ function wpunity_assepile_action_callback(){
 
 	$gameId = $_REQUEST['gameId'];
 	
-	fwrite($fa, "aaaa");
-    fwrite($fa, "\n");
-    fwrite($fa, $gameId);
-    fwrite($fa, "\n");
+//	fwrite($fa, "aaaa");
+//    fwrite($fa, "\n");
+//    fwrite($fa, $gameId);
+//    fwrite($fa, "\n");
+    
+//    fwrite($fa, print_r(wp_get_post_terms($gameId), true));
+//    fwrite($fa, "1234566");
+//    fwrite($fa, $_REQUEST['gameId']);
+//    fwrite($fa, print_r($_REQUEST, true));
     
 	$gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
     
-    fwrite($fa, "\n");
-    fwrite($fa, "aaaa2:" + $gameType);
-    fwrite($fa, "\n");
-    fwrite($fa, "aaaa2:" + $_REQUEST['gameSlug']);
-    fwrite($fa, "\n");
-    fwrite($fa, "aaaa3:" + $targetPlatform);
-    fwrite($fa, "\n");
-    fwrite($fa, "aaaa4:" + $gameType[0]->name);
-    fwrite($fa, "\n");
-    
+ 
 	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'],
         $targetPlatform, $gameType[0]->name);
     
-    fwrite($fa, "bbbb");
+//    fwrite($fa, "bbbb");
 	
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
@@ -2000,8 +1996,8 @@ function wpunity_assepile_action_callback(){
 		$init_gcwd = getcwd(); // get cwd (wp-admin probably)
 		//-----------------------------
         
-        fwrite($fa, "ccccc");
-        fclose($fa);
+//        fwrite($fa, "ccccc");
+//        fclose($fa);
 		//--Uploads/myGameProjectUnity--
 
 		// Todo: Add more option
@@ -2010,24 +2006,28 @@ function wpunity_assepile_action_callback(){
 		$upload_dir = str_replace('\\','/',$upload_dir);
 		$game_dirpath = $upload_dir . '/' . $_REQUEST['gameSlug'] . 'Unity';
 
-		$ff = fopen("outputFF.txt","w");
+//		$ff = fopen("outputFF.txt","w");
 //        fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
 //        fwrite($ff, print_r(wpunity_get_ftpCredentials(),true));
 //        fwrite($ff, print_r(wpunity_getUnity_exe_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_api_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_server_path(),true)."\n");
         
-        fwrite($ff, "aaaa");
 
-		fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
+//		fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
 
 		$remote_game_server_folder_dir = wpunity_getUnity_local_or_remote() =='local' ?
 			$game_dirpath : (wpunity_getRemote_server_path().$_REQUEST['gameSlug'] . 'Unity');
 
 
-		fwrite($ff, $remote_game_server_folder_dir);
-
-		fclose($ff);
+//		fwrite($ff, $remote_game_server_folder_dir);
+//
+//        fwrite($ff, "\n");
+//        fwrite($ff, $os);
+//        fwrite($ff, "\n");
+        
+        
+		
 
 
 
@@ -2078,6 +2078,11 @@ goto :EOF
 		}
 
 		// 1 : Generate bat or sh
+        
+//        fwrite($ff, $game_dirpath.$DS."starter_artificial.".$os_bin);
+        
+		
+		
 		$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
 		fwrite($myfile, $txt);
 		fclose($myfile);
@@ -2085,16 +2090,25 @@ goto :EOF
 
 		chdir($game_dirpath);
 
-		$fj = fopen("outputIII.txt","w");
+//		$fj = fopen("outputIII.txt","w");
 
+		
+		
 		if ($os === 'win') {
 			if(wpunity_getUnity_local_or_remote() != 'remote') {
+    
+
+			 
 				$unity_pid = shell_exec($compile_command);
 				$fga = fopen("execution_hint.txt", "w");
 				fwrite($fga, $compile_command);
 				fclose($fga);
 			} else {
-
+                
+//                fwrite($ff, "\n");
+//                fwrite($ff, "STARTING REMOTE 1");
+//                fwrite($ff, "\n");
+			    
 				// remote
 				$ftp_cre = wpunity_get_ftpCredentials();
 
@@ -2113,7 +2127,11 @@ goto :EOF
 				$startCompile_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=start";
 
 				// -------------- Zip the project to send it for remote compile -------------------
-
+                
+//                fwrite($ff, "\n");
+//                fwrite($ff, "STARTING REMOTE 2: ZIP");
+//                fwrite($ff, "\n");
+                
 				/* Exclude Files */
 				$exclude_files = array();
 				//$exclude_files[] = realpath($zip_file_name);
@@ -2161,7 +2179,11 @@ goto :EOF
 				$zip_close = $zip->close();
 
 				//--------------- FTP TRANSFER ------------------------------------------------
-
+                
+//                fwrite($ff, "\n");
+//                fwrite($ff, "STARTING REMOTE 3: FTP transfer");
+//                fwrite($ff, "\n");
+                
 				/* Connect using basic FTP */
 				$connect_it = ftp_connect($ftp_host);
 
@@ -2173,7 +2195,7 @@ goto :EOF
 				if ($login_result === true) {
 					$ret = ftp_nb_fput($connect_it, $remote_file, $fileHandle, FTP_BINARY);
 
-					fwrite($fj, "remote_file FILE:". $remote_file );
+//					fwrite($fj, "remote_file FILE:". $remote_file );
 
 					while ($ret == FTP_MOREDATA) {
 						// Do whatever you want
@@ -2194,28 +2216,32 @@ goto :EOF
 				}
 
 
-				fwrite($fj, "UNZIP URL". $unzip_url);
+//				fwrite($fj, "UNZIP URL". $unzip_url);
 
 				//------------------ UNZIP AND COMPILE --------------------------
-
+                
+//                fwrite($ff, "\n");
+//                fwrite($ff, "STARTING REMOTE 3: UNZIP and compile");
+//                fwrite($ff, "\n");
+                
 				if (file_get_contents($unzip_url)) //, array("timeout"=>1), $info) )
 				{
 
-					fwrite($fj, "START COMPILE: " . $startCompile_url);
+//					fwrite($fj, "START COMPILE: " . $startCompile_url);
 
 					// Start the compiling
 					$unity_pid = file_get_contents($startCompile_url);
 
-					fwrite($fj, "\n" );
-					fwrite($fj, "PROCC:". $unity_pid);
-					fwrite($fj, "\n" );
+//					fwrite($fj, "\n" );
+//					fwrite($fj, "PROCC:". $unity_pid);
+//					fwrite($fj, "\n" );
 
 				} else {
 					echo "<br />Error 798: UNZIPing problem";
 					wp_die();
 				}
 
-				fwrite($fj, "4 UNZIP and COMPILE");
+//				fwrite($fj, "4 UNZIP and COMPILE");
 
 			}
 		} else {
@@ -2231,7 +2257,7 @@ goto :EOF
 
 		echo $unity_pid;
 	}
-
+    //fclose($ff);
 	wp_die();
 }
 

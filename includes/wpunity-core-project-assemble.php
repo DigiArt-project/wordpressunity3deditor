@@ -4,29 +4,41 @@
 //==========================================================================================================================================
 
 function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlatform, $gameType){
-
-    wpunity_addStrategy_APIcall($gameID);
-
-    wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
-
-    wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
-
-    wpunity_compile_cs_gen($gameSlug, $targetPlatform);//1b. Create cs file before all data
-
-    wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
-
-    wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform);//3. Create Model folders/files
-
-    wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
-
-    wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
-
+    
 //    $fc = fopen("outputKLOA.txt","w");
 //    fwrite($fc, $gameType);
-//    fclose($fc);
+
+//    fwrite($fc, "1");
+    wpunity_addStrategy_APIcall($gameID);
+    
+//    fwrite($fc, "2");
+    wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
+    
+//    fwrite($fc, "3");
+    wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
+    
+//    fwrite($fc, "4");
+    wpunity_compile_cs_gen($gameSlug, $targetPlatform);//1b. Create cs file before all data
+    
+//    fwrite($fc, "5");
+    
+    wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
+    
+//    fwrite($fc, "6");
+    wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform);//3. Create Model folders/files
+    
+//    fwrite($fc, "7");
+    wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
+    
+//    fwrite($fc, "8");
+    wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
+    
+//    fwrite($fc, "9");
     
     if ($gameType == "Chemistry")
         wpunity_compile_make_molecules_prefabs($gameID, $gameSlug);
+    
+//    fclose($fc);
     
     return 'true';
 }
@@ -515,18 +527,25 @@ licenseType: Free
 
 //Generate scenes
 function wpunity_compile_scenes_gen($gameID,$gameSlug){
+    
+    //$fd = fopen("output_SCENES.txt","w");
+    
+    //fwrite($fd, "1");
+    
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/scenes';
     $settings_path = $upload_dir . "/" . $gameSlug . 'Unity/ProjectSettings';
     $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
-
+    
+    //fwrite($fd, "2");
     wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
 
     $gameTypeTerm = wp_get_post_terms( $gameID, 'wpunity_game_type' );
     $gameType = $gameTypeTerm[0]->name;
-
+    
+    //fwrite($fd, "3");
     $queryargs = array(
         'post_type' => 'wpunity_scene',
         'posts_per_page' => -1,
@@ -540,29 +559,49 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
         'orderby' => 'ID',
         'order'   => 'ASC',
     );
-
+    
+    
+    //fwrite($fd, "4");
     $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
+    
+    //fwrite($fd, "5");
+    
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
-
+    
+//            fwrite($fd, "6");
+//
+//            fwrite($fd, "\n");
+//            fwrite($fd, $scene_id);
+//            fwrite($fd, "\n");
+            
+            
+            
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
             wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path,
                 $scenes_counter, $handybuilder_file, $gameType);
-
+    
+            //fwrite($fd, "7");
+            
             // Increment scene counter if scene is either WonderAround or Educational-Energy scene
             $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
             $scene_type_slug = $scene_type[0]->slug;
-
+    
+            //fwrite($fd, "8");
+            
             if ($scene_type_slug == 'wonderaround-yaml' || $scene_type_slug == 'educational-energy' || $scene_type_slug == 'wonderaround-lab-yaml' ){
                 $scenes_counter++;
             }
 
+            
         endwhile;
     endif;
-
+    
+    //fwrite($fd, "9");
+    
     wp_reset_postdata();
 }
 
@@ -616,11 +655,19 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
 //Create MainMenu scene and others
 function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path, $scenes_counter, $handybuilder_file, $gameType){
 
+    //$fe = fopen("output_scenes_cre" . $scene_id . ".txt","w");
+    
     $scene_post = get_post($scene_id);
     $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
     $scene_type_ID = $scene_type[0]->term_id;
     $scene_type_slug = $scene_type[0]->slug;
 
+//    fwrite($fe, $scene_id);
+//    fwrite($fe, "\n");
+//    fwrite($fe, $scene_type_slug);
+//    fwrite($fe, "\n");
+    
+    
     if($scene_type_slug == 'mainmenu-yaml'){
         wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($scene_type_slug == 'mainmenu-arch-yaml'){
@@ -644,7 +691,9 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
     }elseif($scene_type_slug == 'exam3d-chem-yaml'){
         wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
     }
-
+    
+//    fwrite($fe, "success");
+//    fclose($fe);
 }
 
 //==========================================================================================================================================

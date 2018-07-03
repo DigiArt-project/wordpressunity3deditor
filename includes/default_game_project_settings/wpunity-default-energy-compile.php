@@ -247,54 +247,104 @@ function wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$sce
 }
 
 function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+    
+//    $fg = fopen("output_edu_energy.txt","w");
+//
+//    fwrite($fg, "1");
+    
     //DATA of Educational Energy Scene
     $term_meta_educational_energy = wpunity_getSceneYAML_energy('regional');
     $scene_name = $scene_post->post_name;
     $scene_title = $scene_post->post_title;
     $scene_desc = $scene_post->post_content;
-
+    
+//    fwrite($fg, "2");
+    
     //S_Mountains, S_Fields, S_Seashore fixed unity filenames
     $scene_env = get_post_meta($scene_id,'wpunity_scene_environment',true);
     $scene_unity_title = 'S_Mountains';
     if($scene_env == 'seashore'){$scene_unity_title = 'S_Seashore';}
     if($scene_env == 'fields'){$scene_unity_title = 'S_Fields';}
-
+    
+//    fwrite($fg, "3");
 
     $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image
     if($featured_image_edu_sprite_id != ''){$featured_image_edu_sprite_guid =
         wpunity_compile_sprite_upload($featured_image_edu_sprite_id, $gameSlug, $scene_id);}
-
+    
+//    fwrite($fg, "4");
+    
     $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
+    
+//    fwrite($fg, "5");
+    
+    fwrite($fg, "\n");
+    fwrite($fg, $scene_id);
+    
+    
     $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
+    
+//    fwrite($fg, "6");
+    
     $file7 = $game_path . '/' . $scene_unity_title . '.unity';
     $create_file7 = fopen($file7, "w") or die("Unable to open file!");
+    
+//    fwrite($fg, "7");
+    
     fwrite($create_file7, $file_content7);
     fwrite($create_file7,$file_content7b);
     fclose($create_file7);
-
+    
+//    fwrite($fg, "8");
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $file7path_forCS = 'Assets/scenes/' . $scene_unity_title . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file7path_forCS);
+    
+//    fwrite($fg, "success");
+//    fclose($fg);
 }
 
 function wpunity_addAssets_educational_energy_unity($scene_id){
+
+//    $ff = fopen("output_assets_edu.txt","w");
+
+    
+    
     $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
-
+    
+    
+    //fwrite($ff, print_r($scene_json));
+    
     $jsonScene = htmlspecialchars_decode ( $scene_json );
+    
+    
     $sceneJsonARR = json_decode($jsonScene, TRUE);
-
+    
+    //fwrite($ff, print_r($sceneJsonARR,true));
+    
     $current_fid = 51;
     $allObjectsYAML = '';
     $LF = chr(10) ;// line break
-
+    
+    //fwrite($ff, "2");
+    
+    
+    
     foreach ($sceneJsonARR['objects'] as $key => $value ) {
         if ($key == 'avatarYawObject') {
             //do something about AVATAR
         }else{
+    
+//            fwrite($ff, "3:");
+//            fwrite($ff, $value['categoryName']);
+//
+            
             if ($value['categoryName'] == 'Terrain'){
+    
+                
                 $terrain_id = $value['assetid'];
                 $asset_type = get_the_terms( $terrain_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
@@ -308,19 +358,27 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $x_pos_terrain = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_terrain = $value['position'][1];
                 $z_pos_terrain = $value['position'][2];
+    
+//                fwrite($ff, "32:");
+//                fwrite($ff,  print_r($value, true));
+//                //$quats = transform_minusx_radiansToquaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
 
-                $quats = transform_minusx_radiansToquaternions($value['rotation'][0], $value['rotation'][1], $value['rotation'][2]);
-
-                $x_rotation_terrain = $quats[0]; //$value['quaternion'][0];
-                $y_rotation_terrain = $quats[1]; //$value['quaternion'][1];
-                $z_rotation_terrain = $quats[2]; //$value['quaternion'][2];
-                $w_rotation_terrain = $quats[3]; //$value['quaternion'][3];
+                $x_rotation_terrain = $value['quaternion'][0]; // $quats[0]; //$value['quaternion'][0];
+                $y_rotation_terrain = $value['quaternion'][1]; //$quats[1]; //$value['quaternion'][1];
+                $z_rotation_terrain = $value['quaternion'][2]; //$quats[2]; //$value['quaternion'][2];
+                $w_rotation_terrain = $value['quaternion'][3]; //$quats[3]; //$value['quaternion'][3];
                 $x_scale_terrain = $value['scale'][0];
                 $y_scale_terrain = $value['scale'][1];
                 $z_scale_terrain = $value['scale'][2];
-
+    
+      //          fwrite($ff, "33:");
+                
                 $terrain_finalyaml = wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$fid_of_terrain1,$fid_of_terrain2,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain);
                 $allObjectsYAML = $allObjectsYAML . $LF . $terrain_finalyaml;
+    
+//                fwrite($ff, "34:");
+//
+//                fwrite($ff, "4");
             }
             if ($value['categoryName'] == 'Decoration'){
                 $deco_id = $value['assetid'];
@@ -346,6 +404,8 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $deco_finalyaml = wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$fid_decorator1,$fid_decorator2,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator);
                 $allObjectsYAML = $allObjectsYAML . $LF . $deco_finalyaml;
+    
+                //fwrite($ff, "5");
             }
             if ($value['categoryName'] == 'Marker'){
                 $marker_id = $value['assetid'];
@@ -376,6 +436,8 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
                 $marker_finalyaml = wpunity_replace_marker_unity($marker_yaml,$fid_marker,$fid_marker1,$fid_marker2,$fid_marker3,$guid_obj_marker,$x_pos_marker,$y_pos_marker,$z_pos_marker,$x_rotation_marker,$y_rotation_marker,$z_rotation_marker,$w_rotation_marker,$x_scale_marker,$y_scale_marker,$z_scale_marker,$archaelogical_penalty,$nature_penalty,$HV_penalty);
                 $allObjectsYAML = $allObjectsYAML . $LF . $marker_finalyaml;
+    
+    //            fwrite($ff, "6");
             }
             /*
             if ($value['categoryName'] == 'Consumer'){
@@ -459,7 +521,11 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
             */
         }
     }
-
+    
+//    fwrite($ff, "success");
+//
+//    fclose($ff);
+    
     //return all objects
     return $allObjectsYAML;
 
