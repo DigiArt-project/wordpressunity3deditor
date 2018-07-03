@@ -37,6 +37,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+      propertyPath: m_LocalScale.x
+      value: ___[marker_scale_x]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+      propertyPath: m_LocalScale.y
+      value: ___[marker_scale_y]___
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+      propertyPath: m_LocalScale.z
+      value: ___[marker_scale_z]___
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114707447727845176, guid: ___[marker_obj_guid]___, type: 2}
     - {fileID: 65823032349800856, guid: ___[marker_obj_guid]___, type: 2}
