@@ -318,44 +318,44 @@
             Z: [[ new THREE.Mesh( arrowGeometry, pickerMaterial ), [ 0, 0, 1.5 ], [ Math.PI / 2, 0, 0 ] ]]
         };
 
-        this.setActivePlane = function ( axis, eye ) {
-
-            var tempMatrix = new THREE.Matrix4();
-            eye.applyMatrix4( tempMatrix.getInverse( tempMatrix.extractRotation( this.planes[ "XY" ].matrixWorld ) ) );
-
-            if ( axis === "X" ) {
-
-                this.activePlane = this.planes[ "XY" ];
-
-                if ( Math.abs( eye.y ) > Math.abs( eye.z ) ) this.activePlane = this.planes[ "XZ" ];
-
-            }
-
-            if ( axis === "Y" ) {
-
-                this.activePlane = this.planes[ "XY" ];
-
-                if ( Math.abs( eye.x ) > Math.abs( eye.z ) ) this.activePlane = this.planes[ "YZ" ];
-
-            }
-
-            if ( axis === "Z" ) {
-
-                this.activePlane = this.planes[ "XZ" ];
-
-                if ( Math.abs( eye.x ) > Math.abs( eye.y ) ) this.activePlane = this.planes[ "YZ" ];
-
-            }
-
-            if ( axis === "XYZ" ) this.activePlane = this.planes[ "XYZE" ];
-
-            if ( axis === "XY" ) this.activePlane = this.planes[ "XY" ];
-
-            if ( axis === "YZ" ) this.activePlane = this.planes[ "YZ" ];
-
-            if ( axis === "XZ" ) this.activePlane = this.planes[ "XZ" ];
-
-        };
+        // this.setActivePlane = function ( axis, eye ) {
+        //
+        //     var tempMatrix = new THREE.Matrix4();
+        //     eye.applyMatrix4( tempMatrix.getInverse( tempMatrix.extractRotation( this.planes[ "XY" ].matrixWorld ) ) );
+        //
+        //     if ( axis === "X" ) {
+        //
+        //         this.activePlane = this.planes[ "XY" ];
+        //
+        //         if ( Math.abs( eye.y ) > Math.abs( eye.z ) ) this.activePlane = this.planes[ "XZ" ];
+        //
+        //     }
+        //
+        //     if ( axis === "Y" ) {
+        //
+        //         this.activePlane = this.planes[ "XY" ];
+        //
+        //         if ( Math.abs( eye.x ) > Math.abs( eye.z ) ) this.activePlane = this.planes[ "YZ" ];
+        //
+        //     }
+        //
+        //     if ( axis === "Z" ) {
+        //
+        //         this.activePlane = this.planes[ "XZ" ];
+        //
+        //         if ( Math.abs( eye.x ) > Math.abs( eye.y ) ) this.activePlane = this.planes[ "YZ" ];
+        //
+        //     }
+        //
+        //     if ( axis === "XYZ" ) this.activePlane = this.planes[ "XYZE" ];
+        //
+        //     if ( axis === "XY" ) this.activePlane = this.planes[ "XY" ];
+        //
+        //     if ( axis === "YZ" ) this.activePlane = this.planes[ "YZ" ];
+        //
+        //     if ( axis === "XZ" ) this.activePlane = this.planes[ "XZ" ];
+        //
+        // };
 
         this.init();
 

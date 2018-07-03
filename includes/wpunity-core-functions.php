@@ -182,6 +182,9 @@ function wpunity_windEnergy_scene_stats($scene_id){
 	$jsonScene = htmlspecialchars_decode($scene_json);
 	$sceneJsonARR = json_decode($jsonScene, TRUE);
 
+	echo $sceneJsonARR;
+	
+	if (isset($sceneJsonARR['objects']))
 	if (count($sceneJsonARR['objects']) > 0){
 		foreach ($sceneJsonARR['objects'] as $key => $value) {
 			if ($key !== 'avatarYawObject') {
