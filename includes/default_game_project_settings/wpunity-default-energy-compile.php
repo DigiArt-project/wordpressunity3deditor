@@ -64,13 +64,65 @@ function wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path
 
 }
 
+function wpunity_getRegionalscene_byGame($allScenePGameID,$regType){
+
+    $myquery_args = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $allScenePGameID,
+            ),
+        ),
+        'meta_query' => array(
+            array(
+                'key'     => 'wpunity_scene_environment',
+                'value'   => $regType,
+                'compare' => 'IN',
+            ),
+        'orderby' => 'ID',
+        'order' => 'DESC',
+        )
+    );
+
+    $custom_query = new WP_Query( $myquery_args );
+
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $scene_id = get_the_ID();
+        endwhile;
+    endif;
+    wp_reset_query();
+
+    //wpunity_scene_environment
+
+    return $scene_id;
+}
+
 
 function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+    $mountains_activation = 0;
+    $seashore_activation = 0;
+    $fields_activation = 0;
+    $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    $allScenePGameID = $allScenePGame->term_id;
+
+    $mount_id = wpunity_getRegionalscene_byGame($allScenePGameID,'mountain');
+    $fields_id = wpunity_getRegionalscene_byGame($allScenePGameID,'fields');
+    $sea_id = wpunity_getRegionalscene_byGame($allScenePGameID,'seashore');
+
+    $mount_json = get_post_meta($mount_id,'wpunity_scene_json_input',true);
+    $fields_json = get_post_meta($fields_id,'wpunity_scene_json_input',true);
+    $sea_json = get_post_meta($sea_id,'wpunity_scene_json_input',true);
+
+    if(wpunity_countEnergyMarkers($mount_json)){$mountains_activation = 1;}
+    if(wpunity_countEnergyMarkers($fields_json)){$fields_activation = 1;}
+    if(wpunity_countEnergyMarkers($sea_json)){$seashore_activation = 1;}
 
     $term_meta_s_selector = wpunity_getSceneYAML_energy('selector');
-    $mountains_activation = 1;
-    $seashore_activation = 1;
-    $fields_activation = 1;
     $file_selector = $game_path . '/' . 'S_SceneSelector.unity';
     $file_content = wpunity_replace_sceneselector_energy_unity($term_meta_s_selector,$mountains_activation,$seashore_activation,$fields_activation);
     $create_file2 = fopen($file_selector, "w") or die("Unable to open file!");
