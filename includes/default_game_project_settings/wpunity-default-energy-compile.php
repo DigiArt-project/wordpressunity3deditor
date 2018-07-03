@@ -246,27 +246,12 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $terrain_id = $value['assetid'];
                 $asset_type = get_the_terms( $terrain_id, 'wpunity_asset3d_cat' );
                 $asset_type_ID = $asset_type[0]->term_id;
-
-                $energy_income = get_post_meta($terrain_id,'wpunity_energyConsumptionIncome',true);
-                $constr_pen = get_post_meta($terrain_id,'wpunity_constructionPenalties',true);
-                $physics = get_post_meta($terrain_id,'wpunity_physicsValues',true);
                 $terrain_obj = get_post_meta($terrain_id,'wpunity_asset3d_obj',true);
 
-                $terrain_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $terrain_yaml = wpunity_getAssetYAML_energy('terrain');
                 $fid_of_terrain = wpunity_create_fids($current_fid++);
-                $income_when_overpower = $energy_income['over'];
-                $income_when_correct_power = $energy_income['correct'];
-                $income_when_under_power = $energy_income['under'];
-                $mean_speed_wind = $physics['mean'];
-                $var_speed_wind = $physics['variance'];
-                $min_speed_wind = $physics['min'];
-                $max_speed_wind = $physics['max'];
-                $access_penalty = $constr_pen['access'];
-                $archaeology_penalty = $constr_pen['arch'];
-                $natural_reserve_penalty = $constr_pen['natural'];
-                $hvdistance_penalty = $constr_pen['hiVolt'];
-                $fid_rect_transform_terrain = wpunity_create_fids($current_fid++);
-                $fid_terrain_prefab_mesh = wpunity_create_fids($current_fid++);
+                $fid_of_terrain1 = wpunity_create_fids($current_fid++);//($fid_of_terrain+1)
+                $fid_of_terrain2 = wpunity_create_fids($current_fid++);//($fid_of_terrain+2)
                 $guid_terrain_mesh = wpunity_create_guids('obj', $terrain_obj);
                 $x_pos_terrain = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_terrain = $value['position'][1];
@@ -282,7 +267,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $y_scale_terrain = $value['scale'][1];
                 $z_scale_terrain = $value['scale'][2];
 
-                $terrain_finalyaml = wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$fid_rect_transform_terrain,$fid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain);
+                $terrain_finalyaml = wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$fid_of_terrain1,$fid_of_terrain2,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain);
                 $allObjectsYAML = $allObjectsYAML . $LF . $terrain_finalyaml;
             }
             if ($value['categoryName'] == 'Decoration'){
@@ -291,8 +276,10 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $asset_type_ID = $asset_type[0]->term_id;
                 $deco_obj = get_post_meta($deco_id,'wpunity_asset3d_obj',true);
 
-                $deco_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $deco_yaml = wpunity_getAssetYAML_energy('decor');
                 $fid_decorator = wpunity_create_fids($current_fid++);
+                $fid_decorator1 = wpunity_create_fids($current_fid++);//($fid_decorator+1)
+                $fid_decorator2 = wpunity_create_fids($current_fid++);//($fid_decorator+2)
                 $guid_obj_decorator = wpunity_create_guids('obj', $deco_obj);
                 $x_pos_decorator = - $value['position'][0]; // x is in the opposite site in unity
                 $y_pos_decorator = $value['position'][1];
@@ -305,9 +292,40 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $y_scale_decorator = $value['scale'][1];
                 $z_scale_decorator = $value['scale'][2];
 
-                $deco_finalyaml = wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator);
+                $deco_finalyaml = wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$fid_decorator1,$fid_decorator2,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator);
                 $allObjectsYAML = $allObjectsYAML . $LF . $deco_finalyaml;
             }
+            if ($value['categoryName'] == 'Marker'){
+                $marker_id = $value['assetid'];
+                $asset_type = get_the_terms( $marker_id, 'wpunity_asset3d_cat' );
+                $asset_type_ID = $asset_type[0]->term_id;
+                $marker_obj = get_post_meta($marker_id,'wpunity_asset3d_obj',true);
+
+                $marker_yaml = wpunity_getAssetYAML_energy('marker');
+                $fid_marker = wpunity_create_fids($current_fid++);
+                $fid_marker1 = wpunity_create_fids($current_fid++);//($fid_marker+1)
+                $fid_marker2 = wpunity_create_fids($current_fid++);//($fid_marker+2)
+                $fid_marker3 = wpunity_create_fids($current_fid++);//($fid_marker+3)
+                $guid_obj_marker = wpunity_create_guids('obj', $marker_obj);
+                $x_pos_marker = - $value['position'][0]; // x is in the opposite site in unity
+                $y_pos_marker = $value['position'][1];
+                $z_pos_marker = $value['position'][2];
+                $x_rotation_marker = $value['quaternion'][0];
+                $y_rotation_marker = $value['quaternion'][1];
+                $z_rotation_marker = $value['quaternion'][2];
+                $w_rotation_marker = $value['quaternion'][3];
+                $x_scale_marker = $value['scale'][0];
+                $y_scale_marker = $value['scale'][1];
+                $z_scale_marker = $value['scale'][2];
+
+                $archaelogical_penalty = $value['archaeology_penalty'];
+                $nature_penalty = $value['natural_penalty'];
+                $HV_penalty = $value['hv_penalty'];
+
+                $marker_finalyaml = wpunity_replace_marker_unity($marker_yaml,$fid_marker,$fid_marker1,$fid_marker2,$fid_marker3,$guid_obj_marker,$x_pos_marker,$y_pos_marker,$z_pos_marker,$x_rotation_marker,$y_rotation_marker,$z_rotation_marker,$w_rotation_marker,$x_scale_marker,$y_scale_marker,$z_scale_marker,$archaelogical_penalty,$nature_penalty,$HV_penalty);
+                $allObjectsYAML = $allObjectsYAML . $LF . $marker_finalyaml;
+            }
+            /*
             if ($value['categoryName'] == 'Consumer'){
                 $consumer_id = $value['assetid'];
                 $asset_type = get_the_terms( $consumer_id, 'wpunity_asset3d_cat' );
@@ -344,6 +362,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                     $mean_power_consumer, $var_power_consumer, $min_power_consumer, $max_power_consumer);
                 $allObjectsYAML = $allObjectsYAML . $LF . $consumer_finalyaml;
             }
+
             if ($value['categoryName'] == 'Producer'){
                 $producer_id = $value['assetid'];
                 $asset_type = get_the_terms( $producer_id, 'wpunity_asset3d_cat' );
@@ -385,6 +404,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
                 $producer_finalyaml = wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val);
                 $allObjectsYAML = $allObjectsYAML . $LF . $producer_finalyaml;
             }
+            */
         }
     }
 
@@ -456,36 +476,26 @@ function wpunity_replace_educational_energy_unity($term_meta_educational_energy,
     return $file_content_return;
 }
 
-function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$income_when_overpower,$income_when_correct_power,$income_when_under_power,$mean_speed_wind,$var_speed_wind,$min_speed_wind,$max_speed_wind,$access_penalty,$archaeology_penalty,$natural_reserve_penalty,$hvdistance_penalty,$fid_rect_transform_terrain,$fid_terrain_prefab_mesh,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
-    $file_content_return = str_replace("___[fid_of_terrain]___",$fid_of_terrain,$terrain_yaml);
-    $file_content_return = str_replace("___[income_when_overpower]___",$income_when_overpower,$file_content_return);
-    $file_content_return = str_replace("___[income_when_correct_power]___",$income_when_correct_power,$file_content_return);
-    $file_content_return = str_replace("___[income_when_under_power]___",$income_when_under_power,$file_content_return);
-    $file_content_return = str_replace("___[mean_speed_wind]___",$mean_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[var_speed_wind]___",$var_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[min_speed_wind]___",$min_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[max_speed_wind]___",$max_speed_wind,$file_content_return);
-    $file_content_return = str_replace("___[access_penalty]___",$access_penalty,$file_content_return);
-    $file_content_return = str_replace("___[archaeology_penalty]___",$archaeology_penalty,$file_content_return);
-    $file_content_return = str_replace("___[natural_reserve_penalty]___",$natural_reserve_penalty,$file_content_return);
-    $file_content_return = str_replace("___[hvdistance_penalty]___",$hvdistance_penalty,$file_content_return);
-    $file_content_return = str_replace("___[fid_rect_transform_terrain]___",$fid_rect_transform_terrain,$file_content_return);
-    $file_content_return = str_replace("___[fid_terrain_prefab_mesh]___",$fid_terrain_prefab_mesh,$file_content_return);
-    $file_content_return = str_replace("___[guid_terrain_mesh]___",$guid_terrain_mesh,$file_content_return);
-    $file_content_return = str_replace("___[x_pos_terrain]___",$x_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_pos_terrain]___",$y_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_pos_terrain]___",$z_pos_terrain,$file_content_return);
-    $file_content_return = str_replace("___[x_rotation_terrain]___",$x_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_rotation_terrain]___",$y_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_rotation_terrain]___",$z_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[w_rotation_terrain]___",$w_rotation_terrain,$file_content_return);
-    $file_content_return = str_replace("___[x_scale_terrain]___",$x_scale_terrain,$file_content_return);
-    $file_content_return = str_replace("___[y_scale_terrain]___",$y_scale_terrain,$file_content_return);
-    $file_content_return = str_replace("___[z_scale_terrain]___",$z_scale_terrain,$file_content_return);
+function wpunity_replace_terrain_unity($terrain_yaml,$fid_of_terrain,$fid_of_terrain1,$fid_of_terrain2,$guid_terrain_mesh,$x_pos_terrain,$y_pos_terrain,$z_pos_terrain,$x_rotation_terrain,$y_rotation_terrain,$z_rotation_terrain,$w_rotation_terrain,$x_scale_terrain,$y_scale_terrain,$z_scale_terrain){
+    $file_content_return = str_replace("___[terrain_fid]___",$fid_of_terrain,$terrain_yaml);
+    $file_content_return = str_replace("___[terrain_fid1]___",$fid_of_terrain1,$file_content_return);
+    $file_content_return = str_replace("___[terrain_fid2]___",$fid_of_terrain2,$file_content_return);
+    $file_content_return = str_replace("___[terrain_guid]___",$guid_terrain_mesh,$file_content_return);
+    $file_content_return = str_replace("___[terrain_position_x]___",$x_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_position_y]___",$y_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_position_z]___",$z_pos_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_rotation_x]___",$x_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_rotation_y]___",$y_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_rotation_z]___",$z_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_rotation_w]___",$w_rotation_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_scale_x]___",$x_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_scale_y]___",$y_scale_terrain,$file_content_return);
+    $file_content_return = str_replace("___[terrain_scale_z]___",$z_scale_terrain,$file_content_return);
 
     return $file_content_return;
 }
 
+/*
 function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_parent,$x_pos_consumer,$y_pos_consumer,$z_pos_consumer,$x_rotation_consumer,$y_rotation_consumer,$z_rotation_consumer,$w_rotation_consumer,$name_consumer,$fid_consumer_prefab_transform,
                                         $fid_consumer_prefab_child,$guid_consumer_prefab_child_obj,
                                         $mean_power_consumer, $var_power_consumer, $min_power_consumer, $max_power_consumer){
@@ -513,7 +523,9 @@ function wpunity_replace_consumer_unity($consumer_yaml,$fid_prefab_consumer_pare
 
     return $file_content_return;
 }
+*/
 
+/*
 function wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_producer,$y_pos_producer,$z_pos_producer,$x_rot_parent,$y_rot_parent,$z_rot_parent,$w_rot_parent,$y_position_infoquad,$y_pos_quadselector,$turbine_name_class,$turbine_max_power,$turbine_cost,$rotor_diameter,$turbine_windspeed_class,$turbine_repair_cost,$turbine_damage_coefficient,$fid_transformation_parent_producer,$fid_child_producer,$obj_guid_producer,$producer_name,$power_curve_val){
 
     $file_content_return = str_replace("___[fid_producer]___",$fid_producer,$producer_yaml);
@@ -568,20 +580,50 @@ function wpunity_replace_producer_unity($producer_yaml,$fid_producer,$x_pos_prod
 
     return $file_content_return;
 }
+*/
 
-function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
-    $file_content_return = str_replace("___[fid_decorator]___",$fid_decorator,$deco_yaml);
-    $file_content_return = str_replace("___[guid_obj_decorator]___",$guid_obj_decorator,$file_content_return);
-    $file_content_return = str_replace("___[x_pos_decorator]___",$x_pos_decorator,$file_content_return);
-    $file_content_return = str_replace("___[y_pos_decorator]___",$y_pos_decorator,$file_content_return);
-    $file_content_return = str_replace("___[z_pos_decorator]___",$z_pos_decorator,$file_content_return);
-    $file_content_return = str_replace("___[x_rotation_decorator]___",$x_rotation_decorator,$file_content_return);
-    $file_content_return = str_replace("___[y_rotation_decorator]___",$y_rotation_decorator,$file_content_return);
-    $file_content_return = str_replace("___[z_rotation_decorator]___",$z_rotation_decorator,$file_content_return);
-    $file_content_return = str_replace("___[w_rotation_decorator]___",$w_rotation_decorator,$file_content_return);
-    $file_content_return = str_replace("___[x_scale_decorator]___",$x_scale_decorator,$file_content_return);
-    $file_content_return = str_replace("___[y_scale_decorator]___",$y_scale_decorator,$file_content_return);
-    $file_content_return = str_replace("___[z_scale_decorator]___",$z_scale_decorator,$file_content_return);
+function wpunity_replace_marker_unity($marker_yaml,$fid_marker,$fid_marker1,$fid_marker2,$fid_marker3,$guid_obj_marker,$x_pos_marker,$y_pos_marker,$z_pos_marker,$x_rotation_marker,$y_rotation_marker,$z_rotation_marker,$w_rotation_marker,$x_scale_marker,$y_scale_marker,$z_scale_marker,$archaelogical_penalty,$nature_penalty,$HV_penalty){
+
+    $file_content_return = str_replace("___[marker_fid]___",$fid_marker,$marker_yaml);
+    $file_content_return = str_replace("___[marker_fid1]___",$fid_marker1,$file_content_return);
+    $file_content_return = str_replace("___[marker_fid2]___",$fid_marker2,$file_content_return);
+    $file_content_return = str_replace("___[marker_fid3]___",$fid_marker3,$file_content_return);
+    $file_content_return = str_replace("___[marker_obj_guid]___",$guid_obj_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_position_x]___",$x_pos_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_position_y]___",$y_pos_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_position_z]___",$z_pos_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_rotation_x]___",$x_rotation_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_rotation_y]___",$y_rotation_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_rotation_z]___",$z_rotation_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_rotation_w]___",$w_rotation_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_scale_x]___",$x_scale_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_scale_y]___",$y_scale_marker,$file_content_return);
+    $file_content_return = str_replace("___[marker_scale_z]___",$z_scale_marker,$file_content_return);
+    $file_content_return = str_replace("___[archaelogical_penalty]___",$archaelogical_penalty,$file_content_return);
+    $file_content_return = str_replace("___[nature_penalty]___",$nature_penalty,$file_content_return);
+    $file_content_return = str_replace("___[HV_penalty]___",$HV_penalty,$file_content_return);
+
+
+    return $file_content_return;
+
+}
+
+
+function wpunity_replace_decorator_unity($deco_yaml,$fid_decorator,$fid_decorator1,$fid_decorator2,$guid_obj_decorator,$x_pos_decorator,$y_pos_decorator,$z_pos_decorator,$x_rotation_decorator,$y_rotation_decorator,$z_rotation_decorator,$w_rotation_decorator,$x_scale_decorator,$y_scale_decorator,$z_scale_decorator){
+    $file_content_return = str_replace("___[decor_fid]___",$fid_decorator,$deco_yaml);
+    $file_content_return = str_replace("___[decor_fid1]___",$fid_decorator1,$file_content_return);
+    $file_content_return = str_replace("___[decor_fid2]___",$fid_decorator2,$file_content_return);
+    $file_content_return = str_replace("___[decor_guid]___",$guid_obj_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_position_x]___",$x_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_position_y]___",$y_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_position_z]___",$z_pos_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_rotation_x]___",$x_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_rotation_y]___",$y_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_rotation_z]___",$z_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_rotation_w]___",$w_rotation_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_scale_x]___",$x_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_scale_y]___",$y_scale_decorator,$file_content_return);
+    $file_content_return = str_replace("___[decor_scale_z]___",$z_scale_decorator,$file_content_return);
 
     return $file_content_return;
 }
