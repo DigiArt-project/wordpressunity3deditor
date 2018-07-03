@@ -618,13 +618,13 @@ function displayMarkerProperties(event, name){
 
     // Create options
     createOption(selectArchPenalty[0], "0", "0", true, false, "#fff");
-    createOption(selectArchPenalty[0], "-2", "-2", false, false, "#fff");
+    createOption(selectArchPenalty[0], "2", "2", false, false, "#fff");
 
     createOption(selectHVPenalty[0], "0", "0", true, false, "#fff");
-    createOption(selectHVPenalty[0], "-2", "-2", false, false, "#fff");
+    createOption(selectHVPenalty[0], "2", "2", false, false, "#fff");
 
     createOption(selectNaturalPenalty[0], "0", "0", true, false, "#fff");
-    createOption(selectNaturalPenalty[0], "-2", "-2", false, false, "#fff");
+    createOption(selectNaturalPenalty[0], "2", "2", false, false, "#fff");
 
     // Load selected values from 3D scene
     selectArchPenalty.val( envir.scene.getObjectByName(name).archaeology_penalty );
