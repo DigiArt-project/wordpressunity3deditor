@@ -2228,6 +2228,20 @@ function wpunity_default_value_unityConnect_energy_get(){
 // YAMLS for SCENES default values (ENERGY GAMES)
 /***************************************************************************************************************/
 
+function wpunity_getAssetYAML_energy($myasset_type){
+  $def_json = '';
+
+  if($myasset_type == 'decor') {
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/assets/energy-decor.txt");
+  }elseif($myasset_type == 'marker'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/assets/energy-marker.txt");
+  }elseif($myasset_type == 'terrain'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/assets/energy-terrain.txt");
+  }
+
+  return $def_json;
+}
+
 function wpunity_getSceneYAML_energy($myscene_type){
   $def_json = '';
 
