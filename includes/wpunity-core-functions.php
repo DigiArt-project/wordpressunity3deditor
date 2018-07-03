@@ -1937,6 +1937,9 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
+    $fa = fopen("output_COMPILE.txt","w");
+    
+    
 	$DS = DIRECTORY_SEPARATOR;
 	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
@@ -1962,20 +1965,43 @@ function wpunity_assepile_action_callback(){
 	}
 
 	$gameId = $_REQUEST['gameId'];
+	
+	fwrite($fa, "aaaa");
+    fwrite($fa, "\n");
+    fwrite($fa, $gameId);
+    fwrite($fa, "\n");
+    
 	$gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
-
-	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'], $targetPlatform, $gameType[0]->name);
-
+    
+    fwrite($fa, "\n");
+    fwrite($fa, "aaaa2:" + $gameType);
+    fwrite($fa, "\n");
+    fwrite($fa, "aaaa2:" + $_REQUEST['gameSlug']);
+    fwrite($fa, "\n");
+    fwrite($fa, "aaaa3:" + $targetPlatform);
+    fwrite($fa, "\n");
+    fwrite($fa, "aaaa4:" + $gameType[0]->name);
+    fwrite($fa, "\n");
+    
+	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'],
+        $targetPlatform, $gameType[0]->name);
+    
+    fwrite($fa, "bbbb");
+	
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
 	// Do not delete library folder if it takes too long
 	sleep(2);
 
+	
+	
 	if ($assemply_success == 'true') {
 
 		$init_gcwd = getcwd(); // get cwd (wp-admin probably)
 		//-----------------------------
-
+        
+        fwrite($fa, "ccccc");
+        fclose($fa);
 		//--Uploads/myGameProjectUnity--
 
 		// Todo: Add more option
@@ -1990,17 +2016,18 @@ function wpunity_assepile_action_callback(){
 //        fwrite($ff, print_r(wpunity_getUnity_exe_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_api_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_server_path(),true)."\n");
+        
+        fwrite($ff, "aaaa");
 
+		fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
 
-		//fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
-
-		$remote_game_server_folder_dir = wpunity_getUnity_local_or_remote()=='local' ?
+		$remote_game_server_folder_dir = wpunity_getUnity_local_or_remote() =='local' ?
 			$game_dirpath : (wpunity_getRemote_server_path().$_REQUEST['gameSlug'] . 'Unity');
 
 
-		//fwrite($ff, $remote_game_server_folder_dir);
+		fwrite($ff, $remote_game_server_folder_dir);
 
-		//fclose($ff);
+		fclose($ff);
 
 
 
