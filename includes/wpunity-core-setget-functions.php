@@ -5,12 +5,28 @@ function wpunity_getDefaultJSONscene($mygameType){
 	$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
 
 	if($mygameType == 'energy') {
-		$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene_energy.json");
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene_energy.json");
 	}elseif($mygameType == 'chemistry'){
-		$def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/assets/standard_scene_chemistry.json");
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene_chemistry.json");
 	}
 
 	return $def_json;
+}
+
+
+function wpunity_countEnergyMarkers($scene_json) {
+    
+    $nMarkers = 0;
+    
+    $json_dec = json_decode($scene_json, true);
+   
+    foreach ($json_dec['objects'] as $obj3D){
+        if (isset($obj3D['categoryName']))
+            if($obj3D['categoryName']=='Marker')
+                $nMarkers += 1;
+    }
+    
+    return $nMarkers > 0 ? true : false;
 }
 
 //==========================================================================================================================================
