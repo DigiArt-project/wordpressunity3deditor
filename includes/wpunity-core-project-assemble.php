@@ -605,6 +605,10 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
         wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($gameType[0]->slug == 'energy_games'){
         wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+
+        //create standard energy scenes (simulation scenes, stats, turbine selection etc)
+        wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+
     }
 
 }
