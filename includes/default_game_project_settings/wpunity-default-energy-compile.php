@@ -7,35 +7,35 @@ function wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path
 
     //SIMULATION SCENE FIELDS
     $term_meta_simuFields = wpunity_getSceneYAML_energy('fields');
-    $file_simuFields = $game_path . '/' . 'fields.unity';
+    $file_simuFields = $game_path . '/' . 'Stage3(Plains).unity';
     $create_file1 = fopen($file_simuFields, "w") or die("Unable to open file!");
     fwrite($create_file1, $term_meta_simuFields);
     fclose($create_file1);
 
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/fields.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_selCS = 'Assets/scenes/' . 'fields.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/Stage3(Plains).unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_selCS = 'Assets/scenes/' . 'Stage3(Plains).unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
 
     //SIMULATION SCENE MOUNTAINS
     $term_meta_simuMount = wpunity_getSceneYAML_energy('mountains');
-    $file_simuMount = $game_path . '/' . 'mountains.unity';
+    $file_simuMount = $game_path . '/' . 'Stage3(Mountains).unity';
     $create_file2 = fopen($file_simuMount, "w") or die("Unable to open file!");
     fwrite($create_file2, $term_meta_simuMount);
     fclose($create_file2);
 
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/mountains.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_selCS = 'Assets/scenes/' . 'mountains.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/Stage3(Mountains).unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_selCS = 'Assets/scenes/' . 'Stage3(Mountains).unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
 
     //SIMULATION SCENE FIELDS
     $term_meta_simuSea = wpunity_getSceneYAML_energy('seashore');
-    $file_simuSea = $game_path . '/' . 'seashores.unity';
+    $file_simuSea = $game_path . '/' . 'Stage3(Seashore).unity';
     $create_file3 = fopen($file_simuSea, "w") or die("Unable to open file!");
     fwrite($create_file3, $term_meta_simuSea);
     fclose($create_file3);
 
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/seashores.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_selCS = 'Assets/scenes/' . 'seashores.unity';
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/Stage3(Seashore).unity');//Update the EditorBuildSettings.asset by adding new Scene
+    $file_path_selCS = 'Assets/scenes/' . 'Stage3(Seashore).unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
 
 
