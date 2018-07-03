@@ -8,9 +8,9 @@ function wpunity_getAssetYAML_chemistry($myasset_type){
     $def_json = '';
 
     if($myasset_type == 'room') {
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/assets/chemistry-room.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/assets/chemistry-room.txt");
     }elseif($myasset_type == 'gate'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/assets/chemistry-gate.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/assets/chemistry-gate.txt");
     }
 
     return $def_json;
@@ -24,19 +24,19 @@ function wpunity_getSceneYAML_chemistry($myscene_type){
     $def_json = '';
 
     if($myscene_type == 'menu') {
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-menu.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-menu.txt");
     }elseif($myscene_type == 'credits'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-credits.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-credits.txt");
     }elseif($myscene_type == 'help'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-help.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-help.txt");
     }elseif($myscene_type == 'login'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-login.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-login.txt");
     }elseif($myscene_type == 'lab'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-lab.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-lab.txt");
     }elseif($myscene_type == 'exam2d'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam2d.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam2d.txt");
     }elseif($myscene_type == 'exam3d'){
-        $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam3d.txt");
+        $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam3d.txt");
     }
 
     return $def_json;

@@ -634,6 +634,8 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$exam3dSceneSlug = $gameSlug . '-exam3d';
 	}
 
+	$default_json = '';
+
 	if($game_category == 'energy_games'){
 		$firstSceneYAML = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -641,6 +643,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('energy');
 	}elseif($game_category == 'archaeology_games'){
 		$firstSceneYAML = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -648,6 +651,7 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$mainmenuSceneYAMLID = $mainmenuSceneYAML->term_id;
 		$credentialsSceneYAML = get_term_by('slug', 'credentials-arch-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Credentials Scene
 		$credentialsSceneYAMLID = $credentialsSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('archaeology');
 	}elseif($game_category == 'chemistry_games'){
 		$firstSceneYAML = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml'); //Yaml Tax for First Scene (Chemistry)
 		$firstSceneYAMLID = $firstSceneYAML->term_id;
@@ -659,9 +663,8 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 		$exam2dSceneYAMLID = $exam2dSceneYAML->term_id;
 		$exam3dSceneYAML = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml'); //Yaml Tax for Exam 3d Scene (Chemistry)
 		$exam3dSceneYAMLID = $exam3dSceneYAML->term_id;
+		$default_json= wpunity_getDefaultJSONscene('chemistry');
 	}
-
-	$default_json = wpunity_getDefaultJSONscene();
 
 	// Create Main Menu Scene Data
 	$mainmenuSceneData = array(
@@ -729,8 +732,8 @@ Characteristics :
 	- Access cost = 1 $';
 
 
-		$image_content2 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img2.png";
-		$image_content3 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img3.png";
+		$image_content2 = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/regions/img2.png";
+		$image_content3 = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/regions/img3.png";
 
 		// Create First Scene Data
 		$firstSceneData = array(
@@ -860,7 +863,7 @@ Characteristics :
 	$scene1_id = wp_insert_post( $firstSceneData );
 	if($game_category == 'energy_games'){
 
-		$image_content1 = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/regions/img1.png";
+		$image_content1 = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/regions/img1.png";
 		$attachment1_id = wpunity_upload_img_vid( $image_content1, $scene1_id);
 		set_post_thumbnail( $scene1_id, $attachment1_id );
 	}
@@ -1077,24 +1080,24 @@ function wpunity_registrationhook_createAssets($user_id,$username,$game_id){
 function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
 	$has_image = false; $has_video = false;
 	if($assetTypeNumber == 'artifact'){
-		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/artifact/star.mtl");
-		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/artifact/star_yellow.obj");
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/artifact/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/artifact/star_yellow.obj");
 	}elseif($assetTypeNumber == 'door') {
-		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/door/door_green.mtl");
-		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/door/door_green.obj");
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/door/door_green.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/door/door_green.obj");
 	}elseif($assetTypeNumber == 'poi_image') {
-		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star.mtl");
-		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/star_blue.obj");
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_image_text/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_image_text/star_blue.obj");
 		$has_image = true;
-		$image_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_image_text/image.jpg";
+		$image_content = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_image_text/image.jpg";
 	}elseif($assetTypeNumber == 'poi_video') {
-		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star.mtl");
-		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/star_red.obj");
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_video/star.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_video/star_red.obj");
 		$has_video = true;
-		$video_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/poi_video/bunny.mp4";
+		$video_content = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/poi_video/bunny.mp4";
 	}elseif($assetTypeNumber == 'site') {
-		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
-		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
+		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.mtl");
+		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.obj");
 	}
 
 	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
@@ -1124,9 +1127,9 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 
 //function wpunity_registrationhook_uploadAssets_withTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
 //
-//	$texture_content = WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.jpg";
-//	$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.mtl");
-//	$obj_content = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/files/samples/Site1/site1.obj");
+//	$texture_content = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.jpg";
+//	$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.mtl");
+//	$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.obj");
 //
 //	$textureFile_id = wpunity_upload_Assetimg64($texture_content, 'texture_'.$assetTitleForm, $asset_newID, $gameSlug);
 //	$textureFile_filename = basename(get_attached_file($textureFile_id));

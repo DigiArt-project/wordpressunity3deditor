@@ -335,7 +335,7 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
 
 function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileFolder){
 
-    $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
+    $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
 
     if($fileName === 'ProjectSettings.asset'){
 
@@ -501,7 +501,7 @@ function wpunity_compile_objmeta_cre($folder, $objName, $objID, $suffix = ""){
 guid: ___[obj_guid]___
 timeCreated: ___[unx_time_created]___
 licenseType: Free
-";      // wpunity_getYaml_obj_dotmeta_pattern();
+[junk line]";      // wpunity_getYaml_obj_dotmeta_pattern();
 
     $objMetaContent = wpunity_replace_objmeta($objMetaPattern, $objID);
 
@@ -589,22 +589,26 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
 
-    $file = $game_path . '/' . 'S_Reward.unity';
-    $create_file = fopen($file, "w") or die("Unable to open file!");
-    fwrite($create_file, $term_meta_s_reward);
-    fclose($create_file);
-
     if($gameType[0]->slug == 'archaeology_games') {
         $file2 = $game_path . '/' . 'S_SceneSelector.unity';
         $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
         $create_file2 = fopen($file2, "w") or die("Unable to open file!");
         fwrite($create_file2, $file_content);
         fclose($create_file2);
+
+        $file = $game_path . '/' . 'S_Reward.unity';
+        $create_file = fopen($file, "w") or die("Unable to open file!");
+        fwrite($create_file, $term_meta_s_reward);
+        fclose($create_file);
     }elseif($gameType[0]->slug == 'chemistry_games'){
         //do nothing
         wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
     }elseif($gameType[0]->slug == 'energy_games'){
         wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+
+        //create standard energy scenes (simulation scenes, stats, turbine selection etc)
+        wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+
     }
 
 }
