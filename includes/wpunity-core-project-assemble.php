@@ -540,7 +540,6 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
     
     //fwrite($fd, "2");
-    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
 
     $gameTypeTerm = wp_get_post_terms( $gameID, 'wpunity_game_type' );
     $gameType = $gameTypeTerm[0]->name;
@@ -603,6 +602,11 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     //fwrite($fd, "9");
     
     wp_reset_postdata();
+
+
+    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
+
+
 }
 
 //Create Reward and SceneSelector
