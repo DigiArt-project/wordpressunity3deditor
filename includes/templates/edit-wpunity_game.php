@@ -597,23 +597,32 @@ $wp_query = $temp_query; ?>
 //      $assets = array_merge($assets_game, $assets_joker_game);
 
 // Output custom query loop
-if ( $assets ) :?>
+if ( $assets ) :
+    
+    
+    
+    
+    ?>
+
+    
 
     <div class="mdc-layout-grid">
 
         <div class="mdc-layout-grid__inner">
 
-			<?php foreach ($assets as $asset) {	?>
+			<?php foreach ($assets as $asset) {
+                
+			    ?>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 
-                    <div class="mdc-card mdc-theme--background" id="<?php echo $asset[assetid]; ?>">
+                    <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
                         <div class="SceneThumbnail">
                             <a href="#">
 
-								<?php if ($asset[screenImagePath]){ ?>
+								<?php if ($asset['screenImagePath']){ ?>
 
-                                    <img width="495" height="330" src="<?php echo $asset[screenImagePath]; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+                                    <img width="495" height="330" src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
 
 								<?php } else { ?>
                                     <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
@@ -626,11 +635,11 @@ if ( $assets ) :?>
 
                         <div class="mdc-card__primary">
                             <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <a class="mdc-theme--secondary" href=""><?php echo $asset[assetName];?></a>
+                                <a class="mdc-theme--secondary" href=""><?php echo $asset['assetName'];?></a>
                             </h1>
 
                             <p class="mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-								<?php echo $asset[categoryName];?>
+								<?php echo $asset['categoryName'];?>
                             </p>
 
                         </div>
@@ -639,14 +648,14 @@ if ( $assets ) :?>
 
 						//echo current_user_can('administrator');
 						// For joker assets, If the user is not administrator he should not be able to delete or edit them.
-						$shouldHideDELETE_EDIT = $asset[isJoker] && !current_user_can('administrator');
+						$shouldHideDELETE_EDIT = $asset['isJoker'] && !current_user_can('administrator');
 						?>
 
 
                         <section class="mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset[assetid];?>,'<?php echo $gameSlug ?>',<?php echo $asset[isCloned];?>)"
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
                                style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset[assetid]; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
 								<?php
 								echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
 								?>
