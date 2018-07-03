@@ -2232,17 +2232,27 @@ function wpunity_getSceneYAML_energy($myscene_type){
   $def_json = '';
 
   if($myscene_type == 'menu') {
-      $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-menu.txt");
+      $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-menu.txt");
   }elseif($myscene_type == 'credits'){
-      $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-credits.txt");
+      $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-credits.txt");
   }elseif($myscene_type == 'help'){
-    $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-help.txt");
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-help.txt");
   }elseif($myscene_type == 'login'){
-    $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-login.txt");
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-login.txt");
   }elseif($myscene_type == 'selector'){
-    $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-selector.txt");
-  }elseif($myscene_type == 'educational'){
-    $def_json = file_get_contents(WP_PLUGIN_DIR . "/WordpressUnity3DEditor/includes/default_game_project_data/energy/scenes/energy-educational.txt");
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-selector.txt");
+  }elseif($myscene_type == 'regional'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-regional.txt");
+  }elseif($myscene_type == 'fields'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-simuFields.txt");
+  }elseif($myscene_type == 'mountains'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-simuMountains.txt");
+  }elseif($myscene_type == 'seashore'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-simuSeashore.txt");
+  }elseif($myscene_type == 'stats'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-stats.txt");
+  }elseif($myscene_type == 'turbines'){
+    $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-turbselection.txt");
   }
 
   return $def_json;

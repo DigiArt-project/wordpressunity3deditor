@@ -37,9 +37,9 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
 
     //Add Static Pages to cs & BuildSettings (Main Menu must be first)
-//    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-//    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
-//    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
+    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    //$file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
+    //wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
 
     //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
     //$file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
@@ -404,6 +404,9 @@ function wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug){
     $count = 0;
     foreach ($savedMoleculesVal as $moleculeID) {
         $moleName = get_the_title( $moleculeID );
+    
+        $moleName[0] = strtoupper($moleName[0]);
+        
         $mole_type = get_post_meta($moleculeID, 'wpunity_molecule_ChemicalTypeVal', true);
         $firstLine = '- name: ' . $moleName;
         $secondLine = str_repeat(' ', 4) . 'formula: ' . $mole_type;
