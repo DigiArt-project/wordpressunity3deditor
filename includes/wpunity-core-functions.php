@@ -1989,6 +1989,7 @@ function wpunity_assepile_action_callback(){
 	// Do not delete library folder if it takes too long
 	sleep(2);
 
+//	wp_die();
 	
 	
 	if ($assemply_success == 'true') {

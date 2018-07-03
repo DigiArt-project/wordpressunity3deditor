@@ -118,10 +118,20 @@ function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$sett
     $fields_json = get_post_meta($fields_id,'wpunity_scene_json_input',true);
     $sea_json = get_post_meta($sea_id,'wpunity_scene_json_input',true);
 
+    
+    
     if(wpunity_countEnergyMarkers($mount_json)){$mountains_activation = 1;}
     if(wpunity_countEnergyMarkers($fields_json)){$fields_activation = 1;}
     if(wpunity_countEnergyMarkers($sea_json)){$seashore_activation = 1;}
-
+    
+//    $fo = fopen("output_energy_scenes.txt","w");
+//    fwrite($fo, "Mount" . $mountains_activation);
+//    fwrite($fo, "\n");
+//    fwrite($fo, "Fields" . $fields_activation);
+//    fwrite($fo, "\n");
+//    fwrite($fo, "Sea" . $seashore_activation);
+//    fclose($fo);
+    
     $term_meta_s_selector = wpunity_getSceneYAML_energy('selector');
     $file_selector = $game_path . '/' . 'S_SceneSelector.unity';
     $file_content = wpunity_replace_sceneselector_energy_unity($term_meta_s_selector,$mountains_activation,$seashore_activation,$fields_activation);

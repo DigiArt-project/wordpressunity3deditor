@@ -1056,7 +1056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: ___[fields_activation]___
+  m_IsActive: 0
 --- !u!224 &1043251247
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1550,7 +1550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: ___[mountains_activation]___
+  m_IsActive: 0
 --- !u!224 &1446431367
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1723,7 +1723,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: ___[seashore_activation]___
+  m_IsActive: 1
 --- !u!224 &1669222172
 RectTransform:
   m_ObjectHideFlags: 0
