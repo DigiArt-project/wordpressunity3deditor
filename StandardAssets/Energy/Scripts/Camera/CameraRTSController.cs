@@ -81,7 +81,7 @@ public class CameraRTSController : MonoBehaviour
         }
         //}
 
-        transform.Translate(panMovement, Space.World);
+        transform.Translate(panMovement, Space.Self);
 
         #endregion
 

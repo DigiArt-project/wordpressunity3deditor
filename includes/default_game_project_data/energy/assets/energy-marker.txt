@@ -5,59 +5,57 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.x
       value: ___[marker_position_x]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.y
       value: ___[marker_position_y]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalPosition.z
       value: ___[marker_position_z]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalRotation.x
       value: ___[marker_rotation_x]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalRotation.y
       value: ___[marker_rotation_y]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalRotation.z
       value: ___[marker_rotation_z]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalRotation.w
       value: ___[marker_rotation_w]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalScale.x
       value: ___[marker_scale_x]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalScale.y
       value: ___[marker_scale_y]___
       objectReference: {fileID: 0}
-    - target: {fileID: 4432963095571188, guid: ___[marker_obj_guid]___, type: 2}
+    - target: {fileID: 400000, guid: ___[marker_obj_guid]___, type: 3}
       propertyPath: m_LocalScale.z
       value: ___[marker_scale_z]___
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114707447727845176, guid: ___[marker_obj_guid]___, type: 2}
-    - {fileID: 65823032349800856, guid: ___[marker_obj_guid]___, type: 2}
-  m_ParentPrefab: {fileID: 100100000, guid: ___[marker_obj_guid]___, type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ___[marker_obj_guid]___, type: 3}
   m_IsPrefabParent: 0
 --- !u!1 &___[marker_fid1]___ stripped
 GameObject:
-  m_PrefabParentObject: {fileID: 1821963947913140, guid: ___[marker_obj_guid]___,
-    type: 2}
+  m_PrefabParentObject: {fileID: 100002, guid: ___[marker_obj_guid]___,
+    type: 3}
   m_PrefabInternal: {fileID: ___[marker_fid]___}
 --- !u!65 &___[marker_fid2]___
 BoxCollider:

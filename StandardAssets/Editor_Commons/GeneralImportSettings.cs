@@ -18,6 +18,7 @@ class GeneralImportSettings : AssetPostprocessor
         if (modImport.assetPath.Contains(".obj"))
         {
             modImport.importMaterials = true;
+            modImport.materialLocation = 0;
             //Debug.Log("PP:" + modImport.assetPath);
             //string[] linesBefore = System.IO.File.ReadAllLines(modImport.assetPath + ".meta");
             //System.IO.File.Delete(modImport.assetPath + ".meta");
