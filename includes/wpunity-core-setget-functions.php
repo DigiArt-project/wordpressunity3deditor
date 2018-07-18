@@ -148,8 +148,6 @@ function wpunity_combineGameStrategies($project_id){
 			}
 
 		}
-
-
 	}
 
 	return $strategies;

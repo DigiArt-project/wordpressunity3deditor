@@ -9,7 +9,6 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
 //    fwrite($fc, $gameType);
 
 //    fwrite($fc, "1");
-    wpunity_addStrategy_APIcall($gameID);
     
 //    fwrite($fc, "2");
     wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
