@@ -73,7 +73,22 @@ $gotoAdd_newAsset_page = get_permalink($newAssetPage[0]->ID) . $parameter_Scenep
 
 $preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? get_post_meta($scene_id, 'wpunity_exam_strategy', true) : false;
 
-if ($preSavedStrategies) {$preSavedStrategies = json_decode($preSavedStrategies);}
+if ($preSavedStrategies) {
+
+    $preSavedStrategies = json_decode($preSavedStrategies, true);
+
+	$arr = [];
+	foreach ($preSavedStrategies as $key => $value){
+
+	    if ($value['naming']) {
+		    array_push ( $arr, $value['naming']);
+        } else {
+		    array_push ( $arr, $value['construction']);
+        }
+    }
+
+    $preSavedStrategies = $arr;
+}
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
@@ -366,6 +381,8 @@ get_header(); ?>
         };
 
         var examTitle = "<?php echo $game_post->post_title; ?>";
+        var sceneSlug = "<?php echo $sceneSlug; ?>";
+
 
         var mdc = window.mdc;
         mdc.autoInit();
@@ -440,7 +457,7 @@ get_header(); ?>
             var strategy = jQuery("#molecule-json-field").val();
 
             if (strategy.length > 2) {
-                var strategyId = examTitle+""+new_id1+"strat"+new_id2;
+                var strategyId = new_id1+"strat"+new_id2;
                 savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
             }
 
@@ -451,13 +468,15 @@ get_header(); ?>
         function addStrategiesToInput() {
 
             var savedStrategiesList = jQuery( "#saved-strategies" );
-            var json = {};
+            var json = [];
             jQuery( savedStrategiesList.children() ).each(function( index ) {
 
-                var id = jQuery( this ).attr('id');
                 var val = jQuery( "span", this ).text();
                 val = JSON.parse(val);
-                json[id] = val;
+
+                var slug = sceneSlug === 'Molecule Naming' ? 'naming' : 'construction';
+
+                json.push({[slug]: val});
 
             });
 

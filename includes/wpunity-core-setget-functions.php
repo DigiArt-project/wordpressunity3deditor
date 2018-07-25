@@ -1,7 +1,7 @@
 <?php
 
 function wpunity_getDefaultJSONscene($mygameType){
- 
+
 	$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
 
 	if($mygameType == 'energy') {
@@ -15,18 +15,18 @@ function wpunity_getDefaultJSONscene($mygameType){
 
 
 function wpunity_countEnergyMarkers($scene_json) {
-    
-    $nMarkers = 0;
-    
-    $json_dec = json_decode($scene_json, true);
-   
-    foreach ($json_dec['objects'] as $obj3D){
-        if (isset($obj3D['categoryName']))
-            if($obj3D['categoryName']=='Marker')
-                $nMarkers += 1;
-    }
-    
-    return $nMarkers > 0 ? true : false;
+
+	$nMarkers = 0;
+
+	$json_dec = json_decode($scene_json, true);
+
+	foreach ($json_dec['objects'] as $obj3D){
+		if (isset($obj3D['categoryName']))
+			if($obj3D['categoryName']=='Marker')
+				$nMarkers += 1;
+	}
+
+	return $nMarkers > 0 ? true : false;
 }
 
 //==========================================================================================================================================
@@ -118,6 +118,8 @@ function wpunity_combineGameStrategies($project_id){
 			$custom_query->the_post();
 			$examID = get_the_ID();
 			$examName = get_the_title($examID);
+
+			$examName = $examName=='Molecule Naming' ? 'naming' : 'construction' ;
 			$examStrategy = get_post_meta($examID, 'wpunity_exam_strategy', true);
 
 			$assetStrategies[] = [
@@ -144,7 +146,7 @@ function wpunity_combineGameStrategies($project_id){
 
 			foreach ($exam_strategy as $arr) {
 				$object = (object) array($scene_id => $arr);
-				array_push($strategies, $object);
+				array_push($strategies, $arr);
 			}
 
 		}
@@ -216,13 +218,13 @@ function wpunity_getEditpage($type){
 
 ////Get Settings Values
 function wpunity_getUnity_local_or_remote(){
-    $generaloptions = get_option( 'general_settings' );
-    
-    if($generaloptions["wpunity_unity_local_or_remote"]) {
-        return $generaloptions["wpunity_unity_local_or_remote"];
-    }else{
-        return 'local';
-    }
+	$generaloptions = get_option( 'general_settings' );
+
+	if($generaloptions["wpunity_unity_local_or_remote"]) {
+		return $generaloptions["wpunity_unity_local_or_remote"];
+	}else{
+		return 'local';
+	}
 }
 
 function wpunity_getUnity_exe_folder(){
@@ -308,13 +310,13 @@ function wpunity_fetch_game_assets_action_callback(){
 function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 
 	$allAssets = [];
- 
+
 	// find the joker game slug e.g. "Archaeology-joker"
-    $joker_game_slug = wp_get_post_terms( $gameProjectID, 'wpunity_game_type')[0]->name."-joker";
-    
-    // Slugs are low case "Archaeology-joker" -> "archaeology-joker"
-    $joker_game_slug = strtolower($joker_game_slug);
-	
+	$joker_game_slug = wp_get_post_terms( $gameProjectID, 'wpunity_game_type')[0]->name."-joker";
+
+	// Slugs are low case "Archaeology-joker" -> "archaeology-joker"
+	$joker_game_slug = strtolower($joker_game_slug);
+
 	$queryargs = array(
 		'post_type' => 'wpunity_asset3d',
 		'posts_per_page' => -1,
@@ -337,9 +339,9 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$asset_id = get_the_ID();
 			$asset_name = get_the_title();
 			//$asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
-            
-            $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);    //strpos($asset_pgame[0]->slug, 'joker') !== false;
-			
+
+			$isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);    //strpos($asset_pgame[0]->slug, 'joker') !== false;
+
 			// ALL DATA WE NEED
 			$objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
 			$objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
@@ -349,10 +351,10 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 
 			$difImageIDs = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);  // Diffusion Image ID
 
-            $difImagePaths = [];
+			$difImagePaths = [];
 
-            foreach ($difImageIDs as $diffid)
-                $difImagePaths[] = wp_get_attachment_url( $diffid );                // Diffusion Image PATH
+			foreach ($difImageIDs as $diffid)
+				$difImagePaths[] = wp_get_attachment_url( $diffid );                // Diffusion Image PATH
 
 			$screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); // Screenshot Image ID
 			$screenImagePath = $screenImageID ? wp_get_attachment_url( $screenImageID ) : '';           // Screenshot Image PATH
@@ -360,10 +362,10 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true);
 
 			$categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
-            
-            $isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
-            $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
-			
+
+			$isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
+			$isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
+
 			$allAssets[] = [
 				'assetName'=>$asset_name,
 				'assetSlug'=>get_post()->post_name,
@@ -379,17 +381,17 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 				'screenImagePath'=>$screenImagePath,
 				'mtlPath'=>$mtlPath,
 				'image1id'=>$image1id,
-                'doorName_source'=>'', //$doorName_source,   the asset does not save door but the json
-                'doorName_target'=>'', //$doorName_target,
-                'sceneName_target'=>'', //$sceneName_target
-                'sceneID_target'=>'', //$sceneName_target
-                'archaeology_penalty'=>'0',
-                'hv_penalty'=>'0',
-                'natural_penalty'=>'0',
-                'isreward'=> '0',
-                'isJokerAsset'=> $isJoker,
-                'isCloned'=> $isCloned,
-                'isJoker'=> $isJoker
+				'doorName_source'=>'', //$doorName_source,   the asset does not save door but the json
+				'doorName_target'=>'', //$doorName_target,
+				'sceneName_target'=>'', //$sceneName_target
+				'sceneID_target'=>'', //$sceneName_target
+				'archaeology_penalty'=>'0',
+				'hv_penalty'=>'0',
+				'natural_penalty'=>'0',
+				'isreward'=> '0',
+				'isJokerAsset'=> $isJoker,
+				'isCloned'=> $isCloned,
+				'isJoker'=> $isJoker
 			];
 
 		endwhile;
@@ -411,39 +413,39 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
  */
 function wpunity_get_assetids_joker($gameType){
 
-    $assetIds = [];
+	$assetIds = [];
 
-    // find the joker game slug e.g. "Archaeology-joker"
-    $joker_game_slug = $gameType."-joker";
+	// find the joker game slug e.g. "Archaeology-joker"
+	$joker_game_slug = $gameType."-joker";
 
-    // Slugs are low case "Archaeology-joker" -> "archaeology-joker"
-    $joker_game_slug = strtolower($joker_game_slug);
+	// Slugs are low case "Archaeology-joker" -> "archaeology-joker"
+	$joker_game_slug = strtolower($joker_game_slug);
 
-    $queryargs = array(
-        'post_type' => 'wpunity_asset3d',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_asset3d_pgame',
-                'field' => 'slug',
-                'terms' => $joker_game_slug
-            )
-        )
-    );
+	$queryargs = array(
+		'post_type' => 'wpunity_asset3d',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_asset3d_pgame',
+				'field' => 'slug',
+				'terms' => $joker_game_slug
+			)
+		)
+	);
 
-    $custom_query = new WP_Query( $queryargs );
-    
-    if ( $custom_query->have_posts() ) :
-        while ( $custom_query->have_posts() ) :
-            $custom_query->the_post();
-            $assetIds[] = get_the_ID();
-        endwhile;
-    endif;
-   
-    // Reset postdata
-    wp_reset_postdata();
-    
-    return $assetIds;
+	$custom_query = new WP_Query( $queryargs );
+
+	if ( $custom_query->have_posts() ) :
+		while ( $custom_query->have_posts() ) :
+			$custom_query->the_post();
+			$assetIds[] = get_the_ID();
+		endwhile;
+	endif;
+
+	// Reset postdata
+	wp_reset_postdata();
+
+	return $assetIds;
 }
 
 
