@@ -283,17 +283,17 @@ get_header();
                                 <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
                             </li>
 
-                            <!--                            <li class="mdc-form-field">-->
-                            <!--                                <div class="mdc-radio">-->
-                            <!--                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">-->
-                            <!--                                    <div class="mdc-radio__background">-->
-                            <!--                                        <div class="mdc-radio__outer-circle"></div>-->
-                            <!--                                        <div class="mdc-radio__inner-circle"></div>-->
-                            <!--                                    </div>-->
-                            <!--                                </div>-->
-                            <!--                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">-->
-                            <!--                                    <i class="material-icons"></i>Archaeology</label>-->
-                            <!--                            </li>-->
+                            <li class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                                <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">
+                                    <i class="material-icons"></i>Archaeology</label>
+                            </li>
 
                         </ul>
 

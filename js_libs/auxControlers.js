@@ -35,18 +35,18 @@ controlInterface.scale = new dat.GUI( { autoPlace: false });
 controlInterface.scale.domElement.id = 'scalePanelGui';
 
 
-var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx').step(0.001).name('Move x');//.listen();
-var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty').step(0.001).name('Move y');//.listen();
-var dg_controller_tz = controlInterface.translate.add( gui_controls_funs, 'dg_tz').step(0.001).name('Move z');//.listen();
+var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx').step(0.001).name('<span style="color:red">Move x</span>');//.listen();
+var dg_controller_ty = controlInterface.translate.add( gui_controls_funs, 'dg_ty').step(0.001).name('<span style="color:green">Move y</span>');//.listen();
+var dg_controller_tz = controlInterface.translate.add( gui_controls_funs, 'dg_tz').step(0.001).name('<span style="color:blue">Move z</span>');//.listen();
 
-var dg_controller_rx = controlInterface.rotate.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('Rotate x');//.listen();
-var dg_controller_ry = controlInterface.rotate.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('Rotate y');//.listen();
-var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180, 0.001).name('Rotate z');//.listen();
+var dg_controller_rx = controlInterface.rotate.add( gui_controls_funs, 'dg_rx', -179, 180, 0.001).name('<span style="color:red">Rotate x</span>');//.listen();
+var dg_controller_ry = controlInterface.rotate.add( gui_controls_funs, 'dg_ry', -179, 180, 0.001).name('<span style="color:green">Rotate y</span>');//.listen();
+var dg_controller_rz = controlInterface.rotate.add( gui_controls_funs, 'dg_rz', -179, 180, 0.001).name('<span style="color:blue">Rotate z</span>');//.listen();
 
 var dg_controller_sc  = controlInterface.scale.add( gui_controls_funs, 'dg_scale').min(0.001).max(1000).step(0.001).name('Scale');//.listen();
-var dg_controller_dim_x = controlInterface.scale.add( gui_controls_funs, 'dg_dim_x').min(0.001).max(1000).step(0.001).name('x length (red)');
-var dg_controller_dim_y = controlInterface.scale.add( gui_controls_funs, 'dg_dim_y').min(0.001).max(1000).step(0.001).name('y length (green)');
-var dg_controller_dim_z = controlInterface.scale.add( gui_controls_funs, 'dg_dim_z').min(0.001).max(1000).step(0.001).name('z length (blue)');
+var dg_controller_dim_x = controlInterface.scale.add( gui_controls_funs, 'dg_dim_x').min(0.001).max(1000).step(0.001).name('<span style="color:red">x length</span>');
+var dg_controller_dim_y = controlInterface.scale.add( gui_controls_funs, 'dg_dim_y').min(0.001).max(1000).step(0.001).name('<span style="color:green">y length</span>');
+var dg_controller_dim_z = controlInterface.scale.add( gui_controls_funs, 'dg_dim_z').min(0.001).max(1000).step(0.001).name('<span style="color:blue">z length</span>');
 
 
 

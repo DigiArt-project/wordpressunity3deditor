@@ -161,7 +161,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .HierarchyToggleStyle {
     position: absolute;
-    top: 140px;
+    top: 180px;
     background: transparent;
 }
 
@@ -184,7 +184,7 @@ canvas { pointer-events:none; z-index:10; }
     overflow-y: auto;
     position: absolute;
     left: 0;
-    top: 140px;
+    top: 180px;
     background-color: rgb(244,244,244);
 }
 
@@ -198,9 +198,29 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
+
 .RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i, .ThirdPersonVrWalkInButtonStyle a i {
     padding-top: 4px;
 }
+
+
+.pauseRenderingDivStyle {
+    position: absolute;
+    left: 430px;
+    top: 10px;
+    width: 40px;
+    padding: 0;
+    margin: 0;
+}
+
+#pauseRendering {
+    width:40px;
+    min-width:30px;
+    padding:0px;
+    padding-top: 4px;
+    margin: 0;
+}
+
 
 .ObjectManipulationToggle {
     overflow: hidden;

@@ -539,8 +539,6 @@
 
         var arrowGeometry = new THREE.Geometry();
 
-
-
         // Arrow 1 head
         var meshArrow1 = new THREE.Mesh( new THREE.CylinderGeometry( 0, arrWidth, 0.2, 12, 1, false ) );
         meshArrow1.position.y = 0.5;
@@ -564,7 +562,7 @@
         arrowGeometry.merge( cylMesh.geometry, cylMesh.matrix );
 
         this.handleGizmos = {
-            Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 1.5, 0, 0 ]]]
+            Y: [[new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x888888 } ) ), [ 1.5, 0, 0 ]]]
         };
 
 

@@ -31,9 +31,10 @@ class GeneralImportSettings : AssetPostprocessor
         TextureImporter textureImporter = (TextureImporter)assetImporter;
         if (assetPath.Contains("_hdpi"))
         {
-            textureImporter.compressionQuality = 100;
-            textureImporter.textureCompression = TextureImporterCompression.CompressedHQ;
+            textureImporter.filterMode = FilterMode.Point;
             textureImporter.maxTextureSize = 8192;
+            textureImporter.textureFormat = TextureImporterFormat.RGB24;
+            textureImporter.textureCompression = TextureImporterCompression.Uncompressed;
         }
         else if (assetPath.Contains("_ndpi"))
         {
@@ -64,6 +65,9 @@ class GeneralImportSettings : AssetPostprocessor
             Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
             if (mat)
             {
+                // Basic material (no shadows)
+                mat.shader = Shader.Find("Unlit/Texture");
+
                 if (path.Contains("NoGlossy"))
                 {
                     mat.SetFloat("_Glossiness", 0);
@@ -74,10 +78,14 @@ class GeneralImportSettings : AssetPostprocessor
                 }
                 else if (path.Contains("Transparent"))
                 {
+                       mat.shader = Shader.Find("Standard");
+
                        // Rendering mode : Fade
                        mat.EnableKeyword("_Mode");
                        mat.SetFloat("_Mode", 2);
                        mat.SetFloat("_Glossiness", 0);
+
+
 
                        mat.SetInt("_ZWrite", 1);
                        mat.EnableKeyword("_ALPHATEST_ON");

@@ -152,6 +152,19 @@ class LoaderMulti {
                                     if (node instanceof THREE.Mesh) {
                                         node.isDigiArt3DMesh = true;
 
+
+                                        if (node.name.includes("renderOrder")) {
+
+
+                                            var iR = node.name.indexOf("renderOrder");
+
+
+
+                                            node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
+
+                                            console.log(node.renderOrder);
+                                        }
+
                                     }
                                 });
 

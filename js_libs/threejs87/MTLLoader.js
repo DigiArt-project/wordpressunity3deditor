@@ -507,7 +507,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 
 
-
         if (materialName === 'steveViewMaterial')
             this.materials[ materialName ] = new THREE.MeshBasicMaterial( {depthTest:false, depthWrite:false,
                 side:THREE.FrontSide, transparent:true, color: 0xffffff, opacity: 0.25} );
@@ -515,7 +514,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             delete params.shininess;
             delete params.specular;
             params.transparent = true;
-            params.opacity = 0.9;
+            //params.opacity = 0.5;
+
             this.materials[materialName] = new THREE.MeshBasicMaterial(params); //new THREE.MeshPhongMaterial( params );
         }
 

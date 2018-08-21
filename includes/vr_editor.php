@@ -86,6 +86,7 @@ echo '</script>';
 <script type="text/javascript">
 
     isComposerOn = true;
+    isPaused = false;
 
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
@@ -284,6 +285,13 @@ echo '</script>';
         </a>
     </div>
 
+
+    <div id="divPauseRendering" class="pauseRenderingDivStyle">
+        <a type="button" id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
+            <i class="material-icons">pause</i>
+        </a>
+    </div>
+    
     <div id="thirdPersonBlocker" class="ThirdPersonVrWalkInButtonStyle">
         <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">person</i></a>
@@ -621,6 +629,8 @@ echo '</script>';
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
 
+            envir.axisHelper.visible = true;
+
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
             
@@ -632,6 +642,8 @@ echo '</script>';
 
             envir.orbitControls.enableRotate = false;
             envir.gridHelper.visible = false;
+
+            envir.axisHelper.visible = false;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
@@ -861,6 +873,7 @@ echo '</script>';
         jQuery("#fullScreenBtn").show();
         jQuery("#hierarchy-viewer").show();
         jQuery("#hierarchy-toggle-btn").show();
+        jQuery("#divPauseRendering").show();
         
         jQuery("#optionsPopupBtn").show();
 
@@ -889,6 +902,8 @@ echo '</script>';
         jQuery("#hierarchy-viewer").hide();
         jQuery("#hierarchy-toggle-btn").hide();
         jQuery("#optionsPopupBtn").hide();
+
+        jQuery("#divPauseRendering").hide();
         
 
         
@@ -956,6 +971,9 @@ $formRes->init($sceneToLoad);
 
     function animate()
     {
+        if(isPaused)
+            return;
+        
         id_animation_frame = requestAnimationFrame( animate );
 
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
@@ -971,10 +989,6 @@ $formRes->init($sceneToLoad);
         envir.renderer.render( envir.scene, curr_camera);
 
         envir.labelRenderer.render( envir.scene, curr_camera);
-        
-
-        
-        
         
         if (isComposerOn)
             envir.composer.render();
@@ -1028,6 +1042,21 @@ $formRes->init($sceneToLoad);
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
+
+    
+    
+    
+    
+    jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
+
+            isPaused = !isPaused;
+            jQuery("#pauseRendering").get(0).childNodes[1].innerText = isPaused?"play_arrow":"pause";
+
+            if(!isPaused)
+                animate();
+            
+    }, false);
+    
     animate();
 
 </script>

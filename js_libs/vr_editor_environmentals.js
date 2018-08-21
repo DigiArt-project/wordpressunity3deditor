@@ -8,8 +8,6 @@ class vr_editor_environmentals {
 
         this.thirdPersonView = false;
 
-
-
         this.ctx = this;
 
         this.container_3D_all = container_3D_all;
@@ -32,7 +30,7 @@ class vr_editor_environmentals {
         this.setAvatarCamera();
 
         //this.setRecycleBin();
-        //this.setAxisText();
+
         //this.setArtificialFloor();
         this.setLight();
 //         this.setStats();
@@ -316,11 +314,70 @@ class vr_editor_environmentals {
         this.scene.add(this.gridHelper);
         this.gridHelper.visible = false;
 
-        //
+
         // // Add Axes helper
-        //  this.axisHelper = new THREE.AxisHelper( 1 );
-        //  this.axisHelper.name = "myAxisHelper";
-        //  this.scene.add(this.axisHelper);
+        this.axisHelper = new THREE.AxisHelper( 100 );
+        this.axisHelper.name = "myAxisHelper";
+        this.scene.add(this.axisHelper);
+        this.setAxisText();
+        this.axisHelper.visible = false;
+    }
+
+    /*
+ X, Y ,Z letters
+ */
+    setAxisText(){
+        var loader = new THREE.FontLoader();
+        loader.scene = this.scene;
+
+
+        var pathn = window.location.pathname.replace(/[^/]*$/, '');
+        pathn = pathn.replace('/wpunity-edit-3d-scene/','');
+
+
+
+        loader.load(pathn + '/wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/helvetiker_bold.typeface.json', this.loadtexts );
+    }
+
+
+    loadtexts(font){
+
+            for (let letterAx of ['X','Y','Z']) {
+
+                for (var dist = 10; dist < 200; dist = dist + 10) {
+
+
+                    var textGeo = new THREE.TextGeometry(dist + " m", {
+                        font: font,
+                        size: 0.2,
+                        // height: 50,
+                        // curveSegments: 12,
+                        // bevelThickness: 2,
+                        // bevelSize: 5,
+                        // bevelEnabled: true
+                    });
+                    var color = new THREE.Color();
+                    color.setRGB(letterAx == 'X' ? 255 : 0, letterAx == 'Y' ? 255 : 0, letterAx == 'Z' ? 255 : 0);
+                    var textMaterial = new THREE.MeshBasicMaterial({color: color});
+                    var text = new THREE.Mesh(textGeo, textMaterial);
+
+                    if (letterAx == 'X')
+                        text.rotation.y = - Math.PI / 2;
+                    else if (letterAx == 'Y') {
+                        text.rotation.x = Math.PI / 2;
+                        text.rotation.z = Math.PI;
+                    }else if (letterAx == 'Z')
+                        text.rotation.y =  Math.PI;
+
+                    text.position.x = letterAx == 'X' ? dist : 0;
+                    text.position.y = letterAx == 'Y' ? dist : 0;
+                    text.position.z = letterAx == 'Z' ? dist : 0;
+                    text.scale.z = 0.001;
+                    text.name = "myAxisText" + letterAx;
+
+                    window.envir.axisHelper.add(text);
+                }
+            }
     }
 
 
@@ -585,38 +642,6 @@ class vr_editor_environmentals {
 
 
 
-    /*
-     X, Y ,Z letters
-     */
-    // setAxisText(){
-    //
-    //     var loader = new THREE.FontLoader();
-    //     loader.scene = this.scene;
-    //
-    //     loader.load('js_libs/threejs79/helvetiker_bold.typeface.json', function ( font ) {
-    //
-    //         for (let letterAx of ['X','Y','Z']) {
-    //             var textGeo = new THREE.TextGeometry("100 m",{
-    //                 font: font ,
-    //                 size: 5,
-    //                 //height: 50,
-    //                 //curveSegments: 12,
-    //                 //bevelThickness: 2,
-    //                 //bevelSize: 5,
-    //                 //bevelEnabled: true
-    //             });
-    //             var color = new THREE.Color();
-    //             color.setRGB(255, 250, 250);
-    //             var textMaterial = new THREE.MeshBasicMaterial({color: color});
-    //             var text = new THREE.Mesh(textGeo, textMaterial);
-    //             text.position.x = letterAx=='X'?100:0;
-    //             text.position.y = letterAx=='Y'?100:0;
-    //             text.position.z = letterAx=='Z'?100:0;
-    //             text.scale.z = 0.01;
-    //             text.name = "myAxisText" +  letterAx;
-    //             loader.scene.add(text)
-    //         }
-    //     } );
-    // }
+
 
 }
