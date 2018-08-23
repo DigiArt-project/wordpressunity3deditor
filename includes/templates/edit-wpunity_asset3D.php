@@ -6,7 +6,10 @@ function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
 	wp_enqueue_script('wpunity_load87_threejs');
+	// For loading on clicking on image of previously uploaded obj
 	wp_enqueue_script('wpunity_load87_objloader');
+	
+	// For loading on newly uploaded model
 	wp_enqueue_script('wpunity_load87_objloader2');
 	wp_enqueue_script('wpunity_load87_wwobjloader2');
 	wp_enqueue_script('wpunity_load87_pdbloader');
@@ -1125,6 +1128,7 @@ if($asset_id != null) {
                 }
             });
 
+            
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
             });
@@ -1604,6 +1608,12 @@ if($asset_id != null) {
                 input.accept = ".obj,.mtl,.jpg,.png";
             }
         }
+        
+        
+        
+        
+        
+        
     </script>
 
 

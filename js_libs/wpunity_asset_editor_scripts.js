@@ -329,8 +329,6 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
              wu_webw_3d_view.clearAllAssets();
     }
 
-
-
     if (pdbFileContent) {
         wu_webw_3d_view.loadMolecule(pdbFileContent);
         return;
@@ -358,13 +356,24 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
             objLoader.load(objFilename, 'after',
                 // OnObjLoad
                 function (object) {
-                    // adding to the pivot point only
+
+                    // Find bounding sphere
+                    var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll ( object) ;
+
+                    // translate object to the center
+                    object.traverse( function (object) {
+                        if (object instanceof THREE.Mesh) {
+                            object.geometry.translate(- 2*sphere[0].x, - 2*sphere[0].y, - 2*sphere[0].z) ;
+                        }
+                    });
+
+                    // Add to pivot
                     wu_webw_3d_view.pivot.add(object);
 
-                    // ZOOM to fit in screen
-                    var totalradius = wu_webw_3d_view.computeSceneBoundingSphereAll( wu_webw_3d_view.scene.children[5] )[1]; // 5 is the pivot (parent of the added object)
-                    wu_webw_3d_view.controls.minDistance = 0.5*totalradius;
-                    wu_webw_3d_view.controls.maxDistance = 8*totalradius;
+                    // Find new zoom
+                    var totalradius = sphere[1];
+                    wu_webw_3d_view.controls.minDistance = 0.001*totalradius;
+                    wu_webw_3d_view.controls.maxDistance = 3*totalradius;
                 },
                 //onObjProgressLoad
                 function (xhr) {

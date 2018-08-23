@@ -27,14 +27,12 @@ class WU_webw_3d_view {
         this.doubleSide = false;
         this.streamMeshes = true;
 
-
+        // Make a pivot to ensure that the object is centered correctly
         this.pivot = null;
-
 
         // - PDB specific -
         // Here all chemistry 3D and 2D labels items are stored
         this.root = new THREE.Group();
-
 
         // - OBJ Specific -
         this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
@@ -61,12 +59,8 @@ class WU_webw_3d_view {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xddb59b);
 
-
         // - PDB Specific -
         this.scene.add(this.root);
-
-
-
 
         // - Label renderer -
         this.labelRenderer = new THREE.CSS2DRenderer();
@@ -86,6 +80,7 @@ class WU_webw_3d_view {
 
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
         this.controls.zoomSpeed = 1.02;
+
         this.controls.dynamicDampingFactor = 0.3;
 
         var ambientLight = new THREE.AmbientLight(0x404040);
@@ -111,10 +106,7 @@ class WU_webw_3d_view {
     createPivot() {
         this.pivot = new THREE.Object3D();
         this.pivot.name = 'Pivot';
-
-
         this.scene.add(this.pivot);
-
     }
 
     initPostGL() {
@@ -448,9 +440,10 @@ class WU_webw_3d_view {
                 if (radius) {
 
                     // Object center in world space
-                    var objectCenterLocal = object.position.clone();
+                    // var objectCenterLocal = object.position.clone();
+                    // var objectCenterWorld = object.localToWorld(objectCenterLocal);
 
-                    var objectCenterWorld = object.localToWorld(objectCenterLocal);
+                    var objectCenterWorld = object.geometry.boundingSphere.center;
 
                     // // New center in world space
                     var newCenter = new THREE.Vector3();
@@ -468,6 +461,7 @@ class WU_webw_3d_view {
                 }
             }
         } );
+
         return [sceneBSCenter, sceneBSRadius];
     }
 
@@ -475,10 +469,20 @@ class WU_webw_3d_view {
      * Zoom to the whole object
      */
     zoomer(){
-        // child 4 is the added object
-        var totalradius = this.computeSceneBoundingSphereAll( this.scene.children[5] )[1];
 
-        this.controls.minDistance = 0.5*totalradius;
-        this.controls.maxDistance = 8*totalradius;
+        var sphere = this.computeSceneBoundingSphereAll( this.scene.children[5] );
+
+        // translate object to the center
+        this.scene.children[5].traverse( function (object) {
+            if (object instanceof THREE.Mesh) {
+                object.geometry.translate(- 2*sphere[0].x, - 2*sphere[0].y, - 2*sphere[0].z) ;
+            }
+        });
+
+        // child 5 is the added object
+        var totalradius = sphere[1];
+
+        this.controls.minDistance = 0.001*totalradius;
+        this.controls.maxDistance = 3*totalradius;
     }
 }

@@ -160,13 +160,22 @@ get_header();
 
                 <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list" style="max-height: 460px; overflow-y: auto">
 					<?php while ($custom_query->have_posts()) :
-						$custom_query->the_post();
-
+                        
+                        $custom_query->the_post();
+					
 						$game_id = get_the_ID();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
 						//$game_link = get_permalink();
-
+                        
+                        if ($project_scope==0)
+                            if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
+                                continue;
+                        
+                        if ($project_scope==1)
+                            if ($game_title == 'Archaeology Joker')
+                                continue;
+                    
 						$game_type_obj = wpunity_return_game_type($id);
 
                         $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );
@@ -260,32 +269,35 @@ get_header();
                         <label class="mdc-typography--title NewGameLabel">Choose <?php echo $single; ?> type</label>
                         <ul class="RadioButtonList" onclick="loadGameDescription();">
 
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
+                            <?php if ($project_scope==1){?>
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <label id="gameTypeChemistryRadio-label" for="gameTypeChemistryRadio">Chemistry</label>
-                            </li>
-
-
-                            <li class="mdc-form-field">
-                                <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
-                                    <div class="mdc-radio__background">
-                                        <div class="mdc-radio__outer-circle"></div>
-                                        <div class="mdc-radio__inner-circle"></div>
+                                    <label id="gameTypeChemistryRadio-label" for="gameTypeChemistryRadio">Chemistry</label>
+                                </li>
+    
+    
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="gameTypeEnergyRadio" checked="" name="gameTypeRadio" value="2">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
-                            </li>
-
+                                    <label id="gameTypeEnergyRadio-label" for="gameTypeEnergyRadio">Energy</label>
+                                </li>
+                           <?php }?>
+    
+                            <?php if ($project_scope==0){?>
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
-                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio"  name="gameTypeRadio" value="1">
+                                    <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
                                     <div class="mdc-radio__background">
                                         <div class="mdc-radio__outer-circle"></div>
                                         <div class="mdc-radio__inner-circle"></div>
@@ -294,6 +306,7 @@ get_header();
                                 <label id="gameTypeArchRadio-label" for="gameTypeArchRadio">
                                     <i class="material-icons"></i>Archaeology</label>
                             </li>
+                            <?php }?>
 
                         </ul>
 
@@ -418,5 +431,10 @@ get_header();
         }
     });
 
+
+    
+    
+    
+    
 </script>
 <?php get_footer(); ?>
