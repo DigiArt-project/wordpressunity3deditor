@@ -456,7 +456,7 @@ class WU_webw_3d_view {
 
                     var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
                     //sceneBSCenter = dCenter;
-                    sceneBSCenter = newCenter;
+                    sceneBSCenter = newCenter.multiplyScalar(2);
                     sceneBSRadius = newRadius;
                 }
             }
@@ -475,7 +475,7 @@ class WU_webw_3d_view {
         // translate object to the center
         this.scene.children[5].traverse( function (object) {
             if (object instanceof THREE.Mesh) {
-                object.geometry.translate(- 2*sphere[0].x, - 2*sphere[0].y, - 2*sphere[0].z) ;
+                object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
             }
         });
 

@@ -202,8 +202,10 @@ echo '</script>';
 
         showObjectPropertiesPanel(transform_controls.getMode());
 
-        if (envir.is2d)
+        if (envir.is2d) {
             transform_controls.setMode("rottrans");
+            jQuery("#translatePanelGui").show();
+        }
 
         ev.preventDefault();
     }
@@ -842,7 +844,7 @@ echo '</script>';
             transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
 
             // Starting in 2D mode we do not want the play be able to change into rotation and scale
-            jQuery("#object-manipulation-toggle").hide();
+            //jQuery("#object-manipulation-toggle").hide();
 
         }
 

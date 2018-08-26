@@ -662,14 +662,14 @@
         //----------- X mark -----------------
         var xGeometry = new THREE.Geometry();
 
-        // Arrow body
+        // X mark line 1
         var cylMesh1 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth/2, lwidth/2, 0.5, 16, 1, false ));
         cylMesh1.position.z =  1.75;
         cylMesh1.rotation.z = Math.PI/2;
         cylMesh1.rotation.y = Math.PI/4;
         cylMesh1.updateMatrix();
 
-
+        // X mark line 2
         var cylMesh2 = new THREE.Mesh(new THREE.CylinderGeometry( lwidth/2, lwidth/2, 0.5, 16, 1, false ));
         cylMesh2.position.z =  1.75;
         cylMesh2.rotation.z =    Math.PI/2;
@@ -697,15 +697,6 @@
         };
 
         this.setActivePlane = function ( axis ) {
-            //
-            //     if ( axis === "E" ) this.activePlane = this.planes[ "XYZE" ];
-            //
-            //     if ( axis === "X" ) this.activePlane = this.planes[ "YZ" ];
-            //
-            //     if ( axis === "Y" ) this.activePlane = this.planes[ "XZ" ];
-            //
-            //     if ( axis === "Z" ) this.activePlane = this.planes[ "XY" ];
-            //
         };
 
         this.update = function ( rotation, eye2 ) {
@@ -715,12 +706,12 @@
             var tempMatrix = new THREE.Matrix4();
             var worldRotation = new THREE.Euler( 0, 0, 1 );
             var tempQuaternion = new THREE.Quaternion();
-            var unitX = new THREE.Vector3( 1, 0, 0 );
-            var unitY = new THREE.Vector3( 0, 1, 0 );
-            var unitZ = new THREE.Vector3( 0, 0, 1 );
-            var quaternionX = new THREE.Quaternion();
-            var quaternionY = new THREE.Quaternion();
-            var quaternionZ = new THREE.Quaternion();
+            // var unitX = new THREE.Vector3( 1, 0, 0 );
+            // var unitY = new THREE.Vector3( 0, 1, 0 );
+            // var unitZ = new THREE.Vector3( 0, 0, 1 );
+            // var quaternionX = new THREE.Quaternion();
+            // var quaternionY = new THREE.Quaternion();
+            // var quaternionZ = new THREE.Quaternion();
             var eye = eye2.clone();
 
             worldRotation.copy( this.planes[ "XY" ].rotation );
@@ -733,23 +724,23 @@
 
                 tempQuaternion.setFromEuler( worldRotation );
 
-                if ( child.name === "X" ) {
-                    // quaternionX.setFromAxisAngle( unitX, Math.atan2( - eye.y, eye.z ) );
-                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
-                    // child.quaternion.copy( tempQuaternion );
-                }
-
-                if ( child.name === "Y" ) {
-                    // quaternionY.setFromAxisAngle( unitY, Math.atan2( eye.x, eye.z ) );
-                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
-                    // child.quaternion.copy( tempQuaternion );
-                }
-
-                if ( child.name === "Z" ) {
-                    // quaternionZ.setFromAxisAngle( unitZ, Math.atan2( eye.y, eye.x ) );
-                    // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
-                    // child.quaternion.copy( tempQuaternion );
-                }
+                // if ( child.name === "X" ) {
+                //     // quaternionX.setFromAxisAngle( unitX, Math.atan2( - eye.y, eye.z ) );
+                //     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionX );
+                //     // child.quaternion.copy( tempQuaternion );
+                // }
+                //
+                // if ( child.name === "Y" ) {
+                //     // quaternionY.setFromAxisAngle( unitY, Math.atan2( eye.x, eye.z ) );
+                //     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionY );
+                //     // child.quaternion.copy( tempQuaternion );
+                // }
+                //
+                // if ( child.name === "Z" ) {
+                //     // quaternionZ.setFromAxisAngle( unitZ, Math.atan2( eye.y, eye.x ) );
+                //     // tempQuaternion.multiplyQuaternions( tempQuaternion, quaternionZ );
+                //     // child.quaternion.copy( tempQuaternion );
+                // }
             } );
 
         };
@@ -773,6 +764,7 @@
         domElement = ( domElement !== undefined ) ? domElement : document;
 
         this.object = undefined;
+        this.sphereCenter = new THREE.Vector3(0,0,0);
         this.bbox = undefined;
 
         this.visible = false;
@@ -889,6 +881,13 @@
         this.attach = function ( object ) {
             this.object = object;
 
+
+            if (object.name === 'avatarYawObject')
+                this.sphereCenter = new THREE.Vector3(0,0,0);
+            else
+                this.sphereCenter = computeSceneBoundingSphereAll ( object) [0] ;
+
+
             this.bboxX = new THREE.BoxHelper( this.object, 0xff0000 );
 
             this.bboxX.geometry.index.array[0] = 0;
@@ -984,6 +983,10 @@
             this.update();
         };
 
+
+
+
+
         this.detach = function () {
 
             this.object = undefined;
@@ -1055,6 +1058,8 @@
             // console.log("scope.size", scope.size);
 
             scale = scope.size; // //worldPosition.distanceTo( camPosition ) / 6 * scope.size;
+
+
             this.position.copy( worldPosition );
             this.scale.set( scale, scale, scale );
 
@@ -1081,6 +1086,50 @@
             _gizmo[ _mode ].highlight( scope.axis );
 
         };
+
+
+        function computeSceneBoundingSphereAll(myGroupObj)
+        {
+            var sceneBSCenter = new THREE.Vector3(0,0,0);
+            var sceneBSRadius = 0;
+
+            myGroupObj.traverse( function (object)
+            {
+                if (object instanceof THREE.Mesh)
+                {
+                    object.geometry.computeBoundingSphere();
+
+                    // Object radius
+                    var radius = object.geometry.boundingSphere.radius;
+
+                    if (radius) {
+
+                        // Object center in world space
+                        // var objectCenterLocal = object.position.clone();
+                        // var objectCenterWorld = object.localToWorld(objectCenterLocal);
+
+                        var objectCenterWorld = object.geometry.boundingSphere.center;
+
+                        // // New center in world space
+                        var newCenter = new THREE.Vector3();
+
+                        newCenter.addVectors(sceneBSCenter, objectCenterWorld);
+                        newCenter.divideScalar(2.0);
+
+                        // New radius in world space
+                        var dCenter = newCenter.distanceTo(sceneBSCenter);
+
+                        var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
+                        //sceneBSCenter = dCenter;
+                        sceneBSCenter = newCenter.multiplyScalar(2);
+                        sceneBSRadius = newRadius;
+                    }
+                }
+            } );
+
+            return [sceneBSCenter, sceneBSRadius];
+        }
+
 
         function onPointerHover( event ) {
 

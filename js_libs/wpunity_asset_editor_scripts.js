@@ -363,7 +363,7 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
                     // translate object to the center
                     object.traverse( function (object) {
                         if (object instanceof THREE.Mesh) {
-                            object.geometry.translate(- 2*sphere[0].x, - 2*sphere[0].y, - 2*sphere[0].z) ;
+                            object.geometry.translate(- sphere[0].x, - sphere[0].y, - sphere[0].z) ;
                         }
                     });
 
