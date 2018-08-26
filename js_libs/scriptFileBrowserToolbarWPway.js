@@ -153,6 +153,11 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         } else  {
             filemanager.find('.nothingfound').hide();
 
+
+
+//            allAssetsViewBt
+            document.getElementById("assetCategTab").children[0].addEventListener("click", function(event){openCategoryTab(event, this  );  });
+
             for (i = 0; i < enlistData.length; i++) {
 
                 f = enlistData[i];
@@ -160,6 +165,23 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 var fileSize = bytesToSize(f.size);
 
                 name = escapeHTML(f.name);
+
+                // Add the category in tabs if not yet added
+                if (jQuery("#assetCategTab").find("[id='" + f.categoryName + "']").length == 0) {
+                    //Create an input type dynamically.
+                    var element = document.createElement("button");
+                    //Assign different attributes to the element.
+                    element.className = "tablinks";
+                    element.id = f.categoryName;
+                    element.innerText = f.categoryName.substring(0,10);
+                    element.addEventListener("click", function(event){openCategoryTab(event, this  );  });
+
+                    var foo = document.getElementById("assetCategTab");
+                    //Append the element
+                    foo.appendChild(element);
+                }
+
+
 
                 if(f.categoryName=="Molecule")
                     continue;
@@ -294,6 +316,45 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 output_data.push(d);
         });
         return output_data;
+    }
+
+
+    function openCategoryTab(evt, b) {
+
+        var categName = b.id;
+
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        var items = fileList[0].getElementsByTagName("li");
+        for (var i = 0; i < items.length; ++i) {
+            if (categName == "allAssetsViewBt")
+                items[i].style.display = '';
+            else {
+                if (items[i].firstChild.dataset.categoryname == categName)
+                    items[i].style.display = '';
+                else
+                    items[i].style.display = 'none';
+            }
+
+        }
+
+
+        evt.currentTarget.className += " active";
+
     }
 
 }

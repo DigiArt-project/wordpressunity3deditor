@@ -201,6 +201,8 @@ get_header();
                                           class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
                                     </span>
                             </a>
+                            
+                            <?php if( $post->post_name != 'archaeology-joker' && $post->post_name != 'energy-joker' && $post->post_name != 'chemistry-joker'){ ?>
                             <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game"
                                title="Delete project"
                                onclick="deleteGame(<?php echo $game_id; ?>)">
@@ -209,6 +211,7 @@ get_header();
                                     delete
                                 </i>
                             </a>
+                            <?php } ?>
                         </li>
 
 					<?php endwhile; ?>

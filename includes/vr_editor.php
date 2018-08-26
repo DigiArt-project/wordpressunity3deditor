@@ -342,14 +342,20 @@ echo '</script>';
             <div class="mdc-textfield__bottom-line"></div>
         </div>
 
-        <div class="breadcrumbs"></div>
+        <!--      <div class="breadcrumbs"></div>-->
 
         <!--            <div class="nothingfound">-->
         <!--                <div class="nofiles"></div>-->
         <!--                <span>Nothing found</span>-->
         <!--            </div>-->
 
-        <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList"></ul>
+
+        <div class="tab" id="assetCategTab">
+            <button id="allAssetsViewBt" class="tablinks active">All</button>
+        </div>
+        
+        <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList">
+        </ul>
 
         <div class="bt_close_file_toolbar mdc-typography mdc-button--raised mdc-button mdc-button">
             Open
@@ -907,26 +913,22 @@ echo '</script>';
 
         jQuery("#divPauseRendering").hide();
         
-
-        
         jQuery("#editor-dimension-btn").hide();
         jQuery("#toggleTour3DaroundBtn").hide();
         jQuery("#toggleView3rdPerson").hide();
-        
         
         jQuery("#firstPersonBlocker").hide();
         jQuery("#thirdPersonBlocker").hide();
         isComposerOn = false;
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
-        
 
         transform_controls.visible  = false;
 
         // if in 3rd person view then show the cameraobject
         envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
-
     }
+
 </script>
 
 <!-- Load Scene - javascript var resources3D[] -->
