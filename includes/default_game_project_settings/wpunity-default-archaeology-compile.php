@@ -160,7 +160,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $site_obj = get_post_meta($site_id,'wpunity_asset3d_obj',true);
 
-                $site_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $site_yaml = wpunity_getAssetYAML_archaeology('site');
                 $site_fid = wpunity_create_fids($current_fid++);
                 $site_obj_guid = wpunity_create_guids('obj', $site_obj);
                 $site_position_x = - $value['position'][0]; // x is in the opposite site in unity
@@ -185,7 +185,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $asset_type_ID = $asset_type[0]->term_id;
                 $poi_img_obj = get_post_meta($poi_img_id,'wpunity_asset3d_obj',true);
                 $poi_img_sprite = get_post_meta($poi_img_id,'wpunity_asset3d_screenimage',true);
-                $poi_img_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $poi_img_yaml = wpunity_getAssetYAML_archaeology('pois_imagetext');
                 $poi_it_fid = wpunity_create_fids($current_fid++);
                 $poi_it_pos_x = - $value['position'][0]; // x is in the opposite site in unity
                 $poi_it_pos_y = $value['position'][1];
@@ -238,7 +238,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $attachment_file = $attachment_video_post->guid;
                 $attachment_tempname = str_replace('\\', '/', $attachment_file);
                 $attachment_name = pathinfo($attachment_tempname);
-                $poi_vid_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $poi_vid_yaml = wpunity_getAssetYAML_archaeology('pois_video');
                 $poi_v_fid = wpunity_create_fids($current_fid++);
                 $poi_v_pos_x = - $value['position'][0]; // x is in the opposite site in unity
                 $poi_v_pos_y = $value['position'][1];
@@ -271,7 +271,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $door_obj = get_post_meta($door_id,'wpunity_asset3d_obj',true);
 
-                $door_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $door_yaml = wpunity_getAssetYAML_archaeology('door');
                 $door_fid = wpunity_create_fids($current_fid++);
                 $door_pos_x = - $value['position'][0]; // x is in the opposite site in unity
                 $door_pos_y = $value['position'][1];
@@ -307,7 +307,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
                 $asset_type_ID = $asset_type[0]->term_id;
 
                 $artifact_obj = get_post_meta($artifact_id,'wpunity_asset3d_obj',true);
-                $artifact_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $artifact_yaml = wpunity_getAssetYAML_archaeology('artifact');
                 $poi_a_fid = wpunity_create_fids($current_fid++);
                 $poi_a_pos_x = - $value['position'][0]; // x is in the opposite site in unity
                 $poi_a_pos_y = $value['position'][1];
@@ -344,7 +344,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
                 $decoarch_obj = get_post_meta($decoarch_id,'wpunity_asset3d_obj',true);
 
-                $decorarch_yaml = get_term_meta($asset_type_ID,'wpunity_yamlmeta_assetcat_pat',true);
+                $decorarch_yaml = wpunity_getAssetYAML_archaeology('decoration_arch');
                 $decor_fid = wpunity_create_fids($current_fid++);
                 $decor_obj_guid = wpunity_create_guids('obj', $decoarch_obj);
                 $decor_pos_x = - $value['position'][0]; // x is in the opposite site in unity

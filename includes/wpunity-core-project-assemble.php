@@ -621,7 +621,7 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
         $mainMenuTerm = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml');
         $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_arch',true);
         $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_arch',true);
-        $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title_arch',true);
+        $term_meta_s_selector_title = 'Select a Scene';
     }elseif($gameType[0]->slug == 'chemistry_games'){
         $mainMenuTerm = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml');
         $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_chem',true);
