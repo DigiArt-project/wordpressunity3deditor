@@ -48,7 +48,7 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
                         for (key in json_content.query.pages) {
                             if (json_content.query.pages[key].extract) {
 
-                                description_dom['multi-line'].value = json_content.query.pages[key].extract.trim();
+                                description_dom['multi-line'].value = "(Wikipedia)" + "\n" + json_content.query.pages[key].extract.trim();
 
                                 description_dom[1].style.display = 'none';
                             } else {
@@ -66,6 +66,8 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
                 } else if (externalSource === 'Europeana') {
 
                     console.log(json_content);
+
+                    description_dom['multi-line'].value += "(Europeana)" + "\n";
 
                     if(json_content.items.length > 0 ){
 
