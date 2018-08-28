@@ -10,14 +10,14 @@
 
 /* Php info top right */
 .VrInfoPhpStyle {
-    font-size: 0.6vw;
+    /*font-size: 0.6vw;*/
     max-font-size: 20pt;
     background: rgba(255, 255, 255, .54);
     color: #000;
     position: absolute;
     text-align: center;
-    bottom: 20px;
-    right: 0;
+    top: 50%;
+    left: 50%;
     width: 20%;
     padding: 2px;
 }

@@ -173,7 +173,10 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     //Assign different attributes to the element.
                     element.className = "tablinks";
                     element.id = f.categoryName;
-                    element.innerText = f.categoryName.substring(0,10);
+                    // if (f.categoryName.length > 18)
+                    //     element.innerText = f.categoryName.substring(0,10) + " ... " + f.categoryName.substring(f.categoryName.length-6, f.categoryName.length);
+                    // else
+                        element.innerText = f.categoryName;
                     element.addEventListener("click", function(event){openCategoryTab(event, this  );  });
 
                     var foo = document.getElementById("assetCategTab");

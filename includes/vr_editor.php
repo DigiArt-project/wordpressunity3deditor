@@ -299,12 +299,9 @@ echo '</script>';
         <i class="material-icons">person</i></a>
     </div>
 
-
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
         Full Screen
     </a>
-
-
 
     <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">settings</i>
@@ -313,10 +310,10 @@ echo '</script>';
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle" style="visibility: hidden">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
-            <span id="scene_loading_message">Downloading ...</span>
-            <div id="progressbar">
-                <div id="scene_loading_bar"></div>
-            </div>
+<!--            <span id="scene_loading_message">Downloading ...</span>-->
+<!--            <div id="progressbar">-->
+<!--                <div id="scene_loading_bar"></div>-->
+<!--            </div>-->
         </div>
 
         <div class="result"></div>
@@ -334,10 +331,10 @@ echo '</script>';
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
 
-        <h2 class="mdc-typography--title">Assets</h2>
+        <h2 class="mdc-typography--title" style="margin-bottom:0px">Assets</h2>
 
-        <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield">
-            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find..." >
+        <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield" style="margin-top:0px">
+            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find...">
             <i class="material-icons mdc-theme--text-primary-on-background">search</i>
             <div class="mdc-textfield__bottom-line"></div>
         </div>

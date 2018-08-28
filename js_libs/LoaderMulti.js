@@ -65,10 +65,10 @@ class LoaderMulti {
                                                             resources3D[name]['trs']['rotation'][1]
                                                             );
 
-                                if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                    jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                    jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                }
+                                // if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
+                                //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                // }
 
 
 
@@ -105,10 +105,10 @@ class LoaderMulti {
                                     resources3D[name]['trs']['rotation'][1]
                                 );
 
-                                if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                    jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                    jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                }
+                                // if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
+                                //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                // }
 
 
 
@@ -138,6 +138,9 @@ class LoaderMulti {
 
                             // OnObjLoad
                             function (object) {
+
+
+
                                 object.traverse(function (node) {
 
                                     if (node.material) {
@@ -215,35 +218,46 @@ class LoaderMulti {
 
 
                                 envir.scene.add(object);
+
+
+                                jQuery("#infophp").get(0).style.visibility= "hidden";
                             },
 
                             //onObjProgressLoad
                             function (xhr) {
 
-                                if (xhr.lengthComputable) {
+                                console.log(xhr);
 
-                                    var bar = jQuery("#progressbar").get(0).offsetWidth;
+                                 //if (xhr.lengthComputable) {
+
+                                    //jQuery("#progress").get(0).style.display = "block";
+                                    jQuery("#infophp").get(0).style.visibility= "visible";
+
+                                    //var bar = jQuery("#progressbar").get(0).offsetWidth;
 
                                     //var total = progress.totalModels + progress.totalTextures,
                                     //var loaded = progress.loadedModels + progress.loadedTextures;
 
-                                    bar = Math.floor(bar * xhr.loaded / xhr.total);
+                                    //bar = Math.floor(bar * xhr.loaded / xhr.total);
 
-                                    jQuery("#scene_loading_bar").get(0).style.width = bar + "px";
-                                    var downloadedBytes = "Downloaded: " + xhr.loaded + " / " + xhr.total + ' bytes';
+                                    //jQuery("#scene_loading_bar").get(0).style.width = bar + "px";
+                                    var downloadedBytes = "Downloaded: " + Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
 
                                     jQuery(".result").get(0).innerHTML = downloadedBytes;
                                     // console.log(Math.round(percentComplete, 2) + '% downloaded');
 
 
-                                    if (xhr.loaded == xhr.total) {
-
-                                        jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                        jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                        //jQuery("#message").get(0).style.display = "none";
-                                        //jQuery("#progressbar").get(0).style.display = "none";
-                                    }
-                                }
+                                    // if (xhr.loaded == xhr.total) {
+                                    //
+                                    //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
+                                    //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
+                                    //     //jQuery("#message").get(0).style.display = "none";
+                                    //    //jQuery("#progressbar").get(0).style.display = "none";
+                                    //    //  jQuery("#infophp").get(0).style.visibility= "hidden";
+                                    //
+                                    //
+                                    // }
+                                //}
                             },
 
                             //onObjErrorLoad
