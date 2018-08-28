@@ -226,7 +226,7 @@ class LoaderMulti {
                             //onObjProgressLoad
                             function (xhr) {
 
-                                console.log(xhr);
+
 
                                  //if (xhr.lengthComputable) {
 
