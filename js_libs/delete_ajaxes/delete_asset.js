@@ -25,7 +25,7 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
         success: function (res) {
 
             res = JSON.parse(res);
-            console.log("Asset with id=" + res + " was succesfully deleted");
+            console.log("Asset with id=" + res + " was successfully deleted");
 
             if (deleteDialog) {
                 jQuery('#delete-scene-dialog-progress-bar').hide();
@@ -44,10 +44,22 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
                 for (i = 0; i < names_to_remove.length; i++)
                     envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
-                jQuery("#asset-"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+                jQuery("#deleteAssetProgressBar-" + asset_id).hide();
+
+                jQuery("#delete-dialog").hide();
+
+                jQuery("#asset-"+asset_id).fadeOut(300, function() {
+
+                    jQuery("#asset-"+asset_id).remove();
+
+
+                });
             } else {
                 // remove the respective tile from the Project editor
-                jQuery("#"+asset_id).fadeOut(300, function() { jQuery(this).remove(); });
+
+                jQuery("#"+asset_id).fadeOut(300, function() {
+                    jQuery("#"+asset_id).remove();
+                });
             }
 
 
@@ -55,7 +67,7 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
         },
         error: function (xhr, ajaxOptions, thrownError) {
 
-            jQuery("#deleteAssetProgressBar--"+ asset_id).hide();
+            jQuery("#deleteAssetProgressBar-"+ asset_id).hide();
 
             jQuery("#asset-"+asset_id).removeClass("LinkDisabled");
 
@@ -64,5 +76,4 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
             console.log("Ajax Delete Asset: ERROR: 169" + thrownError);
         }
     });
-
 }

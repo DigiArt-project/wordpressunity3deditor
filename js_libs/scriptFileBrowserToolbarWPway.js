@@ -280,7 +280,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
             newAssetBtn.appendTo(fileList);
 
-            // Don't delete. Needed to auto init the mdc componented after they have loaded.
+            // Don't delete. Needed to auto init the mdc components after they have loaded.
             mdc.autoInit(document, () => {});
         }
 
