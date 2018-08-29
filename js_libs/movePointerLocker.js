@@ -108,17 +108,6 @@ function initPointerLock() {
         document.addEventListener('mozpointerlockerror', pointerlockerror, false);
         document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
-        firstPersonBlockerBtn.addEventListener('click', function (event) {
-
-            firstPersonBlockerBtn.style.display = 'none';
-
-            // Ask the browser to lock the pointer
-            element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-
-            element.requestPointerLock();
-
-        }, false);
-
     } else {
         firstPersonBlockerBtn.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }

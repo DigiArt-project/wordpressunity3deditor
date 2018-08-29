@@ -665,6 +665,26 @@ echo '</script>';
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
 
+
+    var firstPersonBlocker = document.getElementById('firstPersonBlocker');
+    var firstPersonBlockerBtn = document.getElementById('firstPersonBlockerBtn');
+
+    firstPersonBlockerBtn.addEventListener('click', function (event) {
+
+        firstPersonBlockerBtn.style.display = 'none';
+
+        var element = document.body;
+        
+        // Ask the browser to lock the pointer
+        element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+        element.requestPointerLock();
+
+        envir.makeFullScreen();
+    }, false);
+    
+    
+    
     // First person view
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
@@ -723,7 +743,10 @@ echo '</script>';
         
         if (btn.data('toggle') === 'off') {
             
-            envir.orbitControls.enableRotate = true;
+            console.log(btn);
+            console.log("ROTATING !!!");
+            
+            // envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
 
