@@ -156,7 +156,6 @@ class ImcSettingsPage {
                 <?php $this->render_tabs(); ?>
                 <form method="post" action="options.php">
                     <?php
-                    wpunity_reset_allyamls();
                     wp_nonce_field( 'update-options' );
                     settings_fields( $tab );
                     do_settings_sections( $tab );
