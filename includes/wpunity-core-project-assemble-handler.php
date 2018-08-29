@@ -354,7 +354,7 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
 
 
     $termid  = $mainMenuTerm->term_id;
-    $metaname = 'wpunity_yamlmeta_s_selector2'.$taxnamemeta_suffix;
+    $metaname = 'wpunity_yamlmeta_s_selector2'.$taxnamemeta_suffix;//DIMITRIS
 
     $term_meta_s_selector2 = get_term_meta($termid, $metaname,true);
 

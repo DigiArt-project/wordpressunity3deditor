@@ -614,19 +614,19 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     $gameType = wp_get_post_terms( $gameID, 'wpunity_game_type' );
     if($gameType[0]->slug == 'energy_games'){
         $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward',true);
-        $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector',true);
-        $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title',true);
+        $term_meta_s_reward = wpunity_getSceneYAML_energy('reward');
+        $term_meta_s_selector = wpunity_getSceneYAML_energy('selector');
+        $term_meta_s_selector_title = 'Select a Scene';
     }elseif($gameType[0]->slug == 'archaeology_games'){
         $mainMenuTerm = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_arch',true);
-        $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_arch',true);
+        $term_meta_s_reward = wpunity_getSceneYAML_archaeology('reward');
+        $term_meta_s_selector = wpunity_getSceneYAML_archaeology('selector');
         $term_meta_s_selector_title = 'Select a Scene';
     }elseif($gameType[0]->slug == 'chemistry_games'){
         $mainMenuTerm = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_reward_chem',true);
-        $term_meta_s_selector = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_chem',true);
-        $term_meta_s_selector_title = get_term_meta($mainMenuTerm->term_id,'wpunity_yamlmeta_s_selector_title_chem',true);
+        $term_meta_s_reward = wpunity_getSceneYAML_chemistry('reward');
+        $term_meta_s_selector = wpunity_getSceneYAML_chemistry('selector');
+        $term_meta_s_selector_title = 'Select a Scene';
     }
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset

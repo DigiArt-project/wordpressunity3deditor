@@ -2,7 +2,7 @@
 
 function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
     //DATA of mainmenu-arch-yaml
-    $term_meta_s_mainmenu = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_mainmenu_arch',true);
+    $term_meta_s_mainmenu = wpunity_getSceneYAML_archaeology('menu');
     $title_text = $scene_post->post_title;
     $is_bt_settings_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_options',true) );
     $is_help_bt_active = intval ( get_post_meta($scene_id,'wpunity_menu_has_help',true) );
@@ -40,7 +40,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
 
     if($is_bt_settings_active == '1'){
         //CREATE SETTINGS/OPTIONS Unity file
-        $term_meta_s_settings = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_options_arch',true);
+        $term_meta_s_settings = wpunity_getSceneYAML_archaeology('options');
         $file_content2 = wpunity_replace_settings_unity($term_meta_s_settings);
 
         $file2 = $game_path . '/' . 'S_Settings.unity';
@@ -55,7 +55,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
 
     if($is_help_bt_active == '1'){
         //CREATE HELP Unity file
-        $term_meta_s_help = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_help_arch',true);
+        $term_meta_s_help = wpunity_getSceneYAML_archaeology('help');
         $text_help_scene = get_post_meta($scene_id,'wpunity_scene_help_text',true);
         $img_help_scene_id = get_post_meta($scene_id,'wpunity_scene_helpimg',true);
         $img_help_scene_guid = 'dad02368a81759f4784c7dbe752b05d6'; //if there's no Featured Image (custom field at Main Menu)
@@ -74,7 +74,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
 
     if($is_login_bt_active == '1'){
         //CREATE Login Unity file
-        $term_meta_s_login = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_login_arch',true);
+        $term_meta_s_login = wpunity_getSceneYAML_archaeology('login');
         $file_content4 = wpunity_replace_login_unity($term_meta_s_login);
 
         $file4 = $game_path . '/S_Login.unity';
@@ -90,7 +90,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
 
 function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
     //DATA of Credits Scene
-    $term_meta_s_credits = get_term_meta($scene_type_ID,'wpunity_yamlmeta_s_credentials_arch',true);
+    $term_meta_s_credits = wpunity_getSceneYAML_archaeology('credits');
     $credits_content = $scene_post->post_content;
 
     $featured_image_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
@@ -112,7 +112,7 @@ function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID
 function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_ID, $scene_id, $gameSlug, $game_path, $settings_path, $handybuilder_file,
                                                        $scenes_counter, $gameType){
     //DATA of Wonder Around Scene
-    $term_meta_wonder_around = get_term_meta($scene_type_ID,'wpunity_yamlmeta_wonderaround_pat',true);
+    $term_meta_wonder_around = wpunity_getSceneYAML_archaeology('wanderaround');
     //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
     $scene_name = $scene_post->post_name;
     $scene_title = $scene_post->post_title;

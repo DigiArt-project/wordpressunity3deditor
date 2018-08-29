@@ -37,6 +37,10 @@ function wpunity_getSceneYAML_chemistry($myscene_type){
         $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam2d.txt");
     }elseif($myscene_type == 'exam3d'){
         $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/scenes/chemistry-exam3d.txt");
+    }elseif($myscene_type == 'reward'){
+        $def_json = '';
+    }elseif($myscene_type == 'selector'){
+        $def_json = '';
     }
 
     return $def_json;
@@ -104,25 +108,6 @@ function wpunity_games_taxtype_chemistry_fill(){
           'slug' => 'chemistry_games',
       )
   );
-
-//  $inserted_term = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
-
-//  update_term_meta($inserted_term->term_id, 'wpunity_audio_manager_term', wpunity_default_value_AudioManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_cluster_input_manager_term', wpunity_default_value_ClusterInputManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_dynamics_manager_term', wpunity_default_value_DynamicsManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_editor_build_settings_term', wpunity_default_value_EditorBuildSettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_editor_settings_term', wpunity_default_value_EditorSettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_graphics_settings_term', wpunity_default_value_GraphicsSettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_input_manager_term', wpunity_default_value_InputManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_nav_mesh_areas_term', wpunity_default_value_NavMeshAreas_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_network_manager_term', wpunity_default_value_NetworkManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_physics2d_settings_term', wpunity_default_value_Physics2DSettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_project_settings_term', wpunity_default_value_ProjectSettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_project_version_term', wpunity_default_value_ProjectVersion_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_quality_settings_term', wpunity_default_value_QualitySettings_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_tag_manager_term', wpunity_default_value_TagManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_time_manager_term', wpunity_default_value_TimeManager_chemistry_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_unity_connect_settings_term', wpunity_default_value_unityConnect_chemistry_get(), true);
 
 }
 

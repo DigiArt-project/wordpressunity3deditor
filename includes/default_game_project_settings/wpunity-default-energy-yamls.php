@@ -2267,6 +2267,10 @@ function wpunity_getSceneYAML_energy($myscene_type){
     $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-stats.txt");
   }elseif($myscene_type == 'turbines'){
     $def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/scenes/energy-turbselection.txt");
+  }elseif($myscene_type == 'reward'){
+    $def_json = '';
+  }elseif($myscene_type == 'selector'){
+    $def_json = '';
   }
 
   return $def_json;
