@@ -565,6 +565,9 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     
     //fwrite($fd, "5");
     
+    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
+    
+    
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
@@ -601,12 +604,9 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     //fwrite($fd, "9");
     
     wp_reset_postdata();
-
-
-    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
-
-
 }
+
+
 
 //Create Reward and SceneSelector
 function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID){

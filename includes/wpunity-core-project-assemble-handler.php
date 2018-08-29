@@ -351,25 +351,23 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
 
     $mainMenuTerm = get_term_by('slug', 'mainmenu'.$taxterm_suffix.'-yaml',
         'wpunity_scene_yaml');
-
-
+    
     $termid  = $mainMenuTerm->term_id;
-
-    //DIMITRIS ERROR
+    
 //    $metaname = 'wpunity_yamlmeta_s_selector2'.$taxnamemeta_suffix;
 //    $term_meta_s_selector2 = get_term_meta($termid, $metaname,true);
     $term_meta_s_selector2 = wpunity_getSceneYAML_archaeology('selector2');
-
+    
     $sceneSelectorFile = $game_path . '/S_SceneSelector.unity';
-
+    
     //Create guid for the tile
     $guid_tile_sceneselector = wpunity_create_fids($scene_id);
 
     $guid_tile_recttransform = wpunity_create_fids_rect($scene_id);
-
+    
     //Add Scene to initial part of Scene Selector
-    wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform);
-
+    wpunity_compile_s_selector_addtile($sceneSelectorFile, $guid_tile_recttransform);
+    
     //Add second part of the new Scene Tile
 
     // Find position of the tile
@@ -396,12 +394,11 @@ function wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $sce
         $guid_tile_recttransform);
 
     $LF = chr(10); // line change
-
-    file_put_contents($sceneSelectorFile, $fileData . $LF, FILE_APPEND);
-
+    
+    $succapp = file_put_contents($sceneSelectorFile, $LF . $fileData . $LF, FILE_APPEND);
 }
 
-function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttransform){
+function wpunity_compile_s_selector_addtile($sceneSelectorFile, $guid_tile_recttransform){
     # ReplaceChildren
     $LF = chr(10); // line change
 
@@ -410,7 +407,9 @@ function wpunity_compile_s_selector_addtile($sceneSelectorFile,$guid_tile_recttr
 
     // a. Read
     $handle = fopen($sceneSelectorFile, 'r');
+    
     $content = fread($handle, filesize($sceneSelectorFile));
+    
     fclose($handle);
 
     $tile_name='- {fileID: '. $guid_tile_recttransform .'}';
