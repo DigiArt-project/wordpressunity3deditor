@@ -625,8 +625,13 @@ function wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID){
 
 	$mainmenuSceneTitle = 'Main Menu'; //Title for Main Menu
 	$mainmenuSceneSlug = $gameSlug . '-main-menu' ; //Slug for Main Menu
-	$firstSceneTitle = 'Lab'; //Title for First Menu
-	$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
+	if($game_category == 'archaeology_games') {
+		$firstSceneTitle = 'Place'; //Title for First Menu
+		$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
+	}else{
+		$firstSceneTitle = 'Lab'; //Title for First Menu
+		$firstSceneSlug = $gameSlug . '-first-scene'; //Slug for First Menu
+	}
 	$credentialsSceneTitle = 'Credits'; //Title for Credentials Menu
 	$credentialsSceneSlug = $gameSlug . '-credits-scene'; //Slug for Credentials Menu
 	if($game_category == 'chemistry_games'){
