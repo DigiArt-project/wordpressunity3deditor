@@ -100,83 +100,82 @@ class vr_editor_environmentals {
 
     makeFullScreen() {
 
-        if (this.container_3D_all.style.width!=="100%") {
-            this.container_3D_all.style.position = 'fixed';
-            this.container_3D_all.style.width = '100%';
-            this.container_3D_all.style.height = '100%';
-            this.container_3D_all.style.overflow = 'hidden';
-            this.container_3D_all.style.zIndex = '9999';
-            this.container_3D_all.style.top = '0';
-            this.container_3D_all.style.left = '0';
-            this.container_3D_all.style.right = '0';
-            this.container_3D_all.style.bottom = '0';
+        this.container_3D_all.style.position = 'fixed';
+        this.container_3D_all.style.width = '100%';
+        this.container_3D_all.style.height = '100%';
+        this.container_3D_all.style.overflow = 'hidden';
+        this.container_3D_all.style.zIndex = '9999';
+        this.container_3D_all.style.top = '0';
+        this.container_3D_all.style.left = '0';
+        this.container_3D_all.style.right = '0';
+        this.container_3D_all.style.bottom = '0';
 
-            jQuery("#fullScreenBtn").html('Exit Full Screen');
+        jQuery("#fullScreenBtn").html('Exit Full Screen');
 
-            jQuery("body#header").css("display", "none" );
-
-
-            if (document.getElementById('wpadminbar')) {
-                document.getElementById('wpadminbar').style.zIndex = 0;
-            }
-
-            if (document.getElementById('adminmenuback')) {
-                document.getElementById('adminmenuback').style.zIndex = 0;
-            }
-
-            if (document.getElementById('adminmenuwrap')) {
-                document.getElementById('adminmenuwrap').style.zIndex = 0;
-            }
-
-            if (document.getElementById('wpfooter')) {
-                document.getElementById('wpfooter').style.display='none';
-            }
-
-            if (document.getElementById('postcustom')) {
-                document.getElementById('postcustom').style.display='none';
-            }
-
-            if (document.getElementById('postdivrich')) {
-                document.getElementById('postdivrich').style.display='none';
-            }
+        jQuery("body#header").css("display", "none" );
 
 
-        } else {
+        if (document.getElementById('wpadminbar')) {
+            document.getElementById('wpadminbar').style.zIndex = 0;
+        }
 
-            this.container_3D_all.style.position = 'relative';
-            this.container_3D_all.style.width = '99%';
-            this.container_3D_all.style.height = '600px';
-            //this.container_3D_all.style.overflow = 'auto';
-            this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
-            this.container_3D_all.style.zIndex = '999';
+        if (document.getElementById('adminmenuback')) {
+            document.getElementById('adminmenuback').style.zIndex = 0;
+        }
 
-            jQuery("#fullScreenBtn").html('Full Screen');
+        if (document.getElementById('adminmenuwrap')) {
+            document.getElementById('adminmenuwrap').style.zIndex = 0;
+        }
 
-            jQuery("body#header").css("display", "block" );
+        if (document.getElementById('wpfooter')) {
+            document.getElementById('wpfooter').style.display='none';
+        }
 
-            if (document.getElementById('wpadminbar')) {
-                document.getElementById('wpadminbar').style.zIndex = 9999;
-            }
-            if (document.getElementById('adminmenuback')) {
-                document.getElementById('adminmenuback').style.zIndex = 9999;
-            }
-            if (document.getElementById('adminmenuwrap')) {
-                document.getElementById('adminmenuwrap').style.zIndex = 9999;
-            }
-            if (document.getElementById('wpfooter')) {
-                document.getElementById('wpfooter').style.display = 'block';
-            }
-            if (document.getElementById('postcustom')) {
-                document.getElementById('postcustom').style.display = 'block';
-            }
-            if (document.getElementById('postdivrich')) {
-                document.getElementById('postdivrich').style.display = '';
-            }
+        if (document.getElementById('postcustom')) {
+            document.getElementById('postcustom').style.display='none';
+        }
+
+        if (document.getElementById('postdivrich')) {
+            document.getElementById('postdivrich').style.display='none';
         }
 
         envir.turboResize();
     }
 
+    makeWindowedScreen(){
+
+        this.container_3D_all.style.position = 'relative';
+        this.container_3D_all.style.width = '99%';
+        this.container_3D_all.style.height = '600px';
+        //this.container_3D_all.style.overflow = 'auto';
+        this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
+        this.container_3D_all.style.zIndex = '999';
+
+        jQuery("#fullScreenBtn").html('Full Screen');
+
+        jQuery("body#header").css("display", "block" );
+
+        if (document.getElementById('wpadminbar')) {
+            document.getElementById('wpadminbar').style.zIndex = 9999;
+        }
+        if (document.getElementById('adminmenuback')) {
+            document.getElementById('adminmenuback').style.zIndex = 9999;
+        }
+        if (document.getElementById('adminmenuwrap')) {
+            document.getElementById('adminmenuwrap').style.zIndex = 9999;
+        }
+        if (document.getElementById('wpfooter')) {
+            document.getElementById('wpfooter').style.display = 'block';
+        }
+        if (document.getElementById('postcustom')) {
+            document.getElementById('postcustom').style.display = 'block';
+        }
+        if (document.getElementById('postdivrich')) {
+            document.getElementById('postdivrich').style.display = '';
+        }
+
+        envir.turboResize();
+    }
 
     // addCubeToControls(transform_controls){
     //
@@ -443,8 +442,8 @@ class vr_editor_environmentals {
 
         // ADD in the Hierarchy viewer
         var deleteButtonHTML =
-            '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"' +
-            ' title="Delete game object" onclick="' +
+            '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete asset"' +
+            ' title="Delete asset object" onclick="' +
             // Delete object from scene and remove it from the hierarchy viewer
             'deleterFomScene(\'' + obj.name + '\');'
             + '">' +
@@ -494,29 +493,36 @@ class vr_editor_environmentals {
         this.scene.traverse(function(obj) {
             if(obj.isDigiArt3DModel || obj.name === "avatarYawObject") {
 
-                // Find also children
-                // var s = '';
-                // var obj2 = obj;
-                // while (obj2 !== envir.scene) {
-                //     s += '-';
-                //     obj2 = obj2.parent;
-                // }
-                //console.log(); // + " " + obj.type + ' ' + obj.name
-
-
                 // Make the html for the delete button Avatar should not be deleted
                 var deleteButtonHTML =  '';
 
                 if (obj.name != 'avatarYawObject'){
                     var deleteButtonHTML =
-                        '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete game"' +
-                        ' title="Delete game object" onclick="' +
+                        '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete asset"' +
+                        ' title="Delete asset object" onclick="' +
                         // Delete object from scene and remove it from the hierarchy viewer
                         'deleterFomScene(\'' + obj.name + '\');'
                         + '">' +
                         '<i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete </i>'+
                         '</a>';
                 }
+
+
+                var resetButtonHTML =  '';
+
+                if (obj.name == 'avatarYawObject') {
+                    resetButtonHTML =
+                        '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Reset asset"' +
+                        ' title="Reset asset object" onclick="' +
+                        // Reset 0,0,0 rot 0,0,0
+                        'resetInScene(\'' + obj.name + '\');'
+                        + '">' +
+                        '<i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Reset">cached </i>' +
+                        '</a>';
+                }
+
+
+
 
                 // Split the object name into 2 parts: The first part is the asset name and the second the date inserted in the scene
                 if (obj.name != 'avatarYawObject') {
@@ -541,6 +547,7 @@ class vr_editor_environmentals {
                     '</span>'+
                     '</a>' +
                     deleteButtonHTML +
+                    resetButtonHTML +
                     '</li>');
             }
         });

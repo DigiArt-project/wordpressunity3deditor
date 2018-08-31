@@ -1060,13 +1060,30 @@ get_header(); ?>
 
             jQuery( "#compileGameBtn" ).click(function() {
                 compileDialog.show();
+
+                // Pause Rendering
+                isPaused = true;
+                jQuery("#pauseRendering").get(0).childNodes[1].innerText = "play_arrow";
+            
+                
+                
             });
         }
 
 
+        jQuery(".mdc-dialog__backdrop").click(function(e){
+            jQuery( "#compileCancelBtn" ).click();
+        });
+        
 
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
+            //Start Rendering
+            isPaused = false;
+            jQuery("#pauseRendering").get(0).childNodes[1].innerText = "pause";
+            animate();
+            
+            // Get Pid of compile process
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
 
             console.log(pid);

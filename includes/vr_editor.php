@@ -129,9 +129,9 @@ echo '</script>';
             wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
-    function removeSavedText(){
-        jQuery(".result").html("");
-    }
+    // function removeSavedText(){
+    //     jQuery(".result").html("");
+    // }
 
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
     var raycasterDrag = new THREE.Raycaster();
@@ -308,7 +308,7 @@ echo '</script>';
     </a>
 
     <!--  Make form to submit user changes -->
-    <div id="infophp" class="VrInfoPhpStyle" style="visibility: hidden">
+    <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
 <!--            <span id="scene_loading_message">Downloading ...</span>-->
 <!--            <div id="progressbar">-->
@@ -316,8 +316,9 @@ echo '</script>';
 <!--            </div>-->
         </div>
 
-        <div class="result"></div>
-        <div id="result_download"></div>
+<!--        <div id="downloadIndicator" class="result"></div>-->
+        <div id="result_download" class="result"></div>
+        <div id="result_download2" class="result"></div>
     </div>
 
 
@@ -727,9 +728,17 @@ echo '</script>';
     
     
 
-    // FULL SCREEN
+    // FULL SCREEN Toggle
     jQuery('#fullScreenBtn').click(function() {
-        envir.makeFullScreen();
+
+        console.log(container_3D_all.style.width);
+        
+        if (container_3D_all.style.width!=="100%") {
+            envir.makeFullScreen();
+        } else {
+            envir.makeWindowedScreen();
+        }
+
     });
 
     // Autor rotate in 3D
@@ -804,12 +813,16 @@ echo '</script>';
     var manager = new THREE.LoadingManager();
 
     manager.onProgress = function ( item, loaded, total ) {
-        //console.log( item, loaded, total );
+        
+        if (total >= 2)
+            document.getElementById("result_download").innerHTML = "Loading " + (loaded-1) + " out of " + (total-2);
     };
 
     // When all are finished loading place them in the correct position
     manager.onLoad = function () {
 
+        jQuery("#infophp").get(0).style.visibility= "hidden";
+        
         var objItem;
         var trs_tmp;
         var name;
@@ -1058,7 +1071,9 @@ $formRes->init($sceneToLoad);
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
 
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseDownSelect, false );
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'click', onMouseUpSelect, false );
+
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'contextmenu', contextMenuClick, false );
 
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });

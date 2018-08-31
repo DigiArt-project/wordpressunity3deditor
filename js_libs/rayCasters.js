@@ -87,7 +87,7 @@ function onMouseDoubleClickFocus( event , objectName) {
  *
  * @param event
  */
-function onMouseDownSelect( event ) {
+function onMouseUpSelect(event ) {
 
     event.preventDefault();
     event.stopPropagation();
@@ -168,6 +168,7 @@ function onMouseDownSelect( event ) {
  */
 function selectorMajor(event, objectSel){
 
+
     if (event.button === 0) {
 
         // set the selected color of the hierarchy viewer
@@ -216,6 +217,11 @@ function selectorMajor(event, objectSel){
 
 }
 
+function contextMenuClick(event){
+
+    onMouseUpSelect(event);
+
+}
 
 /**
  *  Box label set

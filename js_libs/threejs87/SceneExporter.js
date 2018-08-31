@@ -354,9 +354,9 @@ THREE.SceneExporter.prototype = {
             } else {
 
 
-                console.log(o);
-
-                console.log(o.children[0]);
+                // console.log(o);
+                //
+                // console.log(o.children[0]);
 
 
                 var quatCombined = new THREE.Quaternion();

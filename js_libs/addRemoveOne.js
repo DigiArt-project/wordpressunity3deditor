@@ -44,12 +44,19 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
     var manager = new THREE.LoadingManager();
 
+    jQuery("#infophp").get(0).style.visibility= "visible";
+    document.getElementById("result_download").innerHTML = "Loading";
+
     manager.onProgress = function (item, loaded, total) {
         //console.log( item, loaded, total );
+
+        document.getElementById("result_download").innerHTML = "Loading";
     };
 
     // When all are finished loading
     manager.onLoad = function () {
+
+        jQuery("#infophp").get(0).style.visibility= "hidden";
 
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
 
@@ -130,6 +137,18 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
     //console.log(extraResource);
 
     loaderMulti.load(manager, extraResource);
+}
+
+
+/**
+ *   Reset object in scene
+ */
+function resetInScene(name){
+
+    envir.avatarControls.getObject().position.set(0,1.3,0);
+    envir.avatarControls.getObject().quaternion.set(0,0,0,1);
+    envir.avatarControls.getObject().children[0].rotation.set(0,0,0);
+
 }
 
 /**

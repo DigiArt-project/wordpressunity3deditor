@@ -728,12 +728,16 @@ if ( $assets ) :
 
             jQuery( "#compileGameBtn" ).click(function() {
                 compileDialog.show();
+
+                
             });
         }
 
 
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
+            
+            
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
 
             console.log(pid);

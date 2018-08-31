@@ -13,15 +13,9 @@ class LoaderMulti {
 
                 var mtlLoader = new THREE.MTLLoader();
 
-
-
-
                 // Load Steve
                 if (name == 'avatarYawObject') {
-
                     //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
-
-
                     // STEVE is the CAMERA MESH
 
                     mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
@@ -98,6 +92,7 @@ class LoaderMulti {
 
                                 envir.setSteveOldToAvatarControls();
 
+
                                 envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
                                     resources3D[name]['trs']['translation'][1],
                                     resources3D[name]['trs']['translation'][2],
@@ -116,10 +111,7 @@ class LoaderMulti {
                         );
                     });
 
-
-
                 }else {
-
 
 
 
@@ -129,17 +121,15 @@ class LoaderMulti {
 
                         materials.preload();
 
-
                         var objLoader = new THREE.OBJLoader(manager);
                         objLoader.setMaterials(materials);
                         objLoader.setPath( resources3D[name]['path']);
 
                         objLoader.load(resources3D[name]['obj'], 'after',
 
+
                             // OnObjLoad
                             function (object) {
-
-
 
                                 object.traverse(function (node) {
 
@@ -158,10 +148,7 @@ class LoaderMulti {
 
                                         if (node.name.includes("renderOrder")) {
 
-
                                             var iR = node.name.indexOf("renderOrder");
-
-
 
                                             node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
 
@@ -209,55 +196,20 @@ class LoaderMulti {
                                 object.isreward = resources3D[name]['isreward'];
                                 object.isCloned = resources3D[name]['isCloned'];
 
-
-
                                 object.type_behavior = resources3D[name]['type_behavior'];
-
-
-
-
 
                                 envir.scene.add(object);
 
 
-                                jQuery("#infophp").get(0).style.visibility= "hidden";
+                                //jQuery("#infophp").get(0).style.visibility= "hidden";
                             },
 
                             //onObjProgressLoad
                             function (xhr) {
 
+                                    var downloadedBytes = name.substring(0,name.length-11) + " downloaded " + Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
 
-
-                                 //if (xhr.lengthComputable) {
-
-                                    //jQuery("#progress").get(0).style.display = "block";
-                                    jQuery("#infophp").get(0).style.visibility= "visible";
-
-                                    //var bar = jQuery("#progressbar").get(0).offsetWidth;
-
-                                    //var total = progress.totalModels + progress.totalTextures,
-                                    //var loaded = progress.loadedModels + progress.loadedTextures;
-
-                                    //bar = Math.floor(bar * xhr.loaded / xhr.total);
-
-                                    //jQuery("#scene_loading_bar").get(0).style.width = bar + "px";
-                                    var downloadedBytes = "Downloaded: " + Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
-
-                                    jQuery(".result").get(0).innerHTML = downloadedBytes;
-                                    // console.log(Math.round(percentComplete, 2) + '% downloaded');
-
-
-                                    // if (xhr.loaded == xhr.total) {
-                                    //
-                                    //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                    //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                    //     //jQuery("#message").get(0).style.display = "none";
-                                    //    //jQuery("#progressbar").get(0).style.display = "none";
-                                    //    //  jQuery("#infophp").get(0).style.visibility= "hidden";
-                                    //
-                                    //
-                                    // }
-                                //}
+                                    document.getElementById("result_download2").innerHTML = downloadedBytes;
                             },
 
                             //onObjErrorLoad

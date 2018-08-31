@@ -61,12 +61,15 @@ class GeneralImportSettings : AssetPostprocessor
         string[] assetPaths = AssetDatabase.GetAllAssetPaths();
         foreach (string path in assetPaths)
         {
-
             Material mat = AssetDatabase.LoadAssetAtPath(path, typeof(Material)) as Material;
             if (mat)
             {
+
                 // Basic material (no shadows)
-                mat.shader = Shader.Find("Unlit/Texture");
+                if (mat.mainTexture == null)
+                	mat.shader = Shader.Find("Standard");
+                else
+                	mat.shader = Shader.Find("Unlit/Texture");
 
                 if (path.Contains("NoGlossy"))
                 {
@@ -84,14 +87,10 @@ class GeneralImportSettings : AssetPostprocessor
                        mat.EnableKeyword("_Mode");
                        mat.SetFloat("_Mode", 2);
                        mat.SetFloat("_Glossiness", 0);
-
-
-
                        mat.SetInt("_ZWrite", 1);
                        mat.EnableKeyword("_ALPHATEST_ON");
                        mat.DisableKeyword("_ALPHABLEND_ON");
                        mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-
                        mat.enableInstancing = true;
                 }
             }
