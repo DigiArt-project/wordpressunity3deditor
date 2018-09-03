@@ -66,10 +66,15 @@ class GeneralImportSettings : AssetPostprocessor
             {
 
                 // Basic material (no shadows)
-                if (mat.mainTexture == null)
-                	mat.shader = Shader.Find("Standard");
-                else
-                	mat.shader = Shader.Find("Unlit/Texture");
+                // Basic material (no shadows)
+               if (!path.Contains("Sky")){
+                   if (mat.mainTexture == null)
+                       mat.shader = Shader.Find("Standard");
+                   else
+                       mat.shader = Shader.Find("Unlit/Texture");
+                } else {
+
+                }
 
                 if (path.Contains("NoGlossy"))
                 {
