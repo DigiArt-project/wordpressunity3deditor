@@ -34,12 +34,11 @@ $editscene2DPage = wpunity_getEditpage('scene2D');
 $editsceneExamPage = wpunity_getEditpage('sceneExam');
 
 
-
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
     $scene_data='';
-    if($game_type_obj == 'Energy'){
+    if($game_type_obj->string == 'Energy'){
         $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'energy_games');//first 3D scene id
-    }elseif($game_type_obj == 'Chemistry'){
+    }elseif($game_type_obj->string == 'Chemistry'){
         $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games');//first 3D scene id
     }else{
         $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'archaeology_games');//first 3D scene id
