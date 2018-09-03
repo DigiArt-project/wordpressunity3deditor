@@ -165,8 +165,8 @@ function updatePointerLockControls(){
     envir.avatarControls.getObject().translateY( velocity.y );
     envir.avatarControls.getObject().translateZ( velocity.z );
 
-    if (torgue.y != 0)
-        console.log(torgue.y);
+    // if (torgue.y != 0)
+    //     console.log(torgue.y);
 
     if (!avatarControlsEnabled)
         envir.avatarControls.getObject().rotation.y += torgue.y;

@@ -56,20 +56,19 @@ public class CameraRTSController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness)
         {
-            panMovement += Vector3.forward * panSpeed * Time.deltaTime;
+            panMovement += Vector3.ProjectOnPlane(transform.forward, Vector3.up) * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= ScreenEdgeBorderThickness)
         {
-            panMovement -= Vector3.forward * panSpeed * Time.deltaTime;
+            panMovement -= Vector3.ProjectOnPlane(transform.forward, Vector3.up) * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= ScreenEdgeBorderThickness)
         {
-            panMovement += Vector3.left * panSpeed * Time.deltaTime;
+            panMovement -= Vector3.ProjectOnPlane(transform.right, Vector3.up)  * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - ScreenEdgeBorderThickness)
         {
-            panMovement += Vector3.right * panSpeed * Time.deltaTime;
-
+            panMovement += Vector3.ProjectOnPlane(transform.right, Vector3.up) * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.Q))
         {
@@ -81,7 +80,7 @@ public class CameraRTSController : MonoBehaviour
         }
         //}
 
-        transform.Translate(panMovement, Space.Self);
+        transform.Translate(panMovement, Space.World);
 
         #endregion
 
