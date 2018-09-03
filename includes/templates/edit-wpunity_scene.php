@@ -625,9 +625,9 @@ get_header(); ?>
                                     </section>
 
                                     <section class="mdc-card__primary">
-
-                                        <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-
+                                        <?php if($game_type_obj->string != "Archaeology"){ ?>
+                                            <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
+                                        <?php } ?>
                                         <!--Scene Type-->
 										<?php if($game_type_obj->string === "Chemistry"){ ?>
                                             <ul>
