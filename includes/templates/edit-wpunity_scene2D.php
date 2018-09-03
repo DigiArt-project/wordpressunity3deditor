@@ -33,9 +33,22 @@ $editscenePage = wpunity_getEditpage('scene');
 $editscene2DPage = wpunity_getEditpage('scene2D');
 $editsceneExamPage = wpunity_getEditpage('sceneExam');
 
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-	if($scene_type == 'credits'){
+
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+    $scene_data='';
+    if($game_type_obj == 'Energy'){
+        $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'energy_games');//first 3D scene id
+    }elseif($game_type_obj == 'Chemistry'){
+        $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games');//first 3D scene id
+    }else{
+        $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'archaeology_games');//first 3D scene id
+    }
+    $edit_scene_page_id = $editscenePage[0]->ID;
+    $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+
+
+    if($scene_type == 'credits'){
 		$post_content = esc_attr(strip_tags($_POST['scene-description']));
 		$post_image =  $_FILES['scene-featured-image'];
 
@@ -57,8 +70,9 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		set_post_thumbnail( $scene_id, $attachment_id );
 
 		if($post_id){
-			wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-			exit;
+			//wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+            wp_redirect( $goBackTo_MainLab_link );
+            exit;
 		}
 
 	}elseif($scene_type == 'menu'){
@@ -86,8 +100,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		$attachment_id = wpunity_upload_img( $post_image, $scene_id);
 		set_post_thumbnail( $scene_id, $attachment_id );
 
-		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-		exit;
+		//wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
+
+        wp_redirect( $goBackTo_MainLab_link );
+        exit;
 	}
 
 }
