@@ -630,6 +630,7 @@ function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$
     }
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
 
     if($gameType[0]->slug == 'archaeology_games') {
         $file2 = $game_path . '/' . 'S_SceneSelector.unity';

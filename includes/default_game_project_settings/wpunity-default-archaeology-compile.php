@@ -23,7 +23,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
     fclose($create_file);
 
     $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
+    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
     $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
 
