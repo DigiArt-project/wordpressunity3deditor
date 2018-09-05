@@ -159,13 +159,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$sceneMetaType = 'scene';//default 'scene' MetaType (3js)
 	$game_type_chosen_slug = '';
 
-    $default_json = '';
+	$default_json = '';
 	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
 	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';$default_json = wpunity_getDefaultJSONscene('archaeology');}
     elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';$default_json = wpunity_getDefaultJSONscene('energy');}
     elseif($thegameType[0]->slug == 'chemistry_games'){
 		$game_type_chosen_slug = 'chemistry_games';
-        $default_json = wpunity_getDefaultJSONscene('chemistry');
+		$default_json = wpunity_getDefaultJSONscene('chemistry');
 		if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
         elseif($newSceneType == '2d'){$newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam2d';}
         elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
@@ -277,7 +277,12 @@ get_header(); ?>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
-                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
+
+						<?php if($project_saved_keys['expID'] != ''){ ?>
+                            <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
+						<?php } ?>
+
+
                         <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
 
 					<?php } ?>
@@ -309,11 +314,11 @@ get_header(); ?>
 							$meta_json = get_post_meta($current_scene_id, 'wpunity_scene_json_input', true);
 
 							// Do not put esc_attr, crashes the universe in 3D
-                            if ( $game_type_obj->string === "Energy" ) {
-                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
-                            }else{
-                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
-                            }
+							if ( $game_type_obj->string === "Energy" ) {
+								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
+							}else{
+								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
+							}
 
 							// Find scene dir string
 							$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
@@ -625,9 +630,9 @@ get_header(); ?>
                                     </section>
 
                                     <section class="mdc-card__primary">
-                                        <?php if($game_type_obj->string != "Archaeology"){ ?>
+										<?php if($game_type_obj->string != "Archaeology"){ ?>
                                             <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-                                        <?php } ?>
+										<?php } ?>
                                         <!--Scene Type-->
 										<?php if($game_type_obj->string === "Chemistry"){ ?>
                                             <ul>
@@ -883,16 +888,25 @@ get_header(); ?>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-                <div style="position: relative; overflow: hidden; padding-top: 150%;">
+
+                <div id="analyticsIframeFallback" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+                </div>
+
+                <div id="analyticsIframeContainer" style="position: relative; overflow: hidden; padding-top: 150%; display: none;">
                     <iframe id="analyticsIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                 </div>
             </div>
 
-            <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
-                <div style="position: relative; overflow: hidden; padding-top: 180%;">
-                    <iframe id="atRiskIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+			<?php if($project_saved_keys['expID'] != ''){ ?>
+
+                <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
+                    <div id="atRiskIframeContainer" style="position: relative; overflow: hidden; padding-top: 180%;">
+                        <iframe id="atRiskIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+                    </div>
                 </div>
-            </div>
+
+			<?php } ?>
 
             <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
                 <div style="position: relative; overflow: hidden; padding-top: 100%;">
@@ -1032,7 +1046,7 @@ get_header(); ?>
         jQuery(".mdc-dialog__backdrop").click(function(e){
             jQuery( "#compileCancelBtn" ).click();
         });
-        
+
 
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
@@ -1040,7 +1054,7 @@ get_header(); ?>
             isPaused = false;
             jQuery("#pauseRendering").get(0).childNodes[1].innerText = "pause";
             animate();
-            
+
             // Get Pid of compile process
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
 
@@ -1115,56 +1129,14 @@ get_header(); ?>
 
             var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
 
-            if (game_type === "energy") {
-                loadPISAClusterIframe(game_type+'tool', energy_stats, null);
-            } else {
-
-                var analytics_molecules_checklist = '<?php echo $analytics_molecule_checklist; ?>';
-                loadPISAClusterIframe(game_type+'tool', null, analytics_molecules_checklist);
-            }
-
             loadAnalyticsIframe(game_type);
 
-            // Start Goedle Iframes
-            if (project_keys.expID) {
-                loadAtRiskIframe(project_keys.expID);
-            }
-            // End Goedle Iframes
-
-            function loadPISAClusterIframe(lab, energy_fields, chemistry) {
-
-                var url = "";
-                var ip_addr = "https://analytics.envisage-h2020.eu/?";
-
-                if (energy_fields) {
-
-                    if (!energy_fields.env) {energy_fields.env = 'mountain';}
-
-                    url = ip_addr +
-                        "lab=" + lab +
-                        "&env=" + energy_fields.env +
-                        "&map=" + parseInt(energy_fields.map, 10) +
-                        "&watts=" + energy_fields.watts +
-                        "&area=" + energy_fields.area +
-                        "&cost=" + energy_fields.cost;
-
-                } else {
-
-                    url = ip_addr +
-                        "lab=" + lab +
-                        "&settings=" + chemistry;
-
-                }
-
-                var iframe = jQuery('#scene-analytics-iframe');
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
-                return true;
-            }
+            loadAtRiskIframe(project_keys.expID);
 
             function loadAnalyticsIframe(game_type) {
+
+                jQuery('#analyticsIframeFallback').hide();
+                jQuery('#analyticsIframeContainer').show();
 
                 var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
@@ -1200,25 +1172,29 @@ get_header(); ?>
 
             function loadAtRiskIframe(exp_id) {
 
-                var url = "https://envisage.goedle.io/at-risk/index.htm?" +
-                    "exp_id=" + exp_id;
+                if (exp_id) {
 
-                var iframe = jQuery('#atRiskIframeContent');
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
+                    var url = "https://envisage.goedle.io/at-risk/index.htm?" +
+                        "exp_id=" + exp_id;
 
-                jQuery(parent.document).find("atRiskIframeContent").each(function () {
-                    if (this.contentDocument == window.document) {
-                        // if the href of the iframe is not same as
-                        // the value of src attribute then reload it
-                        if (this.src != url) {
-                            this.src = this.src;
-                        }
+                    var iframe = jQuery('#atRiskIframeContent');
+                    if (iframe.length) {
+                        iframe.attr('src', url);
+                        return false;
                     }
-                });
-                return true;
+
+                    jQuery(parent.document).find("atRiskIframeContent").each(function () {
+                        if (this.contentDocument == window.document) {
+                            // if the href of the iframe is not same as
+                            // the value of src attribute then reload it
+                            if (this.src != url) {
+                                this.src = this.src;
+                            }
+                        }
+                    });
+                    return true;
+
+                }
             }
         }
 

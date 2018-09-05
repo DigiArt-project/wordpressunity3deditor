@@ -34,7 +34,10 @@ $game_type_obj = wpunity_return_game_type($project_id);
 $gameSlug = $game_post->post_name;
 
 $scene_post = get_post($scene_id);
+
 $sceneSlug = $scene_post->post_title;
+$naming = stripos($sceneSlug, 'naming') ? true : false;
+
 
 $editgamePage = wpunity_getEditpage('game');
 $allGamesPage = wpunity_getEditpage('allgames');
@@ -63,8 +66,7 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
-
-$scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games');//first 3D scene id
+$scene_data = wpunity_getFirstSceneID_byProjectID($project_id,'chemistry_games'); //first 3D scene id
 $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
@@ -75,19 +77,19 @@ $preSavedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true) ? 
 
 if ($preSavedStrategies) {
 
-    $preSavedStrategies = json_decode($preSavedStrategies, true);
+	$preSavedStrategies = json_decode($preSavedStrategies, true);
 
 	$arr = [];
 	foreach ($preSavedStrategies as $key => $value){
 
-	    if ($value['naming']) {
-		    array_push ( $arr, $value['naming']);
-        } else {
-		    array_push ( $arr, $value['construction']);
-        }
-    }
+		if ($value['naming']) {
+			array_push ( $arr, $value['naming']);
+		} else {
+			array_push ( $arr, $value['construction']);
+		}
+	}
 
-    $preSavedStrategies = $arr;
+	$preSavedStrategies = $arr;
 }
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -98,15 +100,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	wpunity_addStrategy_APIcall($project_id);
 
-    wp_redirect($goBackTo_MainLab_link);
+	wp_redirect($goBackTo_MainLab_link);
 	exit;
 }
 
 if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
 	$saveEnabledMolecules = $_POST['availableMoleculesInput'];
 	update_post_meta($project_id, 'wpunity_exam_enabled_molecules', $saveEnabledMolecules);
-    wp_redirect($refresh_to_examPage);
-    exit;
+	wp_redirect($refresh_to_examPage);
+	exit;
 }
 
 get_header(); ?>
@@ -240,20 +242,50 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
                                     <h2 class="mdc-typography--title">Saved strategies</h2>
-                                    <ul id="saved-strategies">
 
-										<?php if ($preSavedStrategies) {
-											foreach ($preSavedStrategies as $key => $val) { ?>
-                                                <li class="mdc-list-item" id='<?php echo $key; ?>'>
-                                                    <span class="mdc-list-item__text"><?php echo json_encode($val); ?></span>&nbsp;
-                                                    <a onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project">
-                                                        <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
-                                                    </a>
-                                                </li>
+									<?php if ($naming) { ?>
+                                        <div id="saved-strategies" class="mdc-layout-grid__inner">
+
+											<?php if ($preSavedStrategies) {
+												$analytics_molecule_list = array('HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4');
+
+												foreach ($preSavedStrategies as $key => $val) {
+													$mols = array(0,0,0,0,0,0,0,0);
+													foreach ($analytics_molecule_list as $idx => $molecule) {
+														if (in_array( $molecule, $val)) {
+															$mols[$idx] = 1;
+														}
+													}
+													$mols = implode("", $mols); ?>
+
+                                                    <div class="mdc-layout-grid__cell--span-3 CenterContents" id='<?php echo $key;?>'>
+                                                        <iframe style="height: 334px;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
+                                                        <span style="display:inline-block;"><?php echo json_encode($val);?></span>&nbsp;
+                                                        <a style="display:inline-block;" onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer AlignIconToMiddle " aria-label="Delete game" title="Delete project">
+                                                            <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
+                                                        </a>
+
+                                                    </div>
+												<?php } ?>
 											<?php } ?>
-										<?php } ?>
 
-                                    </ul>
+                                        </div>
+									<?php } else { ?>
+
+                                        <ul id="saved-strategies">
+											<?php if ($preSavedStrategies) {
+												foreach ($preSavedStrategies as $key => $val) { ?>
+                                                    <li class="mdc-list-item" id='<?php echo $key; ?>'>
+                                                        <span class="mdc-list-item__text"><?php echo json_encode($val); ?></span>&nbsp;
+                                                        <a onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project">
+                                                            <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
+                                                        </a>
+                                                    </li>
+												<?php } ?>
+											<?php } ?>
+                                        </ul>
+
+									<?php } ?>
                                 </div>
 
                             </div>
@@ -449,6 +481,8 @@ get_header(); ?>
 
         jQuery("#add-strategy-btn").click(function() {
 
+
+            var naming = "<?php echo $naming;?>";
             var savedStrategiesList = jQuery( "#saved-strategies" );
 
             var new_id1 = makeid();
@@ -457,11 +491,41 @@ get_header(); ?>
             var strategy = jQuery("#molecule-json-field").val();
 
             if (strategy.length > 2) {
+
                 var strategyId = new_id1+"strat"+new_id2;
-                savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+                if (naming) {
+
+                    var molecule_list = ['HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4'];
+                    var mols = [0,0,0,0,0,0,0,0];
+                    for (var i = 0; i < molecule_list.length; i++) {
+
+                        if (inArray(molecule_list[i], JSON.parse(strategy))) {
+                            mols[i] = 1;
+                        }
+                    }
+                    mols = mols.join("");
+
+                    savedStrategiesList.append( '' +
+                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><iframe style="height: 334px;" id=frame-'+strategyId+' data-mols="'+ mols +'"></iframe><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></div>' +
+                        '');
+
+                    loadPISAClusterIframe('chemistrytool', mols, 'frame-'+strategyId);
+                } else {
+                    savedStrategiesList.append( '<li class="mdc-list-item" id='+strategyId+'><span class="mdc-list-item__text">'+ strategy+ '</span>&nbsp;<a onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></li>');
+                }
             }
 
+
             addStrategiesToInput();
+
+            function inArray(needle, haystack) {
+                var length = haystack.length;
+                for(var i = 0; i < length; i++) {
+                    if(haystack[i] == needle) return true;
+                }
+                return false;
+            }
+
         });
 
 
@@ -571,6 +635,30 @@ get_header(); ?>
 
             return text;
         }
+
+        jQuery( "#saved-strategies" ).find( "iframe" ).each(function(){
+            var mols = jQuery(this).attr('data-mols');
+            var id = jQuery(this).attr('id');
+            loadPISAClusterIframe('chemistrytool', mols, id);
+        });
+
+
+        function loadPISAClusterIframe(lab, molecules_arr, id) {
+
+            var ip_addr = "https://analytics.envisage-h2020.eu/?";
+
+            var url = ip_addr +
+                "lab=" + lab +
+                "&settings=" + molecules_arr;
+
+            var iframe = jQuery('#'+id);
+            if (iframe.length) {
+                iframe.attr('src', url);
+                return false;
+            }
+            return true;
+        }
+
 
     </script>
 
