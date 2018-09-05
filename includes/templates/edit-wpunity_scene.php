@@ -283,7 +283,9 @@ get_header(); ?>
 						<?php } ?>
 
 
-                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
+						<?php if($game_type_obj->string === "Chemistry"){ ?>
+                            <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
+						<?php } ?>
 
 					<?php } ?>
 
@@ -445,10 +447,6 @@ get_header(); ?>
 
                 </div>
             </div>
-
-            <!--<div class="mdc-layout-grid__cell--span-4" style="position: relative;  padding-bottom: 56.25%; /* 16:9 */  padding-top: 25px; height: 0;">
-						<iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
-					</div>-->
 
             <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
@@ -875,15 +873,6 @@ get_header(); ?>
 				?>
             </div>
 
-            <div class="mdc-layout-grid">
-                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Archetypal Clusters</h2>
-                <div class="mdc-layout-grid__inner">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                        <iframe id="scene-analytics-iframe" style="width: 500px; height: 600px;"></iframe>
-                    </div>
-                </div>
-            </div>
-
         </div>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
@@ -908,11 +897,13 @@ get_header(); ?>
 
 			<?php } ?>
 
-            <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <div style="position: relative; overflow: hidden; padding-top: 100%;">
-                    <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+			<?php if($game_type_obj->string === "Chemistry"){ ?>
+                <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
+                    <div style="position: relative; overflow: hidden; padding-top: 100%;">
+                        <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+                    </div>
                 </div>
-            </div>
+			<?php } ?>
 
 		<?php } ?>
 
@@ -1111,7 +1102,7 @@ get_header(); ?>
             wpunity_saveExpIDAjax();
         });
 
-        if (project_keys.gioID) {
+        if (project_keys.gioID && game_type === "chemistry") {
             ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
         }
 
@@ -1122,7 +1113,6 @@ get_header(); ?>
                 jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
             });
         }
-
 
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
@@ -1138,11 +1128,13 @@ get_header(); ?>
                 jQuery('#analyticsIframeFallback').hide();
                 jQuery('#analyticsIframeContainer').show();
 
+                var type = game_type === 'chemistry' ? game_type : 'energy3d' ;
+
                 var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
-                    "&lab=" + game_type +
+                    "&lab=" + type +
                     /*"&version=" + version +
                     "&location=" + location +*/
                     "&gamemaster_id=" + game_master_id;
