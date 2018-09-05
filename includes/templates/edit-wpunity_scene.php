@@ -883,20 +883,20 @@ get_header(); ?>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 1240px;">
-                    <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                <div style="position: relative; overflow: hidden; padding-top: 150%;">
+                    <iframe id="analyticsIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                 </div>
             </div>
 
             <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 1240px;">
-                    <iframe id="atRiskIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                <div style="position: relative; overflow: hidden; padding-top: 180%;">
+                    <iframe id="atRiskIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                 </div>
             </div>
 
             <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 1240px;">
-                    <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
+                <div style="position: relative; overflow: hidden; padding-top: 100%;">
+                    <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                 </div>
             </div>
 
@@ -1025,9 +1025,6 @@ get_header(); ?>
                 // Pause Rendering
                 isPaused = true;
                 jQuery("#pauseRendering").get(0).childNodes[1].innerText = "play_arrow";
-            
-                
-                
             });
         }
 
@@ -1133,18 +1130,6 @@ get_header(); ?>
                 loadAtRiskIframe(project_keys.expID);
             }
             // End Goedle Iframes
-
-
-            /*jQuery('#analyticsVersionSelector').on('change', function () {
-                analyticsVersionValue = this.value;
-                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-            });
-
-            jQuery('#analyticsLocationSelector').on('change', function () {
-                analyticsLocationValue = this.value;
-                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-            });*/
-
 
             function loadPISAClusterIframe(lab, energy_fields, chemistry) {
 
