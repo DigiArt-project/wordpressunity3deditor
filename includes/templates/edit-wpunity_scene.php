@@ -883,29 +883,9 @@ get_header(); ?>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-                <div class="mdc-layout-grid">
-
-                    <div class="mdc-layout-grid__inner CenterContents">
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
-                                <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
-                                <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
-                            </select>
-                        </div>
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
-                                <option value="Greece" selected>Greece</option>
-                                <option value="England">England</option>
-                                <option value="Italy">Italy</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <div style="min-height: 1240px;">
                     <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
-
             </div>
 
             <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
@@ -915,25 +895,6 @@ get_header(); ?>
             </div>
 
             <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <!--<div class="mdc-layout-grid">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-
-						<?php
-				/*						$strategies = wpunity_combineGameStrategies($project_id);
-										$strategies = json_encode($strategies);
-										*/?>
-
-                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php /*echo $strategies; */?>'>
-                            <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
-                            <div class="mdc-textfield__bottom-line"></div>
-                        </div>
-                        <br>
-                        <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
-                    </div>
-                </div>-->
-
                 <div style="min-height: 1240px;">
                     <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
@@ -1157,12 +1118,6 @@ get_header(); ?>
 
             var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
 
-            var versionSelector = document.getElementById("analyticsVersionSelector");
-            var locationSelector = document.getElementById("analyticsLocationSelector");
-
-            var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
-            var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
-
             if (game_type === "energy") {
                 loadPISAClusterIframe(game_type+'tool', energy_stats, null);
             } else {
@@ -1171,7 +1126,7 @@ get_header(); ?>
                 loadPISAClusterIframe(game_type+'tool', null, analytics_molecules_checklist);
             }
 
-            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
+            loadAnalyticsIframe(game_type);
 
             // Start Goedle Iframes
             if (project_keys.expID) {
@@ -1180,7 +1135,7 @@ get_header(); ?>
             // End Goedle Iframes
 
 
-            jQuery('#analyticsVersionSelector').on('change', function () {
+            /*jQuery('#analyticsVersionSelector').on('change', function () {
                 analyticsVersionValue = this.value;
                 loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
             });
@@ -1188,7 +1143,7 @@ get_header(); ?>
             jQuery('#analyticsLocationSelector').on('change', function () {
                 analyticsLocationValue = this.value;
                 loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-            });
+            });*/
 
 
             function loadPISAClusterIframe(lab, energy_fields, chemistry) {
@@ -1224,16 +1179,16 @@ get_header(); ?>
                 return true;
             }
 
-            function loadAnalyticsIframe(version, location, game_type) {
+            function loadAnalyticsIframe(game_type) {
 
                 var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
                     "&lab=" + game_type +
-                    "&version=" + version +
-                    "&gamemaster_id=" + game_master_id +
-                    "&location=" + location;
+                    /*"&version=" + version +
+                    "&location=" + location +*/
+                    "&gamemaster_id=" + game_master_id;
 
                 var iframe = jQuery('#analyticsIframeContent');
 

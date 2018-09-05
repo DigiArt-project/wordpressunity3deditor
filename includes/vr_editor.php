@@ -234,7 +234,7 @@ echo '</script>';
 </script>
 
 <!-- All go here -->
-<div id="vr_editor_main_div" class="VrEditorMainStyle" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" style="border:2px solid black">
+<div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
