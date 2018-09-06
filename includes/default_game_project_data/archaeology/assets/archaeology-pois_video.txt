@@ -77,6 +77,10 @@ Prefab:
       propertyPath: isRewardItem
       value: ___[poi_v_isreward]___
       objectReference: {fileID: 0}
+    - target: {fileID: 65002973632262576, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 007c17ee709168148aa4aa7afd9e1076, type: 2}
   m_IsPrefabParent: 0

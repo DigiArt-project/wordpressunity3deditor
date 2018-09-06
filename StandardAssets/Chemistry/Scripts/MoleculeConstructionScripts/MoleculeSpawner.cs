@@ -23,7 +23,7 @@ public class MoleculeSpawner : MonoBehaviour
     {
 
 		Debug.Log("Scene Id");
-        Debug.Log(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().buildIndex);
+        //Debug.Log(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().buildIndex);
         SpawnMolecule();
     }
 
