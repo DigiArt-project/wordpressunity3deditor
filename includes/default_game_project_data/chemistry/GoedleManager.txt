@@ -52,8 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staging: 0
-  app_key: 8b8b2b1627e9a21f3c3d15155b57ad11
-  api_key: 2e3242a609fae170b01e51ee928683f1
+  app_key: ___[g_app_key]___
+  api_key: ___[g_api_key]___
   APP_VERSION: Chemistry lab_CA_version
   APP_NAME: Cheistry lab
   GA_TRACKIND_ID: UA-89555283-6
