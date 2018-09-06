@@ -415,6 +415,13 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     cursor: default;
 }
 
+.TextUnselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* jimver04 additions */
 #backtotop {
     z-index : 100 !important;

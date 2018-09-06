@@ -188,7 +188,7 @@ get_header(); ?>
 
                                     <h2 class="mdc-typography--title">Available molecules to use in a strategy</h2>
 
-                                    <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
+                                    <ul id="sortable2" class="connectedSortable mdc-layout-grid__inner TextUnselectable" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23); background-color: rgba(0,0,0,.23);">
 										<?php
 										foreach ($molecules as $molecule) {
 											if (in_array($molecule['moleculeID'], $savedMoleculesVal)) { ?>
@@ -232,7 +232,7 @@ get_header(); ?>
 
                                 <div class="mdc-layout-grid__cell--span-12">
                                     <h2 class="mdc-typography--title">Active molecules</h2>
-                                    <ul id="sortable1" class="connectedSortable mdc-theme--secondary-light-bg mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23);">
+                                    <ul id="sortable1" class="connectedSortable TextUnselectable mdc-theme--secondary-light-bg mdc-layout-grid__inner" style="min-height: 110px; border: 4px solid rgba(63,81,181, .23);">
                                     </ul>
                                 </div>
 
