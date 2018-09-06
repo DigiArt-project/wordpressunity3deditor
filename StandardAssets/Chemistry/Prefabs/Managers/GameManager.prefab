@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4581228637943740}
   - component: {fileID: 114302560275996662}
+  - component: {fileID: 114873401914096500}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -54,3 +55,20 @@ MonoBehaviour:
   playerName: 
   playerClass: 
   playerSchoolName: 
+  playerProgress: 0
+  lastPosition: {x: 0, y: 0, z: 0}
+  lastRotation: {x: 0, y: 0, z: 0, w: 0}
+  totalNamedMols: 0
+  totalConstructedMols: 0
+--- !u!114 &114873401914096500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1840441812703892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9231baa106c089548be67a3b77394386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleKey: 293
