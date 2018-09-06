@@ -159,13 +159,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$sceneMetaType = 'scene';//default 'scene' MetaType (3js)
 	$game_type_chosen_slug = '';
 
-    $default_json = '';
+	$default_json = '';
 	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
 	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';$default_json = wpunity_getDefaultJSONscene('archaeology');}
     elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';$default_json = wpunity_getDefaultJSONscene('energy');}
     elseif($thegameType[0]->slug == 'chemistry_games'){
 		$game_type_chosen_slug = 'chemistry_games';
-        $default_json = wpunity_getDefaultJSONscene('chemistry');
+		$default_json = wpunity_getDefaultJSONscene('chemistry');
 		if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
         elseif($newSceneType == '2d'){$newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam2d';}
         elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
@@ -277,8 +277,15 @@ get_header(); ?>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
                         <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
-                        <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
-                        <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
+
+						<?php if($project_saved_keys['expID'] != ''){ ?>
+                            <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
+						<?php } ?>
+
+
+						<?php if($game_type_obj->string === "Chemistry"){ ?>
+                            <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
+						<?php } ?>
 
 					<?php } ?>
 
@@ -309,11 +316,11 @@ get_header(); ?>
 							$meta_json = get_post_meta($current_scene_id, 'wpunity_scene_json_input', true);
 
 							// Do not put esc_attr, crashes the universe in 3D
-                            if ( $game_type_obj->string === "Energy" ) {
-                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
-                            }else{
-                                $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
-                            }
+							if ( $game_type_obj->string === "Energy" ) {
+								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
+							}else{
+								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
+							}
 
 							// Find scene dir string
 							$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
@@ -440,10 +447,6 @@ get_header(); ?>
 
                 </div>
             </div>
-
-            <!--<div class="mdc-layout-grid__cell--span-4" style="position: relative;  padding-bottom: 56.25%; /* 16:9 */  padding-top: 25px; height: 0;">
-						<iframe id="scene-analytics-iframe" style=" position: absolute; top: 0; left: 0; width: 400px; height: 500px;"></iframe>
-					</div>-->
 
             <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
                       name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
@@ -625,9 +628,9 @@ get_header(); ?>
                                     </section>
 
                                     <section class="mdc-card__primary">
-                                        <?php if($game_type_obj->string != "Archaeology"){ ?>
+										<?php if($game_type_obj->string != "Archaeology"){ ?>
                                             <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-                                        <?php } ?>
+										<?php } ?>
                                         <!--Scene Type-->
 										<?php if($game_type_obj->string === "Chemistry"){ ?>
                                             <ul>
@@ -870,74 +873,37 @@ get_header(); ?>
 				?>
             </div>
 
-            <div class="mdc-layout-grid">
-                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Archetypal Clusters</h2>
-                <div class="mdc-layout-grid__inner">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                        <iframe id="scene-analytics-iframe" style="width: 500px; height: 600px;"></iframe>
-                    </div>
-                </div>
-            </div>
-
         </div>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
-                <div class="mdc-layout-grid">
 
-                    <div class="mdc-layout-grid__inner CenterContents">
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsVersionSelector" title="Select a version" class="mdc-select">
-                                <option value="0.0.0.1 - 17/8/2017 15:55" selected>0.0.0.1 - 17/8/2017 15:55</option>
-                                <option value="0.0.0.2 - 18/8/2017 05:55">0.0.0.2 - 18/8/2017 05:55</option>
-                            </select>
-                        </div>
-                        <div class="mdc-layout-grid__cell--span-6">
-                            <select id="analyticsLocationSelector" title="Select a location" class="mdc-select">
-                                <option value="Greece" selected>Greece</option>
-                                <option value="England">England</option>
-                                <option value="Italy">Italy</option>
-                            </select>
-                        </div>
+                <div id="analyticsIframeFallback" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+                </div>
+
+                <div id="analyticsIframeContainer" style="position: relative; overflow: hidden; padding-top: 150%; display: none;">
+                    <iframe id="analyticsIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+                </div>
+            </div>
+
+			<?php if($project_saved_keys['expID'] != ''){ ?>
+
+                <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
+                    <div id="atRiskIframeContainer" style="position: relative; overflow: hidden; padding-top: 180%;">
+                        <iframe id="atRiskIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                     </div>
                 </div>
 
-                <div style="min-height: 1240px;">
-                    <iframe id="analyticsIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-                </div>
+			<?php } ?>
 
-            </div>
-
-            <div class="panel" id="panel-3" role="tabpanel" aria-hidden="true">
-                <div style="min-height: 1240px;">
-                    <iframe id="atRiskIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
-                </div>
-            </div>
-
-            <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
-                <!--<div class="mdc-layout-grid">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-
-						<?php
-				/*						$strategies = wpunity_combineGameStrategies($project_id);
-										$strategies = json_encode($strategies);
-										*/?>
-
-                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="molecule-json-field" name="molecule-json-field" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" readonly value='<?php /*echo $strategies; */?>'>
-                            <label for="molecule-json-field" class="mdc-textfield__label"> Strategy - JSON Output</label>
-                            <div class="mdc-textfield__bottom-line"></div>
-                        </div>
-                        <br>
-                        <a href="javascript:void(0)" id="copy-output-btn" class="mdc-button" data-mdc-auto-init="MDCRipple">Copy</a>
+			<?php if($game_type_obj->string === "Chemistry"){ ?>
+                <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
+                    <div style="position: relative; overflow: hidden; padding-top: 100%;">
+                        <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
                     </div>
-                </div>-->
-
-                <div style="min-height: 1240px;">
-                    <iframe id="ddaIframeContent" style="min-width: 100%; min-height: inherit;"></iframe>
                 </div>
-            </div>
+			<?php } ?>
 
 		<?php } ?>
 
@@ -1064,9 +1030,6 @@ get_header(); ?>
                 // Pause Rendering
                 isPaused = true;
                 jQuery("#pauseRendering").get(0).childNodes[1].innerText = "play_arrow";
-            
-                
-                
             });
         }
 
@@ -1074,7 +1037,7 @@ get_header(); ?>
         jQuery(".mdc-dialog__backdrop").click(function(e){
             jQuery( "#compileCancelBtn" ).click();
         });
-        
+
 
         jQuery( "#compileCancelBtn" ).click(function(e) {
 
@@ -1082,7 +1045,7 @@ get_header(); ?>
             isPaused = false;
             jQuery("#pauseRendering").get(0).childNodes[1].innerText = "pause";
             animate();
-            
+
             // Get Pid of compile process
             var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
 
@@ -1139,7 +1102,7 @@ get_header(); ?>
             wpunity_saveExpIDAjax();
         });
 
-        if (project_keys.gioID) {
+        if (project_keys.gioID && game_type === "chemistry") {
             ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
         }
 
@@ -1151,89 +1114,30 @@ get_header(); ?>
             });
         }
 
-
         if (game_type === "energy" || game_type === "chemistry") {
             var game_master_id = "<?php echo get_current_user_id();?>";
 
             var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
 
-            var versionSelector = document.getElementById("analyticsVersionSelector");
-            var locationSelector = document.getElementById("analyticsLocationSelector");
+            loadAnalyticsIframe(game_type);
 
-            var analyticsVersionValue = versionSelector.options[versionSelector.selectedIndex].value;
-            var analyticsLocationValue = locationSelector.options[locationSelector.selectedIndex].value;
+            loadAtRiskIframe(project_keys.expID);
 
-            if (game_type === "energy") {
-                loadPISAClusterIframe(game_type+'tool', energy_stats, null);
-            } else {
+            function loadAnalyticsIframe(game_type) {
 
-                var analytics_molecules_checklist = '<?php echo $analytics_molecule_checklist; ?>';
-                loadPISAClusterIframe(game_type+'tool', null, analytics_molecules_checklist);
-            }
+                jQuery('#analyticsIframeFallback').hide();
+                jQuery('#analyticsIframeContainer').show();
 
-            loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue, game_type);
-
-            // Start Goedle Iframes
-            if (project_keys.expID) {
-                loadAtRiskIframe(project_keys.expID);
-            }
-            // End Goedle Iframes
-
-
-            jQuery('#analyticsVersionSelector').on('change', function () {
-                analyticsVersionValue = this.value;
-                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-            });
-
-            jQuery('#analyticsLocationSelector').on('change', function () {
-                analyticsLocationValue = this.value;
-                loadAnalyticsIframe(analyticsVersionValue, analyticsLocationValue);
-            });
-
-
-            function loadPISAClusterIframe(lab, energy_fields, chemistry) {
-
-                var url = "";
-                var ip_addr = "https://analytics.envisage-h2020.eu/?";
-
-                if (energy_fields) {
-
-                    if (!energy_fields.env) {energy_fields.env = 'mountain';}
-
-                    url = ip_addr +
-                        "lab=" + lab +
-                        "&env=" + energy_fields.env +
-                        "&map=" + parseInt(energy_fields.map, 10) +
-                        "&watts=" + energy_fields.watts +
-                        "&area=" + energy_fields.area +
-                        "&cost=" + energy_fields.cost;
-
-                } else {
-
-                    url = ip_addr +
-                        "lab=" + lab +
-                        "&settings=" + chemistry;
-
-                }
-
-                var iframe = jQuery('#scene-analytics-iframe');
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
-                return true;
-            }
-
-            function loadAnalyticsIframe(version, location, game_type) {
+                var type = game_type === 'chemistry' ? game_type : 'energy3d' ;
 
                 var url = "https://analytics.envisage-h2020.eu/?" +
                     "wpunity_game=" + project_id +
                     "&wpunity_scene=" + scene_id +
                     "&scene_type=scene" +
-                    "&lab=" + game_type +
-                    "&version=" + version +
-                    "&gamemaster_id=" + game_master_id +
-                    "&location=" + location;
+                    "&lab=" + type +
+                    /*"&version=" + version +
+                    "&location=" + location +*/
+                    "&gamemaster_id=" + game_master_id;
 
                 var iframe = jQuery('#analyticsIframeContent');
 
@@ -1260,25 +1164,29 @@ get_header(); ?>
 
             function loadAtRiskIframe(exp_id) {
 
-                var url = "https://envisage.goedle.io/at-risk/index.htm?" +
-                    "exp_id=" + exp_id;
+                if (exp_id) {
 
-                var iframe = jQuery('#atRiskIframeContent');
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
+                    var url = "https://envisage.goedle.io/at-risk/index.htm?" +
+                        "exp_id=" + exp_id;
 
-                jQuery(parent.document).find("atRiskIframeContent").each(function () {
-                    if (this.contentDocument == window.document) {
-                        // if the href of the iframe is not same as
-                        // the value of src attribute then reload it
-                        if (this.src != url) {
-                            this.src = this.src;
-                        }
+                    var iframe = jQuery('#atRiskIframeContent');
+                    if (iframe.length) {
+                        iframe.attr('src', url);
+                        return false;
                     }
-                });
-                return true;
+
+                    jQuery(parent.document).find("atRiskIframeContent").each(function () {
+                        if (this.contentDocument == window.document) {
+                            // if the href of the iframe is not same as
+                            // the value of src attribute then reload it
+                            if (this.src != url) {
+                                this.src = this.src;
+                            }
+                        }
+                    });
+                    return true;
+
+                }
             }
         }
 

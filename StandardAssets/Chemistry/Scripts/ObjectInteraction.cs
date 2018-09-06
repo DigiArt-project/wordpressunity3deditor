@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using goedle_sdk;
 
 public class ObjectInteraction : MonoBehaviour
@@ -9,6 +9,9 @@ public class ObjectInteraction : MonoBehaviour
 
     [SerializeField] private Canvas interactionCanvas;
     [SerializeField] private Canvas crosshair;
+
+    [SerializeField] private Material defaultMat; //used to store the default and the outiline materials.
+    [SerializeField] private Material outlinedMat;
 
     private enum Interactables {naming, construction,exit}
     [SerializeField] private Interactables interactable;
@@ -24,8 +27,6 @@ public class ObjectInteraction : MonoBehaviour
     void Start()
     {
         interactionCanvas.enabled = false;
-        //apply the default material
-        rend = GetComponent<Renderer>();
     }
 
     private void Update()
@@ -64,8 +65,7 @@ public class ObjectInteraction : MonoBehaviour
         {
             interactionCanvas.enabled = false;
             cursor.UnLockCursor();
-            //scoreManager.DisplayScore();
-            sceneLoader.LoadScene("S_MainMenu");
+            scoreManager.DisplayScore();
         }
         SoundManager.instance.PlaySingle(clip);
     }
