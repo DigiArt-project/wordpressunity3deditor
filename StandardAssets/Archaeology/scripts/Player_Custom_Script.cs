@@ -331,8 +331,11 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			Transform collidedObjectTransform = go.transform.GetChild (0);
 
+            float scaleArtifact = 5;
 
-			GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (10, 10, 10);
+            GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (scaleArtifact, scaleArtifact, scaleArtifact);
+
+            GameObject.Find("meshcontainer").transform.Translate(new Vector3(0, -1f, 0));
 
 			// Copy mesh
 			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
