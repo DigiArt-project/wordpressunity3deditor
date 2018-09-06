@@ -66,14 +66,20 @@ class GeneralImportSettings : AssetPostprocessor
             {
 
                 // Basic material (no shadows)
-               if (!path.Contains("Sky")){
+               if (!path.Contains("Sky"))
                    if (mat.mainTexture == null)
-                       mat.shader = Shader.Find("Standard");
+                       if (path.Contains("Elements") && path.Contains("Normal")){
+                           mat.shader = Shader.Find("Diffuse");
+                       }else if (path.Contains("Elements") && path.Contains("Transparent")){
+                           mat.shader = Shader.Find("Transparent/Bumped Diffuse");
+                       }else{
+                           mat.shader = Shader.Find("Standard");
+                       }
                    else
-                       mat.shader = Shader.Find("Unlit/Texture");
-                } else {
+                       {
+                         mat.shader = Shader.Find("Unlit/Texture");
+                       }
 
-                }
 
                 if (path.Contains("NoGlossy"))
                 {
@@ -83,7 +89,7 @@ class GeneralImportSettings : AssetPostprocessor
                 {
                     mat.shader = Shader.Find("Standard (Two Sided)");
                 }
-                /*else if (path.Contains("Transparent"))
+                else if (path.Contains("Transparent") && !path.Contains("Elements"))
                 {
                        mat.shader = Shader.Find("Standard");
 
@@ -96,7 +102,7 @@ class GeneralImportSettings : AssetPostprocessor
                        mat.DisableKeyword("_ALPHABLEND_ON");
                        mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
                        mat.enableInstancing = true;
-                }*/
+                }
             }
 
             //Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
