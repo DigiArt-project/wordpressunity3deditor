@@ -84,7 +84,7 @@ class GeneralImportSettings : AssetPostprocessor
                 {
                     mat.shader = Shader.Find("Standard (Two Sided)");
                 }
-                else if (path.Contains("Transparent"))
+                /*else if (path.Contains("Transparent"))
                 {
                        mat.shader = Shader.Find("Standard");
 
@@ -97,7 +97,7 @@ class GeneralImportSettings : AssetPostprocessor
                        mat.DisableKeyword("_ALPHABLEND_ON");
                        mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
                        mat.enableInstancing = true;
-                }
+                }*/
             }
 
             //Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
