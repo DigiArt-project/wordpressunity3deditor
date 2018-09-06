@@ -30,7 +30,7 @@ function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlat
     wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
     
 //    fwrite($fc, "8");
-    wpunity_compile_copy_StandardAssets($gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
+    wpunity_compile_copy_StandardAssets($gameID, $gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
     
 //    fwrite($fc, "9");
     
@@ -704,7 +704,7 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
 //==========================================================================================================================================
 //5. Copy StandardAssets depending the Game Type
 
-function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
+function wpunity_compile_copy_StandardAssets($gameID, $gameSlug,$gameType){
     $upload = wp_upload_dir();
     $upload_dir = $upload['basedir'];
     $upload_dir = str_replace('\\','/',$upload_dir);
@@ -731,7 +731,21 @@ function wpunity_compile_copy_StandardAssets($gameSlug,$gameType){
         }
     }
 
+    if($gameType == "Chemistry"){
+        $fileGo = $dest . '/' . 'goedle_io/Scripts/'. 'GoedleManager.prefab';
+        $GOcontent = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/GoedleManager.txt");
 
+        $project_saved_keys = wpunity_getProjectKeys($gameID);
+        $g_app_key = $project_saved_keys['gioID'];
+        $g_api_key = $project_saved_keys['expID'];
+
+        $file_content = str_replace("___[g_app_key]___",$g_app_key,$GOcontent);
+        $file_content = str_replace("___[g_api_key]___",$g_api_key,$file_content);
+
+        $create_file = fopen($fileGo, "w") or die("Unable to open file!");
+        fwrite($create_file, $file_content);
+        fclose($create_file);
+    }
 }
 //==========================================================================================================================================
 //==========================================================================================================================================
