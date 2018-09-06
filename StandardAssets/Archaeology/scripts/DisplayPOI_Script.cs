@@ -38,6 +38,43 @@ public class DisplayPOI_Script : MonoBehaviour {
 			gameObject.transform.Translate(0, -10000, 0);
 
 
+        bool boundsexist = false;
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+
+        // Structure of POI gameobject
+        // Title of POI
+        // obj name
+        // meshes
+
+        foreach (Transform childtransform in gameObject.transform) {
+            foreach (Transform childtransform2 in childtransform) {
+                Bounds cb = childtransform2.gameObject.GetComponent<MeshFilter>().mesh.bounds;
+
+                Debug.Log(gameObject.name);
+                Debug.Log(cb);
+
+                if (!boundsexist)
+                {
+                    boundsexist = true;
+                    bounds = cb; // new Bounds(Vector3.zero, Vector3.zero);
+                }
+                else
+                {
+                    bounds.Encapsulate(cb);
+                }
+
+                Debug.Log("encapsulate");
+                Debug.Log(cb);
+
+            }
+        }
+
+        BoxCollider collider = (BoxCollider)gameObject.GetComponent<Collider>();
+        collider.center = bounds.center; // - gameObject.transform.position;
+        collider.size = bounds.size;
+
+
+
 //		// Find if OVR mode
 //		ms = GameObject.Find ("mainCanvas").GetComponent<Menu_Script> ();
 //
