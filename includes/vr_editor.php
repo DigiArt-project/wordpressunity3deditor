@@ -170,7 +170,7 @@ echo '</script>';
         var archaeology_penalty = dataDrag.archaeology_penalty;
         var hv_penalty          = dataDrag.hv_penalty;
         var natural_penalty     = dataDrag.natural_penalty;
-        
+
         var isreward = dataDrag.isreward;
         var isCloned = dataDrag.isCloned;
         var isJoker = dataDrag.isJoker;
@@ -274,7 +274,7 @@ echo '</script>';
             <i class="material-icons">rotate_90_degrees_ccw</i>
         </a>
     </div>
-    
+
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
@@ -293,10 +293,10 @@ echo '</script>';
             <i class="material-icons">pause</i>
         </a>
     </div>
-    
+
     <div id="thirdPersonBlocker" class="ThirdPersonVrWalkInButtonStyle">
         <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">person</i></a>
+            <i class="material-icons">person</i></a>
     </div>
 
     <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
@@ -310,13 +310,13 @@ echo '</script>';
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
-<!--            <span id="scene_loading_message">Downloading ...</span>-->
-<!--            <div id="progressbar">-->
-<!--                <div id="scene_loading_bar"></div>-->
-<!--            </div>-->
+            <!--            <span id="scene_loading_message">Downloading ...</span>-->
+            <!--            <div id="progressbar">-->
+            <!--                <div id="scene_loading_bar"></div>-->
+            <!--            </div>-->
         </div>
 
-<!--        <div id="downloadIndicator" class="result"></div>-->
+        <!--        <div id="downloadIndicator" class="result"></div>-->
         <div id="result_download" class="result"></div>
         <div id="result_download2" class="result"></div>
     </div>
@@ -351,7 +351,7 @@ echo '</script>';
         <div class="tab" id="assetCategTab">
             <button id="allAssetsViewBt" class="tablinks active">All</button>
         </div>
-        
+
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList">
         </ul>
 
@@ -385,7 +385,7 @@ echo '</script>';
 
         <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
            style="vertical-align: text-bottom;">directions</i>
-        
+
         <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
                 class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
         </select>
@@ -404,8 +404,8 @@ echo '</script>';
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
-        <p class="mdc-typography--subheading1" style=""> Marker options</p>
-    
+        <p class="mdc-typography--subheading1"> Marker options</p>
+
         <table>
             <tr>
                 <td>
@@ -445,13 +445,14 @@ echo '</script>';
                 </td>
             </tr>
         </table>
-        
-        
-<!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
-<!--           style="vertical-align: text-bottom;">directions</i>-->
-<!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
-<!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
-<!--        </select>-->
+
+        <iframe style="height: 334px;" id="marker-iframe"></iframe>
+
+        <!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
+        <!--           style="vertical-align: text-bottom;">directions</i>-->
+        <!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
+        <!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
+        <!--        </select>-->
 
     </div>
 
@@ -551,7 +552,7 @@ echo '</script>';
 
     // Selected object name
     var selected_object_name = '';
-    
+
 
     // Add gui to gui container_3D_all
     var guiContainer = document.getElementById('gui-container');
@@ -627,7 +628,7 @@ echo '</script>';
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
-            
+
             envir.orbitControls.object.position.x = 50;
             envir.orbitControls.object.position.y = 50;
             envir.orbitControls.object.position.z = 50;
@@ -639,7 +640,7 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
-            
+
 
             envir.is2d = false;
             transform_controls.setMode("translate");
@@ -653,13 +654,13 @@ echo '</script>';
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
-            
+
             envir.is2d = true;
             transform_controls.setMode("rottrans");
 
             envir.scene.getObjectByName("SteveOld").visible = false;
             envir.scene.getObjectByName("Steve").visible = true;
-            
+
         }
 
         envir.orbitControls.object.updateProjectionMatrix();
@@ -675,7 +676,7 @@ echo '</script>';
         firstPersonBlockerBtn.style.display = 'none';
 
         var element = document.body;
-        
+
         // Ask the browser to lock the pointer
         element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 
@@ -683,9 +684,9 @@ echo '</script>';
 
         envir.makeFullScreen();
     }, false);
-    
-    
-    
+
+
+
     // First person view
     jQuery('#toggleUIBtn').click(function() {
         var btn = jQuery('#toggleUIBtn');
@@ -717,22 +718,22 @@ echo '</script>';
 
         envir.scene.getObjectByName("SteveOld").visible = true;
         envir.scene.getObjectByName("Steve").visible = false;
-        
+
         var btnDiv = jQuery('#thirdPersonBlocker');
         btnDiv[0].style.display = "none";
 
         var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
         btnFirst.click();
-    
+
     });
-    
-    
+
+
 
     // FULL SCREEN Toggle
     jQuery('#fullScreenBtn').click(function() {
 
         console.log(container_3D_all.style.width);
-        
+
         if (container_3D_all.style.width!=="100%") {
             envir.makeFullScreen();
         } else {
@@ -743,18 +744,18 @@ echo '</script>';
 
     // Autor rotate in 3D
     jQuery('#toggleTour3DaroundBtn').click(function() {
-        
+
         var btn = jQuery('#toggle-tour-around-btn');
 
         if (envir.is2d)
             jQuery("#editor-dimension-btn").click();
-      
-        
+
+
         if (btn.data('toggle') === 'off') {
-            
+
             console.log(btn);
             console.log("ROTATING !!!");
-            
+
             // envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
@@ -762,7 +763,7 @@ echo '</script>';
             btn.data('toggle', 'on');
 
         } else {
-            
+
             envir.orbitControls.autoRotate = false;
             btn.data('toggle', 'off');
         }
@@ -813,7 +814,7 @@ echo '</script>';
     var manager = new THREE.LoadingManager();
 
     manager.onProgress = function ( item, loaded, total ) {
-        
+
         if (total >= 2)
             document.getElementById("result_download").innerHTML = "Loading " + (loaded-1) + " out of " + (total-2);
     };
@@ -822,16 +823,16 @@ echo '</script>';
     manager.onLoad = function () {
 
         jQuery("#infophp").get(0).style.visibility= "hidden";
-        
+
         var objItem;
         var trs_tmp;
         var name;
-        
+
         for (name in resources3D  ) {
 
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
-            
+
             if (name != 'avatarYawObject') {
                 objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
                 objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -839,7 +840,7 @@ echo '</script>';
             }
         }
 
-        
+
         // place controls to last inserted obj
         if (objItem) {
             transform_controls.attach(objItem);
@@ -870,7 +871,7 @@ echo '</script>';
                 jQuery("#removeAssetBtn").show();
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
             } else {
-               
+
                 //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
                 //transform_controls.attach(intersects[0].object.parent);
                 //envir.renderer.setClearColor( 0xff00aa, 1);
@@ -891,7 +892,7 @@ echo '</script>';
         findSceneDimensions();
 
         envir.setHierarchyViewer();
-        
+
     };
 
     function hideObjectPropertiesPanels() {
@@ -915,16 +916,16 @@ echo '</script>';
         jQuery("#hierarchy-viewer").show();
         jQuery("#hierarchy-toggle-btn").show();
         jQuery("#divPauseRendering").show();
-        
+
         jQuery("#optionsPopupBtn").show();
 
         jQuery("#toggleTour3DaroundBtn").show();
         jQuery("#editor-dimension-btn").show();
         jQuery("#toggleView3rdPerson").show();
-        
+
         jQuery("#firstPersonBlocker").show();
         jQuery("#thirdPersonBlocker").show();
-        
+
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
@@ -945,11 +946,11 @@ echo '</script>';
         jQuery("#optionsPopupBtn").hide();
 
         jQuery("#divPauseRendering").hide();
-        
+
         jQuery("#editor-dimension-btn").hide();
         jQuery("#toggleTour3DaroundBtn").hide();
         jQuery("#toggleView3rdPerson").hide();
-        
+
         jQuery("#firstPersonBlocker").hide();
         jQuery("#thirdPersonBlocker").hide();
         isComposerOn = false;
@@ -971,7 +972,7 @@ $formRes->init($sceneToLoad);
 ?>
 
 <script>
-    
+
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
 
@@ -1010,7 +1011,7 @@ $formRes->init($sceneToLoad);
     {
         if(isPaused)
             return;
-        
+
         id_animation_frame = requestAnimationFrame( animate );
 
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
@@ -1018,15 +1019,15 @@ $formRes->init($sceneToLoad);
 //            id_animation_frame = requestAnimationFrame( animate );
 //        }, 1000 / 25 );
 
-        
+
         // Select the proper camera (orbit, or avatar, or thirdPersonView)
         var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
-        
+
         // Render it
         envir.renderer.render( envir.scene, curr_camera);
 
         envir.labelRenderer.render( envir.scene, curr_camera);
-        
+
         if (isComposerOn)
             envir.composer.render();
 
@@ -1082,20 +1083,17 @@ $formRes->init($sceneToLoad);
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
 
-    
-    
-    
-    
+
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
 
-            isPaused = !isPaused;
-            jQuery("#pauseRendering").get(0).childNodes[1].innerText = isPaused?"play_arrow":"pause";
+        isPaused = !isPaused;
+        jQuery("#pauseRendering").get(0).childNodes[1].innerText = isPaused?"play_arrow":"pause";
 
-            if(!isPaused)
-                animate();
-            
+        if(!isPaused)
+            animate();
+
     }, false);
-    
+
     animate();
 
 </script>

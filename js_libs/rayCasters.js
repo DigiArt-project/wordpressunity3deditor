@@ -112,7 +112,7 @@ function onMouseUpSelect(event ) {
 
         // If Steve is selected
         if( (intersects[0].object.name === 'Steve' || intersects[0].object.name === 'SteveShieldMesh'
-                  || intersects[0].object.name === 'SteveMesh' ) && event.button === 0 ){
+                || intersects[0].object.name === 'SteveMesh' ) && event.button === 0 ){
 
             envir.setBackgroundColorHierarchyViewer("avatarYawObject");
 
@@ -644,6 +644,54 @@ function displayMarkerProperties(event, name){
     // Show the whole popup div
     showWholePopupDiv(popUpMarkerPropertiesDiv, event);
 
+
+    // Load PISA diagram for selected marker
+    var scene_elements = envir.scene.children;
+
+    var energy_fields = [];
+
+    console.log(document.getElementById('wpunity_scene_json_input').value);
+
+    console.log(scene_elements);
+    console.log(name);
+
+    for (var i in scene_elements) {
+        if (name === scene_elements[i].name) {
+
+            /*energy_fields.env = scene_elements[i];
+            energy_fields.map = scene_elements[i];
+            energy_fields.watts = scene_elements[i];
+            energy_fields.area = scene_elements[i];
+            energy_fields.cost = scene_elements[i];*/
+        }
+    }
+
+    loadPISAMarkerIframe(energy_fields, 'marker-iframe');
+
+    function loadPISAMarkerIframe(energy_fields, id) {
+
+        var ip_addr = "https://analytics.envisage-h2020.eu/?";
+
+        if (!energy_fields.env) {energy_fields.env = 'mountain';}
+
+        var url = ip_addr +
+            "lab=energy3d" +
+            "&env=" + energy_fields.env +
+            "&map=" + parseInt(energy_fields.map, 10) +
+            "&watts=" + energy_fields.watts +
+            "&area=" + energy_fields.area +
+            "&cost=" + energy_fields.cost;
+
+
+        var iframe = jQuery('#'+id);
+        if (iframe.length) {
+            iframe.attr('src', url);
+            return false;
+        }
+        return true;
+
+    }
+
     // On popup change
     selectArchPenalty.change(function(e) {
         envir.scene.getObjectByName(name).archaeology_penalty = selectArchPenalty.val();
@@ -755,10 +803,18 @@ function createOption(container, txt, val, sel, dis, backgr){
 }
 
 
-function showWholePopupDiv(popUpDiv, event){
+function showWholePopupDiv(popUpDiv, event) {
+
     popUpDiv.show();
     popUpDiv[0].style.left = 1 + event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()   + 'px';
+
+    if (popUpDiv.selector === '#popUpMarkerPropertiesDiv') {
+        popUpDiv[0].style.top  = event.clientY - 2*(jQuery('#vr_editor_main_div').offset().bottom) + jQuery(window).scrollTop() + 'px';
+    } else {
+        popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+    }
+
+
     event.preventDefault();
 }
 
