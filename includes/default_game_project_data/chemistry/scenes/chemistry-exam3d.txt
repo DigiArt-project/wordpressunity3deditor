@@ -3572,7 +3572,7 @@ GameObject:
   - component: {fileID: 1459765200}
   - component: {fileID: 1459765201}
   m_Layer: 0
-  m_Name: PositionFlurocarbon
+  m_Name: PositionFluorine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4075,7 +4075,7 @@ Prefab:
         type: 2}
       propertyPath: element
       value: 
-      objectReference: {fileID: 1122513201129664, guid: f5f8839bd53973b40947aae745c53186,
+      objectReference: {fileID: 1122513201129664, guid: eb49259371351724e81d3c7015fad246,
         type: 2}
     - target: {fileID: 114866980105344842, guid: 3ebf901e892790149bed88a3380845a7,
         type: 2}
