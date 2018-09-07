@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd8d00bcf8747e4989dcbe0a54c14ed, type: 3}
   m_Name: Al
   m_EditorClassIdentifier: 
-  name: Al
+  name: Floride
   icon: {fileID: 21300000, guid: 7a4da745f1dcc0c4388ed87bbb390453, type: 3}
-  tag: Al
+  tag: F
