@@ -2081,7 +2081,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Molecules:
-  ___[molecule_prefabs]___
+  - {fileID: 1055941, guid: 00000000000000000000000000010559, type: 2}
+  - {fileID: 1051941, guid: 00000000000000000000000000010519, type: 2}
+  - {fileID: 1048941, guid: 00000000000000000000000000010489, type: 2}
+  - {fileID: 1045941, guid: 00000000000000000000000000010459, type: 2}
+  - {fileID: 1043941, guid: 00000000000000000000000000010439, type: 2}
+  - {fileID: 1033941, guid: 00000000000000000000000000010339, type: 2}
+  - {fileID: 1030941, guid: 00000000000000000000000000010309, type: 2}
   position: {fileID: 1586177784}
   molecule: {fileID: 0}
 --- !u!1 &834887055
@@ -4267,7 +4273,7 @@ Prefab:
         type: 2}
       propertyPath: element
       value: 
-      objectReference: {fileID: 1122513201129664, guid: f5f8839bd53973b40947aae745c53186,
+      objectReference: {fileID: 1122513201129664, guid: de1ef6f81de867b4b97fe96338337a17,
         type: 2}
     - target: {fileID: 114866980105344842, guid: 3ebf901e892790149bed88a3380845a7,
         type: 2}
