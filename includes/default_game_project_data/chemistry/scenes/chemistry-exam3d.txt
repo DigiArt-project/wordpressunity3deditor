@@ -2093,13 +2093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Molecules:
-  - {fileID: 1058941, guid: 00000000000000000000000000010589, type: 2}
-  - {fileID: 1051941, guid: 00000000000000000000000000010519, type: 2}
-  - {fileID: 1048941, guid: 00000000000000000000000000010489, type: 2}
-  - {fileID: 1045941, guid: 00000000000000000000000000010459, type: 2}
-  - {fileID: 1043941, guid: 00000000000000000000000000010439, type: 2}
-  - {fileID: 1033941, guid: 00000000000000000000000000010339, type: 2}
-  - {fileID: 1030941, guid: 00000000000000000000000000010309, type: 2}
+  ___[molecule_prefabs]___
   position: {fileID: 1586177784}
   molecule: {fileID: 0}
 --- !u!1 &834887055
@@ -3338,7 +3332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaulStrategy:
-   ___[defaul_strategy]___
+  ___[defaul_strategy]___
   availableMolecules:
   ___[available_Molecules]___
   strategy_naming: []
