@@ -70,6 +70,11 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 
 $project_saved_keys = wpunity_getProjectKeys($project_id);
 
+if (!$project_saved_keys['gioID']) {
+	echo "<script type='text/javascript'>alert(\"APP KEY not found. Please make sure that your are logged in, and your user account has been registered correctly.\");</script>";
+}
+
+
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
