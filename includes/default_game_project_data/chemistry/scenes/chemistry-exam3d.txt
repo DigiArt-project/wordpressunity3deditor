@@ -3338,7 +3338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaulStrategy:
-  ___[defaul_strategy]___
+   ___[defaul_strategy]___
   availableMolecules:
   ___[available_Molecules]___
   strategy_naming: []
@@ -3568,7 +3568,7 @@ Prefab:
         type: 2}
       propertyPath: element
       value: 
-      objectReference: {fileID: 1122513201129664, guid: f5f8839bd53973b40947aae745c53186,
+      objectReference: {fileID: 1122513201129664, guid: bc397e0a921a7f8468cd0a40aa34fb13,
         type: 2}
     - target: {fileID: 114866980105344842, guid: 3ebf901e892790149bed88a3380845a7,
         type: 2}
@@ -3578,7 +3578,7 @@ Prefab:
     - target: {fileID: 224093497561739098, guid: 3ebf901e892790149bed88a3380845a7,
         type: 2}
       propertyPath: m_LocalScale.x
-      value: 0.99994
+      value: 1.0124414
       objectReference: {fileID: 0}
     - target: {fileID: 224093497561739098, guid: 3ebf901e892790149bed88a3380845a7,
         type: 2}
