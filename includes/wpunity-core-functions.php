@@ -504,17 +504,14 @@ function wpunity_registrationUser_save( $user_id ) {
 
 		if ( is_wp_error( $response ) ) {
 			$error_message = $response->get_error_message();
-			print_r($error_message);
-
-			// Todo: @Tasos place an alert div with message
-			//die();
+			echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
+			die();
 		}
 
 	} else {
 
-		print_r("No Extra pass provided");
-		// Todo: @Tasos place an alert div with message
-
+		echo "<script type='text/javascript'>alert(\"No extra pass provided\");</script>";
+		die();
 	}
 }
 
@@ -548,9 +545,8 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 		if (is_wp_error( $token_request ) ) {
 
 			$error_message = $token_request->get_error_message();
-			print_r($error_message);
-			// Todo: @Tasos place an alert div with message
-			//die();
+			echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
+			die();
 
 		} else {
 
@@ -576,18 +572,17 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 			if (is_wp_error( $request ) ) {
 
 				$error_message = $request->get_error_message();
-				print_r($error_message);
-				// Todo: @Tasos place an alert div with message
-				//die();
+				echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
+				die();
 
 			} else {
 
 				if ((string)(int)$request['response']['code'] !== '201') {
 
-					print_r($request['response']['code']);
-					print_r($request['response']['message']);
-					// Todo: @Tasos place an alert div with message
-					//die();
+					$msg = $request['response']['message'];
+
+					echo "<script type='text/javascript'>alert(\"$msg\");</script>";
+					die();
 				}
 
 				$keys = json_decode($request[body]);
