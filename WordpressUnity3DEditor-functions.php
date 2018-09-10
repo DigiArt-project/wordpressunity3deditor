@@ -30,7 +30,7 @@ echo ini_get('max_input_time').chr(10);
 // DigiArt - Virtual Tour: 0
 // Envisage - Virtual Lab: 1
 // Default - Game Project: any other number
-$project_scope = 0;
+$project_scope = 1;
 
 
 //===================================== Styles & Scripts ====================================
@@ -283,7 +283,7 @@ function wpse_lost_password_redirect() {
     $confirm = ( isset($_GET['checkemail'] ) ? $_GET['checkemail'] : '' );
 
     if( $confirm ) {
-        wp_redirect( get_site_url( ).'/wpunity-main.php' );
+        wp_redirect( get_site_url( ).'/wpunity-main/' );
         exit;
     }
 }

@@ -35,48 +35,17 @@ function wpunity_addStrategy_APIcall($project_id){
 
 	} else {
 
-		$token = json_decode( $token_request[ body ] );
+		$code = (string)(int)$token_request['response']['code'];
 
-		$token = $token->token;
+		if ( strcmp($code,"200") || strcmp($code,"201") ) {
 
-		// Create ID from game version and project id
-		$rand_id = rand(0,1000);
-		$strategy_id = $user_id."".$project_id."".$rand_id;
+			$token = json_decode( $token_request[ body ] );
 
+			$token = $token->token;
 
-		$args = array(
-			'method'      => 'POST',
-			'timeout'     => 45,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'blocking'    => true,
-			'sslverify'   => 0,
-			'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
-			'body'        => json_encode( array(
-				'data' => array(
-					'type'       => 'strategy',
-					'id'         => $strategy_id,
-					'attributes' => array(
-						'config' => json_encode($allStrategies)
-					)
-				)
-			) ),
-			'cookies'     => array()
-		);
-
-		$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/", $args );
-
-		if ( is_wp_error( $request ) ) {
-
-			$error_message = $request->get_error_message();
-
-			echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
-
-		} else {
-
-			/*print_r( "strategies-request");
-			print_r( $request['response']['code'] );
-			print_r( $request['response']['message'] );*/
+			// Create ID from game version and project id
+			$rand_id = rand(0,1000);
+			$strategy_id = $user_id."".$project_id."".$rand_id;
 
 			$args = array(
 				'method'      => 'POST',
@@ -88,33 +57,89 @@ function wpunity_addStrategy_APIcall($project_id){
 				'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
 				'body'        => json_encode( array(
 					'data' => array(
-						'type'       => 'test',
+						'type'       => 'strategy',
+						'id'         => $strategy_id,
 						'attributes' => array(
-							'count' => 1000
+							'config' => json_encode($allStrategies)
 						)
 					)
-
 				) ),
 				'cookies'     => array()
 			);
 
-			$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
+			$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/", $args );
 
 			if ( is_wp_error( $request ) ) {
 
 				$error_message = $request->get_error_message();
+
 				echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
 
 			} else {
 
-				if ( (string) (int) $request['response']['code'] !== '201' ) {
+				$code = (string)(int)$request['response']['code'];
+				if ( strcmp($code,"200") || strcmp($code,"201") ) {
 
+					$args = array(
+						'method'      => 'POST',
+						'timeout'     => 45,
+						'redirection' => 5,
+						'httpversion' => '1.0',
+						'blocking'    => true,
+						'sslverify'   => 0,
+						'headers'     => array( 'content-type' => 'application/json', 'Authorization' => $token ),
+						'body'        => json_encode( array(
+							'data' => array(
+								'type'       => 'test',
+								'attributes' => array(
+									'count' => 1000
+								)
+							)
+
+						) ),
+						'cookies'     => array()
+					);
+
+					$request = wp_remote_post( "https://api-staging.goedle.io/apps/" . $project_keys['gioID'] . "/strategies/" . $strategy_id . "/test/", $args );
+
+					if ( is_wp_error( $request ) ) {
+
+						$error_message = $request->get_error_message();
+						echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
+
+					} else {
+
+						$code = (string)(int)$request['response']['code'];
+						if ( strcmp($code,"200") || strcmp($code,"201") ) {}
+						else {
+
+							$code = $request['response']['code'];
+							$msg = $request['response']['message'];
+							$body = json_decode( wp_remote_retrieve_body( $request ), true );
+							print_r($code." - ".$msg.". ".$body['error']);
+							die();
+						}
+					}
+
+				} else {
+
+					$code = $request['response']['code'];
 					$msg = $request['response']['message'];
-					echo "<script type='text/javascript'>alert(\"$msg\");</script>";
-
+					$body = json_decode( wp_remote_retrieve_body( $request ), true );
+					print_r($code." - ".$msg.". ".$body['error']);
+					die();
 				}
 			}
+
+		} else {
+
+			$code = $token_request['response']['code'];
+			$msg = $token_request['response']['message'];
+			$body = json_decode( wp_remote_retrieve_body( $token_request ), true );
+			print_r($code." - ".$msg.". ".$body['error']);
+			die();
 		}
+
 	}
 }
 
@@ -179,30 +204,30 @@ function wpunity_windEnergy_scene_stats($scene_id){
 
 
 	if (isset($sceneJsonARR['objects']))
-	if (count($sceneJsonARR['objects']) > 0){
-		foreach ($sceneJsonARR['objects'] as $key => $value) {
-			if ($key !== 'avatarYawObject') {
-				if ($value['categoryName'] === 'Producer') {
+		if (count($sceneJsonARR['objects']) > 0){
+			foreach ($sceneJsonARR['objects'] as $key => $value) {
+				if ($key !== 'avatarYawObject') {
+					if ($value['categoryName'] === 'Producer') {
 
-					$optCosts = get_post_meta($value['assetid'],'wpunity_producerOptCosts',true);
-					if($optCosts) {
-						$optCosts_size = $optCosts['size'];
-						$optCosts_cost = $optCosts['cost'];
-					}
-					$optGen = get_post_meta($value['assetid'],'wpunity_producerOptGen',true);
-					if($optGen) {
-						$optGen_power = $optGen['power'];
-					}
+						$optCosts = get_post_meta($value['assetid'],'wpunity_producerOptCosts',true);
+						if($optCosts) {
+							$optCosts_size = $optCosts['size'];
+							$optCosts_cost = $optCosts['cost'];
+						}
+						$optGen = get_post_meta($value['assetid'],'wpunity_producerOptGen',true);
+						if($optGen) {
+							$optGen_power = $optGen['power'];
+						}
 
-					$turbinesInfoGathered[] = ['producerID' => $value['assetid'],
-					                           'proWatts' => $optGen_power,
-					                           'proArea' => $optCosts_size * 3,
-					                           'proCost' => $optCosts_cost
-					];
+						$turbinesInfoGathered[] = ['producerID' => $value['assetid'],
+						                           'proWatts' => $optGen_power,
+						                           'proArea' => $optCosts_size * 3,
+						                           'proCost' => $optCosts_cost
+						];
+					}
 				}
 			}
 		}
-	}
 	$totalWatts = 0;$totalArea = 0;$totalCost = 0;$totalItems = 0;
 	foreach ($turbinesInfoGathered as $prod) {
 		$totalWatts += $prod['proWatts'];
@@ -500,13 +525,26 @@ function wpunity_registrationUser_save( $user_id ) {
 			'cookies' => array()
 		);
 
-		$response = wp_remote_post( "http://api-staging.goedle.io/users/", $args);
+		$response = wp_remote_post( "https://api-staging.goedle.io/users/", $args);
 
 		if ( is_wp_error( $response ) ) {
 			$error_message = $response->get_error_message();
 			echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
 			die();
 		}
+
+		$code = (string)(int)$response['response']['code'];
+		if ( strcmp($code,"200") || strcmp($code,"201") ) {
+
+		} else {
+
+			$code = $response['response']['code'];
+			$msg = $response['response']['message'];
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			print_r($code." - ".$msg.". ".$body['error']);
+			die();
+		}
+
 
 	} else {
 
@@ -541,7 +579,6 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 		$token_request = wp_remote_post( "http://api-staging.goedle.io/token/", $args);
 
-
 		if (is_wp_error( $token_request ) ) {
 
 			$error_message = $token_request->get_error_message();
@@ -550,49 +587,68 @@ function wpunity_createGame_GIO_request($project_id, $user_id){
 
 		} else {
 
-			$token = json_decode($token_request[body]);
+			$code = (string)(int)$token_request['response']['code'];
+			if ( strcmp($code,"200") || strcmp($code,"201") ) {
 
-			$token = $token->token;
+				$token = json_decode($token_request[body]);
 
-			$args = array(
-				'method' => 'POST',
-				'timeout' => 45,
-				'redirection' => 5,
-				'httpversion' => '1.0',
-				'blocking' => true,
-				'sslverify' => 0,
-				'headers' => array( 'content-type' => 'application/json', 'Authorization' => $token ),
-				'body' =>json_encode(array() ),
-				'cookies' => array()
-			);
+				$token = $token->token;
+
+				$args = array(
+					'method' => 'POST',
+					'timeout' => 45,
+					'redirection' => 5,
+					'httpversion' => '1.0',
+					'blocking' => true,
+					'sslverify' => 0,
+					'headers' => array( 'content-type' => 'application/json', 'Authorization' => $token ),
+					'body' =>json_encode(array() ),
+					'cookies' => array()
+				);
 
 
-			$request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
+				$request = wp_remote_post( "http://api-staging.goedle.io/apps/", $args);
 
-			if (is_wp_error( $request ) ) {
+				if (is_wp_error( $request ) ) {
 
-				$error_message = $request->get_error_message();
-				echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
-				die();
+					$error_message = $request->get_error_message();
+					echo "<script type='text/javascript'>alert(\" $error_message\");</script>";
+					die();
+
+				} else {
+
+					$code = (string)(int)$request['response']['code'];
+					if ( strcmp($code,"200") || strcmp($code,"201") ) {
+
+						$keys = json_decode($request[body]);
+
+						$app_key = $keys->app->app_key; //the return value for GIO id
+						$api_key = $keys->app->api_key;
+
+						// Save values to our DB
+						update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
+						update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
+
+
+					} else {
+
+						$code = $request['response']['code'];
+						$msg = $request['response']['message'];
+						$body = json_decode( wp_remote_retrieve_body( $request ), true );
+						print_r($code." - ".$msg.". ".$body['error']);
+						die();
+
+					}
+				}
 
 			} else {
 
-				if ((string)(int)$request['response']['code'] !== '201') {
+				$code = $token_request['response']['code'];
+				$msg = $token_request['response']['message'];
+				$body = json_decode( wp_remote_retrieve_body( $token_request ), true );
+				print_r($code." - ".$msg.". ".$body['error']);
+				die();
 
-					$msg = $request['response']['message'];
-
-					echo "<script type='text/javascript'>alert(\"$msg\");</script>";
-					die();
-				}
-
-				$keys = json_decode($request[body]);
-
-				$app_key = $keys->app->app_key; //the return value for GIO id
-				$api_key = $keys->app->api_key;
-
-				// Save values to our DB
-				update_post_meta( $project_id, 'wpunity_project_gioApKey', $app_key);
-				update_post_meta( $project_id, 'wpunity_project_gioAPIKey', $api_key);
 			}
 		}
 	}
@@ -768,7 +824,7 @@ Characteristics :
 				'wpunity_scene_environment' => 'fields',
 			),
 		);
- 
+
 		$thirdSceneData = array(
 			'post_title' => $thirdSceneTitle,
 			'post_content' => $content3,
@@ -1868,9 +1924,9 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_assepile_action_callback(){
 
-    //$fa = fopen("output_COMPILE.txt","w");
-    
-    
+	//$fa = fopen("output_COMPILE.txt","w");
+
+
 	$DS = DIRECTORY_SEPARATOR;
 	$os = 'win';  // Linux Unity3D is crappy  //strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
@@ -1896,38 +1952,38 @@ function wpunity_assepile_action_callback(){
 	}
 
 	$gameId = $_REQUEST['gameId'];
-	
+
 //	fwrite($fa, "aaaa");
 //    fwrite($fa, "\n");
 //    fwrite($fa, $gameId);
 //    fwrite($fa, "\n");
-    
+
 //    fwrite($fa, print_r(wp_get_post_terms($gameId), true));
 //    fwrite($fa, "1234566");
 //    fwrite($fa, $_REQUEST['gameId']);
 //    fwrite($fa, print_r($_REQUEST, true));
-    
+
 	$gameType = wp_get_post_terms( $gameId, 'wpunity_game_type' );
-    
- 
+
+
 	$assemply_success = wpunity_assemble_the_unity_game_project($gameId, $_REQUEST['gameSlug'],
-        $targetPlatform, $gameType[0]->name);
-    
+		$targetPlatform, $gameType[0]->name);
+
 //    fwrite($fa, "bbbb");
-	
+
 	// Wait 4 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
 	// Do not delete library folder if it takes too long
 	sleep(2);
 
 //	wp_die();
-	
-	
+
+
 	if ($assemply_success == 'true') {
 
 		$init_gcwd = getcwd(); // get cwd (wp-admin probably)
 		//-----------------------------
-        
+
 //        fwrite($fa, "ccccc");
 //        fclose($fa);
 		//--Uploads/myGameProjectUnity--
@@ -1944,7 +2000,7 @@ function wpunity_assepile_action_callback(){
 //        fwrite($ff, print_r(wpunity_getUnity_exe_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_api_folder(),true)."\n");
 //        fwrite($ff, print_r(wpunity_getRemote_server_path(),true)."\n");
-        
+
 
 //		fwrite($ff, print_r(wpunity_getUnity_local_or_remote(),true));
 
@@ -1957,9 +2013,9 @@ function wpunity_assepile_action_callback(){
 //        fwrite($ff, "\n");
 //        fwrite($ff, $os);
 //        fwrite($ff, "\n");
-        
-        
-		
+
+
+
 
 
 
@@ -2010,11 +2066,11 @@ goto :EOF
 		}
 
 		// 1 : Generate bat or sh
-        
+
 //        fwrite($ff, $game_dirpath.$DS."starter_artificial.".$os_bin);
-        
-		
-		
+
+
+
 		$myfile = fopen($game_dirpath.$DS."starter_artificial.".$os_bin, "w") or die("Unable to open file!");
 		fwrite($myfile, $txt);
 		fclose($myfile);
@@ -2024,23 +2080,23 @@ goto :EOF
 
 //		$fj = fopen("outputIII.txt","w");
 
-		
-		
+
+
 		if ($os === 'win') {
 			if(wpunity_getUnity_local_or_remote() != 'remote') {
-    
 
-			 
+
+
 				$unity_pid = shell_exec($compile_command);
 				$fga = fopen("execution_hint.txt", "w");
 				fwrite($fga, $compile_command);
 				fclose($fga);
 			} else {
-                
+
 //                fwrite($ff, "\n");
 //                fwrite($ff, "STARTING REMOTE 1");
 //                fwrite($ff, "\n");
-			    
+
 				// remote
 				$ftp_cre = wpunity_get_ftpCredentials();
 
@@ -2059,11 +2115,11 @@ goto :EOF
 				$startCompile_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=start";
 
 				// -------------- Zip the project to send it for remote compile -------------------
-                
+
 //                fwrite($ff, "\n");
 //                fwrite($ff, "STARTING REMOTE 2: ZIP");
 //                fwrite($ff, "\n");
-                
+
 				/* Exclude Files */
 				$exclude_files = array();
 				//$exclude_files[] = realpath($zip_file_name);
@@ -2111,11 +2167,11 @@ goto :EOF
 				$zip_close = $zip->close();
 
 				//--------------- FTP TRANSFER ------------------------------------------------
-                
+
 //                fwrite($ff, "\n");
 //                fwrite($ff, "STARTING REMOTE 3: FTP transfer");
 //                fwrite($ff, "\n");
-                
+
 				/* Connect using basic FTP */
 				$connect_it = ftp_connect($ftp_host);
 
@@ -2151,11 +2207,11 @@ goto :EOF
 //				fwrite($fj, "UNZIP URL". $unzip_url);
 
 				//------------------ UNZIP AND COMPILE --------------------------
-                
+
 //                fwrite($ff, "\n");
 //                fwrite($ff, "STARTING REMOTE 3: UNZIP and compile");
 //                fwrite($ff, "\n");
-                
+
 				if (file_get_contents($unzip_url)) //, array("timeout"=>1), $info) )
 				{
 
@@ -2189,7 +2245,7 @@ goto :EOF
 
 		echo $unity_pid;
 	}
-    //fclose($ff);
+	//fclose($ff);
 	wp_die();
 }
 
