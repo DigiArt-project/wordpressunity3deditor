@@ -655,27 +655,32 @@ function displayMarkerProperties(event, name){
     console.log(scene_elements);
     console.log(name);
 
-    for (var i in scene_elements) {
-        if (name === scene_elements[i].name) {
+    loadPISAMarkerIframes(energy_fields);
 
-            /*energy_fields.env = scene_elements[i];
-            energy_fields.map = scene_elements[i];
-            energy_fields.watts = scene_elements[i];
-            energy_fields.area = scene_elements[i];
-            energy_fields.cost = scene_elements[i];*/
-        }
-    }
+    function loadPISAMarkerIframes(energy_fields) {
 
-    loadPISAMarkerIframe(energy_fields, 'marker-iframe');
+        var turbine1 = {
+            watts: 200,
+            area: 2,
+            cost: 5
+        };
+        var turbine2 = {
+            watts: 200,
+            area: 2,
+            cost: 5
+        };
+        var turbine3 = {
+            watts: 200,
+            area: 2,
+            cost: 5
+        };
 
-    function loadPISAMarkerIframe(energy_fields, id) {
-
-        var ip_addr = "https://analytics.envisage-h2020.eu/?";
 
         if (!energy_fields.env) {energy_fields.env = 'mountain';}
 
-        var url = ip_addr +
-            "lab=energy3d" +
+        var url = "https://analytics.envisage-h2020.eu/?" +
+            /*"lab=energy3d" +*/
+            "lab=energytool" +
             "&env=" + energy_fields.env +
             "&map=" + parseInt(energy_fields.map, 10) +
             "&watts=" + energy_fields.watts +
@@ -683,13 +688,28 @@ function displayMarkerProperties(event, name){
             "&cost=" + energy_fields.cost;
 
 
-        var iframe = jQuery('#'+id);
-        if (iframe.length) {
-            iframe.attr('src', url);
+
+
+        var iframe1 = jQuery('#turbine1-iframe');
+        var iframe2 = jQuery('#turbine2-iframe');
+        var iframe3 = jQuery('#turbine3-iframe');
+
+        if (iframe1.length) {
+            iframe1.attr('src', url);
             return false;
         }
-        return true;
 
+        if (iframe2.length) {
+            iframe2.attr('src', url);
+            return false;
+        }
+
+        if (iframe3.length) {
+            iframe3.attr('src', url);
+            return false;
+        }
+
+        return true;
     }
 
     // On popup change
@@ -810,6 +830,7 @@ function showWholePopupDiv(popUpDiv, event) {
 
     if (popUpDiv.selector === '#popUpMarkerPropertiesDiv') {
         popUpDiv[0].style.top  = event.clientY - 2*(jQuery('#vr_editor_main_div').offset().bottom) + jQuery(window).scrollTop() + 'px';
+        popUpDiv[0].style.left = 0;
     } else {
         popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
     }

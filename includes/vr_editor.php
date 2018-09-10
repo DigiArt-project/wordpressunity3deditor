@@ -397,7 +397,7 @@ echo '</script>';
 
     <!-- Interface for Changing the Marker properties -->
     <div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 240px; max-width:300px; display:none">
+         style="min-width: 100%; width: auto;">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
            onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
@@ -406,47 +406,66 @@ echo '</script>';
 
         <p class="mdc-typography--subheading1"> Marker options</p>
 
-        <table>
-            <tr>
-                <td>
-                    <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
-                </td>
-                <td>
-                    <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
-                </td>
-                <td>
-                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                </td>
-            </tr>
 
-            <tr>
-                <td>
-                    <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
-                </td>
-                <td>
-                    <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
-                    </select>
-                </td>
-                <td>
-                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                </td>
-            </tr>
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
 
-            <tr>
-                <td>
-                    <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
-                </td>
-                <td>
-                    <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
-                    </select>
-                </td>
-                <td>
-                    <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                </td>
-            </tr>
-        </table>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
+                            </td>
+                            <td>
+                                <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
+                            </td>
+                            <td>
+                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                            </td>
+                        </tr>
 
-        <iframe style="height: 334px;" id="marker-iframe"></iframe>
+                        <tr>
+                            <td>
+                                <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
+                            </td>
+                            <td>
+                                <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
+                                </select>
+                            </td>
+                            <td>
+                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
+                            </td>
+                            <td>
+                                <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
+                                </select>
+                            </td>
+                            <td>
+                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                    <iframe style="height: 334px;" id="turbine1-iframe"></iframe>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                    <iframe style="height: 334px;" id="turbine2-iframe"></iframe>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                    <iframe style="height: 334px;" id="turbine3-iframe"></iframe>
+                </div>
+
+            </div>
+        </div>
+
+
 
         <!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
         <!--           style="vertical-align: text-bottom;">directions</i>-->
