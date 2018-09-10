@@ -753,7 +753,6 @@ echo '</script>';
 
         if (btn.data('toggle') === 'off') {
 
-            console.log(btn);
             console.log("ROTATING !!!");
 
             // envir.orbitControls.enableRotate = true;
@@ -1072,7 +1071,7 @@ $formRes->init($sceneToLoad);
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
 
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
-    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'click', onMouseUpSelect, false );
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseSelect, false );
 
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'contextmenu', contextMenuClick, false );
 

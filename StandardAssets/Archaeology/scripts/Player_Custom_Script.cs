@@ -23,8 +23,11 @@ public class Player_Custom_Script : MonoBehaviour {
 	private RectTransform imageGreenBarRect;
 	private GameObject directionalArrow;
 	private GameObject rewardObject;
+    private float sizeNormalizationFactor;
 
-	void Start () {
+
+
+    void Start () {
 		// Get all pois and transform the array to a list
 		pois = getPOIs();
 		poisList = new List<GameObject>(pois);
@@ -151,9 +154,10 @@ public class Player_Custom_Script : MonoBehaviour {
 
 				// Scaling
 				if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-					Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale - 30 * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
 
-					if (targetScale.x > 0)
+                    Vector3 targetScale = GameObject.Find ("meshcontainer").transform.localScale - 5/sizeNormalizationFactor * Input.GetAxis ("Mouse ScrollWheel") * (new Vector3 (1, 1, 1));
+
+				//if (targetScale.x > 0)
 						GameObject.Find ("meshcontainer").transform.localScale =
 							Vector3.Lerp (GameObject.Find ("meshcontainer").transform.localScale, targetScale, 10 * Time.deltaTime);
 				}
@@ -331,11 +335,18 @@ public class Player_Custom_Script : MonoBehaviour {
 
 			Transform collidedObjectTransform = go.transform.GetChild (0);
 
-            float scaleArtifact = 5;
+
+
+			Bounds boundsOfArtifact = estimateBounds(collidedObjectTransform);
+
+			sizeNormalizationFactor = Mathf.Max(Mathf.Max(boundsOfArtifact.size.x, boundsOfArtifact.size.y), boundsOfArtifact.size.z);
+
+            float scaleArtifact = 4 / sizeNormalizationFactor;
 
             GameObject.Find ("meshcontainer").transform.localScale = new Vector3 (scaleArtifact, scaleArtifact, scaleArtifact);
 
-            GameObject.Find("meshcontainer").transform.Translate(new Vector3(0, -1f, 0));
+            GameObject.Find("meshcontainer").transform.Translate(new Vector3(0, -1, 0)); // -boundsOfArtifact.center.z));
+
 
 			// Copy mesh
 			Instantiate(collidedObjectTransform, GameObject.Find ("meshcontainer").transform);
@@ -351,6 +362,26 @@ public class Player_Custom_Script : MonoBehaviour {
 			vanishInfoPanel ();
 		}
 	}
+
+
+    // Estimate bounds of the artifact in order to scale it properly when clicked
+    Bounds estimateBounds(Transform t){
+
+        bool boundsexist = false;
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+
+        foreach (Transform childtransform2 in t) {
+            Bounds cb = childtransform2.gameObject.GetComponent<MeshFilter>().mesh.bounds;
+
+            if (!boundsexist) {
+                boundsexist = true;
+                bounds = cb;
+            } else
+                bounds.Encapsulate(cb);
+        }
+        return bounds;
+    }
+
 
 	void appearExitButton(){
 		GameObject.Find ("bt_scene_exit").transform.Translate(0, - 230, 0);
