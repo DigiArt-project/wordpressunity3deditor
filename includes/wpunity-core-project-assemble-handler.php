@@ -270,7 +270,11 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
 
     // Get the scenes
     $custom_query2 = new WP_Query( $custom_query_args2 );
-
+    
+    $ff = fopen("output_clone3.txt","w");
+    
+    $tabClones = [];
+    
     // Output custom query loop
     if ( $custom_query2->have_posts() ) :
         while ( $custom_query2->have_posts() ) :
@@ -282,20 +286,25 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);
             
-            $ff = fopen("output_clone.txt","w");
-            fwrite($ff, print_r($sceneJsonARR, true));
-            fclose($ff);
-            
-
             $tempScenearr = $sceneJsonARR;
             foreach ($tempScenearr['objects'] as $key => $value ) {
                 if ($key != 'avatarYawObject') {
-                    $assetsids[] =  $value['assetid'];
+
+                    
+                    if(!in_array($value['fnObjID'], $tabClones)){
+                        $assetsids[] =  $value['assetid'];
+                    }
+    
+                    $tabClones[] = $value['fnObjID'];
                 }
             }
         endwhile;
     endif;
-
+    
+    fwrite($ff, print_r($tabClones, true));
+    
+    fclose($ff);
+    
     $assetsids = array_unique($assetsids);
     wp_reset_postdata();
 
