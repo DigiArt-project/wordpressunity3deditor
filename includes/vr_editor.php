@@ -1039,6 +1039,8 @@ $formRes->init($sceneToLoad);
     {
         var i;
 
+        //console.log("1", envir.avatarControls.getObject().rotation._y);
+        
         envir.orbitControls.update();
 
         updatePointerLockControls();
@@ -1065,6 +1067,10 @@ $formRes->init($sceneToLoad);
 
             updatePositionsPhpAndJavsFromControlsAxes();
         }
+
+
+        //console.log("2", envir.avatarControls.getObject().rotation._y);
+        //console.log("B:" , envir.avatarControls.getObject().rotation._y);
     }
 
     // Select event listener

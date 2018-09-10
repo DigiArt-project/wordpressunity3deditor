@@ -281,6 +281,11 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
 
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);
+            
+            $ff = fopen("output_clone.txt","w");
+            fwrite($ff, print_r($sceneJsonARR, true));
+            fclose($ff);
+            
 
             $tempScenearr = $sceneJsonARR;
             foreach ($tempScenearr['objects'] as $key => $value ) {
@@ -288,8 +293,6 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
                     $assetsids[] =  $value['assetid'];
                 }
             }
-
-
         endwhile;
     endif;
 
