@@ -126,8 +126,6 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/node,phpstorm
 /.idea/
-!/node_modules/
-/node_modules/
 StandardAssets/Chemistry/Fonts/TextMesh Pro.meta
 StandardAssets/Chemistry/Fonts/TextMesh Pro/
 StandardAssets/Chemistry/Materials/LiquidMaterials.meta
