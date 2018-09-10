@@ -63,7 +63,6 @@ function onMouseDoubleClickFocus( event , objectName) {
         selectorMajor(event, envir.scene.getObjectByName(objectName) );
     }
 
-
     // // This makes the camera to go on top of the selected item
     if (envir.is2d) {
         envir.orbitControls.target.x = transform_controls.object.position.x;
@@ -87,7 +86,9 @@ function onMouseDoubleClickFocus( event , objectName) {
  *
  * @param event
  */
-function onMouseUpSelect(event ) {
+function onMouseSelect(event ) {
+
+    console.log(event);
 
     event.preventDefault();
     event.stopPropagation();
@@ -219,7 +220,7 @@ function selectorMajor(event, objectSel){
 
 function contextMenuClick(event){
 
-    onMouseUpSelect(event);
+    onMouseSelect(event);
 
 }
 

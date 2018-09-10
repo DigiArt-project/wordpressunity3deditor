@@ -37,7 +37,6 @@ public class DisplayPOI_Script : MonoBehaviour {
 		if (isRewardItem)
 			gameObject.transform.Translate(0, -10000, 0);
 
-
         bool boundsexist = false;
         Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
 
@@ -49,23 +48,12 @@ public class DisplayPOI_Script : MonoBehaviour {
         foreach (Transform childtransform in gameObject.transform) {
             foreach (Transform childtransform2 in childtransform) {
                 Bounds cb = childtransform2.gameObject.GetComponent<MeshFilter>().mesh.bounds;
-
-                Debug.Log(gameObject.name);
-                Debug.Log(cb);
-
-                if (!boundsexist)
-                {
+                if (!boundsexist) {
                     boundsexist = true;
                     bounds = cb; // new Bounds(Vector3.zero, Vector3.zero);
-                }
-                else
-                {
+                } else {
                     bounds.Encapsulate(cb);
                 }
-
-                Debug.Log("encapsulate");
-                Debug.Log(cb);
-
             }
         }
 
