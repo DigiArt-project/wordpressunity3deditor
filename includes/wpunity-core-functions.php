@@ -57,7 +57,7 @@ function wpunity_addStrategy_APIcall($project_id){
 					'type'       => 'strategy',
 					'id'         => $strategy_id,
 					'attributes' => array(
-						'config' => $allStrategies
+						'config' => json_encode($allStrategies)
 					)
 				)
 			) ),
