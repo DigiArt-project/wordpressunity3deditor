@@ -388,15 +388,33 @@ function wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform){
     $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
     $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
-
-    $assetIds = wpunity_fetch_assetids_in_scenes($gameSlug);
-
-    foreach ($assetIds as $asset_id)
-        wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $gameSlug, $targetPlatform);
+    
+    $res = wpunity_fetch_assetids_in_scenes($gameSlug);
+    
+    $assetIds = $res[0];
+    $neededObj = $res[1]; // clones that do need obj
+    
+    $assetsAlreadyIncluded = [];
+    
+    for ($i = 0 ; $i < count($assetIds); $i++ )
+    {
+        if (!in_array($assetIds[$i], $assetsAlreadyIncluded)){
+            wpunity_compile_assets_cre($game_path, $assetIds[$i], $handybuilder_file, $gameSlug, $targetPlatform, $neededObj[$i]);
+            $assetsAlreadyIncluded[] = $assetIds[$i];
+        }
+    }
 }
 
 //Import assets to HandyBuilder (function internal)
-function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $gameSlug, $targetPlatform){
+/**
+ * @param $game_path
+ * @param $asset_id
+ * @param $handybuilder_file
+ * @param $gameSlug
+ * @param $targetPlatform
+ * @param $includeObj  :  Not always wanted to include obj. Clones should not include their obj which has the same id with its prototype (only in the case both exist in the scene).
+ */
+function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $gameSlug, $targetPlatform, $includeObj){
 
     //Create the folder of the Model(Asset)
     $asset_post = get_post($asset_id);
@@ -405,68 +423,71 @@ function wpunity_compile_assets_cre($game_path, $asset_id, $handybuilder_file, $
 
     //Copy files of the Model
 
-    //OBJ FILE
-    $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true);
-    if(is_numeric($objID)){
-        $asset_type = get_the_terms( $asset_id, 'wpunity_asset3d_cat' );
-        $attachment_post = get_post($objID);
-        $attachment_file = $attachment_post->guid;
-        $attachment_tempname = str_replace('\\', '/', $attachment_file);
-        $attachment_name = pathinfo($attachment_tempname);
-        $new_file = $folder .'/' . $attachment_name['filename'] . '.obj';
-
-        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room'){
-            $new_file = $folder .'/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
+    if ($includeObj) {
+        //OBJ FILE
+        $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true);
+        if (is_numeric($objID)) {
+            $asset_type = get_the_terms($asset_id, 'wpunity_asset3d_cat');
+            $attachment_post = get_post($objID);
+            $attachment_file = $attachment_post->guid;
+            $attachment_tempname = str_replace('\\', '/', $attachment_file);
+            $attachment_name = pathinfo($attachment_tempname);
+            $new_file = $folder . '/' . $attachment_name['filename'] . '.obj';
+        
+            if ($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room') {
+                $new_file = $folder . '/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
+            }
+        
+            copy($attachment_file, $new_file);
+        
+            if ($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room')
+                wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
+            else
+                wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, '');
+        
+            $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name . '/' . $attachment_name['filename'] . '.obj';
+        
+            if ($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room') {
+                $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .
+                    '/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
+            }
+        
+            wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
         }
-
-        copy($attachment_file, $new_file);
-
-        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room')
-            wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, 'CollidersNoOptimization');
-        else
-            wpunity_compile_objmeta_cre($folder, $attachment_name['filename'], $objID, '');
-
-        $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .'/' . $attachment_name['filename'] . '.obj';
-
-        if($asset_type[0]->name == 'Site' || $asset_type[0]->name == 'Room'){
-            $new_file_path_forCS = 'Assets/models/' . $asset_post->post_name .
-                '/' . $attachment_name['filename'] . 'CollidersNoOptimization.obj';
-        }
-
-        wpunity_add_in_HandyBuilder_cs($handybuilder_file, $new_file_path_forCS, null);
-    }
-
+    
         //MTL FILE
         $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true);
-        if(is_numeric($mtlID)){
+        if (is_numeric($mtlID)) {
             $attachment_post = get_post($mtlID);
             $attachment_file = $attachment_post->guid;
             $attachment_tempname = str_replace('\\', '/', $attachment_file);
             $attachment_name = pathinfo($attachment_tempname);
-            $new_file = $folder .'/' . $attachment_name['filename'] . '.mtl';
-            copy($attachment_file,$new_file);
+            $new_file = $folder . '/' . $attachment_name['filename'] . '.mtl';
+            copy($attachment_file, $new_file);
         }
-
-    //Diffusion Image FILE
-    $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);
-    foreach($difimgID as $difimg_ID) {
-        if(is_numeric($difimg_ID)){
-            $attachment_post = get_post($difimg_ID);
-
-            $attachment_file = $attachment_post->guid;
-
-            $attachment_tempname = str_replace('\\', '/', $attachment_file);
-            $attachment_name = pathinfo($attachment_tempname);
-
-            $ending = 'jpg';
-            if ($attachment_post->post_mime_type=='image/png')
-                $ending = 'png';
-
-            $new_file = $folder .'/' . $attachment_name['filename'] . '.' . $ending;
-            copy($attachment_file,$new_file);
+    
+        //Diffusion Image FILE
+        $difimgID = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);
+        foreach ($difimgID as $difimg_ID) {
+            if (is_numeric($difimg_ID)) {
+                $attachment_post = get_post($difimg_ID);
+            
+                $attachment_file = $attachment_post->guid;
+            
+                $attachment_tempname = str_replace('\\', '/', $attachment_file);
+                $attachment_name = pathinfo($attachment_tempname);
+            
+                $ending = 'jpg';
+                if ($attachment_post->post_mime_type == 'image/png')
+                    $ending = 'png';
+            
+                $new_file = $folder . '/' . $attachment_name['filename'] . '.' . $ending;
+                copy($attachment_file, $new_file);
+            }
         }
     }
-
+    
+    
     //Video FILE
     $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true); // Video ID
     if(is_numeric($videoID) && $targetPlatform !== "WebGL"){

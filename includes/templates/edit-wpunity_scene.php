@@ -16,7 +16,7 @@ $game_type_obj = wpunity_return_game_type($project_id);
 
 $project_saved_keys = wpunity_getProjectKeys($project_id);
 
-if (!$project_saved_keys['gioID']) {
+if (!$project_saved_keys['gioID'] && $project_scope === 1) { // In Envisage only
 	echo "<script type='text/javascript'>alert(\"APP KEY not found. Please make sure that your user account has been registered correctly, and you have loaded the correct page\");</script>";
 }
 

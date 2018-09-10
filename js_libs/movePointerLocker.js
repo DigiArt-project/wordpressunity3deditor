@@ -36,6 +36,8 @@ function initPointerLock() {
 
         var pointerlockchange = function (event) {
 
+
+
             if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
                 //------------ AVATAR ---------------------------
                 avatarControlsEnabled = true;
@@ -43,16 +45,17 @@ function initPointerLock() {
                 envir.avatarControls.enabled = true;
                 envir.orbitControls.enabled = false;
 
-
-                //envir.cameraOrbit.getObjectByName("recycleBin").visible = false;
                 firstPersonBlocker.style.display = 'none';
+
+
 
                 // When in AVATAR the avatarControls position is the orbit controls target
                 envir.avatarControls.getObject().position = envir.orbitControls.target;
 
-
                 envir.avatarControls.getObject().children[0].position = envir.orbitControls.target;
                 envir.avatarControls.getObject().children[1].position = envir.orbitControls.target;
+
+                //console.log("A:" , envir.avatarControls.getObject().rotation._y);
 
                 //console.log("AVATAR", envir.avatarControls.getObject().rotation.y);
                 //envir.avatarControls.getObject().position.y = 1.8;
@@ -61,6 +64,7 @@ function initPointerLock() {
                 //shd("envir.avatarControls.getObject().position.z", envir.avatarControls.getObject().position.z);
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
+
 
 
 
@@ -75,6 +79,8 @@ function initPointerLock() {
                 //if (envir.avatarControls.getObject().rotation.y < - Math.PI /2)
                 //    envir.avatarControls.getObject().rotation.y += 0.85;
 
+                console.log("4", envir.avatarControls.getObject().rotation._y);
+
                 // envir.cameraOrbit.getObjectByName("recycleBin").visible=true;
                 firstPersonBlocker.style.display = '-webkit-box';
                 firstPersonBlocker.style.display = '-moz-box';
@@ -88,6 +94,8 @@ function initPointerLock() {
                 envir.scene.getObjectByName("Steve").visible = true;
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
+
+
             }
         };
 
@@ -99,12 +107,14 @@ function initPointerLock() {
 
         // Hook pointer lock state change events
         document.addEventListener('pointerlockchange', pointerlockchange, false);
-        document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-        document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+//        document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+//        document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
 
         document.addEventListener('pointerlockerror', pointerlockerror, false);
-        document.addEventListener('mozpointerlockerror', pointerlockerror, false);
-        document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+//        document.addEventListener('mozpointerlockerror', pointerlockerror, false);
+//        document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+
+
 
     } else {
         firstPersonBlockerBtn.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
@@ -117,6 +127,8 @@ function initPointerLock() {
  *
  */
 function updatePointerLockControls(){
+
+
 
     //if ( avatarControlsEnabled ) {
 
@@ -168,6 +180,8 @@ function updatePointerLockControls(){
     // if (torgue.y != 0)
     //     console.log(torgue.y);
 
+
+
     if (!avatarControlsEnabled)
         envir.avatarControls.getObject().rotation.y += torgue.y;
 
@@ -177,7 +191,8 @@ function updatePointerLockControls(){
     moveDown = false;
 
     prevTime = time;
-    //}
+
+
 }
 
 

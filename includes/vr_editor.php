@@ -53,7 +53,10 @@ echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
 echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
 echo "var scenesTargetChemistry=".json_encode(wpunity_getAllexams_byGame($project_id, true)).";";
 echo '</script>';
+
 ?>
+
+
 
 
 <!-- Todo: put these js libraries in wp_register -->
@@ -233,9 +236,14 @@ echo '</script>';
     //===================== End of drag n drop for INSERT ========================================================
 </script>
 
+
+
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
+    
+    
+    
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -981,6 +989,9 @@ echo '</script>';
 
 </script>
 
+
+
+
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );
 $formRes = new ParseJSON($UPLOAD_DIR);
@@ -1056,6 +1067,8 @@ $formRes->init($sceneToLoad);
     {
         var i;
 
+        //console.log("1", envir.avatarControls.getObject().rotation._y);
+        
         envir.orbitControls.update();
 
         updatePointerLockControls();
@@ -1082,6 +1095,10 @@ $formRes->init($sceneToLoad);
 
             updatePositionsPhpAndJavsFromControlsAxes();
         }
+
+
+        //console.log("2", envir.avatarControls.getObject().rotation._y);
+        //console.log("B:" , envir.avatarControls.getObject().rotation._y);
     }
 
     // Select event listener
@@ -1113,6 +1130,13 @@ $formRes->init($sceneToLoad);
     animate();
 
 </script>
+
+<?php
+//echo get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0];
+echo '<script>';
+echo 'envir.sceneType="'.get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0].'";';
+echo '</script>';
+?>
 
 <!-- Change dat GUI style: Override the inside js style -->
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
