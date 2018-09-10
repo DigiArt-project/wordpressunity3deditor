@@ -645,23 +645,31 @@ function displayMarkerProperties(event, name){
     // Show the whole popup div
     showWholePopupDiv(popUpMarkerPropertiesDiv, event);
 
-
     // Load PISA diagram for selected marker
-    var scene_elements = envir.scene.children;
+    loadPISAMarkerIframes();
 
-    var energy_fields = [];
+    function loadPISAMarkerIframes() {
 
-    console.log(document.getElementById('wpunity_scene_json_input').value);
+        var scene_elements = envir.scene.children;
+        var energy_fields = [];
+        var penalties = [];
 
-    console.log(scene_elements);
-    console.log(name);
+        console.log(scene_elements);
+        console.log(name);
 
-    loadPISAMarkerIframes(energy_fields);
+        console.log(envir);
 
-    function loadPISAMarkerIframes(energy_fields) {
+        for (var i in scene_elements) {
+            if (scene_elements[i].name === name) {
+                penalties.arch_penalty = scene_elements[i].archaeology_penalty;
+                penalties.hv_penalty = scene_elements[i].hv_penalty;
+                penalties.natural_penalty = scene_elements[i].natural_penalty;
+            }
+        }
+
 
         var turbine1 = {
-            watts: 200,
+            watts: 6000,
             area: 2,
             cost: 5
         };
@@ -680,14 +688,12 @@ function displayMarkerProperties(event, name){
         if (!energy_fields.env) {energy_fields.env = 'mountain';}
 
         var url = "https://analytics.envisage-h2020.eu/?" +
-            /*"lab=energy3d" +*/
             "lab=energytool" +
             "&env=" + energy_fields.env +
             "&map=" + parseInt(energy_fields.map, 10) +
             "&watts=" + energy_fields.watts +
             "&area=" + energy_fields.area +
             "&cost=" + energy_fields.cost;
-
 
 
 
