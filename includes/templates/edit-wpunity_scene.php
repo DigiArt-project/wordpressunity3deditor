@@ -16,6 +16,10 @@ $game_type_obj = wpunity_return_game_type($project_id);
 
 $project_saved_keys = wpunity_getProjectKeys($project_id);
 
+if (!$project_saved_keys['gioID']) {
+	echo "<script type='text/javascript'>alert(\"APP KEY not found. Please make sure that your user account has been registered correctly, and you have loaded the correct page\");</script>";
+}
+
 $userid = get_current_user_id();
 $user_data = get_userdata( $userid );
 $user_email = $user_data->user_email;
@@ -225,6 +229,18 @@ get_header(); ?>
         .panel.active { display: block; }
         .mdc-tab { min-width: 0; }
     </style>
+
+<?php if ( !is_user_logged_in() ) { ?>
+
+    <div class="DisplayBlock CenterContents">
+        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">account_circle</i>
+        <p class="mdc-typography--title"> Please login or register to use platform</p>
+    </div>
+
+    <hr class="WhiteSpaceSeparator">
+
+<?php } else { ?>
+
 
     <!-- START PAGE -->
     <div class="EditPageHeader">
@@ -1308,4 +1324,7 @@ get_header(); ?>
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
     </script>
+
+<?php } ?>
+
 <?php get_footer(); ?>

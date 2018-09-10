@@ -31,8 +31,7 @@ function wpunity_addStrategy_APIcall($project_id){
 	if (is_wp_error( $token_request ) ) {
 
 		$error_message = $token_request->get_error_message();
-		/*print_r($error_message);
-		print_r("1");*/
+		echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
 
 	} else {
 
@@ -70,8 +69,8 @@ function wpunity_addStrategy_APIcall($project_id){
 		if ( is_wp_error( $request ) ) {
 
 			$error_message = $request->get_error_message();
-			/*print_r( $error_message );
-			print_r("2");*/
+
+			echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
 
 		} else {
 
@@ -104,23 +103,19 @@ function wpunity_addStrategy_APIcall($project_id){
 			if ( is_wp_error( $request ) ) {
 
 				$error_message = $request->get_error_message();
-				/*print_r( $error_message );
-				print_r("3");*/
+				echo "<script type='text/javascript'>alert(\"$error_message\");</script>";
 
 			} else {
 
 				if ( (string) (int) $request['response']['code'] !== '201' ) {
 
-				/*	print_r( $request['response']['code'] );
-					print_r( $request['response']['message'] );*/
+					$msg = $request['response']['message'];
+					echo "<script type='text/javascript'>alert(\"$msg\");</script>";
 
-					// Todo: @Tasos place an alert div with message
-					//die();
 				}
 			}
 		}
 	}
-
 }
 
 //==========================================================================================================================================
