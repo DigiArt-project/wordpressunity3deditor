@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +13,11 @@ public class SceneLoader : MonoBehaviour {
     public void LoadScene(string sceneName)
     {
         StartCoroutine(LoadSceneAsychronusly(sceneName));
+    }
+	
+	public void ExitGane()
+    {
+        Application.Quit();
     }
 
     IEnumerator LoadSceneAsychronusly(string sceneName)
