@@ -1396,8 +1396,18 @@ function wpunity_upload_img_vid_directory( $dir ) {
 
 function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation = null) {
 
-
-
+//    $ff  =  fopen ("output_imv.txt","a");
+//    fwrite($ff, print_r($file, true));
+//    fwrite($ff,"\n");
+//    fwrite($ff,"\n");
+//    fclose($ff);
+    
+    if($file['type']==='image/jpeg' || $file['type']==='image/png')
+        if( strpos($file['name'], 'sprite') == false ) {
+            $file['name'] = str_replace(".jpg", "_sprite.jpg", $file['name']);
+            $file['name'] = str_replace(".png", "_sprite.png", $file['name']);
+        }
+    
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
@@ -1428,16 +1438,13 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id, $orientation =
 		$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 		wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
-
 		remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 		if( 0 < intval( $attachment_id, 10 ) ) {
 			return $attachment_id;
 		}
-
 	}
 	return false;
-
 }
 
 function wpunity_upload_img($file = array(), $parent_post_id, $orientation = null) {
