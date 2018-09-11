@@ -152,6 +152,8 @@ canvas { pointer-events:none; z-index:10; }
     left: calc(50% - 72px);
     top: 2px;
     background: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 .ToggleUIButtonStyle i {
@@ -310,4 +312,10 @@ canvas { pointer-events:none; z-index:10; }
     position: absolute;
     right: 340px;
     top: 10px;
+}
+
+
+button, html [type="button"], [type="reset"], [type="submit"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }

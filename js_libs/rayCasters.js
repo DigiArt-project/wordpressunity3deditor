@@ -653,10 +653,12 @@ function displayMarkerProperties(event, name){
         var scene_elements = envir.scene.children;
         var energy_fields = [];
         var penalties = [];
+        var turbine_small =[];
+        var turbine_medium = [];
+        var turbine_large = [];
 
         console.log(scene_elements);
         console.log(name);
-
         console.log(envir);
 
         for (var i in scene_elements) {
@@ -667,56 +669,94 @@ function displayMarkerProperties(event, name){
             }
         }
 
-
-        var turbine1 = {
-            watts: 6000,
-            area: 2,
-            cost: 5
-        };
-        var turbine2 = {
-            watts: 200,
-            area: 2,
-            cost: 5
-        };
-        var turbine3 = {
-            watts: 200,
-            area: 2,
-            cost: 5
-        };
-
-
+        energy_fields.env = envir.fields;
         if (!energy_fields.env) {energy_fields.env = 'mountain';}
 
-        var url = "https://analytics.envisage-h2020.eu/?" +
-            "lab=energytool" +
-            "&env=" + energy_fields.env +
-            "&map=" + parseInt(energy_fields.map, 10) +
-            "&watts=" + energy_fields.watts +
-            "&area=" + energy_fields.area +
-            "&cost=" + energy_fields.cost;
+        switch(energy_fields.env) {
+
+            // Wind Class I
+            case 'mountains':
+                turbine_small.power = 900;
+                turbine_small.area = 52;
+                turbine_small.cost = 1;
+
+                turbine_medium.power = 3000;
+                turbine_medium.area = 90;
+                turbine_medium.cost = 3;
+
+                turbine_large.power = 6000;
+                turbine_large.area = 128;
+                turbine_large.cost = 5;
+
+                break;
+
+            // Wind Class II
+            case 'fields':
+                turbine_small.power = 850;
+                turbine_small.area = 60;
+                turbine_small.cost = 1;
+
+                turbine_medium.power = 2000;
+                turbine_medium.area = 90;
+                turbine_medium.cost = 2;
+
+                turbine_large.power = 3000;
+                turbine_large.area = 90;
+                turbine_large.cost = 3;
+
+                break;
+
+            // Wind Class III
+            case 'seashore':
+                turbine_small.power = 850;
+                turbine_small.area = 60;
+                turbine_small.cost = 1;
+
+                turbine_medium.power = 2000;
+                turbine_medium.area = 90;
+                turbine_medium.cost = 2;
+
+                turbine_large.power = 3000;
+                turbine_large.area = 126;
+                turbine_large.cost = 4;
+
+                break;
+
+            default:
+        }
 
 
+        energy_fields.mapId = 4;
+
+        var url1 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_small);
+        var url2 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_medium);
+        var url3 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_large);
 
         var iframe1 = jQuery('#turbine1-iframe');
         var iframe2 = jQuery('#turbine2-iframe');
         var iframe3 = jQuery('#turbine3-iframe');
 
-        if (iframe1.length) {
-            iframe1.attr('src', url);
-            return false;
-        }
 
-        if (iframe2.length) {
-            iframe2.attr('src', url);
-            return false;
-        }
+            iframe1.attr('src', url1);
 
-        if (iframe3.length) {
-            iframe3.attr('src', url);
-            return false;
-        }
+
+            iframe2.attr('src', url2);
+
+            iframe3.attr('src', url3);
 
         return true;
+    }
+
+    function createIframeUrl(env, id, turbine) {
+
+        return "https://analytics.envisage-h2020.eu/?" +
+            "lab=energytool" +
+            "&env=" + env +
+            "&map=" + parseInt(id, 10) +
+            "&watts=" + turbine.power +
+            "&area=" + turbine.area +
+            "&cost=" + turbine.cost;
+
     }
 
     // On popup change
@@ -731,8 +771,6 @@ function displayMarkerProperties(event, name){
     selectNaturalPenalty.change(function(e) {
         envir.scene.getObjectByName(name).natural_penalty = selectNaturalPenalty.val();
     });
-
-    return;
 }
 
 
@@ -836,8 +874,9 @@ function showWholePopupDiv(popUpDiv, event) {
     popUpDiv[0].style.left = 1 + event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
 
     if (popUpDiv.selector === '#popUpMarkerPropertiesDiv') {
-        popUpDiv[0].style.top  = event.clientY - 2*(jQuery('#vr_editor_main_div').offset().bottom) + jQuery(window).scrollTop() + 'px';
+        popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
         popUpDiv[0].style.left = 0;
+        popUpDiv[0].style.bottom = 0;
     } else {
         popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
     }

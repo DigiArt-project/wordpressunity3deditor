@@ -461,13 +461,13 @@ echo '</script>';
                 </div>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 360px;" id="turbine1-iframe"></iframe>
+                    <iframe style="height: 380px; border:none;" id="turbine1-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 360px;" id="turbine2-iframe"></iframe>
+                    <iframe style="height: 380px; border:none;" id="turbine2-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 360px;" id="turbine3-iframe"></iframe>
+                    <iframe style="height: 380px; border:none;" id="turbine3-iframe"></iframe>
                 </div>
 
             </div>
