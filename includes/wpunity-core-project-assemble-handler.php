@@ -300,9 +300,7 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
             }
         endwhile;
     endif;
-    
-    
-    //$assetsids = array_unique($assetsids);
+
     wp_reset_postdata();
     
     return [$assetsids, $neededObj];
@@ -323,8 +321,13 @@ function wpunity_compile_sprite_upload($featured_image_sprite_id, $gameSlug, $sc
     $attachment_file = $attachment_post->guid;
     $attachment_tempname = str_replace('\\', '/', $attachment_file);
     $attachment_name = pathinfo($attachment_tempname);
-    $new_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'];
-    copy($attachment_file,$new_file);
+    
+    if (strpos($attachment_name['filename'], 'sprite') == false)
+        $new_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'];
+    else
+        $new_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'];
+    
+    copy($attachment_file, $new_file);
 
     // Now for the meta
     $sprite_meta_yaml = 'fileFormatVersion: 2
@@ -335,7 +338,12 @@ licenseType: Free
 
     $sprite_meta_guid = wpunity_create_guids('jpg', $featured_image_sprite_id);
     $sprite_meta_yaml_replace = wpunity_replace_spritemeta($sprite_meta_yaml,$sprite_meta_guid);
-    $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'] . '.meta';
+    
+    if (strpos($attachment_name['filename'], 'sprite') == false)
+        $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '_sprite.' . $attachment_name['extension'] . '.meta';
+    else
+        $sprite_meta_file = $game_models_path .'/' . $attachment_name['filename'] . '.' . $attachment_name['extension'] . '.meta';
+    
     $create_meta_file = fopen($sprite_meta_file, "w") or die("Unable to open file!");
 
     fwrite($create_meta_file,$sprite_meta_yaml_replace);

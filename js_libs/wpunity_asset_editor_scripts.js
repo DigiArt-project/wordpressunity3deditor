@@ -173,10 +173,10 @@ function wpunity_reset_panels(wu_webw_3d_view) {
     jQuery("#terrainPanel").hide();
     jQuery("#consumerPanel").hide();
     jQuery("#producerPanel").hide();
-    jQuery("#poiImgDetailsPanel").hide();
-    jQuery("#poiVideoDetailsPanel").hide();
+    //jQuery("#poiImgDetailsPanel").hide();
+    //jQuery("#poiVideoDetailsPanel").hide();
     jQuery("#objectPreviewTitle").hide();
-    jQuery("#moleculeOptionsPanel").hide();
+    //jQuery("#moleculeOptionsPanel").hide();
     jQuery("#moleculeFluidPanel").hide();
     jQuery("#chemistryBoxOptionsPanel").hide();
 }
