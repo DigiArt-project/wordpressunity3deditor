@@ -379,7 +379,11 @@ echo '</script>';
     <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
          style="min-width: 240px; max-width:300px; display:none">
 
-        <a style="float: right;" type="button" class="mdc-theme--primary" onclick='this.parentNode.style.display = "none"; clearAndUnbindDoorProperties(); return false;'>
+        <a style="float: right;" type="button" class="mdc-theme--primary"
+           onclick='this.parentNode.style.display = "none"; clearAndUnbind("popupDoorSelect", "doorid", ""); return false;'>
+
+<!--            clearAndUnbindDoorProperties();-->
+            
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
