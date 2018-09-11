@@ -417,17 +417,21 @@ if($asset_id != null) {
                     jQuery('#assetDescription')[0].children)">
                 Fetch description from Wikipedia</button>
 
-            <!-- EUROPEANA -->
-            <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
-                    onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
-                    jQuery('#assetDescription')[0].children)"
-                    style="margin-top:30px" >Fetch description from Europeana</button>
-
+            <!-- EUROPEANA (shown only in DigiArt)-->
+            <?php if ($project_scope === 0){ ?>
+                <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
+                        onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
+                        jQuery('#assetDescription')[0].children)"
+                        style="margin-top:30px" >Fetch description from Europeana</button>
+            <?php } ?>
+            
             <hr class="WhiteSpaceSeparator">
 
-            <?php $showIMT = $saved_term[0]->slug == 'pois_imagetext'?'':'none';  ?>
+
+            <!--  POI Image-Text -->
             
-            <!--  Image for  POI Image-Text -->
+            <?php $showIMT = $saved_term[0]->slug == 'pois_imagetext'?'':'none';  ?>
+
             <div id="poiImgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
 
                 <h3 class="mdc-typography--title">Featured Image</h3>
@@ -438,6 +442,8 @@ if($asset_id != null) {
                     <img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
                 <?php } ?>
                 <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+                <br />
+                <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
 
                 <hr class="WhiteSpaceSeparator">
 
@@ -487,7 +493,7 @@ if($asset_id != null) {
 
                     <label for="videoFileInput"> Select a new video</label>
                     <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
-
+                    <br />
                     <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">mp4 is recommended </span>
                 </div>
             </div>
