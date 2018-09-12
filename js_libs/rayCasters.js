@@ -657,34 +657,22 @@ function displayMarkerProperties(event, name){
         var turbine_medium = [];
         var turbine_large = [];
 
-        console.log(scene_elements);
-        console.log(name);
-        console.log(envir);
-
-        for (var i in scene_elements) {
-            if (scene_elements[i].name === name) {
-                penalties.arch_penalty = scene_elements[i].archaeology_penalty;
-                penalties.hv_penalty = scene_elements[i].hv_penalty;
-                penalties.natural_penalty = scene_elements[i].natural_penalty;
-            }
-        }
-
-        energy_fields.env = envir.fields;
-        if (!energy_fields.env) {energy_fields.env = 'mountain';}
+        energy_fields.env = envir.sceneType;
+        if (!energy_fields.env) {energy_fields.env = 'mountains';}
 
         switch(energy_fields.env) {
 
             // Wind Class I
             case 'mountains':
-                turbine_small.power = 900;
+                turbine_small.power = 0.9;
                 turbine_small.area = 52;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 3000;
+                turbine_medium.power = 3;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 3;
 
-                turbine_large.power = 6000;
+                turbine_large.power = 6;
                 turbine_large.area = 128;
                 turbine_large.cost = 5;
 
@@ -692,15 +680,15 @@ function displayMarkerProperties(event, name){
 
             // Wind Class II
             case 'fields':
-                turbine_small.power = 850;
+                turbine_small.power = 0.85;
                 turbine_small.area = 60;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 2000;
+                turbine_medium.power = 2;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 2;
 
-                turbine_large.power = 3000;
+                turbine_large.power = 3;
                 turbine_large.area = 90;
                 turbine_large.cost = 3;
 
@@ -708,15 +696,15 @@ function displayMarkerProperties(event, name){
 
             // Wind Class III
             case 'seashore':
-                turbine_small.power = 850;
+                turbine_small.power = 0.85;
                 turbine_small.area = 60;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 2000;
+                turbine_medium.power = 2;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 2;
 
-                turbine_large.power = 3000;
+                turbine_large.power = 3;
                 turbine_large.area = 126;
                 turbine_large.cost = 4;
 
@@ -725,26 +713,42 @@ function displayMarkerProperties(event, name){
             default:
         }
 
+        for (var i in scene_elements) {
+            if (scene_elements[i].name === name) {
+                penalties.arch_penalty = (parseInt(scene_elements[i].archaeology_penalty, 10) === 0) ? 0 : 1;
+                penalties.hv_penalty = (parseInt(scene_elements[i].hv_penalty, 10) === 0) ? 0 : 1;
+                penalties.natural_penalty = (parseInt(scene_elements[i].natural_penalty, 10) === 0) ? 0 : 1;
+            }
+        }
 
-        energy_fields.mapId = 4;
+        energy_fields.mapId = parseInt(calculateMapId(penalties.arch_penalty, penalties.natural_penalty, penalties.hv_penalty), 10);
 
         var url1 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_small);
         var url2 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_medium);
         var url3 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_large);
 
+        console.log(url1, url2, url3);
+
         var iframe1 = jQuery('#turbine1-iframe');
+        iframe1.attr('src', url1);
+
         var iframe2 = jQuery('#turbine2-iframe');
+        iframe2.attr('src', url2);
+
         var iframe3 = jQuery('#turbine3-iframe');
+        iframe3.attr('src', url3);
 
+    }
 
-            iframe1.attr('src', url1);
+    function calculateMapId(arch, natural, hv) {
 
+        var penalty = {
+            hv: 1,
+            natural: 2,
+            arch: 4
+        };
 
-            iframe2.attr('src', url2);
-
-            iframe3.attr('src', url3);
-
-        return true;
+        return (hv * penalty.hv) + (natural * penalty.natural) + (arch * penalty.arch);
     }
 
     function createIframeUrl(env, id, turbine) {
@@ -753,9 +757,9 @@ function displayMarkerProperties(event, name){
             "lab=energytool" +
             "&env=" + env +
             "&map=" + parseInt(id, 10) +
-            "&watts=" + turbine.power +
-            "&area=" + turbine.area +
-            "&cost=" + turbine.cost;
+            "&watts=" + parseInt(turbine.power, 10) +
+            "&area=" +  parseInt(turbine.area, 10) +
+            "&cost=" +  parseInt(turbine.cost, 10);
 
     }
 

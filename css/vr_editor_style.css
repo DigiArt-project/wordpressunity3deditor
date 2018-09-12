@@ -181,7 +181,6 @@ canvas { pointer-events:none; z-index:10; }
 
 
 .HierarchyViewerStyle {
-    max-height: 100%;
     width: 20%;
     overflow-y: auto;
     position: absolute;

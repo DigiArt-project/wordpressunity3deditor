@@ -241,9 +241,9 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
-    
-    
-    
+
+
+
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -335,7 +335,12 @@ echo '</script>';
     <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
         <i class="material-icons">menu</i>
     </a>
-    <ul class="mdc-list HierarchyViewerStyle" id="hierarchy-viewer"></ul>
+
+    <div class="HierarchyViewerStyle">
+        <h2 class="mdc-typography--title mdc-theme--text-primary-on-background">Hierarchy Viewer</h2>
+        <hr class="mdc-list-divider">
+        <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
+    </div>
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -582,7 +587,6 @@ echo '</script>';
     // Selected object name
     var selected_object_name = '';
 
-
     // Add gui to gui container_3D_all
     var guiContainer = document.getElementById('gui-container');
     guiContainer.appendChild(controlInterface.translate.domElement);
@@ -713,8 +717,6 @@ echo '</script>';
 
         envir.makeFullScreen();
     }, false);
-
-
 
     // First person view
     jQuery('#toggleUIBtn').click(function() {
@@ -990,7 +992,6 @@ echo '</script>';
         // if in 3rd person view then show the cameraobject
         envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
     }
-
 </script>
 
 
@@ -1072,7 +1073,7 @@ $formRes->init($sceneToLoad);
         var i;
 
         //console.log("1", envir.avatarControls.getObject().rotation._y);
-        
+
         envir.orbitControls.update();
 
         updatePointerLockControls();
