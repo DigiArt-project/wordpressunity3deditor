@@ -1,6 +1,6 @@
 <?php
 
-function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of mainmenu-arch-yaml
     $term_meta_s_mainmenu = wpunity_getSceneYAML_archaeology('menu');
     $title_text = $scene_post->post_title;
@@ -22,28 +22,21 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
     fwrite($create_file, $file_content);
     fclose($create_file);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
-
-
-    //Add Static Pages to cs & BuildSettings (Main Menu must be first)
+    
+    //Add Static Pages to EditorBuilderSettings.asset and in HandyBuilder.cs
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_Reward.unity');
 
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_SceneSelector.unity');
 
-
+    // Settings button active switch
     if($is_bt_settings_active == '1'){
         //CREATE SETTINGS/OPTIONS Unity file
         $term_meta_s_settings = wpunity_getSceneYAML_archaeology('options');
         $file_content2 = wpunity_replace_settings_unity($term_meta_s_settings);
 
-        $file2 = $game_path . '/' . 'S_Settings.unity';
+        $file2 = $game_path . '/S_Settings.unity';
         $create_file2 = fopen($file2, "w") or die("Unable to open file!");
         fwrite($create_file2,$file_content2);
         fclose($create_file2);
@@ -68,8 +61,7 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
         fclose($create_file3);
 
         wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Help.unity');//Update the EditorBuildSettings.asset by adding new Scene
-        $file3_path_CS = 'Assets/scenes/' . 'S_Help.unity';
-        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file3_path_CS);
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_Help.unity');
     }
 
     if($is_login_bt_active == '1'){
@@ -83,12 +75,11 @@ function wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$s
         fclose($create_file4);
 
         wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Login.unity');//Update the EditorBuildSettings.asset by adding new Scene
-        $file4_path_CS = 'Assets/scenes/' . 'S_Login.unity';
-        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file4_path_CS);
+        wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_Login.unity');
     }
 }
 
-function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of Credits Scene
     $term_meta_s_credits = wpunity_getSceneYAML_archaeology('credits');
     $credits_content = $scene_post->post_content;
@@ -98,18 +89,16 @@ function wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID
     if($featured_image_sprite_id != ''){$featured_image_sprite_guid = wpunity_compile_sprite_upload($featured_image_sprite_id,$gameSlug,$scene_id);}
     $file_content5 = wpunity_replace_creditsscene_unity($term_meta_s_credits,$credits_content,$featured_image_sprite_guid);
 
-    $file5 = $game_path . '/' . 'S_Credits.unity';
+    $file5 = $game_path . '/S_Credits.unity';
     $create_file5 = fopen($file5, "w") or die("Unable to open file!");
     fwrite($create_file5, $file_content5);
     fclose($create_file5);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Credits.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file5_path_CS);
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_Credits.unity');
 }
 
-function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_ID, $scene_id, $gameSlug, $game_path, $settings_path, $handybuilder_file,
+function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_ID, $scene_id, $gameSlug, $game_path, $fileEditorBuildSettings, $handybuilder_file,
                                                        $scenes_counter, $gameType){
     //DATA of Wonder Around Scene
     $term_meta_wonder_around = wpunity_getSceneYAML_archaeology('wanderaround');
@@ -133,7 +122,6 @@ function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_
     wpunity_compile_append_scene_to_s_selector($scene_id, $scene_name, $scene_title, $scene_desc, $scene_type_ID,
          $game_path, $scenes_counter, $featured_image_edu_sprite_guid, $gameType);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . $scene_name . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);

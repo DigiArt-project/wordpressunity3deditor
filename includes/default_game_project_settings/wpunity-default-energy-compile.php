@@ -1,9 +1,7 @@
 <?php
 
-function wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file){
-
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-
+function wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
+    
 
     //SIMULATION SCENE FIELDS
     $term_meta_simuFields = wpunity_getSceneYAML_energy('fields');
@@ -103,7 +101,7 @@ function wpunity_getRegionalscene_byGame($allScenePGameID,$regType){
 }
 
 
-function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     $mountains_activation = 0;
     $seashore_activation = 0;
     $fields_activation = 0;
@@ -139,15 +137,12 @@ function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$sett
     fwrite($create_file2, $file_content);
     fclose($create_file2);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_SceneSelector.unity');//Update the EditorBuildSettings.asset by adding new Scene
     $file_path_selCS = 'Assets/scenes/' . 'S_SceneSelector.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_selCS);
-
 }
 
-function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of mainmenu
     $term_meta_s_mainmenu = wpunity_getSceneYAML_energy('menu');
 
@@ -173,17 +168,10 @@ function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_
     fwrite($create_file, $file_content);
     fclose($create_file);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
-
-
     //Add Static Pages to cs & BuildSettings (Main Menu must be first)
     //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
     //$file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
     //wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file_path_rewCS);
-
 
     if($is_bt_settings_active == '1'){
         //CREATE SETTINGS/OPTIONS Unity file
@@ -235,7 +223,7 @@ function wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_
     }
 }
 
-function wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of Credits Scene
     $term_meta_s_credits = wpunity_getSceneYAML_energy('credits');
     $credits_content = $scene_post->post_content;
@@ -250,13 +238,12 @@ function wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$sce
     fwrite($create_file5, $file_content5);
     fclose($create_file5);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Credits.unity');//Update the EditorBuildSettings.asset by adding new Scene
     $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file5_path_CS);
 }
 
-function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType){
     
 //    $fg = fopen("output_edu_energy.txt","w");
 //
@@ -289,8 +276,8 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     
 //    fwrite($fg, "5");
     
-    fwrite($fg, "\n");
-    fwrite($fg, $scene_id);
+//    fwrite($fg, "\n");
+//    fwrite($fg, $scene_id);
     
     
     $file_content7b = wpunity_addAssets_educational_energy_unity($scene_id);//add objects from json
@@ -308,7 +295,6 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     
 //    fwrite($fg, "8");
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $file7path_forCS = 'Assets/scenes/' . $scene_unity_title . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$file7path_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file7path_forCS);

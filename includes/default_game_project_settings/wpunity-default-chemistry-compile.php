@@ -1,10 +1,10 @@
 <?php
 
-function wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
 
 }
 
-function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of mainmenu
     $term_meta_s_mainmenu = wpunity_getSceneYAML_chemistry('menu');
     $title_text = $scene_post->post_title;
@@ -30,12 +30,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
     $create_file = fopen($file, "w") or die("Unable to open file!");
     fwrite($create_file, $file_content);
     fclose($create_file);
-
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
-    $file1_path_CS = 'Assets/scenes/' . 'S_MainMenu.unity';
-    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file1_path_CS);
-
+    
     //Add Static Pages to cs & BuildSettings (Main Menu must be first)
     //wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Reward.unity');//Update the EditorBuildSettings.asset by adding new Scene
     //$file_path_rewCS = 'Assets/scenes/' . 'S_Reward.unity';
@@ -100,7 +95,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
 
 }
 
-function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file){
+function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file){
     //DATA of Credits Scene
     $term_meta_s_credits = wpunity_getSceneYAML_chemistry('credits');
     $credits_content = $scene_post->post_content;
@@ -118,14 +113,12 @@ function wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$
     fwrite($create_file5, $file_content5);
     fclose($create_file5);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_Credits.unity');//Update the EditorBuildSettings.asset by adding new Scene
     $file5_path_CS = 'Assets/scenes/' . 'S_Credits.unity';
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $file5_path_CS);
-
 }
 
-function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType){
 
     $exam_slug = $scene_post->post_name;
 
@@ -137,13 +130,12 @@ function wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene
     fwrite($create_fileA, $file_contentA);
     fclose($create_fileA);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . $exam_slug . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
 }
 
-function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType){
 
     $exam_slug = $scene_post->post_name;
 
@@ -155,14 +147,13 @@ function wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene
     fwrite($create_fileA, $file_contentA);
     fclose($create_fileA);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . $exam_slug . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);
 
 }
 
-function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType){
+function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType){
     //DATA of Chemistry Wander Around Scene
     $term_meta_wander_around_chem = wpunity_getSceneYAML_chemistry('lab');
     $scene_name = $scene_post->post_name;
@@ -183,7 +174,6 @@ function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id
     fwrite($create_fileA,$file_contentAb);
     fclose($create_fileA);
 
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
     $fileApath_forCS = 'Assets/scenes/' . /*$scene_name*/'S_Lab' . '.unity';
     wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,$fileApath_forCS);//Update the EditorBuildSettings.asset by adding new Scene
     wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, $fileApath_forCS);

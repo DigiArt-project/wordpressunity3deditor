@@ -4,40 +4,34 @@
 //==========================================================================================================================================
 
 function wpunity_assemble_the_unity_game_project($gameID, $gameSlug, $targetPlatform, $gameType){
-    
-//    $fc = fopen("outputKLOA.txt","w");
-//    fwrite($fc, $gameType);
 
-//    fwrite($fc, "1");
+    //0. Delete everything in order to recreate them from scratch
+    wpunity_compile_folders_del($gameSlug);
+
+    //1. Create Default Folder Structure
+    wpunity_compile_folders_gen($gameSlug);
+
+    //1b. Create cs files before all data that give commands to editor and importer
+    // GeneralImportSettings is completed as it is whereas Handybuilder.cs is a template that should be filled with assets and scenes to import
+    wpunity_compile_cs_gen($gameSlug, $targetPlatform);
     
-//    fwrite($fc, "2");
-    wpunity_compile_folders_del($gameSlug);//0. Delete everything in order to recreate them from scratch
+    //2. Create Project Settings files (16 files):
+    // ProjectSettings.asset is modified with the versioning system.
+    // EditorBuildSettings.asset is not modified. Just copied.
+    wpunity_compile_settings_gen($gameID,$gameSlug);
+
+    //3. Create models related files (go in Models and Resources)
+    wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform);
+
+    //4. Create Scenes.Unity files (at Assets/scenes)
+    wpunity_compile_scenes_gen($gameID,$gameSlug);
+
+    //5. Copy StandardAssets depending the Game Type
+    wpunity_compile_copy_StandardAssets($gameID, $gameSlug, $gameType);
     
-//    fwrite($fc, "3");
-    wpunity_compile_folders_gen($gameSlug);//1. Create Default Folder Structure
-    
-//    fwrite($fc, "4");
-    wpunity_compile_cs_gen($gameSlug, $targetPlatform);//1b. Create cs file before all data
-    
-//    fwrite($fc, "5");
-    
-    wpunity_compile_settings_gen($gameID,$gameSlug);//2. Create Project Settings files (16 files)
-    
-//    fwrite($fc, "6");
-    wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform);//3. Create Model folders/files
-    
-//    fwrite($fc, "7");
-    wpunity_compile_scenes_gen($gameID,$gameSlug);//4. Create Unity files (at Assets/scenes)
-    
-//    fwrite($fc, "8");
-    wpunity_compile_copy_StandardAssets($gameID, $gameSlug, $gameType);//5. Copy StandardAssets depending the Game Type
-    
-//    fwrite($fc, "9");
-    
+    //6. If game is chemistry then make the molecule prefabs
     if ($gameType == "Chemistry")
         wpunity_compile_make_molecules_prefabs($gameID, $gameSlug);
-    
-//    fclose($fc);
     
     return 'true';
 }
@@ -181,24 +175,23 @@ function wpunity_compile_folders_gen($gameSlug){
 //==========================================================================================================================================
 //1b. Create cs file before all data (Generate HandyBuilder.cs and GeneralImportSettings.cs)
 function wpunity_compile_cs_gen($gameSlug, $targetPlatform){
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
+    
+    // 1. HandyBuilder.cs
+    // Get 'Uploads' dir path of wordpress
+    $upload_dir = str_replace('\\','/', wp_upload_dir()['basedir']);
 
-    //--Uploads/myGameProjectUnity--
+    wpunity_createEmpty_HandyBuilder_cs($upload_dir.'/'.$gameSlug.'Unity/Assets/Editor/HandyBuilder.cs',
+                                                $targetPlatform);
+    
+    // 2. GeneralImportSettings.cs: Copy from Editor_Commons folder
+    
+    $pluginSlug = plugin_basename(__FILE__); // wordpressunity3deditor/includes/wpunity-core-project-assemble.php
+    
+    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/")); // wordpressunity3deditor
+    
+    $filepath_source_file = get_home_path().'wp-content/plugins/' . $pluginSlug . '/StandardAssets/Editor_Commons/GeneralImportSettings.cs';
 
-    // HandyBuilder.cs
-    $filepath =$filepath = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
-    wpunity_createEmpty_HandyBuilder_cs($filepath, $targetPlatform);
-
-    // GeneralImportSettings.cs
-    $pluginpath = dirname ( dirname (get_template_directory()));
-    $pluginpath = str_replace('\\','/',$pluginpath);
-    $pluginSlug = plugin_basename(__FILE__);
-    $pluginSlug = substr($pluginSlug, 0, strpos($pluginSlug, "/"));
-    $filepath_source_file = $pluginpath . '/plugins/' . $pluginSlug . '/StandardAssets/Editor_Commons/GeneralImportSettings.cs';
-
-    $filepath_target_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/GeneralImportSettings.cs';
+    $filepath_target_file = $upload_dir . '/' . $gameSlug . 'Unity/Assets/Editor/GeneralImportSettings.cs';
 
     if (!copy($filepath_source_file, $filepath_target_file)) {
         echo "failed to copy $filepath_source_file to $filepath_target_file...\n";
@@ -315,15 +308,20 @@ function wpunity_add_in_HandyBuilder_cs($filepath, $assetpath, $scenepath){
 function wpunity_compile_settings_gen($gameID,$gameSlug){
 
     $gameType = wp_get_post_terms( $gameID, 'wpunity_game_type' );
-    $fileFolder = 'archaeology';
+    
+    switch($gameType[0]->slug) {
+        case 'archaeology_games':
+            $fileFolder = 'archaeology';
+            break;
+        case 'energy_games':
+            $fileFolder = 'energy';
+            break;
+        case 'chemistry_games':
+            $fileFolder = 'chemistry';
+            break;
+    }
 
-    if($gameType[0]->slug == 'energy_games') {$fileFolder = 'energy';}
-    if($gameType[0]->slug == 'chemistry_games') {$fileFolder = 'chemistry';}
-
-
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
+    $upload_dir = str_replace('\\','/',wp_upload_dir()['basedir']);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity';
 
     wpunity_compile_settings_files_gen($gameID, $game_path,'AudioManager.asset',$fileFolder);
@@ -346,8 +344,10 @@ function wpunity_compile_settings_gen($gameID,$gameSlug){
 
 function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileName,$fileFolder){
 
+    // Get the YAML pattern
     $fileYaml = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/" . $fileFolder . "/settings/" . $fileName);
 
+    // Add Versioning in ProjectSettings
     if($fileName === 'ProjectSettings.asset'){
 
         // get from db the last version of the game
@@ -379,20 +379,19 @@ function wpunity_compile_settings_files_gen($game_project_id, $game_path,$fileNa
 //==========================================================================================================================================
 //==========================================================================================================================================
 //3. Create Model folders/files
-
-// Add all objs in HandyBuilder.cs for importing (wrapper)
+// First get all assets of game
+// Second all objs in Models and sprites/videos in Resources
+// Third all objs in HandyBuilder.cs for importing (wrapper)
 function wpunity_compile_models_gen($gameID, $gameSlug, $targetPlatform){
 
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
+    $upload_dir = str_replace('\\','/', wp_upload_dir()['basedir']);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/models';
     $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
     
     $res = wpunity_fetch_assetids_in_scenes($gameSlug);
     
-    $assetIds = $res[0];
-    $neededObj = $res[1]; // clones that do need obj
+    $assetIds = $res[0];  // Asset ids to include in the models
+    $neededObj = $res[1]; // clones that do need their obj (given that their protos are already included)
     
     $assetsAlreadyIncluded = [];
     
@@ -547,24 +546,16 @@ licenseType: Free
 
 //Generate scenes
 function wpunity_compile_scenes_gen($gameID,$gameSlug){
+ 
+    $upload_dir = str_replace('\\','/', wp_upload_dir()['basedir']);
     
-    //$fd = fopen("output_SCENES.txt","w");
-    
-    //fwrite($fd, "1");
-    
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir = str_replace('\\','/',$upload_dir);
     $game_path = $upload_dir . "/" . $gameSlug . 'Unity/Assets/scenes';
-    $settings_path = $upload_dir . "/" . $gameSlug . 'Unity/ProjectSettings';
-    $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity' . '/Assets/Editor/HandyBuilder.cs';
+    $fileEditorBuildSets = $upload_dir . "/" . $gameSlug . 'Unity/ProjectSettings/EditorBuildSettings.asset';
+    $handybuilder_file = $upload_dir . '/' . $gameSlug . 'Unity/Assets/Editor/HandyBuilder.cs';
     
-    //fwrite($fd, "2");
-
     $gameTypeTerm = wp_get_post_terms( $gameID, 'wpunity_game_type' );
     $gameType = $gameTypeTerm[0]->name;
     
-    //fwrite($fd, "3");
     $queryargs = array(
         'post_type' => 'wpunity_scene',
         'posts_per_page' => -1,
@@ -580,49 +571,34 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
     );
     
     
-    //fwrite($fd, "4");
     $scenes_counter = 1;
     $custom_query = new WP_Query( $queryargs );
     
-    //fwrite($fd, "5");
+    // MainMenu should be first in EditorBuildSettings.asset and HandyBuilder.cs
+    wpunity_append_scenes_in_EditorBuildSettings_dot_asset( $fileEditorBuildSets,'Assets/scenes/S_MainMenu.unity');
+    wpunity_add_in_HandyBuilder_cs($handybuilder_file, null, 'Assets/scenes/S_MainMenu.unity');
     
-    wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID);
-    
+    // Add Static scenes
+    wpunity_compile_scenes_static_cre($game_path, $gameSlug, $fileEditorBuildSets, $handybuilder_file, $gameID);
     
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
             $custom_query->the_post();
             $scene_id = get_the_ID();
     
-//            fwrite($fd, "6");
-//
-//            fwrite($fd, "\n");
-//            fwrite($fd, $scene_id);
-//            fwrite($fd, "\n");
-            
-            
-            
             //Create the non-static Unity Scenes (or those that have dependency from non-static)
-            wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path,
+            wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $fileEditorBuildSets,
                 $scenes_counter, $handybuilder_file, $gameType);
-    
-            //fwrite($fd, "7");
             
             // Increment scene counter if scene is either WonderAround or Educational-Energy scene
             $scene_type = get_the_terms( $scene_id, 'wpunity_scene_yaml' );
             $scene_type_slug = $scene_type[0]->slug;
     
-            //fwrite($fd, "8");
-            
             if ($scene_type_slug == 'wonderaround-yaml' || $scene_type_slug == 'educational-energy' || $scene_type_slug == 'wonderaround-lab-yaml' ){
                 $scenes_counter++;
             }
-
-            
         endwhile;
     endif;
-    
-    //fwrite($fd, "9");
     
     wp_reset_postdata();
 }
@@ -630,55 +606,65 @@ function wpunity_compile_scenes_gen($gameID,$gameSlug){
 
 
 //Create Reward and SceneSelector
-function wpunity_compile_scenes_static_cre($game_path,$gameSlug,$settings_path,$handybuilder_file,$gameID){
+function wpunity_compile_scenes_static_cre($game_path, $gameSlug, $fileEditorBuildSettings, $handybuilder_file, $gameID){
+    
     //get the first Game Type taxonomy in order to get the yamls (all of them have the same)
     $gameType = wp_get_post_terms( $gameID, 'wpunity_game_type' );
-    if($gameType[0]->slug == 'energy_games'){
-        $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = wpunity_getSceneYAML_energy('reward');
-        $term_meta_s_selector = wpunity_getSceneYAML_energy('selector');
-        $term_meta_s_selector_title = 'Select a Scene';
-    }elseif($gameType[0]->slug == 'archaeology_games'){
-        $mainMenuTerm = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = wpunity_getSceneYAML_archaeology('reward');
-        $term_meta_s_selector = wpunity_getSceneYAML_archaeology('selector');
-        $term_meta_s_selector_title = 'Select a Scene';
-    }elseif($gameType[0]->slug == 'chemistry_games'){
-        $mainMenuTerm = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml');
-        $term_meta_s_reward = wpunity_getSceneYAML_chemistry('reward');
-        $term_meta_s_selector = wpunity_getSceneYAML_chemistry('selector');
-        $term_meta_s_selector_title = 'Select a Scene';
+
+    switch($gameType[0]->slug){
+        case 'archaeology_games':
+        
+            $mainMenuTerm = get_term_by('slug', 'mainmenu-arch-yaml', 'wpunity_scene_yaml');
+            $term_meta_s_reward = wpunity_getSceneYAML_archaeology('reward');
+            $term_meta_s_selector = wpunity_getSceneYAML_archaeology('selector');
+            $term_meta_s_selector_title = 'Select a Scene';
+        
+            // S_SceneSelector.unity create
+            $file2 = $game_path . '/' . 'S_SceneSelector.unity';
+        
+            // Change its title
+            $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
+            $create_file2 = fopen($file2, "w") or die("Unable to open file!");
+            fwrite($create_file2, $file_content);
+            fclose($create_file2);
+        
+            // S_Reward.unity create
+            $file = $game_path . '/' . 'S_Reward.unity';
+            $create_file = fopen($file, "w") or die("Unable to open file!");
+            fwrite($create_file, $term_meta_s_reward);
+            fclose($create_file);
+            
+            break;
+        case 'energy_games':
+    
+//            $mainMenuTerm = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
+//            $term_meta_s_reward = wpunity_getSceneYAML_energy('reward');
+//            $term_meta_s_selector = wpunity_getSceneYAML_energy('selector');
+//            $term_meta_s_selector_title = 'Select a Scene';
+
+            //create standard energy scenes (simulation scenes, stats, turbine selection etc)
+            wpunity_create_energy_standardScenes_unity($gameID, $gameSlug, $game_path, $fileEditorBuildSettings, $handybuilder_file);
+    
+            // Make the scene selector
+            wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
+    
+            break;
+        case 'chemistry_games':
+    
+//            $mainMenuTerm = get_term_by('slug', 'mainmenu-chem-yaml', 'wpunity_scene_yaml');
+//            $term_meta_s_reward = wpunity_getSceneYAML_chemistry('reward');
+//            $term_meta_s_selector = wpunity_getSceneYAML_chemistry('selector');
+//            $term_meta_s_selector_title = 'Select a Scene';
+    
+            //do nothing
+            wpunity_create_chemistry_selector_unity($gameID, $gameSlug, $game_path, $fileEditorBuildSettings, $handybuilder_file);
+            
+            break;
     }
-
-    $fileEditorBuildSettings = $settings_path . '/EditorBuildSettings.asset';//path of EditorBuildSettings.asset
-    wpunity_append_scenes_in_EditorBuildSettings_dot_asset($fileEditorBuildSettings,'Assets/scenes/S_MainMenu.unity');//Update the EditorBuildSettings.asset by adding new Scene
-
-    if($gameType[0]->slug == 'archaeology_games') {
-        $file2 = $game_path . '/' . 'S_SceneSelector.unity';
-        $file_content = str_replace("___[text_title_scene_selector]___", $term_meta_s_selector_title, $term_meta_s_selector);
-        $create_file2 = fopen($file2, "w") or die("Unable to open file!");
-        fwrite($create_file2, $file_content);
-        fclose($create_file2);
-
-        $file = $game_path . '/' . 'S_Reward.unity';
-        $create_file = fopen($file, "w") or die("Unable to open file!");
-        fwrite($create_file, $term_meta_s_reward);
-        fclose($create_file);
-    }elseif($gameType[0]->slug == 'chemistry_games'){
-        //do nothing
-        wpunity_create_chemistry_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
-    }elseif($gameType[0]->slug == 'energy_games'){
-        wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
-
-        //create standard energy scenes (simulation scenes, stats, turbine selection etc)
-        wpunity_create_energy_standardScenes_unity($gameID,$gameSlug,$game_path,$settings_path,$handybuilder_file);
-
-    }
-
 }
 
 //Create MainMenu scene and others
-function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_path, $scenes_counter, $handybuilder_file, $gameType){
+function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $fileEditorBuildSettings, $scenes_counter, $handybuilder_file, $gameType){
 
     //$fe = fopen("output_scenes_cre" . $scene_id . ".txt","w");
     
@@ -694,27 +680,27 @@ function wpunity_compile_scenes_cre($game_path, $scene_id, $gameSlug, $settings_
     
     
     if($scene_type_slug == 'mainmenu-yaml'){
-        wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_energy_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'mainmenu-arch-yaml'){
-        wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_archaeology_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'mainmenu-chem-yaml'){
-        wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'credentials-arch-yaml'){
-        wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_archaeology_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'credentials-yaml'){
-        wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'credentials-chem-yaml'){
-        wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file);
+        wpunity_create_chemistry_credentials_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file);
     }elseif($scene_type_slug == 'educational-energy'){
-        wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'wonderaround-yaml'){
-        wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_archaeology_wonderaround_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'wonderaround-lab-yaml'){
-        wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'exam2d-chem-yaml'){
-        wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_chemistry_exam2d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType);
     }elseif($scene_type_slug == 'exam3d-chem-yaml'){
-        wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$settings_path,$handybuilder_file,$scenes_counter,$gameType);
+        wpunity_create_chemistry_exam3d_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType);
     }
     
 //    fwrite($fe, "success");
