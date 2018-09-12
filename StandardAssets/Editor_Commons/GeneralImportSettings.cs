@@ -65,13 +65,15 @@ class GeneralImportSettings : AssetPostprocessor
             if (mat)
             {
 
-                // Basic material (no shadows)
-               if (!path.Contains("Sky"))
+                // Change shaders depending on material name
+               if (!path.Contains("Sky")){
                    if (mat.mainTexture == null)
                        if (path.Contains("Elements") && path.Contains("Normal")){
                            mat.shader = Shader.Find("Diffuse");
                        }else if (path.Contains("Elements") && path.Contains("Transparent")){
                            mat.shader = Shader.Find("Transparent/Bumped Diffuse");
+                       }else if (path.Contains("WaterBasicDaytime") || path.Contains("water")){
+                          mat.shader = Shader.Find("FX/Water (Basic)");
                        }else{
                            mat.shader = Shader.Find("Standard");
                        }
@@ -79,7 +81,7 @@ class GeneralImportSettings : AssetPostprocessor
                        {
                          mat.shader = Shader.Find("Unlit/Texture");
                        }
-
+                }
 
                 if (path.Contains("NoGlossy"))
                 {
