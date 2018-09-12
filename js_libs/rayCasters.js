@@ -657,22 +657,22 @@ function displayMarkerProperties(event, name){
         var turbine_medium = [];
         var turbine_large = [];
 
-        energy_fields.env = envir.fields;
-        if (!energy_fields.env) {energy_fields.env = 'mountain';}
+        energy_fields.env = envir.sceneType;
+        if (!energy_fields.env) {energy_fields.env = 'mountains';}
 
         switch(energy_fields.env) {
 
             // Wind Class I
-            case 'mountain':
-                turbine_small.power = 900;
+            case 'mountains':
+                turbine_small.power = 0.9;
                 turbine_small.area = 52;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 3000;
+                turbine_medium.power = 3;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 3;
 
-                turbine_large.power = 6000;
+                turbine_large.power = 6;
                 turbine_large.area = 128;
                 turbine_large.cost = 5;
 
@@ -680,15 +680,15 @@ function displayMarkerProperties(event, name){
 
             // Wind Class II
             case 'fields':
-                turbine_small.power = 850;
+                turbine_small.power = 0.85;
                 turbine_small.area = 60;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 2000;
+                turbine_medium.power = 2;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 2;
 
-                turbine_large.power = 3000;
+                turbine_large.power = 3;
                 turbine_large.area = 90;
                 turbine_large.cost = 3;
 
@@ -696,15 +696,15 @@ function displayMarkerProperties(event, name){
 
             // Wind Class III
             case 'seashore':
-                turbine_small.power = 850;
+                turbine_small.power = 0.85;
                 turbine_small.area = 60;
                 turbine_small.cost = 1;
 
-                turbine_medium.power = 2000;
+                turbine_medium.power = 2;
                 turbine_medium.area = 90;
                 turbine_medium.cost = 2;
 
-                turbine_large.power = 3000;
+                turbine_large.power = 3;
                 turbine_large.area = 126;
                 turbine_large.cost = 4;
 
@@ -730,14 +730,14 @@ function displayMarkerProperties(event, name){
         console.log(url1, url2, url3);
 
         var iframe1 = jQuery('#turbine1-iframe');
-        var iframe2 = jQuery('#turbine2-iframe');
-        var iframe3 = jQuery('#turbine3-iframe');
-
         iframe1.attr('src', url1);
+
+        var iframe2 = jQuery('#turbine2-iframe');
         iframe2.attr('src', url2);
+
+        var iframe3 = jQuery('#turbine3-iframe');
         iframe3.attr('src', url3);
 
-        return true;
     }
 
     function calculateMapId(arch, natural, hv) {
