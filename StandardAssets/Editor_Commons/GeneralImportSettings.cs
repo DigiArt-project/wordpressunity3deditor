@@ -72,7 +72,7 @@ class GeneralImportSettings : AssetPostprocessor
                            mat.shader = Shader.Find("Diffuse");
                        }else if (path.Contains("Elements") && path.Contains("Transparent")){
                            mat.shader = Shader.Find("Transparent/Bumped Diffuse");
-                       }else if (path.Contains("WaterBasicDaytime")){
+                       }else if (path.Contains("WaterBasicDaytime") || path.Contains("water")){
                           mat.shader = Shader.Find("FX/Water (Basic)");
                        }else{
                            mat.shader = Shader.Find("Standard");
