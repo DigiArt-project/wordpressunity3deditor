@@ -93,17 +93,20 @@ class GeneralImportSettings : AssetPostprocessor
                 }
                 else if (path.Contains("Transparent") && !path.Contains("Elements"))
                 {
-                       mat.shader = Shader.Find("Standard");
+                    if (path.Contains("glass"))
+                        mat.shader = Shader.Find("Legacy Shaders/Transparent/Diffuse");
+                    else
+                        mat.shader = Shader.Find("Standard");
 
-                       // Rendering mode : Fade
-                       mat.EnableKeyword("_Mode");
-                       mat.SetFloat("_Mode", 2);
-                       mat.SetFloat("_Glossiness", 0);
-                       mat.SetInt("_ZWrite", 1);
-                       mat.EnableKeyword("_ALPHATEST_ON");
-                       mat.DisableKeyword("_ALPHABLEND_ON");
-                       mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                       mat.enableInstancing = true;
+                   // Rendering mode : Fade
+                   mat.EnableKeyword("_Mode");
+                   mat.SetFloat("_Mode", 2);
+                   mat.SetFloat("_Glossiness", 0);
+                   mat.SetInt("_ZWrite", 1);
+                   mat.EnableKeyword("_ALPHATEST_ON");
+                   mat.DisableKeyword("_ALPHABLEND_ON");
+                   mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                   mat.enableInstancing = true;
                 }
             }
 
