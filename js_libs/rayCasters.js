@@ -554,7 +554,7 @@ function displayDoorProperties(event, name){
         if (envir.scene.getObjectByName(name).doorName_source !== doorsAll[l].door)
             doorsFromOtherScenes.push ( doorsAll[l].door + " at " + doorsAll[l].scene + " (" + doorsAll[l].sceneSlug + ")" );
 
-    // Add options for each intersected object
+    // Add options
     createOption(popupDoorSelect[0], "Select a door", "Select a door", true, true, "#fff");
     for (var doorName of doorsFromOtherScenes )
         createOption(popupDoorSelect[0], doorName, doorName, false, false, "#fff");
@@ -592,8 +592,8 @@ function displayDoorProperties(event, name){
 
         if (valDoorScene && valDoorScene != "Select a door") {
 
-            var nameDoor_Target = valDoorScene.split("at")[0];
-            var sceneName_Target = valDoorScene.split("at")[1];
+            var nameDoor_Target = valDoorScene.split(" at ")[0];
+            var sceneName_Target = valDoorScene.split(" at ")[1];
 
             envir.scene.getObjectByName(name).doorName_target = nameDoor_Target.trim();
             envir.scene.getObjectByName(name).sceneName_target = sceneName_Target.trim();
@@ -792,6 +792,24 @@ function displayMarkerProperties(event, name){
 
 
 // ----------------- Aux ----------------------------------------------------------
+// /**
+//  * Clear Door properties
+//  */
+// function clearAndUnbindDoorProperties() {
+//     // Clear past options
+//
+//     // door target
+//     var popupDoorSelect = document.getElementById("popupDoorSelect");
+//     for (var i = popupDoorSelect.options.length; i-->0;)
+//         popupDoorSelect.options[i] = null;
+//
+//     // door source title & remove listeners
+//     jQuery("#doorid").val( null ).unbind('change');
+//
+//     jQuery("#popupDoorSelect").unbind('change');
+// }
+
+
 
 /**
  * A general mechanism to clear popup and unbind any handlers
@@ -912,22 +930,7 @@ function showWholePopupDiv(popUpDiv, event) {
 // }
 
 //
-// /**
-//  * Clear Door properties
-//  */
-// function clearAndUnbindDoorProperties() {
-//     // Clear past options
-//
-//     // door target
-//     var popupDoorSelect = document.getElementById("popupDoorSelect");
-//     for (var i = popupDoorSelect.options.length; i-->0;)
-//         popupDoorSelect.options[i] = null;
-//
-//     // door source title & remove listeners
-//     jQuery("#doorid").val( null ).unbind('change');
-//
-//     jQuery("#popupDoorSelect").unbind('change');
-// }
+
 //
 // function clearAndUnbindMarkerProperties() {
 //     // marker target scene

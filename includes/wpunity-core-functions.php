@@ -1978,7 +1978,7 @@ function wpunity_assepile_action_callback(){
 
 //    fwrite($fa, "bbbb");
 
-	// Wait 4 seconds to erase previous project before starting compiling the new one
+	// Wait 2 seconds to erase previous project before starting compiling the new one
 	// to avoiding erroneously take previous files. This is not safe with sleep however.
 	// Do not delete library folder if it takes too long
 	sleep(2);
@@ -2020,10 +2020,6 @@ function wpunity_assepile_action_callback(){
 //        fwrite($ff, "\n");
 //        fwrite($ff, $os);
 //        fwrite($ff, "\n");
-
-
-
-
 
 
 		//'C:\xampp\htdocs\COMPILE_UNITY3D_GAMES\\'. $_REQUEST['gameSlug'] . 'Unity' ;
@@ -2085,24 +2081,15 @@ goto :EOF
 
 		chdir($game_dirpath);
 
-//		$fj = fopen("outputIII.txt","w");
-
-
-
 		if ($os === 'win') {
 			if(wpunity_getUnity_local_or_remote() != 'remote') {
 
-
-
+			    // local compile
 				$unity_pid = shell_exec($compile_command);
 				$fga = fopen("execution_hint.txt", "w");
 				fwrite($fga, $compile_command);
 				fclose($fga);
 			} else {
-
-//                fwrite($ff, "\n");
-//                fwrite($ff, "STARTING REMOTE 1");
-//                fwrite($ff, "\n");
 
 				// remote
 				$ftp_cre = wpunity_get_ftpCredentials();
@@ -2122,10 +2109,6 @@ goto :EOF
 				$startCompile_url = "http://".$ftp_host."/".$gamesFolder.'/unzipper.php?game='.$gameProject."&action=start";
 
 				// -------------- Zip the project to send it for remote compile -------------------
-
-//                fwrite($ff, "\n");
-//                fwrite($ff, "STARTING REMOTE 2: ZIP");
-//                fwrite($ff, "\n");
 
 				/* Exclude Files */
 				$exclude_files = array();
@@ -2175,10 +2158,6 @@ goto :EOF
 
 				//--------------- FTP TRANSFER ------------------------------------------------
 
-//                fwrite($ff, "\n");
-//                fwrite($ff, "STARTING REMOTE 3: FTP transfer");
-//                fwrite($ff, "\n");
-
 				/* Connect using basic FTP */
 				$connect_it = ftp_connect($ftp_host);
 
@@ -2189,8 +2168,6 @@ goto :EOF
 
 				if ($login_result === true) {
 					$ret = ftp_nb_fput($connect_it, $remote_file, $fileHandle, FTP_BINARY);
-
-//					fwrite($fj, "remote_file FILE:". $remote_file );
 
 					while ($ret == FTP_MOREDATA) {
 						// Do whatever you want
@@ -2210,33 +2187,15 @@ goto :EOF
 					}
 				}
 
-
-//				fwrite($fj, "UNZIP URL". $unzip_url);
-
 				//------------------ UNZIP AND COMPILE --------------------------
-
-//                fwrite($ff, "\n");
-//                fwrite($ff, "STARTING REMOTE 3: UNZIP and compile");
-//                fwrite($ff, "\n");
-
 				if (file_get_contents($unzip_url)) //, array("timeout"=>1), $info) )
 				{
-
-//					fwrite($fj, "START COMPILE: " . $startCompile_url);
-
 					// Start the compiling
 					$unity_pid = file_get_contents($startCompile_url);
-
-//					fwrite($fj, "\n" );
-//					fwrite($fj, "PROCC:". $unity_pid);
-//					fwrite($fj, "\n" );
-
 				} else {
 					echo "<br />Error 798: UNZIPing problem";
 					wp_die();
 				}
-
-//				fwrite($fj, "4 UNZIP and COMPILE");
 
 			}
 		} else {
@@ -2252,7 +2211,6 @@ goto :EOF
 
 		echo $unity_pid;
 	}
-	//fclose($ff);
 	wp_die();
 }
 
@@ -2261,15 +2219,12 @@ function wpunity_monitor_compiling_action_callback(){
 
 	$DS = DIRECTORY_SEPARATOR;
 
-
-
 	$os = 'win'; // strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'? 'win':'lin';
 
 	// Monitor stdout.log
-
-
 	if ($os === 'lin') {
-
+        // LINUX
+        
 //		//pid is the sh process id. First get the xvfbrun process ID
 //		$phpcomd1  = exec ("ps -ef | grep Unity | awk ' $3 == \"".$_POST['pid']."\" {print $2;}';");
 //
@@ -2291,9 +2246,10 @@ function wpunity_monitor_compiling_action_callback(){
 //		else
 //			$processUnityCSV = "".$processUnityCSV."";
 
-
 	} else {
+	    // WINDOWS
 		if(wpunity_getUnity_local_or_remote() == 'local') {
+		    // LOCAL
 			//$phpcomd = 'TASKLIST /FI "imagename eq Unity.exe" /v /fo CSV';
 			$phpcomd = 'TASKLIST /FI "pid eq ' . $_POST['pid'] . '" /v /fo CSV';
 			$processUnityCSV = shell_exec($phpcomd);
@@ -2312,7 +2268,7 @@ function wpunity_monitor_compiling_action_callback(){
 
 			echo json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 		}else{
-
+            // REMOTE
 			$ftp_cre = wpunity_get_ftpCredentials();
 
 			$ftp_host = $ftp_cre['address'];
@@ -2330,8 +2286,6 @@ function wpunity_monitor_compiling_action_callback(){
 
 			$monitorCompile_url = "http://".$ftp_host."/".$gamesFolder."/unzipper.php?action=monitor&game=".$gameProject."&pid=".$_POST['pid'];
 
-
-
 			fwrite($fo, $monitorCompile_url);
 
 			$res = file_get_contents($monitorCompile_url);
@@ -2339,8 +2293,6 @@ function wpunity_monitor_compiling_action_callback(){
 			echo $res; // json_encode(array('os'=> $os, 'CSV' => $processUnityCSV , "LOGFILE"=>$stdoutSTR));
 		}
 	}
-
-
 
 	wp_die();
 }
