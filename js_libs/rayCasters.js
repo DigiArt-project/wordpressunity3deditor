@@ -646,9 +646,9 @@ function displayMarkerProperties(event, name){
     showWholePopupDiv(popUpMarkerPropertiesDiv, event);
 
     // Load PISA diagram for selected marker
-    loadPISAMarkerIframes();
+    loadPISAMarkerIframes(envir.scene.getObjectByName(name).archaeology_penalty, envir.scene.getObjectByName(name).hv_penalty, envir.scene.getObjectByName(name).natural_penalty);
 
-    function loadPISAMarkerIframes() {
+    function loadPISAMarkerIframes(arch_penalty, hv_penalty, natural_penalty) {
 
         var scene_elements = envir.scene.children;
         var energy_fields = [];
@@ -713,13 +713,9 @@ function displayMarkerProperties(event, name){
             default:
         }
 
-        for (var i in scene_elements) {
-            if (scene_elements[i].name === name) {
-                penalties.arch_penalty = (parseInt(scene_elements[i].archaeology_penalty, 10) === 0) ? 0 : 1;
-                penalties.hv_penalty = (parseInt(scene_elements[i].hv_penalty, 10) === 0) ? 0 : 1;
-                penalties.natural_penalty = (parseInt(scene_elements[i].natural_penalty, 10) === 0) ? 0 : 1;
-            }
-        }
+        penalties.arch_penalty = (parseInt(arch_penalty, 10) === 0) ? 0 : 1;
+        penalties.hv_penalty = (parseInt(hv_penalty, 10) === 0) ? 0 : 1;
+        penalties.natural_penalty = (parseInt(natural_penalty, 10) === 0) ? 0 : 1;
 
         energy_fields.mapId = parseInt(calculateMapId(penalties.arch_penalty, penalties.natural_penalty, penalties.hv_penalty), 10);
 
@@ -756,24 +752,41 @@ function displayMarkerProperties(event, name){
         return "https://analytics.envisage-h2020.eu/?" +
             "lab=energytool" +
             "&env=" + env +
-            "&map=" + parseInt(id, 10) +
-            "&watts=" + parseInt(turbine.power, 10) +
-            "&area=" +  parseInt(turbine.area, 10) +
-            "&cost=" +  parseInt(turbine.cost, 10);
+            "&map=" + id.toString() +
+            "&watts=" + turbine.power.toString() +
+            "&area=" +  turbine.area.toString() +
+            "&cost=" +  turbine.cost.toString();
 
+    }
+
+    function clearIframes() {
+        var iframe1 = jQuery('#turbine1-iframe');
+        iframe1.attr('src', 'about:blank');
+
+        var iframe2 = jQuery('#turbine2-iframe');
+        iframe2.attr('src', 'about:blank');
+
+        var iframe3 = jQuery('#turbine3-iframe');
+        iframe3.attr('src', 'about:blank');
     }
 
     // On popup change
     selectArchPenalty.change(function(e) {
         envir.scene.getObjectByName(name).archaeology_penalty = selectArchPenalty.val();
+        clearIframes();
+        loadPISAMarkerIframes(jQuery("#archaeology_penalty").val(), jQuery("#hv_distance_penalty"), jQuery("#natural_resource_proximity_penalty"));
     });
 
     selectHVPenalty.change(function(e) {
         envir.scene.getObjectByName(name).hv_penalty = selectHVPenalty.val();
+        clearIframes();
+        loadPISAMarkerIframes(jQuery("#archaeology_penalty").val(), jQuery("#hv_distance_penalty"), jQuery("#natural_resource_proximity_penalty"));
     });
 
     selectNaturalPenalty.change(function(e) {
         envir.scene.getObjectByName(name).natural_penalty = selectNaturalPenalty.val();
+        clearIframes();
+        loadPISAMarkerIframes(jQuery("#archaeology_penalty").val(), jQuery("#hv_distance_penalty"), jQuery("#natural_resource_proximity_penalty"));
     });
 }
 

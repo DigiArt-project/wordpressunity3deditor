@@ -332,11 +332,11 @@ echo '</script>';
 
     <!--Hierarchy Viewer-->
 
-    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy panel">
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy viewer">
         <i class="material-icons">menu</i>
     </a>
 
-    <div class="HierarchyViewerStyle">
+    <div class="HierarchyViewerStyle" id="hierarchy-viewer-container">
         <h2 class="mdc-typography--title mdc-theme--text-primary-on-background">Hierarchy Viewer</h2>
         <hr class="mdc-list-divider">
         <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
@@ -616,7 +616,7 @@ echo '</script>';
             jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
         }
 
-        jQuery("#hierarchy-viewer").toggle("slow");
+        jQuery("#hierarchy-viewer-container").toggle("slow");
     });
 
 
@@ -943,7 +943,7 @@ echo '</script>';
         jQuery("#double-sided-switch").show();
         jQuery("#removeAssetBtn").show();
         jQuery("#fullScreenBtn").show();
-        jQuery("#hierarchy-viewer").show();
+        jQuery("#hierarchy-viewer-container").show();
         jQuery("#hierarchy-toggle-btn").show();
         jQuery("#divPauseRendering").show();
 
@@ -971,7 +971,7 @@ echo '</script>';
         jQuery("#double-sided-switch").hide();
         jQuery("#removeAssetBtn").hide();
         jQuery("#fullScreenBtn").hide();
-        jQuery("#hierarchy-viewer").hide();
+        jQuery("#hierarchy-viewer-container").hide();
         jQuery("#hierarchy-toggle-btn").hide();
         jQuery("#optionsPopupBtn").hide();
 
