@@ -68,9 +68,9 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 );
 
 
-$project_saved_keys = wpunity_getProjectKeys($project_id);
+$project_saved_keys = wpunity_getProjectKeys($project_id, $project_scope);
 
-if (!$project_saved_keys['gioID']) {
+if (!$project_saved_keys['gioID'] && $project_scope === 1) {
 	echo "<script type='text/javascript'>alert(\"APP KEY not found. Please make sure that your are logged in, and your user account has been registered correctly.\");</script>";
 }
 

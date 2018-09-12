@@ -272,7 +272,7 @@ get_header();
                         <label class="mdc-typography--title NewGameLabel">Choose <?php echo $single; ?> type</label>
                         <ul class="RadioButtonList" onclick="loadGameDescription();">
 
-                            <?php if ($project_scope==1){?>
+                            <?php if ($project_scope===1){?>
                                 <li class="mdc-form-field">
                                     <div class="mdc-radio">
                                         <input class="mdc-radio__native-control" type="radio" id="gameTypeChemistryRadio" name="gameTypeRadio" value="3">
@@ -297,7 +297,7 @@ get_header();
                                 </li>
                            <?php }?>
     
-                            <?php if ($project_scope==0){?>
+                            <?php if ($project_scope===0){?>
                             <li class="mdc-form-field">
                                 <div class="mdc-radio">
                                     <input class="mdc-radio__native-control" type="radio" id="gameTypeArchRadio" checked="" name="gameTypeRadio" value="1">
