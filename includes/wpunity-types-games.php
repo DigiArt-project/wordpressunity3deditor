@@ -131,7 +131,7 @@ class GameClass{
 
 // Generate Taxonomy (for scenes & assets) with Game's slug/name
 // Create Default Scenes for this "Game"
-function wpunity_create_folder_game( $new_status, $old_status, $post ){
+function wpunity_create_folder_game( $new_status, $old_status, $post, $project_scope ){
 
     $post_type = get_post_type($post);
     $gameSlug = $post->post_name;
@@ -186,7 +186,10 @@ function wpunity_create_folder_game( $new_status, $old_status, $post ){
             //MALTA remove comments
 
             //Request keys from GIO
-            wpunity_createGame_GIO_request( $gameID , $user_id );
+	        if ($project_scope === 1) {
+		        wpunity_createGame_GIO_request( $gameID , $user_id );
+	        }
+
         }else{
             $gameTitle = $post->post_title;
             //Create a parent game tax category for the assets

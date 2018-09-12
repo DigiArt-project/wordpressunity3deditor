@@ -478,20 +478,24 @@ function wpunity_extrapass_profile_fields( $user ) {
 //==========================================================================================================================================
 
 //Function to get ALL necessary keys about GIO Analytics
-function wpunity_getProjectKeys($project_id) {
+function wpunity_getProjectKeys($project_id, $project_scope) {
 
-	$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
-	$myExpID = get_post_meta( $project_id, 'wpunity_project_expID', true);
-	$extraPass = get_the_author_meta( 'extra_pass', get_current_user_id() );
+	$mykeys = array();
 
-	$mykeys = array('projectID' => $project_id, 'gioID' => $myGioID, 'expID' => $myExpID, 'extraPass' => $extraPass);
+	if ($project_scope === 1) {
+		$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
+		$myExpID = get_post_meta( $project_id, 'wpunity_project_expID', true);
+		$extraPass = get_the_author_meta( 'extra_pass', get_current_user_id() );
+		$mykeys = array('projectID' => $project_id, 'gioID' => $myGioID, 'expID' => $myExpID, 'extraPass' => $extraPass);
+    }
 
 	return $mykeys;
 }
 
 // STEP 1 for GIO data
-add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
-
+if ($project_scope === 1) {
+	add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
+}
 
 function wpunity_registrationUser_save( $user_id ) {
 
