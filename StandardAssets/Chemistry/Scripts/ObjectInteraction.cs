@@ -65,7 +65,7 @@ public class ObjectInteraction : MonoBehaviour
         {
             interactionCanvas.enabled = false;
             cursor.UnLockCursor();
-            scoreManager.DisplayScore();
+            sceneLoader.LoadScene(sceneToLoad);
         }
         SoundManager.instance.PlaySingle(clip);
     }
