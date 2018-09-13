@@ -241,9 +241,6 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
-
-
-
     <div id="xlengthText"></div>
     <div id="ylengthText"></div>
     <div id="zlengthText"></div>
@@ -763,8 +760,6 @@ echo '</script>';
     // FULL SCREEN Toggle
     jQuery('#fullScreenBtn').click(function() {
 
-        console.log(container_3D_all.style.width);
-
         if (container_3D_all.style.width!=="100%") {
             envir.makeFullScreen();
         } else {
@@ -1100,10 +1095,6 @@ $formRes->init($sceneToLoad);
 
             updatePositionsPhpAndJavsFromControlsAxes();
         }
-
-
-        //console.log("2", envir.avatarControls.getObject().rotation._y);
-        //console.log("B:" , envir.avatarControls.getObject().rotation._y);
     }
 
     // Select event listener
