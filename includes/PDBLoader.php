@@ -107,7 +107,7 @@ class PDBLoader {
      * @param $mat_meta_id
      * @return array
      */
-    public function _atomMaterialPattern ($r, $g, $b, $mat_meta_id){ // in zero to 1 domain
+    public function _atomMaterialPattern ($r, $g, $b, $mat_meta_id,$atomName){ // in zero to 1 domain
     
 $_materialPattern =
 "%YAML 1.1
@@ -118,7 +118,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Natrium_transp
+  m_Name: ".$atomName."_transp
   m_Shader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 4
@@ -860,11 +860,8 @@ MeshFilter:
             $mat_meta_id = str_pad("a".$red."b".$green."c".$blue, 32, "0", STR_PAD_LEFT );
         
             // get the colors to make the mat and its meta
-            $mat_meta = $this->_atomMaterialPattern (  $red, $green, $blue, $mat_meta_id );
-        
-            
-            
-            
+            $mat_meta = $this->_atomMaterialPattern (  $red, $green, $blue, $mat_meta_id, $atomNameCurr );
+
             // Make the dir if does not exist
             if(!is_dir($dirFormAtomMaterials))
                 mkdir($dirFormAtomMaterials);
