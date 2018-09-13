@@ -742,7 +742,9 @@ function wpunity_compile_copy_StandardAssets($gameID, $gameSlug,$gameType){
         $fileGo = $dest . '/' . 'goedle_io/Scripts/'. 'GoedleManager.prefab';
         $GOcontent = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/chemistry/GoedleManager.txt");
 
-        $project_saved_keys = wpunity_getProjectKeys($gameID);
+	    global $project_scope;
+
+        $project_saved_keys = wpunity_getProjectKeys($gameID, $project_scope);
         $g_app_key = $project_saved_keys['gioID'];
         $g_api_key = $project_saved_keys['expID'];
 
