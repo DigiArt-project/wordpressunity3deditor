@@ -66,30 +66,16 @@ class vr_editor_environmentals {
 
         this.labelRenderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
 
-        //        console.log(this.renderer.context.canvas.getContext("webgl").MAX_TEXTURE_SIZE);
-
-        //console.log("TURBO RESIZE");
-
         //----------------------------------------------
 
         updateCameraGivenSceneLimits();
-
-        // this.cameraOrbit.aspect = this.ASPECT;
-        //
-        // this.cameraOrbit.left = this.cameraOrbit.left * this.ASPECT_NEW_RATIO;
-        // this.cameraOrbit.right = this.cameraOrbit.right * this.ASPECT_NEW_RATIO;
-        //
-        // this.cameraOrbit.updateProjectionMatrix();
-
 
         //----------------------------------------------------------------
          this.cameraAvatar.aspect = this.ASPECT;
          this.cameraAvatar.updateProjectionMatrix();
 
-
         this.cameraThirdPerson.aspect = this.ASPECT;
         this.cameraThirdPerson.updateProjectionMatrix();
-
 
          //---------------------------------------------------------------
 
@@ -177,19 +163,6 @@ class vr_editor_environmentals {
         envir.turboResize();
     }
 
-    // addCubeToControls(transform_controls){
-    //
-    //     // Change trs mode by click on the purple cube
-    //     var cubeForModeChangeDetectGEO = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-    //     var cubeForModeChangeDetectMAT = new THREE.MeshBasicMaterial( { color: 0xff8c00 } );
-    //
-    //     var cubeForModeChangeDetec = new THREE.Mesh( cubeForModeChangeDetectGEO, cubeForModeChangeDetectMAT );
-    //     cubeForModeChangeDetec.position.set( 1.1, 1.1, 0);
-    //     cubeForModeChangeDetec.name = "trs_modeChanger";
-    //     transform_controls.add( cubeForModeChangeDetec );
-    // }
-
-
     /**
      Set the Orbit Camera
      */
@@ -231,8 +204,6 @@ class vr_editor_environmentals {
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
 
-
-
         this.scene.add(this.cameraAvatar);
 
         this.avatarControls = new THREE.PointerLockControls( this.cameraAvatar, this.renderer.domElement );
@@ -246,14 +217,12 @@ class vr_editor_environmentals {
 
         this.scene.add(avatarControlsYawObject);
 
-
         this.cameraThirdPerson = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, 0.01, 3000);
         this.cameraThirdPerson.position.set(0, 4, 5);
         this.cameraThirdPerson.rotation.x = -0.2;
         this.cameraThirdPerson.name = "cameraThirdPerson";
 
         avatarControlsYawObject.add(this.cameraThirdPerson);
-
 
         //this.orbitControls.target =  avatarControlsYawObject.position; //new THREE.Vector3(0,0,0) ;//
 
@@ -284,9 +253,6 @@ class vr_editor_environmentals {
         return envir.avatarControls.getObject();
     }
 
-
-
-
     setSteveWorldPosition(x,y,z,rx,ry){
         envir.avatarControls.getObject().position.x = x;
         envir.avatarControls.getObject().position.y = y;
@@ -307,13 +273,11 @@ class vr_editor_environmentals {
         this.scene = new THREE.Scene();
         this.scene.name = "digiartScene";
 
-
         // // Add Grid
         this.gridHelper = new THREE.GridHelper(2000, 40);
         this.gridHelper.name = "myGridHelper";
         this.scene.add(this.gridHelper);
         this.gridHelper.visible = false;
-
 
         // // Add Axes helper
         this.axisHelper = new THREE.AxisHelper( 100 );
@@ -330,11 +294,8 @@ class vr_editor_environmentals {
         var loader = new THREE.FontLoader();
         loader.scene = this.scene;
 
-
         var pathn = window.location.pathname.replace(/[^/]*$/, '');
         pathn = pathn.replace('/wpunity-edit-3d-scene/','');
-
-
 
         loader.load(pathn + '/wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/helvetiker_bold.typeface.json', this.loadtexts );
     }
