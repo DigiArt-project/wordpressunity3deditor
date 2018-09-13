@@ -559,7 +559,6 @@ function wpunity_registrationUser_save( $user_id ) {
 
 //STEP 2 for GIO data
 function wpunity_createGame_GIO_request($project_id, $user_id){
-
 	$user_info = get_userdata($user_id);
 	$userEmail = $user_info->user_email;
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
