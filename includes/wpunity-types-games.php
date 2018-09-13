@@ -131,7 +131,7 @@ class GameClass{
 
 // Generate Taxonomy (for scenes & assets) with Game's slug/name
 // Create Default Scenes for this "Game"
-function wpunity_create_folder_game( $new_status, $old_status, $post, $project_scope){
+function wpunity_create_folder_game( $new_status, $old_status, $post){
 
 	$post_type = get_post_type($post);
 	$gameSlug = $post->post_name;
@@ -200,7 +200,7 @@ function wpunity_create_folder_game( $new_status, $old_status, $post, $project_s
 	}
 }
 
-add_action('transition_post_status','wpunity_create_folder_game',9,4);
+add_action('transition_post_status','wpunity_create_folder_game',9,3);
 
 //==========================================================================================================================================
 
