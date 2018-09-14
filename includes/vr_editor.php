@@ -1041,14 +1041,6 @@ $formRes->init($sceneToLoad);
 
         id_animation_frame = requestAnimationFrame( animate );
 
-        
-        
-        // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
-//        setTimeout( function() {
-//            id_animation_frame = requestAnimationFrame( animate );
-//        }, 1000 / 25 );
-
-
         // Select the proper camera (orbit, or avatar, or thirdPersonView)
         var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
 

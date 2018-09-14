@@ -88,7 +88,7 @@ function onMouseDoubleClickFocus( event , objectName) {
  */
 function onMouseSelect(event ) {
 
-    console.log(event);
+    //console.log(event);
 
     event.preventDefault();
     event.stopPropagation();
@@ -863,7 +863,7 @@ function raylineVisualize(raycasterPick){
 
     var geolinecast = new THREE.Geometry();
 
-    var c = -150;
+    var c = 10000;
     geolinecast.vertices.push(raycasterPick.ray.origin,
         new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
             (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
@@ -876,16 +876,16 @@ function raylineVisualize(raycasterPick){
     envir.scene.add(myBulletLine);
 
     // This will force scene to update and show the line
-    envir.scene.getObjectByName('orbitCamera').position.x += 0.001;
+    envir.scene.getObjectByName('orbitCamera').position.x += 1;
 
     setTimeout(function () {
-        envir.scene.getObjectByName('orbitCamera').position.x -= 0.001;
-    }, 500);
+        envir.scene.getObjectByName('orbitCamera').position.x -= 1;
+    }, 1500);
 
     // Remove the line
     setTimeout(function () {
         envir.scene.remove(envir.scene.getObjectByName('rayLine'));
-    }, 500);
+    }, 1500);
 
 }
 

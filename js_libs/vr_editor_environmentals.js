@@ -22,7 +22,7 @@ class vr_editor_environmentals {
 
 
         this.NEAR = 0.01;
-        this.FAR = 0.01; // keep the camera empty until everything is loaded
+        this.FAR = 10000; // keep the camera empty until everything is loaded
 
         this.setScene();
         this.setRenderer();
