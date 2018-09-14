@@ -573,7 +573,7 @@ function displayDoorProperties(event, name){
     popUpDoorPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     popUpDoorPropertiesDiv[0].style.top = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 
-    //mdc.textfield.MDCTextfield.attachTo(document.getElementById('chemistryGateComponent'));
+    window.mdc.textfield.MDCTextfield.attachTo(document.getElementById('doorInputTextfield'));
 
     doorid.change(function(e) {
         var nameDoorSource_simple = jQuery("#doorid").val();
