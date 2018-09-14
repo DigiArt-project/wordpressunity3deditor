@@ -746,8 +746,9 @@ function wpunity_compile_copy_StandardAssets($gameID, $gameSlug,$gameType){
 
         $project_saved_keys = wpunity_getProjectKeys($gameID, $project_scope);
         $g_app_key = $project_saved_keys['gioID'];
-        $g_api_key = $project_saved_keys['wpunity_project_gioAPIKey'];
-
+        //$g_api_key = $project_saved_keys['wpunity_project_gioAPIKey'];
+		$g_api_key = get_post_meta($gameID,'wpunity_project_gioAPIKey',true);
+		
         $file_content = str_replace("___[g_app_key]___",$g_app_key,$GOcontent);
         $file_content = str_replace("___[g_api_key]___",$g_api_key,$file_content);
 
