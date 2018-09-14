@@ -1041,6 +1041,8 @@ $formRes->init($sceneToLoad);
 
         id_animation_frame = requestAnimationFrame( animate );
 
+        
+        
         // XX fps (avoid due to dat-gui unable to intercept rendering (limited scope of id_animation_frame)
 //        setTimeout( function() {
 //            id_animation_frame = requestAnimationFrame( animate );
