@@ -174,13 +174,14 @@ class vr_editor_environmentals {
             new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
                                                           this.FRUSTUM_SIZE * this.ASPECT /   2,
                                                           this.FRUSTUM_SIZE /   2,
-                                                          this.FRUSTUM_SIZE / - 2, -1400, this.FAR);
+                                                          this.FRUSTUM_SIZE / - 2, 0, this.FAR);
 
         //     new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR);
 
         this.cameraOrbit.name = "orbitCamera";
         this.scene.add(this.cameraOrbit);
 
+        // Cold start values
         this.cameraOrbit.position.set( 0, 50, 0);
 
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
@@ -609,10 +610,4 @@ class vr_editor_environmentals {
         //this.sky.uniforms.sunPosition.value.copy( this.sunSphere.position );
 
     }
-
-
-
-
-
-
 }

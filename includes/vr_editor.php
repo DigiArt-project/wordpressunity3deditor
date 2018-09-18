@@ -574,10 +574,8 @@ echo '</script>';
     </div>
 </div>
 
-
 <!--    Start 3D    -->
 <script>
-
     // all 3d dom
     var container_3D_all = document.getElementById( 'vr_editor_main_div' );
 
@@ -590,19 +588,13 @@ echo '</script>';
     guiContainer.appendChild(controlInterface.rotate.domElement);
     guiContainer.appendChild(controlInterface.scale.domElement);
 
-
     // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
     var envir = new vr_editor_environmentals(container_3D_all);
     envir.is2d = true;
 
-
     // Controls with axes (Transform, Rotate, Scale)
     var transform_controls = new THREE.TransformControls( envir.cameraOrbit, envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
-
-    //transform_controls.addEventListener( 'change', checkForRecycle );
-
-    //envir.addCubeToControls(transform_controls);
 
     jQuery("#hierarchy-toggle-btn").click(function() {
 
@@ -639,30 +631,19 @@ echo '</script>';
 
         findSceneDimensions();
         updateCameraGivenSceneLimits();
-
-        envir.cameraOrbit.position.x = 0;
-        envir.cameraOrbit.position.y = 50;
-        envir.cameraOrbit.position.z = 0;
-
-        envir.cameraOrbit.rotation._x = - Math.PI/2;
-        envir.cameraOrbit.rotation._y = 0;
-        envir.cameraOrbit.rotation._z = 0;
-
-        envir.orbitControls.object.zoom = 1;
-
-
-        envir.orbitControls.target.x = 0;
-        envir.orbitControls.target.y = 0;
-        envir.orbitControls.target.z = 0;
+        
+        // envir.orbitControls.object.zoom = 1;
+        //
+        // envir.orbitControls.target.x = 0;
+        // envir.orbitControls.target.y = 0;
+        // envir.orbitControls.target.z = 0;
 
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
 
-            envir.orbitControls.object.position.x = 50;
-            envir.orbitControls.object.position.y = 50;
-            envir.orbitControls.object.position.z = 50;
-
+            envir.cameraOrbit.position.set(envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE);
+            
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
 
@@ -671,11 +652,16 @@ echo '</script>';
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
 
-
             envir.is2d = false;
             transform_controls.setMode("translate");
 
         } else {
+
+            envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
+            
+            envir.cameraOrbit.rotation._x = - Math.PI/2;
+            envir.cameraOrbit.rotation._y = 0;
+            envir.cameraOrbit.rotation._z = 0;
 
             envir.orbitControls.enableRotate = false;
             envir.gridHelper.visible = false;
@@ -690,7 +676,6 @@ echo '</script>';
 
             envir.scene.getObjectByName("SteveOld").visible = false;
             envir.scene.getObjectByName("Steve").visible = true;
-
         }
 
         envir.orbitControls.object.updateProjectionMatrix();
@@ -754,8 +739,6 @@ echo '</script>';
         btnFirst.click();
 
     });
-
-
 
     // FULL SCREEN Toggle
     jQuery('#fullScreenBtn').click(function() {
@@ -915,9 +898,11 @@ echo '</script>';
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
+        updateCameraGivenSceneLimits();
 
+
+        
         envir.setHierarchyViewer();
-
     };
 
     function hideObjectPropertiesPanels() {
@@ -988,9 +973,6 @@ echo '</script>';
         envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
     }
 </script>
-
-
-
 
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );

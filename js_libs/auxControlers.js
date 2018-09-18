@@ -378,13 +378,7 @@ function findSceneDimensions(){
 
 function updateCameraGivenSceneLimits(){
 
-    //console.log("resetCameraFor2Dview");
-
-
-
     if(envir.cameraOrbit.type === 'PerspectiveCamera') {
-
-        envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
 
     } else if(envir.cameraOrbit.type  === 'OrthographicCamera') {
 
@@ -397,10 +391,14 @@ function updateCameraGivenSceneLimits(){
 
         envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 1; // *0.8 shift it a little bit to the top
         envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1; // *1.2 shift it a little bit to the top
-        envir.cameraOrbit.far = 20000;
+        envir.cameraOrbit.far    = 20000;
     }
 
+    if(envir.is2d){
+        envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
+    } else {
+        envir.cameraOrbit.position.set(envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE);
+    }
 
     envir.cameraOrbit.updateProjectionMatrix();
 }
-
