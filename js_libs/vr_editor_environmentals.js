@@ -168,6 +168,8 @@ class vr_editor_environmentals {
      */
     setOrbitCamera() {
 
+        // Do not set orthographicCamera near plane to negative values (it affects badly raycasting)
+        // Try to configure orthographicCamera based on game type
         this.cameraOrbit =
             new THREE.OrthographicCamera( this.FRUSTUM_SIZE * this.ASPECT / - 2,
                                                           this.FRUSTUM_SIZE * this.ASPECT /   2,

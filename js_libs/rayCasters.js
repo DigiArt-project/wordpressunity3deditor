@@ -22,6 +22,7 @@ function raycasterSetter(event){
     // calculate objects intersecting the picking ray
     raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
 
+
     // Show the myBulletLine (raycast)
     if (showRayPickLine)
         raylineVisualize(raycasterPick);
@@ -88,7 +89,9 @@ function onMouseDoubleClickFocus( event , objectName) {
  */
 function onMouseSelect(event ) {
 
-    //console.log(event);
+    // Middle click return
+    if(event.button === 1)
+        return;
 
     event.preventDefault();
     event.stopPropagation();
@@ -96,9 +99,8 @@ function onMouseSelect(event ) {
     var raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"), //transform_controls.getObjectByName('trs_modeChanger')
-
-    //console.log(activMesh);
+    var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
+   //transform_controls.getObjectByName('trs_modeChanger')
 
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
@@ -168,7 +170,6 @@ function onMouseSelect(event ) {
  * @param inters
  */
 function selectorMajor(event, objectSel){
-
 
     if (event.button === 0) {
 

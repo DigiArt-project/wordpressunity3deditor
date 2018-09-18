@@ -628,11 +628,11 @@ echo '</script>';
     });
 
     jQuery("#axis-size-increase-btn").click(function() {
-        transform_controls.setSize( transform_controls.size + 0.1 );
+        transform_controls.setSize( transform_controls.size * 1.1 );
     });
 
     jQuery("#axis-size-decrease-btn").click(function() {
-        transform_controls.setSize( Math.max(transform_controls.size - 0.1, 0.1 ) );
+        transform_controls.setSize( Math.max(transform_controls.size * 0.9, 0.1 ) );
     });
 
     jQuery("#editor-dimension-btn").click(function() {

@@ -16048,6 +16048,7 @@
 
                 var distance = raycaster.ray.origin.distanceTo( intersectionPointWorld );
 
+
                 if ( distance < raycaster.near || distance > raycaster.far ) return null;
 
                 return {
@@ -16089,6 +16090,8 @@
 
             return function raycast( raycaster, intersects ) {
 
+
+
                 var geometry = this.geometry;
                 var material = this.material;
                 var matrixWorld = this.matrixWorld;
@@ -16117,9 +16120,11 @@
 
                 }
 
+
                 var intersection;
 
                 if ( geometry.isBufferGeometry ) {
+
 
                     var a, b, c;
                     var index = geometry.index;
@@ -16172,6 +16177,7 @@
                     }
 
                 } else if ( geometry.isGeometry ) {
+
 
                     var fvA, fvB, fvC;
                     var isMultiMaterial = Array.isArray( material );
@@ -16228,6 +16234,8 @@
                         }
 
                         intersection = checkIntersection( this, faceMaterial, raycaster, ray, fvA, fvB, fvC, intersectionPoint );
+
+
 
                         if ( intersection ) {
 
@@ -23982,9 +23990,11 @@
 
         raycast: ( function () {
 
+
             var matrixPosition = new Vector3();
 
             return function raycast( raycaster, intersects ) {
+
 
                 matrixPosition.setFromMatrixPosition( this.matrixWorld );
 
@@ -24526,11 +24536,15 @@
 
         raycast: ( function () {
 
+
+
             var inverseMatrix = new Matrix4();
             var ray = new Ray();
             var sphere = new Sphere();
 
             return function raycast( raycaster, intersects ) {
+
+            
 
                 var precision = raycaster.linePrecision;
                 var precisionSq = precision * precision;
@@ -24797,11 +24811,13 @@
 
         raycast: ( function () {
 
+
             var inverseMatrix = new Matrix4();
             var ray = new Ray();
             var sphere = new Sphere();
 
             return function raycast( raycaster, intersects ) {
+
 
                 var object = this;
                 var geometry = this.geometry;
@@ -40489,7 +40505,9 @@
 
         if ( object.visible === false ) return;
 
+
         object.raycast( raycaster, intersects );
+
 
         if ( recursive === true ) {
 
@@ -40527,6 +40545,7 @@
             } else if ( ( camera && camera.isOrthographicCamera ) ) {
 
                 this.ray.origin.set( coords.x, coords.y, ( camera.near + camera.far ) / ( camera.near - camera.far ) ).unproject( camera ); // set origin in plane of camera
+
                 this.ray.direction.set( 0, 0, - 1 ).transformDirection( camera.matrixWorld );
 
             } else {
@@ -40561,10 +40580,10 @@
             }
 
             for ( var i = 0, l = objects.length; i < l; i ++ ) {
-
                 intersectObject( objects[ i ], this, intersects, recursive );
 
             }
+
 
             intersects.sort( ascSort );
 

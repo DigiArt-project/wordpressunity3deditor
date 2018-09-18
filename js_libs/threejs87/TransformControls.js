@@ -1137,13 +1137,14 @@
 
             if(_mode === "rotate") {
                 // magic_line.visible = true;
-
             }
 
             if ( scope.object === undefined || _dragging === true || ( event.button !== undefined && event.button !== 0 ) ) return;
 
             var pointer = event.changedTouches ? event.changedTouches[ 0 ] : event;
+
             var intersect = intersectObjects( pointer, _gizmo[ _mode ].pickers.children );
+
             var axis = null;
 
             if ( intersect ) {
@@ -1804,7 +1805,12 @@
             var y = ( pointer.clientY - rect.top ) / rect.height;
 
             pointerVector.set( ( x * 2 ) - 1, - ( y * 2 ) + 1 );
+
+
+
             ray.setFromCamera( pointerVector, camera );
+
+
 
             var intersections = ray.intersectObjects( objects, true );
             return intersections[ 0 ] ? intersections[ 0 ] : false;
