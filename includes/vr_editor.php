@@ -467,15 +467,15 @@ echo '</script>';
                 </div>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                    <p class="mdc-typography--title">Low Turbine</p>
+                    <p class="mdc-typography--title">Small Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine1-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                    <p class="mdc-typography--title">Medium Turbine</p>
+                    <p class="mdc-typography--title">Normal Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine2-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                    <p class="mdc-typography--title">High Turbine</p>
+                    <p class="mdc-typography--title">Big Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine3-iframe"></iframe>
                 </div>
 
