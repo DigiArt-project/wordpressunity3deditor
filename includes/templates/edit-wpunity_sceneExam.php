@@ -259,7 +259,7 @@ get_header(); ?>
 													$mols = implode("", $mols); ?>
 
                                                     <div class="mdc-layout-grid__cell--span-3 CenterContents" id='<?php echo $key;?>'>
-                                                        <iframe style="height: 334px;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
+                                                        <iframe style="height: 334px; border:none;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
                                                         <span style="display:inline-block;"><?php echo json_encode($val);?></span>&nbsp;
                                                         <a style="display:inline-block;" onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer AlignIconToMiddle " aria-label="Delete game" title="Delete project">
                                                             <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
@@ -506,7 +506,7 @@ get_header(); ?>
                     mols = mols.join("");
 
                     savedStrategiesList.append( '' +
-                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><iframe style="height: 334px;" id=frame-'+strategyId+' data-mols="'+ mols +'"></iframe><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></div>' +
+                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><iframe style="height: 334px; border:none;" id=frame-'+strategyId+' data-mols="'+ mols +'"></iframe><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></div>' +
                         '');
 
                     loadPISAClusterIframe('chemistrytool', mols, 'frame-'+strategyId);

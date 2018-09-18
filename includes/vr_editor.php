@@ -418,13 +418,13 @@ echo '</script>';
             <i class="material-icons" style="cursor: pointer; float: right;">close</i>
         </a>
 
-        <p class="mdc-typography--subheading1"> Marker options</p>
+        <p class="mdc-typography--title"> Marker options</p>
 
 
         <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                     <table>
                         <tr>
                             <td>
@@ -466,14 +466,14 @@ echo '</script>';
                     </table>
                 </div>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 380px; border:none;" id="turbine1-iframe"></iframe>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine1-iframe"></iframe>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 380px; border:none;" id="turbine2-iframe"></iframe>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine2-iframe"></iframe>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-                    <iframe style="height: 380px; border:none;" id="turbine3-iframe"></iframe>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine3-iframe"></iframe>
                 </div>
 
             </div>
