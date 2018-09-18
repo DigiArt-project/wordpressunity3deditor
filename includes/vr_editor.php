@@ -87,7 +87,7 @@ echo '</script>';
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/addRemoveOne.js"></script>
 
 <script type="text/javascript">
-
+    
     isComposerOn = true;
     isPaused = false;
 

@@ -30,7 +30,7 @@ echo ini_get('max_input_time').chr(10);
 // DigiArt - Virtual Tour: 0
 // Envisage - Virtual Lab: 1
 // Default - Game Project: any other number
-$project_scope = 1;
+$project_scope = 0;
 
 
 //===================================== Styles & Scripts ====================================
