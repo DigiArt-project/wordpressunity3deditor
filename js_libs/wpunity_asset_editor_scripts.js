@@ -114,10 +114,6 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
         document.getElementById("assetPreviewContainer").innerHTML = "";
     }
 
-    if (jQuery('#producerPanel').is(':visible')) {
-        spanProducerChartLabels();
-    }
-
 }
 
 function wpunity_extract_file_extension(fn) {

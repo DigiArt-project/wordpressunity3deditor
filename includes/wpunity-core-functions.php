@@ -1,6 +1,6 @@
 <?php
 
-function wpunity_addStrategy_APIcall($project_id){
+function wpunity_addStrategy_APIcall($project_id, $strategy){
 
 	global $project_scope;
 
@@ -10,8 +10,6 @@ function wpunity_addStrategy_APIcall($project_id){
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 
 	$project_keys = wpunity_getProjectKeys($project_id, $project_scope);
-
-	$allStrategies = wpunity_combineGameStrategies($project_id);
 
 	$args = array(
 		'method' => 'POST',
@@ -62,7 +60,7 @@ function wpunity_addStrategy_APIcall($project_id){
 						'type'       => 'strategy',
 						'id'         => $strategy_id,
 						'attributes' => array(
-							'config' => json_encode($allStrategies)
+							'config' => json_encode($strategy)
 						)
 					)
 				) ),
@@ -148,6 +146,48 @@ function wpunity_addStrategy_APIcall($project_id){
 //==========================================================================================================================================
 //==========================================================================================================================================
 
+function wpunity_getExamScenes_byProjectID($project_id){
+	$gamePost = get_post($project_id);
+	$gameSlug = $gamePost->post_name;
+
+	$scene_type_slug = array( 'exam2d-chem-yaml', 'exam3d-chem-yaml' );
+
+	$custom_query_args = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field'    => 'slug',
+				'terms'    => $gameSlug
+			),
+			array(
+				'taxonomy' => 'wpunity_scene_yaml',
+				'field'    => 'slug',
+				'terms'    => $scene_type_slug,
+			),
+		),
+		'orderby' => 'ID',
+		'order' => 'DESC',
+	);
+
+	$scene_data = array();
+	$custom_query = new WP_Query( $custom_query_args );
+
+	if ( $custom_query->have_posts() ) {
+		while ($custom_query->have_posts()) {
+			$custom_query->the_post();
+
+			$scene_data[] = get_the_ID();
+			//$scene_data['type'] = get_post_meta( get_the_ID(), 'wpunity_scene_metatype', true );
+		}
+	}
+
+	return $scene_data;
+
+}
+
 
 function wpunity_getFirstSceneID_byProjectID($project_id,$project_type){
 	$gamePost = get_post($project_id);
@@ -156,6 +196,8 @@ function wpunity_getFirstSceneID_byProjectID($project_id,$project_type){
 	$scene_type_slug = 'wonderaround-yaml';
 	if($project_type == 'chemistry_games'){$scene_type_slug='wonderaround-lab-yaml';}
 	if($project_type == 'energy_games'){$scene_type_slug='educational-energy';}
+
+
 
 	$custom_query_args = array(
 		'post_type' => 'wpunity_scene',
