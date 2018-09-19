@@ -97,9 +97,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$savedStrategies = $_POST['json-strategies-input'];
 
 	// Update both naming & construction DB
+    $allExams = wpunity_getExamScenes_byProjectID($project_id);//get all scene exams
 
-	update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
-
+    foreach ($allExams as $thescene_id) {
+        update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
+    }
 	wpunity_addStrategy_APIcall($project_id);
 
 	wp_redirect($goBackTo_MainLab_link);
@@ -113,7 +115,9 @@ if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verif
 	exit;
 }
 
-get_header(); ?>
+get_header();
+
+?>
 
     <style>
         .panel { display: none; }
