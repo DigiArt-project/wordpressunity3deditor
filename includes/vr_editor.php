@@ -329,11 +329,11 @@ echo '</script>';
 
     <!--Hierarchy Viewer-->
 
-    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy viewer">
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">menu</i>
     </a>
 
-    <div class="HierarchyViewerStyle" id="hierarchy-viewer-container">
+    <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
         <h2 class="mdc-typography--title mdc-theme--text-primary-on-background">Hierarchy Viewer</h2>
         <hr class="mdc-list-divider">
         <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
