@@ -48,8 +48,6 @@ add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 function wpunity_register_scripts() {
 	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ).'js_libs/wpunity_asset_editor_scripts.js');
 
-	wp_register_script( 'flot', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.js');
-	wp_register_script( 'flot-axis-labels', plugin_dir_url( __FILE__ ) . 'js_libs/jquery.flot.axislabels.js');
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
 	wp_register_script( 'wpunity_lightslider', plugin_dir_url( __FILE__ ) . 'js_libs/lightslider.min.js');
 
