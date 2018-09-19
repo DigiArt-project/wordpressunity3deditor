@@ -94,7 +94,19 @@ if ($preSavedStrategies) {
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
+    // TODO: STRATEGY DELETION!
+    // 1. Get new strategies array
 	$savedStrategies = $_POST['json-strategies-input'];
+
+	// 2. Load WP DB saved array
+
+    // 3. Check if old arr has strategy NOT IN new arr
+
+	// 4. Send GIO request to deactivate the old strategy ids
+
+    // 5. Compare 2 arrs. If new arr has a new id, then send GIO request to create new.
+
+    // 6. Save arrays to WPDB
 
 	// Updating both exams with the same strategy
 	$allExams = wpunity_getExamScenes_byProjectID($project_id); //get all scene exams
@@ -107,9 +119,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
     // Update GIO API with strategies
 	foreach ($savedStrategies as $strategy){
-
 	    wpunity_addStrategy_APIcall($project_id, $strategy);
-
 	}
 
 	wp_redirect($goBackTo_MainLab_link);
