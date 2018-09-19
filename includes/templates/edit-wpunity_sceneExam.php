@@ -96,6 +96,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$savedStrategies = $_POST['json-strategies-input'];
 
+	// Update both naming & construction DB
+
 	update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
 
 	wpunity_addStrategy_APIcall($project_id);
@@ -517,6 +519,7 @@ get_header(); ?>
 
             addStrategiesToInput();
 
+
             function inArray(needle, haystack) {
                 var length = haystack.length;
                 for(var i = 0; i < length; i++) {
@@ -537,9 +540,10 @@ get_header(); ?>
                 var val = jQuery( "span", this ).text();
                 val = JSON.parse(val);
 
-                var slug = sceneSlug === 'Molecule Naming' ? 'naming' : 'construction';
-
-                json.push({[slug]: val});
+                json.push({
+                    'naming': val,
+                    'construction': val
+                });
 
             });
 
