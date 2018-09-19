@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4581228637943740}
   - component: {fileID: 114302560275996662}
   - component: {fileID: 114873401914096500}
+  - component: {fileID: 114584103248791052}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -60,6 +61,17 @@ MonoBehaviour:
   lastRotation: {x: 0, y: 0, z: 0, w: 0}
   totalNamedMols: 0
   totalConstructedMols: 0
+--- !u!114 &114584103248791052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1840441812703892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3eb788dc1ff2fb40bafe09f8de29907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114873401914096500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,3 +84,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggleKey: 293
+  openOnStart: 0
+  shakeToOpen: 1
+  shakeAcceleration: 3
+  restrictLogCount: 0
+  maxLogCount: 1000

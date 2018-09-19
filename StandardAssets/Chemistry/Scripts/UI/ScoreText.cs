@@ -9,8 +9,6 @@ public class ScoreText : MonoBehaviour {
     public Text sumText;
     public Text currentText;
 
-    public MoleculesController MoleculesCtrl;
-
     // Use this for initialization
     void Start () {
         currentText.gameObject.GetComponent<Animator>().enabled = false;
@@ -23,13 +21,13 @@ public class ScoreText : MonoBehaviour {
     {
         if (GameManager.currentLevel == GameManager.Levels.moleculeNaming)
         {
-			sumText.text = MoleculesCtrl.strategy_naming_count.ToString();
+			sumText.text = MoleculesController.instance.strategy_naming_count.ToString();
             currentText.text = GameManager.namedMolecules.ToString();
 			StartCoroutine(WaitForSec());
         }
         else
         {
-			sumText.text = MoleculesCtrl.strategy_construction_count.ToString();
+            sumText.text = MoleculesController.instance.strategy_construction_count.ToString();
             currentText.text = GameManager.constructedMolecules.ToString();
             StartCoroutine(WaitForSec());
         }        
