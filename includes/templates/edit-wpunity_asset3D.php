@@ -179,11 +179,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 
 	if($scene_id == 0)
-		wp_redirect($goBackTo_MainLab_link);
-	else
-		wp_redirect($goBackTo_MainLab_link);
+		echo '<script>alert("Asset created");</script>';
+//	else
+//		wp_redirect($goBackTo_MainLab_link);
 
-	exit;
+	//exit;
 }
 
 if ($project_scope == 0) {

@@ -122,7 +122,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	    wpunity_addStrategy_APIcall($project_id, $strategy);
 	}
 
-	wp_redirect($goBackTo_MainLab_link);
+	//wp_redirect($goBackTo_MainLab_link);
+    wp_redirect($refresh_to_examPage);
 	exit;
 }
 
