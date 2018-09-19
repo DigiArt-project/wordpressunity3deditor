@@ -39,7 +39,7 @@ function wpunity_addStrategy_APIcall($project_id, $strategy){
 
 		if ( strcmp($code,"200") || strcmp($code,"201") ) {
 
-			$token = json_decode( $token_request[ 'body' ] );
+			$token = json_decode( $token_request[ body ] );
 
 			$token = $token->token;
 
