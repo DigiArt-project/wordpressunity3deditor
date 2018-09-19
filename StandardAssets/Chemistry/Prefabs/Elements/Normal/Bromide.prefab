@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114158175942298162}
   - component: {fileID: 54582171691090742}
   m_Layer: 0
-  m_Name: Bromide
+  m_Name: Bromine
   m_TagString: bromine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 0c05568c1cb29394c8b4dc5c74bcba99, type: 2}
   m_StaticBatchInfo:
