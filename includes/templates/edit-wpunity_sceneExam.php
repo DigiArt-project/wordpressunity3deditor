@@ -96,13 +96,21 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$savedStrategies = $_POST['json-strategies-input'];
 
-	// Update both naming & construction DB
-    $allExams = wpunity_getExamScenes_byProjectID($project_id);//get all scene exams
+	// Updating both exams with the same strategy
+	$allExams = wpunity_getExamScenes_byProjectID($project_id); //get all scene exams
+	foreach ($allExams as $thescene_id) {
+		update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
+	}
 
-    foreach ($allExams as $thescene_id) {
-        update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
-    }
-	wpunity_addStrategy_APIcall($project_id);
+	$savedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true);
+	$savedStrategies = json_decode($savedStrategies, true);
+
+    // Update GIO API with strategies
+	foreach ($savedStrategies as $strategy){
+
+	    wpunity_addStrategy_APIcall($project_id, $strategy);
+
+	}
 
 	wp_redirect($goBackTo_MainLab_link);
 	exit;

@@ -1,6 +1,6 @@
 <?php
 
-function wpunity_addStrategy_APIcall($project_id){
+function wpunity_addStrategy_APIcall($project_id, $strategy){
 
 	global $project_scope;
 
@@ -10,8 +10,6 @@ function wpunity_addStrategy_APIcall($project_id){
 	$extraPass = get_the_author_meta( 'extra_pass', $user_id );
 
 	$project_keys = wpunity_getProjectKeys($project_id, $project_scope);
-
-	$allStrategies = wpunity_combineGameStrategies($project_id);
 
 	$args = array(
 		'method' => 'POST',
@@ -62,7 +60,7 @@ function wpunity_addStrategy_APIcall($project_id){
 						'type'       => 'strategy',
 						'id'         => $strategy_id,
 						'attributes' => array(
-							'config' => json_encode($allStrategies)
+							'config' => json_encode($strategy)
 						)
 					)
 				) ),
