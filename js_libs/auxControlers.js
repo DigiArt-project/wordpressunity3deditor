@@ -374,31 +374,3 @@ function findSceneDimensions(){
     // In empty scene lets fix it to 10
     //envir.SCENE_DIMENSION_SURFACE = envir.SCENE_DIMENSION_SURFACE > 0 ? envir.SCENE_DIMENSION_SURFACE * 1.5 : 10;
 }
-
-
-function updateCameraGivenSceneLimits(){
-
-    if(envir.cameraOrbit.type === 'PerspectiveCamera') {
-
-    } else if(envir.cameraOrbit.type  === 'OrthographicCamera') {
-
-        envir.FRUSTUM_SIZE = envir.SCENE_DIMENSION_SURFACE;
-
-        envir.ASPECT = envir.container_3D_all.clientWidth / envir.container_3D_all.clientHeight;
-
-        envir.cameraOrbit.left   = envir.FRUSTUM_SIZE * envir.ASPECT / -2; // * 0.8; // shift it a little bit to the left
-        envir.cameraOrbit.right  = envir.FRUSTUM_SIZE * envir.ASPECT /  2; // * 1.2; // shift it a little bit to the left
-
-        envir.cameraOrbit.top    = envir.FRUSTUM_SIZE / 2 * 1; // *0.8 shift it a little bit to the top
-        envir.cameraOrbit.bottom = envir.FRUSTUM_SIZE/ -2 * 1; // *1.2 shift it a little bit to the top
-        envir.cameraOrbit.far    = 20000;
-    }
-
-    if(envir.is2d){
-        envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
-    } else {
-        envir.cameraOrbit.position.set(envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE);
-    }
-
-    envir.cameraOrbit.updateProjectionMatrix();
-}

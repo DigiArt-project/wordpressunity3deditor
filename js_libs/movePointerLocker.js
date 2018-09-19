@@ -65,21 +65,14 @@ function initPointerLock() {
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
 
-
-
-
             } else {
                 // ------------- ORBIT --------------------------
                 avatarControlsEnabled = false;
                 envir.avatarControls.enabled = false;
                 envir.orbitControls.enabled = true;
 
-//                console.log("ORBIT B", envir.avatarControls.getObject().rotation.y);
-
                 //if (envir.avatarControls.getObject().rotation.y < - Math.PI /2)
                 //    envir.avatarControls.getObject().rotation.y += 0.85;
-
-                console.log("4", envir.avatarControls.getObject().rotation._y);
 
                 // envir.cameraOrbit.getObjectByName("recycleBin").visible=true;
                 firstPersonBlocker.style.display = '-webkit-box';
@@ -94,8 +87,6 @@ function initPointerLock() {
                 envir.scene.getObjectByName("Steve").visible = true;
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
-
-
             }
         };
 
@@ -114,8 +105,6 @@ function initPointerLock() {
 //        document.addEventListener('mozpointerlockerror', pointerlockerror, false);
 //        document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
-
-
     } else {
         firstPersonBlockerBtn.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }
@@ -127,8 +116,6 @@ function initPointerLock() {
  *
  */
 function updatePointerLockControls(){
-
-
 
     //if ( avatarControlsEnabled ) {
 

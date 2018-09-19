@@ -629,8 +629,6 @@ echo '</script>';
 
     jQuery("#editor-dimension-btn").click(function() {
 
-        findSceneDimensions();
-        updateCameraGivenSceneLimits();
         
         // envir.orbitControls.object.zoom = 1;
         //
@@ -641,12 +639,9 @@ echo '</script>';
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
-
-            envir.cameraOrbit.position.set(envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE, envir.SCENE_DIMENSION_SURFACE);
             
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
-
             envir.axisHelper.visible = true;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
@@ -657,15 +652,12 @@ echo '</script>';
 
         } else {
 
-            envir.cameraOrbit.position.set(0, envir.SCENE_DIMENSION_SURFACE, 0);
-            
             envir.cameraOrbit.rotation._x = - Math.PI/2;
             envir.cameraOrbit.rotation._y = 0;
             envir.cameraOrbit.rotation._z = 0;
 
             envir.orbitControls.enableRotate = false;
             envir.gridHelper.visible = false;
-
             envir.axisHelper.visible = false;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
@@ -677,6 +669,10 @@ echo '</script>';
             envir.scene.getObjectByName("SteveOld").visible = false;
             envir.scene.getObjectByName("Steve").visible = true;
         }
+
+        findSceneDimensions();
+        envir.updateCameraGivenSceneLimits();
+
 
         envir.orbitControls.object.updateProjectionMatrix();
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
@@ -898,7 +894,7 @@ echo '</script>';
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
-        updateCameraGivenSceneLimits();
+        envir.updateCameraGivenSceneLimits();
 
 
         
@@ -1086,8 +1082,6 @@ $formRes->init($sceneToLoad);
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-
-
 
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
 
