@@ -80,7 +80,7 @@ function wpunity_create_chemistry_mainmenu_unity($scene_post,$scene_type_ID,$sce
         $term_meta_s_login = wpunity_getSceneYAML_chemistry('login');
         $WanderAroundScene_title = 'S_Lab';
 
-        $file_content4 = wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title);
+        $file_content4 = wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title,$gameSlug);
 
         $file4 = $game_path . '/S_Login.unity';
         $create_file4 = fopen($file4, "w") or die("Unable to open file!");
@@ -322,9 +322,13 @@ function wpunity_replace_help_chem_unity($term_meta_s_help,$text_help_scene,$img
     return $file_content_return;
 }
 
-function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title){
+function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_title,$gameSlug){
+    $available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
+    $defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
 
     $file_content_return = str_replace("___[WanderAroundScene]___",$WanderAroundScene_title,$term_meta_s_login);
+    $file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$file_content_return);
+    $file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
 
     return $file_content_return;
 }
@@ -362,11 +366,12 @@ function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scen
 
 function wpunity_replace_chemistry_exam2D_unity($term_meta_exam2d_chem,$gameSlug){
 
-    $available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
-    $defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
-
-    $file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$term_meta_exam2d_chem);
-    $file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
+//    $available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
+//    $defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
+//
+//    $file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$term_meta_exam2d_chem);
+//    $file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
+    $file_content_return = $term_meta_exam2d_chem;
 
     return $file_content_return;
 
@@ -472,13 +477,13 @@ function wpunity_replace_chemistry_exam_molePrefabs($gameSlug){
 
 function wpunity_replace_chemistry_exam3D_unity($term_meta_exam3d_chem,$gameSlug){
 
-    $available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
-    $defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
+    //$available_Molecules = wpunity_replace_chemistry_exam_AvailableMolecules($gameSlug);
+    //$defaul_strategy = wpunity_replace_chemistry_exam_defaulStrategy($gameSlug);
     $molecule_prefabs = wpunity_replace_chemistry_exam_molePrefabs($gameSlug);
 
     $file_content_return = str_replace("___[molecule_prefabs]___",$molecule_prefabs,$term_meta_exam3d_chem);
-    $file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$file_content_return);
-    $file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
+    //$file_content_return = str_replace("___[available_Molecules]___",$available_Molecules,$file_content_return);
+    //$file_content_return = str_replace("___[defaul_strategy]___",$defaul_strategy,$file_content_return);
 
     return $file_content_return;
 
