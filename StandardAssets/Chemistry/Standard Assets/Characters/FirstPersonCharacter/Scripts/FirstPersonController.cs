@@ -55,6 +55,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+			//set player transform
+            gameObject.transform.position = GameManager.instance.lastPosition;
+            gameObject.transform.rotation = GameManager.instance.lastRotation;
         }
 
 
