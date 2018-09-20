@@ -17,12 +17,18 @@ class vr_editor_environmentals {
         this.VIEW_ANGLE = 60;
 
         this.ASPECT = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
-        this.FRUSTUM_SIZE = 100; // For orthographic camera only
+        this.FRUSTUM_SIZE = 100000; // For orthographic camera only
+        //this.FRUSTUM_SIZE = this.SCENE_DIMENSION_SURFACE;
+
+        // this.cameraOrbit.top    = this.FRUSTUM_SIZE / 2 * 1; // *0.8 shift it a little bit to the top
+        // this.cameraOrbit.bottom = this.FRUSTUM_SIZE/ -2 * 1; // *1.2 shift it a little bit to the top
+        // this.cameraOrbit.far    = 20000;
+
+
         this.SCENE_DIMENSION_SURFACE = 100; // It is the max of x z dimensions of the scene (found when all objects are loaded)
 
-
         this.NEAR = 0.01;
-        this.FAR = 10000; // keep the camera empty until everything is loaded
+        this.FAR = 200000; // keep the camera empty until everything is loaded
 
         this.setScene();
         this.setRenderer();
@@ -68,7 +74,7 @@ class vr_editor_environmentals {
 
         //----------------------------------------------
 
-        updateCameraGivenSceneLimits();
+        this.updateCameraGivenSceneLimits();
 
         //----------------------------------------------------------------
          this.cameraAvatar.aspect = this.ASPECT;
@@ -79,7 +85,7 @@ class vr_editor_environmentals {
 
          //---------------------------------------------------------------
 
-        this.composer.renderer.setSize( envir.SCREEN_WIDTH, envir.SCREEN_HEIGHT );
+        this.composer.renderer.setSize( this.SCREEN_WIDTH, this.SCREEN_HEIGHT );
         this.composer.renderer.setPixelRatio(this.ASPECT);
         this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT , 1 / this.SCREEN_HEIGHT / this.ASPECT);
     }
@@ -182,7 +188,7 @@ class vr_editor_environmentals {
         this.scene.add(this.cameraOrbit);
 
         // Cold start values
-        this.cameraOrbit.position.set( 0, 50, 0);
+        this.cameraOrbit.position.set( 0, this.FRUSTUM_SIZE, 0);
 
         this.orbitControls = new THREE.OrbitControls( this.cameraOrbit, this.renderer.domElement );
         this.orbitControls.userPanSpeed = 1;
@@ -518,6 +524,29 @@ class vr_editor_environmentals {
         });
 
     }
+
+    updateCameraGivenSceneLimits(){
+
+        if(this.cameraOrbit.type === 'PerspectiveCamera') {
+
+        } else if(this.cameraOrbit.type  === 'OrthographicCamera') {
+
+            this.ASPECT = this.container_3D_all.clientWidth / this.container_3D_all.clientHeight;
+            this.cameraOrbit.left   = this.FRUSTUM_SIZE * this.ASPECT / -2;
+            this.cameraOrbit.right  = this.FRUSTUM_SIZE * this.ASPECT /  2;
+            this.cameraOrbit.zoom = this.SCENE_DIMENSION_SURFACE;
+
+        }
+
+        if(this.is2d){
+            this.cameraOrbit.position.set(0, this.FRUSTUM_SIZE, 0);
+        } else {
+            this.cameraOrbit.position.set(this.FRUSTUM_SIZE, this.FRUSTUM_SIZE, this.FRUSTUM_SIZE);
+        }
+
+        this.cameraOrbit.updateProjectionMatrix();
+    }
+
 
     /**
      Set the Light
