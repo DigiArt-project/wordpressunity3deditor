@@ -329,11 +329,11 @@ echo '</script>';
 
     <!--Hierarchy Viewer-->
 
-    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-theme--secondary" title="Toggle hierarchy viewer">
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">menu</i>
     </a>
 
-    <div class="HierarchyViewerStyle" id="hierarchy-viewer-container">
+    <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
         <h2 class="mdc-typography--title mdc-theme--text-primary-on-background">Hierarchy Viewer</h2>
         <hr class="mdc-list-divider">
         <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
@@ -467,12 +467,15 @@ echo '</script>';
                 </div>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <p class="mdc-typography--title">Small Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine1-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <p class="mdc-typography--title">Normal Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine2-iframe"></iframe>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                    <p class="mdc-typography--title">Big Turbine</p>
                     <iframe style="height: 372px; width: 95%; border:none;" id="turbine3-iframe"></iframe>
                 </div>
 

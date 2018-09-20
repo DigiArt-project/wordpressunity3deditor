@@ -7,7 +7,7 @@ using goedle_sdk;
 
 public class MoleculesController : MonoBehaviour
 {
-
+    public static MoleculesController instance = null;
     public string[] defaulStrategy;
 
     //all the molecules that will be available in both naming and construction and
@@ -130,19 +130,38 @@ public class MoleculesController : MonoBehaviour
 
     void Awake()
     {
-        strategy_naming = new List<string>(defaulStrategy);
-        strategy_construction = new List<string>(defaulStrategy);
-
-        BuildStrategyNamingQueue(strategy_naming);
-        BuildStrategyConstructionQueue(strategy_construction);
-
-
-        strategy_naming_count = strategy_stack_naming.Count;
-        strategy_construction_count = strategy_stack_construction.Count;
+        //Check if instance already exists
+        if (instance == null)
+        {
+            //if not, set instance to this
+            instance = this;
+        }
+        //If instance already exists and it's not this:
+        else if (instance != this)
+        {
+            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+            Destroy(gameObject);
+        }
+        //Sets this to not be destroyed when reloading scene
+        DontDestroyOnLoad(gameObject);
 
         // request strategy from server
         GoedleAnalytics.instance.requestStrategy();
         StartCoroutine(GetStrategy());
+
+        if (strategy_naming.Count <= 0 && strategy_construction.Count <= 0)
+        {
+            strategy_naming = new List<string>(defaulStrategy);
+            strategy_construction = new List<string>(defaulStrategy);
+
+            BuildStrategyNamingQueue(strategy_naming);
+            BuildStrategyConstructionQueue(strategy_construction);
+
+            strategy_naming_count = strategy_stack_naming.Count;
+            strategy_construction_count = strategy_stack_construction.Count;
+
+            Debug.Log("Strategy is not received, all available molecules have been loaded");
+        }
 
         //save molecules to GM so to use them in the lab scene
         if (GameManager.currentLevel == GameManager.Levels.moleculeNaming)

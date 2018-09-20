@@ -164,7 +164,10 @@ canvas { pointer-events:none; z-index:10; }
 .HierarchyToggleStyle {
     position: absolute;
     top: 180px;
-    background: transparent;
+    width: 42px;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .HierarchyToggleStyle i {
@@ -186,7 +189,7 @@ canvas { pointer-events:none; z-index:10; }
     position: absolute;
     left: 0;
     top: 180px;
-    background-color: rgb(244,244,244);
+    background-color: #ffffff;
 }
 
 .RemoveAssetFromSceneBtnStyle {
@@ -200,7 +203,7 @@ canvas { pointer-events:none; z-index:10; }
 }
 
 
-.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .EditorTourToggleBtn a i, .ThirdPersonVrWalkInButtonStyle a i {
+.RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .HierarchyToggleStyle i, .EditorTourToggleBtn a i, .ThirdPersonVrWalkInButtonStyle a i {
     padding-top: 4px;
 }
 
@@ -217,7 +220,7 @@ canvas { pointer-events:none; z-index:10; }
 #pauseRendering {
     width:40px;
     min-width:30px;
-    padding:0px;
+    padding:0;
     padding-top: 4px;
     margin: 0;
 }

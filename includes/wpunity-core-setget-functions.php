@@ -113,6 +113,7 @@ function wpunity_combineGameStrategies($project_id){
 	);
 
 	$custom_query = new WP_Query( $queryargs );
+
 	if ( $custom_query->have_posts() ) :
 		while ( $custom_query->have_posts() ) :
 			$custom_query->the_post();

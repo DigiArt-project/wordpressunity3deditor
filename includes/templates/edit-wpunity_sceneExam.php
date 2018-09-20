@@ -94,13 +94,36 @@ if ($preSavedStrategies) {
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
+    // TODO: STRATEGY DELETION!
+    // 1. Get new strategies array
 	$savedStrategies = $_POST['json-strategies-input'];
 
-	update_post_meta($scene_id, 'wpunity_exam_strategy', $savedStrategies);
+	// 2. Load WP DB saved array
 
-	wpunity_addStrategy_APIcall($project_id);
+    // 3. Check if old arr has strategy NOT IN new arr
 
-	wp_redirect($goBackTo_MainLab_link);
+	// 4. Send GIO request to deactivate the old strategy ids
+
+    // 5. Compare 2 arrs. If new arr has a new id, then send GIO request to create new.
+
+    // 6. Save arrays to WPDB
+
+	// Updating both exams with the same strategy
+	$allExams = wpunity_getExamScenes_byProjectID($project_id); //get all scene exams
+	foreach ($allExams as $thescene_id) {
+		update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
+	}
+
+	$savedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true);
+	$savedStrategies = json_decode($savedStrategies, true);
+
+    // Update GIO API with strategies
+	foreach ($savedStrategies as $strategy){
+	    wpunity_addStrategy_APIcall($project_id, $strategy);
+	}
+
+	//wp_redirect($goBackTo_MainLab_link);
+    wp_redirect($refresh_to_examPage);
 	exit;
 }
 
@@ -111,7 +134,9 @@ if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verif
 	exit;
 }
 
-get_header(); ?>
+get_header();
+
+?>
 
     <style>
         .panel { display: none; }
@@ -259,12 +284,11 @@ get_header(); ?>
 													$mols = implode("", $mols); ?>
 
                                                     <div class="mdc-layout-grid__cell--span-3 CenterContents" id='<?php echo $key;?>'>
-                                                        <iframe style="height: 334px; border:none;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
                                                         <span style="display:inline-block;"><?php echo json_encode($val);?></span>&nbsp;
                                                         <a style="display:inline-block;" onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer AlignIconToMiddle " aria-label="Delete game" title="Delete project">
                                                             <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
                                                         </a>
-
+                                                        <iframe style="height: 280px; border:none;width:100%;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
                                                     </div>
 												<?php } ?>
 											<?php } ?>
@@ -506,7 +530,7 @@ get_header(); ?>
                     mols = mols.join("");
 
                     savedStrategiesList.append( '' +
-                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><iframe style="height: 334px; border:none;" id=frame-'+strategyId+' data-mols="'+ mols +'"></iframe><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a></div>' +
+                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a><iframe style="height: 280px; border:none;width: 100%;" id=frame-'+ strategyId +' data-mols="'+ mols +'"></iframe></div>' +
                         '');
 
                     loadPISAClusterIframe('chemistrytool', mols, 'frame-'+strategyId);
@@ -517,6 +541,7 @@ get_header(); ?>
 
 
             addStrategiesToInput();
+
 
             function inArray(needle, haystack) {
                 var length = haystack.length;
@@ -538,9 +563,10 @@ get_header(); ?>
                 var val = jQuery( "span", this ).text();
                 val = JSON.parse(val);
 
-                var slug = sceneSlug === 'Molecule Naming' ? 'naming' : 'construction';
-
-                json.push({[slug]: val});
+                json.push({
+                    'naming': val,
+                    'construction': val
+                });
 
             });
 
