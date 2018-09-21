@@ -40,12 +40,12 @@ function wpunity_addStrategy_APIcall($project_id, $strategy){
 		if ( strcmp($code,"200") || strcmp($code,"201") ) {
 
 			$token = json_decode( $token_request[ 'body' ] );
-
 			$token = $token->token;
 
-			// Create ID from game version and project id
-			$rand_id = rand(0,1000);
-			$strategy_id = $user_id."".$project_id."".$rand_id;
+			$hash = hash('crc32b', json_encode($strategy));
+
+			// Create ID from game name, user_id and strategy hash
+			$strategy_id = $hash;
 
 			$args = array(
 				'method'      => 'POST',

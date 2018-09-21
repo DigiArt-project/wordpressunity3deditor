@@ -108,7 +108,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
     // 6. Save arrays to WPDB
 
-	// Updating both exams with the same strategy
+    // Updating both exams with the same strategy
 	$allExams = wpunity_getExamScenes_byProjectID($project_id); //get all scene exams
 	foreach ($allExams as $thescene_id) {
 		update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
