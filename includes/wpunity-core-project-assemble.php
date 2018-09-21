@@ -755,6 +755,23 @@ function wpunity_compile_copy_StandardAssets($gameID, $gameSlug,$gameType){
         $create_file = fopen($fileGo, "w") or die("Unable to open file!");
         fwrite($create_file, $file_content);
         fclose($create_file);
+    }elseif($gameType == "Energy"){
+        $fileGo = $dest . '/' . 'goedle_io/Scripts/'. 'GoedleManager.prefab';
+        $GOcontent = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/default_game_project_data/energy/GoedleManager.txt");
+
+        global $project_scope;
+
+        $project_saved_keys = wpunity_getProjectKeys($gameID, $project_scope);
+        $g_app_key = $project_saved_keys['gioID'];
+        //$g_api_key = $project_saved_keys['wpunity_project_gioAPIKey'];
+        $g_api_key = get_post_meta($gameID,'wpunity_project_gioAPIKey',true);
+
+        $file_content = str_replace("___[g_app_key]___",$g_app_key,$GOcontent);
+        $file_content = str_replace("___[g_api_key]___",$g_api_key,$file_content);
+
+        $create_file = fopen($fileGo, "w") or die("Unable to open file!");
+        fwrite($create_file, $file_content);
+        fclose($create_file);
     }
 }
 //==========================================================================================================================================
