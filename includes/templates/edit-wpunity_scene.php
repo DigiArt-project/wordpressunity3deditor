@@ -293,7 +293,7 @@ get_header(); ?>
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
 
-                        <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2">Analytics</a>
+                        <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" onclick="">Analytics</a>
 
 						<?php if($project_saved_keys['expID'] != ''){ ?>
                             <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
@@ -1220,6 +1220,10 @@ get_header(); ?>
         dynamicTabBar.listen('MDCTabBar:change', function (t) {
             var dynamicTabBar = t.detail;
             var nthChildIndex = dynamicTabBar.activeTabIndex;
+
+            if (nthChildIndex === 1) {
+                loadAnalyticsIframe(game_type);
+            }
 
             updatePanel(nthChildIndex);
         });
