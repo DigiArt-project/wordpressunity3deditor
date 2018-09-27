@@ -540,6 +540,11 @@ class vr_editor_environmentals {
 
         if(this.is2d){
             this.cameraOrbit.position.set(0, this.FRUSTUM_SIZE, 0);
+
+            this.cameraOrbit.rotation._x = - Math.PI/2;
+            this.cameraOrbit.rotation._y = 0;
+            this.cameraOrbit.rotation._z = 0;
+
         } else {
             this.cameraOrbit.position.set(this.FRUSTUM_SIZE, this.FRUSTUM_SIZE, this.FRUSTUM_SIZE);
         }

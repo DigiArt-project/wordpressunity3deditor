@@ -282,7 +282,7 @@ echo '</script>';
 
 
     <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
-        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="2D view" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
     </div>
 
     <!-- The button to start walking in the 3d environment -->
@@ -632,13 +632,6 @@ echo '</script>';
 
     jQuery("#editor-dimension-btn").click(function() {
 
-        
-        // envir.orbitControls.object.zoom = 1;
-        //
-        // envir.orbitControls.target.x = 0;
-        // envir.orbitControls.target.y = 0;
-        // envir.orbitControls.target.z = 0;
-
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
@@ -676,7 +669,8 @@ echo '</script>';
         findSceneDimensions();
         envir.updateCameraGivenSceneLimits();
 
-
+        
+        
         envir.orbitControls.object.updateProjectionMatrix();
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
     });
@@ -821,7 +815,7 @@ echo '</script>';
     var manager = new THREE.LoadingManager();
 
     manager.onProgress = function ( item, loaded, total ) {
-
+        console.log(item, loaded, total);
         if (total >= 2)
             document.getElementById("result_download").innerHTML = "Loading " + (loaded-1) + " out of " + (total-2);
     };
@@ -835,21 +829,28 @@ echo '</script>';
         var trs_tmp;
         var name;
 
-        for (name in resources3D  ) {
-
+        for ( name in resources3D  ) {
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
 
-            if (name != 'avatarYawObject') {
+            if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
                 objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
                 objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
                 objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
             }
         }
 
-
+        // In the case the last asset is missing then put controls on the camera
+        if (typeof objItem === "undefined"){
+            name = 'avatarYawObject';
+            trs_tmp = resources3D[name]['trs'];
+            objItem = envir.scene.getObjectByName(name);
+        }
+        
+        
         // place controls to last inserted obj
-        if (objItem) {
+        if (typeof objItem !== "undefined") {
+            
             transform_controls.attach(objItem);
 
             // highlight
@@ -878,28 +879,17 @@ echo '</script>';
                 jQuery("#removeAssetBtn").show();
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
             } else {
-
-                //envir.outlinePass.selectedObjects = [intersects[0].object.parent.children[0]];
-                //transform_controls.attach(intersects[0].object.parent);
-                //envir.renderer.setClearColor( 0xff00aa, 1);
-
                 var sizeT = 1;
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
                 jQuery("#removeAssetBtn").hide();
             }
 
             transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
-
-            // Starting in 2D mode we do not want the play be able to change into rotation and scale
-            //jQuery("#object-manipulation-toggle").hide();
-
         }
 
         // Find scene dimension in order to configure camera in 2D view (Y axis distance)
         findSceneDimensions();
         envir.updateCameraGivenSceneLimits();
-
-
         
         envir.setHierarchyViewer();
     };
