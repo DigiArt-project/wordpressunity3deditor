@@ -180,6 +180,21 @@ function wpunity_create_folder_game( $new_status, $old_status, $post){
 			//Create Default Scenes for this "Game"
 			wpunity_create_default_scenes_for_game($gameSlug, $gameTitle, $gameID);
 
+			//Available molecules
+			$molecules = wpunity_get_all_molecules_of_game($gameID);//ALL available Molecules of a GAME
+			$allMolecules = '[';$start = 0;
+			foreach ($molecules as $molecule) {
+				if($start == 0) {
+					$allMolecules = $allMolecules . '"' . $molecule['moleculeID'] . '"';
+					$start = 1;
+				}else{
+					$allMolecules = $allMolecules . ',"' . $molecule['moleculeID'] . '"';
+				}
+			}
+			$allMolecules = $allMolecules . ']';
+			update_post_meta($gameID, 'wpunity_exam_enabled_molecules', $allMolecules);
+
+
 			//Create Sample Data (assets) for the game that auto-created
 			$current_user = wp_get_current_user();
 			$user_id = $current_user->ID;
