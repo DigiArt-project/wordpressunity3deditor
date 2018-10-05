@@ -137,14 +137,21 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
 	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-
+    
+    
+    $assetCatIPRID = intval($_POST['term_id_ipr']); //ID of Asset Category IPR (hidden input)
+    $assetCatIPRTerm = get_term_by('id', $assetCatIPRID, 'wpunity_asset3d_ipr_cat');
+    
+    
+    
+	
 	// NEW
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug);
+		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID);
 	}else {
 		// Edit an existing asset: Return true if updated, false if failed
-		$asset_updatedConf = wpunity_update_asset_frontend($asset_id, $assetTitleForm, $assetDescForm);
+		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID, $assetCatIPRID);
 	}
 
 	// Create new or updated of main fields edit successfull
@@ -278,7 +285,7 @@ if($asset_id != null) {
 		//load the already saved featured image for POI image-text
 		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
 		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
-	}elseif ($saved_term[0]->slug == 'pois_video') {
+	} elseif ($saved_term[0]->slug == 'pois_video') {
 		//upload the featured image for POI video
 		//$asset_featured_image =  $_FILES['poi-video-featured-image'];
 		//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
@@ -694,6 +701,11 @@ if($asset_id != null) {
                                        multiple accept=".obj,.mtl,.jpg,.png"/>
 
 
+                                
+                                
+                                
+                                
+
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                                 <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                                 <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
@@ -1046,6 +1058,62 @@ if($asset_id != null) {
 
         <hr class="WhiteSpaceSeparator">
 
+
+        <!--       IPR category              -->
+        <?php
+            $cat_ipr_terms = get_terms('wpunity_asset3d_ipr_cat', array('get' => 'all'));
+            $saved_ipr_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_ipr_cat');
+        ?>
+
+        <!-- CATEGORY IPR -->
+        <div class="mdc-layout-grid">
+
+            <div class="mdc-layout-grid__inner">
+
+                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+                    <h3 class="mdc-typography--title">Select an IPR plan</h3>
+                    <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                        <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+                    
+                        <?php if($asset_id == null) { ?>
+                            <span id="currently-ipr-selected" class="mdc-select__selected-text mdc-typography--subheading2">No IPR category selected</span>
+                        <?php } else { ?>
+                            <span data-cat-ipr-desc="<?php echo $saved_ipr_term[0]->description; ?>" data-cat-ipr-slug="<?php echo $saved_ipr_term[0]->slug; ?>" data-cat-ipr-id="<?php echo $saved_ipr_term[0]->term_ipr_id; ?>" id="currently-ipr-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_ipr_term[0]->name; ?></span>
+                        <?php } ?>
+
+           
+                        <div class="mdc-simple-menu mdc-select__menu">
+                            <ul class="mdc-list mdc-simple-menu__items">
+
+                                <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
+                                    No IPR category selected
+                                </li>
+                                
+                                <?php
+                                    foreach ( $cat_ipr_terms as $term_ipr ) {
+                                    ?>
+                                    
+                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-ipr-desc="<?php echo $term_ipr->description; ?>" data-cat-ipr-slug="<?php echo $term_ipr->slug; ?>" id="<?php echo $term_ipr->term_id?>" tabindex="0">
+                                        <?php echo $term_ipr->name; ?>
+                                    </li>
+                            
+                                <?php } ?>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryIPRDescription"> </span>
+                </div>
+                <input id="termIdInputIPR" type="hidden" name="term_id_ipr" value="">
+
+            </div>
+
+        </div>
+
+        <!--                                                  -->
+
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         <input type="hidden" name="submitted" id="submitted" value="true" />
 		<?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
@@ -1089,10 +1157,17 @@ if($asset_id != null) {
 
         (function() {
             var MDCSelect = mdc.select.MDCSelect;
+            
             var categoryDropdown = document.getElementById('category-select');
+            var categoryIPRDropdown = document.getElementById('category-ipr-select');
 
             var categorySelect = MDCSelect.attachTo(categoryDropdown);
             var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
+
+
+            var categoryIPRSelect = MDCSelect.attachTo(categoryIPRDropdown);
+            var selectedCatIPRId = jQuery('#currently-ipr-selected').attr("data-cat-ipr-id");
+            
 
             var moleculeFunctionalGroupDropdown = document.getElementById('moleculeFunctionalGroupSelect');
             var moleculeFunctionalGroupSelect = MDCSelect.attachTo(moleculeFunctionalGroupDropdown);
@@ -1101,7 +1176,7 @@ if($asset_id != null) {
             var boxKnownGroupSelect = MDCSelect.attachTo(boxKnownGroupDropdown);
 
 
-            // This fires on EDIT
+            // This fires on CREATE
             jQuery( document ).ready(function() {
 
                 if (jQuery('#currently-selected').attr("data-cat-id")) {
@@ -1109,12 +1184,37 @@ if($asset_id != null) {
                     jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                     loadLayout(false);
                 }
+
+                if (jQuery('#currently-ipr-selected').attr("data-cat-ipr-id")) {
+                    jQuery('#'+ selectedCatIPRId).attr("aria-selected", true);
+                    jQuery('#category-ipr-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
+                }
+
             });
 
-            // This fires on CREATE
+
+            // This fires on CHANGE
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
             });
+
+            categoryIPRDropdown.addEventListener('MDCSelect:change', function() {
+
+                //var descTextIPR = document.getElementById('categoryIPRDescription');
+                //descTextIPR.innerHTML = jQuery("#currently-ipr-selected").attr("data-cat-ipr-desc");
+                
+                // Change the description of the popup
+                jQuery("#categoryIPRDescription")[0].innerHTML =  categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-desc");
+     
+                // descTextIPR.innerHTML = categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-desc");
+                // catIPR = categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-slug");
+                // jQuery("#termIdInputIPR").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
+                // Change the value of termIdInputIPR
+                jQuery("#termIdInputIPR").attr( "value", categoryIPRSelect.selectedOptions[0].getAttribute("id") );
+            });
+            
+            //-----------------------
 
             moleculeFunctionalGroupDropdown.addEventListener('MDCSelect:change', function() {
                 jQuery("#moleculeFunctionalGroupInput").attr( "value", moleculeFunctionalGroupSelect.selectedOptions[0].getAttribute("id") );
@@ -1157,6 +1257,7 @@ if($asset_id != null) {
 
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
+                
 
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
@@ -1169,20 +1270,18 @@ if($asset_id != null) {
                 var cat;
 
                 descText = document.getElementById('categoryDescription');
-
+                
                 if(createAsset) {
 
                     descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
                     cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
-
                 } else {
-
+                    
                     descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
                     cat = jQuery("#currently-selected").attr("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", selectedCatId );
-
                 }
 
                 if (cat === 'molecule') {

@@ -11,6 +11,7 @@ class Asset3DClass{
         add_action('init', array($this, 'wpunity_assets_construct')); //wpunity_asset3d 'ASSETS 3D'
         add_action('init', array($this, 'wpunity_assets_taxcategory')); //wpunity_asset3d_cat 'ASSET TYPES'
         add_action('init', array($this, 'wpunity_assets_taxpgame')); //wpunity_asset3d_pgame 'ASSET GAMES'
+        add_action('init', array($this, 'wpunity_assets_taxcategory_ipr')); //wpunity_asset3d_ipr_cat 'ASSET IPR CATEG'
     }
 
     // Create Asset3D as custom type 'wpunity_asset3d'
@@ -43,7 +44,7 @@ class Asset3DClass{
             'show_in_nav_menus' => false,
             'menu_position' => 25,
             'menu_icon' => 'dashicons-editor-textcolor',
-            'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pgame'),
+            'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pgame', 'wpunity_asset3d_ipr_cat'),
             'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
             'hierarchical' => false,
             'has_archive' => false,
@@ -95,7 +96,7 @@ class Asset3DClass{
         );
         register_taxonomy('wpunity_asset3d_cat', 'wpunity_asset3d', $args);
     }
-
+    
     //==========================================================================================================================================
 
     // Create Asset Game as custom taxonomy
@@ -129,6 +130,40 @@ class Asset3DClass{
         );
         register_taxonomy('wpunity_asset3d_pgame', 'wpunity_asset3d', $args);
     }
+    
+    // ================================================================
+    // Create Asset Category as custom taxonomy
+    function wpunity_assets_taxcategory_ipr(){
+        $labels = array(
+            'name' => _x('Asset IPR', 'taxonomy general name'),
+            'singular_name' => _x('Asset IPR', 'taxonomy singular name'),
+            'menu_name' => _x('Asset IPR', 'admin menu'),
+            'search_items' => __('Search Asset bu IPR'),
+            'all_items' => __('All Asset IPR'),
+            'parent_item' => __('Parent Asset IPR'),
+            'parent_item_colon' => __('Parent Asset IPR:'),
+            'edit_item' => __('Edit Asset IPR'),
+            'update_item' => __('Update Asset IPR'),
+            'add_new_item' => __('Add New Asset IPR'),
+            'new_item_name' => __('New Asset IPR')
+        );
+        $args = array(
+            'description' => 'IPR (Category) of 3D asset',
+            'labels' => $labels,
+            'public' => true,
+            'show_ui' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'capabilities' => array (
+                'manage_terms' => 'manage_asset3d_cat',
+                'edit_terms' => 'manage_asset3d_cat',
+                'delete_terms' => 'manage_asset3d_cat',
+                'assign_terms' => 'edit_asset3d_cat'
+            ),
+        );
+        register_taxonomy('wpunity_asset3d_ipr_cat', 'wpunity_asset3d', $args);
+    }
+    
 
 }
 

@@ -1314,16 +1314,18 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 			if (trim($jsonScene) === '')
 				continue;
 
-			if (count($sceneJsonARR['objects']) > 0)
-				foreach ($sceneJsonARR['objects'] as $key => $value) {
-					if ($key !== 'avatarYawObject') {
-						if ($value['categoryName'] === 'Door') {
-							$doorInfoGathered[] = ['door' => $value['doorName_source'],
-							                       'scene' => $sceneTitle,
-							                       'sceneSlug'=> $sceneSlug];
-						}
-					}
-				}
+			
+            if ( $sceneJsonARR['objects'] != NULL)
+                if (count($sceneJsonARR['objects']) > 0)
+                    foreach ($sceneJsonARR['objects'] as $key => $value) {
+                        if ($key !== 'avatarYawObject') {
+                            if ($value['categoryName'] === 'Door') {
+                                $doorInfoGathered[] = ['door' => $value['doorName_source'],
+                                                       'scene' => $sceneTitle,
+                                                       'sceneSlug'=> $sceneSlug];
+                            }
+                        }
+                    }
 		}
 	}
 
@@ -1372,17 +1374,18 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 				continue;
 
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
-
-			if (count($sceneJsonARR['objects']) > 0)
-				foreach ($sceneJsonARR['objects'] as $key => $value) {
-					if ($key !== 'avatarYawObject') {
-						if ($value['categoryName'] === 'Door') {
-							$doorInfoGathered[] = ['door' => $value['doorName_source'],
-							                       'scene' => $sceneTitle,
-							                       'sceneSlug'=> $sceneSlug];
-						}
-					}
-				}
+            
+            if ( $sceneJsonARR['objects'] != NULL)
+                if (count($sceneJsonARR['objects']) > 0)
+                    foreach ($sceneJsonARR['objects'] as $key => $value) {
+                        if ($key !== 'avatarYawObject') {
+                            if ($value['categoryName'] === 'Door') {
+                                $doorInfoGathered[] = ['door' => $value['doorName_source'],
+                                                       'scene' => $sceneTitle,
+                                                       'sceneSlug'=> $sceneSlug];
+                            }
+                        }
+                    }
 		}
 	}
 

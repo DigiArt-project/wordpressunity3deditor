@@ -1,12 +1,16 @@
 <?php
 
-function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug){
+function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID){
+    
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
             $assetPGameID,
         ),
         'wpunity_asset3d_cat' => array(
             $assetCatID,
+        ),
+        'wpunity_asset3d_ipr_cat' => array(
+            $assetCatIPRID,
         )
     );
 
@@ -24,11 +28,25 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm
     if($asset_id){return $asset_id;}else{return 0;}
 }
 
-function wpunity_update_asset_frontend($asset_inserted_id,$assetTitleForm,$assetDescForm){
+function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id,$assetTitleForm,$assetDescForm, $assetCatIPRID){
+    
+    $asset_taxonomies = array(
+        'wpunity_asset3d_pgame' => array(
+            $assetPGameID,
+        ),
+        'wpunity_asset3d_cat' => array(
+            $assetCatID,
+        ),
+        'wpunity_asset3d_ipr_cat' => array(
+            $assetCatIPRID,
+        )
+    );
+    
     $asset_new_info = array(
         'ID' => $asset_inserted_id,
         'post_title' => $assetTitleForm,
         'post_content' => $assetDescForm,
+        'tax_input' => $asset_taxonomies,
     );
 
     wp_update_post($asset_new_info);
