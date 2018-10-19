@@ -1,6 +1,5 @@
 <?php
 
-
 //Create asset
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
@@ -153,7 +152,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		// Edit an existing asset: Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID, $assetCatIPRID);
 	}
-
+ 
+	
 	// Create new or updated of main fields edit successfull
 	if($asset_id != 0 || $asset_updatedConf == 1) {
 		if ($_POST['asset_sourceID']=='') {
@@ -1066,7 +1066,7 @@ if($asset_id != null) {
         ?>
 
         <!-- CATEGORY IPR -->
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid" id="ipr-div" style="display:none">
 
             <div class="mdc-layout-grid__inner">
 
@@ -1262,6 +1262,13 @@ if($asset_id != null) {
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
+                jQuery("#pdbRadioListItem").show();
+
+                jQuery("#ipr-div").show();
+
+                
+                
+                
                 wu_webw_3d_view.resizeDisplayGL();
 
                 wpunity_reset_panels(wu_webw_3d_view);

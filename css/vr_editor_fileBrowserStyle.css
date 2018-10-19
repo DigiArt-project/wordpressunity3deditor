@@ -331,47 +331,61 @@
 
 /*Tabs for filebrowser*/
 /* Style the tab */
-.tab {
-	overflow: hidden;
-	border: 1px solid #ccc;
-
+div.tab {
+	height:45px;
+	width:100%;
+	overflow: auto;
+	white-space: nowrap;
+	/*overflow-x: hidden;*/
+	/*overflow-y: hidden;*/
+	/*border: 1px solid #ccc;*/
 	background-color: #ccc;
 	color:#fff;
+	margin-bottom:5px;
 }
 
-/* Style the buttons that are used to open the tab content */
-.tab button {
+
+
+div.tab button {
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+}
+
+
+/*!* Style the buttons that are used to open the tab content *!*/
+div.tab button {
 	background-color: inherit;
-	float: left;
-	border: none;
-	outline: none;
-	cursor: pointer;
+	font-size:9pt !important;
+	font-weight: lighter !important;
+	/*float: left;*/
+	/*border: none;*/
+	/*outline: none;*/
+	/*cursor: pointer;*/
 	padding: 2px 4px;
 	transition: 0.3s;
-
-
 	background-color: #ccc;
 	color:#fff;
 }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
+/*!* Change background color of buttons on hover *!*/
+div.tab button:hover {
 	background-color: #ddd;
 }
 
-/* Create an active/current tablink class */
+/*!* Create an active/current tablink class *!*/
 .tab button.active {
-
 	background-color: #eee;
 	color:#777;
 }
 
-/* Style the tab content */
-.tabcontent {
-	display: none;
-	padding: 2px 4px;
-	border: 1px solid #ccc;
-	border-top: none;
-}
+/*!* Style the tab content *!*/
+/*.tabcontent {*/
+	/*font-size:9pt !important;*/
+	/*font-weight: lighter !important;*/
+	/*padding: 2px 4px;*/
+	/*border: 1px solid #ccc;*/
+	/*border-top: none;*/
+/*}*/
 
 

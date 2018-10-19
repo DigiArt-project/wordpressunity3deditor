@@ -313,7 +313,14 @@ get_header();
 
                         </ul>
 
-                        <span id="game-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">A Wind Energy park simulation with many areas and parameters</span>
+                        
+                        <?php if ($project_scope == 1) { ?>
+                            <span id="game-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">A Wind Energy park simulation with many areas and parameters</span>
+                            <?php } else { ?>
+                        <span id="game-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">
+                            Design a virtual tour of your own archaeological place
+                            <?php } ?>
+                            
 
                         <hr class="WhiteSpaceSeparator">
 
@@ -387,7 +394,7 @@ get_header();
         } else if (checked === 3) {
             jQuery("#game-description-label").html("A Chemistry lab with 2D and 3D puzzles about molecules");
         } else {
-            jQuery("#game-description-label").html("A first person view game about visiting a museum");
+            jQuery("#game-description-label").html("Design a virtual tour of your own archaeological place");
         }
     }
 

@@ -288,7 +288,7 @@ get_header(); ?>
             </div>
 
             <!--Set tab buttons-->
-            <div class="mdc-toolbar__section">
+            <div class="mdc-toolbar__section" style="flex:inherit">
                 <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
                     <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
 					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
@@ -310,13 +310,7 @@ get_header(); ?>
                 </nav>
             </div>
 
-            <div class="mdc-toolbar__section mdc-toolbar__section--align-end">
-                <div id="saveSceneBtn" class="SaveBtnContainerStyle">
-                    <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
-                       id="save-scene-button"
-                       class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
-                </div>
-            </div>
+           
 
         </div>
     </div>

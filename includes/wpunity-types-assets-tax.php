@@ -257,35 +257,47 @@ add_action( 'save_post', 'wpunity_assets_taxcategory_ipr_box_content_save' );
 function wpunity_assets_taxpgame_box_content_save( $post_id ) {
 
     global $wpdb;
-
+    
+    $fg = fopen("output_gg.txt","w");
+    
+   
     // verify if this is an auto save routine.
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
         return;
-
+        
+    
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
 
     if ( !wp_verify_nonce( $_POST['wpunity_asset3d_pgame_noncename'], plugin_basename( __FILE__ ) ) )
         return;
-
+    
+    fwrite( $fg ,  "-------------------->EE3".$_POST['post_type'].current_user_can( 'edit_page', $post_id ));
+    
     // Check permissions
     if ( 'wpunity_asset3d' == $_POST['post_type'] )
     {
-        if ( ! ( current_user_can( 'edit_page', $post_id )  ) )
+        if ( ! ( current_user_can( 'edit_post', $post_id )  ) )
             return;
     }
-    else
-    {
-        if ( ! ( current_user_can( 'edit_post', $post_id ) ) )
-            return;
-    }
-
+//    else
+//    {
+//        if ( ! ( current_user_can( 'edit_post', $post_id ) ) )
+//            return;
+//    }
+    
+    fwrite( $fg ,  "-------------------->EE4");
+    
     // OK, we're authenticated: we need to find and save the data
     $type_ID = intval($_POST['wpunity_asset3d_pgame'], 10);
 
     $type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
+    
+    fwrite( $fg ,  "-------------------->EE".$post_id." ".$type );
+    fclose($fg);
+    
     wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_pgame' );
 
 }

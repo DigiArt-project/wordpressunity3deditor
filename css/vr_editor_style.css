@@ -22,13 +22,7 @@
     padding: 2px;
 }
 
-.SaveBtnContainerStyle {
-    position: absolute;
-    text-align: center;
-    top: 7px;
-    right: 10px;
-    width: auto;
-}
+
 
 
 #formdiv {
@@ -112,12 +106,7 @@ canvas { pointer-events:none; z-index:10; }
 
 }
 
-.VrWalkInButtonStyle {
-    position: absolute;
-    right: 260px;
-    top: 10px;
 
-}
 
 .EditorObjOverlapSelectStyle a {
     width: 48px;
@@ -133,13 +122,13 @@ canvas { pointer-events:none; z-index:10; }
 
 .VrEditorFullscreenBtnStyle {
     position: absolute;
-    right: 90px;
+    right: 190px;
     top: 10px;
 }
 
 .VrEditorOptionsBtnStyle {
     position: absolute;
-    right: 20px;
+    right: 130px;
     top: 10px;
     width: 48px;
     min-width: 0;
@@ -202,10 +191,53 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
+.SaveSceneBtnStyle {
+    position: absolute;
+    right: 1px;
+    top: 2px;
+    padding: 0;
+    margin: 0;
+    width: 130px;
+}
+
+.SaveBtnContainerStyle {
+    position: absolute;
+    text-align: center;
+    top: 7px;
+    right: 1px;
+}
+
+
+.EditorDimensionToggleBtn {
+    position: absolute;
+    right: 430px;
+    top: 10px;
+}
+
+.EditorTourToggleBtn {
+    position: absolute;
+    right: 500px;
+    top: 10px;
+}
+
+.VrWalkInButtonStyle {
+    position: absolute;
+    right: 360px;
+    top: 50px;
+
+}
+
+.ThirdPersonVrWalkInButtonStyle {
+    position: absolute;
+    right: 360px;
+    top: 10px;
+}
 
 .RemoveAssetFromSceneBtnStyle i, .VrEditorOptionsBtnStyle i, .HierarchyToggleStyle i, .EditorTourToggleBtn a i, .ThirdPersonVrWalkInButtonStyle a i {
     padding-top: 4px;
 }
+
+
 
 
 .pauseRenderingDivStyle {
@@ -298,23 +330,7 @@ canvas { pointer-events:none; z-index:10; }
     width: 42px;
 }
 
-.EditorDimensionToggleBtn {
-    position: absolute;
-    right: 420px;
-    top: 10px;
-}
 
-.EditorTourToggleBtn {
-    position: absolute;
-    right: 500px;
-    top: 10px;
-}
-
-.ThirdPersonVrWalkInButtonStyle {
-    position: absolute;
-    right: 340px;
-    top: 10px;
-}
 
 
 button, html [type="button"], [type="reset"], [type="submit"] {

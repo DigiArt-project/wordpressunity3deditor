@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
@@ -267,6 +269,15 @@ echo '</script>';
         <i class="material-icons">delete</i>
     </a>
 
+
+    <div class="SaveSceneBtnStyle">
+        <div id="saveSceneBtn" class="SaveBtnContainerStyle">
+            <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
+               id="save-scene-button"
+               class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
+        </div>
+    </div>
+    
     <!--Canvas center-->
     <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons">visibility</i>
@@ -357,11 +368,16 @@ echo '</script>';
         <!--                <span>Nothing found</span>-->
         <!--            </div>-->
 
-
+        
+       
+        
+        
         <div class="tab" id="assetCategTab">
             <button id="allAssetsViewBt" class="tablinks active">All</button>
         </div>
 
+        
+        
         <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList">
         </ul>
 
@@ -919,12 +935,15 @@ echo '</script>';
         jQuery("#optionsPopupBtn").show();
 
         jQuery("#toggleTour3DaroundBtn").show();
+        
         jQuery("#editor-dimension-btn").show();
         jQuery("#toggleView3rdPerson").show();
 
         jQuery("#firstPersonBlocker").show();
         jQuery("#thirdPersonBlocker").show();
 
+        jQuery("#saveSceneBtn").show();
+        
         isComposerOn = true;
         jQuery("#infophp").show();
         jQuery("#fileBrowserToolbar").show();
@@ -956,6 +975,8 @@ echo '</script>';
         jQuery("#infophp").hide();
         jQuery("#fileBrowserToolbar").hide();
 
+        jQuery("#saveSceneBtn").hide();
+        
         transform_controls.visible  = false;
 
         // if in 3rd person view then show the cameraobject

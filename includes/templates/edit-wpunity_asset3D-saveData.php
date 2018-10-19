@@ -1,7 +1,7 @@
 <?php
 
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID){
-    
+   
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
             $assetPGameID,

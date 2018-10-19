@@ -158,6 +158,22 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 //            allAssetsViewBt
             document.getElementById("assetCategTab").children[0].addEventListener("click", function(event){openCategoryTab(event, this  );  });
 
+            var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
+
+            var newAssetBtn = jQuery(
+                '<br><a ' +
+                'draggable="false" ' +
+                'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
+                'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
+                'style="width:97%;" ' +
+                'data-mdc-auto-init="MDCRipple" ' +
+                '>' +
+                'Add new' +
+                '</a><br>');
+
+            newAssetBtn.appendTo(fileList);
+
+
             for (i = 0; i < enlistData.length; i++) {
 
                 f = enlistData[i];
@@ -212,7 +228,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                 img = '<span class="mdc-list-item__start-detail CenterContents" style="width:72px; margin-right: 8px;"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
 
-                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; position: relative;">' +
+                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; width:97%; position: relative;">' +
                     '<a class="mdc-list-item editor-asset-tile-style" style="align-items:baseline; left:0; padding:6px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
                     '" title="Drag the card into the plane" ' +
                     'data-assetslug="'+ f.assetSlug +
@@ -269,19 +285,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 file.appendTo(fileList);
             }
 
-            var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
 
-            var newAssetBtn = jQuery(
-                '<br><a ' +
-                'draggable="false" ' +
-                'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
-                'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
-                'data-mdc-auto-init="MDCRipple" ' +
-                '>' +
-                'Add new' +
-                '</a><br>');
-
-            newAssetBtn.appendTo(fileList);
 
             // Don't delete. Needed to auto init the mdc components after they have loaded.
             mdc.autoInit(document, () => {});
