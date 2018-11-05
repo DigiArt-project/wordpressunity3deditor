@@ -912,7 +912,7 @@ function showWholePopupDiv(popUpDiv, event) {
     if (popUpDiv.selector === '#popUpMarkerPropertiesDiv') {
         popUpDiv[0].style.top  = 0;
         popUpDiv[0].style.left = 0;
-        popUpDiv[0].style.bottom = 0;
+        popUpDiv[0].style.bottom = 'auto';
     } else {
         popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
     }

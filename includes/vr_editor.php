@@ -427,7 +427,7 @@ echo '</script>';
 
     <!-- Interface for Changing the Marker properties -->
     <div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 100%; width: auto;">
+         style="min-width: 100%; width: auto; bottom: auto;">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
            onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
@@ -482,17 +482,17 @@ echo '</script>';
                     </table>
                 </div>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
                     <p class="mdc-typography--title">Small Turbine</p>
-                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine1-iframe"></iframe>
+                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine1-iframe"></iframe>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
                     <p class="mdc-typography--title">Normal Turbine</p>
-                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine2-iframe"></iframe>
+                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine2-iframe"></iframe>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
                     <p class="mdc-typography--title">Big Turbine</p>
-                    <iframe style="height: 372px; width: 95%; border:none;" id="turbine3-iframe"></iframe>
+                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine3-iframe"></iframe>
                 </div>
 
             </div>
