@@ -94,21 +94,21 @@ if ($preSavedStrategies) {
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-    // TODO: STRATEGY DELETION!
-    // 1. Get new strategies array
+	// TODO: STRATEGY DELETION!
+	// 1. Get new strategies array
 	$savedStrategies = $_POST['json-strategies-input'];
 
 	// 2. Load WP DB saved array
 
-    // 3. Check if old arr has strategy NOT IN new arr
+	// 3. Check if old arr has strategy NOT IN new arr
 
 	// 4. Send GIO request to deactivate the old strategy ids
 
-    // 5. Compare 2 arrs. If new arr has a new id, then send GIO request to create new.
+	// 5. Compare 2 arrs. If new arr has a new id, then send GIO request to create new.
 
-    // 6. Save arrays to WPDB
+	// 6. Save arrays to WPDB
 
-    // Updating both exams with the same strategy
+	// Updating both exams with the same strategy
 	$allExams = wpunity_getExamScenes_byProjectID($project_id); //get all scene exams
 	foreach ($allExams as $thescene_id) {
 		update_post_meta($thescene_id, 'wpunity_exam_strategy', $savedStrategies);
@@ -117,13 +117,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	$savedStrategies = get_post_meta($scene_id, 'wpunity_exam_strategy', true);
 	$savedStrategies = json_decode($savedStrategies, true);
 
-    // Update GIO API with strategies
+	// Update GIO API with strategies
 	foreach ($savedStrategies as $strategy){
-	    wpunity_addStrategy_APIcall($project_id, $strategy);
+		wpunity_addStrategy_APIcall($project_id, $strategy);
 	}
 
 	//wp_redirect($goBackTo_MainLab_link);
-    wp_redirect($refresh_to_examPage);
+	wp_redirect($refresh_to_examPage);
 	exit;
 }
 
@@ -288,7 +288,9 @@ get_header();
                                                         <a style="display:inline-block;" onclick="deleteStrategy('<?php echo $key; ?>')" class="mdc-list-item CursorPointer AlignIconToMiddle " aria-label="Delete game" title="Delete project">
                                                             <i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i>
                                                         </a>
-                                                        <iframe style="height: 280px; border:none;width:100%;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
+                                                        <div style="width: 100%">
+                                                            <iframe style="height: 380px; border:none; width: 70%;" id="frame-<?php echo $key;?>" data-mols="<?php echo $mols; ?>"></iframe>
+                                                        </div>
                                                     </div>
 												<?php } ?>
 											<?php } ?>
@@ -530,7 +532,7 @@ get_header();
                     mols = mols.join("");
 
                     savedStrategiesList.append( '' +
-                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a><iframe style="height: 280px; border:none;width: 100%;" id=frame-'+ strategyId +' data-mols="'+ mols +'"></iframe></div>' +
+                        '<div class="mdc-layout-grid__cell--span-3 CenterContents" id='+strategyId+'><span style="display:inline-block;">'+ strategy+ '</span>&nbsp;<a style="display:inline-block;" onclick="deleteStrategy('+"'"+strategyId+"'"+')" class="mdc-list-item CursorPointer AlignIconToMiddle" aria-label="Delete game" title="Delete project"><i class="material-icons mdc-list-item__end-detail" aria-hidden="true" title="Delete">delete</i></a><div style="width: 100%"><iframe style="height: 380px; border:none;width: 70%;" id=frame-'+ strategyId +' data-mols="'+ mols +'"></iframe></div></div>' +
                         '');
 
                     loadPISAClusterIframe('chemistrytool', mols, 'frame-'+strategyId);
