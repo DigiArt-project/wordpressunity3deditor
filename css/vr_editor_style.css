@@ -106,8 +106,6 @@ canvas { pointer-events:none; z-index:10; }
 
 }
 
-
-
 .EditorObjOverlapSelectStyle a {
     width: 48px;
     min-width: 0;
