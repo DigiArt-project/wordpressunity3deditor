@@ -182,6 +182,11 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                 name = escapeHTML(f.name);
 
+                if(f.categoryName=="Molecule") {
+                    continue;
+                }
+
+
                 // Add the category in tabs if not yet added
                 if (jQuery("#assetCategTab").find("[id='" + f.categoryName + "']").length == 0) {
                     //Create an input type dynamically.
@@ -202,8 +207,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
 
 
-                if(f.categoryName=="Molecule")
-                    continue;
+
+
+
 
                 if(!f.objPath)
                     continue;

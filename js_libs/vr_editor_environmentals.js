@@ -545,6 +545,8 @@ class vr_editor_environmentals {
             this.cameraOrbit.rotation._y = 0;
             this.cameraOrbit.rotation._z = 0;
 
+            //this.cameraOrbit. orbitControls.object.quaternion = new THREE.Quaternion(0.707, 0 , 0, 0.707);
+
         } else {
             this.cameraOrbit.position.set(this.FRUSTUM_SIZE, this.FRUSTUM_SIZE, this.FRUSTUM_SIZE);
         }
