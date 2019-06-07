@@ -261,7 +261,7 @@ function wpunity_addAssets_chemistry_lab_unity($scene_id){
                 if($gate_type_slug == 'mainmenu-chem-yaml'){
                     $moleculeNamingScene_fid = 'S_MainMenu';
                     $interactable_value = '2';
-                    $scoreManager_Fid = '1599989332634340';
+                    $scoreManager_Fid = '0'; //'1599989332634340';
                 }elseif($gate_type_slug == 'exam2d-chem-yaml') {
                     $moleculeNamingScene_fid = $target_post_slug;
                     $interactable_value = '0';

@@ -87,6 +87,12 @@ function initPointerLock() {
                 envir.scene.getObjectByName("Steve").visible = true;
 
                 jQuery( "#toggleUIBtn" ).trigger( "click" );
+
+                // ToDo: Zoom
+                envir.orbitControls.reset();
+                findSceneDimensions();
+                envir.updateCameraGivenSceneLimits();
+
             }
         };
 

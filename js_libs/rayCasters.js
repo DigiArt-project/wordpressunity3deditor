@@ -60,25 +60,73 @@ function dragDropVerticalRayCasting (event){
 
 function onMouseDoubleClickFocus( event , objectName) {
 
+    //envir.scene.getObjectByName(selected_object_name);
+
+    console.log(selected_object_name, objectName);
+
     if (arguments.length === 2) {
         selectorMajor(event, envir.scene.getObjectByName(objectName) );
     }
 
     // // This makes the camera to go on top of the selected item
     if (envir.is2d) {
-        envir.orbitControls.target.x = transform_controls.object.position.x;
-        envir.orbitControls.target.y = transform_controls.object.position.y;
-        envir.orbitControls.target.z = transform_controls.object.position.z;
-        envir.cameraOrbit.position.x = transform_controls.object.position.x;
-        envir.cameraOrbit.position.y = transform_controls.object.position.y + 30;
-        envir.cameraOrbit.position.z = transform_controls.object.position.z;
+
+
+        //var borders = findBorders(transform_controls.object);
+
+        //var minBorders = borders[0];
+        //var maxBorders = borders[1];
+        //
+        // console.log(minBorders);
+        //
+        // console.log(maxBorders);
+        //
+        // console.log(envir.orbitControls.object.left);
+        //
+        //
+        // envir.updateCameraGivenSceneLimits();
+        //
+        //
+        // envir.orbitControls.object.bottom+= minBorders.x;
+        // envir.orbitControls.object.top   += maxBorders.x;
+        //
+        // envir.orbitControls.object.left  += minBorders.z;
+        // envir.orbitControls.object.right += maxBorders.z;
+
+        //
+        //
+        // envir.orbitControls.object.top  += transform_controls.object.position.x;
+        // envir.orbitControls.object.down += transform_controls.object.position.x;
+        //
+        //
+        // console.log(envir.orbitControls.object.left);
+
+
+
+
+
+        // This is not valid
+        // envir.orbitControls.target.x = transform_controls.object.position.x;
+        // envir.orbitControls.target.y = transform_controls.object.position.y;
+        // envir.orbitControls.target.z = transform_controls.object.position.z;
+
+
+
+        // envir.orbitControls.object.rotation._x = - Math.PI/2;
+        // envir.orbitControls.object.rotation._y = 0;
+        // envir.orbitControls.object.rotation._z = 0;
+        //
+        //
+        // envir.orbitControls.reset2();
+
+
+
     } else {
         envir.orbitControls.target.x = transform_controls.object.position.x;
         envir.orbitControls.target.y = transform_controls.object.position.y;
         envir.orbitControls.target.z = transform_controls.object.position.z;
     }
 
-    //envir.orbitControls.object.zoom = 10 / transform_controls.size;
     envir.orbitControls.object.updateProjectionMatrix();
 }
 
@@ -189,6 +237,7 @@ function selectorMajor(event, objectSel){
             transform_controls.size = 1;
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
             jQuery("#removeAssetBtn").hide();
+
         } else {
             // find dimenstions of object in order to resize transform controls
             var dims = findDimensions(transform_controls.object);
@@ -610,6 +659,8 @@ function displayDoorProperties(event, name){
  * @param name
  */
 function displayMarkerProperties(event, name){
+
+
 
     var popUpMarkerPropertiesDiv = jQuery("#popUpMarkerPropertiesDiv");
 

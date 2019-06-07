@@ -460,7 +460,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ___[text_help_scene]___
+  m_Text: "___[text_help_scene]___"
 --- !u!222 &1361962197
 CanvasRenderer:
   m_ObjectHideFlags: 0

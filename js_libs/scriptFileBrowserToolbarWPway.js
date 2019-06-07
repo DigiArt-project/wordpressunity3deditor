@@ -186,7 +186,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     continue;
                 }
 
-
                 // Add the category in tabs if not yet added
                 if (jQuery("#assetCategTab").find("[id='" + f.categoryName + "']").length == 0) {
                     //Create an input type dynamically.
@@ -204,12 +203,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     //Append the element
                     foo.appendChild(element);
                 }
-
-
-
-
-
-
 
                 if(!f.objPath)
                     continue;

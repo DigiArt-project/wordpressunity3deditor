@@ -261,7 +261,17 @@ get_header(); ?>
     </div>
 
     <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string; ?></span>
+        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
+    
+//        if ($game_type_obj->string === "Archaeology")
+//            echo "Museum";
+//        else
+          echo $game_type_obj->string;
+        
+        //echo $game_type_obj->string;
+        
+        
+        ?></span>
 
     <hr class="mdc-list-divider">
 

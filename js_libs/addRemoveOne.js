@@ -145,7 +145,12 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
  */
 function resetInScene(name){
 
-    envir.avatarControls.getObject().position.set(0,1.3,0);
+    if (game_type!="energy")
+        envir.avatarControls.getObject().position.set(0,1.3,0);
+    else
+        envir.avatarControls.getObject().position.set(0,200,500);
+
+
     envir.avatarControls.getObject().quaternion.set(0,0,0,1);
     envir.avatarControls.getObject().children[0].rotation.set(0,0,0);
 

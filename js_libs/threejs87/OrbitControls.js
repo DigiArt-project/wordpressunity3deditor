@@ -104,6 +104,23 @@ THREE.OrbitControls = function ( object, domElement ) {
 
     };
 
+    this.reset2 = function () {
+
+        //scope.target.copy( scope.target0 );
+        scope.object.rotation = new THREE.Vector3(0,0,0);
+        //scope.object.position.copy( scope.position0 );
+        //scope.object.zoom = scope.zoom0;
+
+        scope.object.updateProjectionMatrix();
+        scope.dispatchEvent( changeEvent );
+
+        scope.update();
+
+        state = STATE.NONE;
+
+    };
+
+
     this.reset = function () {
 
         scope.target.copy( scope.target0 );

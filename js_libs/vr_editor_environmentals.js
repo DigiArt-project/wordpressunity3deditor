@@ -527,6 +527,8 @@ class vr_editor_environmentals {
 
     updateCameraGivenSceneLimits(){
 
+
+
         if(this.cameraOrbit.type === 'PerspectiveCamera') {
 
         } else if(this.cameraOrbit.type  === 'OrthographicCamera') {
@@ -534,16 +536,18 @@ class vr_editor_environmentals {
             this.ASPECT = this.container_3D_all.clientWidth / this.container_3D_all.clientHeight;
             this.cameraOrbit.left   = this.FRUSTUM_SIZE * this.ASPECT / -2;
             this.cameraOrbit.right  = this.FRUSTUM_SIZE * this.ASPECT /  2;
-            this.cameraOrbit.zoom = this.SCENE_DIMENSION_SURFACE;
+
+            this.cameraOrbit.zoom = -1.5 * this.SCENE_DIMENSION_SURFACE + 2300;
+
 
         }
 
         if(this.is2d){
             this.cameraOrbit.position.set(0, this.FRUSTUM_SIZE, 0);
 
-            this.cameraOrbit.rotation._x = - Math.PI/2;
-            this.cameraOrbit.rotation._y = 0;
-            this.cameraOrbit.rotation._z = 0;
+            // this.cameraOrbit.rotation._x = - Math.PI/2;
+            // this.cameraOrbit.rotation._y = 0;
+            // this.cameraOrbit.rotation._z = 0;
 
             //this.cameraOrbit. orbitControls.object.quaternion = new THREE.Quaternion(0.707, 0 , 0, 0.707);
 
@@ -552,6 +556,7 @@ class vr_editor_environmentals {
         }
 
         this.cameraOrbit.updateProjectionMatrix();
+        //this.orbitControls.object.updateProjectionMatrix();
     }
 
 

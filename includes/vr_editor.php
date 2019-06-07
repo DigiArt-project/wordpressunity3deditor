@@ -651,7 +651,7 @@ echo '</script>';
         jQuery("#translate-switch").click();
 
         if (envir.is2d) {
-            
+            //3d
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
             envir.axisHelper.visible = true;
@@ -668,10 +668,13 @@ echo '</script>';
             // envir.cameraOrbit.rotation._y = 0;
             // envir.cameraOrbit.rotation._z = 0;
 
+            // ToDo: Zoom
+            envir.orbitControls.reset();
+            
             //envir.orbitControls.object.quaternion = new THREE.Quaternion(0.707, 0 , 0, 0.707);
 
-            envir.avatarControls.getObject().quaternion.set(0,0,0,1);
-            envir.avatarControls.getObject().children[0].rotation.set(0,0,0);
+            // envir.avatarControls.getObject().quaternion.set(0,0,0,1);
+            // envir.avatarControls.getObject().children[0].rotation.set(0,0,0);
             
             
             envir.orbitControls.enableRotate = false;

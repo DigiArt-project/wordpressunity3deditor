@@ -318,6 +318,27 @@ function findDimensions(grouObj){
     return [x,y,z];
 }
 
+// Find dimensions of the selected object
+function findBorders(grouObj){
+
+    grouObj.remove( grouObj.getObjectByName('bbox') );
+    grouObj.remove( grouObj.getObjectByName('x_dim_line') );
+
+    // ======= bbox ========================
+    var box = new THREE.BoxHelper( grouObj, 0xff00ff );
+
+    box.geometry.computeBoundingBox();
+    box.name = "bbox";
+
+    var finalVec = new THREE.Vector3().subVectors(box.geometry.boundingBox.min, box.geometry.boundingBox.max);
+
+    var x = Math.abs(finalVec.x);
+    var y = Math.abs(finalVec.y);
+    var z = Math.abs(finalVec.z);
+
+    return [box.geometry.boundingBox.min, box.geometry.boundingBox.max];
+}
+
 
 // Find Limits (world coordinates) of the selected object
 function findObjectLimits(grouObj){
