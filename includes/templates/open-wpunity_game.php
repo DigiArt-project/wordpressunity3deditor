@@ -96,7 +96,7 @@ if ($project_scope == 0) {
 get_header();
 ?>
 
-<h1 class="mdc-typography--display3 mdc-theme--text-primary-on-background"><?php echo $full_title; ?> Manager</h1>
+<span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-top:10px"><?php echo $full_title; ?> Manager</span>
 
 
 <!--<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?-->
@@ -115,7 +115,11 @@ get_header();
 
 <?php } else { ?>
 
-    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-background">Create a new <?php echo $full_title_lowercase; ?> or edit an existing one</h2>
+
+    
+    <a href="#" class="helpButton" onclick="alert('Create a new <?php echo $full_title_lowercase; ?> or edit an existing one')">
+        ?
+    </a>
 
 
 <div class="mdc-layout-grid FrontPageStyle">

@@ -442,8 +442,10 @@ function wpunity_getNonRegionalScenes($project_id) {
 //Add new Field at registration form (3 steps)
 
 //1. Add a new form element...
-add_action( 'register_form', 'wpunity_extrapass_register_form' );
-
+// For Envisage only
+if ($project_scope === 1) {
+    add_action('register_form', 'wpunity_extrapass_register_form');
+}
 function wpunity_extrapass_register_form() {
 
 	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
@@ -481,8 +483,10 @@ function wpunity_extrapass_register_form() {
 }
 
 //2. Add validation. In this case, we make sure extra_pass is required.
-add_filter( 'registration_errors', 'wpunity_extrapass_registration_errors', 10, 3 );
-
+// For Envisage only
+if ($project_scope === 1) {
+    add_filter('registration_errors', 'wpunity_extrapass_registration_errors', 10, 3);
+}
 function wpunity_extrapass_registration_errors( $errors, $sanitized_user_login, $user_email ) {
 
 	if ( empty( $_POST['extra_pass'] ) || ! empty( $_POST['extra_pass'] ) && trim( $_POST['extra_pass'] ) == '' ) {
@@ -494,16 +498,21 @@ function wpunity_extrapass_registration_errors( $errors, $sanitized_user_login, 
 }
 
 //3. Finally, save our extra registration user meta.
-add_action( 'user_register', 'wpunity_extrapass_user_register', 10, 1 );
-
+// For Envisage only
+if ($project_scope === 1) {
+    add_action('user_register', 'wpunity_extrapass_user_register', 10, 1);
+}
 function wpunity_extrapass_user_register( $user_id ) {
 	if ( ! empty( $_POST['extra_pass'] ) ) {
 		update_user_meta( $user_id, 'extra_pass', sanitize_text_field( $_POST['extra_pass'] ) );
 	}
 }
 
-add_action( 'show_user_profile', 'wpunity_extrapass_profile_fields' );
-add_action( 'edit_user_profile', 'wpunity_extrapass_profile_fields' );
+// For Envisage only
+if ($project_scope === 1) {
+    add_action('show_user_profile', 'wpunity_extrapass_profile_fields');
+    add_action('edit_user_profile', 'wpunity_extrapass_profile_fields');
+}
 
 function wpunity_extrapass_profile_fields( $user ) {
 	?>
@@ -520,6 +529,55 @@ function wpunity_extrapass_profile_fields( $user ) {
 
 //==========================================================================================================================================
 //==========================================================================================================================================
+
+// Display Login/Logout in menu
+function wpsites_loginout_menu_link( $menu, $args ) {
+    //$loginout = wp_loginout($_SERVER['REQUEST_URI'], false );
+    $loginout = '<li class="nav-menu" class="menu-item">' . wp_loginout($_SERVER['REQUEST_URI'], false ) . '</li>';
+    $menu .= $loginout;
+    return $menu;
+}
+
+add_filter( 'wp_nav_menu_items','wpsites_loginout_menu_link', 199, 2 );
+
+
+
+
+//function add_login_logout_register_menu( $items, $args ) {
+////    if ( $args->theme_location != 'primary' ) {
+////        return $items;
+////    }
+//
+//    if ( is_user_logged_in() ) {
+//        $items .= '' . __( 'Log Out' ) . '';
+//    } else {
+//        $items .= '' . __( 'Login In' ) . '';
+//        $items .= '' . __( 'Sign Up' ) . '';
+//    }
+//
+//    return $items;
+//}
+//
+//add_filter( 'wp_nav_menu_items', 'add_login_logout_register_menu', 199, 2 );
+
+
+// Remove Admin bar for non admins
+add_action('after_setup_theme', 'remove_admin_bar');
+
+function remove_admin_bar() {
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
+}
+
+// Redirect to home page after login (not go to profile)
+function wpunity_default_page() {
+    
+    return home_url();
+}
+
+add_filter('login_redirect', 'wpunity_default_page');
+
 
 //Function to get ALL necessary keys about GIO Analytics
 function wpunity_getProjectKeys($project_id, $project_scope) {

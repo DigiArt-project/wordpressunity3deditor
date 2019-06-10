@@ -227,7 +227,14 @@ get_header(); ?>
     <style>
         .panel { display: none; }
         .panel.active { display: block; }
+        .navigation-top {display:none;}
         .mdc-tab { min-width: 0; }
+        .custom-header { display:none; }
+        .main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
+        .site-branding {display:none;}
+        #content {padding:0px;}
+        
+        
     </style>
 
 <?php if ( !is_user_logged_in() ) { ?>
@@ -245,49 +252,51 @@ get_header(); ?>
 
     <!-- START PAGE -->
     <div class="EditPageHeader">
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php echo $goBackTo_AllProjects_link; ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-			<?php echo $game_post->post_title; ?>
-        </h1>
-
-
-        <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle" data-mdc-auto-init="MDCRipple" title="When you are finished compile the <?php echo $single_lowercase; ?> into a standalone binary">
-            COMPILE <?php echo $single_lowercase; ?>
-        </a>
-
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
             Add a new 3D asset
         </a>
     </div>
 
-    <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
-    
-//        if ($game_type_obj->string === "Archaeology")
-//            echo "Museum";
-//        else
-          echo $game_type_obj->string;
+    <span class="mdc-typography--caption" style="font-size:16pt">
         
-        //echo $game_type_obj->string;
+
+    </span>
+
+<!--    <ul class="EditPageBreadcrumb">-->
+<!--        <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_AllProjects_link; ?><!--" title="Go back to Project selection">Home</a></li>-->
+<!--        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
+<!--        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Scene Editor</span></li>-->
+<!--    </ul>-->
+
+    <div class="mdc-toolbar" style="display:block;">
+
         
         
-        ?></span>
-
-    <hr class="mdc-list-divider">
-
-    <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
-        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Scene Editor</span></li>
-    </ul>
-
-    <div class="mdc-toolbar">
-        <div class="mdc-toolbar__row" style="min-height: 0;">
+        <div class="" style="min-height: 0;">
             <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start">
+                
+                
+                <div class="mdc-textfield mdc-theme--text-primary-on-dark mdc-form-field" data-mdc-auto-init="MDCTextfield" style="margin-top: 0; margin-bottom:0;font-size: 20px; vertical-align: middle;padding-bottom:15px" >
 
-                <div class="mdc-textfield mdc-textfield--fullwidth--theme-dark mdc-form-field" data-mdc-auto-init="MDCTextfield" style="margin-top: 0; margin-bottom:0;">
+                    <a title="Back" href="<?php echo $goBackTo_AllProjects_link; ?>"> <i class="material-icons mdc-theme--text-primary-on-dark" style="font-size: 26px; vertical-align: middle;" >arrow_back</i> </a>
+                    <?php echo $game_post->post_title; ?>
+
+                    <i class="material-icons mdc-theme--text-icon-on-dark" title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
+    
+                    //        if ($game_type_obj->string === "Archaeology")
+                    //            echo "Museum";
+                    //        else
+                    echo $game_type_obj->string;
+    
+                    //echo $game_type_obj->string;
+    
+                    ?>
+
+
+
                     <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title"
-                           aria-controls="title-validation-msg" minlength="3" required style="border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: none; border-radius: 0;">
+                           aria-controls="title-validation-msg" minlength="3" required
+                           style="padding:0px; margin-top:10px; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: none; border-radius: 0;">
                     <p class="mdc-textfield-helptext mdc-textfield-helptext--validation-msg"
                        id="title-validation-msg">
                         Must be at least 3 characters long
@@ -320,7 +329,11 @@ get_header(); ?>
                 </nav>
             </div>
 
-           
+
+            <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle w3-display-right" data-mdc-auto-init="MDCRipple" style="margin-top:10px;position:absolute;right:0px" title="When you are finished compile the <?php echo $single_lowercase; ?> into a standalone binary">
+                COMPILE <?php echo $single_lowercase; ?>
+            </a>
+            
 
         </div>
     </div>
@@ -328,7 +341,7 @@ get_header(); ?>
     <div class="panels">
         <div class="panel active" id="panel-1" role="tabpanel" aria-hidden="false">
 
-            <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid" style="padding:0px;">
                 <div class="mdc-layout-grid__inner">
                     <div class="mdc-layout-grid__cell--span-12">
                         <div id="scene-vr-editor">
