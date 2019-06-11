@@ -258,7 +258,9 @@ function wpunity_getRemote_server_path(){
 function wpunity_get_ftpCredentials(){
 	$generaloptions = get_option( 'general_settings' );
 
-	$ftp_credentials = array('address' => $generaloptions["wpunity_ftp_address"],'username' => $generaloptions["wpunity_ftp_username"], 'password' => $generaloptions["wpunity_ftp_pass"]);
+	$ftp_credentials = array('address'  => $generaloptions["wpunity_ftp_address"],
+                             'username' => $generaloptions["wpunity_ftp_username"],
+                             'password' => $generaloptions["wpunity_ftp_pass"]);
 
 	return $ftp_credentials;
 

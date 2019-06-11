@@ -46,7 +46,6 @@ class ImcSettingsPage {
 
     }
 
-
     /*
      * Registers the general settings and appends the
      * key to the plugin settings tabs array.
