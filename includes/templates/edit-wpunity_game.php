@@ -177,7 +177,8 @@ get_header();
         </h1>
 
         <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-button--primary HeaderButtonStyle" data-mdc-auto-init="MDCRipple">
-            COMPILE <?php echo $single_lowercase; ?>
+            COMPILE
+<!--            --><?php //echo $single_lowercase; ?>
         </a>
     </div>
 

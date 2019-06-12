@@ -28,11 +28,14 @@ var controlInterface = [];
 controlInterface.translate = new dat.GUI( { autoPlace: false });
 controlInterface.translate.domElement.id = 'translatePanelGui';
 
+
 controlInterface.rotate = new dat.GUI( { autoPlace: false });
 controlInterface.rotate.domElement.id = 'rotatePanelGui';
+controlInterface.rotate.domElement.style='width:100%';
 
 controlInterface.scale = new dat.GUI( { autoPlace: false });
 controlInterface.scale.domElement.id = 'scalePanelGui';
+controlInterface.scale.domElement.style='width:100%';
 
 
 var dg_controller_tx = controlInterface.translate.add( gui_controls_funs, 'dg_tx').step(0.001).name('<span style="color:red">Move x</span>');//.listen();
@@ -48,7 +51,7 @@ var dg_controller_dim_x = controlInterface.scale.add( gui_controls_funs, 'dg_dim
 var dg_controller_dim_y = controlInterface.scale.add( gui_controls_funs, 'dg_dim_y').min(0.001).max(1000).step(0.001).name('<span style="color:green">y length</span>');
 var dg_controller_dim_z = controlInterface.scale.add( gui_controls_funs, 'dg_dim_z').min(0.001).max(1000).step(0.001).name('<span style="color:blue">z length</span>');
 
-
+controlInterface.translate.domElement.style='width:100%';
 
 
 /**

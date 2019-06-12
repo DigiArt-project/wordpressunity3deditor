@@ -8,6 +8,7 @@
 
 .dg.main {
     padding: 0;
+    width:100% !important;
 }
 
 .dg.main.taller-than-window .close-button {

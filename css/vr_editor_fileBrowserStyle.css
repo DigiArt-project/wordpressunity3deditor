@@ -7,8 +7,8 @@
 .filemanager {
 	position: absolute;
 	width: 20%;
-	right: 0;
-	top: 60px;
+	left: 0;
+	top: 0px;
 	background-color: rgba(0, 0, 0, 0.12);
 	padding: 0 6px 0 6px;
 }

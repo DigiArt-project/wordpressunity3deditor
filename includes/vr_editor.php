@@ -243,86 +243,118 @@ echo '</script>';
 <!-- All go here -->
 <div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
-    <div id="xlengthText"></div>
-    <div id="ylengthText"></div>
-    <div id="zlengthText"></div>
-
-    <!-- Controlling 3d items transition-rotation-scale (trs) -->
-    <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
-
-    <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
-        <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
-        <label for="translate-switch">Move (T)</label>
-        <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
-        <label for="rotate-switch">Rotate (Y)</label>
-        <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
-        <label for="scale-switch">Scale (U)</label>
-    </div>
-
-    <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
-        <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
-        <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
-    </div>
-
+    <!--Canvas center-->
+<!--    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">-->
+<!--        <i class="material-icons">visibility</i>-->
+<!--    </a>-->
+    
+    <!-- Remove game object-->
     <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
        title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
         <i class="material-icons">delete</i>
     </a>
 
 
-    <div class="SaveSceneBtnStyle">
-        <div id="saveSceneBtn" class="SaveBtnContainerStyle">
-            <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
-               id="save-scene-button"
-               class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save scene</a>
-        </div>
-    </div>
-    
-    <!--Canvas center-->
-    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
-        <i class="material-icons">visibility</i>
+
+    <!--        Open/Close panel-->
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">menu</i>
     </a>
 
 
-    <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">
-        <a id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
-           class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
-            <i class="material-icons">rotate_90_degrees_ccw</i>
-        </a>
+
+    <div id="right-elements-panel" class="right-elements-panel-style">
+
+        <div id="row0" class="row-right-panel" style="height:35px;">
+
+        </div>
+        
+        <div id="row1" class="row-right-panel">
+                <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
+                    Full Screen
+                </a>
+        
+                <!-- Options -->
+                <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
+                    <i class="material-icons">settings</i>
+                </a>
+        </div>
+
+        <div id="row2" class="row-right-panel">
+<!--        <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">-->
+            <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
+               class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+                <i class="material-icons">rotate_90_degrees_ccw</i>
+            </a>
+<!--        </div>-->
+
+<!--        <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">-->
+            <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+<!--        </div>-->
+
+        <!-- The button to start walking in the 3d environment -->
+<!--        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">-->
+            <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+                VIEW
+            </a>
+<!--        </div>-->
+
+<!--        <div id="thirdPersonBlocker" class="">-->
+            <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+                <i class="material-icons">person</i></a>
+<!--        </div>-->
+    
+        </div>
+
+
+        <!-- Move, Rotate, Scale Buttons -->
+        <div id="row3" class="row-right-panel">
+            <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
+                <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
+                <label for="translate-switch">Move</label>
+                <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
+                <label for="rotate-switch">Rotate</label>
+                <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
+                <label for="scale-switch">Scale</label>
+            </div>
+        </div>
+
+        <!-- Numerical input for Move rotate scale -->
+        <div id="row4" class="row-right-panel">
+            <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
+        </div>
+
+        <!--  Axis controls size -->
+        <div id="row5" class="row-right-panel">
+            <span class="mdc-typography--subheading1" style="font-size:12px">Axes controls size:</span>
+            <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
+                <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+                <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+            </div>
+        </div>
+
+        <!-- Hierarchy viewer -->
+        <div id="row6" class="row-right-panel">
+            <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
+                <span class="hierarchyViewerTitle mdc-typography--subheading1 mdc-theme--text-primary-on-background" style="">Hierarchy Viewer</span>
+                <hr class="mdc-list-divider">
+                <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
+            </div>
+        </div>
+        
     </div>
 
 
-    <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">
-        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
-    </div>
 
-    <!-- The button to start walking in the 3d environment -->
-    <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
-        <a type="button" id="firstPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            VIEW
-        </a>
-    </div>
-
-
+    
+    <!-- Pause rendering-->
     <div id="divPauseRendering" class="pauseRenderingDivStyle">
         <a type="button" id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
             <i class="material-icons">pause</i>
         </a>
     </div>
-
-    <div id="thirdPersonBlocker" class="ThirdPersonVrWalkInButtonStyle">
-        <a type="button" id="thirdPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            <i class="material-icons">person</i></a>
-    </div>
-
-    <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
-        Full Screen
-    </a>
-
-    <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">settings</i>
-    </a>
-
+    
+    
     <!--  Make form to submit user changes -->
     <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
         <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
@@ -338,17 +370,7 @@ echo '</script>';
     </div>
 
 
-    <!--Hierarchy Viewer-->
 
-    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">menu</i>
-    </a>
-
-    <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
-        <h2 class="mdc-typography--title mdc-theme--text-primary-on-background">Hierarchy Viewer</h2>
-        <hr class="mdc-list-divider">
-        <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
-    </div>
 
     <!--  FileBrowserToolbar  -->
     <div class="filemanager" id="fileBrowserToolbar">
@@ -624,7 +646,7 @@ echo '</script>';
             jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
         }
 
-        jQuery("#hierarchy-viewer-container").toggle("slow");
+        jQuery("#right-elements-panel").toggle("slow");
     });
 
 
@@ -718,28 +740,28 @@ echo '</script>';
         envir.makeFullScreen();
     }, false);
 
-    // First person view
-    jQuery('#toggleUIBtn').click(function() {
-        var btn = jQuery('#toggleUIBtn');
-        var icon = jQuery('#toggleUIBtn i');
-
-        if (btn.data('toggle') === 'on') {
-
-            btn.addClass('mdc-theme--text-hint-on-light');
-            btn.removeClass('mdc-theme--secondary');
-            icon.html('<i class="material-icons">visibility_off</i>');
-            btn.data('toggle', 'off');
-            hideEditorUI();
-
-        } else {
-            btn.removeClass('mdc-theme--text-hint-on-light');
-            btn.addClass('mdc-theme--secondary');
-            icon.html('<i class="material-icons">visibility</i>');
-            btn.data('toggle', 'on');
-
-            showEditorUI();
-        }
-    });
+    // // First person view
+    // jQuery('#toggleUIBtn').click(function() {
+    //     var btn = jQuery('#toggleUIBtn');
+    //     var icon = jQuery('#toggleUIBtn i');
+    //
+    //     if (btn.data('toggle') === 'on') {
+    //
+    //         btn.addClass('mdc-theme--text-hint-on-light');
+    //         btn.removeClass('mdc-theme--secondary');
+    //         icon.html('<i class="material-icons">visibility_off</i>');
+    //         btn.data('toggle', 'off');
+    //         hideEditorUI();
+    //
+    //     } else {
+    //         btn.removeClass('mdc-theme--text-hint-on-light');
+    //         btn.addClass('mdc-theme--secondary');
+    //         icon.html('<i class="material-icons">visibility</i>');
+    //         btn.data('toggle', 'on');
+    //
+    //         showEditorUI();
+    //     }
+    // });
 
 
     // Toggle 3rd person view
@@ -930,67 +952,67 @@ echo '</script>';
         jQuery("#"+type+"PanelGui").show();
     }
 
-    function showEditorUI() {
-        jQuery("#"+transform_controls.getMode()+"PanelGui").show();
-        jQuery("#object-manipulation-toggle").show();
-        jQuery("#axis-manipulation-buttons").show();
-        jQuery("#double-sided-switch").show();
-        jQuery("#removeAssetBtn").show();
-        jQuery("#fullScreenBtn").show();
-        jQuery("#hierarchy-viewer-container").show();
-        jQuery("#hierarchy-toggle-btn").show();
-        jQuery("#divPauseRendering").show();
-
-        jQuery("#optionsPopupBtn").show();
-
-        jQuery("#toggleTour3DaroundBtn").show();
-        
-        jQuery("#editor-dimension-btn").show();
-        jQuery("#toggleView3rdPerson").show();
-
-        jQuery("#firstPersonBlocker").show();
-        jQuery("#thirdPersonBlocker").show();
-
-        jQuery("#saveSceneBtn").show();
-        
-        isComposerOn = true;
-        jQuery("#infophp").show();
-        jQuery("#fileBrowserToolbar").show();
-
-        transform_controls.visible  = true;
-        envir.getSteveFrustum().visible = true;
-    }
-
-    function hideEditorUI() {
-        hideObjectPropertiesPanels();
-        jQuery("#object-manipulation-toggle").hide();
-        jQuery("#axis-manipulation-buttons").hide();
-        jQuery("#double-sided-switch").hide();
-        jQuery("#removeAssetBtn").hide();
-        jQuery("#fullScreenBtn").hide();
-        jQuery("#hierarchy-viewer-container").hide();
-        jQuery("#hierarchy-toggle-btn").hide();
-        jQuery("#optionsPopupBtn").hide();
-
-        jQuery("#divPauseRendering").hide();
-
-        jQuery("#editor-dimension-btn").hide();
-        jQuery("#toggleTour3DaroundBtn").hide();
-        jQuery("#toggleView3rdPerson").hide();
-
-        jQuery("#firstPersonBlocker").hide();
-        jQuery("#thirdPersonBlocker").hide();
-        isComposerOn = false;
-        jQuery("#infophp").hide();
-        jQuery("#fileBrowserToolbar").hide();
-
-        jQuery("#saveSceneBtn").hide();
-        
-        transform_controls.visible  = false;
-
-        // if in 3rd person view then show the cameraobject
-        envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
-    }
+    // function showEditorUI() {
+    //     jQuery("#"+transform_controls.getMode()+"PanelGui").show();
+    //     jQuery("#object-manipulation-toggle").show();
+    //     jQuery("#axis-manipulation-buttons").show();
+    //     jQuery("#double-sided-switch").show();
+    //     jQuery("#removeAssetBtn").show();
+    //     jQuery("#fullScreenBtn").show();
+    //     jQuery("#hierarchy-viewer-container").show();
+    //     jQuery("#hierarchy-toggle-btn").show();
+    //     jQuery("#divPauseRendering").show();
+    //
+    //     jQuery("#optionsPopupBtn").show();
+    //
+    //     jQuery("#toggleTour3DaroundBtn").show();
+    //
+    //     jQuery("#editor-dimension-btn").show();
+    //     jQuery("#toggleView3rdPerson").show();
+    //
+    //     jQuery("#firstPersonBlocker").show();
+    //     jQuery("#thirdPersonBlocker").show();
+    //
+    //     jQuery("#saveSceneBtn").show();
+    //
+    //     isComposerOn = true;
+    //     jQuery("#infophp").show();
+    //     jQuery("#fileBrowserToolbar").show();
+    //
+    //     transform_controls.visible  = true;
+    //     envir.getSteveFrustum().visible = true;
+    // }
+    //
+    // function hideEditorUI() {
+    //     hideObjectPropertiesPanels();
+    //     jQuery("#object-manipulation-toggle").hide();
+    //     jQuery("#axis-manipulation-buttons").hide();
+    //     jQuery("#double-sided-switch").hide();
+    //     jQuery("#removeAssetBtn").hide();
+    //     jQuery("#fullScreenBtn").hide();
+    //     jQuery("#hierarchy-viewer-container").hide();
+    //     jQuery("#hierarchy-toggle-btn").hide();
+    //     jQuery("#optionsPopupBtn").hide();
+    //
+    //     jQuery("#divPauseRendering").hide();
+    //
+    //     jQuery("#editor-dimension-btn").hide();
+    //     jQuery("#toggleTour3DaroundBtn").hide();
+    //     jQuery("#toggleView3rdPerson").hide();
+    //
+    //     jQuery("#firstPersonBlocker").hide();
+    //     jQuery("#thirdPersonBlocker").hide();
+    //     isComposerOn = false;
+    //     jQuery("#infophp").hide();
+    //     jQuery("#fileBrowserToolbar").hide();
+    //
+    //     jQuery("#saveSceneBtn").hide();
+    //
+    //     transform_controls.visible  = false;
+    //
+    //     // if in 3rd person view then show the cameraobject
+    //     envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
+    // }
 </script>
 
 <!-- Load Scene - javascript var resources3D[] -->

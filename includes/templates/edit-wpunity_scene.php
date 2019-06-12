@@ -330,8 +330,19 @@ get_header(); ?>
             </div>
 
 
+
+<!--            <div class="SaveSceneBtnStyle">-->
+<!--                <div id="saveSceneBtn" class="SaveBtnContainerStyle">-->
+                    <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
+                       id="save-scene-button"
+                       class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save</a>
+<!--                </div>-->
+<!--            </div>-->
+            
+            
             <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle w3-display-right" data-mdc-auto-init="MDCRipple" style="margin-top:10px;position:absolute;right:0px" title="When you are finished compile the <?php echo $single_lowercase; ?> into a standalone binary">
-                COMPILE <?php echo $single_lowercase; ?>
+                COMPILE
+<!--                --><?php //echo $single_lowercase; ?>
             </a>
             
 

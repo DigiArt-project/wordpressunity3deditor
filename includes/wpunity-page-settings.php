@@ -120,7 +120,7 @@ class ImcSettingsPage {
 
     function field_wpunity_ftp_pass(){
         ?>
-        <input type="text" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_pass'] ); ?>" />
+        <input type="password" name="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" id="<?php echo $this->general_settings_key; ?>[wpunity_ftp_pass]" value="<?php echo esc_attr( $this->general_settings['wpunity_ftp_pass'] ); ?>" />
         <?php
     }
 
