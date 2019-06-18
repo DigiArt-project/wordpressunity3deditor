@@ -252,9 +252,12 @@ get_header(); ?>
 
     <!-- START PAGE -->
     <div class="EditPageHeader">
+        
+        <!-- ADD NEW ASSET FROM JOKER PROJECT -->
         <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
             Add a new 3D asset
         </a>
+        
     </div>
 
     <span class="mdc-typography--caption" style="font-size:16pt">
@@ -268,66 +271,81 @@ get_header(); ?>
 <!--        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Scene Editor</span></li>-->
 <!--    </ul>-->
 
-    <div class="mdc-toolbar" style="display:block;">
+    <div class="mdc-toolbar" style="display:block;position:fixed;z-index:1000;">
 
         
         
-        <div class="" style="min-height: 0;">
-            <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start">
+        <div class="" style="width:90%">
+            <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start"
+                    style="width:80%; vertical-align: middle;line-height:1.8em">
                 
                 
-                <div class="mdc-textfield mdc-theme--text-primary-on-dark mdc-form-field" data-mdc-auto-init="MDCTextfield" style="margin-top: 0; margin-bottom:0;font-size: 20px; vertical-align: middle;padding-bottom:15px" >
+                <div id="gameInfoBreadcrump" class="mdc-textfield mdc-theme--text-primary-on-dark mdc-form-field" data-mdc-auto-init="MDCTextfield"
+                     style="height:30px; margin:0; font-size: 14px; vertical-align: middle;display:block" >
 
-                    <a title="Back" href="<?php echo $goBackTo_AllProjects_link; ?>"> <i class="material-icons mdc-theme--text-primary-on-dark" style="font-size: 26px; vertical-align: middle;" >arrow_back</i> </a>
-                    <?php echo $game_post->post_title; ?>
-
-                    <i class="material-icons mdc-theme--text-icon-on-dark" title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
+                    <div id="gameClassGameName" style="float:left;max-width:50%;line-height:1.8em">
+                        <a title="Back" href="<?php echo $goBackTo_AllProjects_link; ?>"> <i class="material-icons mdc-theme--text-primary-on-dark"
+                                                                                             style="font-size: 20px; vertical-align: middle;" >arrow_back</i> </a>
     
-                    //        if ($game_type_obj->string === "Archaeology")
-                    //            echo "Museum";
-                    //        else
-                    echo $game_type_obj->string;
-    
-                    //echo $game_type_obj->string;
-    
-                    ?>
+                        <i class="material-icons mdc-theme--text-icon-on-dark"
+                           style="font-size: 16px; vertical-align: middle;margin-bottom:3px;"
+                           title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
+        
+                        //        if ($game_type_obj->string === "Archaeology")
+                        //            echo "Museum";
+                        //        else
+                            echo $game_type_obj->string;
+                        //echo $game_type_obj->string;
+                        ?>
+                        <i class="material-icons mdc-theme--text-icon-on-dark" title="" style="font-size:20px;vertical-align:middle">chevron_right</i>&nbsp;
+                        <?php
+                            echo $game_post->post_title;
+                        ?>
+                        <i class="material-icons mdc-theme--text-icon-on-dark" title="" style="font-size:20px;vertical-align:middle">chevron_right</i>
 
-
-
-                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark mdc-toolbar__title"
+                    </div>
+                    
+                    <input title="Scene title" placeholder="Scene title" value="<?php echo $scene_post->post_title; ?>" id="sceneTitleInput" name="sceneTitleInput" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-dark"
                            aria-controls="title-validation-msg" minlength="3" required
-                           style="padding:0px; margin-top:10px; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: none; border-radius: 0;">
+                           style="display:block; float:left; width:35%; margin-left:0px; padding:0px; border: none; font-size:14px; border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: none; border-radius: 0;">
+                    
                     <p class="mdc-textfield-helptext mdc-textfield-helptext--validation-msg"
+                       style="height:25px;max-width:10%;display:block;float:left;"
                        id="title-validation-msg">
                         Must be at least 3 characters long
                     </p>
                     <div class="mdc-textfield__bottom-line"></div>
                 </div>
 
+<!--                <div class="mdc-toolbar__section" style="display:block;float:left">-->
+<!--                    <nav id="dynamic-tab-bar" class="mdc-tab-bar--indicator-secondary" style="text-transform: uppercase" role="tablist">-->
+<!--                        <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>-->
+<!--                        --><?php //if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
+<!---->
+<!--                            <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" onclick="">Analytics</a>-->
+<!--        -->
+<!--                            --><?php //if($project_saved_keys['expID'] != ''){ ?>
+<!--                                <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>-->
+<!--                            --><?php //} ?>
+<!--        -->
+<!--        -->
+<!--                            --><?php //if($game_type_obj->string === "Chemistry"){ ?>
+<!--                                <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>-->
+<!--                            --><?php //} ?>
+<!--    -->
+<!--                        --><?php //} ?>
+<!---->
+<!--                        <span class="mdc-tab-bar__indicator"></span>-->
+<!--                    </nav>-->
+<!--                </div>-->
             </div>
 
             <!--Set tab buttons-->
-            <div class="mdc-toolbar__section" style="flex:inherit">
-                <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">
-                    <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>
-					<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
-
-                        <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" onclick="">Analytics</a>
-
-						<?php if($project_saved_keys['expID'] != ''){ ?>
-                            <a role="tab" aria-controls="panel-3" class="mdc-tab" href="#panel-3">at-risk prediction</a>
-						<?php } ?>
-
-
-						<?php if($game_type_obj->string === "Chemistry"){ ?>
-                            <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>
-						<?php } ?>
-
-					<?php } ?>
-
-                    <span class="mdc-tab-bar__indicator"></span>
-                </nav>
-            </div>
+<!--            <div class="mdc-toolbar__section" style="display:block;max-width:10%">-->
+<!--                <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-secondary" role="tablist">-->
+<!--                -->
+<!--                </nav>-->
+<!--            </div>-->
 
 
 
@@ -340,7 +358,8 @@ get_header(); ?>
 <!--            </div>-->
             
             
-            <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg HeaderButtonStyle w3-display-right" data-mdc-auto-init="MDCRipple" style="margin-top:10px;position:absolute;right:0px" title="When you are finished compile the <?php echo $single_lowercase; ?> into a standalone binary">
+            <a id="compileGameBtn" class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg w3-display-right" data-mdc-auto-init="MDCRipple"
+               title="When you are finished compile the <?php echo $single_lowercase; ?> into a standalone binary">
                 COMPILE
 <!--                --><?php //echo $single_lowercase; ?>
             </a>
@@ -385,7 +404,9 @@ get_header(); ?>
 							$isAdmin = is_admin() ? 'back' : 'front';
 
 							// vr_editor loads the $sceneToLoad
-							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' ); ?>
+							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' );
+                            require( plugin_dir_path( __DIR__ ) .  '/vr_editor_scenes_wrapper.php' );
+							?>
                         </div>
                     </div>
 
@@ -528,401 +549,6 @@ get_header(); ?>
 			<?php } ?>
 
 
-            <div class="mdc-layout-grid">
-
-
-                <!-- Scenes -->
-				<?php
-				$custom_query_args = array(
-					'post_type' => 'wpunity_scene',
-					'posts_per_page' => -1,
-					'tax_query' => array(
-						array(
-							'taxonomy' => 'wpunity_scene_pgame',
-							'field'    => 'term_id',
-							'terms'    => $allScenePGameID,
-						),
-					),
-					'orderby' => 'ID',
-					'order' => 'DESC',
-					/*'paged' => $paged,*/
-				);
-
-				$custom_query = new WP_Query( $custom_query_args );
-
-				// Pagination fix
-				$temp_query = $wp_query;
-				$wp_query   = NULL;
-				$wp_query   = $custom_query;
-				?>
-
-				<?php if ( $custom_query->have_posts() ) :?>
-
-                <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Scenes</h2>
-                <div class="mdc-layout-grid__inner">
-
-					<?php while ( $custom_query->have_posts() ) :
-						$custom_query->the_post();
-						$scene_id = get_the_ID();
-						$scene_title = get_the_title();
-						$scene_desc = get_the_content();
-
-						$is_regional = get_post_meta($scene_id,'wpunity_isRegional', true);
-
-						$current_card_bg = $current_scene_id == $scene_id ? 'mdc-theme--primary-light-bg' : '';
-
-						$scene_type = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
-
-						if($scene_type !== 'menu' && $scene_type !== 'credits') {
-
-
-
-							?>
-
-                            <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
-
-                                <div class="mdc-card mdc-theme--background <?php echo $current_card_bg;?> ">
-
-                                    <div class="SceneThumbnail">
-										<?php
-
-										$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-
-										//create permalink depending the scene yaml category
-										$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-										if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-										$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-										?>
-                                        <a href="<?php echo $edit_page_link; ?>">
-
-											<?php if(has_post_thumbnail($scene_id)) { ?>
-
-												<?php echo get_the_post_thumbnail( $scene_id ); ?>
-
-											<?php } else { ?>
-
-                                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                                    <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                                </div>
-
-											<?php } ?>
-                                        </a>
-                                    </div>
-                                    <section class="mdc-card__primary">
-                                        <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
-                                            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-                                            <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
-											<?php if ($is_regional) { ?>
-                                                <i title="Regional scene" class="material-icons AlignIconToBottom CursorDefault mdc-theme--primary" style="float: right;">public</i>
-											<?php } ?>
-                                        </h1>
-                                        <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
-                                            &#8203;<?php echo $scene_desc; ?>
-                                        </h2>
-
-                                    </section>
-                                    <section class="mdc-card__actions">
-										<?php if (!$default_scene) { ?>
-                                            <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-										<?php } ?>
-                                        <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
-                                    </section>
-                                </div>
-                            </div>
-						<?php } ?>
-					<?php endwhile;?>
-
-					<?php if($game_type_obj->string !== "Energy") { ?>
-
-
-                        <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
-                            <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
-								<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                                <input type="hidden" name="submitted" id="submitted" value="true" />
-                                <div class="mdc-card mdc-theme--secondary-light-bg">
-
-                                    <section class="mdc-card__primary">
-
-                                        <h1 class="mdc-card__title mdc-typography--title"
-                                            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Add new">
-                                            <i class="material-icons AlignIconToMiddle">add</i>
-                                            Add new scene
-                                        </h1>
-
-                                        <!--Title-->
-                                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                                   aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                            <label for="title" class="mdc-textfield__label"> Enter a scene title</label>
-                                            <div class="mdc-textfield__bottom-line"></div>
-                                        </div>
-                                        <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                                           id="title-validation-msg">
-                                            Between 3 - 25 characters
-                                        </p>
-
-                                        <!--Description-->
-                                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                                   maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                            <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
-                                            <div class="mdc-textfield__bottom-line"></div>
-                                        </div>
-
-                                        <br>
-                                    </section>
-
-                                    <section class="mdc-card__primary">
-										<?php if($game_type_obj->string != "Archaeology"){ ?>
-                                            <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-										<?php } ?>
-                                        <!--Scene Type-->
-										<?php if($game_type_obj->string === "Chemistry"){ ?>
-                                            <ul>
-                                                <li class="mdc-form-field">
-                                                    <div class="mdc-radio">
-                                                        <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
-                                                        <div class="mdc-radio__background">
-                                                            <div class="mdc-radio__outer-circle"></div>
-                                                            <div class="mdc-radio__inner-circle"></div>
-                                                        </div>
-                                                    </div>
-                                                    <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">Molecule Naming</label>
-                                                </li>
-                                                &nbsp;
-                                                <li class="mdc-form-field">
-                                                    <div class="mdc-radio">
-                                                        <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
-                                                        <div class="mdc-radio__background">
-                                                            <div class="mdc-radio__outer-circle"></div>
-                                                            <div class="mdc-radio__inner-circle"></div>
-                                                        </div>
-                                                    </div>
-                                                    <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">Molecule Construction</label>
-                                                </li>
-                                                &nbsp;
-                                                <li class="mdc-form-field">
-                                                    <div class="mdc-radio">
-                                                        <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
-                                                        <div class="mdc-radio__background">
-                                                            <div class="mdc-radio__outer-circle"></div>
-                                                            <div class="mdc-radio__inner-circle"></div>
-                                                        </div>
-                                                    </div>
-                                                    <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
-                                                </li>
-                                            </ul>
-										<?php } ?>
-
-										<?php if($game_type_obj->string === "Energy"){ ?>
-                                            <div class="mdc-form-field">
-                                                <div class="mdc-checkbox" id="regional-checkbox-component">
-                                                    <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
-                                                    <div class="mdc-checkbox__background">
-                                                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                                        </svg>
-                                                        <div class="mdc-checkbox__mixedmark"></div>
-                                                    </div>
-                                                </div>
-                                                <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
-                                            </div>
-										<?php } ?>
-                                    </section>
-
-                                    <section class="mdc-card__primary">
-                                        <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
-                                                data-mdc-auto-init="MDCRipple" type="submit">
-                                            ADD NEW
-                                        </button>
-
-                                    </section>
-                                </div>
-                            </form>
-                        </div>
-
-					<?php } ?>
-
-                    <!--Delete Scene Dialog-->
-                    <aside id="delete-dialog"
-                           class="mdc-dialog"
-                           role="alertdialog"
-                           style="z-index: 1000;"
-                           aria-labelledby="Delete scene dialog"
-                           aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
-                        <div class="mdc-dialog__surface">
-                            <header class="mdc-dialog__header">
-                                <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
-                                    Delete scene?
-                                </h2>
-                            </header>
-                            <section id="delete-dialog-description" class="mdc-dialog__body">
-                                Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
-                            </section>
-
-                            <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
-                                <h3 class="mdc-typography--title">Deleting...</h3>
-
-                                <div class="progressSlider">
-                                    <div class="progressSliderLine"></div>
-                                    <div class="progressSliderSubLine progressIncrease"></div>
-                                    <div class="progressSliderSubLine progressDecrease"></div>
-                                </div>
-                            </section>
-
-                            <footer class="mdc-dialog__footer">
-                                <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
-                                <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
-                            </footer>
-                        </div>
-                        <div class="mdc-dialog__backdrop"></div>
-                    </aside>
-
-
-                </div>
-            </div>
-		<?php endif;
-		wp_reset_query();
-		?>
-
-
-            <!-- Scenes -->
-			<?php
-			$custom_query_args = array(
-				'post_type' => 'wpunity_scene',
-				'posts_per_page' => -1,
-				'tax_query' => array(
-					array(
-						'taxonomy' => 'wpunity_scene_pgame',
-						'field'    => 'term_id',
-						'terms'    => $allScenePGameID,
-					),
-				),
-				'orderby' => 'ID',
-				'order' => 'DESC',
-				/*'paged' => $paged,*/
-			);
-
-			$custom_query = new WP_Query( $custom_query_args );
-
-			// Pagination fix
-			$temp_query = $wp_query;
-			$wp_query   = NULL;
-			$wp_query   = $custom_query;
-			?>
-
-            <div class="mdc-layout-grid">
-				<?php if ( $custom_query->have_posts() ) :?>
-
-                    <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Game settings</h2>
-                    <div class="mdc-layout-grid__inner">
-
-						<?php while ( $custom_query->have_posts() ) :
-							$custom_query->the_post();
-							$scene_id = get_the_ID();
-							$scene_title = get_the_title();
-							$scene_desc = get_the_content();
-
-							$current_card_bg = $current_scene_id == $scene_id ? 'mdc-theme--primary-light-bg' : '';
-
-							$scene_type = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
-
-							if($scene_type == 'menu' || $scene_type == 'credits') { ?>
-
-                                <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 SceneCardContainer">
-
-                                    <div class="mdc-card mdc-theme--background <?php echo $current_card_bg;?> ">
-
-                                        <div class="SceneThumbnail">
-											<?php
-
-											$default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-											$scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
-
-											//create permalink depending the scene yaml category
-											$edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-											if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-											$edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-											?>
-                                            <a href="<?php echo $edit_page_link; ?>">
-
-												<?php if(has_post_thumbnail($scene_id)) { ?>
-
-													<?php echo get_the_post_thumbnail( $scene_id ); ?>
-
-												<?php } else { ?>
-
-                                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                                    </div>
-
-												<?php } ?>
-                                            </a>
-                                        </div>
-                                        <section class="mdc-card__primary">
-                                            <h1 id="<?php echo $scene_id;?>-title" class="mdc-card__title mdc-typography--title"
-                                                style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-                                                <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
-                                            </h1>
-                                            <h2 class="mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
-                                                &#8203;<?php echo $scene_desc; ?>
-                                            </h2>
-
-                                        </section>
-                                        <section class="mdc-card__actions">
-											<?php if (!$default_scene) { ?>
-                                                <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-											<?php } ?>
-                                            <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $edit_page_link; ?>">EDIT</a>
-                                        </section>
-                                    </div>
-                                </div>
-
-
-							<?php } ?>
-						<?php endwhile; ?>
-
-						<?php if ($project_scope === 1) {?>
-
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-
-                                <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">GIO APP KEY</h3>
-
-                                <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                    <input id="app-key" name="app-key" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light mdc-textfield--disabled"
-                                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;" value="<?php if($project_saved_keys['gioID'] != ''){echo $project_saved_keys['gioID'];} ?>">
-                                    <label for="app-key" class="mdc-textfield__label">APP KEY</label>
-                                    <div class="mdc-textfield__bottom-line"></div>
-                                </div>
-
-
-                                <h3 class="mdc-typography--subheading2 mdc-theme--text-primary-on-light">Experiment ID (GUID)</h3>
-                                <form name="create_new_expid_form" action="" id="create_new_expid_form" method="POST" enctype="multipart/form-data">
-
-                                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                                        <input id="exp-id" name="exp-id" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
-                                               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"  value="<?php if($project_saved_keys['expID'] != ''){echo $project_saved_keys['expID'];} ?>">
-                                        <label for="exp-id" class="mdc-textfield__label">Insert a valid exp id</label>
-                                        <div class="mdc-textfield__bottom-line"></div>
-                                    </div>
-
-                                    <br>
-									<?php wp_nonce_field('post_nonce', 'post_nonce_field2'); ?>
-                                    <input type="hidden" name="submitted2" id="submitted2" value="true" />
-                                    <button id="save-expid-button" type="submit" class="mdc-button mdc-button--primary mdc-button--raised FullWidth" data-mdc-auto-init="MDCRipple"> SAVE</button>
-                                </form>
-                            </div>
-
-						<?php } ?>
-
-                    </div>
-
-				<?php endif;
-				wp_reset_query();
-				?>
-            </div>
-
-        </div>
 		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
@@ -1239,22 +865,22 @@ get_header(); ?>
             }
         }
 
-        var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
+        //var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
         var dots = document.querySelector('.dots');
         var panels = document.querySelector('.panels');
 
-        dynamicTabBar.preventDefaultOnClick = true;
+        //dynamicTabBar.preventDefaultOnClick = true;
 
-        dynamicTabBar.listen('MDCTabBar:change', function (t) {
-            var dynamicTabBar = t.detail;
-            var nthChildIndex = dynamicTabBar.activeTabIndex;
-
-            if (nthChildIndex === 1) {
-                loadAnalyticsIframe(game_type);
-            }
-
-            updatePanel(nthChildIndex);
-        });
+        // dynamicTabBar.listen('MDCTabBar:change', function (t) {
+        //     var dynamicTabBar = t.detail;
+        //     var nthChildIndex = dynamicTabBar.activeTabIndex;
+        //
+        //     if (nthChildIndex === 1) {
+        //         loadAnalyticsIframe(game_type);
+        //     }
+        //
+        //     updatePanel(nthChildIndex);
+        // });
 
         function ddaIframe(email, pwd, app_key) {
 

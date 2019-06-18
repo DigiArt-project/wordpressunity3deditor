@@ -7,10 +7,11 @@
 .filemanager {
 	position: absolute;
 	width: 20%;
+	height:70%;
 	left: 0;
 	top: 0px;
 	background-color: rgba(0, 0, 0, 0.12);
-	padding: 0 6px 0 6px;
+	/*padding: 0 6px 0 6px;*/
 }
 
 
@@ -23,41 +24,37 @@
 }
 */
 
-.filemanager .bt_close_file_toolbar{
-	width: 100%;
 
-	cursor: pointer;
-}
 
 /*-------------------------
 	Breadcrumbs
 -------------------------*/
 
-.filemanager .breadcrumbs {
-	color: #262626;
-	padding-left: 4%;
-	font-size: 0.8vw;
-	max-font-size:14pt;
-	font-weight: 400;
-	line-height: 1.6vw;
-}
+/*.filemanager .breadcrumbs {*/
+/*	color: #262626;*/
+/*	padding-left: 4%;*/
+/*	font-size: 0.8vw;*/
+/*	max-font-size:14pt;*/
+/*	font-weight: 400;*/
+/*	line-height: 1.6vw;*/
+/*}*/
 
-.filemanager .breadcrumbs a:link, .breadcrumbs a:visited {
-	color: #272729;
-	text-decoration: none;
-}
+/*.filemanager .breadcrumbs a:link, .breadcrumbs a:visited {*/
+/*	color: #272729;*/
+/*	text-decoration: none;*/
+/*}*/
 
-.filemanager .breadcrumbs a:hover {
-	text-decoration: underline;
-}
+/*.filemanager .breadcrumbs a:hover {*/
+/*	text-decoration: underline;*/
+/*}*/
 
-.filemanager .breadcrumbs .arrow {
-	color: #7fb1cf;
-	font-size: 0.8vw;
-	/*max-font-size:14pt;*/
-	/*font-weight: 700;*/
-	/*line-height: 2.2vw;*/
-}
+/*.filemanager .breadcrumbs .arrow {*/
+/*	color: #7fb1cf;*/
+/*	font-size: 0.8vw;*/
+/*	!*max-font-size:14pt;*!*/
+/*	!*font-weight: 700;*!*/
+/*	!*line-height: 2.2vw;*!*/
+/*}*/
 
 
 /*-------------------------
@@ -76,11 +73,10 @@
 /* Search input */
 .filemanager .search input[type=search] {
 	width: 80%;
-	height: 2vw;
-	padding-left: 0.2vw;
-	padding-right: 0.2vw;
+	height: 30px;
 	font-weight: 400;
-	line-height: 2vw;
+	line-height: 30px;
+	padding:5px;
 	/*display: none;
 	outline: none;
 	border: none;
@@ -97,33 +93,78 @@
 	overflow-y: auto;
 	margin: 0;
 	padding: 0;
+	columns: 2;
+	-webkit-columns: 2;
+	-moz-columns: 2;
 }
 
-.filemanager .data li {
+.megabytesAsset {
+	position: absolute;
+	bottom: 40%;
+	left: 5px;
+}
 
+
+
+
+.filemanager .data li {
+	height: 96px;
+	width: 96%;
+	position: relative;
+	margin-left: 2%;
+	margin-right: 1%;
 	border-radius: 2px;
 	background-color: #fff;
 	overflow: hidden;
 	z-index: 1;
-
-	margin: 6px 0 6px 0;
+	/*margin: 6px 0 6px 0;*/
 	transition: 0.3s background-color;
 }
 
-
 .FileListItemName {
-	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	position: absolute;
+	left: 5px;
+	top: 0;
+	font-size: 14px;
+	text-shadow: 1px 1px 1px #fff;
 }
 
-.FileListItemName span {
-	font-size: 12px;
-	overflow: visible;
-	white-space: normal;
-	line-height: 130%;
+
+
+.assetCategoryNameInList{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 60%;
 }
+
+
+.filebrowserahref {
+	align-items: baseline;
+	left: 0;
+	padding: 0px 0 0px 0px;
+	height: 100%;
+	width: 100%;
+}
+
+
+.assetImg {
+	width: 100%;
+	height: 102%;
+	position: absolute;
+	margin-left: 0px;
+	left: 0;
+	z-index: -5;
+	top: 0;
+	bottom: 0;
+	padding: 0;
+}
+
+
+
 
 .FileListItemImg {
 	border-radius: 0;
@@ -133,50 +174,27 @@
 .FileListItemFooter {
 	position: absolute;
 	bottom: 0;
-	right:0;
+	left:0;
 }
 
-/* --------- Nothing FOUND -------------*/
-.filemanager .nothingfound {
-	/*background-color: #ffffff;*/
-	/*opacity: 0.1;*/
-	width: 97%;
-	height: 14vw;
-	margin: 0 auto;
-	display: none;
-	position:absolute;
-	/*font-family: Arial, Helvetica, sans-serif;*/
+.editAssetbutton{
+	height: 30px;
+	font-size: 12px;
+	width: 40px;
+	line-height: 35px;
+	min-width: 50px;
+	padding: 0px;
 }
 
-.filemanager .nothingfound .nofiles {
-	margin: 1vw auto;
-	top: 1vw;
-	/*border-radius: 50%;*/
-	position:relative;
-	/*background-color: #d72f6e;*/
-	width: 10vw;
-	height: 10vw;
-	line-height: 10vw;
-}
-.filemanager .nothingfound .nofiles:after {
-	/*content: 'x';*/
-	/*position: relative;*/
-	/*color: #ffffff;*/
-	/*font-size: 10vw;*/
-	/*margin-left: 2vw;*/
-	/*right: 0;*/
+.deleteAssetbutton {
+	height: 30px;
+	font-size: 12px;
+	width: 40px;
+	line-height: 35px;
+	min-width: 50px;
+	padding: 0px;
 }
 
-.filemanager .nothingfound span {
-	margin: auto;
-	display: table;
-	color: #ffffff;
-	font-size: 0.6vw;
-	font-weight: 700;
-	line-height: 0.8vw;
-	position: relative;
-	top: 0.2vw;
-}
 
 
 .editor-asset-tile-style:hover {
@@ -331,52 +349,56 @@
 
 /*Tabs for filebrowser*/
 /* Style the tab */
-div.tab {
+#assetCategTab {
 	height:45px;
 	width:100%;
 	overflow: auto;
+	/*overflow: hidden;*/
+	/*text-overflow:ellipsis;*/
 	white-space: nowrap;
-	/*overflow-x: hidden;*/
-	/*overflow-y: hidden;*/
 	/*border: 1px solid #ccc;*/
-	background-color: #ccc;
+	background-color: black;
 	color:#fff;
-	margin-bottom:5px;
+	/*margin-bottom:5px;*/
 }
 
-
-
-div.tab button {
+/*!* Style the buttons that are used to open the tab content *!*/
+#assetCategTab button {
 	display: inline-block;
 	text-align: center;
 	text-decoration: none;
-}
-
-
-/*!* Style the buttons that are used to open the tab content *!*/
-div.tab button {
 	background-color: inherit;
-	font-size:9pt !important;
+	font-size:12pt !important;
 	font-weight: lighter !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width:70px;
+	max-height:45px;
+	padding-right:3px;
+	padding-left:3px;
+	/*margin:0px;*/
+
+
 	/*float: left;*/
 	/*border: none;*/
 	/*outline: none;*/
 	/*cursor: pointer;*/
-	padding: 2px 4px;
+	/*padding: 2px 4px;*/
 	transition: 0.3s;
-	background-color: #ccc;
-	color:#fff;
+	background-color: black;
+	color: white;
 }
 
 /*!* Change background color of buttons on hover *!*/
-div.tab button:hover {
+#assetCategTab button:hover {
 	background-color: #ddd;
 }
 
 /*!* Create an active/current tablink class *!*/
-.tab button.active {
-	background-color: #eee;
-	color:#777;
+#assetCategTab button.active {
+	background-color: #40b1ee;
+	color: white;
 }
 
 /*!* Style the tab content *!*/

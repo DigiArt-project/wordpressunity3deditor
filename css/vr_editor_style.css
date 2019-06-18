@@ -1,12 +1,28 @@
 /* Three js */
-.VrEditorMainStyle {
+#vr_editor_main_div {
+    position:fixed;
+    top:60px;
+    left:0;
+    right:0;
+    bottom:0;
     background-color: #eee;
-    position: relative;
-    width: 100%;
-    min-width:600px;
-    height: 600px;
+    /*min-width:600px;*/
+    /*height: 600px;*/
     z-index: 999;
+    /*999;*/
 }
+
+#scenesInsideVREditor{
+    width:90%;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index:1000;
+    background:rgba(0, 0, 0, 0.12);
+    height:20%;
+}
+
+
 
 /* Php info top right */
 .VrInfoPhpStyle {
@@ -22,7 +38,28 @@
     padding: 2px;
 }
 
+#save-scene-button {
+    position: absolute;
+    top: 5px;
+    right: 100px;
+    height: 20px;
+    padding: 0px;
+    line-height: 1.4em;
+}
 
+#compileGameBtn {
+    position: absolute;
+    top: 5px;
+    right: 0px;
+    height: 20px;
+    line-height: 1.4em;
+}
+
+
+.HeaderButtonStyle {
+    float: right;
+    margin-top:5px;
+}
 
 
 #formdiv {
@@ -112,6 +149,42 @@ canvas { pointer-events:none; z-index:10; }
     margin: 0;
 }
 
+/*Assets Left Toolbar*/
+
+/* leftPanelToggleOnOff*/
+.AssetsToggleStyle {
+    position:absolute;
+    top:1px;
+    width: 20%;
+    left:0;
+    z-index: 999;
+    cursor: pointer;
+    padding-top:5px;
+}
+
+.AssetsToggleStyle i {
+    display:block;
+    cursor: pointer;
+}
+
+.AssetsToggleOn {
+    width: 20%;
+}
+
+.AssetsToggleOff {
+    width: 4%;
+}
+
+#assetCategTab{
+    margin-top:30px;
+    background-color:black;
+    padding:0px;
+}
+
+
+
+
+
 /* rightPanelToggleOnOff*/
 .HierarchyToggleStyle {
     position:absolute;
@@ -139,7 +212,7 @@ canvas { pointer-events:none; z-index:10; }
     right: 0;
     top: 0;
     width:15%;
-    height:100%;
+    height:70%;
     background-color: rgba(255,255,255,0.5);
     border: 1px solid rgba(0,0,0,.5);
     z-index:2;
@@ -168,7 +241,7 @@ canvas { pointer-events:none; z-index:10; }
 }
 
 .VrEditorOptionsBtnStyle {
-    width:50%;
+    width:100%;
     /*position: absolute;*/
     /*right: 0;*/
     /*top: 2px;*/
@@ -222,10 +295,11 @@ canvas { pointer-events:none; z-index:10; }
 .ObjectManipulationToggle {
     /*overflow: hidden;*/
     background: transparent;
-    display:contents;
+    display:inline-flex;
     /*position: absolute;*/
     /*top: 8%;*/
     /*right:0;*/
+    width:100%;
 }
 
 .ObjectManipulationToggle input {
@@ -401,8 +475,53 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     -webkit-appearance: none;
 }
 
-#save-scene-button {
+
+
+
+/*CARD STYLING*/
+.sceneTab{
+    height:100%;
+    width:60%;
+}
+
+.SceneThumbnail, .ImageContainer {
+    width:100%;
+    height:60%;
+    position:relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+.SceneThumbnail a, .ImageContainer img {
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.SceneThumbnail a img, .ImageContainer img {
     position: absolute;
-    top: 10px;
-    right: 100px;
+    /*min-height: 225px;*/
+    /*width: auto;*/
+    height: 100%;
+    overflow: hidden;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.SceneThumbnail a img {
+    /*max-width: none;*/
+}
+
+.cardTitle{
+    padding:0px;
+    margin:0px;
+    font-size:14px;
+}
+
+.cardDescription{
+    padding:0px;
+    margin:0px;
+    font-size:12px;
 }

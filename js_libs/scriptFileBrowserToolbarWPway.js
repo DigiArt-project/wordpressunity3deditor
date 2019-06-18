@@ -30,8 +30,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
         //breadcrumbs = jQuery('.breadcrumbs'),
-        fileList = filemanager.find('.data'),
-        closeButton = jQuery('.bt_close_file_toolbar');
+        fileList = filemanager.find('.data');
+        //closeButton = jQuery('#bt_close_file_toolbar');
 
     // Create drag image BEFORE event is fired - THEN call it inside the event
     function createDragImage() {
@@ -146,32 +146,32 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         var i, f, name;
 
         // Empty the old result and make the new one
-        fileList.empty().hide();
+        //fileList.empty().hide();
 
-        if (!enlistData) {
-            filemanager.find('.nothingfound').show();
-        } else  {
-            filemanager.find('.nothingfound').hide();
+        if (enlistData) {
 
+            // allAssetsViewBt
+            document.getElementById("assetCategTab").children[0].addEventListener("click",
+                function(event){openCategoryTab(event, this  );  }
+                );
 
-
-//            allAssetsViewBt
-            document.getElementById("assetCategTab").children[0].addEventListener("click", function(event){openCategoryTab(event, this  );  });
-
-            var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
-
-            var newAssetBtn = jQuery(
-                '<br><a ' +
-                'draggable="false" ' +
-                'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
-                'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
-                'style="width:97%;" ' +
-                'data-mdc-auto-init="MDCRipple" ' +
-                '>' +
-                'Add new' +
-                '</a><br>');
-
-            newAssetBtn.appendTo(fileList);
+            // OLD ADD NEW BUTTON in File list
+            // // Get the link from the button of the joker game
+            // var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
+            //
+            // // Assign the link to new button
+            // var newAssetBtn = jQuery(
+            //     '<br><a ' +
+            //     'draggable="false" ' +
+            //     'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
+            //     'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
+            //     'style="width:97%;" ' +
+            //     'data-mdc-auto-init="MDCRipple" ' +
+            //     '>' +
+            //     'Add new' +
+            //     '</a><br>');
+            //
+            // newAssetBtn.appendTo(fileList);
 
 
             for (i = 0; i < enlistData.length; i++) {
@@ -225,11 +225,14 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 f.screenImagePath = f.screenImagePath ? f.screenImagePath : "../wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
 
 
-                img = '<span class="mdc-list-item__start-detail CenterContents" style="width:72px; margin-right: 8px;"><img draggable="false" src=' + f.screenImagePath +'><br><span class="mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize +'</span></span>';
+                img = '<span class="mdc-list-item__start-detail CenterContents">'+
+                            '<img class="assetImg" draggable="false" src=' + f.screenImagePath + '>'+
+                            // '<span class="megabytesAsset mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize + '</span>'+
+                      '</span>';
 
                 var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; width:97%; position: relative;">' +
-                    '<a class="mdc-list-item editor-asset-tile-style" style="align-items:baseline; left:0; padding:6px 0 6px 6px; height: 100%; width:100%" href="'+ f.objPath +
-                    '" title="Drag the card into the plane" ' +
+                    '<a class="filebrowserahref mdc-list-item editor-asset-tile-style" href="'+ f.objPath +
+                    '" title="Drag the card into the plane, (Size: '+ fileSize + ')"' +
                     'data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
                     '" data-objPath="'+ f.objPath +
@@ -254,21 +257,23 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-isJoker="'+ f.isJoker +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
-                    '<span class="mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
+                    '<span class="assetCategoryNameInList mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
                     '<span class="FileListItemFooter">' +
 
                     (f.isJoker==='false'?
                             ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  + '\'" class="mdc-button mdc-button--dense">Edit</a>')
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  +
+                                '\'" class="editAssetbutton mdc-button mdc-button--dense">Edit</a>')
                             :
                             ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=false' + '\'" class="mdc-button mdc-button--dense">View</a>')
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=false' +
+                                '\'" class="deleteAssetbutton mdc-button mdc-button--dense">View</a>')
                     )+
 
                     (f.isJoker==='false'?
                             ('<a draggable="false" ondragstart="return false;" title="Delete asset" href="#" id="deleteAssetBtn-'+ f.assetid
                                 + '" onclick="wpunity_deleteAssetAjax('+
-                                f.assetid + ', \'' + gameProjectSlug + '\',' + f.isCloned + ')" class="mdc-button mdc-button--dense">Delete</a>') :
+                                f.assetid + ', \'' + gameProjectSlug + '\',' + f.isCloned + ')" class="deleteAssetbutton mdc-button mdc-button--dense">Del</a>') :
                             ''
                     )
                     +
@@ -298,7 +303,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         fileList.animate({'display':'inline-block'});
 
         // Perform click to open (bug appeared from migrating jquery-1.11 to 3.1.1
-        closeButton.click();
+        //closeButton.click();
     }
 
     // This function escapes special html characters in names
@@ -316,7 +321,6 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
     function selectByTitleComparizon(input_data, needle){
         var output_data = [];
-
         input_data.forEach(function(d){
             if (d.assetName.indexOf(needle) !== -1)
                 output_data.push(d);
@@ -358,9 +362,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
         }
 
-
         evt.currentTarget.className += " active";
-
     }
 
 }

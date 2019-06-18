@@ -93,13 +93,14 @@ echo '</script>';
     isComposerOn = true;
     isPaused = false;
 
+    game_type = parseInt("<?php echo strtolower($project_scope);?>");
+    
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
 
-        var vr_editor = jQuery('#vr_editor_main_div');
-        var cw = vr_editor.width();
-        vr_editor.css({'height':cw*2/3+'px'});
-
+        // var vr_editor = jQuery('#vr_editor_main_div');
+        // var cw = vr_editor.width();
+        // vr_editor.css({'height':cw*2/3+'px'});
         envir.turboResize();
 
         // make filebrowser draggable
@@ -110,25 +111,7 @@ echo '</script>';
         // Make filemanager draggable
         filemanager.draggable({cancel : 'ul'});
 
-        //------------- File Browser Toolbar close button -------------
-        var closeButton = jQuery('.bt_close_file_toolbar');
-
-        closeButton.on('click', function(e){
-            // e.preventDefault();
-
-            if (fileList[0].style.display === "") {
-                fileList[0].style.display = 'none';
-                fileList[0].style.height = '0';
-                filemanager[0].style.height = '0';
-                closeButton[0].innerHTML = 'Open';
-            } else {
-                fileList[0].style.display = '';
-                fileList[0].style.height = '27vw';
-                filemanager[0].style.height = 'auto';
-                closeButton[0].innerHTML = 'Close';
-            }
-
-        });
+        
 
         if (!envir.isDebug)
             wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
@@ -226,10 +209,9 @@ echo '</script>';
      */
     function resize_handler(ev){
 
-        var vr_editor = jQuery('#vr_editor_main_div');
-        var cw = vr_editor.width();
-        vr_editor.css({'height':cw*2/3+'px'});
-
+        // var vr_editor = jQuery('#vr_editor_main_div');
+        // var cw = vr_editor.width();
+        // vr_editor.css({'height':cw*2/3+'px'});
         envir.turboResize();
     }
 
@@ -240,295 +222,296 @@ echo '</script>';
 
 
 
-<!-- All go here -->
-<div id="vr_editor_main_div" class="VrEditorMainStyle mdc-card" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
+<!-- 3D editor  -->
+<div id="vr_editor_main_div" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
     <!--Canvas center-->
 <!--    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">-->
 <!--        <i class="material-icons">visibility</i>-->
 <!--    </a>-->
     
-    <!-- Remove game object-->
-    <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
-       title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">delete</i>
-    </a>
+<!-- Remove game object-->
+<a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+   title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
+    <i class="material-icons">delete</i>
+</a>
+
+
+<!--  Open/Close Right Hierarchy panel-->
+<a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
+    <i class="material-icons">menu</i>
+</a>
 
 
 
-    <!--        Open/Close panel-->
-    <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">menu</i>
-    </a>
+<div id="right-elements-panel" class="right-elements-panel-style">
 
-
-
-    <div id="right-elements-panel" class="right-elements-panel-style">
-
-        <div id="row0" class="row-right-panel" style="height:35px;">
-
-        </div>
-        
-        <div id="row1" class="row-right-panel">
-                <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">
-                    Full Screen
-                </a>
-        
-                <!-- Options -->
-                <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
-                    <i class="material-icons">settings</i>
-                </a>
-        </div>
-
-        <div id="row2" class="row-right-panel">
-<!--        <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">-->
-            <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
-               class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
-                <i class="material-icons">rotate_90_degrees_ccw</i>
+    <div id="row0" class="row-right-panel" style="height:65px;vertical-align: bottom; bottom:0; display:table-cell; padding-left:5px;">
+        Scene controls
+    </div>
+    
+    <div id="row1" class="row-right-panel">
+<!--                <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">-->
+<!--                    Full Screen-->
+<!--                </a>-->
+    
+            <!-- Options -->
+            <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
+                <i class="material-icons">settings</i>
             </a>
+    </div>
+
+    <div id="row2" class="row-right-panel">
+<!--        <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">-->
+        <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
+           class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+            <i class="material-icons">rotate_90_degrees_ccw</i>
+        </a>
 <!--        </div>-->
 
 <!--        <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">-->
-            <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
+        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
 <!--        </div>-->
 
-        <!-- The button to start walking in the 3d environment -->
+    <!-- The button to start walking in the 3d environment -->
 <!--        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">-->
-            <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-                VIEW
-            </a>
+        <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+            VIEW
+        </a>
 <!--        </div>-->
 
 <!--        <div id="thirdPersonBlocker" class="">-->
-            <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-                <i class="material-icons">person</i></a>
+        <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+            <i class="material-icons">person</i></a>
 <!--        </div>-->
-    
-        </div>
 
+    </div>
+
+
+    <!--  Object Controls  -->
+    <div id="row3" class="row-right-panel" style="display:block">
+        
+        
+        <div style="padding-left:5px; padding-top:10px;"> Object controls</div>
 
         <!-- Move, Rotate, Scale Buttons -->
-        <div id="row3" class="row-right-panel">
-            <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
-                <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
-                <label for="translate-switch">Move</label>
-                <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
-                <label for="rotate-switch">Rotate</label>
-                <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
-                <label for="scale-switch">Scale</label>
-            </div>
+        <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
+            <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
+            <label for="translate-switch">Move</label>
+            <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
+            <label for="rotate-switch">Rotate</label>
+            <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
+            <label for="scale-switch">Scale</label>
         </div>
-
-        <!-- Numerical input for Move rotate scale -->
-        <div id="row4" class="row-right-panel">
-            <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
-        </div>
-
-        <!--  Axis controls size -->
-        <div id="row5" class="row-right-panel">
-            <span class="mdc-typography--subheading1" style="font-size:12px">Axes controls size:</span>
-            <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
-                <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
-                <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
-            </div>
-        </div>
-
-        <!-- Hierarchy viewer -->
-        <div id="row6" class="row-right-panel">
-            <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
-                <span class="hierarchyViewerTitle mdc-typography--subheading1 mdc-theme--text-primary-on-background" style="">Hierarchy Viewer</span>
-                <hr class="mdc-list-divider">
-                <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
-            </div>
-        </div>
-        
     </div>
 
-
-
-    
-    <!-- Pause rendering-->
-    <div id="divPauseRendering" class="pauseRenderingDivStyle">
-        <a type="button" id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
-            <i class="material-icons">pause</i>
-        </a>
-    </div>
-    
-    
-    <!--  Make form to submit user changes -->
-    <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
-        <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
-            <!--            <span id="scene_loading_message">Downloading ...</span>-->
-            <!--            <div id="progressbar">-->
-            <!--                <div id="scene_loading_bar"></div>-->
-            <!--            </div>-->
-        </div>
-
-        <!--        <div id="downloadIndicator" class="result"></div>-->
-        <div id="result_download" class="result"></div>
-        <div id="result_download2" class="result"></div>
+    <!-- Numerical input for Move rotate scale -->
+    <div id="row4" class="row-right-panel">
+        <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
     </div>
 
-
-
-
-    <!--  FileBrowserToolbar  -->
-    <div class="filemanager" id="fileBrowserToolbar">
-
-        <h2 class="mdc-typography--title" style="margin-bottom:0px">Assets</h2>
-
-        <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield" style="margin-top:0px">
-            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find...">
-            <i class="material-icons mdc-theme--text-primary-on-background">search</i>
-            <div class="mdc-textfield__bottom-line"></div>
+    <!--  Axis controls size -->
+    <div id="row5" class="row-right-panel" style="padding-top:12px; padding-left:5px; padding-bottom:10px">
+        <span class="mdc-typography--subheading1" style="font-size:12px">Axes controls size:</span>
+        <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
+            <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+            <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
         </div>
+    </div>
 
-        <!--      <div class="breadcrumbs"></div>-->
+    <!-- Hierarchy viewer -->
+    <div id="row6" class="row-right-panel">
+        <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
+            <span class="hierarchyViewerTitle mdc-typography--subheading1 mdc-theme--text-primary-on-background" style="">Hierarchy Viewer</span>
+            <hr class="mdc-list-divider">
+            <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
+        </div>
+    </div>
+    
+</div>
 
-        <!--            <div class="nothingfound">-->
-        <!--                <div class="nofiles"></div>-->
-        <!--                <span>Nothing found</span>-->
+<!-- Pause rendering-->
+<div id="divPauseRendering" class="pauseRenderingDivStyle">
+    <a type="button" id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">pause</i>
+    </a>
+</div>
+    
+    
+<!--  Make form to submit user changes -->
+<div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
+    <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
+        <!--            <span id="scene_loading_message">Downloading ...</span>-->
+        <!--            <div id="progressbar">-->
+        <!--                <div id="scene_loading_bar"></div>-->
         <!--            </div>-->
-
-        
-       
-        
-        
-        <div class="tab" id="assetCategTab">
-            <button id="allAssetsViewBt" class="tablinks active">All</button>
-        </div>
-
-        
-        
-        <ul class="data mdc-list mdc-list--two-line mdc-list--avatar-list" id="filesList">
-        </ul>
-
-        <div class="bt_close_file_toolbar mdc-typography mdc-button--raised mdc-button mdc-button">
-            Open
-        </div>
     </div>
 
-    <!-- Interface for Picking two overlapping objects -->
-    <!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
-    <!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
-    <!--    </div>-->
+    <!--        <div id="downloadIndicator" class="result"></div>-->
+    <div id="result_download" class="result"></div>
+    <div id="result_download2" class="result"></div>
+</div>
 
 
 
-    <!-- Interface for Changing the door properties -->
-    <div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 240px; max-width:300px; display:none">
 
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbind("popupDoorSelect", "doorid", ""); return false;'>
+<!--   ================================= FileBrowserToolbar ============================================ -->
+
+<!--  Open/Close button-->
+<a id="bt_close_file_toolbar" data-toggle='on' type="button" class="AssetsToggleStyle AssetsToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense mdc-ripple-upgraded" title="Toggle asset viewer" data-mdc-auto-init="MDCRipple">
+    <i class="material-icons">menu</i>
+</a>
+
+<div class="filemanager" id="fileBrowserToolbar">
+
+    <!-- Categories of assets -->
+    <div id="assetCategTab"  >
+        <button id="allAssetsViewBt" class="tablinks active">All</button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield" style="margin-top:0px; height:40px;margin-left:10px;">
+        <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find...">
+        <i class="material-icons mdc-theme--text-primary-on-background">search</i>
+        <div class="mdc-textfield__bottom-line"></div>
+    </div>
+    
+    <ul id="filesList" class="data mdc-list mdc-list--two-line mdc-list--avatar-list"></ul>
+
+
+    <!-- ADD NEW ASSET FROM ASSETS LIST -->
+    <a id="addNewAssetBtnAssetsList" style="height:70px; position:absolute; bottom:0; right:0; margin-right:5px; display:block; background:transparent;" class="" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
+        <i class="material-icons" style="cursor: pointer; font-size:54px; color:indianred; backgr ">add_circle</i>
+    </a>
+    
+</div>
+
+<!-- Interface for Picking two overlapping objects -->
+<!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
+<!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
+<!--    </div>-->
+
+<!-- Interface for Changing the door properties -->
+<div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
+     style="min-width: 240px; max-width:300px; display:none">
+
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbind("popupDoorSelect", "doorid", ""); return false;'>
 
 <!--            clearAndUnbindDoorProperties();-->
+        
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <p class="mdc-typography--subheading1" style=""> Door options </p>
+    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
+        <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
+               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+        <label for="doorid" class="mdc-textfield__label">Enter a door name </label>
+        <div class="mdc-textfield__bottom-line"></div>
+    </div>
+
+    <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
+       style="vertical-align: text-bottom;">directions</i>
+
+    <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
+            class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
+    </select>
+
+    <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
+           class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
+    <label for="door_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
+</div>
+
+<!--======================= Interface for Changing the Marker properties : WindEnergy ======================= -->
+
+<div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
+     style="min-width: 100%; width: auto; bottom: auto;">
+
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <p class="mdc-typography--title"> Marker options</p>
+
+
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+
+            <?php if ($project_scope == 1) { ?>
             
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
+                        </td>
+                        <td>
+                            <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
+                        </td>
+                        <td>
+                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                        </td>
+                    </tr>
 
-        <p class="mdc-typography--subheading1" style=""> Door options </p>
-        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
-            <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-                   style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-            <label for="doorid" class="mdc-textfield__label">Enter a door name </label>
-            <div class="mdc-textfield__bottom-line"></div>
-        </div>
+                    <tr>
+                        <td>
+                            <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
+                        </td>
+                        <td>
+                            <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
+                            </select>
+                        </td>
+                        <td>
+                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                        </td>
+                    </tr>
 
-        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
-           style="vertical-align: text-bottom;">directions</i>
-
-        <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
-                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
-        </select>
-
-        <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
-               class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
-        <label for="door_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
-    </div>
-
-    <!-- Interface for Changing the Marker properties -->
-    <div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-         style="min-width: 100%; width: auto; bottom: auto;">
-
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
-
-        <p class="mdc-typography--title"> Marker options</p>
-
-
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                    <table>
-                        <tr>
-                            <td>
-                                <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
-                            </td>
-                            <td>
-                                <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
-                            </td>
-                            <td>
-                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
-                            </td>
-                            <td>
-                                <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
-                                </select>
-                            </td>
-                            <td>
-                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
-                            </td>
-                            <td>
-                                <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
-                                </select>
-                            </td>
-                            <td>
-                                <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                    <p class="mdc-typography--title">Small Turbine</p>
-                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine1-iframe"></iframe>
-                </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                    <p class="mdc-typography--title">Normal Turbine</p>
-                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine2-iframe"></iframe>
-                </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                    <p class="mdc-typography--title">Big Turbine</p>
-                    <iframe style="height: 400px; width: 100%; border:none;" id="turbine3-iframe"></iframe>
-                </div>
-
+                    <tr>
+                        <td>
+                            <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
+                        </td>
+                        <td>
+                            <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
+                            </select>
+                        </td>
+                        <td>
+                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
+                        </td>
+                    </tr>
+                </table>
             </div>
+
+            <?php } ?>
+            
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                <p class="mdc-typography--title">Small Turbine</p>
+                <iframe style="height: 400px; width: 100%; border:none;" id="turbine1-iframe"></iframe>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                <p class="mdc-typography--title">Normal Turbine</p>
+                <iframe style="height: 400px; width: 100%; border:none;" id="turbine2-iframe"></iframe>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+                <p class="mdc-typography--title">Big Turbine</p>
+                <iframe style="height: 400px; width: 100%; border:none;" id="turbine3-iframe"></iframe>
+            </div>
+
         </div>
-
-        <!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
-        <!--           style="vertical-align: text-bottom;">directions</i>-->
-        <!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
-        <!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
-        <!--        </select>-->
-
     </div>
 
-    <!-- Popup menu to Select a scene to go, from Microscope or Textbook -->
+    <!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
+    <!--           style="vertical-align: text-bottom;">directions</i>-->
+    <!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
+    <!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
+    <!--        </select>-->
+
+</div>
+
+
+<!-- Chemistry: Popup menu to Select a scene to go, from Microscope or Textbook -->
+<?php if ($project_scope == 1) { ?>
     <div id="chemistrySceneSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
 
         <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -540,79 +523,79 @@ echo '</script>';
         <select title="Select a scene" id="chemistrySceneSelectComponent" class="mdc-select">
         </select>
     </div>
+<?php } ?>
+
+<!-- Popup menu to Select a scene to go, from Gate-->
+<div id="chemistryGatePopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
+
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <i title="Select a functional Category label" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">label</i>
+    <select title="Select a functional category label" id="chemistryGateComponent" class="mdc-select">
+    </select>
+</div>
 
 
-    <!-- Popup menu to Select a scene to go, from Gate-->
-    <div id="chemistryGatePopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
+<!-- Popup menu to for Reward item checkbox, from Artifact -->
+<div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
 
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
+    <!-- The close button-->
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("artifact_reward_checkbox"); return false;'>
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
 
-        <i title="Select a functional Category label" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">label</i>
-        <select title="Select a functional category label" id="chemistryGateComponent" class="mdc-select">
-        </select>
-    </div>
-
-
-    <!-- Popup menu to for Reward item checkbox, from Artifact -->
-    <div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-        <!-- The close button-->
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("artifact_reward_checkbox"); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
-
-        <!-- The checkbox-->
-        <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
-               class="mdc-textfield__input mdc-theme--text-primary-on-light"
-               style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
-        <label for="artifact_reward_checkbox" class="mdc-textfield__label"
-               style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+    <!-- The checkbox-->
+    <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
+           class="mdc-textfield__input mdc-theme--text-primary-on-light"
+           style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+    <label for="artifact_reward_checkbox" class="mdc-textfield__label"
+           style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+</div>
 
 
-    </div>
+<!-- Popup menu to for Reward item checkbox, from POI IT -->
+<div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
+
+    <!-- The close button-->
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox"); return false;'>
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <!-- The checkbox-->
+    <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
+           class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
+    <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"
+           style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
+
+</div>
+
+<!-- Popup menu to for Reward item checkbox, from POI Video -->
+<div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
+
+    <!-- The close button-->
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox"); return false;'>
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <!-- The checkbox-->
+
+    <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
+           class="mdc-textfield__input mdc-theme--text-primary-on-light"
+           style="margin-left: 29px; width: 150px !important; float: right;">
+    <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
+        Is a reward item?</label>
+
+</div>
 
 
-    <!-- Popup menu to for Reward item checkbox, from POI IT -->
-    <div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-        <!-- The close button-->
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox"); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
-
-        <!-- The checkbox-->
-        <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
-               class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
-        <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"
-               style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
 
 
-    </div>
-
-
-    <!-- Popup menu to for Reward item checkbox, from POI Video -->
-    <div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-        <!-- The close button-->
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox"); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
-
-        <!-- The checkbox-->
-
-        <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
-               class="mdc-textfield__input mdc-theme--text-primary-on-light"
-               style="margin-left: 29px; width: 150px !important; float: right;">
-        <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
-            Is a reward item?</label>
-
-    </div>
 </div>
 
 <!--    Start 3D    -->
@@ -649,6 +632,43 @@ echo '</script>';
         jQuery("#right-elements-panel").toggle("slow");
     });
 
+    //------------- File Browser Toolbar close button -------------
+
+    jQuery("#bt_close_file_toolbar").click(function() {
+
+        if (jQuery("#bt_close_file_toolbar").hasClass("AssetsToggleOn")) {
+
+            jQuery("#bt_close_file_toolbar").addClass("AssetsToggleOff").removeClass("AssetsToggleOn");
+        } else {
+
+            jQuery("#bt_close_file_toolbar").addClass("AssetsToggleOn").removeClass("AssetsToggleOff");
+        }
+
+        jQuery("#fileBrowserToolbar").toggle("slow");
+        jQuery("#filemanager").toggle("slow");
+        
+    });
+
+
+    // var closeButton = jQuery('#bt_close_file_toolbar');
+    //
+    // closeButton.on('click', function(e){
+    //     console.log("1111");
+    //     // e.preventDefault();
+    //
+    //     // if (fileList[0].style.display === "") {
+    //     //     fileList[0].style.display = 'none';
+    //     //     fileList[0].style.height = '0';
+    //     //     filemanager[0].style.height = '0';
+    //     //     // closeButton[0].innerHTML = 'Open';
+    //     // } else {
+    //     //     fileList[0].style.display = '';
+    //     //     fileList[0].style.height = '27vw';
+    //     //     filemanager[0].style.height = 'auto';
+    //     //     // closeButton[0].innerHTML = 'Close';
+    //     // }
+    //
+    // });
 
     jQuery("#object-manipulation-toggle").click(function() {
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
@@ -780,16 +800,16 @@ echo '</script>';
 
     });
 
-    // FULL SCREEN Toggle
-    jQuery('#fullScreenBtn').click(function() {
-
-        if (container_3D_all.style.width!=="100%") {
-            envir.makeFullScreen();
-        } else {
-            envir.makeWindowedScreen();
-        }
-
-    });
+    // // FULL SCREEN Toggle
+    // jQuery('#fullScreenBtn').click(function() {
+    //
+    //     if (container_3D_all.style.position=="absolute") {
+    //         envir.makeFullScreen();
+    //     } else {
+    //         envir.makeWindowedScreen();
+    //     }
+    //
+    // });
 
     // Autor rotate in 3D
     jQuery('#toggleTour3DaroundBtn').click(function() {
@@ -952,6 +972,9 @@ echo '</script>';
         jQuery("#"+type+"PanelGui").show();
     }
 
+    
+    
+    
     // function showEditorUI() {
     //     jQuery("#"+transform_controls.getMode()+"PanelGui").show();
     //     jQuery("#object-manipulation-toggle").show();
