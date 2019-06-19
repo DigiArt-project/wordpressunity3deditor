@@ -330,6 +330,8 @@ THREE.SceneExporter.prototype = {
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
                     '	"fnObjID" : ' + '"' + o.fnObjID  + '"' + ',',
                     '	"categoryName" : ' + '"' + o.categoryName  + '"' + ',',
+                    '	"categoryDescription" : ' + '"' + o.categoryDescription  + '"' + ',',
+                    '	"categoryIcon" : ' + '"' + o.categoryIcon  + '"' + ',',
                     '	"categoryID" : ' + '"' + o.categoryID  + '"' + ',',
                     '	"diffImage" : ' + '"' + o.diffImage  + '"' + ',',
                     '	"diffImageID" : ' + '"' + o.diffImageID  + '"' + ',',

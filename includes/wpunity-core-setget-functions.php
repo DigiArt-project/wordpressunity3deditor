@@ -365,7 +365,9 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			$image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true);
 
 			$categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
-
+            
+            $categIcon = get_term_meta($categoryAsset[0]->term_id, 'wpunity_assetcat_icon');
+			
 			$isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
 			$isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
 
@@ -374,6 +376,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 				'assetSlug'=>get_post()->post_name,
 				'assetid'=>$asset_id,
 				'categoryName'=>$categoryAsset[0]->name,
+                'categoryDescription'=>$categoryAsset[0]->description,
+                'categoryIcon'=>$categIcon,
 				'categoryID'=>$categoryAsset[0]->term_id,
 				'objID'=>$objID,
 				'objPath'=>$objPath,

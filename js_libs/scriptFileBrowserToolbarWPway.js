@@ -114,6 +114,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "diffImageIDs": e.target.attributes.getNamedItem("data-diffImageIDs").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
+                "categoryDescription": e.target.attributes.getNamedItem("data-categoryDescription").value,
+                "categoryIcon": e.target.attributes.getNamedItem("data-categoryIcon").value,
                 "image1id":e.target.attributes.getNamedItem("data-image1id").value,
                 "doorName_source":e.target.attributes.getNamedItem("data-doorName_source").value,
                 "doorName_target":e.target.attributes.getNamedItem("data-doorName_target").value,
@@ -196,7 +198,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     // if (f.categoryName.length > 18)
                     //     element.innerText = f.categoryName.substring(0,10) + " ... " + f.categoryName.substring(f.categoryName.length-6, f.categoryName.length);
                     // else
-                        element.innerText = f.categoryName;
+                        element.innerHTML = "<i class='material-icons' title='"+ f.categoryName + ": "+ f.categoryDescription   + "' style='font-size:18px;'>" + f.categoryIcon + "</i>"    ;//f.categoryName;
                     element.addEventListener("click", function(event){openCategoryTab(event, this  );  });
 
                     var foo = document.getElementById("assetCategTab");
@@ -243,6 +245,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-diffImageIDs="'+ f.diffImageIDs +
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
+                    '" data-categoryDescription="'+ f.categoryDescription +
+                    '" data-categoryIcon="'+ f.categoryIcon +
                     '" data-image1id="'+ f.image1id +
                     '" data-doorName_source="'+ f.doorName_source +
                     '" data-doorName_target="'+ f.doorName_target +
@@ -257,7 +261,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-isJoker="'+ f.isJoker +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
-                    '<span class="assetCategoryNameInList mdc-list-item__text__secondary mdc-typography--caption">'+ f.categoryName +'</span></span></a>' +
+                    '<i class="assetCategoryNameInList mdc-list-item__text__secondary mdc-typography--caption material-icons">'+ f.categoryIcon +'</i></span></a>' +
                     '<span class="FileListItemFooter">' +
 
                     (f.isJoker==='false'?

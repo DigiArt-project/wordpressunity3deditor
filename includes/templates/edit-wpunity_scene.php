@@ -405,7 +405,7 @@ get_header(); ?>
 
 							// vr_editor loads the $sceneToLoad
 							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' );
-                            require( plugin_dir_path( __DIR__ ) .  '/vr_editor_scenes_wrapper.php' );
+//                            require( plugin_dir_path( __DIR__ ) .  '/vr_editor_scenes_wrapper.php' );
 							?>
                         </div>
                     </div>

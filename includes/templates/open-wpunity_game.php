@@ -128,7 +128,7 @@ get_header();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Existing <?php echo $multiple; ?></h2>
+            <span class="mdc-typography--title mdc-theme--text-primary-on-background">Existing <?php echo $multiple; ?></span>
 
             <hr class="mdc-list-divider">
 
@@ -251,7 +251,7 @@ get_header();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 
-            <h2 class="mdc-typography--display1 mdc-theme--text-primary-on-background">Create new <?php echo $single; ?></h2>
+            <span class="mdc-typography--title mdc-theme--text-primary-on-background">Create new <?php echo $single; ?></span>
 
             <hr class="mdc-list-divider">
 

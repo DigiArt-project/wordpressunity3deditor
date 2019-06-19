@@ -132,6 +132,7 @@ function wpunity_register_styles() {
 	wp_enqueue_style('wpunity_material_stylesheet');
 	wp_enqueue_script('wpunity_material_scripts');
 	wp_enqueue_style( 'wpunity_material_icons', plugin_dir_url( __FILE__ ) . 'css/material-icons/material-icons.css' );
+//    wp_enqueue_style( 'wpunity_glyphter_icons', plugin_dir_url( __FILE__ ) . 'css/glyphter-font/Glyphter.css' );
 	wp_enqueue_style('wpunity_frontend_stylesheet');
 	wp_enqueue_style( 'wpunity_lightslider_stylesheet');
 }

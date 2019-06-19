@@ -69,73 +69,81 @@ function wpunity_assets_taxcategory_archaeology_fill(){
         'Artifact', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Artifact models are dynamic 3d assets that can be clicked or moved.',
+            'description'=> 'Artifacts are 3d models that can be clicked and inspected. They have also a textual description, e.g. a 3D scanned bone.',
             'slug' => 'artifact',
         )
     );
     $inserted_term1 = get_term_by('slug', 'artifact', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term1->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_artifact_get(), true);
     update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+    update_term_meta($inserted_term1->term_id, 'wpunity_assetcat_icon', "pets" );
 
     wp_insert_term(
         'Points of Interest (Image-Text)', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Image with Text',
+            'description'=> 'Points of interest (POIs) when clicked information pops up as an image with a textual description, e.g. a star 3D model with an image and text field.',
             'slug' => 'pois_imagetext',
         )
     );
     $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_get(), true);
     update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
+    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_icon', 'image_search');
+    
     wp_insert_term(
         'Points of Interest (Video)', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Points of interest (POIs) are spots at the game where information pops up as Video',
+            'description'=> 'Points of interest (POIs) that open up a video',
             'slug' => 'pois_video',
         )
     );
     $inserted_term3 = get_term_by('slug', 'pois_video', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term3->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_video_get(), true);
     update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+    update_term_meta($inserted_term3->term_id, 'wpunity_assetcat_icon', 'videocam');
 
     wp_insert_term(
         'Site', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Site models are Static 3D models that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
+            'description'=> 'Site models are static 3D models that can not be clicked and can not be moved (e.g. ground, wall, cave, house)',
             'slug' => 'site',
         )
     );
     $inserted_term4 = get_term_by('slug', 'site', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term4->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_site_get(), true);
     update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-
+    update_term_meta($inserted_term4->term_id, 'wpunity_assetcat_icon', 'place');
+    
+    
     wp_insert_term(
         'Door', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'Doors are 3D model where avatar pass through and thus going from one Scene to another Scene.',
+            'description'=> 'Doors are gates to other scenes',
             'slug' => 'door',
         )
     );
     $inserted_term5 = get_term_by('slug', 'door', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_door_get(), true);
-    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+    add_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_icon', 'meeting_room');
 
     wp_insert_term(
         'Decoration (Archaeology)', // the term
         'wpunity_asset3d_cat', // the taxonomy
         array(
-            'description'=> 'A Decoration (for Archaeology Games) is a game object that can improve the immersiveness such as Archaeological site, Power lines, Trees, etc.',
+            'description'=> 'A Decoration is a 3D object that can improve the immersiveness such as a tree, a furniture, etc.',
             'slug' => 'decoration_arch',
         )
     );
     $inserted_term6 = get_term_by('slug', 'decoration_arch', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term6->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_decoration_arch_get(), true);
     update_term_meta($inserted_term6->term_id, 'wpunity_assetcat_gamecat', 1 , true);
+    update_term_meta($inserted_term6->term_id, 'wpunity_assetcat_icon', 'local_florist');
+    
 }
 
 /***************************************************************************************************************/
