@@ -19,9 +19,13 @@ function raycasterSetter(event){
     // Main Raycast object
     var raycasterPick = new THREE.Raycaster();
 
-    // calculate objects intersecting the picking ray
-    raycasterPick.setFromCamera( mouse, envir.cameraOrbit );
-
+    if (avatarControlsEnabled) {
+        // calculate objects intersecting the picking ray
+        raycasterPick.setFromCamera(mouse, envir.cameraAvatar);
+    }else {
+        // calculate objects intersecting the picking ray
+        raycasterPick.setFromCamera(mouse, envir.cameraOrbit);
+    }
 
     // Show the myBulletLine (raycast)
     if (showRayPickLine)

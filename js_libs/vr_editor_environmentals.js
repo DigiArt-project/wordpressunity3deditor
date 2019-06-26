@@ -90,84 +90,84 @@ class vr_editor_environmentals {
         this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT , 1 / this.SCREEN_HEIGHT / this.ASPECT);
     }
 
-    // makeFullScreen() {
-    //
-    //     this.container_3D_all.style.position = 'fixed';
-    //     //this.container_3D_all.style.width = '100%';
-    //     this.container_3D_all.style.height = '100%';
-    //     this.container_3D_all.style.overflow = 'hidden';
-    //     this.container_3D_all.style.zIndex = '9999';
-    //     this.container_3D_all.style.top = '0';
-    //     this.container_3D_all.style.left = '0';
-    //     this.container_3D_all.style.right = '0';
-    //     this.container_3D_all.style.bottom = '0';
-    //
-    //     jQuery("#fullScreenBtn").html('Exit Full Screen');
-    //
-    //     jQuery("body#header").css("display", "none" );
-    //
-    //
-    //     if (document.getElementById('wpadminbar')) {
-    //         document.getElementById('wpadminbar').style.zIndex = 0;
-    //     }
-    //
-    //     if (document.getElementById('adminmenuback')) {
-    //         document.getElementById('adminmenuback').style.zIndex = 0;
-    //     }
-    //
-    //     if (document.getElementById('adminmenuwrap')) {
-    //         document.getElementById('adminmenuwrap').style.zIndex = 0;
-    //     }
-    //
-    //     if (document.getElementById('wpfooter')) {
-    //         document.getElementById('wpfooter').style.display='none';
-    //     }
-    //
-    //     if (document.getElementById('postcustom')) {
-    //         document.getElementById('postcustom').style.display='none';
-    //     }
-    //
-    //     if (document.getElementById('postdivrich')) {
-    //         document.getElementById('postdivrich').style.display='none';
-    //     }
-    //
-    //     envir.turboResize();
-    // }
-    //
-    // makeWindowedScreen(){
-    //
-    //     this.container_3D_all.style.position = 'absolute';
-    //     // this.container_3D_all.style.width = '100%';
-    //     this.container_3D_all.style.height = '600px';
-    //     //this.container_3D_all.style.overflow = 'auto';
-    //     this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
-    //     this.container_3D_all.style.zIndex = '999';
-    //
-    //     jQuery("#fullScreenBtn").html('Full Screen');
-    //
-    //     jQuery("body#header").css("display", "block" );
-    //
-    //     if (document.getElementById('wpadminbar')) {
-    //         document.getElementById('wpadminbar').style.zIndex = 9999;
-    //     }
-    //     if (document.getElementById('adminmenuback')) {
-    //         document.getElementById('adminmenuback').style.zIndex = 9999;
-    //     }
-    //     if (document.getElementById('adminmenuwrap')) {
-    //         document.getElementById('adminmenuwrap').style.zIndex = 9999;
-    //     }
-    //     if (document.getElementById('wpfooter')) {
-    //         document.getElementById('wpfooter').style.display = 'block';
-    //     }
-    //     if (document.getElementById('postcustom')) {
-    //         document.getElementById('postcustom').style.display = 'block';
-    //     }
-    //     if (document.getElementById('postdivrich')) {
-    //         document.getElementById('postdivrich').style.display = '';
-    //     }
-    //
-    //     envir.turboResize();
-    // }
+    makeFullScreen() {
+
+        this.container_3D_all.style.position = 'fixed';
+        this.container_3D_all.style.width = '100%';
+        this.container_3D_all.style.height = '100%';
+        this.container_3D_all.style.overflow = 'hidden';
+        this.container_3D_all.style.zIndex = '9999';
+        this.container_3D_all.style.top = '0';
+        this.container_3D_all.style.left = '0';
+        this.container_3D_all.style.right = '0';
+        this.container_3D_all.style.bottom = '0';
+
+        jQuery("#fullScreenBtn").html('Exit Full Screen');
+
+        jQuery("body#header").css("display", "none" );
+
+
+        if (document.getElementById('wpadminbar')) {
+            document.getElementById('wpadminbar').style.zIndex = 0;
+        }
+
+        if (document.getElementById('adminmenuback')) {
+            document.getElementById('adminmenuback').style.zIndex = 0;
+        }
+
+        if (document.getElementById('adminmenuwrap')) {
+            document.getElementById('adminmenuwrap').style.zIndex = 0;
+        }
+
+        if (document.getElementById('wpfooter')) {
+            document.getElementById('wpfooter').style.display='none';
+        }
+
+        if (document.getElementById('postcustom')) {
+            document.getElementById('postcustom').style.display='none';
+        }
+
+        if (document.getElementById('postdivrich')) {
+            document.getElementById('postdivrich').style.display='none';
+        }
+
+        envir.turboResize();
+    }
+
+    makeWindowedScreen(){
+
+        this.container_3D_all.style.position = 'relative';
+        this.container_3D_all.style.width = '99%';
+        this.container_3D_all.style.height = '600px';
+        //this.container_3D_all.style.overflow = 'auto';
+        this.container_3D_all.style.height = envir.container_3D_all.clientWidth * 2 / 3 + 'px';
+        this.container_3D_all.style.zIndex = '999';
+
+        jQuery("#fullScreenBtn").html('Full Screen');
+
+        jQuery("body#header").css("display", "block" );
+
+        if (document.getElementById('wpadminbar')) {
+            document.getElementById('wpadminbar').style.zIndex = 9999;
+        }
+        if (document.getElementById('adminmenuback')) {
+            document.getElementById('adminmenuback').style.zIndex = 9999;
+        }
+        if (document.getElementById('adminmenuwrap')) {
+            document.getElementById('adminmenuwrap').style.zIndex = 9999;
+        }
+        if (document.getElementById('wpfooter')) {
+            document.getElementById('wpfooter').style.display = 'block';
+        }
+        if (document.getElementById('postcustom')) {
+            document.getElementById('postcustom').style.display = 'block';
+        }
+        if (document.getElementById('postdivrich')) {
+            document.getElementById('postdivrich').style.display = '';
+        }
+
+        envir.turboResize();
+    }
 
     /**
      Set the Orbit Camera
@@ -402,18 +402,18 @@ class vr_editor_environmentals {
 
         this.composer.addPass( this.outlinePass );
 
-         this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-         this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH ,
+        this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+        this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH ,
                                                           1 / this.SCREEN_HEIGHT );
-         this.effectFXAA.renderToScreen = true;
-         this.composer.addPass( this.effectFXAA );
+        this.effectFXAA.renderToScreen = true;
+        this.composer.addPass( this.effectFXAA );
     }
 
     addInHierarchyViewer(obj){
 
         // ADD in the Hierarchy viewer
         var deleteButtonHTML =
-            '<a href="javascript:void(0);" class="mdc-list-item" aria-label="Delete asset"' +
+            '<a href="javascript:void(0);" class="hierarchyItemDelete mdc-list-item" aria-label="Delete asset"' +
             ' title="Delete asset object" onclick="' +
             // Delete object from scene and remove it from the hierarchy viewer
             'deleterFomScene(\'' + obj.name + '\');'
@@ -430,8 +430,8 @@ class vr_editor_environmentals {
 
         // Add as a list item
         jQuery('#hierarchy-viewer').append(
-            '<li class="mdc-list-item" id="'+ obj.name  + '">' +
-                '<a href="javascript:void(0);" class="mdc-list-item" style="font-size: 9pt; line-height:12pt" '+
+            '<li class="hierarchyItem mdc-list-item" id="'+ obj.name  + '">' +
+                '<a href="javascript:void(0);" class="hierarchyItemName mdc-list-item"  '+
                     'data-mdc-auto-init="MDCRipple" title="" onclick="onMouseDoubleClickFocus(event,\'' + obj.name + '\')">'+
                         '<span id="" class="mdc-list-item__text">' +
                             game_object_nameA_assetName + '<br />' +
@@ -492,6 +492,9 @@ class vr_editor_environmentals {
                         '</a>';
                 }
 
+
+
+
                 // Split the object name into 2 parts: The first part is the asset name and the second the date inserted in the scene
                 if (obj.name != 'avatarYawObject') {
                     var game_object_nameA_assetName = obj.name.substring(0, obj.name.length - 11);
@@ -535,6 +538,8 @@ class vr_editor_environmentals {
             this.cameraOrbit.right  = this.FRUSTUM_SIZE * this.ASPECT /  2;
 
             this.cameraOrbit.zoom = -1.5 * this.SCENE_DIMENSION_SURFACE + 2300;
+
+
         }
 
         if(this.is2d){

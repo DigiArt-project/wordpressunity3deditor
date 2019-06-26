@@ -12,16 +12,7 @@
     /*999;*/
 }
 
-#scenesInsideVREditor{
-    position:absolute;
-    height:20%;
-    width:90%;
-    left:0;
-    bottom:0;
-    z-index:1000;
-    background:rgba(0, 0, 0, 0.12);
-    padding-left:60px !important;
-}
+
 
 /* rightPanelToggleOnOff*/
 .scenesListToggleStyle {
@@ -42,7 +33,7 @@
 }
 
 .scenesListToggleOn {
-    height: 20%;
+    height: 17%;
 }
 
 .scenesListToggleOff {
@@ -263,9 +254,10 @@ canvas { pointer-events:none; z-index:10; }
 /*row1*/
 .VrEditorFullscreenBtnStyle {
     width:50%;
-    /*position: absolute;*/
+    position: absolute;
     /*right: 4%;*/
     /*top: 2px;*/
+    z-index:1500;
 }
 
 .VrEditorOptionsBtnStyle {
@@ -304,6 +296,7 @@ canvas { pointer-events:none; z-index:10; }
 .VrWalkInButtonStyle {
     width:35%;
     min-width: 30px;
+    z-index: 1200;
     /*display:block;*/
     /*position: absolute;*/
     /*right: 0;*/
@@ -404,6 +397,31 @@ canvas { pointer-events:none; z-index:10; }
     /*right: 0;*/
     /*top: 30%;*/
     background-color: #dfdfdf;
+}
+
+#hierarchy-viewer{
+    padding:0px;
+
+}
+
+#hierarchy-viewer li{
+    padding-left:5px;
+
+}
+
+
+.hierarchyItem {
+    width:100%
+}
+
+.hierarchyItemName {
+    font-size: 9pt;
+    line-height:12pt;
+    width:80%
+}
+
+.hierarchyItemDelete {
+    width:20%
 }
 
 
@@ -508,27 +526,127 @@ button, html [type="button"], [type="reset"], [type="submit"] {
 
 
 /*CARD STYLING*/
-.sceneTab{
-    height:90%;
-    width:60%;
+#scenesInsideVREditor{
+    position:absolute;
+    display:inline-flex;
+    height:17%;
+    width:90%;
+    left:0;
+    bottom:0;
+    z-index:1000;
+    background:rgba(0, 0, 0, 0.12);
+    padding-left:60px !important;
+    padding-top:5px;
 }
 
-.SceneThumbnail, .ImageContainer {
+.SceneCardContainer {
+    width: 150px;
+    padding-left:20px;
+}
+
+.sceneTab{
+    /*height:100px;*/
+    display:block;
+    background: transparent;
+}
+
+.SceneThumbnail {
+    position:relative;
     width:100%;
-    height:60%;
+    height:80px;
+    max-height:80px;
+    min-height:50px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.sceneDisplayBlock {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.sceneDisplayBlock a {
+    width: 100%;
+    height: 100%;
+}
+
+.sceneDisplayBlock a img {
+    width: 100%;
+    height: 100%;
+}
+
+
+.landscapeIcon {
+    font-size: 34px; padding-top: 20px;
+}
+
+/*.SceneThumbnail a {*/
+/*    display: block;*/
+/*    text-align: center;*/
+/*    vertical-align: middle;*/
+/*    !*height: 100%;*!*/
+/*}*/
+
+/*.SceneThumbnail a img {*/
+/*    position: absolute;*/
+/*    height:80px;*/
+/*    max-height:80px;*/
+/*    min-height:50px;*/
+/*    overflow: hidden;*/
+/*    -webkit-transform: translate(-50%,-50%);*/
+/*    -ms-transform: translate(-50%,-50%);*/
+/*    transform: translate(-50%,-50%);*/
+/*}*/
+
+.cardTitleDeleteWrapper {
+    width:100%;
+    max-height:30px;
+ }
+
+.cardTitle{
+    width: 70%;
+    margin:0px;
+    font-size:14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left:5px;
+}
+
+.cardDeleteIcon {
+    float:right;
+    right:0;
+    min-width:30px;
+    margin: 0 !important;
+    max-height:25px;
+    padding:0px;
+    margin-top:3px;
+}
+
+/*.cardDescription{*/
+/*    padding:0px;*/
+/*    margin:0px;*/
+/*    font-size:12px;*/
+/*}*/
+
+.deleteIconMaterial{
+    font-size:18px;
+}
+
+
+.ImageContainer {
+    width:100%;
+    height:80px;
+    max-height:80px;
+    min-height:50px;
     position:relative;
     text-align: center;
     overflow: hidden;
 }
 
-.SceneThumbnail a, .ImageContainer img {
-    display: block;
-    text-align: center;
-    vertical-align: middle;
-    height: 100%;
-}
 
-.SceneThumbnail a img, .ImageContainer img {
+.ImageContainer img {
     position: absolute;
     /*min-height: 225px;*/
     /*width: auto;*/
@@ -537,20 +655,9 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     -webkit-transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+    height: 100%;
 }
 
-.SceneThumbnail a img {
-    /*max-width: none;*/
-}
-
-.cardTitle{
-    padding:0px;
-    margin:0px;
-    font-size:14px;
-}
-
-.cardDescription{
-    padding:0px;
-    margin:0px;
-    font-size:12px;
-}

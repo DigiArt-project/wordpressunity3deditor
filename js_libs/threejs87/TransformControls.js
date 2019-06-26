@@ -742,7 +742,7 @@
 
     //----------------------------------------------------- End of RotTrans ---------------------------------------------------
 
-    THREE.TransformControls = function ( camera, domElement ) {
+    THREE.TransformControls = function ( domElement ) {
 
         // TODO: Make non-uniform scale and rotate play nice in hierarchies
         // TODO: ADD RXYZ contol
@@ -1031,6 +1031,13 @@
             scope.object.updateMatrixWorld();
             worldPosition.setFromMatrixPosition( scope.object.matrixWorld );
             worldRotation.setFromRotationMatrix( tempMatrix.extractRotation( scope.object.matrixWorld ) );
+
+            var camera;
+
+            if(avatarControlsEnabled)
+                camera = envir.cameraAvatar;
+            else
+                camera = envir.cameraOrbit;
 
             camera.updateMatrixWorld();
             camPosition.setFromMatrixPosition( camera.matrixWorld );
@@ -1678,6 +1685,12 @@
             var y = ( pointer.clientY - rect.top ) / rect.height;
 
             pointerVector.set( ( x * 2 ) - 1, - ( y * 2 ) + 1 );
+
+            var camera;
+            if(avatarControlsEnabled)
+                camera = envir.cameraAvatar;
+            else
+                camera = envir.cameraOrbit;
 
             ray.setFromCamera( pointerVector, camera );
 

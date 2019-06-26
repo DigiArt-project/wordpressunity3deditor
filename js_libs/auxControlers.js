@@ -73,6 +73,16 @@ function controllerDatGuiOnChange() {
         }
     );
 
+    //dg_controller_tx.
+
+        // // Stop animating
+        // cancelAnimationFrame( id_animation_frame );
+        //
+        //
+        // // start animating again
+        // animate();
+
+
     dg_controller_ty.onChange(function(value) {
             cancelAnimationFrame( id_animation_frame );
             transform_controls.object.position.y = gui_controls_funs.dg_ty;
@@ -142,7 +152,6 @@ function controllerDatGuiOnChange() {
                 gui_controls_funs.dg_dim_y = dims[1];
                 gui_controls_funs.dg_dim_z = dims[2];
             }
-
 
             dg_dim_x_prev = value;
             animate();
@@ -221,6 +230,15 @@ function setKeyPressControllerUnconstrained(element){
     div[0].onclick = function(event){
          cancelAnimationFrame( id_animation_frame );
      };
+
+    // While on Input Field on Focus and press enter
+    div[0].addEventListener('keydown', function (e) {
+        if (e.keyCode == 13) {
+          animate();
+        }
+    });
+
+
 }
 
 
@@ -235,6 +253,15 @@ function setKeyPressControllerConstrained(element) {
     div[0].children[0].onclick = function (event) {
         cancelAnimationFrame(id_animation_frame);
     };
+
+
+    // While on Input Field on Focus and press enter
+    div[0].addEventListener('keydown', function (e) {
+        if (e.keyCode == 13) {
+            animate();
+        }
+    });
+
 }
 
 

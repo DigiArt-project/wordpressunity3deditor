@@ -153,12 +153,6 @@ i.ButtonIcon {
     height: 100%;
 }
 
-
-
-
-
-
-
 .AddNewAssetBtnStyle {
     float: right;
 }
@@ -189,9 +183,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
         grid-template-columns: repeat(1, minmax(0, 1fr))
     }
 
-    .SceneCardContainer {
-        width: 100%;
-    }
+
 
     .AddNewAssetBtnStyle {
         float: left;

@@ -122,7 +122,7 @@ echo '</script>';
     // }
 
     //========== Drag and drop 3D objects into scene for INSERT  =========================================
-    var raycasterDrag = new THREE.Raycaster();
+    //var raycasterDrag = new THREE.Raycaster();
 
     // find all indexes of the needle inside the str
     function allIndexOf(needle, str){
@@ -254,10 +254,6 @@ echo '</script>';
     </div>
     
     <div id="row1" class="row-right-panel">
-<!--                <a id="fullScreenBtn" class="VrEditorFullscreenBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle full screen" data-mdc-auto-init="MDCRipple">-->
-<!--                    Full Screen-->
-<!--                </a>-->
-    
             <!-- Options -->
             <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
                 <i class="material-icons">settings</i>
@@ -265,29 +261,40 @@ echo '</script>';
     </div>
 
     <div id="row2" class="row-right-panel">
-<!--        <div id="toggleTour3DaroundBtn" class="EditorTourToggleBtn">-->
+
+        <!--  Toggle Around Tour -->
         <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
            class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
             <i class="material-icons">rotate_90_degrees_ccw</i>
         </a>
-<!--        </div>-->
 
-<!--        <div id="editor-dimension-btn" class="EditorDimensionToggleBtn">-->
+        <!--  Dimensionality 2D 3D toggle -->
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
-<!--        </div>-->
 
     <!-- The button to start walking in the 3d environment -->
 <!--        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">-->
-        <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            VIEW
-        </a>
+<!--        <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">-->
+<!--            VIEW-->
+<!--        </a>-->
 <!--        </div>-->
 
+
+        <!-- The button to start walking in the 3d environment -->
+        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
+            <a type="button" id="firstPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+                VIEW
+            </a>
+        </div>
+        
+        
+        
 <!--        <div id="thirdPersonBlocker" class="">-->
         <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
             <i class="material-icons">person</i></a>
 <!--        </div>-->
 
+
+        
     </div>
 
 
@@ -604,9 +611,12 @@ echo '</script>';
 
 
     <!-- Scenes List -->
-    <div id="scenesInsideVREditor" class="mdc-layout-grid" style="padding:10px;">
-        <div class="mdc-layout-grid__inner">
-            <!-- Scenes -->
+    <div id="scenesInsideVREditor" class="" style="">
+
+
+
+
+            <!-- Game Settings Scenes -->
             <?php
             $custom_query_args = array(
                 'post_type' => 'wpunity_scene',
@@ -631,267 +641,8 @@ echo '</script>';
             $wp_query   = $custom_query;
             ?>
             
-            <?php if ( $custom_query->have_posts() ) :?>
-
-                <!--    <span style="font-size:12px;" class="mdc-theme--text-primary-on-light">Scenes</span>-->
-                
-                <?php while ( $custom_query->have_posts() ) :
-                    $custom_query->the_post();
-                    $scene_id = get_the_ID();
-                    $scene_title = get_the_title();
-                    $scene_desc = get_the_content();
-                    $is_regional = get_post_meta($scene_id,'wpunity_isRegional', true);
-                    $current_card_bg = $current_scene_id == $scene_id ? 'mdc-theme--primary-light-bg' : '';
-                    $scene_type = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
-                    
-                    if($scene_type !== 'menu' && $scene_type !== 'credits') {
-                        ?>
-
-                        <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 SceneCardContainer">
-                            <div class="sceneTab mdc-card mdc-theme--background <?php echo $current_card_bg;?> ">
-                                <div class="SceneThumbnail">
-                                    <?php
-                                    
-                                    $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-                                    
-                                    //create permalink depending the scene yaml category
-                                    $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-                                    if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-                                    $edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
-                                    ?>
-                                    <a href="<?php echo $edit_page_link; ?>">
-                                        
-                                        <?php if(has_post_thumbnail($scene_id)) { ?>
-                                            
-                                            <?php echo get_the_post_thumbnail( $scene_id ); ?>
-                                        
-                                        <?php } else { ?>
-
-                                            <div class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                                <i style="font-size: 34px; padding-top: 10px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                            </div>
-                                        
-                                        <?php } ?>
-                                    </a>
-                                </div>
-                                <section class="" style="padding:2px;">
-                            
-                            <span id="<?php echo $scene_id;?>-title" class="cardTitle mdc-card__title mdc-typography--title"
-                                  style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-                                <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
-                                <?php if ($is_regional) { ?>
-                                    <i title="Regional scene" class="material-icons AlignIconToBottom CursorDefault mdc-theme--primary" style="float: right;">public</i>
-                                <?php } ?>
-                            </span>
-
-                                    <span class="cardDescription mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
-                                            &#8203;(<?php echo $scene_desc; ?>)
-                                        </span>
-
-                                </section>
-
-
-
-                                <section class="mdc-card__actions">
-                                    <?php if (!$default_scene) { ?>
-                                        <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple" title="Delete scene" class="mdc-button mdc-button--compact mdc-card__action" onclick="deleteScene(<?php echo $scene_id; ?>)">DELETE</a>
-                                    <?php } ?>
-
-
-                                    <!--                            <a data-mdc-auto-init="MDCRipple" title="Edit scene" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="--><?php //echo $edit_page_link; ?><!--">EDIT</a>-->
-                                </section>
-                            </div>
-                        </div>
-                    <?php } ?>
-                <?php endwhile;?>
-
-                <!--ADD NEW SCENE-->
-                <?php if($game_type_obj->string !== "Energy") { ?>
-
-                    <div id="add-new-scene-card" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 SceneCardContainer">
-                        <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
-                            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-                            <input type="hidden" name="submitted" id="submitted" value="true" />
-                            <div class="mdc-card mdc-theme--secondary-light-bg">
-
-                                <section class="mdc-card__primary" style="padding:8px;">
-                            
-                            <span class="mdc-card__title mdc-typography--title"
-                                  style="font-size:14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; " title="Add new">
-                                <i class="material-icons AlignIconToMiddle" style="font-size:14px;">add</i>
-                                Add new scene
-                            </span>
-
-                                    <!--Title-->
-                                    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="padding:0px; height:25px;">
-                                        <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
-                                               aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-                                        <label for="title" class="mdc-textfield__label" style="font-size:12px;"> Enter a scene title</label>
-                                        <div class="mdc-textfield__bottom-line"></div>
-                                    </div>
-
-                                    <!--                            <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"-->
-                                    <!--                               id="title-validation-msg" style="font-size:12px;">-->
-                                    <!--                                Between 3 - 25 characters-->
-                                    <!--                            </p>-->
-
-                                    <!--Description-->
-                                    <!--                            <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">-->
-                                    <!--                                <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"-->
-                                    <!--                                       maxlength="50" aria-controls="desc-validation-msg" style="border: none; font-size:12px; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">-->
-                                    <!--                                <label for="desc" class="mdc-textfield__label" style="font-size:12px;"> Enter a scene description </label>-->
-                                    <!--                                <div class="mdc-textfield__bottom-line"></div>-->
-                                    <!--                            </div>-->
-                                    <!--                            -->
-                                    <!--                            <br>-->
-                                </section>
-
-                                <section class="mdc-card__primary" style="display:none">
-                                    <?php if($game_type_obj->string != "Archaeology"){ ?>
-                                        <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
-                                    <?php } ?>
-                                    <!--Scene Type-->
-                                    <?php if($game_type_obj->string === "Chemistry"){ ?>
-                                        <ul>
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">Molecule Naming</label>
-                                            </li>
-                                            &nbsp;
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">Molecule Construction</label>
-                                            </li>
-                                            &nbsp;
-                                            <li class="mdc-form-field">
-                                                <div class="mdc-radio">
-                                                    <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
-                                                    <div class="mdc-radio__background">
-                                                        <div class="mdc-radio__outer-circle"></div>
-                                                        <div class="mdc-radio__inner-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
-                                            </li>
-                                        </ul>
-                                    <?php } ?>
-                                    
-                                    <?php if($game_type_obj->string === "Energy"){ ?>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox" id="regional-checkbox-component">
-                                                <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                            </div>
-                                            <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
-                                        </div>
-                                    <?php } ?>
-                                </section>
-
-                                <section class="mdc-card__primary" style="padding:0px;">
-                                    <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
-                                            data-mdc-auto-init="MDCRipple" type="submit">
-                                        ADD NEW
-                                    </button>
-
-                                </section>
-                            </div>
-                        </form>
-                    </div>
-                
-                <?php } ?>
-
-                <!--Delete Scene Dialog-->
-                <aside id="delete-dialog"
-                       class="mdc-dialog"
-                       role="alertdialog"
-                       style="z-index: 1000;"
-                       aria-labelledby="Delete scene dialog"
-                       aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
-                    <div class="mdc-dialog__surface">
-                        <header class="mdc-dialog__header">
-                            <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
-                                Delete scene?
-                            </h2>
-                        </header>
-                        <section id="delete-dialog-description" class="mdc-dialog__body">
-                            Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
-                        </section>
-
-                        <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
-                            <h3 class="mdc-typography--title">Deleting...</h3>
-
-                            <div class="progressSlider">
-                                <div class="progressSliderLine"></div>
-                                <div class="progressSliderSubLine progressIncrease"></div>
-                                <div class="progressSliderSubLine progressDecrease"></div>
-                            </div>
-                        </section>
-
-                        <footer class="mdc-dialog__footer">
-                            <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
-                            <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
-                        </footer>
-                    </div>
-                    <div class="mdc-dialog__backdrop"></div>
-                </aside>
-
-
-                <!--    </div>-->
-                <!--    </div>-->
-            <?php endif;
-            wp_reset_query();
-            ?>
-
-
-
-            <!-- Game Setting Scenes -->
-            <?php
-            $custom_query_args = array(
-                'post_type' => 'wpunity_scene',
-                'posts_per_page' => -1,
-                'tax_query' => array(
-                    array(
-                        'taxonomy' => 'wpunity_scene_pgame',
-                        'field'    => 'term_id',
-                        'terms'    => $allScenePGameID,
-                    ),
-                ),
-                'orderby' => 'ID',
-                'order' => 'DESC',
-                /*'paged' => $paged,*/
-            );
-            
-            $custom_query = new WP_Query( $custom_query_args );
-            
-            // Pagination fix
-            $temp_query = $wp_query;
-            $wp_query   = NULL;
-            $wp_query   = $custom_query;
-            ?>
-            
-            
-            <?php if ( $custom_query->have_posts() ) :?>
-
-            <!--        <span style="font-size:12px;" class="mdc-theme--text-primary-on-light">Game settings</span>-->
-            
-            <?php while ( $custom_query->have_posts() ) :
+            <?php if ( $custom_query->have_posts() ) :
+                while ( $custom_query->have_posts() ) :
                 $custom_query->the_post();
                 $scene_id = get_the_ID();
                 $scene_title = get_the_title();
@@ -903,7 +654,7 @@ echo '</script>';
                 
                 if($scene_type == 'menu' || $scene_type == 'credits') { ?>
 
-                    <div id="scene-<?php echo $scene_id; ?>" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 SceneCardContainer">
+                    <div id="scene-<?php echo $scene_id; ?>" class="SceneCardContainer">
 
                         <div class="sceneTab mdc-card mdc-theme--background <?php echo $current_card_bg;?> ">
 
@@ -912,38 +663,32 @@ echo '</script>';
                                 
                                 $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
                                 $scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
-                                
                                 //create permalink depending the scene yaml category
                                 $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                                 if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
                                 $edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
                                 ?>
+                                <div style="" class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
                                 <a href="<?php echo $edit_page_link; ?>">
                                     
-                                    <?php if(has_post_thumbnail($scene_id)) { ?>
-                                        
-                                        <?php echo get_the_post_thumbnail( $scene_id ); ?>
-                                    
-                                    <?php } else { ?>
-
-                                        <div style="" class="DisplayBlock mdc-theme--primary-bg CenterContents">
-                                            <i style="font-size: 34px; padding-top: 10px;" class="material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                        </div>
-                                    
+                                    <?php if(has_post_thumbnail($scene_id)) {
+                                            echo get_the_post_thumbnail( $scene_id );
+                                          } else { ?>
+                                            <i class="landscapeIcon material-icons mdc-theme--text-icon-on-background">landscape</i>
+                                      
                                     <?php } ?>
                                 </a>
+                                </div>
+                                
                             </div>
-                            <section class="" style="padding:2px;">
-                                            <span id="<?php echo $scene_id;?>-title" class="cardTitle mdc-card__title mdc-typography--title"
-                                                  style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?php echo $scene_title; ?>">
-                                                <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
-                                            </span>
-                                <span class="cardDescription mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">
-                                                &#8203;(<?php echo $scene_desc; ?>)
-                                            </span>
 
+                            <section class="cardTitleDeleteWrapper">
+                                    <span class="cardTitle mdc-card__title mdc-typography--title">
+                                        <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>">
+                                            <?php echo $scene_title; ?>
+                                        </a>
+                                    </span>
                             </section>
-
                         </div>
                     </div>
                 
@@ -984,21 +729,258 @@ echo '</script>';
             
             <?php } ?>
 
-        </div>
+        
         
         <?php endif;
         wp_reset_query();
         ?>
-    </div>
 
 
 
 
+
+    <!-- Scenes -->
+    <?php
+    $custom_query_args = array(
+        'post_type' => 'wpunity_scene',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_scene_pgame',
+                'field'    => 'term_id',
+                'terms'    => $allScenePGameID,
+            ),
+        ),
+        'orderby' => 'ID',
+        'order' => 'DESC',
+        /*'paged' => $paged,*/
+    );
+    
+    $custom_query = new WP_Query( $custom_query_args );
+    
+    // Pagination fix
+    $temp_query = $wp_query;
+    $wp_query   = NULL;
+    $wp_query   = $custom_query;
+    ?>
+    
+    <?php if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            $custom_query->the_post();
+            $scene_id = get_the_ID();
+            $scene_title = get_the_title();
+            $scene_desc = get_the_content();
+            $is_regional = get_post_meta($scene_id,'wpunity_isRegional', true);
+            $current_card_bg = $current_scene_id == $scene_id ? 'mdc-theme--primary-light-bg' : '';
+            $scene_type = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
+            
+            if($scene_type !== 'menu' && $scene_type !== 'credits') {
+                ?>
+
+                <div id="scene-<?php echo $scene_id; ?>" class="SceneCardContainer">
+                    <div class="sceneTab mdc-card mdc-theme--background <?php echo $current_card_bg;?> ">
+                        <div class="SceneThumbnail">
+                            <?php
+                            
+                            $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
+                            
+                            //create permalink depending the scene yaml category
+                            $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
+                            if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+                            $edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
+                            ?>
+                            <div class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
+                                <a href="<?php echo $edit_page_link; ?>">
+                                    <?php if(has_post_thumbnail($scene_id)) {
+                                        echo get_the_post_thumbnail( $scene_id );
+                                            } else { ?>
+                                                <i class="landscapeIcon material-icons mdc-theme--text-icon-on-background">landscape</i>
+                                    <?php } ?>
+                                </a>
+                            </div>
+                        </div>
+
+                        <section class="cardTitleDeleteWrapper" style="">
+                            
+                                    <span id="<?php echo $scene_id;?>-title" class="cardTitle mdc-card__title mdc-typography--title"
+                                           title="<?php echo $scene_title; ?>">
+                                        <a class="mdc-theme--primary" href="<?php echo $edit_page_link; ?>"><?php echo $scene_title; ?></a>
+                                        <?php if ($is_regional) { ?>
+                                            <i title="Regional scene" class="material-icons AlignIconToBottom CursorDefault mdc-theme--primary" style="float: right;">public</i>
+                                        <?php } ?>
+                                    </span>
+
+<!--                            <span class="cardDescription mdc-card__subtitle mdc-theme--text-secondary-on-light SceneCardDescriptionStyle">-->
+<!--                                            &#8203;(--><?php //echo $scene_desc; ?><!--)-->
+<!--                                        </span>-->
+                            <!-- DELETE SCENE  -->
+                            <!--                        <section class="mdc-card__actions">-->
+                            <?php if (!$default_scene) { ?>
+                                <a id="deleteSceneBtn" data-mdc-auto-init="MDCRipple"
+                                   title="Delete scene" class="cardDeleteIcon mdc-button mdc-button--compact mdc-card__action"
+                                   onclick="deleteScene(<?php echo $scene_id; ?>)"><i class="material-icons deleteIconMaterial">delete_forever</i></a>
+                            <?php } ?>
+                            <!--                        </section>-->
+
+                        </section>
+
+
+                    </div>
+                </div>
+            <?php } ?>
+        <?php endwhile;?>
+
+        <!--ADD NEW SCENE-->
+        <?php if($game_type_obj->string !== "Energy") { ?>
+
+        <div id="add-new-scene-card" class="SceneCardContainer">
+            <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
+                <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+                <input type="hidden" name="submitted" id="submitted" value="true" />
+                <div class="mdc-card mdc-theme--secondary-light-bg">
+
+                    <section class="mdc-card__primary" style="padding:8px;">
+
+                        <!--  PLus icon-->
+<!--                        <span class="mdc-card__title mdc-typography--title"-->
+<!--                              style="font-size:14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; " title="Add new">-->
+<!--                                        <i class="material-icons AlignIconToMiddle" style="font-size:14px;">add</i>-->
+<!--                                        Add new scene-->
+<!--                        </span>-->
+
+                        <!--Title-->
+                        <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" style="padding:0px; height:25px;">
+                            <input id="title" name="scene-title" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-secondary-light"
+                                   aria-controls="title-validation-msg" required minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
+                            <label for="title" class="mdc-textfield__label" style="font-size:12px;"> Enter a scene title</label>
+                            <div class="mdc-textfield__bottom-line"></div>
+                        </div>
+                    </section>
+
+                    <section class="mdc-card__primary" style="display:none">
+                        <?php if($game_type_obj->string != "Archaeology"){ ?>
+                            <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
+                        <?php } ?>
+                        <!--Scene Type-->
+                        <?php if($game_type_obj->string === "Chemistry"){ ?>
+                            <ul>
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="sceneType2DRadio" name="sceneTypeRadio" value="2d">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
+                                    </div>
+                                    <label id="sceneType2DRadio-label" for="sceneType2DRadio" style="padding: 0; margin: 0;">Molecule Naming</label>
+                                </li>
+                                &nbsp;
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="sceneType3DRadio" checked="" name="sceneTypeRadio" value="3d">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
+                                    </div>
+                                    <label id="sceneType3DRadio-label" for="sceneType3DRadio" style="padding: 0; margin: 0;">Molecule Construction</label>
+                                </li>
+                                &nbsp;
+                                <li class="mdc-form-field">
+                                    <div class="mdc-radio">
+                                        <input class="mdc-radio__native-control" type="radio" id="sceneTypeLabRadio" checked="" name="sceneTypeRadio" value="lab">
+                                        <div class="mdc-radio__background">
+                                            <div class="mdc-radio__outer-circle"></div>
+                                            <div class="mdc-radio__inner-circle"></div>
+                                        </div>
+                                    </div>
+                                    <label id="sceneTypeLabRadio-label" for="sceneTypeLabRadio" style="padding: 0; margin: 0;">Lab</label>
+                                </li>
+                            </ul>
+                        <?php } ?>
+                        
+                        <?php if($game_type_obj->string === "Energy"){ ?>
+                            <div class="mdc-form-field">
+                                <div class="mdc-checkbox" id="regional-checkbox-component">
+                                    <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">
+                                    <div class="mdc-checkbox__background">
+                                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                            <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                        </svg>
+                                        <div class="mdc-checkbox__mixedmark"></div>
+                                    </div>
+                                </div>
+                                <label class="" for="regional-scene-checkbox" style="padding: 0; margin: 0;">Regional scene</label>
+                            </div>
+                        <?php } ?>
+                    </section>
+
+                    <!-- ADD NEW SCENE BUTTON -->
+                    <section class="mdc-card__primary" style="padding:0px;">
+                        <button style="float:right; background-image:none;" class="mdc-button--raised mdc-button mdc-button-primary"
+                                data-mdc-auto-init="MDCRipple" type="submit">
+                            ADD NEW
+                        </button>
+                    </section>
+
+                </div>
+            </form>
+        </div>
+    
+    <?php } ?>
+
+        <!--Delete Scene Dialog-->
+        <aside id="delete-dialog"
+               class="mdc-dialog"
+               role="alertdialog"
+               style="z-index: 1000;"
+               aria-labelledby="Delete scene dialog"
+               aria-describedby="You can delete the selected from the current game project" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+                <header class="mdc-dialog__header">
+                    <h2 id="delete-dialog-title" class="mdc-dialog__header__title">
+                        Delete scene?
+                    </h2>
+                </header>
+                <section id="delete-dialog-description" class="mdc-dialog__body">
+                    Are you sure you want to delete this scene? There is no Undo functionality once you delete it.
+                </section>
+
+                <section id="delete-scene-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">
+                    <h3 class="mdc-typography--title">Deleting...</h3>
+
+                    <div class="progressSlider">
+                        <div class="progressSliderLine"></div>
+                        <div class="progressSliderSubLine progressIncrease"></div>
+                        <div class="progressSliderSubLine progressDecrease"></div>
+                    </div>
+                </section>
+
+                <footer class="mdc-dialog__footer">
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="deleteSceneDialogCancelBtn">Cancel</a>
+                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteSceneDialogDeleteBtn">Delete</a>
+                </footer>
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+    
+    <?php endif;
+    wp_reset_query();
+    ?>
     <!--    End of Scenes-->
+
+    </div>   <!-- Scenes List Div -->
+    
+    
+    
+    
+    
+    
+    
     
     
 
-</div>
+</div>   <!--   VR DIV   -->
 
 
 
@@ -1022,7 +1004,7 @@ echo '</script>';
     envir.is2d = true;
 
     // Controls with axes (Transform, Rotate, Scale)
-    var transform_controls = new THREE.TransformControls( envir.cameraOrbit, envir.renderer.domElement );
+    var transform_controls = new THREE.TransformControls( envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
 
     jQuery("#hierarchy-toggle-btn").click(function() {
@@ -1112,7 +1094,7 @@ echo '</script>';
         transform_controls.setSize( Math.max(transform_controls.size * 0.9, 0.1 ) );
     });
 
-    jQuery("#editor-dimension-btn").click(function() {
+    jQuery("#dim-change-btn").click(function() {
 
         jQuery("#translate-switch").click();
 
@@ -1167,24 +1149,24 @@ echo '</script>';
     });
 
 
-    var firstPersonBlocker = document.getElementById('firstPersonBlocker');
+    //var firstPersonBlocker = document.getElementById('firstPersonBlocker');
     var firstPersonBlockerBtn = document.getElementById('firstPersonBlockerBtn');
 
     firstPersonBlockerBtn.addEventListener('click', function (event) {
 
-        firstPersonBlockerBtn.style.display = 'none';
+        //firstPersonBlockerBtn.style.display = 'none';
 
         var element = document.body;
 
         // Ask the browser to lock the pointer
-        element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+        // element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+        // element.requestPointerLock();
 
-        element.requestPointerLock();
+        firstPersonViewWithoutLock();
 
-        envir.makeFullScreen();
     }, false);
 
-    // // First person view
+    // // // First person view
     // jQuery('#toggleUIBtn').click(function() {
     //     var btn = jQuery('#toggleUIBtn');
     //     var icon = jQuery('#toggleUIBtn i');
@@ -1216,8 +1198,8 @@ echo '</script>';
         envir.scene.getObjectByName("SteveOld").visible = true;
         envir.scene.getObjectByName("Steve").visible = false;
 
-        var btnDiv = jQuery('#thirdPersonBlocker');
-        btnDiv[0].style.display = "none";
+        // var btnDiv = jQuery('#thirdPersonBlocker');
+        // btnDiv[0].style.display = "none";
 
         var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
         btnFirst.click();
@@ -1225,23 +1207,23 @@ echo '</script>';
     });
 
     // // FULL SCREEN Toggle
-    // jQuery('#fullScreenBtn').click(function() {
-    //
-    //     if (container_3D_all.style.position=="absolute") {
-    //         envir.makeFullScreen();
-    //     } else {
-    //         envir.makeWindowedScreen();
-    //     }
-    //
-    // });
+    jQuery('#fullScreenBtn').click(function() {
+
+        if (container_3D_all.style.position=="absolute") {
+            envir.makeFullScreen();
+        } else {
+            envir.makeWindowedScreen();
+        }
+
+    });
 
     // Autor rotate in 3D
-    jQuery('#toggleTour3DaroundBtn').click(function() {
+    jQuery('#toggle-tour-around-btn').click(function() {
 
         var btn = jQuery('#toggle-tour-around-btn');
 
         if (envir.is2d)
-            jQuery("#editor-dimension-btn").click();
+            jQuery("#dim-change-btn").click();
 
 
         if (btn.data('toggle') === 'off') {
@@ -1396,70 +1378,6 @@ echo '</script>';
         jQuery("#"+type+"PanelGui").show();
     }
 
-    
-    
-    
-    // function showEditorUI() {
-    //     jQuery("#"+transform_controls.getMode()+"PanelGui").show();
-    //     jQuery("#object-manipulation-toggle").show();
-    //     jQuery("#axis-manipulation-buttons").show();
-    //     jQuery("#double-sided-switch").show();
-    //     jQuery("#removeAssetBtn").show();
-    //     jQuery("#fullScreenBtn").show();
-    //     jQuery("#hierarchy-viewer-container").show();
-    //     jQuery("#hierarchy-toggle-btn").show();
-    //     jQuery("#divPauseRendering").show();
-    //
-    //     jQuery("#optionsPopupBtn").show();
-    //
-    //     jQuery("#toggleTour3DaroundBtn").show();
-    //
-    //     jQuery("#editor-dimension-btn").show();
-    //     jQuery("#toggleView3rdPerson").show();
-    //
-    //     jQuery("#firstPersonBlocker").show();
-    //     jQuery("#thirdPersonBlocker").show();
-    //
-    //     jQuery("#saveSceneBtn").show();
-    //
-    //     isComposerOn = true;
-    //     jQuery("#infophp").show();
-    //     jQuery("#fileBrowserToolbar").show();
-    //
-    //     transform_controls.visible  = true;
-    //     envir.getSteveFrustum().visible = true;
-    // }
-    //
-    // function hideEditorUI() {
-    //     hideObjectPropertiesPanels();
-    //     jQuery("#object-manipulation-toggle").hide();
-    //     jQuery("#axis-manipulation-buttons").hide();
-    //     jQuery("#double-sided-switch").hide();
-    //     jQuery("#removeAssetBtn").hide();
-    //     jQuery("#fullScreenBtn").hide();
-    //     jQuery("#hierarchy-viewer-container").hide();
-    //     jQuery("#hierarchy-toggle-btn").hide();
-    //     jQuery("#optionsPopupBtn").hide();
-    //
-    //     jQuery("#divPauseRendering").hide();
-    //
-    //     jQuery("#editor-dimension-btn").hide();
-    //     jQuery("#toggleTour3DaroundBtn").hide();
-    //     jQuery("#toggleView3rdPerson").hide();
-    //
-    //     jQuery("#firstPersonBlocker").hide();
-    //     jQuery("#thirdPersonBlocker").hide();
-    //     isComposerOn = false;
-    //     jQuery("#infophp").hide();
-    //     jQuery("#fileBrowserToolbar").hide();
-    //
-    //     jQuery("#saveSceneBtn").hide();
-    //
-    //     transform_controls.visible  = false;
-    //
-    //     // if in 3rd person view then show the cameraobject
-    //     envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
-    // }
 </script>
 
 <!-- Load Scene - javascript var resources3D[] -->
@@ -1510,10 +1428,10 @@ $formRes->init($sceneToLoad);
             return;
 
         id_animation_frame = requestAnimationFrame( animate );
-
+        
         // Select the proper camera (orbit, or avatar, or thirdPersonView)
         var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
-
+        
         // Render it
         envir.renderer.render( envir.scene, curr_camera);
 
@@ -1531,19 +1449,12 @@ $formRes->init($sceneToLoad);
     {
         var i;
 
-        //console.log("1", envir.avatarControls.getObject().rotation._y);
-
         envir.orbitControls.update();
 
         updatePointerLockControls();
 
         transform_controls.update(); // update the axis controls based on the browse controls
         //envir.stats.update();
-
-        // light is from camera towards object
-        // envir.lightOrbit.position.copy(envir.orbitControls.object.position);
-        // envir.lightAvatar.position.copy(envir.avatarControls.getObject().position);
-        // envir.lightAvatar.position.y += 1.8;
 
         // Now update the translation and rotation input texts
         if (transform_controls.object) {

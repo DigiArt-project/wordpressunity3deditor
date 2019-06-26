@@ -232,7 +232,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                             // '<span class="megabytesAsset mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize + '</span>'+
                       '</span>';
 
-                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2" style="height: 96px; width:97%; position: relative;">' +
+                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="filebrowserIcon mdc-list-item mdc-elevation--z2">' +
                     '<a class="filebrowserahref mdc-list-item editor-asset-tile-style" href="'+ f.objPath +
                     '" title="Drag the card into the plane, (Size: '+ fileSize + ')"' +
                     'data-assetslug="'+ f.assetSlug +
