@@ -305,7 +305,9 @@ function wpunity_createJoker_activation() {
 	//$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
 
 	if (!wpunity_the_slug_exists('archaeology-joker')) {
-		$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+
+	    $archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+
 		$archaeology_tax_id = $archaeology_tax->term_id;
 
 		$game_taxonomies_arch = array(
@@ -386,7 +388,8 @@ function wpunity_createJoker_activation() {
 }
 //add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
 
-add_action( 'init', 'wpunity_createJoker_activation', 10, 2 );
+// Set to the lowest priority in order to have game taxes available when joker games are created
+add_action( 'init', 'wpunity_createJoker_activation', 100, 2 );
 
 
 //==========================================================================================================================================

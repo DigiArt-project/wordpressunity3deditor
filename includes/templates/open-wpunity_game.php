@@ -172,14 +172,19 @@ get_header();
 						$game_date = get_the_date();
 						//$game_link = get_permalink();
                         
-                        if ($project_scope==0)
-                            if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
-                                continue;
+//                        if ($project_scope==0)
+//                            if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
+//                                continue;
+//
+//                        if ($project_scope==1)
+//                            if ($game_title == 'Archaeology Joker')
+//                                continue;
+//
+                        if ($game_title == 'Archaeology Joker' || $game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
+                            continue;
                         
-                        if ($project_scope==1)
-                            if ($game_title == 'Archaeology Joker')
-                                continue;
-                    
+                            
+                            
 						$game_type_obj = wpunity_return_game_type($id);
 
                         $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );

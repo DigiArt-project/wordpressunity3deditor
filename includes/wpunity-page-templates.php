@@ -51,7 +51,7 @@ class wpUnityTemplate {
         // Add your templates to this array.
         $this->templates = array(
             '/templates/open-wpunity_game.php'     => 'WPUnity-Main',
-            '/templates/edit-wpunity_game.php'     => 'WPUnity-Edit Project',
+            '/templates/shared-wpunity_assets.php'     => 'WPUnity-List Shared Assets',
             '/templates/edit-wpunity_scene.php'     => 'WPUnity-Edit 3D Scene',
             '/templates/edit-wpunity_scene2D.php'     => 'WPUnity-Edit 2D Scene',
             '/templates/edit-wpunity_sceneExam.php'     => 'WPUnity-Edit Exam Scene',
@@ -160,11 +160,11 @@ function wpunity_create_openGamePage() {
 
 function wpunity_create_editGamePage() {
 
-    if (! wpunity_get_page_by_slug('wpunity-edit-project')) {
+    if (! wpunity_get_page_by_slug('wpunity-list-shared-assets')) {
         $new_page_id = wp_insert_post(array(
-            'post_title' => 'WPUnity-Edit Project',
+            'post_title' => 'WPUnity-List Shared Assets',
             'post_type' => 'page',
-            'post_name' => 'wpunity-edit-project',
+            'post_name' => 'wpunity-list-shared-assets',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
             'post_content' => '',
@@ -173,7 +173,7 @@ function wpunity_create_editGamePage() {
             'menu_order' => 0,
         ));
         if ($new_page_id && !is_wp_error($new_page_id)) {
-            update_post_meta($new_page_id, '_wp_page_template', '/templates/edit-wpunity_game.php');
+            update_post_meta($new_page_id, '_wp_page_template', '/templates/shared-wpunity_assets.php');
         }
 
         update_option('hclpage', $new_page_id);

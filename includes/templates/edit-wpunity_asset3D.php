@@ -57,9 +57,13 @@ $project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET[
 $asset_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
 $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['wpunity_scene'] )) : null ;
 
+
+
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
 $game_type_obj = wpunity_return_game_type($project_id);
+
+$isJokerGame = strpos($gameSlug, 'joker') !== false ;
 
 //Get 'parent-game' taxonomy with the same slug as Game
 $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
@@ -79,6 +83,7 @@ if (!isset($_GET['wpunity_asset'])) {
 		$isEditable = $_REQUEST['editable'] === 'true' ? true : false;
 	}
 }
+
 
 
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
@@ -120,13 +125,18 @@ $newAssetPage = wpunity_getEditpage('asset');
 $editscene2DPage = wpunity_getEditpage('scene2D');
 $editsceneExamPage = wpunity_getEditpage('sceneExam');
 
+
+$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
+
 $all_game_category = get_the_terms( $project_id, 'wpunity_game_type' );
+
 $game_category  = $all_game_category[0]->slug;
 
 $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//first 3D scene id
 $edit_scene_page_id = $editscenePage[0]->ID;
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
+$goBackTo_SharedAssets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id;
 
 // If form is submitted
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -140,19 +150,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     
     $assetCatIPRID = intval($_POST['term_id_ipr']); //ID of Asset Category IPR (hidden input)
     $assetCatIPRTerm = get_term_by('id', $assetCatIPRID, 'wpunity_asset3d_ipr_cat');
-    
-    
-    
-	
+
 	// NEW
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID);
+		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $assetTitleForm, $assetDescForm, $gameSlug, $assetCatIPRID);
 	}else {
 		// Edit an existing asset: Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID, $assetCatIPRID);
 	}
- 
 	
 	// Create new or updated of main fields edit successfull
 	if($asset_id != 0 || $asset_updatedConf == 1) {
@@ -206,23 +212,41 @@ get_header();
 
     <div class="PageHeaderStyle">
         <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php echo $goBackTo_MainLab_link; ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-			<?php echo $game_post->post_title; ?>
+            <a title="Back" href="<?php
+            
+                if(!$isJokerGame )
+                    echo $goBackTo_MainLab_link;
+                else
+                    echo $goBackTo_SharedAssets;
+            
+            ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>
+			<?php
+                if(!$isJokerGame )
+                    echo $game_post->post_title;
+                else
+                    echo "Shared Asset";
+			?>
         </h1>
     </div>
 
     <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php echo $game_type_obj->string; ?></span>
+        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;
+        <?php echo $game_type_obj->string; ?>
+    </span>
 
     <hr class="mdc-list-divider">
 
-    <ul class="EditPageBreadcrumb">
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
-        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
-        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
-    </ul>
+    <!-- Breadcrumps -->
+    <?php if(!$isJokerGame ){    ?>
+        <ul class="EditPageBreadcrumb">
+            <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
+            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
+            <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
+            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
+            <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
+        </ul>
+
+    <?php } ?>
 
 <?php
 $breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
