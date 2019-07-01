@@ -266,6 +266,132 @@ function wpunity_get_ftpCredentials(){
 
 }
 
+/* Get all game projects of the user */
+function wpunity_get_user_game_projects($user_id){
+    
+    $games_slugs = ['archaeology-joker','energy-joker','chemistry-joker'];
+    
+    if($user_id==0)
+        return $games_slugs;
+    
+    $custom_query_args = array(
+//        'author' => $user_id,
+        'post_type' => 'wpunity_game',
+        'posts_per_page' => -1,
+    );
+    
+    $custom_query_args['author'] = $user_id;
+    
+    $custom_query = new WP_Query($custom_query_args);
+    
+    if ($custom_query->have_posts()) :
+        while ($custom_query->have_posts()) :
+            $custom_query->the_post();
+            $game_slug = get_post()->post_name;
+            $games_slugs[] = $game_slug;
+        endwhile;
+    endif;
+    
+    wp_reset_postdata();
+    $wp_query = NULL;
+
+    return array_unique ($games_slugs);
+}
+
+function get_games_assets($games_slugs){
+    
+    $allAssets = [];
+    
+    $queryargs = array(
+        'post_type' => 'wpunity_asset3d',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'wpunity_asset3d_pgame',
+                'field' => 'slug',
+                'terms' => $games_slugs
+            )
+        )
+    );
+    
+    $custom_query = new WP_Query( $queryargs );
+    
+    if ( $custom_query->have_posts() ) :
+        while ( $custom_query->have_posts() ) :
+            
+            $custom_query->the_post();
+            $asset_id = get_the_ID();
+            $asset_name = get_the_title();
+            $asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
+            
+            // ALL DATA WE NEED
+            $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
+            $objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
+
+            $mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
+            $mtlPath = $mtlID ? wp_get_attachment_url( $mtlID ) : '';                   // MTL PATH
+
+            $difImageIDs = get_post_meta($asset_id, 'wpunity_asset3d_diffimage', false);  // Diffusion Image ID
+
+            $difImagePaths = [];
+
+            foreach ($difImageIDs as $diffid)
+                $difImagePaths[] = wp_get_attachment_url( $diffid );                // Diffusion Image PATH
+
+            $screenImageID = get_post_meta($asset_id, 'wpunity_asset3d_screenimage', true); // Screenshot Image ID
+            $screenImagePath = $screenImageID ? wp_get_attachment_url( $screenImageID ) : '';           // Screenshot Image PATH
+
+            $image1id = get_post_meta($asset_id, 'wpunity_asset3d_image1', true);
+
+            $categoryAsset = wp_get_post_terms($asset_id, 'wpunity_asset3d_cat');
+
+            $categIcon = get_term_meta($categoryAsset[0]->term_id, 'wpunity_assetcat_icon');
+
+            $isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
+            $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
+
+            $allAssets[] = [
+                'assetName'=>$asset_name,
+                'assetSlug'=>get_post()->post_name,
+                'assetid'=>$asset_id,
+                'categoryName'=>$categoryAsset[0]->name,
+                'categoryDescription'=>$categoryAsset[0]->description,
+                'categoryIcon'=>$categIcon,
+                'categoryID'=>$categoryAsset[0]->term_id,
+                'objID'=>$objID,
+                'objPath'=>$objPath,
+                'mtlID'=>$mtlID,
+                'diffImageIDs'=>$difImageIDs,
+                'diffImages'=>$difImagePaths,
+                'screenImageID'=>$screenImageID,
+                'screenImagePath'=>$screenImagePath,
+                'mtlPath'=>$mtlPath,
+                'image1id'=>$image1id,
+                'doorName_source'=>'', //$doorName_source,   the asset does not save door but the json
+                'doorName_target'=>'', //$doorName_target,
+                'sceneName_target'=>'', //$sceneName_target
+                'sceneID_target'=>'', //$sceneName_target
+                'archaeology_penalty'=>'0',
+                'hv_penalty'=>'0',
+                'natural_penalty'=>'0',
+                'isreward'=> '0',
+                'isJokerAsset'=> $isJoker,
+                'isCloned'=> $isCloned,
+                'isJoker'=> $isJoker,
+                'assetParentGame'=>$asset_pgame[0]->name
+            ];
+        
+        endwhile;
+    endif;
+    
+    // Reset postdata
+    wp_reset_postdata();
+    
+    return $allAssets;
+}
+
+
+
 //==========================================================================================================================================
 
 //TODO check them

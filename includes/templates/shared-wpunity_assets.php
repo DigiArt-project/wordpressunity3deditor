@@ -5,11 +5,20 @@ if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
-$project_id = intval( $_GET['wpunity_game'] );
-$project_id = sanitize_text_field( $project_id );
+if ($project_scope == 0) {
+//	$single_lowercase = "tour";
+//	$single_first = "Tour";
+} else if ($project_scope == 1){
+//	$single_lowercase = "lab";
+//	$single_first = "Lab";
+} else {
+//	$single_lowercase = "project";
+//	$single_first = "Project";
+}
+
+$project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
 
 if( isset($_GET['wpunity_asset']) ) {
-
 	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
 	$asset_post = get_post($asset_inserted_id);
 	if($asset_post->post_type == 'wpunity_asset3d') {
@@ -17,7 +26,6 @@ if( isset($_GET['wpunity_asset']) ) {
 		$asset_checked_id = $asset_inserted_id;
 	}
 }
-
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -29,10 +37,6 @@ echo '</script>';
 
 $isUserloggedIn = is_user_logged_in();
 $isUserAdmin = current_user_can('administrator');
-$isJokerGame = strpos($gameSlug, 'joker') !== false ;
-
-
-
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -41,32 +45,6 @@ $pluginpath = str_replace('\\','/',$pluginpath);
 $upload_dir = wp_upload_dir()['basedir'];
 $upload_dir = str_replace('\\','/',$upload_dir);
 
-// COMPILE Ajax
-$gameUnityProject_dirpath = $upload_dir . '/' . $gameSlug . 'Unity';
-
-$thepath = $pluginpath . '/js_libs/assemble_compile_commands/request_game_assepile.js';
-wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
-wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
-	array( 'ajax_url' => admin_url( 'admin-ajax.php'),
-	       'id' => $project_id,
-	       'slug' => $gameSlug,
-	       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
-	       'gameUnityProject_urlpath' => $pluginpath.'/../../uploads/'. $gameSlug . 'Unity/'
-	)
-);
-
-// DELETE SCENE AJAX
-wp_enqueue_script( 'ajax-script_deletescene', $pluginpath . '/js_libs/delete_ajaxes/delete_scene.js', array('jquery') );
-wp_localize_script( 'ajax-script_deletescene', 'my_ajax_object_deletescene',
-	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
-);
-
-//FOR SAVING extra keys
-wp_enqueue_script( 'ajax-script_savegio', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
-wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
-	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
-);
-
 // DELETE ASSET AJAX
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
@@ -74,27 +52,17 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 );
 
 
-$project_saved_keys = wpunity_getProjectKeys($project_id, $project_scope);
-
-if (!$project_saved_keys['gioID'] && $project_scope === 1) {
-	echo "<script type='text/javascript'>alert(\"APP KEY not found. Please make sure that your are logged in, and your user account has been registered correctly.\");</script>";
-}
-
-
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
-$game_type_obj = wpunity_return_game_type($project_id);
 
-$editscenePage = wpunity_getEditpage('scene');
-$editscene2DPage = wpunity_getEditpage('scene2D');
-$editsceneExamPage = wpunity_getEditpage('sceneExam');
 $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
-$allGamesPage = wpunity_getEditpage('allgames');
 
 $urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
+
+
 
 
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
@@ -161,47 +129,28 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-if ($project_scope == 0) {
-	$single_lowercase = "tour";
-	$single_first = "Tour";
-} else if ($project_scope == 1){
-	$single_lowercase = "lab";
-	$single_first = "Lab";
-} else {
-	$single_lowercase = "project";
-	$single_first = "Project";
-}
+
 
 get_header();
 
+if($isUserloggedIn){ ?>
+    <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle"
+       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
+           data-mdc-auto-init="MDCRipple">Add New Shared Asset</a>
+<?php } ?>
 
-
-    if (!$isJokerGame) {?>
-        <div class="PageHeaderStyle">
-            <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-                <a title="Back" href="<?php echo esc_url( get_permalink($allGamesPage[0]->ID)); ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i> </a>
-                <?php echo $game_post->post_title; ?>
-            </h1>
-        </div>
-        <hr class="mdc-list-divider">
-    <?php }
-    
-    if($isUserloggedIn){?>
-        <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle"
-           href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-           data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
-    <?php } ?>
 
 <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Assets</h2>
 
-<?php $assets = wpunity_getAllassets_byGameProject($gameSlug, $project_id);
+<?php
 
-//      $assets_joker_game = wpunity_getAllassets_byGameProject('archaeology-joker');
-//      $assets = array_merge($assets_game, $assets_joker_game);
+$user_id = get_current_user_id();
+$user_games_slugs = wpunity_get_user_game_projects($user_id);
+$assets = get_games_assets($user_games_slugs);
 
 // Output custom query loop
-if ( $assets ) :  ?>
-
+if ( $assets ) : ?>
+    
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
 			<?php foreach ($assets as $asset) {
@@ -238,16 +187,21 @@ if ( $assets ) :  ?>
                         </div>
 
 						<?php
-
 						//echo current_user_can('administrator');
 						// For joker assets, If the user is not administrator he should not be able to delete or edit them.
 						$shouldHideDELETE_EDIT = $asset['isJoker'] && !$isUserAdmin;
-						
-						if ($asset['isJoker']){
 						?>
                         
-                        <span class="mdc-typography--subheading1" style="background:lightblue; top:0;right:0;position:absolute">Shared</span>
+                        
+                        <?php if ($asset['isJoker']=='true') { ?>
+                            <span class="sharedAssetsIndicator mdc-typography--subheading1"
+                                  style="background: rgba(144,238,144,0.3);">Shared</span>
+                        <?php } else { ?>
+                            <span class="sharedAssetsIndicator mdc-typography--subheading1"
+                                  style="background: rgba(250,250,210,0.3);">
+                                <?php echo $asset['assetParentGame']; ?></span>
                         <?php } ?>
+                        
                         
                         
                         <section class="mdc-card__actions">

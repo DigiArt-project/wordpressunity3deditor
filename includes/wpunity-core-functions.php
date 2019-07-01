@@ -534,14 +534,28 @@ function wpunity_extrapass_profile_fields( $user ) {
 //==========================================================================================================================================
 
 // Display Login/Logout in menu
-function wpsites_loginout_menu_link( $menu, $args ) {
+function wpunity_loginout_menu_link( $menu, $args ) {
     //$loginout = wp_loginout($_SERVER['REQUEST_URI'], false );
     $loginout = '<li class="nav-menu" class="menu-item">' . wp_loginout($_SERVER['REQUEST_URI'], false ) . '</li>';
     $menu .= $loginout;
     return $menu;
 }
 
-add_filter( 'wp_nav_menu_items','wpsites_loginout_menu_link', 199, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 199, 2 );
+
+
+// Display Login/Logout in menu
+function wpunity_assets_menu_link( $menu, $args ) {
+    $loginout = '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'wpunity-list-shared-assets/' ) ).'">Assets</a>'
+        . '</li>';
+    $menu .= $loginout;
+    return $menu;
+}
+
+add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 190, 2 );
+
+
 
 
 
