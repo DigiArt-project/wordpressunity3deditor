@@ -117,6 +117,7 @@
 	z-index: 1;
 	/*margin: 6px 0 6px 0;*/
 	transition: 0.3s background-color;
+	margin-bottom:5px;
 }
 
 .FileListItemName {

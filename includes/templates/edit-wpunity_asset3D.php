@@ -210,41 +210,43 @@ if ($project_scope == 0) {
 get_header();
 ?>
 
-    <div class="PageHeaderStyle">
-        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">
-            <a title="Back" href="<?php
-            
-                if(!$isJokerGame )
-                    echo $goBackTo_MainLab_link;
-                else
-                    echo $goBackTo_SharedAssets;
-            
-            ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>
-			<?php
-                if(!$isJokerGame )
-                    echo $game_post->post_title;
-                else
-                    echo "Shared Asset";
+<!--    <div class="PageHeaderStyle">-->
+<!--        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">-->
+<!--            <a title="Back" href="-->
+<!--            -->
+<!--            --><?php
+//                if(!$isJokerGame )
+//                    echo $goBackTo_MainLab_link;
+//                else
+//                    echo $goBackTo_SharedAssets;
+//
+//            ?><!--"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>-->
+			
+            <?php
+//                if(!$isJokerGame )
+//                    echo $game_post->post_title;
+//                else
+//                    echo "Assets List";
 			?>
-        </h1>
-    </div>
+<!--        </h1>-->
+<!--    </div>-->
 
-    <span class="mdc-typography--caption">
-        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon"><?php echo $game_type_obj->icon; ?> </i>&nbsp;
-        <?php echo $game_type_obj->string; ?>
-    </span>
+<!--    <span class="mdc-typography--caption">-->
+<!--        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon">--><?php //echo $game_type_obj->icon; ?><!-- </i>&nbsp;-->
+<!--        --><?php //echo $game_type_obj->string; ?>
+<!--    </span>-->
 
-    <hr class="mdc-list-divider">
+<!--    <hr class="mdc-list-divider">-->
 
     <!-- Breadcrumps -->
     <?php if(!$isJokerGame ){    ?>
-        <ul class="EditPageBreadcrumb">
-            <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_AllProjects_link; ?>" title="Go back to Project selection">Home</a></li>
-            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-            <li><a class="mdc-typography--caption mdc-theme--primary" href="<?php echo $goBackTo_MainLab_link; ?>" title="Go back to Project editor"><?php echo $single_first; ?> Editor</a></li>
-            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>
-            <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>
-        </ul>
+<!--        <ul class="EditPageBreadcrumb">-->
+<!--            <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_AllProjects_link; ?><!--" title="Go back to Project selection">Home</a></li>-->
+<!--            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
+<!--            <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_MainLab_link; ?><!--" title="Go back to Project editor">--><?php //echo $single_first; ?><!-- Editor</a></li>-->
+<!--            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
+<!--            <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>-->
+<!--        </ul>-->
 
     <?php } ?>
 
@@ -324,7 +326,21 @@ if($asset_id != null) {
 
 ?>
     <div class="PageHeaderStyle">
-        <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light"><span><?php echo $breacrumbsTitle; ?></span></h2>
+
+        
+        <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">
+
+
+            <a title="Back" href="
+            <?php
+            if(!$isJokerGame )
+                echo $goBackTo_MainLab_link;
+            else
+                echo $goBackTo_SharedAssets;
+    
+            ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>
+            
+            <span><?php echo $breacrumbsTitle; ?></span></h2>
 		<?php if($asset_id != null ) { ?>
             <a class="mdc-button mdc-button--primary mdc-theme--primary" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 		<?php } ?>
@@ -1569,7 +1585,22 @@ if($asset_id != null) {
                 //document.getElementById("sshotFileInputContainer").appendChild(canvas)
                 //document.body.appendChild(canvas)
                 document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
-            document.getElementById("sshotFileInput").value = canvas.toDataURL("image/jpeg");
+                
+                
+                //------------ Resize for fixed size at input ------------
+                var resizedCanvas = document.createElement("canvas");
+                var resizedContext = resizedCanvas.getContext("2d");
+                
+                var context = canvas.getContext("2d");
+
+                resizedCanvas.height = "150";
+                resizedCanvas.width = "265";
+                resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+                var myResizedData = resizedCanvas.toDataURL();
+                //-----------------------------------------------------------
+               
+                
+                document.getElementById("sshotFileInput").value = myResizedData;
 
         });
         }

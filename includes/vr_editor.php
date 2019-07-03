@@ -443,7 +443,7 @@ echo '</script>';
         <i class="material-icons" style="cursor: pointer; float: right;">close</i>
     </a>
 
-    <p class="mdc-typography--title"> Marker options</p>
+<!--    <p class="mdc-typography--title"> Marker options</p>-->
 
 
     <div class="mdc-layout-grid">
@@ -496,15 +496,15 @@ echo '</script>';
             <?php } ?>
             
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                <p class="mdc-typography--title">Small Turbine</p>
+<!--                <p class="mdc-typography--title">Small Turbine</p>-->
                 <iframe style="height: 400px; width: 100%; border:none;" id="turbine1-iframe"></iframe>
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                <p class="mdc-typography--title">Normal Turbine</p>
+<!--                <p class="mdc-typography--title">Normal Turbine</p>-->
                 <iframe style="height: 400px; width: 100%; border:none;" id="turbine2-iframe"></iframe>
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                <p class="mdc-typography--title">Big Turbine</p>
+<!--                <p class="mdc-typography--title">Big Turbine</p>-->
                 <iframe style="height: 400px; width: 100%; border:none;" id="turbine3-iframe"></iframe>
             </div>
 

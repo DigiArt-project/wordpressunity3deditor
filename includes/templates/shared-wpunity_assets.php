@@ -156,7 +156,7 @@ if ( $assets ) : ?>
 			<?php foreach ($assets as $asset) {
 			    ?>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="position:relative">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
 
                     <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
                         <div class="SceneThumbnail">
@@ -175,12 +175,12 @@ if ( $assets ) : ?>
                             </a>
                         </div>
 
-                        <div class="mdc-card__primary">
-                            <h1 class="mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div class="assetsListCard mdc-card__primary">
+                            <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <a class="mdc-theme--secondary" href=""><?php echo $asset['assetName'];?></a>
                             </h1>
 
-                            <p class="mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <p class="assetsListCardCategory mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
 								<?php echo $asset['categoryName'];?>
                             </p>
 
@@ -199,15 +199,15 @@ if ( $assets ) : ?>
                         <?php } else { ?>
                             <span class="sharedAssetsIndicator mdc-typography--subheading1"
                                   style="background: rgba(250,250,210,0.3);">
-                                <?php echo $asset['assetParentGame']; ?></span>
+                                <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
                         <?php } ?>
                         
                         
                         
-                        <section class="mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
+                        <section class="assetsListCardActions mdc-card__actions">
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
                                style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
 								<?php
 								echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
 								?>
@@ -245,16 +245,21 @@ if ( $assets ) : ?>
 
         var mdc = window.mdc;
         mdc.autoInit();
-
+        
         var helpDialog = document.querySelector('#help-dialog');
-
         if (helpDialog) {
             helpDialog = new mdc.dialog.MDCDialog(helpDialog);
-
             jQuery( "#helpButton" ).click(function() {
                 helpDialog.show();
-
             });
         }
+        
+        var deleteDialog = document.querySelector('#delete-dialog');
+        if (deleteDialog) {
+            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
+            deleteDialog.focusTrap_.deactivate();
+        }
+
+
     </script>
 <?php get_footer(); ?>
