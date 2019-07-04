@@ -129,18 +129,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-
-
 get_header();
 
-if($isUserloggedIn){ ?>
-    <a class="mdc-button mdc-button--primary AddNewAssetBtnStyle"
-       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-           data-mdc-auto-init="MDCRipple">Add New Shared Asset</a>
-<?php } ?>
+?>
 
-
-<h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">Assets</h2>
+<span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-top:10px"><?php echo $full_title; ?> Assets</span>
+<a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">
+        ?
+</a>
 
 <?php
 
@@ -153,6 +149,22 @@ if ( $assets ) : ?>
     
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
+        
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
+
+                <a href="<?php
+                    if($isUserloggedIn)
+                        echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id );
+                    else
+                        echo wp_login_url(  );
+                ?>">
+                
+                <i class="addAssetCardIcon material-icons"
+                   style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
+                <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
+                </a>
+            </div>
+            
 			<?php foreach ($assets as $asset) {
 			    ?>
 

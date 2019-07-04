@@ -125,11 +125,8 @@ class wpUnityTemplate {
 
         // Return template
         return $template;
-
     }
-
 }
-
 add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
 
 //==========================================================================================================================================

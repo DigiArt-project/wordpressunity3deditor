@@ -532,6 +532,22 @@ function wpunity_extrapass_profile_fields( $user ) {
 
 //==========================================================================================================================================
 //==========================================================================================================================================
+// Assets
+function wpunity_assets_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'wpunity-list-shared-assets/' ) ).'">Assets</a>'
+        . '</li>';
+    return $menu;
+}
+add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 185, 2 );
+
+// Projects
+function wpunity_projects_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'wpunity-main/' ) ).'">Projects</a></li>';
+    return $menu;
+}
+add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 190, 2 );
 
 // Display Login/Logout in menu
 function wpunity_loginout_menu_link( $menu, $args ) {
@@ -540,22 +556,7 @@ function wpunity_loginout_menu_link( $menu, $args ) {
     $menu .= $loginout;
     return $menu;
 }
-
 add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 199, 2 );
-
-
-// Display Login/Logout in menu
-function wpunity_assets_menu_link( $menu, $args ) {
-    $loginout = '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'wpunity-list-shared-assets/' ) ).'">Assets</a>'
-        . '</li>';
-    $menu .= $loginout;
-    return $menu;
-}
-
-add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 190, 2 );
-
-
 
 
 

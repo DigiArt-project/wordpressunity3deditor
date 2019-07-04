@@ -19,6 +19,7 @@ wp_localize_script( 'ajax-script_delete_game', 'my_ajax_object_deletegame',
 
 
 
+
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	//wpunity_compile_the_game($gameID,$gameSlug);
@@ -76,22 +77,27 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 $user_id = get_current_user_id();
 
-if ($project_scope == 0) {
-	$full_title = "Virtual Tour";
-	$full_title_lowercase = "virtual tour";
-	$single = "tour";
-	$multiple = "tours";
-} else if ($project_scope == 1){
-	$full_title = "Virtual Lab";
-	$full_title_lowercase = "virtual lab";
-	$single = "lab";
-	$multiple = "labs";
-} else {
-	$full_title = "Game Project";
-	$full_title_lowercase = "game project";
-	$single = "project";
-	$multiple = "projects";
-}
+$full_title = "Projects";
+$full_title_lowercase = "projects";
+$single = "project";
+$multiple = "projects";
+
+//if ($project_scope == 0) {
+//	$full_title = "Virtual Tour";
+//	$full_title_lowercase = "virtual tour";
+//	$single = "tour";
+//	$multiple = "tours";
+//} else if ($project_scope == 1){
+//	$full_title = "Virtual Lab";
+//	$full_title_lowercase = "virtual lab";
+//	$single = "lab";
+//	$multiple = "labs";
+//} else {
+//	$full_title = "Game Project";
+//	$full_title_lowercase = "game project";
+//	$single = "project";
+//	$multiple = "projects";
+//}
 
 get_header();
 ?>
@@ -171,7 +177,7 @@ get_header();
 						$game_title = get_the_title();
 						$game_date = get_the_date();
 						//$game_link = get_permalink();
-                        
+      
 //                        if ($project_scope==0)
 //                            if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
 //                                continue;
