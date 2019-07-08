@@ -241,10 +241,11 @@ function setKeyPressControllerUnconstrained(element){
     div[0].addEventListener('keydown', function (e) {
         if (e.keyCode == 13) {
           animate();
+
+          // trigger autosave
+          triggerAutoSave();
         }
     });
-
-
 }
 
 
@@ -265,6 +266,8 @@ function setKeyPressControllerConstrained(element) {
     div[0].addEventListener('keydown', function (e) {
         if (e.keyCode == 13) {
             animate();
+            // trigger autosave
+            triggerAutoSave();
         }
     });
 
@@ -281,7 +284,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         gui_controls_funs.dg_tx = transform_controls.object.position.x;
 
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //--------- translate_y ---------------
@@ -289,7 +292,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         gui_controls_funs.dg_ty = transform_controls.object.position.y;
 
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //--------- translate_z ---------------
@@ -297,7 +300,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         gui_controls_funs.dg_tz = transform_controls.object.position.z;
 
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //--------- rotate_x ----------------------
@@ -305,21 +308,21 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         gui_controls_funs.dg_rx = transform_controls.object.rotation._x * 180/Math.PI;
 
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //---------rotate_y -------------------------------
     if (transform_controls.object.rotation._y*180/Math.PI != this.dg_ry){
         gui_controls_funs.dg_ry = transform_controls.object.rotation._y * 180/Math.PI;
 
-
+//        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //---------rotate_z -------------------------------
     if (transform_controls.object.rotation._z*180/Math.PI != gui_controls_funs.dg_rz){
         gui_controls_funs.dg_rz = transform_controls.object.rotation._z * 180/Math.PI;
 
-
+        //envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
 
     //---------scale by TransformTools-------------------------------
@@ -346,7 +349,7 @@ function updatePositionsPhpAndJavsFromControlsAxes(){
         gui_controls_funs.dg_dim_z = dims[2];
 
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
     }
     //--------- end of scale ------------------------
 }

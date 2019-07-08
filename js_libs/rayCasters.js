@@ -66,7 +66,7 @@ function onMouseDoubleClickFocus( event , objectName) {
 
     //envir.scene.getObjectByName(selected_object_name);
 
-    console.log(selected_object_name, objectName);
+    //console.log(selected_object_name, objectName);
 
     if (arguments.length === 2) {
         selectorMajor(event, envir.scene.getObjectByName(objectName) );

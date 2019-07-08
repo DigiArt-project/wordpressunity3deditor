@@ -1261,11 +1261,7 @@ echo '</script>';
         btn.toggleClass('mdc-theme--secondary-bg');
     });
 
-    // Capture save events on scene: envir.scene.dispatchEvent({type:"save"});
-    envir.scene.addEventListener("save", function(){
-        console.log("Saved time: " + Date.now());
-        jQuery('#save-scene-button').click();
-    });
+
     
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
@@ -1492,9 +1488,52 @@ $formRes->init($sceneToLoad);
         }
     }
 
+
+    var mapActions = {}; // You could also use an array
+    function saveScene(e) {
+        // console.log("Event", event.type);
+        // console.log("Saved time: " + Date.now());
+
+        console.log(e.type);
+        
+        // A change has been made and mouseup then save
+        if (e.type ==  'modificationPendingSave')
+            mapActions[e.type] = true;
+        
+        if (e.type == 'mouseup') {
+            mapActions[e.type] = true;
+
+            if (mapActions['mouseup'] && mapActions['modificationPendingSave']) {
+                jQuery('#save-scene-button').click();
+                mapActions = {};
+                return;
+            }
+        }
+        
+    }
+    
+    // trigger autosave for the automatic cases (insert, delete asset from scene)
+    function triggerAutoSave(){
+        
+        envir.scene.dispatchEvent({type:"modificationPendingSave"});
+        var clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent ("mouseup", true, true);
+        jQuery("#vr_editor_main_div canvas").get(0).dispatchEvent(clickEvent);
+    }
+    
+    
     // Select event listener
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
 
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mouseup', saveScene, false );
+
+    // Capture save events on scene: envir.scene.dispatchEvent({type:"save"});
+    envir.scene.addEventListener("modificationPendingSave", saveScene);
+
+    // To detect enter button press for saving scene
+    jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'keypress', saveScene, false );
+    
+    
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseSelect, false );
 

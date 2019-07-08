@@ -123,17 +123,11 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
             insertedObject.position.set(0, 100, 0);
         }
 
-
-
-
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
 
-
         // Auto-save
-        envir.scene.dispatchEvent({type:"save"});
-
-
+        triggerAutoSave();
     };
 
     var extraResource = {};
@@ -190,6 +184,13 @@ function deleterFomScene(nameToRemove){
     jQuery('#hierarchy-viewer').find('#' + nameToRemove).remove();
 
     transform_controls.detach();
+
+
+    triggerAutoSave();
+
+    // Only Player exists then hide delete button (single one)
+    if(envir.scene.children.length==5)
+        jQuery("#removeAssetBtn").hide();
 }
 
 

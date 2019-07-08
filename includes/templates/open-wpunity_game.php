@@ -119,13 +119,27 @@ get_header();
 
     <hr class="WhiteSpaceSeparator">
 
-<?php } else { ?>
+<?php } else {
+    
+    
+    $current_user = wp_get_current_user();
+    $login_username = $current_user->user_login;
+    
+    ?>
 
 
     
     <a href="#" class="helpButton" onclick="alert('Create a new <?php echo $full_title_lowercase; ?> or edit an existing one')">
         ?
     </a>
+
+    
+    <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
+        <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
+              <?php echo $login_username;?>
+        </a>
+    </span>
+
 
 
 <div class="mdc-layout-grid FrontPageStyle">

@@ -50,6 +50,7 @@ document.addEventListener( 'wheel', function ( event ) {
 document.addEventListener( 'keydown',
     function ( event ) {
 
+
         var objManipulationSwitch = jQuery('input:radio[name=object-manipulation-switch]');
 
         switch ( event.keyCode ) {

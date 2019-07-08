@@ -143,9 +143,10 @@ get_header();
 </a>
 
 <?php
+
 if($isUserloggedIn){ ?>
     <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
-        <a href="https://heliosvr.mklab.iti.gr/account/">
+        <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
               <?php echo $login_username;?>
         </a>
     </span>
@@ -218,7 +219,12 @@ if ( $assets ) : ?>
                             </h1>
 
                             <p class="sharedAssetsUsername mdc-typography--caption"
-                                  style="position:relative"><?php echo 'by: '.$asset['author_username']; ?></p>
+                                  style="position:relative">
+                                by:
+                                <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>" style="color:dodgerblue">
+                                    <?php echo $asset['author_username']; ?>
+                                </a>
+                            </p>
                             
                             <p class="assetsListCardCategory mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
 								<?php echo $asset['categoryName'];?>
