@@ -349,7 +349,10 @@ function get_games_assets($games_slugs){
 
             $isCloned = get_post_meta($asset_id, 'wpunity_asset3d_isCloned', true);
             $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
-
+            
+            $author_id = get_post_field ('post_author', $asset_id);
+            $author_username = get_the_author_meta( 'display_name' , $author_id );
+    
             $allAssets[] = [
                 'assetName'=>$asset_name,
                 'assetSlug'=>get_post()->post_name,
@@ -378,7 +381,9 @@ function get_games_assets($games_slugs){
                 'isJokerAsset'=> $isJoker,
                 'isCloned'=> $isCloned,
                 'isJoker'=> $isJoker,
-                'assetParentGame'=>$asset_pgame[0]->name
+                'assetParentGame'=>$asset_pgame[0]->name,
+                'author_id'=> $author_id,
+                'author_username'=> $author_username
             ];
         
         endwhile;

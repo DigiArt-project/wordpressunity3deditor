@@ -678,6 +678,8 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
+        
+        
         var optionsDialog = document.querySelector('#options-dialog');
         if (optionsDialog) {
             optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
@@ -956,7 +958,9 @@ get_header(); ?>
             jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
 
-            wpunity_deleteSceneAjax(deleteDialog.id);
+            
+            //console.log(url_scene_redirect);
+            wpunity_deleteSceneAjax(deleteDialog.id, url_scene_redirect);
         });
 
         jQuery("#deleteSceneDialogCancelBtn").click(function (e) {

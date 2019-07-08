@@ -6,14 +6,15 @@
  * wpunity_deleteSceneAjax()
  *
  */
-function wpunity_deleteSceneAjax(scene_id) {
+function wpunity_deleteSceneAjax(scene_id, url_scene_redirect) {
 
     jQuery.ajax({
         url: my_ajax_object_deletescene.ajax_url,
         type: 'POST',
         data: {
             'action': 'wpunity_delete_scene_action',
-            'scene_id': scene_id
+            'scene_id': scene_id,
+            'url_scene_redirect': url_scene_redirect
         },
         success: function (res) {
 
@@ -26,6 +27,8 @@ function wpunity_deleteSceneAjax(scene_id) {
             deleteDialog.close();
 
             jQuery( "#scene-" + scene_id).fadeOut(300, function() { jQuery(this).remove(); });
+
+            window.location.replace(url_scene_redirect);
 
         },
         error: function (xhr, ajaxOptions, thrownError) {

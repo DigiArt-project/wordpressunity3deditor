@@ -40,7 +40,7 @@ class GameClass{
 			'menu_position'     => 26,
 			'menu_icon'         =>'dashicons-media-interactive',
 			'taxonomies'        => array('wpunity_game_cat' , 'wpunity_game_type'),
-			'supports'          => array('title','editor','custom-fields'),
+			'supports'          => array('title','editor','custom-fields','revisions'),
 			'hierarchical'      => false,
 			'has_archive'       => false,
 			'capabilities' => array(

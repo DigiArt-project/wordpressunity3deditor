@@ -282,6 +282,7 @@ class vr_editor_environmentals {
         this.scene = new THREE.Scene();
         this.scene.name = "digiartScene";
 
+
         // // Add Grid
         this.gridHelper = new THREE.GridHelper(2000, 40);
         this.gridHelper.name = "myGridHelper";

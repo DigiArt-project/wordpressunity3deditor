@@ -41,7 +41,7 @@ class SceneClass{
             'menu_position' => 25,
             'menu_icon' => 'dashicons-media-default',
             'taxonomies' => array('wpunity_scene_pgame','wpunity_scene_yaml'),
-            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
+            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail','revisions'),
             'hierarchical' => false,
             'has_archive' => false,
             'capabilities' => array(

@@ -36,6 +36,10 @@ echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_ass
 echo '</script>';
 
 $isUserloggedIn = is_user_logged_in();
+$current_user = wp_get_current_user();
+
+$login_username = $current_user->user_login;
+
 $isUserAdmin = current_user_can('administrator');
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
@@ -139,8 +143,23 @@ get_header();
 </a>
 
 <?php
+if($isUserloggedIn){ ?>
+    <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
+        <a href="https://heliosvr.mklab.iti.gr/account/">
+              <?php echo $login_username;?>
+        </a>
+    </span>
+<?php } ?>
+
+
+
+
+
+
+<?php
 
 $user_id = get_current_user_id();
+
 $user_games_slugs = wpunity_get_user_game_projects($user_id);
 $assets = get_games_assets($user_games_slugs);
 
@@ -150,6 +169,7 @@ if ( $assets ) : ?>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
         
+            <!-- Card to add asset -->
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
 
                 <a href="<?php
@@ -166,32 +186,40 @@ if ( $assets ) : ?>
             </div>
             
 			<?php foreach ($assets as $asset) {
+			    
 			    ?>
 
+                
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
 
                     <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
                         <div class="SceneThumbnail">
                             <a href="#">
-
 								<?php if ($asset['screenImagePath']){ ?>
-
-                                    <img width="495" height="330" src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-
+                                    
+                                    <img src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+                                    
 								<?php } else { ?>
                                     <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                         <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                     </div>
 								<?php } ?>
-
                             </a>
+
+                            
+
+
                         </div>
 
                         <div class="assetsListCard mdc-card__primary">
-                            <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            
+                            <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <a class="mdc-theme--secondary" href=""><?php echo $asset['assetName'];?></a>
                             </h1>
 
+                            <p class="sharedAssetsUsername mdc-typography--caption"
+                                  style="position:relative"><?php echo 'by: '.$asset['author_username']; ?></p>
+                            
                             <p class="assetsListCardCategory mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
 								<?php echo $asset['categoryName'];?>
                             </p>
@@ -201,7 +229,7 @@ if ( $assets ) : ?>
 						<?php
 						//echo current_user_can('administrator');
 						// For joker assets, If the user is not administrator he should not be able to delete or edit them.
-						$shouldHideDELETE_EDIT = $asset['isJoker'] && !$isUserAdmin;
+						$canDELETE_EDIT = $isUserAdmin || ($user_id == $asset['author_id']);
 						?>
                         
                         
@@ -213,15 +241,15 @@ if ( $assets ) : ?>
                                   style="background: rgba(250,250,210,0.3);">
                                 <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
                         <?php } ?>
-                        
+
                         
                         
                         <section class="assetsListCardActions mdc-card__actions">
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
-                               style="display:<?php echo $shouldHideDELETE_EDIT?'none':'';?>">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $shouldHideDELETE_EDIT?'editable=false':'editable=true' ?>">
+                               style="display:<?php echo $canDELETE_EDIT?'':'none';?>">DELETE</a>
+                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $canDELETE_EDIT?'editable=true':'editable=false' ?>">
 								<?php
-								echo $shouldHideDELETE_EDIT ? 'VIEW':'EDIT';
+								echo $canDELETE_EDIT ? 'EDIT':'VIEW';
 								?>
                             </a>
                         </section>

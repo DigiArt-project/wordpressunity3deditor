@@ -428,6 +428,15 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     padding-right: 5px;
 }
 
+.sharedAssetsUsername {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
 .assetsListCard {
     padding:10px;
     padding-top:0px;
@@ -436,7 +445,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 
 .assetsListCardTitle{
     padding-top: 0px !important;
-    font-size:10pt;
+    font-size:12pt;
 }
 
 .assetsListCardActions{

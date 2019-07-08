@@ -45,7 +45,7 @@ class Asset3DClass{
             'menu_position' => 25,
             'menu_icon' => 'dashicons-editor-textcolor',
             'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pgame', 'wpunity_asset3d_ipr_cat'),
-            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
+            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail','revisions'),
             'hierarchical' => false,
             'has_archive' => false,
             'capabilities' => array(

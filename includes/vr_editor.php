@@ -787,7 +787,20 @@ echo '</script>';
                             //create permalink depending the scene yaml category
                             $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                             if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-                            $edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
+                            $editurl = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type;
+                            $edit_page_link = esc_url( editurl );
+
+                            if($default_scene) {
+                                //echo urlencode($edit_page_link);
+    
+                                
+                                
+                                echo '<script>';
+                                echo 'var url_scene_redirect="'.$editurl.'";';
+                                echo '</script>';
+                            }
+                            
+                            
                             ?>
                             <div class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
                                 <a href="<?php echo $edit_page_link; ?>">
@@ -800,7 +813,10 @@ echo '</script>';
                             </div>
                         </div>
 
-                        <section class="cardTitleDeleteWrapper" style="">
+                        <section class="cardTitleDeleteWrapper"
+                                 style="<?php
+                                        if($scene_id==$_GET['wpunity_scene']){?>
+                                                background:lightgreen; <?php } ?>">
                             
                                     <span id="<?php echo $scene_id;?>-title" class="cardTitle mdc-card__title mdc-typography--title"
                                            title="<?php echo $scene_title; ?>">
@@ -1245,6 +1261,12 @@ echo '</script>';
         btn.toggleClass('mdc-theme--secondary-bg');
     });
 
+    // Capture save events on scene: envir.scene.dispatchEvent({type:"save"});
+    envir.scene.addEventListener("save", function(){
+        console.log("Saved time: " + Date.now());
+        jQuery('#save-scene-button').click();
+    });
+    
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
 
@@ -1253,8 +1275,6 @@ echo '</script>';
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
-
-        console.log("is_scene_icon_manually_selected2: " + is_scene_icon_manually_selected);
 
         if(!is_scene_icon_manually_selected)
             takeScreenshot();

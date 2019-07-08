@@ -602,6 +602,7 @@ button, html [type="button"], [type="reset"], [type="submit"] {
 .cardTitleDeleteWrapper {
     width:100%;
     max-height:30px;
+    background:white;
  }
 
 .cardTitle{
