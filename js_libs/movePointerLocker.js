@@ -85,6 +85,8 @@ function initPointerLock() {
 function firstPersonViewWithoutLock(){
 
     if (!avatarControlsEnabled) {
+
+        // ----------- First person view ----------------------
         avatarControlsEnabled = true;
 
         // Mouse controls Avatar viewing
@@ -99,9 +101,14 @@ function firstPersonViewWithoutLock(){
         envir.avatarControls.getObject().children[0].position = envir.orbitControls.target;
         envir.avatarControls.getObject().children[1].position = envir.orbitControls.target;
 
-        isComposerOn = false;
-
         transform_controls.visible = false;
+
+        // Glow effect change camera
+        envir.composer = [];
+        envir.setComposer();
+
+        isComposerOn = true;
+
         // if in 3rd person view then show the cameraobject
         envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
     }else{
@@ -124,6 +131,10 @@ function firstPersonViewWithoutLock(){
         envir.scene.getObjectByName("SteveOld").visible = false;
         envir.scene.getObjectByName("Steve").visible = true;
 
+
+        envir.composer = [];
+        envir.setComposer();
+
         isComposerOn = true;
 
         transform_controls.visible  = true;
@@ -131,7 +142,9 @@ function firstPersonViewWithoutLock(){
 
         // ToDo: Zoom
         envir.orbitControls.reset();
+
         findSceneDimensions();
         envir.updateCameraGivenSceneLimits();
+
     }
 }

@@ -59,11 +59,13 @@
 
 #save-scene-button {
     position: absolute;
-    top: 5px;
-    right: 100px;
+    top: 3px;
+    right: 20%;
     height: 20px;
     padding: 0px;
     line-height: 1.4em;
+    color: white;
+    font-size: medium;
 }
 
 #compileGameBtn {

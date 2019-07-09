@@ -15,7 +15,7 @@ function wpunity_saveSceneAjax() {
         type: 'POST',
         data: postdata,
         success: function (data) {
-            jQuery('#save-scene-button').html("Save").removeClass("LinkDisabled");
+            jQuery('#save-scene-button').html("All changes saved").removeClass("LinkDisabled");
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log("Ajax Save Scene: ERROR: 156" + thrownError);

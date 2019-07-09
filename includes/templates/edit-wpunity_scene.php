@@ -351,9 +351,9 @@ get_header(); ?>
 
 <!--            <div class="SaveSceneBtnStyle">-->
 <!--                <div id="saveSceneBtn" class="SaveBtnContainerStyle">-->
-                    <a data-mdc-auto-init="MDCRipple" title="Save all changes you made to the current scene"
+                    <a title="Save all changes you made to the current scene"
                        id="save-scene-button"
-                       class="mdc-button mdc-button--raised mdc-theme--text-primary-on-dark mdc-theme--secondary-bg">Save</a>
+                       class="">All changes saved</a>
 <!--                </div>-->
 <!--            </div>-->
             

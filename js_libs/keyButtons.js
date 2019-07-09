@@ -80,6 +80,8 @@ document.addEventListener( 'keydown',
 // KEY UP
 document.addEventListener( 'keyup',
     function ( event ) {
+
+        triggerAutoSave();
         switch( event.keyCode ) {
             case 38: // up
             case 87: moveForward = false; break; // w

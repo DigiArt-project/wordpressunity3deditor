@@ -43,6 +43,7 @@ class vr_editor_environmentals {
         this.setSky();
         this.setSunSphere();
 
+        // This is to make selected items glow
         this.setComposer();
 
         // this.setTerrain(); // test after 74
@@ -85,9 +86,11 @@ class vr_editor_environmentals {
 
          //---------------------------------------------------------------
 
-        this.composer.renderer.setSize( this.SCREEN_WIDTH, this.SCREEN_HEIGHT );
-        this.composer.renderer.setPixelRatio(this.ASPECT);
-        this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT , 1 / this.SCREEN_HEIGHT / this.ASPECT);
+
+            this.composer.renderer.setSize(this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+            this.composer.renderer.setPixelRatio(this.ASPECT);
+            this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT, 1 / this.SCREEN_HEIGHT / this.ASPECT);
+
     }
 
     makeFullScreen() {
@@ -386,14 +389,20 @@ class vr_editor_environmentals {
         this.container_3D_all.appendChild(this.labelRenderer.domElement);
     }
 
+    // Glowing effect on Orbit mode
     setComposer(){
+
+        // Get current camera
+        var curr_camera_input = avatarControlsEnabled ? (this.thirdPersonView ? this.cameraThirdPerson : this.cameraAvatar) : this.cameraOrbit;
         this.composer = new THREE.EffectComposer( this.renderer );
 
-        this.renderPass = new THREE.RenderPass( this.scene, this.cameraOrbit );
-        this.composer.addPass( this.renderPass );
+        // Render Pass
+        this.renderPass = new THREE.RenderPass( this.scene, curr_camera_input );
 
+        // Outline Pass
+        this.outlinePass = [];
         this.outlinePass = new THREE.OutlinePass(
-            new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, this.cameraOrbit);
+            new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, curr_camera_input);
 
         this.outlinePass.visibleEdgeColor = new THREE.Color( 0x00aa00 );
 
@@ -401,14 +410,23 @@ class vr_editor_environmentals {
         this.outlinePass.edgeStrength = 5;
         this.outlinePass.edgeThickness = 2;
 
-        this.composer.addPass( this.outlinePass );
-
+        // FX Pass
+        this.effectFXAA = [];
         this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-        this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH ,
-                                                          1 / this.SCREEN_HEIGHT );
+        this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH, 1 / this.SCREEN_HEIGHT );
         this.effectFXAA.renderToScreen = true;
+
+        this.turboResize();
+
+        // Add to composer all passes
+        this.composer.addPass( this.renderPass );
+        this.composer.addPass( this.outlinePass );
         this.composer.addPass( this.effectFXAA );
+
+        this.turboResize();
     }
+
+
 
     addInHierarchyViewer(obj){
 
@@ -442,7 +460,6 @@ class vr_editor_environmentals {
                 deleteButtonHTML +
             '</li>'
         );
-
     }
 
     setBackgroundColorHierarchyViewer(name){
@@ -454,7 +471,6 @@ class vr_editor_environmentals {
         );
 
         jQuery('#hierarchy-viewer').find('#' + name )[0].style.background = '#a4addf';
-
     }
 
 

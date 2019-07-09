@@ -271,17 +271,10 @@ echo '</script>';
         <!--  Dimensionality 2D 3D toggle -->
         <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
 
-    <!-- The button to start walking in the 3d environment -->
-<!--        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">-->
-<!--        <a type="button" id="firstPersonBlockerBtn" class="VrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">-->
-<!--            VIEW-->
-<!--        </a>-->
-<!--        </div>-->
-
-
         <!-- The button to start walking in the 3d environment -->
         <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
-            <a type="button" id="firstPersonBlockerBtn" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to First Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
+            <a type="button" id="firstPersonBlockerBtn" data-toggle='on' class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+               title="Change camera to First Person View - Move: W,A,S,D,Q,E,R,F keys" data-mdc-auto-init="MDCRipple">
                 VIEW
             </a>
         </div>
@@ -1157,8 +1150,6 @@ echo '</script>';
 
         findSceneDimensions();
         envir.updateCameraGivenSceneLimits();
-
-        
         
         envir.orbitControls.object.updateProjectionMatrix();
         jQuery("#dim-change-btn").toggleClass('mdc-theme--secondary-bg');
@@ -1172,13 +1163,14 @@ echo '</script>';
 
         //firstPersonBlockerBtn.style.display = 'none';
 
-        var element = document.body;
+        //var element = document.body;
 
         // Ask the browser to lock the pointer
         // element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
         // element.requestPointerLock();
 
         firstPersonViewWithoutLock();
+        jQuery("#firstPersonBlockerBtn").toggleClass('mdc-theme--secondary-bg');
 
     }, false);
 
@@ -1219,6 +1211,8 @@ echo '</script>';
 
         var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
         btnFirst.click();
+        jQuery("#firstPersonBlockerBtn").toggleClass('mdc-theme--secondary-bg');
+        jQuery("#thirdPersonBlockerBtn").toggleClass('mdc-theme--secondary-bg');
 
     });
 
@@ -1494,8 +1488,6 @@ $formRes->init($sceneToLoad);
         // console.log("Event", event.type);
         // console.log("Saved time: " + Date.now());
 
-        console.log(e.type);
-        
         // A change has been made and mouseup then save
         if (e.type ==  'modificationPendingSave')
             mapActions[e.type] = true;
