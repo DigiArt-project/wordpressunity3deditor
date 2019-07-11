@@ -1264,6 +1264,7 @@ echo '</script>';
 
         // Export using a custom variant of the old deprecated class SceneExporter
         var exporter = new THREE.SceneExporter();
+        
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
 
         if(!is_scene_icon_manually_selected)

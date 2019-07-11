@@ -7,7 +7,7 @@ function wpunity_saveSceneAjax() {
 //        'available_molecules': document.getElementById("availableMoleculesInput").value,
         'scene_screenshot': document.getElementById("wpunity_scene_sshot").src,
         'scene_title':   document.getElementById("sceneTitleInput").value,
-        'scene_description':   document.getElementById("sceneDescriptionInput").value
+        'scene_caption':   document.getElementById("sceneCaptionInput").value
     };
 
     jQuery.ajax({
@@ -41,7 +41,7 @@ function wpunity_saveGIOApKeyAjax() {
             'project_gioApKey': document.getElementById("app-key").value,
             //'scene_screenshot': document.getElementById("wpunity_scene_sshot").value,
             //'scene_title':   document.getElementById("sceneTitleInput").value,
-            //'scene_description':   document.getElementById("sceneDescriptionInput").value
+            //'scene_description':   document.getElementById("sceneCaptionInput").value
         },
         success: function (data) {
             console.log("Ajax Save GIO:" + data);
@@ -72,7 +72,7 @@ function wpunity_saveExpIDAjax() {
             'project_expID': document.getElementById("exp-id").value,
             //'scene_screenshot': document.getElementById("wpunity_scene_sshot").value,
             //'scene_title':   document.getElementById("sceneTitleInput").value,
-            //'scene_description':   document.getElementById("sceneDescriptionInput").value
+            //'scene_description':   document.getElementById("sceneCaptionInput").value
         },
         success: function (data) {
             console.log("Ajax Save ExpID:" + data);

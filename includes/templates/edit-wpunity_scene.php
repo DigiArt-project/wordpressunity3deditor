@@ -165,14 +165,39 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$default_json = '';
 	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
-	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$game_type_chosen_slug = 'archaeology_games';$default_json = wpunity_getDefaultJSONscene('archaeology');}
-    elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$game_type_chosen_slug = 'energy_games';$default_json = wpunity_getDefaultJSONscene('energy');}
-    elseif($thegameType[0]->slug == 'chemistry_games'){
+	if($thegameType[0]->slug == 'archaeology_games'){
+	    
+	    $newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');
+	    
+	    $game_type_chosen_slug = 'archaeology_games';
+	    $default_json = wpunity_getDefaultJSONscene('archaeology');
+	    
+	} elseif($thegameType[0]->slug == 'energy_games'){
+	    
+	    $newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');
+	    $game_type_chosen_slug = 'energy_games';
+	    $default_json = wpunity_getDefaultJSONscene('energy');
+	
+	}elseif($thegameType[0]->slug == 'chemistry_games'){
+	 
 		$game_type_chosen_slug = 'chemistry_games';
+		
 		$default_json = wpunity_getDefaultJSONscene('chemistry');
-		if($newSceneType == 'lab'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');}
-        elseif($newSceneType == '2d'){$newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam2d';}
-        elseif($newSceneType == '3d'){$newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');$sceneMetaType = 'sceneExam3d';}
+		
+		if($newSceneType == 'lab'){
+		
+		    $newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');
+		
+		} elseif($newSceneType == '2d'){
+		
+		    $newscene_yaml_tax = get_term_by('slug', 'exam2d-chem-yaml', 'wpunity_scene_yaml');
+		    $sceneMetaType = 'sceneExam2d';
+		
+		} elseif($newSceneType == '3d'){
+		
+		    $newscene_yaml_tax = get_term_by('slug', 'exam3d-chem-yaml', 'wpunity_scene_yaml');
+		    $sceneMetaType = 'sceneExam3d';
+		}
 	}
 
 	$scene_taxonomies = array(
@@ -186,7 +211,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
-		'wpunity_scene_json_input' => $default_json,
+        'wpunity_scene_caption' => esc_attr(strip_tags($_POST['scene-description']))
 	);
 
 	//REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
@@ -202,7 +227,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_information = array(
 		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
-		'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
+		'post_content' => $default_json,
 		'post_type' => 'wpunity_scene',
 		'post_status' => 'publish',
 		'tax_input' => $scene_taxonomies,
@@ -377,7 +402,7 @@ get_header(); ?>
                         <div id="scene-vr-editor">
 							<?php
 
-							$meta_json = get_post_meta($current_scene_id, 'wpunity_scene_json_input', true);
+							$meta_json = get_post($current_scene_id)->post_content;
 
 							// Do not put esc_attr, crashes the universe in 3D
 							if ( $game_type_obj->string === "Energy" ) {
@@ -432,9 +457,10 @@ get_header(); ?>
                                             <h2 class="mdc-typography--title">Description</h2>
 
                                             <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                                            <textarea id="sceneDescriptionInput" name="sceneDescriptionInput" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                            <textarea id="sceneCaptionInput" name="sceneCaptionInput" class="mdc-textfield__input"
+                                                      rows="10" cols="40" style="box-shadow: none; "
                                                       type="text" form="3dAssetForm"><?php echo $scene_post->post_content; ?></textarea>
-                                                <label for="sceneDescriptionInput" class="mdc-textfield__label" style="background: none;">Add a description</label>
+                                                <label for="sceneCaptionInput" class="mdc-textfield__label" style="background: none;">Add a description</label>
 
                                             </div>
 

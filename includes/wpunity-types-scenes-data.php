@@ -15,6 +15,13 @@ $wpunity_databox4 = array(
     'priority' => 'high',
     'fields' => array(
         array(
+            'name' => 'Scene caption',
+            'desc' => 'Scene caption',
+            'id' => $wpunity_prefix . 'caption',
+            'type' => 'textarea',
+            'std' => ''
+        ),
+        array(
             'name' => 'Scene Json',
             'desc' => 'Scene Json Input',
             'id' => $wpunity_prefix . 'json_input',

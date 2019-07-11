@@ -56,6 +56,7 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 $project_id = isset($_GET['wpunity_game']) ? sanitize_text_field( intval( $_GET['wpunity_game'] )) : null ;
 $asset_id = isset($_GET['wpunity_asset']) ? sanitize_text_field( intval( $_GET['wpunity_asset'] )) : null ;
 $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['wpunity_scene'] )) : null ;
+//$previous_page = isset($_GET['previous_page']) ? sanitize_text_field( intval( $_GET['previous_page'] )) : null ;
 
 
 
@@ -74,15 +75,32 @@ $isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
 
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
-if (!isset($_GET['wpunity_asset'])) {
-	$isEditable = true;
-}else {
-	if (!isset($_REQUEST['editable'])) {
-		$isEditable = true;
-	}else {
-		$isEditable = $_REQUEST['editable'] === 'true' ? true : false;
-	}
+$isUserloggedIn = is_user_logged_in();
+$current_user = wp_get_current_user();
+$login_username = $current_user->user_login;
+$isUserAdmin = current_user_can('administrator');
+
+$isEditable = false;
+
+if ($isUserloggedIn) {
+    $user_id = get_current_user_id();
+    
+    if (!isset($_GET['wpunity_asset'])) {
+        // NEW ASSET
+        $isEditable = true;
+    } else if ($isUserAdmin || ($user_id == get_post_field ('post_author', $asset_id))){
+        // OLD ASSET
+        $isEditable = true;
+    }
+    
 }
+
+//	if (!isset($_REQUEST['editable'])) {
+//		$isEditable = true;
+//	}else {
+//		$isEditable = $_REQUEST['editable'] === 'true' ? true : false;
+//	}
+
 
 
 
@@ -333,10 +351,11 @@ if($asset_id != null) {
 
             <a title="Back" href="
             <?php
-            if(!$isJokerGame )
-                echo $goBackTo_MainLab_link;
-            else
-                echo $goBackTo_SharedAssets;
+            echo $_SERVER['HTTP_REFERER'];
+//            if(!$isJokerGame )
+//                echo $goBackTo_MainLab_link;
+//            else
+//                echo $goBackTo_SharedAssets;
     
             ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>
             
@@ -1163,7 +1182,7 @@ if($asset_id != null) {
         </button>
 
 
-		<?php echo $isEditable?'':'*You can not update a shared asset'?>
+		<?php echo $isEditable?'':'*You do not have persmission to edit this asset'?>
 
     </form>
 

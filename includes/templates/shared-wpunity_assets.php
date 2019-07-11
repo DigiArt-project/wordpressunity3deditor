@@ -6,26 +6,26 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 if ($project_scope == 0) {
-//	$single_lowercase = "tour";
-//	$single_first = "Tour";
+    //	$single_lowercase = "tour";
+    //	$single_first = "Tour";
 } else if ($project_scope == 1){
-//	$single_lowercase = "lab";
-//	$single_first = "Lab";
+    //	$single_lowercase = "lab";
+    //	$single_first = "Lab";
 } else {
-//	$single_lowercase = "project";
-//	$single_first = "Project";
+    //	$single_lowercase = "project";
+    //	$single_first = "Project";
 }
 
 $project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
 
-if( isset($_GET['wpunity_asset']) ) {
-	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-	$asset_post = get_post($asset_inserted_id);
-	if($asset_post->post_type == 'wpunity_asset3d') {
-		$create_new = 0;
-		$asset_checked_id = $asset_inserted_id;
-	}
-}
+//if( isset($_GET['wpunity_asset']) ) {
+//	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
+//	$asset_post = get_post($asset_inserted_id);
+//	if($asset_post->post_type == 'wpunity_asset3d') {
+//		$create_new = 0;
+//		$asset_checked_id = $asset_inserted_id;
+//	}
+//}
 
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
@@ -37,7 +37,6 @@ echo '</script>';
 
 $isUserloggedIn = is_user_logged_in();
 $current_user = wp_get_current_user();
-
 $login_username = $current_user->user_login;
 
 $isUserAdmin = current_user_can('administrator');
@@ -66,73 +65,6 @@ $newAssetPage = wpunity_getEditpage('asset');
 
 $urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
 
-
-
-
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-
-	$credentials_yaml_tax = get_term_by('slug', 'credentials-yaml', 'wpunity_scene_yaml');
-	$menu_yaml_tax = get_term_by('slug', 'mainmenu-yaml', 'wpunity_scene_yaml');
-	$options_yaml_tax = get_term_by('slug', 'options-yaml', 'wpunity_scene_yaml');
-
-    $default_json = '';
-	$thegameType = wp_get_post_terms($project_id, 'wpunity_game_type');
-	if($thegameType[0]->slug == 'archaeology_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-yaml', 'wpunity_scene_yaml');$default_json = wpunity_getDefaultJSONscene('archaeology');}
-    elseif($thegameType[0]->slug == 'energy_games'){$newscene_yaml_tax = get_term_by('slug', 'educational-energy', 'wpunity_scene_yaml');$default_json = wpunity_getDefaultJSONscene('energy');}
-    elseif($thegameType[0]->slug == 'chemistry_games'){$newscene_yaml_tax = get_term_by('slug', 'wonderaround-lab-yaml', 'wpunity_scene_yaml');$default_json = wpunity_getDefaultJSONscene('chemistry');}
-
-	$scene_taxonomies = array(
-		'wpunity_scene_pgame' => array(
-			$allScenePGameID,
-		),
-		'wpunity_scene_yaml' => array(
-			$newscene_yaml_tax->term_id,
-		)
-	);
-
-    $sceneMetaType = 'scene';//default 'scene' MetaType (3js)
-
-	$scene_metas = array(
-		'wpunity_scene_default' => 0,
-		'wpunity_scene_json_input' => $default_json,
-	);
-
-    //REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
-    $isRegional = 0;//default value
-    if($thegameType[0]->slug == 'energy_games'){
-        if($_POST['regionalSceneCheckbox'] == 'on'){$isRegional = 1;}
-        $scene_metas['wpunity_isRegional']= $isRegional;
-        $scene_metas['wpunity_scene_environment'] = 'fields';
-    }
-
-    //SCENE TYPE FOR CHEMISTRY GAMES (Lab = scene)
-    if($thegameType[0]->slug == 'chemistry_games'){
-        if($_POST['sceneTypeRadio'] == '2d'){$sceneMetaType = 'sceneExam2d';}
-        elseif($_POST['sceneTypeRadio'] == '3d'){$sceneMetaType = 'sceneExam3d';}
-    }
-
-    //Add the final MetaType of the Scene
-    $scene_metas['wpunity_scene_metatype']= $sceneMetaType;
-
-	$scene_information = array(
-		'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
-		'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
-		'post_type' => 'wpunity_scene',
-		'post_status' => 'publish',
-		'tax_input' => $scene_taxonomies,
-		'meta_input' => $scene_metas,
-	);
-
-	$scene_id = wp_insert_post($scene_information);
-
-	if($scene_id){
-		$newpost = get_post($scene_id);
-
-		wp_redirect(esc_url( get_permalink($editgamePage[0]->ID) . $parameter_pass . $project_id ));
-		exit;
-	}
-}
-
 get_header();
 
 ?>
@@ -144,6 +76,7 @@ get_header();
 
 <?php
 
+// Display Login name at right
 if($isUserloggedIn){ ?>
     <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
         <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
@@ -153,18 +86,16 @@ if($isUserloggedIn){ ?>
 <?php } ?>
 
 
-
-
-
-
 <?php
+
+
 
 $user_id = get_current_user_id();
 
 $user_games_slugs = wpunity_get_user_game_projects($user_id);
 $assets = get_games_assets($user_games_slugs);
 
-// Output custom query loop
+// Display assets Grid
 if ( $assets ) : ?>
     
     <div class="mdc-layout-grid">
@@ -186,16 +117,15 @@ if ( $assets ) : ?>
                 </a>
             </div>
             
-			<?php foreach ($assets as $asset) {
-			    
-			    ?>
+			<?php foreach ($assets as $asset) {    ?>
 
-                
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
 
                     <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
                         <div class="SceneThumbnail">
-                            <a href="#">
+                            <a href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
+                                '&wpunity_scene=&wpunity_asset='.$asset['assetid'];
+                            ?>">
 								<?php if ($asset['screenImagePath']){ ?>
                                     
                                     <img src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
@@ -215,7 +145,11 @@ if ( $assets ) : ?>
                         <div class="assetsListCard mdc-card__primary">
                             
                             <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <a class="mdc-theme--secondary" href=""><?php echo $asset['assetName'];?></a>
+                                <a class="mdc-theme--secondary"
+                                   href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
+                                   '&wpunity_scene=&wpunity_asset='.$asset['assetid'];
+                                   ?>"><?php echo $asset['assetName'];?></a>
+
                             </h1>
 
                             <p class="sharedAssetsUsername mdc-typography--caption"
@@ -267,7 +201,10 @@ if ( $assets ) : ?>
         </div>
     </div>
 
-<?php else : ?>
+<?php else :
+    
+    // No Assets Empty Repo
+    ?>
 
     <hr class="WhiteSpaceSeparator">
 
@@ -284,9 +221,6 @@ if ( $assets ) : ?>
 
 
 <?php endif; ?>
-
-
-
     <script type="text/javascript">
 
         var mdc = window.mdc;
@@ -305,7 +239,5 @@ if ( $assets ) : ?>
             deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
             deleteDialog.focusTrap_.deactivate();
         }
-
-
     </script>
 <?php get_footer(); ?>

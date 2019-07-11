@@ -211,7 +211,7 @@ function wpunity_delete_asset3d_from_games_and_scenes($asset_id, $gameSlug){
         while ( $custom_query2->have_posts() ) :
             $custom_query2->the_post();
             $scene_id = get_the_ID();
-            $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
+            $scene_json = get_post($scene_id)->post_content;
 
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);
@@ -227,8 +227,9 @@ function wpunity_delete_asset3d_from_games_and_scenes($asset_id, $gameSlug){
             }
 
             $tempScenearr = json_encode($tempScenearr, JSON_PRETTY_PRINT);
+    
+            wp_update_post(array('ID' => $scene_id, 'post_content' => $tempScenearr));
 
-            update_post_meta($scene_id,'wpunity_scene_json_input',$tempScenearr );
         endwhile;
     endif;
 
@@ -280,7 +281,7 @@ function wpunity_fetch_assetids_in_scenes($gameSlug){
 
             $custom_query2->the_post();
             $scene_id = get_the_ID();
-            $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input', true);
+            $scene_json = get_post($scene_id)->post_content;
 
             $jsonScene = htmlspecialchars_decode ( $scene_json );
             $sceneJsonARR = json_decode($jsonScene, TRUE);

@@ -128,7 +128,7 @@ function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_
 }
 
 function wpunity_addAssets_wonderaround_unity($scene_id){
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content;
 
     $jsonScene = htmlspecialchars_decode ( $scene_json );
     $sceneJsonARR = json_decode($jsonScene, TRUE);
@@ -365,7 +365,7 @@ function wpunity_addAssets_wonderaround_unity($scene_id){
 
 function wpunity_replace_wonderaround_unity($term_meta_wonder_around, $scene_id){
 
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content;
 
     $jsonScene = htmlspecialchars_decode ( $scene_json );
     $sceneJsonARR = json_decode($jsonScene, TRUE);

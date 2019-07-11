@@ -539,7 +539,7 @@ function wpunity_assets_menu_link( $menu, $args ) {
         . '</li>';
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 185, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 1, 2 );
 
 // Projects
 function wpunity_projects_menu_link( $menu, $args ) {
@@ -547,7 +547,24 @@ function wpunity_projects_menu_link( $menu, $args ) {
         '<a href="'.get_permalink( get_page_by_path( 'wpunity-main/' ) ).'">Projects</a></li>';
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 190, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 2, 2 );
+
+
+
+// Display Members as menu item (Ultimatemember plugin)
+function wpunity_members_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'members/' ) ).'">Members</a></li>';
+    return $menu;
+}
+
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+if ( is_plugin_active( 'ultimate-member/ultimate-member.php' ) ) {
+    add_filter( 'wp_nav_menu_items','wpunity_members_menu_link', 3, 2 );
+}
+
+
+
 
 // Display Login/Logout in menu
 function wpunity_loginout_menu_link( $menu, $args ) {
@@ -556,7 +573,7 @@ function wpunity_loginout_menu_link( $menu, $args ) {
     $menu .= $loginout;
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 199, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 3, 2 );
 
 
 
@@ -977,7 +994,7 @@ Characteristics :
 		// Create First Scene Data
 		$firstSceneData = array(
 			'post_title' => $firstSceneTitle,
-			'post_content' => 'Auto-created scene',
+			'post_content' => $default_json,
 			'post_name' => $firstSceneSlug,
 			'post_type' => 'wpunity_scene',
 			'post_status' => 'publish',
@@ -987,7 +1004,7 @@ Characteristics :
 			), 'meta_input' => array(
 				'wpunity_scene_default' => 1,
 				'wpunity_scene_metatype' => 'scene',
-				'wpunity_scene_json_input' => $default_json,
+				'wpunity_scene_caption' => 'Auto-created scene',
 				'wpunity_isRegional' => 0,
 			),
 		);
@@ -1382,8 +1399,10 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 			$scene_id = get_the_ID();
 			$sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
 			$sceneSlug = get_post()->post_name;
-
-			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+            
+            $scene_json = get_post()->post_content;
+            
+			//$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
 			$sceneJsonARR = json_decode($jsonScene, TRUE);
 
@@ -1442,8 +1461,10 @@ function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
 			$scene_id = get_the_ID();
 			$sceneTitle = get_the_title();  // get_post($scene_id)->post_title;
 			$sceneSlug = get_post()->post_name;
-
-			$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+            
+            $scene_json = get_post()->post_content;
+			
+			//$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
 			$jsonScene = htmlspecialchars_decode($scene_json);
 
 			if (trim($jsonScene)==='')
@@ -2575,8 +2596,6 @@ function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scen
 
 function wpunity_save_scene_async_action_callback()
 {
-	// put meta in scene. True, false, or id of meta if does not exist
-	$res = update_post_meta( $_POST['scene_id'], 'wpunity_scene_json_input', wp_unslash($_POST['scene_json']) );
 	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	if (isset($_POST['scene_screenshot']))
@@ -2585,15 +2604,17 @@ function wpunity_save_scene_async_action_callback()
 
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
 
+	
 	$scene_new_info = array(
 		'ID' => $_POST['scene_id'],
 		'post_title' => $_POST['scene_title'],
-		'post_content' => $_POST['scene_description']
+		'post_content' => wp_unslash($_POST['scene_json'])
 	);
 
-	wp_update_post($scene_new_info);
+	$res = wp_update_post($scene_new_info);
+	update_post_meta($_POST['scene_id'], 'wpunity_scene_caption', $_POST['scene_caption']);
 
-	echo $res ? 'true' : 'false';
+	echo $res!=0 ? 'true' : 'false';
 	wp_die();
 }
 
