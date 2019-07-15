@@ -18,17 +18,76 @@ function wpunity_saveSceneAjax() {
             jQuery('#save-scene-button').html("All changes saved").removeClass("LinkDisabled");
         },
         error: function (xhr, ajaxOptions, thrownError) {
+
             console.log("Ajax Save Scene: ERROR: 156" + thrownError);
 
             jQuery('#save-scene-button').html("Save scene").removeClass("LinkDisabled");
 
-            document.getElementById('save-scene-button').style.backgroundColor = '#FF0000';
+            //document.getElementById('save-scene-button').style.backgroundColor = '#FF0000';
 
-            alert("Ajax Save Scene: ERROR: 156" + thrownError);
+            //alert("Ajax Save Scene: ERROR: 156" + thrownError);
         }
     });
 
 }
+
+
+
+
+
+function wpunity_undoSceneAjax(UPLOAD_DIR, post_revision_no_in) {
+
+    var postdata = {
+        'action': 'wpunity_undo_scene_async_action',
+        'scene_id': isAdmin == "back" ? phpmyvarC.scene_id : my_ajax_object_savescene.scene_id,
+        'UPLOAD_DIR': UPLOAD_DIR,
+        'post_revision_no': post_revision_no_in
+    };
+
+    jQuery.ajax({
+        url: isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_savescene.ajax_url,
+        type: 'POST',
+        data: postdata,
+        success: function (scene_json) {
+            jQuery('#undo-scene-button').html("<i class='material-icons'>undo</i>").removeClass("LinkDisabled");
+            jQuery('#redo-scene-button').html("<i class='material-icons'>redo</i>").removeClass("LinkDisabled");
+
+                parseJSON_LoadScene(scene_json);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+            console.log("Ajax Undo Scene: ERROR: 158" + thrownError);
+
+            jQuery('#undo-scene-button').html("<i class='material-icons'>undo</i>").removeClass("LinkDisabled");
+            jQuery('#redo-scene-button').html("<i class='material-icons'>redo</i>").removeClass("LinkDisabled");
+
+            //alert("Ajax Save Scene: ERROR: 156" + thrownError);
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function wpunity_saveGIOApKeyAjax() {
 

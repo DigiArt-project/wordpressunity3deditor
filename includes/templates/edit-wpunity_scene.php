@@ -156,6 +156,8 @@ if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verif
 	exit;
 }
 
+
+// NEW SCENE
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	$newSceneType = $_POST['sceneTypeRadio'];
@@ -211,7 +213,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$scene_metas = array(
 		'wpunity_scene_default' => 0,
-        'wpunity_scene_caption' => esc_attr(strip_tags($_POST['scene-description']))
+        'wpunity_scene_caption' => esc_attr(strip_tags($_POST['scene-caption']))
 	);
 
 	//REGIONAL SCENE EXTRA TYPE FOR ENERGY GAMES
@@ -297,8 +299,6 @@ get_header(); ?>
 <!--    </ul>-->
 
     <div class="mdc-toolbar" style="display:block;position:fixed;z-index:1000;">
-
-        
         
         <div class="" style="width:90%">
             <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start"
@@ -372,13 +372,13 @@ get_header(); ?>
 <!--                </nav>-->
 <!--            </div>-->
 
-
-
-<!--            <div class="SaveSceneBtnStyle">-->
-<!--                <div id="saveSceneBtn" class="SaveBtnContainerStyle">-->
-                    <a title="Save all changes you made to the current scene"
-                       id="save-scene-button"
-                       class="">All changes saved</a>
+            <div id="save-scene-elements">
+               <a id="undo-scene-button" title="Undo last change"><i class="material-icons">undo</i></a>
+               <a id="save-scene-button" title="Save all changes you made to the current scene">All changes saved</a>
+               <a id="redo-scene-button" title="Redo last change"><i class="material-icons">redo</i></a>
+            </div>
+            
+            
 <!--                </div>-->
 <!--            </div>-->
             
@@ -402,32 +402,6 @@ get_header(); ?>
                         <div id="scene-vr-editor">
 							<?php
 
-							$meta_json = get_post($current_scene_id)->post_content;
-
-							// Do not put esc_attr, crashes the universe in 3D
-							if ( $game_type_obj->string === "Energy" ) {
-								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
-							}else{
-								$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
-							}
-
-							// Find scene dir string
-							$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
-							$parentGameId = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
-							$projectGameSlug = $parentGameSlug;
-
-							$scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
-
-							$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
-
-							$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
-
-							$scenefolder = $sceneTitle;
-							$gamefolder = $parentGameSlug;
-							$sceneID = $current_scene_id;
-
-							$isAdmin = is_admin() ? 'back' : 'front';
-
 							// vr_editor loads the $sceneToLoad
 							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' );
 //                            require( plugin_dir_path( __DIR__ ) .  '/vr_editor_scenes_wrapper.php' );
@@ -435,6 +409,8 @@ get_header(); ?>
                         </div>
                     </div>
 
+                    
+                    
                     <!-- Scene Options Dialog-->
                     <aside id="options-dialog"
                            class="mdc-dialog"
@@ -459,11 +435,11 @@ get_header(); ?>
                                             <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
                                             <textarea id="sceneCaptionInput" name="sceneCaptionInput" class="mdc-textfield__input"
                                                       rows="10" cols="40" style="box-shadow: none; "
-                                                      type="text" form="3dAssetForm"><?php echo $scene_post->post_content; ?></textarea>
+                                                      type="text" form="3dAssetForm"><?php echo get_post_meta($current_scene_id, 'wpunity_scene_caption', true); ?></textarea>
                                                 <label for="sceneCaptionInput" class="mdc-textfield__label" style="background: none;">Add a description</label>
 
                                             </div>
-
+                            
                                         </div>
 
                                         <div class="mdc-layout-grid__cell--span-6">

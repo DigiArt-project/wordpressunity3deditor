@@ -105,7 +105,7 @@ function wpunity_create_archaeology_wonderaround_unity($scene_post, $scene_type_
     //$json_scene = get_post_meta($scene_id,'wpunity_scene_json_input',true);
     $scene_name = $scene_post->post_name;
     $scene_title = $scene_post->post_title;
-    $scene_desc = $scene_post->post_content;
+    $scene_desc = get_post_meta($scene_id, 'wpunity_scene_caption', true); //$scene_post->post_content;
 
     $featured_image_edu_sprite_id = get_post_thumbnail_id( $scene_id );//The Featured Image ID
     $featured_image_edu_sprite_guid = 'dad02368a81759f4784c7dbe752b05d6';//if there's no Featured Image

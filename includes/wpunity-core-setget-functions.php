@@ -267,10 +267,11 @@ function wpunity_get_ftpCredentials(){
 }
 
 /* Get all game projects of the user */
-function wpunity_get_user_game_projects($user_id){
+function wpunity_get_user_game_projects($user_id, $isUserAdmin){
     
     $games_slugs = ['archaeology-joker','energy-joker','chemistry-joker'];
     
+    // user is not logged in return only joker game
     if($user_id==0)
         return $games_slugs;
     
@@ -280,7 +281,9 @@ function wpunity_get_user_game_projects($user_id){
         'posts_per_page' => -1,
     );
     
-    $custom_query_args['author'] = $user_id;
+    // if user is not admin then add as filter the author (else the admin can see all authors)
+    if (!$isUserAdmin)
+        $custom_query_args['author'] = $user_id;
     
     $custom_query = new WP_Query($custom_query_args);
     
@@ -323,6 +326,9 @@ function get_games_assets($games_slugs){
             $asset_id = get_the_ID();
             $asset_name = get_the_title();
             $asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
+            
+            
+            
             
             // ALL DATA WE NEED
             $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
@@ -382,6 +388,7 @@ function get_games_assets($games_slugs){
                 'isCloned'=> $isCloned,
                 'isJoker'=> $isJoker,
                 'assetParentGame'=>$asset_pgame[0]->name,
+                'assetParentGameSlug'=>$asset_pgame[0]->slug,
                 'author_id'=> $author_id,
                 'author_username'=> $author_username
             ];

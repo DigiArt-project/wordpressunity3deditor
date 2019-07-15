@@ -138,7 +138,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
     $scene_information = array(
         'post_title' => esc_attr(strip_tags($_POST['scene-title'])),
-        'post_content' => esc_attr(strip_tags($_POST['scene-description'])),
+        'post_content' => esc_attr(strip_tags($_POST['scene-caption'])),
         'post_type' => 'wpunity_scene',
         'post_status' => 'publish',
         'tax_input' => $scene_taxonomies,
@@ -224,7 +224,7 @@ get_header();
 
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
                         <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield">
-                            <input id="desc" name="scene-description" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
+                            <input id="desc" name="scene-caption" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light"
                                    maxlength="50" aria-controls="desc-validation-msg" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
                             <label for="desc" class="mdc-textfield__label"> Enter a scene description </label>
                             <div class="mdc-textfield__bottom-line"></div>

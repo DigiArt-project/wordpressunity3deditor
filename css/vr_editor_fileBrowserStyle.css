@@ -90,22 +90,15 @@
 /* The container of the folders */
 .filemanager .data {
 	z-index: -3;
-	overflow-y: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
 	margin: 0;
 	padding: 0;
-	columns: 2;
-	-webkit-columns: 2;
-	-moz-columns: 2;
+	/*-webkit-columns: 2;*/
+	/*-moz-columns: 2;*/
+	/*columns: 2;*/
+	height:76%;
 }
-
-.megabytesAsset {
-	position: absolute;
-	bottom: 40%;
-	left: 5px;
-}
-
-
-
 
 .filemanager .data li {
 	position: relative;
@@ -118,7 +111,16 @@
 	/*margin: 6px 0 6px 0;*/
 	transition: 0.3s background-color;
 	margin-bottom:5px;
+	display:-webkit-inline-box;
+	width:45%;
 }
+
+.megabytesAsset {
+	position: absolute;
+	bottom: 40%;
+	left: 5px;
+}
+
 
 .FileListItemName {
 	overflow: hidden;
@@ -429,3 +431,6 @@
 /*}*/
 
 
+.addNewAsset3DEditor{
+	height:70px; position:absolute; bottom:0; right:0; margin-right:5px; display:block; background:transparent;z-index:2000;
+}

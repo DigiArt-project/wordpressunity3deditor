@@ -48,7 +48,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 
     if($scene_type == 'credits'){
-		$post_content = esc_attr(strip_tags($_POST['scene-description']));
+		$post_content = esc_attr(strip_tags($_POST['scene-caption']));
 		$post_image =  $_FILES['scene-featured-image'];
 
 		$scene_information = array(
@@ -245,7 +245,7 @@ get_header(); ?>
 
                         <h2 class="mdc-typography--title">Insert information about the people that created the <?php echo $single_lowercase; ?> or acknowledgements</h2>
                         <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                            <textarea id="creditsTextarea" name="scene-description" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
+                            <textarea id="creditsTextarea" name="scene-caption" class="mdc-textfield__input" rows="6" cols="40" style="box-shadow: none;"><?php echo $scene_post->post_content; ?></textarea>
                             <label for="creditsTextarea" class="mdc-textfield__label" style="background: none;">Edit Credits text</label>
                         </div>
 

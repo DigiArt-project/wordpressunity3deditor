@@ -1,6 +1,6 @@
-<?php
+<?php //Create asset
 
-//Create asset
+// Load Scrinpts
 function loadAsset3DManagerScripts() {
 	// Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
@@ -41,6 +41,7 @@ function loadAsset3DManagerScripts() {
 }
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
 
+// End Of Scripts Loading
 
 $mean_speed_wind = 14;$var_speed_wind = 30;$min_speed_wind = 0;$max_speed_wind = 40;$income_when_overpower = 0.5;
 $income_when_correct_power = 1;$income_when_under_power = 0;$access_penalty = 0;$archaeology_penalty = 0;
@@ -59,12 +60,14 @@ $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['
 //$previous_page = isset($_GET['previous_page']) ? sanitize_text_field( intval( $_GET['previous_page'] )) : null ;
 
 
-
+// Game project variables
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
 $game_type_obj = wpunity_return_game_type($project_id);
+$isJokerGame = strpos($gameSlug, 'joker') != false ;
 
-$isJokerGame = strpos($gameSlug, 'joker') !== false ;
+
+
 
 //Get 'parent-game' taxonomy with the same slug as Game
 $assetPGame = get_term_by('slug', $gameSlug, 'wpunity_asset3d_pgame');
@@ -95,45 +98,7 @@ if ($isUserloggedIn) {
     
 }
 
-//	if (!isset($_REQUEST['editable'])) {
-//		$isEditable = true;
-//	}else {
-//		$isEditable = $_REQUEST['editable'] === 'true' ? true : false;
-//	}
 
-
-
-
-// When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
-if($asset_id != null) {
-
-	$asset_post = get_post($asset_id);
-	$assetpostMeta = get_post_meta($asset_id);
-
-	if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
-		$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-		$objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
-		$mtl_file_name = basename($mtlpost->guid);
-		$obj_file_name = basename($objpost->guid);
-		$path_url = pathinfo($mtlpost->guid)['dirname'];
-
-		echo '<script>';
-		echo 'var mtl_file_name="'.$mtl_file_name.'";';
-		echo 'var obj_file_name="'.$obj_file_name.'";';
-		echo 'var path_url="'.$path_url . '/'    .'";';
-		echo '</script>';
-	}
-
-	if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
-		$pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
-		$pdb_file_name = $pdbpost->guid;
-
-		echo '<script>';
-		echo 'var pdb_file_name="'.$pdb_file_name.'";';
-		echo '</script>';
-	}
-}
-//--------------------------------------------------------
 
 
 $editgamePage = wpunity_getEditpage('game');
@@ -151,12 +116,17 @@ $all_game_category = get_the_terms( $project_id, 'wpunity_game_type' );
 $game_category  = $all_game_category[0]->slug;
 
 $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//first 3D scene id
+
 $edit_scene_page_id = $editscenePage[0]->ID;
+
+// GoBack links
 $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 $goBackTo_SharedAssets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id;
 
-// If form is submitted
+// ============================================
+// Submit Handler
+//=============================================
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
@@ -210,7 +180,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 
 	if($scene_id == 0)
-		echo '<script>alert("Asset created");</script>';
+		echo '<script>alert("Asset created or edited successfully");</script>';
 //	else
 //		wp_redirect($goBackTo_MainLab_link);
 
@@ -225,50 +195,38 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
+// When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
+if($asset_id != null) {
+    
+    $asset_post = get_post($asset_id);
+    $assetpostMeta = get_post_meta($asset_id);
+    
+    if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
+        $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+        $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
+        $mtl_file_name = basename($mtlpost->guid);
+        $obj_file_name = basename($objpost->guid);
+        $path_url = pathinfo($mtlpost->guid)['dirname'];
+        
+        echo '<script>';
+        echo 'var mtl_file_name="'.$mtl_file_name.'";';
+        echo 'var obj_file_name="'.$obj_file_name.'";';
+        echo 'var path_url="'.$path_url . '/'    .'";';
+        echo '</script>';
+    }
+    
+    if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
+        $pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
+        $pdb_file_name = $pdbpost->guid;
+        
+        echo '<script>';
+        echo 'var pdb_file_name="'.$pdb_file_name.'";';
+        echo '</script>';
+    }
+}
+//--------------------------------------------------------
 get_header();
-?>
 
-<!--    <div class="PageHeaderStyle">-->
-<!--        <h1 class="mdc-typography--display1 mdc-theme--text-primary-on-light">-->
-<!--            <a title="Back" href="-->
-<!--            -->
-<!--            --><?php
-//                if(!$isJokerGame )
-//                    echo $goBackTo_MainLab_link;
-//                else
-//                    echo $goBackTo_SharedAssets;
-//
-//            ?><!--"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>-->
-			
-            <?php
-//                if(!$isJokerGame )
-//                    echo $game_post->post_title;
-//                else
-//                    echo "Assets List";
-			?>
-<!--        </h1>-->
-<!--    </div>-->
-
-<!--    <span class="mdc-typography--caption">-->
-<!--        <i class="material-icons mdc-theme--text-icon-on-background AlignIconToBottom" title="Add category title & icon">--><?php //echo $game_type_obj->icon; ?><!-- </i>&nbsp;-->
-<!--        --><?php //echo $game_type_obj->string; ?>
-<!--    </span>-->
-
-<!--    <hr class="mdc-list-divider">-->
-
-    <!-- Breadcrumps -->
-    <?php if(!$isJokerGame ){    ?>
-<!--        <ul class="EditPageBreadcrumb">-->
-<!--            <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_AllProjects_link; ?><!--" title="Go back to Project selection">Home</a></li>-->
-<!--            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
-<!--            <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_MainLab_link; ?><!--" title="Go back to Project editor">--><?php //echo $single_first; ?><!-- Editor</a></li>-->
-<!--            <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
-<!--            <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">Asset Manager</span></li>-->
-<!--        </ul>-->
-
-    <?php } ?>
-
-<?php
 $breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 $asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
@@ -348,20 +306,37 @@ if($asset_id != null) {
         
         <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">
 
-
-            <a title="Back" href="
-            <?php
-            echo $_SERVER['HTTP_REFERER'];
-//            if(!$isJokerGame )
-//                echo $goBackTo_MainLab_link;
-//            else
-//                echo $goBackTo_SharedAssets;
+            <span><?php echo $breacrumbsTitle;
+                        print_r($isJokerGame);?></span></h2>
+        
+            <br />
     
-            ?>"> <i class="material-icons" style="font-size: 36px; vertical-align: top;" >arrow_back</i></a>
+            <?php if($isJokerGame ) {
+    
+                
+                ?>
             
-            <span><?php echo $breacrumbsTitle; ?></span></h2>
+                <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_SharedAssets;?>">
+                    <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>Assets List
+                </a>
+
+            <?php } else {
+    
+                ?>
+        
+                
+                
+                <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
+                    <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor
+                </a>
+            <?php } ?>
+            
+            
+        
 		<?php if($asset_id != null ) { ?>
-            <a class="mdc-button mdc-button--primary mdc-theme--primary" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>" data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+            <a class="mdc-button mdc-button--primary mdc-theme--primary"
+               href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
+               data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
 		<?php } ?>
     </div>
 
@@ -1174,8 +1149,11 @@ if($asset_id != null) {
         <!--                                                  -->
 
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+        
         <input type="hidden" name="submitted" id="submitted" value="true" />
-		<?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
+		
+        <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
+        
         <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
                 data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
 			<?php echo $buttonTitleText; ?>

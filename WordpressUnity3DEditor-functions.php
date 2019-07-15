@@ -102,6 +102,9 @@ function wpunity_register_scripts() {
     wp_register_script( 'wpunity_CSS2DRenderer', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/CSS2DRenderer.js', null, null, false);
 
 	wp_register_script( 'wpunity_load_sceneexporterutils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporterUtils.js', null, null, false);
+    
+    wp_register_script( 'wpunity_load_scene_importer_utils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneImporter.js', null, null, false);
+	
 	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporter.js', null, null, false);
 
 // ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
@@ -295,6 +298,8 @@ add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_asse
 
 
 add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
+add_action('wp_ajax_wpunity_undo_scene_async_action','wpunity_undo_scene_async_action_callback');
+add_action('wp_ajax_wpunity_redo_scene_async_action','wpunity_redo_scene_async_action_callback');
 
 
 add_action('wp_ajax_wpunity_save_expid_async_action','wpunity_save_expid_async_action_callback');

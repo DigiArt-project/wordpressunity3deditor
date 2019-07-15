@@ -419,21 +419,57 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     top:1px;
 }
 
+.editasseturl{
+    height: 102% !important;
+    display: flex;
+}
 
 .sharedAssetsIndicator {
-    top: 0;
+    bottom: 0;
     right: 0;
     position: absolute;
     padding-left: 5px;
     padding-right: 5px;
 }
 
-.sharedAssetsUsername {
-    bottom: 0;
-    left: 0;
+.assetsListCardTitle{
+    top: 0;
+    left: 5px;
     position: absolute;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-top: 0px !important;
+    font-size:12pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow:2px 2px 5px #fff;
+    max-width:70%;
+}
+
+.sharedAssetsUsername {
+    top: 30px;
+    left: 8px;
+    position: absolute;
+    text-shadow:2px 2px 5px #fff;
+}
+
+.assetsListCardCategory{
+    top: 50px;
+    left: 8px;
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow:2px 2px 5px #fff;
+    font-size:10pt;
+    max-width:90%;
+}
+
+
+.deleteAssetListButton{
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    font-size:6pt;
 }
 
 
@@ -443,22 +479,15 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     padding-bottom:0px;
 }
 
-.assetsListCardTitle{
-    padding-top: 0px !important;
-    font-size:12pt;
-}
+
 
 .assetsListCardActions{
     padding:0px !important;
 }
 
-.assetsListCardCategory{
-    font-size:10pt;
-}
 
-.deleteAssetListButton{
-    font-size:6pt;
-}
+
+
 
 .editAssetListButton{
     font-size:8pt;

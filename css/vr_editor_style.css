@@ -57,16 +57,7 @@
     padding: 2px;
 }
 
-#save-scene-button {
-    position: absolute;
-    top: 3px;
-    right: 20%;
-    height: 20px;
-    padding: 0px;
-    line-height: 1.4em;
-    color: white;
-    font-size: medium;
-}
+
 
 #compileGameBtn {
     position: absolute;
@@ -532,13 +523,14 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     position:absolute;
     display:inline-flex;
     height:17%;
-    width:90%;
+    width:auto;
     left:0;
     bottom:0;
     z-index:1000;
     background:rgba(0, 0, 0, 0.12);
     padding-left:60px !important;
     padding-top:5px;
+    padding-right:20px;
 }
 
 .SceneCardContainer {
@@ -664,3 +656,32 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     height: 100%;
 }
 
+#save-scene-elements{
+    position: absolute;
+    right: 20%;
+    width: 200px;
+    top:-3px;
+}
+
+#save-scene-button {
+    color: hotpink;
+    position:relative;
+    font-size: medium;
+    cursor:pointer;
+}
+
+#undo-scene-button{
+    color: hotpink;
+    position: relative;
+    left: 0;
+    cursor: pointer;
+    top: 5px;
+}
+
+#redo-scene-button{
+    color: hotpink;
+    position: relative;
+    right: 0;
+    cursor: pointer;
+    top: 5px;
+}

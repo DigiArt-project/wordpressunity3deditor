@@ -22,6 +22,7 @@
 
 <!-- vr_editor.php -->
 <?php
+
 wp_enqueue_style('wpunity_vr_editor');
 wp_enqueue_style('wpunity_vr_editor_filebrowser');
 
@@ -30,14 +31,48 @@ wp_enqueue_style('wpunity_vr_editor_filebrowser');
 //wp_enqueue_script('wpunity_load87_mtlloader');
 //wp_enqueue_script('wpunity_load87_orbitcontrols');
 
+
 wp_enqueue_script('wpunity_load_sceneexporterutils');
+wp_enqueue_script('wpunity_load_scene_importer_utils');
 wp_enqueue_script('wpunity_load_sceneexporter');
+
 
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
 $UPLOAD_DIR_C = wp_upload_dir()['basedir'];
 $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
+
+
+
+
+
+
+$meta_json = get_post($current_scene_id)->post_content;
+
+// Do not put esc_attr, crashes the universe in 3D
+if ( $game_type_obj->string === "Energy" ) {
+    $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
+}else{
+    $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
+}
+
+// Find scene dir string
+$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
+$parentGameId = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
+$projectGameSlug = $parentGameSlug;
+
+$scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
+
+$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
+
+$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
+
+$scenefolder = $sceneTitle;
+$gamefolder = $parentGameSlug;
+$sceneID = $current_scene_id;
+
+$isAdmin = is_admin() ? 'back' : 'front';
 
 // Also available in Javascript side
 echo '<script>';
@@ -49,6 +84,7 @@ echo 'var sceneID="'.$sceneID.'";';
 echo 'var gameProjectID="'.$project_id.'";';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
+echo 'var isUserAdmin="'.current_user_can('administrator').'";';
 echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
 echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
@@ -89,7 +125,7 @@ echo '</script>';
 <script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/addRemoveOne.js"></script>
 
 <script type="text/javascript">
-    
+    post_revision_no = 1;
     isComposerOn = true;
     isPaused = false;
 
@@ -383,7 +419,10 @@ echo '</script>';
 
 
     <!-- ADD NEW ASSET FROM ASSETS LIST -->
-    <a id="addNewAssetBtnAssetsList" style="height:70px; position:absolute; bottom:0; right:0; margin-right:5px; display:block; background:transparent;" class="" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
+    <a id="addNewAssetBtnAssetsList"
+       style="" class="addNewAsset3DEditor" data-mdc-auto-init="MDCRipple"
+       title="Add new private asset"
+       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
         <i class="material-icons" style="cursor: pointer; font-size:54px; color:orangered; ">add_circle</i>
     </a>
     
@@ -401,7 +440,7 @@ echo '</script>';
     <a style="float: right;" type="button" class="mdc-theme--primary"
        onclick='this.parentNode.style.display = "none"; clearAndUnbind("popupDoorSelect", "doorid", ""); return false;'>
 
-<!--            clearAndUnbindDoorProperties();-->
+    <!-- clearAndUnbindDoorProperties(); -->
         
         <i class="material-icons" style="cursor: pointer; float: right;">close</i>
     </a>
@@ -605,9 +644,6 @@ echo '</script>';
 
     <!-- Scenes List -->
     <div id="scenesInsideVREditor" class="" style="">
-
-
-
 
             <!-- Game Settings Scenes -->
             <?php
@@ -1256,6 +1292,27 @@ echo '</script>';
     });
 
 
+
+    jQuery('#undo-scene-button').click(function() {
+
+        jQuery('#undo-scene-button').html("...").addClass("LinkDisabled");
+
+        post_revision_no += 1;
+        
+        wpunity_undoSceneAjax(UPLOAD_DIR, post_revision_no);
+    });
+
+    jQuery('#redo-scene-button').click(function() {
+
+        if(post_revision_no>1)
+            post_revision_no -= 1;
+        
+        jQuery('#redo-scene-button').html("...").addClass("LinkDisabled");
+
+        wpunity_undoSceneAjax();
+    });
+    
+    
     
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
@@ -1393,15 +1450,65 @@ echo '</script>';
 
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );
-$formRes = new ParseJSON($UPLOAD_DIR);
-$formRes->init($sceneToLoad);
+    $formRes = new ParseJSON($UPLOAD_DIR);
+    $formRes->init($sceneToLoad);
 ?>
 
 <script>
 
     loaderMulti = new LoaderMulti();
     loaderMulti.load(manager, resources3D);
+    
+    if (!isUserAdmin)
+        document.getElementById("vr_editor_main_div").style.top = "28px";
+   
+    function parseJSON_LoadScene(scene_json){
+       
+        resources3D = parseJSON_javascript(scene_json, UPLOAD_DIR);
+        
+        // CLEAR SCENE
+        //var keepNames = ['myAxisHelper', 'myGridHelper', 'orbitCamera', 'avatarYawObject', 'myTransformControls'];
 
+        var mAh = envir.scene.getObjectByName('myAxisHelper');
+        var mGH = envir.scene.getObjectByName('myGridHelper');
+        var oc = envir.scene.getObjectByName('orbitCamera');
+        var aYO = envir.scene.getObjectByName('avatarYawObject');
+        var mTC = envir.scene.getObjectByName('myTransformControls');
+        
+        
+        while(envir.scene.children.length > 0){
+            envir.scene.remove(envir.scene.children[0]);
+        }
+
+        
+        
+        envir.scene.add(mAh);
+        envir.scene.add(mGH);
+        envir.scene.add(oc);
+        envir.scene.add(aYO);
+        envir.scene.add(mTC);
+        
+        envir.setHierarchyViewer();
+
+        transform_controls = envir.scene.getObjectByName('myTransformControls');
+        
+        transform_controls.attach(envir.scene.getObjectByName("avatarYawObject"));
+        
+        console.log(transform_controls.children[4].handleGizmos); //.XZY[0][0].visible = false;
+        
+        jQuery("#removeAssetBtn").hide();
+        
+        
+        
+        loaderMulti = new LoaderMulti();
+        loaderMulti.load(manager, resources3D);
+    }
+    
+ 
+    
+    
+    
+    
     function takeScreenshot(){
 
         //envir.cameraAvatarHelper.visible = false;

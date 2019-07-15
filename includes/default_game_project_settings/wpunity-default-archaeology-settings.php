@@ -89,7 +89,7 @@ function wpunity_assets_taxcategory_archaeology_fill(){
     $inserted_term2 = get_term_by('slug', 'pois_imagetext', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term2->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_poi_get(), true);
     update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_icon', 'image_search');
+    update_term_meta($inserted_term2->term_id, 'wpunity_assetcat_icon', 'image');
     
     wp_insert_term(
         'Points of Interest (Video)', // the term
@@ -129,7 +129,7 @@ function wpunity_assets_taxcategory_archaeology_fill(){
     $inserted_term5 = get_term_by('slug', 'door', 'wpunity_asset3d_cat');
     //update_term_meta($inserted_term5->term_id, 'wpunity_yamlmeta_assetcat_pat', wpunity_default_value_door_get(), true);
     add_term_meta($inserted_term5->term_id, 'wpunity_assetcat_gamecat', 1 , true);
-    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_icon', 'meeting_room');
+    update_term_meta($inserted_term5->term_id, 'wpunity_assetcat_icon', 'input');
 
     wp_insert_term(
         'Decoration (Archaeology)', // the term

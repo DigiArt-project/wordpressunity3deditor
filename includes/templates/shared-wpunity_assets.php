@@ -39,7 +39,10 @@ $isUserloggedIn = is_user_logged_in();
 $current_user = wp_get_current_user();
 $login_username = $current_user->user_login;
 
-$isUserAdmin = current_user_can('administrator');
+if($isUserloggedIn)
+    $isUserAdmin = current_user_can('administrator');
+else
+    $isUserAdmin = false;
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -92,152 +95,160 @@ if($isUserloggedIn){ ?>
 
 $user_id = get_current_user_id();
 
-$user_games_slugs = wpunity_get_user_game_projects($user_id);
+$user_games_slugs = wpunity_get_user_game_projects($user_id, $isUserAdmin);
+
+//print_r($user_games_slugs);
+
+
 $assets = get_games_assets($user_games_slugs);
 
 // Display assets Grid
-if ( $assets ) : ?>
+?>
     
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-        
-            <!-- Card to add asset -->
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
 
-                <a href="<?php
-                    if($isUserloggedIn)
-                        echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id );
-                    else
-                        echo wp_login_url(  );
-                ?>">
-                
-                <i class="addAssetCardIcon material-icons"
-                   style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
-                <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
-                </a>
-            </div>
+        <!-- Card to add asset -->
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
+            <a href="<?php echo $isUserloggedIn ?
+                esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ) : wp_login_url();
+            ?>">
             
-			<?php foreach ($assets as $asset) {    ?>
+            <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
+            <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
+            </a>
+        </div>
+        
+        <!-- Each Asset -->
+        <?php foreach ($assets as $asset) {    ?>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
 
-                    <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
-                        <div class="SceneThumbnail">
-                            <a href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
-                                '&wpunity_scene=&wpunity_asset='.$asset['assetid'];
-                            ?>">
-								<?php if ($asset['screenImagePath']){ ?>
-                                    
-                                    <img src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
-                                    
-								<?php } else { ?>
-                                    <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
-                                        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
-                                    </div>
-								<?php } ?>
-                            </a>
+                <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
 
-                            
+                    <!--  Thumbnail  -->
+                    <div class="SceneThumbnail">
+
+                        <a class="editasseturl" href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
+                            '&wpunity_scene=&wpunity_asset='.$asset['assetid']; ?>">
+                            <?php if ($asset['screenImagePath']){ ?>
+                                <img src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+                            <?php } else { ?>
+                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                    <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
+                                </div>
+                            <?php } ?>
+                        </a>
 
 
-                        </div>
-
-                        <div class="assetsListCard mdc-card__primary">
-                            
-                            <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <a class="mdc-theme--secondary"
-                                   href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
+                        <?php $pGameId= get_page_by_path($asset['assetParentGameSlug'], OBJECT, 'wpunity_game')->ID; ?>
+                        
+                        <!-- Title -->
+                        <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="">
+                            <a class="mdc-theme--secondary"
+                               href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
                                    '&wpunity_scene=&wpunity_asset='.$asset['assetid'];
-                                   ?>"><?php echo $asset['assetName'];?></a>
+                               ?>"><?php echo $asset['assetName'];?></a>
+                        </h1>
 
-                            </h1>
 
-                            <p class="sharedAssetsUsername mdc-typography--caption"
-                                  style="position:relative">
-                                by:
-                                <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>" style="color:dodgerblue">
-                                    <?php echo $asset['author_username']; ?>
-                                </a>
-                            </p>
+                        <!-- Author -->
+                        <p class="sharedAssetsUsername mdc-typography--caption">
+                            by:
+                            <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>" style="color:dodgerblue">
+                                <?php echo $asset['author_username']; ?>
+                            </a>
                             
-                            <p class="assetsListCardCategory mdc-card__title mdc-typography--body1" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-								<?php echo $asset['categoryName'];?>
-                            </p>
+                            
+<!--                            <img src="--><?php //get_avatar_url($asset['author_id']);?><!--">-->
+                            
+                        </p>
 
-                        </div>
 
-						<?php
-						//echo current_user_can('administrator');
-						// For joker assets, If the user is not administrator he should not be able to delete or edit them.
-						$canDELETE_EDIT = $isUserAdmin || ($user_id == $asset['author_id']);
-						?>
-                        
-                        
+                        <!-- Category -->
+                        <p class="assetsListCardCategory mdc-card__title mdc-typography--body1">
+                            <?php echo $asset['categoryName'];?>
+                        </p>
+    
+                        <!-- DELETE BUTTON -->
+                        <?php
+                        //echo current_user_can('administrator');
+                        // For joker assets, If the user is not administrator he should not be able to delete or edit them.
+                        $canDELETE_EDIT = $isUserAdmin || ($user_id == $asset['author_id']);
+                        ?>
+
+                        <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
+                           class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
+                           onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
+                           style="display:<?php echo $canDELETE_EDIT?'':'none';?>">DELETE</a>
+    
+    
                         <?php if ($asset['isJoker']=='true') { ?>
-                            <span class="sharedAssetsIndicator mdc-typography--subheading1"
-                                  style="background: rgba(144,238,144,0.3);">Shared</span>
+                            <!--                        <span class="sharedAssetsIndicator mdc-typography--subheading1" style="background: rgba(144,238,144,0.3);">Shared</span>-->
                         <?php } else { ?>
                             <span class="sharedAssetsIndicator mdc-typography--subheading1"
                                   style="background: rgba(250,250,210,0.3);">
-                                <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
+                            <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
                         <?php } ?>
 
-                        
-                        
-                        <section class="assetsListCardActions mdc-card__actions">
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action" onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
-                               style="display:<?php echo $canDELETE_EDIT?'':'none';?>">DELETE</a>
-                            <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="<?php echo $urlforAssetEdit.$asset['assetid']; ?>&<?php echo $canDELETE_EDIT?'editable=true':'editable=false' ?>">
-								<?php
-								echo $canDELETE_EDIT ? 'EDIT':'VIEW';
-								?>
-                            </a>
-                        </section>
 
                     </div>
+
+<!--                    <div class="assetsListCard mdc-card__primary">-->
+<!--                    -->
+<!--                    </div>-->
+
+                    
+
+                    
+                    
+<!--                    <section class="assetsListCardActions mdc-card__actions">-->
+                    
+<!--                        <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="--><?php //echo $urlforAssetEdit.$asset['assetid']; ?><!--&--><?php //echo $canDELETE_EDIT?'editable=true':'editable=false' ?><!--">-->
+<!--                            --><?php //echo $canDELETE_EDIT ? 'EDIT':'VIEW'; ?>
+<!--                        </a>-->
+<!--                    </section>-->
+
                 </div>
-			<?php } ?>
+            </div>
+        <?php } ?>
 
-        </div>
     </div>
+</div>
 
-<?php else :
-    
-    // No Assets Empty Repo
-    ?>
 
+
+
+<!--  No Assets Empty Repo-->
+<?php if ( !$assets ) :  ?>
     <hr class="WhiteSpaceSeparator">
-
     <div class="CenterContents">
-
         <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No assets available">
             insert_photo
         </i>
-
         <h3 class="mdc-typography--headline">No Assets available</h3>
         <hr class="WhiteSpaceSeparator">
-
     </div>
-
-
 <?php endif; ?>
-    <script type="text/javascript">
+<!--                     -->
 
-        var mdc = window.mdc;
-        mdc.autoInit();
-        
-        var helpDialog = document.querySelector('#help-dialog');
-        if (helpDialog) {
-            helpDialog = new mdc.dialog.MDCDialog(helpDialog);
-            jQuery( "#helpButton" ).click(function() {
-                helpDialog.show();
-            });
-        }
-        
-        var deleteDialog = document.querySelector('#delete-dialog');
-        if (deleteDialog) {
-            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
-            deleteDialog.focusTrap_.deactivate();
-        }
-    </script>
+<script type="text/javascript">
+
+    var mdc = window.mdc;
+    mdc.autoInit();
+    
+    var helpDialog = document.querySelector('#help-dialog');
+    if (helpDialog) {
+        helpDialog = new mdc.dialog.MDCDialog(helpDialog);
+        jQuery( "#helpButton" ).click(function() {
+            helpDialog.show();
+        });
+    }
+    
+    var deleteDialog = document.querySelector('#delete-dialog');
+    if (deleteDialog) {
+        deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
+        deleteDialog.focusTrap_.deactivate();
+    }
+</script>
 <?php get_footer(); ?>

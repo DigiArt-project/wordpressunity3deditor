@@ -1,14 +1,12 @@
 <?php
 class ParseJSON {
 
-    function __construct($relativepath)
-    {
+    function __construct($relativepath)  {
         $this->relativepath = $relativepath;
     }
 
-    public function init($sceneToLoad)
-    {
-
+    public function init($sceneToLoad) {
+        
         $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
@@ -17,19 +15,15 @@ class ParseJSON {
 
             $name = $key;
 
-            if ($name == 'avatarYawObject')
-            {
+            if ($name == 'avatarYawObject') {
                 $path = '';
                 $obj = '';
                 $mtl = '';
                 $type_behavior = 'avatar';
-
-                
                 
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = 0;
-
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $assetid=$value->assetid;
@@ -51,8 +45,7 @@ class ParseJSON {
                 $archaeology_penalty = $value->archaeology_penalty;
                 $hv_penalty = $value->hv_penalty;
                 $natural_penalty = $value->natural_penalty;
-                
-                
+
                 $isreward = $value->isreward;
                 $isCloned = $value->isCloned;
                 $isJoker = $value->isJoker;
@@ -95,9 +88,9 @@ class ParseJSON {
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.
                                             '","trs":selected_object_trs};';
-
             echo '</script>';
         }
+        return true;
     }
 }
 ?>

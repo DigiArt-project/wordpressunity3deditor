@@ -558,10 +558,30 @@ function wpunity_members_menu_link( $menu, $args ) {
     return $menu;
 }
 
+
+// Display Feedback page as menu item (Ultimatemember plugin)
+function wpunity_feedback_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'feedback/' ) ).'">Feedback</a></li>';
+    return $menu;
+}
+add_filter( 'wp_nav_menu_items','wpunity_feedback_menu_link', 4, 2 );
+
+function wpunity_contact_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'contact/' ) ).'">Contact</a>'
+        . '</li>';
+    return $menu;
+}
+add_filter( 'wp_nav_menu_items','wpunity_contact_menu_link', 5, 2 );
+
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 if ( is_plugin_active( 'ultimate-member/ultimate-member.php' ) ) {
     add_filter( 'wp_nav_menu_items','wpunity_members_menu_link', 3, 2 );
 }
+
+
+
 
 
 
@@ -573,7 +593,7 @@ function wpunity_loginout_menu_link( $menu, $args ) {
     $menu .= $loginout;
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 3, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 5, 2 );
 
 
 
@@ -2599,11 +2619,14 @@ function wpunity_save_scene_async_action_callback()
 	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	if (isset($_POST['scene_screenshot']))
-		$attachment_id = wpunity_upload_Assetimg64($_POST['scene_screenshot'], 'scene_'.$_POST['scene_id'].'_featimg',
-			$_POST['scene_id'], get_post($_POST['scene_id'])->post_name, 'jpg' );
+		$attachment_id = wpunity_upload_Assetimg64(
+		             $_POST['scene_screenshot'],
+            'scene_'.$_POST['scene_id'].'_featimg',
+			          $_POST['scene_id'],
+                     get_post($_POST['scene_id'])->post_name,
+            'jpg' );
 
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
-
 	
 	$scene_new_info = array(
 		'ID' => $_POST['scene_id'],
@@ -2617,6 +2640,96 @@ function wpunity_save_scene_async_action_callback()
 	echo $res!=0 ? 'true' : 'false';
 	wp_die();
 }
+
+
+
+
+
+
+function wpunity_undo_scene_async_action_callback()
+{
+    //$ff = fopen("undo.log","w");
+    
+    $revision_number = $_POST['post_revision_no'];
+    $current_scene_id = $_POST['scene_id'];
+    
+//    fwrite($ff, $current_scene_id);
+//    fwrite($ff, $revision_number);
+//
+    
+    $rev=wp_get_post_revisions( $current_scene_id,
+        [
+            'offset'           => $revision_number,    // Start from the previous change
+            'posts_per_page'  => 1,    // Only a single revision
+            'post_name__in'   => [ "{$current_scene_id}-revision-v1" ],
+            'check_enabled'   => false,
+        ]
+    );
+    $sceneToLoad = reset($rev)->post_content;
+
+//    fwrite($ff, $sceneToLoad);
+//    fclose($ff);
+   
+    
+    echo $sceneToLoad;
+    wp_die();
+}
+
+
+
+
+
+
+
+
+
+
+
+function wpunity_redo_scene_async_action_callback()
+{
+    $mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
+    
+    if (isset($_POST['scene_screenshot']))
+        $attachment_id = wpunity_upload_Assetimg64(
+            $_POST['scene_screenshot'],
+            'scene_'.$_POST['scene_id'].'_featimg',
+            $_POST['scene_id'],
+            get_post($_POST['scene_id'])->post_name,
+            'jpg' );
+    
+    set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+    
+    $scene_new_info = array(
+        'ID' => $_POST['scene_id'],
+        'post_title' => $_POST['scene_title'],
+        'post_content' => wp_unslash($_POST['scene_json'])
+    );
+    
+    $res = wp_update_post($scene_new_info);
+    update_post_meta($_POST['scene_id'], 'wpunity_scene_caption', $_POST['scene_caption']);
+    
+    echo $res!=0 ? 'true' : 'false';
+    wp_die();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function wpunity_save_gio_async_action_callback()
 {
