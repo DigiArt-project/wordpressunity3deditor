@@ -154,21 +154,17 @@ $assets = get_games_assets($user_games_slugs);
 
                         <!-- Author -->
                         <p class="sharedAssetsUsername mdc-typography--caption">
-                            by:
+                            <img style="width:20px;height:20px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($asset['author_id']);?>">
                             <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>" style="color:dodgerblue">
                                 <?php echo $asset['author_username']; ?>
                             </a>
-                            
-                            
-<!--                            <img src="--><?php //get_avatar_url($asset['author_id']);?><!--">-->
-                            
                         </p>
 
 
                         <!-- Category -->
-                        <p class="assetsListCardCategory mdc-card__title mdc-typography--body1">
-                            <?php echo $asset['categoryName'];?>
-                        </p>
+<!--                        <p class="assetsListCardCategory mdc-card__title mdc-typography--body1">-->
+<!--                            --><?php //echo $asset['categoryName'];?>
+<!--                        </p>-->
     
                         <!-- DELETE BUTTON -->
                         <?php

@@ -446,7 +446,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 }
 
 .sharedAssetsUsername {
-    top: 30px;
+    top: 25px;
     left: 8px;
     position: absolute;
     text-shadow:2px 2px 5px #fff;
@@ -462,6 +462,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     text-shadow:2px 2px 5px #fff;
     font-size:10pt;
     max-width:90%;
+    padding-top:5px;
 }
 
 
