@@ -304,7 +304,6 @@ get_header(); ?>
             <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start"
                     style="width:80%; vertical-align: middle;line-height:1.8em">
                 
-                
                 <div id="gameInfoBreadcrump" class="mdc-textfield mdc-theme--text-primary-on-dark mdc-form-field" data-mdc-auto-init="MDCTextfield"
                      style="height:30px; margin:0; font-size: 14px; vertical-align: middle;display:block" >
 

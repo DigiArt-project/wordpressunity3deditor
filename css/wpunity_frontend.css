@@ -419,9 +419,17 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     top:1px;
 }
 
-.editasseturl{
-    height: 102% !important;
+.editasseturl {
+    height: 100%;
     display: flex;
+}
+
+.asset-shared-thumbnail {
+    width: 100%;
+    max-width:265px;
+    height:104% !important;
+    min-height:100px;
+    max-height:150px;
 }
 
 .sharedAssetsIndicator {
@@ -449,7 +457,8 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     top: 25px;
     left: 8px;
     position: absolute;
-    text-shadow:2px 2px 5px #fff;
+    /*text-shadow:4px 4px 6px #fff;*/
+    /*mix-blend-mode: difference;*/
 }
 
 .assetsListCardCategory{
@@ -506,8 +515,10 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     font-size: 12pt;
     font-family: 'Comic Sans MS';
     transform: translate(-50%, -50%);
-    top: 80%;
+    top: 90%;
     left: 50%;
     position: absolute;
     text-align: center;
+    white-space: nowrap;
+    display:block;
 }

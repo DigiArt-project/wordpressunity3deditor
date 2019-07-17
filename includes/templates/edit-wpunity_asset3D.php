@@ -85,20 +85,27 @@ $isUserAdmin = current_user_can('administrator');
 
 $isEditable = false;
 
+// Old asset
+if(isset($_GET['wpunity_asset']))
+    $author_id = get_post_field ('post_author', $asset_id);
+
 if ($isUserloggedIn) {
     $user_id = get_current_user_id();
     
     if (!isset($_GET['wpunity_asset'])) {
         // NEW ASSET
         $isEditable = true;
-    } else if ($isUserAdmin || ($user_id == get_post_field ('post_author', $asset_id))){
+        $author_id = $user_id;
+        
+    } else if ($isUserAdmin || ($user_id == $author_id)){
         // OLD ASSET
         $isEditable = true;
+        $author_id = get_post_field ('post_author', $asset_id);
     }
-    
 }
 
-
+$author_displayname = get_the_author_meta( 'display_name' , $author_id );
+$author_username = get_the_author_meta( 'nickname' , $author_id );
 
 
 $editgamePage = wpunity_getEditpage('game');
@@ -301,53 +308,83 @@ if($asset_id != null) {
 }
 
 ?>
-    <div class="PageHeaderStyle">
 
-        
-        <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">
+    <style>
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .navigation-top {display:none;}
+        .mdc-tab { min-width: 0; }
+        .custom-header { display:none; }
+        .main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
+        .site-branding {display:none;}
+        #content {padding:0px;}
+        .site-content-contain{margin:0;height:100%;overflow:hidden;}
+    </style>
 
-            <span><?php echo $breacrumbsTitle;
-                        print_r($isJokerGame);?></span></h2>
-        
-            <br />
-    
-            <?php if($isJokerGame ) {
-    
-                
-                ?>
-            
-                <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_SharedAssets;?>">
-                    <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>Assets List
-                </a>
 
-            <?php } else {
-    
-                ?>
-        
-                
-                
-                <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
-                    <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor
-                </a>
-            <?php } ?>
-            
-            
-        
-		<?php if($asset_id != null ) { ?>
-            <a class="mdc-button mdc-button--primary mdc-theme--primary"
-               href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-               data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
-		<?php } ?>
+    <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents">
+        <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+        <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+        <div class="progressSlider">
+            <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+        </div>
     </div>
 
+
+
+    <div id="wrapper_3d_inner" style="position: fixed; top:0; right:0;width:60%;height:100%;z-index:1">
+        
+        <div style="position: absolute;">
+            <div id="previewCanvasDiv" style="height:100%; width:100%; position: relative"></div>
+        </div>
+
+        <canvas id="previewCanvas" style="height:100%; width:100%;position: relative"></canvas>
+    </div>
+
+
+
+    <div id="text-asset-sidebar" style="position:fixed;padding:15px;height:100%;width:40%;background:white; border:1px solid black;z-index:1000;overflow-y:scroll">
+    
+<!--        <div class="PageHeaderStyle">-->
+            <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">
+                
+                <span><?php echo $breacrumbsTitle; ?></span></h2>
+                <br />
+        
+                <?php if($isJokerGame ) { ?>
+                    <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_SharedAssets;?>">
+                        <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>Assets List
+                    </a>
+                <?php } else { ?>
+                    <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
+                        <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor
+                    </a>
+                <?php } ?>
+            
+                <?php if($asset_id != null ) { ?>
+                    <a class="mdc-button mdc-button--primary mdc-theme--primary"
+                       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
+                       data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+                <?php } ?>
+<!--        </div>-->
+
+        <p class="mdc-typography--caption" style="position:absolute;top:15px;right:10px;">
+            <img style="width:40px;height:40px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($author_id);?>">
+            <a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black">
+                <?php echo $author_displayname; ?>
+            </a>
+        </p>
+    
+    
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
-        <div class="mdc-layout-grid">
+        <div class="">
 
-            <div class="mdc-layout-grid__inner">
+            <div class="">
 
-                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div  class="">
 
                     <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -422,11 +459,11 @@ if($asset_id != null) {
         </div>
 
         <!--   TITLE , DESCRIPTION , 3D files  -->
-        <div class="mdc-layout-grid" id="informationPanel" style="display: none;">
+        <div class="" id="informationPanel" style="display: none;padding-top:10px;">
 
-            <div class="mdc-layout-grid__inner">
+            <div class="">
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+                <div class="">
 
                     <!-- TITLE , DESCRIPTION -->
                     <h3 class="mdc-typography--title">Information</h3>
@@ -438,12 +475,12 @@ if($asset_id != null) {
                         <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
-                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg"
-                       id="title-validation-msg">
+                    <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">
                         Between 3 - 25 characters
                     </p>
 
-                    <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
+                    <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                         style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
                 <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                           name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
@@ -495,9 +532,6 @@ if($asset_id != null) {
 						</div>-->
                     </div>
 
-
-
-
                     <!-- Video for POI video -->
 
                     <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
@@ -513,7 +547,7 @@ if($asset_id != null) {
 
                         <h3 class="mdc-typography--title">Video POI Details</h3>
 
-                        <div id="videoFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                        <div id="videoFileInputContainer" class="">
 
 
 							<?php
@@ -632,8 +666,8 @@ if($asset_id != null) {
 
                 </div>
 
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6" id="objectPropertiesPanel">
+                
+                <div class="" id="objectPropertiesPanel">
 
                     <h3 class="mdc-typography--title">Object Properties</h3>
 
@@ -672,36 +706,16 @@ if($asset_id != null) {
 
                     </ul>
 
-                    <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__inner">
+                    <div class="">
+                        <div class="">
 
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                                <h3 class="mdc-typography--title">Object Preview</h3>
-
-
-                                <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents">
-                                    <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-                                    <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
-
-                                    <div class="progressSlider">
-                                        <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
-                                    </div>
-                                </div>
-
-                                <div id="wrapper_3d_inner">
-                                    <div style="position: absolute;">
-                                        <div id="previewCanvasDiv" style="height: 300px; width:100%; position: relative"></div>
-                                    </div>
-
-                                    <canvas id="previewCanvas" style="height: 300px; width:100%;"></canvas>
-                                </div>
-
+                            <div class="">
+                                
                                 <label>Select an asset to insert</label>
                                 <ul id="lightSlider">
                                     <!--put php loop here for every li item-->
 
-									<?php
-									foreach ( $asset_id_avail_joker as $myAssetID ) {
+									<?php foreach ( $asset_id_avail_joker as $myAssetID ) {
 										$mtlID = get_post_meta($myAssetID, 'wpunity_asset3d_mtl', true);
 										$objID = get_post_meta($myAssetID, 'wpunity_asset3d_obj', true);
 										$pdbID = get_post_meta($myAssetID, 'wpunity_asset3d_pdb', true);
@@ -735,11 +749,6 @@ if($asset_id != null) {
                                        multiple accept=".obj,.mtl,.jpg,.png"/>
 
 
-                                
-                                
-                                
-                                
-
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                                 <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                                 <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
@@ -748,9 +757,9 @@ if($asset_id != null) {
                             </div>
 
 
-                            <div id="sshotFileInputContainer" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            <div id="sshotFileInputContainer" class="">
                                 <h3 class="mdc-typography--title">Screenshot</h3>
-
+                                
 								<?php
 
 								if($asset_id==null) {
@@ -1100,11 +1109,11 @@ if($asset_id != null) {
         ?>
 
         <!-- CATEGORY IPR -->
-        <div class="mdc-layout-grid" id="ipr-div" style="display:none">
+        <div class="" id="ipr-div" style="display:none">
 
-            <div class="mdc-layout-grid__inner">
+            <div class="">
 
-                <div  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div  class="">
 
                     <h3 class="mdc-typography--title">Select an IPR plan</h3>
                     <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -1164,6 +1173,8 @@ if($asset_id != null) {
 
     </form>
 
+    </div>
+
     <!--                     Javascript                             -->
 
     <script type="text/javascript">
@@ -1220,6 +1231,10 @@ if($asset_id != null) {
                     jQuery('#'+ selectedCatId).attr("aria-selected", true);
                     jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                     loadLayout(false);
+
+
+                    
+                    
                 }
 
                 if (jQuery('#currently-ipr-selected').attr("data-cat-ipr-id")) {
@@ -1295,15 +1310,12 @@ if($asset_id != null) {
                 var item = categorySelect.selectedOptions[0];
                 var index = categorySelect.selectedIndex;
                 
-
                 jQuery("#informationPanel").show();
                 jQuery("#formSubmitBtn").show();
 
                 jQuery("#pdbRadioListItem").show();
 
                 jQuery("#ipr-div").show();
-
-                
                 
                 
                 wu_webw_3d_view.resizeDisplayGL();

@@ -357,7 +357,8 @@ function get_games_assets($games_slugs){
             $isJoker = get_post_meta($asset_id, 'wpunity_asset3d_isJoker', true);
             
             $author_id = get_post_field ('post_author', $asset_id);
-            $author_username = get_the_author_meta( 'display_name' , $author_id );
+            $author_displayname = get_the_author_meta( 'display_name' , $author_id );
+            $author_username = get_the_author_meta( 'nickname' , $author_id );
     
             $allAssets[] = [
                 'assetName'=>$asset_name,
@@ -390,6 +391,7 @@ function get_games_assets($games_slugs){
                 'assetParentGame'=>$asset_pgame[0]->name,
                 'assetParentGameSlug'=>$asset_pgame[0]->slug,
                 'author_id'=> $author_id,
+                'author_displayname'=> $author_displayname,
                 'author_username'=> $author_username
             ];
         

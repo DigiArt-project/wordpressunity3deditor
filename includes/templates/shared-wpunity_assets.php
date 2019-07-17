@@ -124,24 +124,21 @@ $assets = get_games_assets($user_games_slugs);
 
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
 
-                <div class="mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
-
-                    <!--  Thumbnail  -->
-                    <div class="SceneThumbnail">
-
-                        <a class="editasseturl" href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$asset['assetParentGame'].
+                <div class="asset-shared-thumbnail mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
+    
+                        <?php $pGameId= get_page_by_path($asset['assetParentGameSlug'], OBJECT, 'wpunity_game')->ID; ?>
+                        
+                        <!-- Edit url -->
+                        <a class="editasseturl" href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
                             '&wpunity_scene=&wpunity_asset='.$asset['assetid']; ?>">
                             <?php if ($asset['screenImagePath']){ ?>
-                                <img src="<?php echo $asset['screenImagePath']; ?>" class="attachment-post-thumbnail size-post-thumbnail wp-post-image">
+                                <img src="<?php echo $asset['screenImagePath']; ?>" class="asset-shared-thumbnail">
                             <?php } else { ?>
                                 <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                     <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                 </div>
                             <?php } ?>
                         </a>
-
-
-                        <?php $pGameId= get_page_by_path($asset['assetParentGameSlug'], OBJECT, 'wpunity_game')->ID; ?>
                         
                         <!-- Title -->
                         <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="">
@@ -151,12 +148,12 @@ $assets = get_games_assets($user_games_slugs);
                                ?>"><?php echo $asset['assetName'];?></a>
                         </h1>
 
-
                         <!-- Author -->
                         <p class="sharedAssetsUsername mdc-typography--caption">
                             <img style="width:20px;height:20px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($asset['author_id']);?>">
-                            <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>" style="color:dodgerblue">
-                                <?php echo $asset['author_username']; ?>
+                            <a href="<?php echo home_url().'/user/'.$asset['author_username']; ?>"
+                               style="color:white; mix-blend-mode: difference;">
+                                <?php echo $asset['author_displayname']; ?>
                             </a>
                         </p>
 
@@ -168,15 +165,13 @@ $assets = get_games_assets($user_games_slugs);
     
                         <!-- DELETE BUTTON -->
                         <?php
-                        //echo current_user_can('administrator');
                         // For joker assets, If the user is not administrator he should not be able to delete or edit them.
-                        $canDELETE_EDIT = $isUserAdmin || ($user_id == $asset['author_id']);
-                        ?>
-
-                        <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
-                           class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
-                           onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
-                           style="display:<?php echo $canDELETE_EDIT?'':'none';?>">DELETE</a>
+                        if( $isUserAdmin || ($user_id == $asset['author_id'])) {  ?>
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
+                               class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
+                               onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
+                               >DELETE</a>
+                        <?php } ?>
     
     
                         <?php if ($asset['isJoker']=='true') { ?>
@@ -186,24 +181,6 @@ $assets = get_games_assets($user_games_slugs);
                                   style="background: rgba(250,250,210,0.3);">
                             <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
                         <?php } ?>
-
-
-                    </div>
-
-<!--                    <div class="assetsListCard mdc-card__primary">-->
-<!--                    -->
-<!--                    </div>-->
-
-                    
-
-                    
-                    
-<!--                    <section class="assetsListCardActions mdc-card__actions">-->
-                    
-<!--                        <a data-mdc-auto-init="MDCRipple" title="Edit asset" class="editAssetListButton mdc-button mdc-button--compact mdc-card__action mdc-button--primary" href="--><?php //echo $urlforAssetEdit.$asset['assetid']; ?><!--&--><?php //echo $canDELETE_EDIT?'editable=true':'editable=false' ?><!--">-->
-<!--                            --><?php //echo $canDELETE_EDIT ? 'EDIT':'VIEW'; ?>
-<!--                        </a>-->
-<!--                    </section>-->
 
                 </div>
             </div>
