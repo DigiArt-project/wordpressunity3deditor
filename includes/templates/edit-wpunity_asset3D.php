@@ -106,6 +106,7 @@ if ($isUserloggedIn) {
 
 $author_displayname = get_the_author_meta( 'display_name' , $author_id );
 $author_username = get_the_author_meta( 'nickname' , $author_id );
+$author_country = get_the_author_meta( 'country' , $author_id );
 
 
 $editgamePage = wpunity_getEditpage('game');
@@ -234,7 +235,11 @@ if($asset_id != null) {
 //--------------------------------------------------------
 get_header();
 
-$breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
+if($isEditable)
+    $breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
+else
+    $breacrumbsTitle = "";
+
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 $asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
 $asset_title_label = ($asset_id == null ? "Enter a title for your asset" : "Edit the title of your asset");
@@ -322,18 +327,23 @@ if($asset_id != null) {
     </style>
 
 
-    <div id="previewProgressSlider" style="display: none; position: relative;" class="CenterContents">
-        <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
-        <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1" style="position: absolute; left:0; right: 0; top: 26px;"></h6>
-
-        <div class="progressSlider">
-            <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
-        </div>
-    </div>
+    
 
 
 
     <div id="wrapper_3d_inner" style="position: fixed; top:0; right:0;width:60%;height:100%;z-index:1">
+
+        <div id="previewProgressSlider" style="visibility:hidden; position: absolute; z-index:2;width:100%;top:0" class="CenterContents">
+            <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+            <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1"
+                style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+
+            <div class="progressSlider">
+                <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
+            </div>
+        </div>
+        
+        
         
         <div style="position: absolute;">
             <div id="previewCanvasDiv" style="height:100%; width:100%; position: relative"></div>
@@ -347,9 +357,22 @@ if($asset_id != null) {
     <div id="text-asset-sidebar" style="position:fixed;padding:15px;height:100%;width:40%;background:white; border:1px solid black;z-index:1000;overflow-y:scroll">
     
 <!--        <div class="PageHeaderStyle">-->
-            <h2 class="mdc-typography--headline mdc-theme--text-primary-on-light">
-                
-                <span><?php echo $breacrumbsTitle; ?></span></h2>
+        
+        <div id="edit-asset-header">
+            <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
+
+
+            <span id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:50%;display:inline-block;text-align:right;float:right">
+                <img style="width:40px;height:40px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($author_id);?>">
+                <a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black">
+                    <?php  echo $author_displayname;?>
+                    <br />
+                    <?php echo $author_country;?>
+                </a>
+            </span>
+
+        </div>
+        
                 <br />
         
                 <?php if($isJokerGame ) { ?>
@@ -362,30 +385,27 @@ if($asset_id != null) {
                     </a>
                 <?php } ?>
             
-                <?php if($asset_id != null ) { ?>
-                    <a class="mdc-button mdc-button--primary mdc-theme--primary"
-                       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-                       data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
-                <?php } ?>
+        
+                
+                <?php
+                
+                    if($isUserloggedIn){
+                        if($asset_id != null ) { ?>
+                            <a class="mdc-button mdc-button--primary mdc-theme--primary"
+                            href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
+                            data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
+                        <?php } }
+                    ?>
 <!--        </div>-->
 
-        <p class="mdc-typography--caption" style="position:absolute;top:15px;right:10px;">
-            <img style="width:40px;height:40px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($author_id);?>">
-            <a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black">
-                <?php echo $author_displayname; ?>
-            </a>
-        </p>
+    
     
     
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
-        <div class="">
-
-            <div class="">
-
-                <div  class="">
-
+        <div class="" style="display:<?php echo !$isUserloggedIn?"none":""; ?>">
+                    
                     <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                         <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
@@ -451,23 +471,23 @@ if($asset_id != null) {
                     </div>
 
                     <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
-                </div>
+                
                 <input id="termIdInput" type="hidden" name="term_id" value="">
-
-            </div>
-
         </div>
 
         <!--   TITLE , DESCRIPTION , 3D files  -->
         <div class="" id="informationPanel" style="display: none;padding-top:10px;">
-
             <div class="">
-
                 <div class="">
-
+                    
+                    
+                    
                     <!-- TITLE , DESCRIPTION -->
-                    <h3 class="mdc-typography--title">Information</h3>
-
+                    
+                    
+                    
+                    <?php if($isUserloggedIn) { ?>
+                    
                     <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                         <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
                                aria-controls="title-validation-msg" required minlength="3" maxlength="40" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;"
@@ -475,6 +495,7 @@ if($asset_id != null) {
                         <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                         <div class="mdc-textfield__bottom-line"></div>
                     </div>
+                    
                     <p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">
                         Between 3 - 25 characters
                     </p>
@@ -487,22 +508,38 @@ if($asset_id != null) {
 
                     </div>
 
-                    <!-- WIKIPEDIA  -->
-                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
-                            onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
-                    jQuery('#assetDescription')[0].children)">
-                        Fetch description from Wikipedia</button>
+                    <?php } else { ?>
+                    
+                            <h1 class="mdc-typography--title"
+                                style="color: orangered;text-shadow: 2px 2px 2px aliceblue;font-family: Comic Sans MS;"><?php echo trim($asset_title_saved); ?></h1>
+                            
+                            <span style="width:90%; margin-top:20px; color: dimgray;white-space:pre-line; text-shadow: 1px #0bb697;font-family: Comic Sans MS;">
+                                <?php echo trim($asset_desc_saved); ?>
+                            </span>
+                    
+                    <?php } ?>
+    
+    
+    
+                    <?php if($isUserloggedIn) { ?>
+                    
+                            <!-- WIKIPEDIA button -->
+                            <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
+                                    onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
+                            jQuery('#assetDescription')[0].children)">
+                                Fetch description from Wikipedia</button>
+            
+                            <!-- EUROPEANA (shown only in DigiArt)-->
+                            <?php if ($project_scope === 0){ ?>
+                                <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
+                                        onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
+                                jQuery('#assetDescription')[0].children)"
+                                        style="margin-top:30px" >Fetch description from Europeana</button>
+                            <?php } ?>
+            
+                            <hr class="WhiteSpaceSeparator">
 
-                    <!-- EUROPEANA (shown only in DigiArt)-->
-					<?php if ($project_scope === 0){ ?>
-                        <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
-                                onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value,
-                        jQuery('#assetDescription')[0].children)"
-                                style="margin-top:30px" >Fetch description from Europeana</button>
-					<?php } ?>
-
-                    <hr class="WhiteSpaceSeparator">
-
+                    <?php } ?>
 
                     <!--  POI Image-Text -->
 
@@ -669,9 +706,10 @@ if($asset_id != null) {
                 
                 <div class="" id="objectPropertiesPanel">
 
-                    <h3 class="mdc-typography--title">Object Properties</h3>
+                    <div style="display:<?php echo $isUserloggedIn?'':'none';?>">
+                        <h3 class="mdc-typography--title">Object Properties</h3>
 
-                    <ul class="RadioButtonList">
+                        <ul class="RadioButtonList">
                         <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
 						  <div class="mdc-radio" >
 							  <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx" disabled>
@@ -683,33 +721,37 @@ if($asset_id != null) {
 						  <label id="fbxRadio-label" for="fbxRadio" style="margin-bottom: 0;">FBX file</label>
 					  </li>-->
 
-                        <li class="mdc-form-field" id="mtlRadioListItem">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
+                            <li class="mdc-form-field" id="mtlRadioListItem">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
-                        </li>
-                        <li class="mdc-form-field" style="display: none;" id="pdbRadioListItem">
-                            <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="pdbRadio" name="objectTypeRadio" value="pdb">
-                                <div class="mdc-radio__background">
-                                    <div class="mdc-radio__outer-circle"></div>
-                                    <div class="mdc-radio__inner-circle"></div>
+                                <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
+                            </li>
+                            
+                            <li class="mdc-form-field" style="display: none;" id="pdbRadioListItem">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="pdbRadio" name="objectTypeRadio" value="pdb">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
-                        </li>
+                                <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
+                            </li>
 
-                    </ul>
+                        </ul>
+                    </div>
 
                     <div class="">
                         <div class="">
 
                             <div class="">
+    
+                                <?php if($isUserloggedIn) { ?>
                                 
                                 <label>Select an asset to insert</label>
                                 <ul id="lightSlider">
@@ -741,13 +783,21 @@ if($asset_id != null) {
 
 
                                 </ul>
-
+                                <?php } ?>
+                                
+                                
                                 <input type="hidden" id="asset_sourceID" name="asset_sourceID" value=""/>
-
-                                <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
-                                <input id="fileUploadInput" class="FullWidth" type="file" name="multipleFilesInput" value=""
+    
+                                <?php if($isUserloggedIn) { ?>
+                                    <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
+                                <?php } ?>
+                                
+                                <input id="fileUploadInput"
+                                       class="FullWidth" type="file" name="multipleFilesInput" value=""
+                                       style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                        multiple accept=".obj,.mtl,.jpg,.png"/>
 
+                                
 
                                 <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                                 <input type="hidden" name="objFileInput" value="" id="objFileInput" />
@@ -756,31 +806,24 @@ if($asset_id != null) {
 
                             </div>
 
-
-                            <div id="sshotFileInputContainer" class="">
+                            
+                            <div id="sshotFileInputContainer" class="" style="display: <?php echo $isUserloggedIn?'':'none';?>">
                                 <h3 class="mdc-typography--title">Screenshot</h3>
-                                
 								<?php
-
-								if($asset_id==null) {
-
+	    							if($asset_id==null) {
 									// If asset is not created load a predefault image
 									echo '<img id = "sshotPreviewImg" style = "width: auto; height: 100px" src="'.
 									     plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ).'">';
-
-								} else {
-									// if asset is edited load the existing screenshot url
-									$scrnImageURL = wp_get_attachment_url( get_post_meta($asset_id, "wpunity_asset3d_screenimage",true) );
-									echo '<img id = "sshotPreviewImg" style = "width: auto; height: 100px" src="'.$scrnImageURL.'">';
-
-									// There is no need to resend the image. I ignore the field operations if it is empty.
-//                                        $scrImgData = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($scrnImageURL));
-//                                        echo '<input class="FullWidth" type="hidden" name="sshotFileInput" value="'.$scrImgData.'" id="sshotFileInput" accept="image/jpeg"/>';
-								}
+                                    } else {
+                                        // if asset is edited load the existing screenshot url
+                                        $scrnImageURL = wp_get_attachment_url( get_post_meta($asset_id, "wpunity_asset3d_screenimage",true) );
+                                        echo '<img id = "sshotPreviewImg" style = "width: auto; height: 100px" src="'.$scrnImageURL.'">';
+                                        // There is no need to resend the image. I ignore the field operations if it is empty.
+    //                                        $scrImgData = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($scrnImageURL));
+    //                                        echo '<input class="FullWidth" type="hidden" name="sshotFileInput" value="'.$scrImgData.'" id="sshotFileInput" accept="image/jpeg"/>';
+                                    }
 								?>
-
                                 <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
-
                                 <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                             </div>
                         </div>
@@ -1109,7 +1152,9 @@ if($asset_id != null) {
         ?>
 
         <!-- CATEGORY IPR -->
-        <div class="" id="ipr-div" style="display:none">
+    
+        
+        <div class="" id="ipr-div" style="display:<?php echo $isUserloggedIn?'':'none';?>">
 
             <div class="">
 
@@ -1154,23 +1199,26 @@ if($asset_id != null) {
             </div>
 
         </div>
-
+        
+        
         <!--                                                  -->
 
 		<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
+    
+        <?php if($isUserloggedIn) { ?>
+            <input type="hidden" name="submitted" id="submitted" value="true" />
+            
+            <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
+            
+            <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
+                    data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
+                <?php echo $buttonTitleText; ?>
+            </button>
+        <?php } ?>
+
+        <?php echo $isEditable?'':'*You do not have persmission to edit this asset'?>
         
-        <input type="hidden" name="submitted" id="submitted" value="true" />
-		
-        <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
-        
-        <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
-                data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
-			<?php echo $buttonTitleText; ?>
-        </button>
-
-
-		<?php echo $isEditable?'':'*You do not have persmission to edit this asset'?>
-
+      
     </form>
 
     </div>
@@ -1183,6 +1231,9 @@ if($asset_id != null) {
         var mdc = window.mdc;
         mdc.autoInit();
 
+        // if (event.target.files.length > 0)
+             //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
+        
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
         // TODO: Remove also from register and enquire
@@ -1192,7 +1243,11 @@ if($asset_id != null) {
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
+        //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
+        
         loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
+
+        
 
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
         var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
@@ -1231,10 +1286,6 @@ if($asset_id != null) {
                     jQuery('#'+ selectedCatId).attr("aria-selected", true);
                     jQuery('#category-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                     loadLayout(false);
-
-
-                    
-                    
                 }
 
                 if (jQuery('#currently-ipr-selected').attr("data-cat-ipr-id")) {
@@ -1314,9 +1365,6 @@ if($asset_id != null) {
                 jQuery("#formSubmitBtn").show();
 
                 jQuery("#pdbRadioListItem").show();
-
-                jQuery("#ipr-div").show();
-                
                 
                 wu_webw_3d_view.resizeDisplayGL();
 
@@ -1625,13 +1673,15 @@ if($asset_id != null) {
             var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
             var inputLabel = document.getElementById('fileUploadInputLabel');
             var input = document.getElementById('fileUploadInput');
-            if (objectType === 'pdb') {
-                inputLabel.innerHTML = 'Select a pdb file';
-                input.accept = ".pdb";
-            } else {
-                inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
-                input.accept = ".obj,.mtl,.jpg,.png";
-            }
+            
+            if (inputLabel)
+                if (objectType === 'pdb') {
+                    inputLabel.innerHTML = 'Select a pdb file';
+                    input.accept = ".pdb";
+                } else {
+                    inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
+                    input.accept = ".obj,.mtl,.jpg,.png";
+                }
         }
 
     </script>

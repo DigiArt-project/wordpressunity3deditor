@@ -193,7 +193,6 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
 
         //  Read each file and put the string content in an input dom
         for ( var i = 0, file; file = files[ i ]; i++) {
-
             if ( file.name.indexOf( '\.pdb' ) > 0 ) {
                 nPdb = 1;
                 wpunity_read_file('Text' , file, 'pdb', wpunity_load_file_callback, wu_webw_3d_view_local);
@@ -219,6 +218,7 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
             }
         }
 
+        //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
 
@@ -240,6 +240,8 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
 
     // kick render loop
     render();
+
+
 
     // for existing 3D models
     if (typeof path_url != "undefined")
@@ -304,6 +306,7 @@ function checkerCompleteReading(canvas){
 
                         // Start with textures
                         canvas.loadFilesUser(objectDefinition);
+
                     }
                 }
             }
@@ -319,6 +322,11 @@ function checkerCompleteReading(canvas){
  * @param objFilename
  */
 function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
+
+
+    jQuery('#previewProgressSlider')[0].style.visibility = "visible";
+
+    jQuery('#previewProgressSlider').show();// = "visible";
 
     if (wu_webw_3d_view.scene != null) {
         if (wu_webw_3d_view.renderer)
@@ -370,10 +378,16 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
                     var totalradius = sphere[1];
                     wu_webw_3d_view.controls.minDistance = 0.001*totalradius;
                     wu_webw_3d_view.controls.maxDistance = 3*totalradius;
+
+                    jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                 },
                 //onObjProgressLoad
                 function (xhr) {
+
+                    //console.log(xhr);
+                    document.getElementById( 'previewProgressLabel' ).innerHTML = Math.round(xhr.loaded / 1000 ) + "KB";
                     if (xhr.lengthComputable) {
+
                     }
                 },
                 //onObjErrorLoad

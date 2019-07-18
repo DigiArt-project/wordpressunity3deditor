@@ -224,7 +224,6 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     width: 100%;
     height: 4px;
     overflow: hidden;
-    top: 5px;
 }
 
 .progressSliderLine{
