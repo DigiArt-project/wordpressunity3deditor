@@ -342,16 +342,13 @@ $wpunity_databox1 = array(
 			'id' => $wpunity_prefix . 'next_scene',
 			'type' => 'text',
 			'std' => ''
-		
-        
+
         ),array(
 			'name' => 'Video',
 			'desc' => 'Video',
 			'id' => $wpunity_prefix . 'video',
 			'type' => 'text',
 			'std' => ''
-        
-        
         ),array(
             'name' => 'isreward',
             'desc' => 'isreward',
@@ -376,6 +373,24 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'isJoker',
             'type' => 'text',
             'std' => 'false'
+        ),array(
+            'name' => 'Greek',
+            'desc' => 'Greek',
+            'id' => $wpunity_prefix . 'description_greek',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'Spanish',
+            'desc' => 'Spanish',
+            'id' => $wpunity_prefix . 'description_spanish',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'French',
+            'desc' => 'French',
+            'id' => $wpunity_prefix . 'description_french',
+            'type' => 'text',
+            'std' => ''
         )
 	)
 );
@@ -566,7 +581,19 @@ function wpunity_assets_databox_show(){
 						<?php //TODO preview of the video ?>
                     </td>
                 </tr>
-				<?php
+                <?php
+            }elseif (in_array($field['id'],['wpunity_asset3d_description_greek','wpunity_asset3d_description_spanish','wpunity_asset3d_description_french']  )) {
+                ?>
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td id="<?php echo $field['id'] ?>" style="margin-bottom:0;">
+                        <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                        <textarea name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                               value="" style="width:100%;height:auto"><?php echo esc_attr($meta ? $meta : $field['std']); ?></textarea>
+                    </td>
+                </tr>
+                
+                <?php
 			}
 		}
 		?>
@@ -588,6 +615,7 @@ function wpunity_assets_databox_show(){
                 document.getElementById('wpunity_asset3d_video').style.display = 'none';
                 document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
                 document.getElementById('wpunity-assets-infobox').style.display = 'none';
+                document.getElementById('wpunity_asset3d_description_greek').style.display = 'none';
             }else{
                 var link = document.getElementById('wpunity_asset3d_next_scene_field');
                 link.style.display = 'none';
@@ -598,6 +626,7 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_video').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
                     document.getElementById('wpunity-assets-infobox').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_description_greek').style.display = 'block';
                 }else if(text == 'Points of Interest (Image-Text)'){
                     document.getElementById('wpunity_asset3d_image1').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
@@ -605,6 +634,7 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_video').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
                     document.getElementById('wpunity-assets-infobox').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_description_greek').style.display = 'block';
                 }else if(text == 'Points of Interest'){
                     document.getElementById('wpunity_asset3d_image1').style.display = 'block';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'block';
@@ -612,6 +642,7 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_video').style.display = 'block';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
                     document.getElementById('wpunity-assets-infobox').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_description_greek').style.display = 'block';
                 }else{
                     document.getElementById('wpunity_asset3d_image1').style.display = 'none';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
@@ -619,6 +650,7 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_video').style.display = 'none';
                     document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
                     document.getElementById('wpunity-assets-infobox').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_description_greek').style.display = 'none';
                 }
             }
         }

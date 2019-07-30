@@ -1,6 +1,7 @@
 <?php
 
-function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID){
+function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID,
+                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench){
    
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -24,11 +25,18 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm
 
     $asset_id = wp_insert_post($asset_information);
     update_post_meta($asset_id, 'wpunity_asset3d_pathData', $gameSlug);
-
+    
+    update_post_meta($asset_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    
+    
+    
     if($asset_id){return $asset_id;}else{return 0;}
 }
 
-function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id,$assetTitleForm,$assetDescForm, $assetCatIPRID){
+function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id, $assetTitleForm,$assetDescForm, $assetCatIPRID,
+                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench){
     
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -50,6 +58,11 @@ function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_insert
     );
 
     wp_update_post($asset_new_info);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    
     return 1;
 }
 

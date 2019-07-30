@@ -139,6 +139,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
 	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
+    
+    $assetDescFormGreek = esc_attr(strip_tags($_POST['assetDescGreek'],"<b><i>")); //Description of the Asset (Form value)
+    $assetDescFormSpanish = esc_attr(strip_tags($_POST['assetDescSpanish'],"<b><i>")); //Description of the Asset (Form value)
+    $assetDescFormFrench = esc_attr(strip_tags($_POST['assetDescFrench'],"<b><i>")); //Description of the Asset (Form value)
+    
 
 	$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
 	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
@@ -150,10 +155,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	// NEW
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $assetTitleForm, $assetDescForm, $gameSlug, $assetCatIPRID);
+		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $assetTitleForm, $assetDescForm, $gameSlug, $assetCatIPRID,
+            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench);
 	}else {
 		// Edit an existing asset: Return true if updated, false if failed
-		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID, $assetCatIPRID);
+		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID,
+            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench);
 	}
 	
 	// Create new or updated of main fields edit successfull
@@ -187,8 +194,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		wpunity_create_asset_moleculeExtra_frontend($asset_id);
 	}
 
-	if($scene_id == 0)
-		echo '<script>alert("Asset created or edited successfully");</script>';
+	if($scene_id == 0) {
+        
+        echo '<script>alert("Asset created or edited successfully");</script>';
+    }
 //	else
 //		wp_redirect($goBackTo_MainLab_link);
 
@@ -243,8 +252,20 @@ else
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 $asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
 $asset_title_label = ($asset_id == null ? "Enter a title for your asset" : "Edit the title of your asset");
+
 $asset_desc_saved = ($asset_id == null ? "" : get_post_field('post_content', $asset_id));
 $asset_desc_label = ($asset_id == null ? "Add a small description for your asset" : "Edit the description of your asset");
+
+$asset_desc_greek_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_greek', true));
+$asset_desc_greek_label = ($asset_id == null ? "Πρόσθεσε μια περιγραφή για το αντικείμενο" : "Τροποποίηση περιγραφής αντικειμένου");
+
+$asset_desc_spanish_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_spanish', true));
+$asset_desc_spanish_label = ($asset_id == null ? "Agregue una pequeña descripción para su activo" : "Edite la descripción de su activo");
+
+$asset_desc_french_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french', true));
+$asset_desc_french_label = ($asset_id == null ? "Ajouter une description de votre actif" : "Modifier la description de votre bien");
+
+
 
 //print_r(get_allowed_mime_types());
 
@@ -502,27 +523,78 @@ if($asset_id != null) {
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                          style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                <textarea id="multi-line" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                        
+                        <textarea id="assetDesc" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                           name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
-                        <label for="multi-line" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
+                        <label for="assetDesc" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
 
+                    </div>
+
+                    <div id="assetDescriptionGreek" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                             style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
+                        <textarea id="assetDescGreek" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                  name="assetDescGreek" form="3dAssetForm"><?php echo trim($asset_desc_greek_saved); ?></textarea>
+                        <label for="assetDescGreek" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_label; ?></label>
+                    </div>
+
+                    <div id="assetDescriptionSpanish" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                         style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
+                        <textarea id="assetDescSpanish" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                  name="assetDescSpanish" form="3dAssetForm"><?php echo trim($asset_desc_spanish_saved); ?></textarea>
+                        <label for="assetDescSpanish" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_spanish_label; ?></label>
+                    </div>
+
+                    <div id="assetDescriptionFrench" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                             style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
+                        <textarea id="assetDescFrench" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                  name="assetDescFrench" form="3dAssetForm"><?php echo trim($asset_desc_french_saved); ?></textarea>
+                        <label for="assetDescFrench" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_label; ?></label>
                     </div>
 
                     <?php } else { ?>
                     
                             <h1 class="mdc-typography--title"
                                 style="color: orangered;text-shadow: 2px 2px 2px aliceblue;font-family: Comic Sans MS;"><?php echo trim($asset_title_saved); ?></h1>
-                            
-                            <span style="width:90%; margin-top:20px; color: dimgray;white-space:pre-line; text-shadow: 1px #0bb697;font-family: Comic Sans MS;">
-                                <?php echo trim($asset_desc_saved); ?>
-                            </span>
+
+                            <ul class="langul">
+                                <li class="langli"><a href="#English">English</a></li>
+                                <li class="langli"><a href="#Greek" >Greek</a></li>
+                                <li class="langli"><a href="#Spanish" >Spanish</a></li>
+                                <li class="langli"><a href="#French" >French</div></li>
+                            </ul>
+
+                                <div class="wrapper_lang">
+                                    <div id="English" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_saved);?></div>
+                                    <div id="Greek" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_greek_saved); ?></div>
+                                    <div id="Spanish" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_spanish_saved); ?></div>
+                                    <div id="French" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_french_saved); ?></div>
+                                </div>
+
+
+<!--                <ul>-->
+<!--                    <li><a href="#tab-1-container">Tab 1</a></li>-->
+<!--                    <li><a href="#tab-2-container">Tab 2</a></li>-->
+<!--                    <li><a href="#tab-3-container">Tab 3</a></li>-->
+<!--                </ul>-->
+<!---->
+<!--                <div class="wrapper">-->
+<!--                    <div id="tab-1-container" class="tab-container">-->
+<!--                        Tab 1 content-->
+<!--                    </div>-->
+<!---->
+<!--                    <div id="tab-2-container" class="tab-container">-->
+<!--                        Tab 2 content-->
+<!--                    </div>-->
+<!---->
+<!--                    <div id="tab-3-container" class="tab-container">-->
+<!--                        Tab 3 content-->
+<!--                    </div>-->
+<!--                </div>-->
+                
                     
                     <?php } ?>
     
-    
-    
                     <?php if($isUserloggedIn) { ?>
-                    
                             <!-- WIKIPEDIA button -->
                             <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
                                     onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value,
@@ -1152,8 +1224,6 @@ if($asset_id != null) {
         ?>
 
         <!-- CATEGORY IPR -->
-    
-        
         <div class="" id="ipr-div" style="display:<?php echo $isUserloggedIn?'':'none';?>">
 
             <div class="">
@@ -1684,6 +1754,7 @@ if($asset_id != null) {
                 }
         }
 
+        
     </script>
 
 <?php  get_footer(); ?>

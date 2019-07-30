@@ -38,6 +38,7 @@ class SceneClass{
             'exclude_from_search' => true,
             'publicly_queryable' => false,
             'show_in_nav_menus' => false,
+            'show_in_rest' => true,
             'menu_position' => 25,
             'menu_icon' => 'dashicons-media-default',
             'taxonomies' => array('wpunity_scene_pgame','wpunity_scene_yaml'),

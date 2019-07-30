@@ -130,7 +130,7 @@ $assets = get_games_assets($user_games_slugs);
                         
                         <!-- Edit url -->
                         <a class="editasseturl" href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
-                            '&wpunity_scene=&wpunity_asset='.$asset['assetid']; ?>">
+                            '&wpunity_scene=&wpunity_asset='.$asset['assetid'].'#English'; ?>">
                             <?php if ($asset['screenImagePath']){ ?>
                                 <img src="<?php echo $asset['screenImagePath']; ?>" class="asset-shared-thumbnail">
                             <?php } else { ?>
@@ -144,7 +144,7 @@ $assets = get_games_assets($user_games_slugs);
                         <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="">
                             <a class="mdc-theme--secondary"
                                href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
-                                   '&wpunity_scene=&wpunity_asset='.$asset['assetid'];
+                                   '&wpunity_scene=&wpunity_asset='.$asset['assetid'].'#English';
                                ?>"><?php echo $asset['assetName'];?></a>
                         </h1>
 

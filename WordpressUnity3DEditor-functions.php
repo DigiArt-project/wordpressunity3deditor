@@ -321,7 +321,60 @@ add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_
 
 
 
+//add_filter('rest_authentication_errors', 'disable_wp_rest_api');
+//
+//function disable_wp_rest_api($access) {
+//
+//    //if (!is_user_logged_in()) {
+//
+//    //    $message = apply_filters('disable_wp_rest_api_error', __('REST API restricted to authenticated users.', 'disable-wp-rest-api'));
+//
+//    //    return new WP_Error('rest_login_required', $message, array('status' => rest_authorization_required_code()));
+//
+//  //  }
+//
+//    return $access;
+//}
+
+// remove <p>  </p> from content
+remove_filter ('the_content', 'wpautop');
 
 
 
+/* ------------------------------ API ---------------------------------------- */
+
+/*
+ * Get scene data by title
+ */
+function prefix_get_endpoint_phrase($request) { //
+    // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
+    
+    $title = (string) $request['title'];
+    
+    $args = array (
+        'title'=>$title,
+        'post_status' => 'publish',
+        'post_type' => 'wpunity_scene'
+    );
+    
+    $post = get_posts( $args );
+    $content = json_decode($post[0]->post_content, true);
+    
+    return rest_ensure_response($content);
+}
+
+/**
+ * This function is where we register our routes for our example endpoint.
+ */
+function prefix_register_example_routes() {
+    // register_rest_route() handles more arguments but we are going to stick to the basics for now.
+    register_rest_route( 'wpunity/v1', '/scene/(?P<title>\S+)', array(
+        // By using this constant we ensure that when the WP_REST_Server changes our readable endpoints will work as intended.
+        'methods'  => WP_REST_Server::READABLE,
+        // Here we register our callback. The callback is fired when this endpoint is matched by the WP_REST_Server class.
+        'callback' => 'prefix_get_endpoint_phrase',
+    ) );
+}
+
+add_action( 'rest_api_init', 'prefix_register_example_routes' );
 ?>

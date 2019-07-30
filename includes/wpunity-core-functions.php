@@ -550,6 +550,16 @@ function wpunity_projects_menu_link( $menu, $args ) {
 add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 2, 2 );
 
 
+// Projects
+function wpunity_compiled_projects_menu_link( $menu, $args ) {
+    $menu .= '<li class="nav-menu" class="menu-item">' .
+        '<a href="'.get_permalink( get_page_by_path( 'compiled-projects/' ) ).'">Compiled Projects</a></li>';
+    return $menu;
+}
+add_filter( 'wp_nav_menu_items','wpunity_compiled_projects_menu_link', 2, 3 );
+
+
+
 
 // Display Members as menu item (Ultimatemember plugin)
 function wpunity_members_menu_link( $menu, $args ) {
@@ -565,7 +575,7 @@ function wpunity_feedback_menu_link( $menu, $args ) {
         '<a href="'.get_permalink( get_page_by_path( 'feedback/' ) ).'">Feedback</a></li>';
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_feedback_menu_link', 4, 2 );
+add_filter( 'wp_nav_menu_items','wpunity_feedback_menu_link', 4, 4 );
 
 function wpunity_contact_menu_link( $menu, $args ) {
     $menu .= '<li class="nav-menu" class="menu-item">' .
@@ -2631,7 +2641,7 @@ function wpunity_save_scene_async_action_callback()
 	$scene_new_info = array(
 		'ID' => $_POST['scene_id'],
 		'post_title' => $_POST['scene_title'],
-		'post_content' => wp_unslash($_POST['scene_json'])
+		'post_content' => wp_strip_all_tags(wp_unslash($_POST['scene_json']), true)
 	);
 
 	$res = wp_update_post($scene_new_info);

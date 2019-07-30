@@ -521,3 +521,80 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     white-space: nowrap;
     display:block;
 }
+
+
+
+
+ /*Language tabs front-end*/
+.wrapper_lang {
+    position: relative;
+}
+
+.tab-container_lang {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+}
+
+
+.tab-container_lang:target { display: block}
+.tab-container_lang:not(:target) { display: none !important }
+
+/* just for demo */
+.langul  {
+    list-style: none;
+}
+
+.langli  {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+
+
+
+/*.wrapper {*/
+/*    position: relative;*/
+/*}*/
+/*.tab-container {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    background: red;*/
+/*}*/
+
+/*.tab-container:first-child { display: block }*/
+
+/*:target { display: block }*/
+
+
+
+/*!* just for demo *!*/
+
+/*ul {*/
+/*    list-style: none;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*li {*/
+/*    display: inline-block;*/
+/*    margin-right: 1rem;*/
+/*}*/
+
+
+
+
+.asset3d_desc_view{
+    width:90%;
+    margin-top:20px;
+    color: dimgray;
+    white-space:pre-line;
+    text-shadow: 1px #0bb697;
+    font-family: Comic Sans MS;
+}
+
+
