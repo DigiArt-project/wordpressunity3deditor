@@ -3,7 +3,10 @@
 //SIDEBAR of Asset3D with fetch-segmentation etc...
 
 function loadTypesAssetsDataScripts() {
-// load css/wpunity_backend.css
+    
+    
+    
+    // load css/wpunity_backend.css
 	wp_enqueue_style('wpunity_backend');
 
 // load script from js_libs
@@ -41,11 +44,11 @@ function loadTypesAssetsDataScripts() {
 
     
 // Some parameters to pass in the classification.js  ajax
-	wp_localize_script('wpunity_classification_request', 'phpvars',
-		array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
-		      'obj' => get_post_meta($_GET['post'], 'wpunity_asset3d_obj', true)
-		)
-	);
+//	wp_localize_script('wpunity_classification_request', 'phpvars',
+//		array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
+//		      'obj' => get_post_meta($_GET['post'], 'wpunity_asset3d_obj', true)
+//		)
+//	);
 }
 add_action('wp_enqueue_scripts', 'loadTypesAssetsDataScripts' );
 
@@ -391,6 +394,18 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'description_french',
             'type' => 'text',
             'std' => ''
+        ),array(
+            'name' => 'fonts',
+            'desc' => 'fonts',
+            'id' => $wpunity_prefix . 'fonts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'back_3d_color',
+            'desc' => '3D viewer background color',
+            'id' => $wpunity_prefix . 'back_3d_color',
+            'type' => 'text',
+            'std' => "rgb(221, 185, 155)"
         )
 	)
 );
@@ -592,9 +607,28 @@ function wpunity_assets_databox_show(){
                                value="" style="width:100%;height:auto"><?php echo esc_attr($meta ? $meta : $field['std']); ?></textarea>
                     </td>
                 </tr>
-                
                 <?php
-			}
+            }elseif (in_array($field['id'],['wpunity_asset3d_fonts'])) {
+                ?>
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td id="<?php echo $field['id'] ?>" style="margin-bottom:0;">
+                        <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                        <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                    </td>
+                </tr>
+                <?php
+            }elseif (in_array($field['id'],['wpunity_asset3d_back_3d_color'])) {
+                ?>
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td id="<?php echo $field['id'] ?>" style="margin-bottom:0;">
+                        <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                        <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
+                    </td>
+                </tr>
+                <?php
+            }
 		}
 		?>
         </tbody>
@@ -657,6 +691,9 @@ function wpunity_assets_databox_show(){
 
         jQuery(document).ready(function ($) {
 
+            
+            
+            
             // Uploading files
             var file_frame;
             var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
@@ -912,6 +949,7 @@ add_action('save_post', 'wpunity_assets_databox_save');
 
 // AJAXES for content interlinking
 add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
+//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
 add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
 add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
 

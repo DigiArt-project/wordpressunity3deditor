@@ -1,8 +1,34 @@
 <?php //Create asset
 
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+
+putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
+
+// Include Google Cloud dependendencies using Composer
+require( plugin_dir_path( __DIR__ ) .  '/translate/vendor/autoload.php' );
+
+//// [START translate_translate_text]
+use Google\Cloud\Translate\TranslateClient;
+
+
+//    $text = $_POST['text'];
+//    $target_lang = $_POST['lang'];
+//
+//    //$translate = new TranslateClient();
+////    $result = $translate->translate($text, [
+////    'target' => $target_lang,
+////    ]);
+//    echo $result[text];
+
+
+
 // Load Scrinpts
 function loadAsset3DManagerScripts() {
-	// Three js : for simple rendering
+    
+    
+    // Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
 	wp_enqueue_script('wpunity_load87_threejs');
 	// For loading on clicking on image of previously uploaded obj
@@ -24,7 +50,9 @@ function loadAsset3DManagerScripts() {
 
 	// scroll for images
 	wp_enqueue_script('wpunity_lightslider');
-
+    
+    wp_enqueue_script('wpunity_jscolorpick');
+	
 	// to capture screenshot of the 3D molecule and its tags
 	wp_enqueue_script('wpunity_html2canvas');
 
@@ -38,6 +66,7 @@ function loadAsset3DManagerScripts() {
 	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
 	);
+ 
 }
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
 
@@ -86,8 +115,10 @@ $isUserAdmin = current_user_can('administrator');
 $isEditable = false;
 
 // Old asset
-if(isset($_GET['wpunity_asset']))
-    $author_id = get_post_field ('post_author', $asset_id);
+if(isset($_GET['wpunity_asset'])) {
+    $author_id = get_post_field('post_author', $asset_id);
+    
+}
 
 if ($isUserloggedIn) {
     $user_id = get_current_user_id();
@@ -128,7 +159,12 @@ $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//
 $edit_scene_page_id = $editscenePage[0]->ID;
 
 // GoBack links
-$goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+if($scene_id!=0) {
+    $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
+} else {
+    $goBackTo_MainLab_link ='';
+}
+
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 $goBackTo_SharedAssets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id;
 
@@ -144,7 +180,28 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     $assetDescFormSpanish = esc_attr(strip_tags($_POST['assetDescSpanish'],"<b><i>")); //Description of the Asset (Form value)
     $assetDescFormFrench = esc_attr(strip_tags($_POST['assetDescFrench'],"<b><i>")); //Description of the Asset (Form value)
     
-
+    if($assetDescFormGreek=='' && $assetDescForm !=''){
+        $translate = new TranslateClient();
+        $result = $translate->translate($assetDescForm, ['target' => 'el']);
+        $assetDescFormGreek = $result[text];
+    }
+    
+    if($assetDescFormSpanish=='' && $assetDescForm !=''){
+        $translate = new TranslateClient();
+        $result = $translate->translate($assetDescForm, ['target' => 'es']);
+        $assetDescFormSpanish = $result[text];
+    }
+    
+    if($assetDescFormFrench=='' && $assetDescForm !=''){
+        $translate = new TranslateClient();
+        $result = $translate->translate($assetDescForm, ['target' => 'fr']);
+        $assetDescFormFrench = $result[text];
+    }
+    
+    $assetFonts = esc_attr(strip_tags($_POST['assetFonts']));
+    $assetback3dcolor=  esc_attr(strip_tags($_POST['assetback3dcolor']));
+    
+    
 	$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
 	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
     
@@ -156,11 +213,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $assetTitleForm, $assetDescForm, $gameSlug, $assetCatIPRID,
-            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench);
+            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor);
 	}else {
 		// Edit an existing asset: Return true if updated, false if failed
 		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetTitleForm, $assetDescForm, $assetCatIPRID,
-            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench);
+            $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor);
 	}
 	
 	// Create new or updated of main fields edit successfull
@@ -217,6 +274,9 @@ if($asset_id != null) {
     
     $asset_post = get_post($asset_id);
     $assetpostMeta = get_post_meta($asset_id);
+   
+    $back_3d_color = $assetpostMeta['wpunity_asset3d_back_3d_color'][0];
+    $fonts = $assetpostMeta['wpunity_asset3d_fonts'][0];
     
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
         $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
@@ -265,7 +325,11 @@ $asset_desc_spanish_label = ($asset_id == null ? "Agregue una pequeña descripci
 $asset_desc_french_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french', true));
 $asset_desc_french_label = ($asset_id == null ? "Ajouter une description de votre actif" : "Modifier la description de votre bien");
 
+$asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_fonts', true));
+$asset_fonts_label = ($asset_id == null ? "Fonts" : "Fonts");
 
+$asset_back_3d_color_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
+$asset_back_3d_color_label = ($asset_id == null ? "3D viewer background color" : "3D viewer background color");
 
 //print_r(get_allowed_mime_types());
 
@@ -344,7 +408,7 @@ if($asset_id != null) {
         .main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
         .site-branding {display:none;}
         #content {padding:0px;}
-        .site-content-contain{margin:0;height:100%;overflow:hidden;}
+        .site-content-contain{margin:0;overflow:hidden;}
     </style>
 
 
@@ -523,11 +587,9 @@ if($asset_id != null) {
 
                     <div id="assetDescription" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                          style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                        
                         <textarea id="assetDesc" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                           name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                         <label for="assetDesc" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
-
                     </div>
 
                     <div id="assetDescriptionGreek" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
@@ -535,8 +597,14 @@ if($asset_id != null) {
                         <textarea id="assetDescGreek" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                                   name="assetDescGreek" form="3dAssetForm"><?php echo trim($asset_desc_greek_saved); ?></textarea>
                         <label for="assetDescGreek" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_label; ?></label>
+                        
                     </div>
 
+
+                    
+                    
+                    
+                    
                     <div id="assetDescriptionSpanish" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                          style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
                         <textarea id="assetDescSpanish" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
@@ -551,46 +619,59 @@ if($asset_id != null) {
                         <label for="assetDescFrench" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_label; ?></label>
                     </div>
 
+
+                        <div id="assetFontsDiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                             style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
+                        <input type="text" id="assetFonts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                  name="assetFonts" form="3dAssetForm" value="<?php echo trim($asset_fonts_saved); ?>" />
+                            <label for="assetFonts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_fonts_label; ?></label>
+                        </div>
+
+
+                        <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                             style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
+
+                            <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="cccccc" style="width:40%;margin-left:60%;padding:20px;">
+                            
+                            <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
+                                   name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
+                            <label for="assetback3dcolor" class="mdc-textfield__label" style="background: none;"><?php echo $asset_back_3d_color_label; ?></label>
+                            
+
+
+                        </div>
+
+                        
+
+                   
+
+
                     <?php } else { ?>
                     
                             <h1 class="mdc-typography--title"
-                                style="color: orangered;text-shadow: 2px 2px 2px aliceblue;font-family: Comic Sans MS;"><?php echo trim($asset_title_saved); ?></h1>
+                                style="color: orangered;text-shadow: 2px 2px 2px aliceblue;"><?php echo trim($asset_title_saved); ?></h1>
 
                             <ul class="langul">
                                 <li class="langli"><a href="#English">English</a></li>
-                                <li class="langli"><a href="#Greek" >Greek</a></li>
-                                <li class="langli"><a href="#Spanish" >Spanish</a></li>
-                                <li class="langli"><a href="#French" >French</div></li>
+                                <li class="langli"><a href="#Greek" >Ελληνικά</a></li>
+                                <li class="langli"><a href="#Spanish" >Español</a></li>
+                                <li class="langli"><a href="#French" >Français</div></li>
                             </ul>
 
+                
                                 <div class="wrapper_lang">
-                                    <div id="English" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_saved);?></div>
+                                    <div id="English" class="tab-container_lang asset3d_desc_view" style="font-family:<?php echo $fonts ?>"><?php echo trim($asset_desc_saved);?></div>
                                     <div id="Greek" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_greek_saved); ?></div>
                                     <div id="Spanish" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_spanish_saved); ?></div>
                                     <div id="French" class="tab-container_lang asset3d_desc_view"><?php echo trim($asset_desc_french_saved); ?></div>
                                 </div>
 
 
-<!--                <ul>-->
-<!--                    <li><a href="#tab-1-container">Tab 1</a></li>-->
-<!--                    <li><a href="#tab-2-container">Tab 2</a></li>-->
-<!--                    <li><a href="#tab-3-container">Tab 3</a></li>-->
-<!--                </ul>-->
-<!---->
-<!--                <div class="wrapper">-->
-<!--                    <div id="tab-1-container" class="tab-container">-->
-<!--                        Tab 1 content-->
-<!--                    </div>-->
-<!---->
-<!--                    <div id="tab-2-container" class="tab-container">-->
-<!--                        Tab 2 content-->
-<!--                    </div>-->
-<!---->
-<!--                    <div id="tab-3-container" class="tab-container">-->
-<!--                        Tab 3 content-->
-<!--                    </div>-->
-<!--                </div>-->
-                
+                        
+                            <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
+                                   name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
+                            <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="cccccc" style="padding:20px;width:20px;">
+                        
                     
                     <?php } ?>
     
@@ -609,6 +690,17 @@ if($asset_id != null) {
                                         style="margin-top:30px" >Fetch description from Europeana</button>
                             <?php } ?>
             
+                        
+                            <!-- Translation -->
+                        
+<!--                            <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"-->
+<!--                                    onclick="wpunity_translateAjaxFrontEnd(jQuery('#assetDescriptionGreek')[0].children[0].innerHTML, 'el',-->
+<!--                                jQuery('#assetDescriptionGreek')[0].children)"-->
+<!--                                    style="margin-top:30px" >Translate from English to Greek</button>-->
+                        
+                        
+                        
+                        
                             <hr class="WhiteSpaceSeparator">
 
                     <?php } ?>
@@ -1306,8 +1398,12 @@ if($asset_id != null) {
         
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
+        var back_3d_color = "<?php echo $back_3d_color; ?>";
+        
+        document.getElementById("jscolorpick").value = back_3d_color;
+        
         // TODO: Remove also from register and enquire
-        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ) );
+        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color );
 
         wpunity_reset_panels(wu_webw_3d_view);
 
@@ -1363,6 +1459,13 @@ if($asset_id != null) {
                     jQuery('#category-ipr-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                 }
 
+
+                
+                
+                
+
+                //jQuery('#wpunity_asset3d_back_3d_color').wpColorPicker();
+                
             });
 
 
@@ -1754,6 +1857,14 @@ if($asset_id != null) {
                 }
         }
 
+        
+        function updateColorPicker(picker){
+            document.getElementById('assetback3dcolor').value = picker.toRGBString();
+            wu_webw_3d_view .scene.background.r = picker.rgb[0]/255;
+            wu_webw_3d_view .scene.background.g = picker.rgb[1]/255;
+            wu_webw_3d_view .scene.background.b = picker.rgb[2]/255;
+        }
+        
         
     </script>
 

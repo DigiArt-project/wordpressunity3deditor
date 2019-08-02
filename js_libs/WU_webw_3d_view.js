@@ -3,7 +3,7 @@
  */
 class WU_webw_3d_view {
 
-    constructor(elementToBindTo) {
+    constructor(elementToBindTo, back_3d_color) {
 
         this.renderer = null;
         this.canvas = elementToBindTo;
@@ -57,7 +57,9 @@ class WU_webw_3d_view {
         });
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xddb59b);
+
+        //back_3d_color = "rgb(221, 185, 155)"; //  0xddb59b;
+        this.scene.background = new THREE.Color(back_3d_color);
 
         // - PDB Specific -
         this.scene.add(this.root);

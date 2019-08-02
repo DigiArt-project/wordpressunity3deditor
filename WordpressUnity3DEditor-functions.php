@@ -50,6 +50,8 @@ function wpunity_register_scripts() {
 
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
 	wp_register_script( 'wpunity_lightslider', plugin_dir_url( __FILE__ ) . 'js_libs/lightslider.min.js');
+    
+    wp_register_script( 'wpunity_jscolorpick', plugin_dir_url( __FILE__ ) . 'js_libs/jscolor.js');
 
     wp_register_script( 'wpunity_html2canvas', plugin_dir_url( __FILE__ ) . 'js_libs/html2canvas.min.js');
     
@@ -377,4 +379,11 @@ function prefix_register_example_routes() {
 }
 
 add_action( 'rest_api_init', 'prefix_register_example_routes' );
+
+
+
+
+
+
+
 ?>

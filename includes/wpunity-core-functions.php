@@ -2056,6 +2056,9 @@ function wpunity_enlist_splitted_objs_action_callback(){
 
 add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
 
+
+//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
+
 //======================= CONTENT INTERLINKING =========================================================================
 
 function wpunity_fetch_description_action_callback(){
@@ -2686,12 +2689,19 @@ function wpunity_undo_scene_async_action_callback()
 }
 
 
-
-
-
-
-
-
+//function wpunity_translate_action_callback()
+//{
+//
+//    $text = $_POST['text'];
+//    $target_lang = $_POST['lang'];
+//
+//    //$translate = new TranslateClient();
+////    $result = $translate->translate($text, [
+////    'target' => $target_lang,
+////    ]);
+//    echo $result[text];
+//    wp_die();
+//}
 
 
 

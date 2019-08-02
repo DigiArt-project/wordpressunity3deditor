@@ -42,6 +42,7 @@ class ImcSettingsPage {
             'wpunity_ftp_username' => '',
             'wpunity_ftp_pass' => '',
             'wpunity_server_path' => 'C:/xampp/htdocs/COMPILE_UNITY3D_GAMES/',
+            'wpunity_google_application_credentials' => ''
         ), $this->general_settings );
 
     }
@@ -71,6 +72,9 @@ class ImcSettingsPage {
         add_settings_field( 'wpunity_ftp_pass', __('FTP Password'), array( &$this, 'field_wpunity_ftp_pass' ), $this->general_settings_key, 'section_general' );
 
         add_settings_field( 'wpunity_server_path', __('Remote Server path'), array( &$this, 'field_wpunity_server_path' ), $this->general_settings_key, 'section_general' );
+    
+        add_settings_field( 'wpunity_google_application_credentials', __('GOOGLE_APPLICATION_CREDENTIALS'), array( &$this, 'field_wpunity_google_application_credentials' ), $this->general_settings_key, 'section_general' );
+        
     }
 
 
@@ -129,6 +133,14 @@ class ImcSettingsPage {
         <input type="text" style="width:70%" name="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" id="<?php echo $this->general_settings_key; ?>[wpunity_server_path]" value="<?php echo esc_attr( $this->general_settings['wpunity_server_path'] ); ?>" />
         <?php
     }
+    
+    
+    function field_wpunity_google_application_credentials(){
+        ?>
+        <input type="text" style="width:70%" name="<?php echo $this->general_settings_key; ?>[wpunity_google_application_credentials]" id="<?php echo $this->general_settings_key; ?>[wpunity_google_application_credentials]" value="<?php echo esc_attr( $this->general_settings['wpunity_google_application_credentials'] ); ?>" />
+        <?php
+    }
+    
 
     /***************************************************************************************/
 

@@ -1,7 +1,7 @@
 <?php
 
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID,
-                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench){
+                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor){
    
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -30,13 +30,16 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm
     update_post_meta($asset_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
     update_post_meta($asset_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
     
+    update_post_meta($asset_id, 'wpunity_asset3d_fonts', $assetFonts);
+    update_post_meta($asset_id, 'wpunity_asset3d_back_3d_color', $assetback3dcolor);
+    
     
     
     if($asset_id){return $asset_id;}else{return 0;}
 }
 
 function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id, $assetTitleForm,$assetDescForm, $assetCatIPRID,
-                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench){
+                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor){
     
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -62,6 +65,9 @@ function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_insert
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_fonts', $assetFonts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_back_3d_color', $assetback3dcolor);
     
     return 1;
 }

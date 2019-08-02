@@ -1,5 +1,46 @@
-
 /**
+ * AJAX: FETCH CONTENT FOR DESCRIPTION
+ * @param externalSource  either "Wikipedia" or "Europeana"
+ */
+// function wpunity_translateAjaxFrontEnd( text, lang, description_dom ) {
+//
+//     // console.log(text);
+//     // console.log(lang);
+//     // console.log(description_dom);
+//
+//     var reqTranslate = jQuery.ajax({
+//         url : my_ajax_object_fetch_content.ajax_url,
+//         type : 'POST',
+//         data : {'action': 'wpunity_translate_action',
+//             'text':           text,
+//             'lang':            lang
+//             },
+//
+//         success : function(response) {
+//
+//             console.log(response);
+//
+//             description_dom['assetDescGreek'].innerHTML = response;
+//
+//
+//
+//         },
+//         error : function(xhr, ajaxOptions, thrownError){
+//             console.log("ajaxOptions" + ajaxOptions);
+//             console.log("ERROR"  + thrownError);
+//             alert('Error 28: API problems. Fetch again? ' + thrownError);
+//
+//             //document.getElementById('wpunity_fetchDescription_bt').innerHTML = 'Error 21: Fetch again?' + thrownError;
+//         }
+//     });
+//
+//
+//
+// }
+
+
+
+    /**
  * AJAX: FETCH CONTENT FOR DESCRIPTION
  * @param externalSource  either "Wikipedia" or "Europeana"
  */
