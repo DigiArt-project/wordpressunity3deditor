@@ -1684,19 +1684,23 @@ function wpunity_upload_filter( $args  ) {
  *
  */
 function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug, $type) {
-
+ 
 	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
 
 	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
-
+    
+	
 	$upload_dir = wp_upload_dir();
-	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-
+	$upload_path = str_replace( '/',
+            DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+	
 	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.'.$type;
-
+    
+	
 	$image_upload = file_put_contents($upload_path . $hashed_filename,
 		base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
-
+    
+	
 	// HANDLE UPLOADED FILE
 	if( !function_exists( 'wp_handle_sideload' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -1736,17 +1740,14 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 		'guid' => $file_return['url']
 	);
 
-
 	$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
-
-
+	
 	require_once(ABSPATH . 'wp-admin/includes/image.php');
 	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 	wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
-
 	remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
-
+	
 	if( 0 < intval( $attachment_id, 10 ) ) {
 		return $attachment_id;
 	}

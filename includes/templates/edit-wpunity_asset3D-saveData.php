@@ -214,17 +214,14 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         $textureNamesOut = [];
         
         for ($i = 0; $i < count($tContent); $i++) {
-            
             $textureFile_id = wpunity_upload_Assetimg64(
                 $tContent[$textureNamesIn[$i]], 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm,
                 $asset_newID, $gameSlug, $tContentExt[$textureNamesIn[$i]]);
 
             $textureFile_filename = basename(get_attached_file($textureFile_id));
-
             $textureNamesOut[] = $textureFile_filename;
-
             add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-            
+          
             //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
         }
     }
@@ -305,8 +302,11 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     if (isset($_POST['sshotFileInput']) ) {
         if (strlen($_POST['sshotFileInput'])>0) {
             
-            $screenShotFile_id = wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID, $gameSlug, 'jpg');
-            update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id, 'jpg');
+            $screenShotFile_id =
+                wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID,
+                    $gameSlug, 'jpg');
+
+            $res = update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
         }
     }
 
