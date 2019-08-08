@@ -218,7 +218,7 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
             }
         }
 
-        //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
     };
     multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
 

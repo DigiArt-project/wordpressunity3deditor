@@ -415,9 +415,9 @@ if($asset_id != null) {
     <div id="wrapper_3d_inner" style="position: fixed; top:0; right:0;width:60%;height:100%;z-index:1">
 
         <div id="previewProgressSlider" style="visibility:hidden; position: absolute; z-index:2;width:100%;top:0" class="CenterContents">
-            <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;">Loading 3D object</h6>
+            <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;color:white !important; mix-blend-mode: difference;">Loading 3D object</h6>
             <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1"
-                style="position: absolute; left:0; right: 0; top: 26px;"></h6>
+                style="position: absolute; left:0; right: 0; top: 26px;color:white !important; mix-blend-mode: difference;"></h6>
 
             <div class="progressSlider">
                 <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;"></div>
@@ -437,21 +437,22 @@ if($asset_id != null) {
     
     <div id="edit-asset-header">
         <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
-        <span id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:50%;display:inline-block;text-align:right;float:right">
-            <img style="width:40px;height:40px;border-radius: 50%;vertical-align:middle" src="<?php echo get_avatar_url($author_id);?>">
-            <a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black">
-                <?php  echo $author_displayname;?>
-                <br />
-                <?php echo $author_country;?>
-            </a>
-        </span>
+        <table id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:170px;display:inline-block;text-align:left;float:right;right:0;">
+            <tr>
+                <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
+                <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
+            </tr>
+            <tr>
+                <td><span style=""><?php echo $author_country;?></span></td>
+            </tr>
+        </table>
     </div>
         
     <br />
         
     <?php if($isJokerGame ) { ?>
-        <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_SharedAssets;?>">
-            <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>Assets List
+        <a title="Back" style="color:dodgerblue" class="hideAtLocked" href="<?php echo $goBackTo_SharedAssets;?>">
+            <i class="material-icons" style="font-size: 24px; vertical-align: top;">arrow_back</i>Assets List
         </a>
     <?php } else { ?>
         <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
@@ -633,8 +634,8 @@ if($asset_id != null) {
                 
             <?php } else { ?>
                     
-                <h1 class="mdc-typography--title" style="color: orangered;text-shadow: 2px 2px 2px aliceblue;"><?php echo trim($asset_title_saved); ?></h1>
-
+                <h1 id="assetTitleView" class="mdc-typography--title" style="color: orangered;text-shadow: 2px 2px 2px aliceblue;"><?php echo trim($asset_title_saved); ?></h1>
+                
                 <ul class="langul">
                     <li class="langli"><a href="#English">English</a></li>
                     <li class="langli"><a href="#Greek" >Ελληνικά</a></li>
@@ -663,11 +664,13 @@ if($asset_id != null) {
                         
                 <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                        name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
-                <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="cccccc"
-                       style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;position:absolute;right:0;display:inline-block;">
+                
+                <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
+                        style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;position:absolute;left:0;display:inline-block;">
+                </button>
 
                 <div id="font-size-selector" style="position: absolute; display:inline-block; right: 10%;font-size: 1.5em;">
-                    <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block">A+</div>
+                    <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
                     <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                 </div>
                     
@@ -1341,8 +1344,6 @@ if($asset_id != null) {
         var mdc = window.mdc;
         mdc.autoInit();
 
-        // if (event.target.files.length > 0)
-             //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
         
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
@@ -1357,7 +1358,7 @@ if($asset_id != null) {
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
-        //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
+        
         
         loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
 
@@ -1406,16 +1407,17 @@ if($asset_id != null) {
                     jQuery('#'+ selectedCatIPRId).attr("aria-selected", true);
                     jQuery('#category-ipr-select').addClass('mdc-select--disabled').attr( "aria-disabled", true);
                 }
-
-
-                
-                
-                
-
-                //jQuery('#wpunity_asset3d_back_3d_color').wpColorPicker();
                 
             });
 
+
+
+            // Scroll to top because with # focuses to language description
+            window.onload = function () {
+                setTimeout(function () {
+                    document.getElementById("text-asset-sidebar").scrollTo(0,0)
+                }, 0);
+            };
 
             // This fires on CHANGE
             categoryDropdown.addEventListener('MDCSelect:change', function() {
