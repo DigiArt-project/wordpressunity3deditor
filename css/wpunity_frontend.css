@@ -689,3 +689,30 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 }
 
 
+#assetTitleView{
+    width:100%;
+    color: orangered;
+    text-shadow: 2px 2px 2px aliceblue;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: Roboto, sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 32px;
+    text-decoration: inherit;
+    text-transform: inherit;
+}
+
+#text-asset-sidebar {
+    position:fixed;
+    padding:15px;
+    height:100%;
+    width:40%;
+    background:white;
+    border:1px solid black;
+    z-index:1000;
+    overflow-y:auto;
+}

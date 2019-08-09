@@ -12,22 +12,9 @@ require( plugin_dir_path( __DIR__ ) .  '/translate/vendor/autoload.php' );
 //// [START translate_translate_text]
 use Google\Cloud\Translate\TranslateClient;
 
-
-//    $text = $_POST['text'];
-//    $target_lang = $_POST['lang'];
-//
-//    //$translate = new TranslateClient();
-////    $result = $translate->translate($text, [
-////    'target' => $target_lang,
-////    ]);
-//    echo $result[text];
-
-
-
 // Load Scrinpts
 function loadAsset3DManagerScripts() {
-    
-    
+
     // Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
 	wp_enqueue_script('wpunity_load87_threejs');
@@ -108,10 +95,18 @@ $isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
 
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
-$isUserloggedIn = is_user_logged_in();
-$current_user = wp_get_current_user();
-$login_username = $current_user->user_login;
-$isUserAdmin = current_user_can('administrator');
+
+if(!isset($_GET['preview'])) {
+    $isUserloggedIn = is_user_logged_in();
+    $current_user = wp_get_current_user();
+    $login_username = $current_user->user_login;
+    $isUserAdmin = current_user_can('administrator');
+}else {
+    $isUserloggedIn = false;
+    $isUserAdmin = false;
+}
+
+
 
 $isEditable = false;
 
@@ -120,6 +115,8 @@ if(isset($_GET['wpunity_asset'])) {
     $author_id = get_post_field('post_author', $asset_id);
     
 }
+
+
 
 if ($isUserloggedIn) {
     $user_id = get_current_user_id();
@@ -432,7 +429,7 @@ if($asset_id != null) {
     </div>
 
 
-    <div id="text-asset-sidebar" style="position:fixed;padding:15px;height:100%;width:40%;background:white; border:1px solid black;z-index:1000;overflow-y:scroll">
+    <div id="text-asset-sidebar" style="">
     
     
     <div id="edit-asset-header">
@@ -465,9 +462,34 @@ if($asset_id != null) {
             if($asset_id != null ) { ?>
                 <a class="mdc-button mdc-button--primary mdc-theme--primary"
                 href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-                data-mdc-auto-init="MDCRipple">Add New 3D Asset</a>
-            <?php } }
-    ?>
+                data-mdc-auto-init="MDCRipple">Add New</a>
+    
+                <?php
+    
+                
+                
+                $previewLink = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ) .
+                    $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] . '&preview=1#English';
+                    
+                ?>
+                
+                <a class="mdc-button mdc-button--primary mdc-theme--primary"
+                   href="<?php echo $previewLink; ?>"
+                   data-mdc-auto-init="MDCRipple">Preview</a>
+                
+                
+            <?php }
+        } else {
+                $curr_uri = $_SERVER['REQUEST_URI'];
+                $targetparams = str_replace("preview=1","",$curr_uri);
+                $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).$_SERVER['HTTP_HOST'].$targetparams.'#English';
+                  ?>
+
+                    <a class="mdc-button mdc-button--primary mdc-theme--primary"
+                       href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
+        <?php } ?>
+        
+    
     
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
@@ -634,7 +656,7 @@ if($asset_id != null) {
                 
             <?php } else { ?>
                     
-                <h1 id="assetTitleView" class="mdc-typography--title" style="color: orangered;text-shadow: 2px 2px 2px aliceblue;"><?php echo trim($asset_title_saved); ?></h1>
+                <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
                 
                 <ul class="langul">
                     <li class="langli"><a href="#English">English</a></li>
