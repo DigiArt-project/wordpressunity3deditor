@@ -1,5 +1,9 @@
 <?php
 
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
@@ -59,23 +63,21 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 
 
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
-$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
-$allScenePGameID = $allScenePGame->term_id;
+//$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+//if ($allScenePGame)
+//    $allScenePGameID = $allScenePGame->term_id;
 
 
 $editgamePage = wpunity_getEditpage('game');
 $newAssetPage = wpunity_getEditpage('asset');
 
-$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
+//$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$scene_id . '&wpunity_asset=' ); // . asset_id
 
 get_header();
 
 ?>
 
-<span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-top:10px"><?php echo $full_title; ?> Assets</span>
-<a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">
-        ?
-</a>
+
 
 <?php
 
@@ -94,20 +96,19 @@ if($isUserloggedIn){ ?>
 
 
 $user_id = get_current_user_id();
-
 $user_games_slugs = wpunity_get_user_game_projects($user_id, $isUserAdmin);
-
-//print_r($user_games_slugs);
-
-
 $assets = get_games_assets($user_games_slugs);
 
-// Display assets Grid
-?>
-    
-<div class="mdc-layout-grid">
-    <div class="mdc-layout-grid__inner">
 
+?>
+<div id="page-wrapper" style="display:inline-block">
+
+    <!-- Display assets Grid-->
+    <div style="width:70%;float:left;padding-top:5px;padding-left:5px;" class="mdc-layout-grid">
+    <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets</span>
+    
+    <a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">?</a>
+    <div class="mdc-layout-grid__inner">
         <!-- Card to add asset -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
             <a href="<?php echo $isUserloggedIn ?
@@ -187,9 +188,15 @@ $assets = get_games_assets($user_games_slugs);
         <?php } ?>
 
     </div>
+    
+    
 </div>
 
+<div style="width:30%;float:right; padding-right:5px;">
+   <?php get_sidebar(); ?>
+</div>
 
+</div>
 
 
 <!--  No Assets Empty Repo-->

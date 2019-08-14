@@ -112,9 +112,12 @@ get_header();
 <?php if ( !is_user_logged_in() ) { ?>
 
     <div class="DisplayBlock CenterContents">
-        <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">account_circle</i>
-        <p class="mdc-typography--title"> Please <a class="mdc-theme--secondary" href="<?php echo wp_login_url( get_permalink() ); ?>">login</a> to use platform</p>
-        <p class="mdc-typography--title"> Or <a class="mdc-theme--secondary" href="<?php echo wp_registration_url(); ?>">register</a> if you don't have an account</p>
+
+        <img style="margin-top:10px;" src="/wp-content/plugins/wordpressunity3deditor/images/screenshots/authtoolimage.jpg" width="50%;" alt="editor screenshot" />
+        <br />
+        <i style="font-size: 64px; padding-top: 10px;" class="material-icons mdc-theme--text-icon-on-background">account_circle</i>
+        <p class="mdc-typography--title"> Please <a class="mdc-theme--secondary" href="<?php echo wp_login_url( get_permalink() ); ?>">login</a> to use platform
+         Or <a class="mdc-theme--secondary" href="<?php echo wp_registration_url(); ?>">register</a> if you don't have an account</p>
     </div>
 
     <hr class="WhiteSpaceSeparator">

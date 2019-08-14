@@ -716,3 +716,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     z-index:1000;
     overflow-y:auto;
 }
+
+#content {
+    padding:0!important;
+}
