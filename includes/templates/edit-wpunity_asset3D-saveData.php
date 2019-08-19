@@ -166,7 +166,7 @@ function wpunity_create_asset_producerExtra_frontend($asset_newID){
 }
 
 function wpunity_create_asset_poisITExtra_frontend($asset_newID){
-    $asset_featured_imageForm =  $_FILES['poi-img-featured-image'];
+    $asset_featured_imageForm =  $_FILES['featured-image'];
     $attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
     set_post_thumbnail( $asset_newID, $attachment_id );
 }

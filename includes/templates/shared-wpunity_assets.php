@@ -171,7 +171,7 @@ $assets = get_games_assets($user_games_slugs);
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
                                class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
                                onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
-                               >DELETE</a>
+                               >DEL</a>
                         <?php } ?>
     
     
@@ -180,7 +180,7 @@ $assets = get_games_assets($user_games_slugs);
                         <?php } else { ?>
                             <span class="sharedAssetsIndicator mdc-typography--subheading1"
                                   style="background: rgba(250,250,210,0.3);">
-                            <?php echo "Personal @ ". $asset['assetParentGame']; ?></span>
+                            <?php echo "@".$asset['assetParentGame']; ?></span>
                         <?php } ?>
 
                 </div>

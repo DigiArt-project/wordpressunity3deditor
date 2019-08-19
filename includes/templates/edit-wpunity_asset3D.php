@@ -1,3 +1,13 @@
+
+<!--<style type="text/css" media="screen">-->
+<!--    html { margin-top: 0px !important; }-->
+<!--    * html body { margin-top: 0px !important; }-->
+<!--    @media screen and ( max-width: 782px ) {-->
+<!--        html { margin-top: 0px !important; }-->
+<!--        * html body { margin-top: 0px !important; }-->
+<!--    }-->
+<!--</style>-->
+
 <?php //Create asset
 
 //ini_set('display_errors', 1);
@@ -81,7 +91,7 @@ $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
 $game_type_obj = wpunity_return_game_type($project_id);
-$isJokerGame = strpos($gameSlug, 'joker') != false ;
+$isJokerGame = (strpos($gameSlug, 'joker') != false) || $_GET['wpunity_scene'] == '';
 
 
 
@@ -241,7 +251,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		wpunity_create_asset_terrainExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'producer') {
 		wpunity_create_asset_producerExtra_frontend($asset_id);
-	}elseif ($assetCatTerm->slug == 'pois_imagetext') {
+	}elseif ( in_array($assetCatTerm->slug, ['artifact','pois_imagetext'])) {
 		wpunity_create_asset_poisITExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'pois_video') {
 		wpunity_create_asset_poisVideoExtra_frontend($asset_id);
@@ -378,7 +388,7 @@ if($asset_id != null) {
 			$optGen_power = $optGen['power'];
 		}
 		$optProductionVal = get_post_meta($asset_id,'wpunity_producerPowerProductionVal',true);
-	}elseif ($saved_term[0]->slug == 'pois_imagetext') {
+	}elseif (in_array($saved_term[0]->slug , ['artifact','pois_imagetext'])) {
 		//load the already saved featured image for POI image-text
 		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
 		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
@@ -465,19 +475,13 @@ if($asset_id != null) {
                 data-mdc-auto-init="MDCRipple">Add New</a>
     
                 <?php
-    
-                
-                
                 $previewLink = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ) .
                     $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] . '&preview=1#English';
-                    
                 ?>
                 
                 <a class="mdc-button mdc-button--primary mdc-theme--primary"
                    href="<?php echo $previewLink; ?>"
                    data-mdc-auto-init="MDCRipple">Preview</a>
-                
-                
             <?php }
         } else {
                 $curr_uri = $_SERVER['REQUEST_URI'];
@@ -653,11 +657,101 @@ if($asset_id != null) {
                 <?php } ?>
 
                 <hr class="WhiteSpaceSeparator">
+
+
+                <!--  POI Image-Text -->
+                
+                <?php
+                
+                $showIMT = in_array($saved_term[0]->slug, ['pois_imagetext','artifact']) ?'':'none';  ?>
+
+                
+                
+                <div id="poiImgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                    <h3 class="mdc-typography--title">Featured Image</h3>
+                    
+                    <?php if($asset_id == null){ ?>
+                        <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <?php }else{ ?>
+                        <img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
+                    <?php } ?>
+                    <input type="file" name="featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
+                    <br />
+                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
+
+                    <hr class="WhiteSpaceSeparator">
+                </div>
+
+                <!-- Video for POI video -->
+                <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
+                <?php $showVid = $saved_term[0]->slug == 'pois_video'?'':'none';  ?>
+
+                <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
+
+                    <h3 class="mdc-typography--title">Video POI Details</h3>
+
+                    <div id="videoFileInputContainer" class="">
+                        <?php
+                        $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
+                        $attachment_post = get_post($videoID);
+                        $attachment_file = $attachment_post->guid;
+                        ?>
+            
+                        <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
+                            <video width="320" height="240" controls>
+                                <source src="<?php echo $attachment_file;?>" type="video/mp4">
+                                <source src="<?php echo $attachment_file;?>" type="video/ogg">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php } ?>
+
+                        <label for="videoFileInput"> Select a new video</label>
+                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
+                        <br />
+                        <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">mp4 is recommended </span>
+                    </div>
+                </div>
+                
                 
             <?php } else { ?>
                     
                 <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
+
+                <!--  POI Image-Text -->
+                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
                 
+                <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                    <?php if($asset_id != null){ ?>
+                        <img id="poiImgFeaturedImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
+                    <?php } ?>
+                </div>
+
+
+                <!-- Video for POI video -->
+                <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
+                <?php $showVid = $saved_term[0]->slug == 'pois_video'?'':'none';  ?>
+
+                <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
+
+                    <div id="videoFileInputContainer" class="">
+                        <?php
+                        $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
+                        $attachment_post = get_post($videoID);
+                        $attachment_file = $attachment_post->guid;
+                        ?>
+            
+                        <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
+                            <video width="100%" height="auto    " controls>
+                                <source src="<?php echo $attachment_file;?>" type="video/mp4">
+                                <source src="<?php echo $attachment_file;?>" type="video/ogg">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php } ?>
+                    </div>
+                </div>
+                
+                
+                <!-- Languages -->
                 <ul class="langul">
                     <li class="langli"><a href="#English">English</a></li>
                     <li class="langli"><a href="#Greek" >Ελληνικά</a></li>
@@ -683,75 +777,29 @@ if($asset_id != null) {
                         <?php echo trim($asset_desc_french_saved); ?>
                     </div>
                 </div>
-                        
+                
+                <div style="display:inline-block;" >
                 <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                        name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
                 
                 <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
-                        style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;position:absolute;left:0;display:inline-block;">
+                        style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;">
                 </button>
 
-                <div id="font-size-selector" style="position: absolute; display:inline-block; right: 10%;font-size: 1.5em;">
+                <div id="font-size-selector" style="display:inline-block; right: 10%;font-size: 1.5em;">
                     <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
                     <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                 </div>
-                    
+                </div>
+                
+                
+                
+                
             <?php } ?>
 
-            <!--  POI Image-Text -->
-            <?php $showIMT = $saved_term[0]->slug == 'pois_imagetext'?'':'none';  ?>
+            
 
-            <div id="poiImgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
-                <h3 class="mdc-typography--title">Featured Image</h3>
-
-                <?php if($asset_id == null){ ?>
-                    <img id="poiImgFeaturedImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                <?php }else{ ?>
-                    <img id="poiImgFeaturedImgPreview" src="<?php echo $the_featured_image_url; ?>">
-                <?php } ?>
-                <input type="file" name="poi-img-featured-image" title="Featured image" value="" id="poiImgFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
-                <br />
-                <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-                <hr class="WhiteSpaceSeparator">
-            </div>
-
-            <!-- Video for POI video -->
-
-            <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
-            <?php $showVid = $saved_term[0]->slug == 'pois_video'?'':'none';  ?>
-
-            <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
-
-                        <!--
-                <img id="poiVideoFeaturedImgPreview" src="<?php /*echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); */?>">
-                <label for="poiVideoFeaturedImgInput"> Select a featured image</label>
-                <input type="file" name="poi-video-featured-image" title="Featured image" value="" id="poiVideoFeaturedImgInput" accept="image/x-png,image/gif,image/jpeg">
-                -->
-
-                <h3 class="mdc-typography--title">Video POI Details</h3>
-
-                <div id="videoFileInputContainer" class="">
-                <?php
-                $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
-                $attachment_post = get_post($videoID);
-                $attachment_file = $attachment_post->guid;
-                ?>
-
-                <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
-                    <video width="320" height="240" controls>
-                        <source src="<?php echo $attachment_file;?>" type="video/mp4">
-                        <source src="<?php echo $attachment_file;?>" type="video/ogg">
-                        Your browser does not support the video tag.
-                    </video>
-                <?php } ?>
-
-                <label for="videoFileInput"> Select a new video</label>
-                <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
-                <br />
-                <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">mp4 is recommended </span>
-            </div>
-            </div>
+            
             <!-- MOLECULE -->
             <?php $showMolType = $saved_term[0]->slug == 'molecule'?'':'none'; ?>
     
@@ -1573,6 +1621,7 @@ if($asset_id != null) {
 
                         break;
                     case 'pois_imagetext':
+                    case 'artifact':
                         jQuery("#poiImgDetailsPanel").show();
                         break;
                     case 'pois_video':
@@ -1609,161 +1658,161 @@ if($asset_id != null) {
         })();
 
 
-        jQuery( function() {
+        //jQuery( function() {
+        //
+        //    // Object type Toggle
+        //    jQuery( "input[name=objectTypeRadio]" ).click(function() {
+        //        loadFileInputLabel();
+        //    });
+        //
+        //    var minspeed_value = <?php //echo json_encode($min_speed_wind);?>//;
+        //    var maxspeed_value = <?php //echo json_encode($max_speed_wind);?>//;
+        //    var meanspeed_value = <?php //echo json_encode($mean_speed_wind);?>//;
+        //    var varspeed_value = <?php //echo json_encode($var_speed_wind);?>//;
 
-            // Object type Toggle
-            jQuery( "input[name=objectTypeRadio]" ).click(function() {
-                loadFileInputLabel();
-            });
-
-            var minspeed_value = <?php echo json_encode($min_speed_wind);?>;
-            var maxspeed_value = <?php echo json_encode($max_speed_wind);?>;
-            var meanspeed_value = <?php echo json_encode($mean_speed_wind);?>;
-            var varspeed_value = <?php echo json_encode($var_speed_wind);?>;
-
-            var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[minspeed_value,maxspeed_value], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
-            var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: meanspeed_value, valId:"#physicsWindMeanVal", units:"m/sec"});
-            var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: varspeed_value, valId:"#physicsWindVarianceVal", units:""});
-
-
-            // Change Mean range according to Speed range
-            jQuery( "#wind-speed-range" ).on( "slidestop", function( event, ui ) {
-
-                var elemId = "#wind-mean-slider";
-                jQuery( elemId ).slider( "option", "min", ui.values[ 0 ] );
-                jQuery( elemId ).slider( "option", "max", ui.values[ 1 ] );
-                jQuery( elemId ).slider( "option", "values", [ ui.values[ 0 ], ui.values[ 1 ] ] );
-
-                jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) + " " + 'm/sec' );
-
-            } );
-
-            var min_cons = <?php echo json_encode($min_consumption);?>;
-            var max_cons = <?php echo json_encode($max_consumption);?>;
-            var mean_cons = <?php echo json_encode($mean_consumption);?>;
-            var var_cons = <?php echo json_encode($var_consumption);?>;
-
-            var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[min_cons, max_cons], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
-            var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 50, max: 150, value: mean_cons, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
-            var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: var_cons, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
-
-
-            // Change Mean range according to Speed range
-            jQuery( "#energy-consumption-range" ).on( "slidestop", function( event, ui ) {
-
-                var elemId = "#energy-consumption-mean-slider";
-                jQuery( elemId ).slider( "option", "min", ui.values[ 0 ] );
-                jQuery( elemId ).slider( "option", "max", ui.values[ 1 ] );
-                jQuery( elemId ).slider( "option", "values", [ ui.values[ 0 ], ui.values[ 1 ] ] );
-
-                jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) + " " + 'kW' );
-
-            } );
-
-            var income_overpower = <?php echo json_encode($income_when_overpower);?>;
-            var income_correct = <?php echo json_encode($income_when_correct_power);?>;
-            var income_underpower = <?php echo json_encode($income_when_under_power);?>;
-
-            var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: income_overpower, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
-            var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: income_correct, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
-            var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: income_underpower, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
-
-            var opt_size = <?php echo json_encode($optCosts_size);?>;
-            var opt_dmg = <?php echo json_encode($optCosts_dmg);?>;
-            var opt_cost = <?php echo json_encode($optCosts_cost);?>;
-            var opt_repaid = <?php echo json_encode($optCosts_repaid);?>;
-            var opt_speed = <?php echo json_encode($optGen_speed);?>;
-            var opt_power = <?php echo json_encode($optGen_power);?>;
-
-            var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: opt_size, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
-            var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: opt_dmg, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
-            var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: opt_cost, valId:"#producerCostVal", step: 1, units:"$"});
-            var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: opt_repaid, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
-            var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: opt_speed, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
-            var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: opt_power, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
-
-            var moleculeFluidViscositySlider = wpunity_create_slider_component("#molecule-fluid-viscosity-slider", false, {min: 0, max: 2000, value: 1, valId:"#moleculeFluidViscosityVal", step: 0.1, units:"", inputText:true});
-
-            // POI Image panels - Add/remove POI inputs
-            var poiMaxFields      = 3; // max input boxes allowed
-            var poiImgDetailsWrapper         = jQuery("#poiImgDetailsWrapper"); // Fields wrapper
-            var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
-            var i = 0; // Initial text box count
-
-            addPoiFieldBtn.click(function(e){ // On add input button click
-                e.preventDefault();
-                if(i < poiMaxFields) { // Max input box allowed
-                    i++; // Text box increment
-                    poiImgDetailsWrapper.append(
-                        '<div class="mdc-layout-grid"><div class="mdc-layout-grid__inner">'+
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
-                        '<label for="poi-input-file-'+i+'"> Select an image</label>'+
-                        '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
-                        '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
-                        '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
-                        'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">' +
-                        '<div class="mdc-textfield__bottom-line"></div>' +
-                        '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
-                        '</div>' +
-                        '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
-                        '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div>' +
-                        '</div></div>'
-                    ); // Add input box
-                }
-                // Run autoInit with noop to suppress warnings.
-                mdc.autoInit(document, () => {});
-            });
-
-            poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
-                e.preventDefault();
-                jQuery(this).parent('div').parent('div').parent('div').remove();
-                i--;
-            });
-
-            // Color picker based on sliders
-            jQuery( "#fluidColorRedSlider, #fluidColorGreenSlider, #fluidColorBlueSlider" ).slider({
-                orientation: "horizontal",
-                range: "min",
-                max: 255,
-                value: 127,
-                change: refreshSwatch,
-                slide: refreshSwatch,
-                stop: refreshSwatch
-            });
-
-            jQuery( "#fluidColorAlphaSlider" ).slider({
-                orientation: "horizontal",
-                range: "min",
-                max: 1,
-                value: 1,
-                step: 0.01,
-                change: refreshSwatch,
-                slide: refreshSwatch,
-                stop: refreshSwatch
-            });
-
-            jQuery( "#fluidColorRedSlider" ).slider( "value", 255 );
-            jQuery( "#fluidColorGreenSlider" ).slider( "value", 140 );
-            jQuery( "#fluidColorBlueSlider" ).slider( "value", 60 );
-
-            function refreshSwatch() {
-                var red = jQuery( "#fluidColorRedSlider" ).slider( "value" ),
-                    green = jQuery( "#fluidColorGreenSlider" ).slider( "value" ),
-                    blue = jQuery( "#fluidColorBlueSlider" ).slider( "value" ),
-                    alpha = jQuery( "#fluidColorAlphaSlider" ).slider( "value" ),
-                    color = [red, green, blue, alpha ];
-
-                jQuery('#fluidColorRedVal').val(red);
-                jQuery('#fluidColorGreenVal').val(green);
-                jQuery('#fluidColorBlueVal').val(blue);
-                jQuery('#fluidColorAlphaVal').val(alpha);
-
-                jQuery( "#fluidColorPreview" ).css( "background-color", "rgba(" + color +");");
-
-                document.getElementById('moleculeFluidColorVal').value = "["+color+"]".toString();
-            }
-
-        });
+        //    var windSpeedRangeSlider = wpunity_create_slider_component("#wind-speed-range", true, {min: 0, max: 40, values:[minspeed_value,maxspeed_value], valIds:["#physicsWindMinVal", "#physicsWindMaxVal" ], units:"m/sec"});
+        //    var windMeanSlider = wpunity_create_slider_component("#wind-mean-slider", false, {min: 0, max: 40, value: meanspeed_value, valId:"#physicsWindMeanVal", units:"m/sec"});
+        //    var windVarianceSlider = wpunity_create_slider_component("#wind-variance-slider", false, {min: 1, max: 100, value: varspeed_value, valId:"#physicsWindVarianceVal", units:""});
+        //
+        //
+        //    // Change Mean range according to Speed range
+        //    jQuery( "#wind-speed-range" ).on( "slidestop", function( event, ui ) {
+        //
+        //        var elemId = "#wind-mean-slider";
+        //        jQuery( elemId ).slider( "option", "min", ui.values[ 0 ] );
+        //        jQuery( elemId ).slider( "option", "max", ui.values[ 1 ] );
+        //        jQuery( elemId ).slider( "option", "values", [ ui.values[ 0 ], ui.values[ 1 ] ] );
+        //
+        //        jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) + " " + 'm/sec' );
+        //
+        //    } );
+        //
+        //    var min_cons = <?php //echo json_encode($min_consumption);?>//;
+        //    var max_cons = <?php //echo json_encode($max_consumption);?>//;
+        //    var mean_cons = <?php //echo json_encode($mean_consumption);?>//;
+        //    var var_cons = <?php //echo json_encode($var_consumption);?>//;
+        //
+        //    var energyConsumptionRangeSlider = wpunity_create_slider_component("#energy-consumption-range", true, {min: 0, max: 2000, values:[min_cons, max_cons], valIds:["#energyConsumptionMinVal", "#energyConsumptionMaxVal" ], step: 5, units:"kW"});
+        //    var energyConsumptionMeanSlider = wpunity_create_slider_component("#energy-consumption-mean-slider", false, {min: 50, max: 150, value: mean_cons, valId:"#energyConsumptionMeanVal", step: 5, units:"kW"});
+        //    var energyConsumptionVarianceSlider = wpunity_create_slider_component("#energy-consumption-variance-slider", false, {min: 5, max: 1000, value: var_cons, valId:"#energyConsumptionVarianceVal", step: 5, units:""});
+        //
+        //
+        //    // Change Mean range according to Speed range
+        //    jQuery( "#energy-consumption-range" ).on( "slidestop", function( event, ui ) {
+        //
+        //        var elemId = "#energy-consumption-mean-slider";
+        //        jQuery( elemId ).slider( "option", "min", ui.values[ 0 ] );
+        //        jQuery( elemId ).slider( "option", "max", ui.values[ 1 ] );
+        //        jQuery( elemId ).slider( "option", "values", [ ui.values[ 0 ], ui.values[ 1 ] ] );
+        //
+        //        jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) + " " + 'kW' );
+        //
+        //    } );
+        //
+        //    var income_overpower = <?php //echo json_encode($income_when_overpower);?>//;
+        //    var income_correct = <?php //echo json_encode($income_when_correct_power);?>//;
+        //    var income_underpower = <?php //echo json_encode($income_when_under_power);?>//;
+        //
+        //    var terrainOverPowerIncomeSlider = wpunity_create_slider_component("#over-power-income-slider", false, {min: -5, max: 5, value: income_overpower, valId:"#overPowerIncomeVal", step: 0.5, units:"$"});
+        //    var terrainCorrectPowerIncomeSlider = wpunity_create_slider_component("#correct-power-income-slider", false, {min: -5, max: 5, value: income_correct, valId:"#correctPowerIncomeVal", step: 0.5, units:"$"});
+        //    var terrainUnderPowerIncomeSlider = wpunity_create_slider_component("#under-power-income-slider", false, {min: -5, max: 5, value: income_underpower, valId:"#underPowerIncomeVal", step: 0.5, units:"$"});
+        //
+        //    var opt_size = <?php //echo json_encode($optCosts_size);?>//;
+        //    var opt_dmg = <?php //echo json_encode($optCosts_dmg);?>//;
+        //    var opt_cost = <?php //echo json_encode($optCosts_cost);?>//;
+        //    var opt_repaid = <?php //echo json_encode($optCosts_repaid);?>//;
+        //    var opt_speed = <?php //echo json_encode($optGen_speed);?>//;
+        //    var opt_power = <?php //echo json_encode($optGen_power);?>//;
+        //
+        //    var producerTurbineSizeSlider = wpunity_create_slider_component("#producer-turbine-size-slider", false, {min: 3, max: 250, value: opt_size, valId:"#producerTurbineSizeVal", step: 1, units:"m"});
+        //    var producerDmgCoeffSlider = wpunity_create_slider_component("#producer-damage-coeff-slider", false, {min: 0.001, max: 0.02, value: opt_dmg, valId:"#producerDmgCoeffVal", step: 0.001, units:"Probability / sec"});
+        //    var producerCostSlider = wpunity_create_slider_component("#producer-cost-slider", false, {min: 1, max: 10, value: opt_cost, valId:"#producerCostVal", step: 1, units:"$"});
+        //    var producerRepairCostSlider = wpunity_create_slider_component("#producer-repair-cost-slider", false, {min: 0.5, max: 5, value: opt_repaid, valId:"#producerRepairCostVal", step: 0.5, units:"$"});
+        //    var producerWindSpeedClassSlider = wpunity_create_slider_component("#producer-wind-speed-class-slider", false, {min: 2, max: 20, value: opt_speed, valId:"#producerWindSpeedClassVal", step: 0.01, units:"m/sec"});
+        //    var producerMaxPowerSlider = wpunity_create_slider_component("#producer-max-power-slider", false, {min: 0.001, max: 20, value: opt_power, valId:"#producerMaxPowerVal", step: 0.001, units:"MW"});
+        //
+        //    var moleculeFluidViscositySlider = wpunity_create_slider_component("#molecule-fluid-viscosity-slider", false, {min: 0, max: 2000, value: 1, valId:"#moleculeFluidViscosityVal", step: 0.1, units:"", inputText:true});
+        //
+        //    // POI Image panels - Add/remove POI inputs
+        //    var poiMaxFields      = 3; // max input boxes allowed
+        //    var poiImgDetailsWrapper         = jQuery("#poiImgDetailsWrapper"); // Fields wrapper
+        //    var addPoiFieldBtn      = jQuery("#poiAddFieldBtn"); // Add button ID
+        //    var i = 0; // Initial text box count
+        //
+        //    addPoiFieldBtn.click(function(e){ // On add input button click
+        //        e.preventDefault();
+        //        if(i < poiMaxFields) { // Max input box allowed
+        //            i++; // Text box increment
+        //            poiImgDetailsWrapper.append(
+        //                '<div class="mdc-layout-grid"><div class="mdc-layout-grid__inner">'+
+        //                '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">' +
+        //                '<label for="poi-input-file-'+i+'"> Select an image</label>'+
+        //                '<input type="file" name="poi-input-file-'+i+'" class="FullWidth" value="" accept="image/jpeg"/>' +
+        //                '<div class="mdc-textfield mdc-form-field FullWidth " data-mdc-auto-init="MDCTextfield">' +
+        //                '<input id="poi-input-text-'+i+'" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth" name="poi-input-text-'+i+'" ' +
+        //                'aria-controls="poi-input-text-validation-msg" minlength="3" maxlength="25" style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">' +
+        //                '<div class="mdc-textfield__bottom-line"></div>' +
+        //                '<label for="poi-input-text-'+i+'" class="mdc-textfield__label">Enter an image description' +
+        //                '</div>' +
+        //                '<p class="mdc-textfield-helptext  mdc-textfield-helptext--validation-msg" id="title-validation-msg">Between 3 - 25 characters</p></div>' +
+        //                '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"><a href="#" class="remove_field"><i title="Delete field" style="font-size: 36px" class="material-icons">clear</i></a></div>' +
+        //                '</div></div>'
+        //            ); // Add input box
+        //        }
+        //        // Run autoInit with noop to suppress warnings.
+        //        mdc.autoInit(document, () => {});
+        //    });
+        //
+        //    poiImgDetailsWrapper.on("click",".remove_field", function(e) { // User click on remove text
+        //        e.preventDefault();
+        //        jQuery(this).parent('div').parent('div').parent('div').remove();
+        //        i--;
+        //    });
+        //
+        //    // Color picker based on sliders
+        //    jQuery( "#fluidColorRedSlider, #fluidColorGreenSlider, #fluidColorBlueSlider" ).slider({
+        //        orientation: "horizontal",
+        //        range: "min",
+        //        max: 255,
+        //        value: 127,
+        //        change: refreshSwatch,
+        //        slide: refreshSwatch,
+        //        stop: refreshSwatch
+        //    });
+        //
+        //    jQuery( "#fluidColorAlphaSlider" ).slider({
+        //        orientation: "horizontal",
+        //        range: "min",
+        //        max: 1,
+        //        value: 1,
+        //        step: 0.01,
+        //        change: refreshSwatch,
+        //        slide: refreshSwatch,
+        //        stop: refreshSwatch
+        //    });
+        //
+        //    jQuery( "#fluidColorRedSlider" ).slider( "value", 255 );
+        //    jQuery( "#fluidColorGreenSlider" ).slider( "value", 140 );
+        //    jQuery( "#fluidColorBlueSlider" ).slider( "value", 60 );
+        //
+        //    function refreshSwatch() {
+        //        var red = jQuery( "#fluidColorRedSlider" ).slider( "value" ),
+        //            green = jQuery( "#fluidColorGreenSlider" ).slider( "value" ),
+        //            blue = jQuery( "#fluidColorBlueSlider" ).slider( "value" ),
+        //            alpha = jQuery( "#fluidColorAlphaSlider" ).slider( "value" ),
+        //            color = [red, green, blue, alpha ];
+        //
+        //        jQuery('#fluidColorRedVal').val(red);
+        //        jQuery('#fluidColorGreenVal').val(green);
+        //        jQuery('#fluidColorBlueVal').val(blue);
+        //        jQuery('#fluidColorAlphaVal').val(alpha);
+        //
+        //        jQuery( "#fluidColorPreview" ).css( "background-color", "rgba(" + color +");");
+        //
+        //        document.getElementById('moleculeFluidColorVal').value = "["+color+"]".toString();
+        //    }
+        //
+        //});
 
         jQuery("#poiImgFeaturedImgInput").change(function() {
             wpunity_read_url(this, "#poiImgFeaturedImgPreview");
@@ -1862,10 +1911,19 @@ if($asset_id != null) {
                 document.body.style.fontSize = "1.0em";
             }
             document.body.style.fontSize = parseFloat(document.body.style.fontSize) + (multiplier * 0.2) + "em";
+
+             document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop =
+                 (parseFloat(document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop)+multiplier*10)+"px";
+            
+            //console.log( document.getElementsByClassName("asset3d_desc_view")[0].style );
             
             return false;
         }
+
+        document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
         
     </script>
-
-<?php  get_footer(); ?>
+<?php
+if($isUserloggedIn)
+    echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
+?>
