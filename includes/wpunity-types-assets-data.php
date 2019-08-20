@@ -681,8 +681,8 @@ function wpunity_assets_databox_show(){
                     document.getElementById('wpunity_asset3d_image1').style.display = 'none';
                     document.getElementById('wpunity_asset3d_image1_btn').style.display = 'none';
                     document.getElementById('wpunity_asset3d_image1_preview').style.display = 'none';
-                    document.getElementById('wpunity_asset3d_video').style.display = 'none';
-                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'none';
+                    document.getElementById('wpunity_asset3d_video').style.display = 'block';
+                    document.getElementById('wpunity_asset3d_video_btn').style.display = 'block';
                     document.getElementById('wpunity-assets-infobox').style.display = 'none';
                     document.getElementById('wpunity_asset3d_description_greek').style.display = 'none';
                 }

@@ -172,14 +172,22 @@ function wpunity_create_asset_poisITExtra_frontend($asset_newID){
 }
 
 function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
-    $asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
+    //$asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
     $asset_videoForm = $_FILES['videoFileInput'];
+    
+    $f1=fopen("output_video.txt","w");
+    fwrite($f1, "1");
 
-    $attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
-    set_post_thumbnail( $asset_newID, $attachment_id );
+    //$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
+    //set_post_thumbnail( $asset_newID, $attachment_id );
     
     $attachment_video_id = wpunity_upload_img_vid( $asset_videoForm, $asset_newID);
+    
+    fwrite($f1, $attachment_video_id);
+    
     update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
+    
+    fclose($f1);
 }
 
 function wpunity_create_asset_moleculeExtra_frontend($asset_newID){

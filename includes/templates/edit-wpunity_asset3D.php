@@ -105,17 +105,11 @@ $isJoker = (strpos($assetPGameSlug, 'joker') !== false) ? "true":"false";
 
 $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
-
-if(!isset($_GET['preview'])) {
-    $isUserloggedIn = is_user_logged_in();
-    $current_user = wp_get_current_user();
-    $login_username = $current_user->user_login;
-    $isUserAdmin = current_user_can('administrator');
-}else {
-    $isUserloggedIn = false;
-    $isUserAdmin = false;
-}
-
+$isUserloggedIn = is_user_logged_in();
+$current_user = wp_get_current_user();
+$login_username = $current_user->user_login;
+$isUserAdmin = current_user_can('administrator');
+$isPreviewMode = isset($_GET['preview']);
 
 
 $isEditable = false;
@@ -251,13 +245,16 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		wpunity_create_asset_terrainExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'producer') {
 		wpunity_create_asset_producerExtra_frontend($asset_id);
-	}elseif ( in_array($assetCatTerm->slug, ['artifact','pois_imagetext'])) {
+	}elseif ( $assetCatTerm->slug == 'pois_imagetext') {
 		wpunity_create_asset_poisITExtra_frontend($asset_id);
-	}elseif ($assetCatTerm->slug == 'pois_video') {
+	}elseif ( $assetCatTerm->slug == 'pois_video') {
 		wpunity_create_asset_poisVideoExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'molecule') {
 		wpunity_create_asset_moleculeExtra_frontend($asset_id);
-	}
+    }elseif ( $assetCatTerm->slug == 'artifact') {
+        wpunity_create_asset_poisITExtra_frontend($asset_id);
+        wpunity_create_asset_poisVideoExtra_frontend($asset_id);
+    }
 
 	if($scene_id == 0) {
         
@@ -312,7 +309,7 @@ if($asset_id != null) {
 //--------------------------------------------------------
 get_header();
 
-if($isEditable)
+if($isEditable && !$isPreviewMode)
     $breacrumbsTitle = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
 else
     $breacrumbsTitle = "";
@@ -468,7 +465,7 @@ if($asset_id != null) {
     <?php } ?>
 
     <?php
-        if($isUserloggedIn){
+        if($isUserloggedIn && !$isPreviewMode){
             if($asset_id != null ) { ?>
                 <a class="mdc-button mdc-button--primary mdc-theme--primary"
                 href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
@@ -484,21 +481,27 @@ if($asset_id != null) {
                    data-mdc-auto-init="MDCRipple">Preview</a>
             <?php }
         } else {
-                $curr_uri = $_SERVER['REQUEST_URI'];
-                $targetparams = str_replace("preview=1","",$curr_uri);
-                $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).$_SERVER['HTTP_HOST'].$targetparams.'#English';
-                  ?>
-
-                    <a class="mdc-button mdc-button--primary mdc-theme--primary"
-                       href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
+                ?>
         <?php } ?>
         
+    <?php if ($isPreviewMode){
+
+        $curr_uri = $_SERVER['REQUEST_URI'];
+        $targetparams = str_replace("preview=1","",$curr_uri);
+        $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).$_SERVER['HTTP_HOST'].$targetparams.'#English';
+        ?>
+    
+            <a class="mdc-button mdc-button--primary mdc-theme--primary"
+               href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
+    
+    <?php  }     ?>
+    
     
     
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
-        <div class="" style="display:<?php echo !$isUserloggedIn?"none":""; ?>">
+        <div class="" style="display:<?php echo (!$isUserloggedIn || $isPreviewMode) ? "none":""; ?>">
                     
                     <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -573,7 +576,7 @@ if($asset_id != null) {
         <div class="" id="informationPanel" style="display: none;padding-top:10px;">
 
             <!-- TITLE , DESCRIPTION -->
-            <?php if($isUserloggedIn) { ?>
+            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
             
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
@@ -659,13 +662,11 @@ if($asset_id != null) {
                 <hr class="WhiteSpaceSeparator">
 
 
-                <!--  POI Image-Text -->
+                <!--  Image -->
                 
                 <?php
                 
                 $showIMT = in_array($saved_term[0]->slug, ['pois_imagetext','artifact']) ?'':'none';  ?>
-
-                
                 
                 <div id="poiImgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
                     <h3 class="mdc-typography--title">Featured Image</h3>
@@ -681,15 +682,17 @@ if($asset_id != null) {
 
                     <hr class="WhiteSpaceSeparator">
                 </div>
+                
+                <hr />
 
                 <!-- Video for POI video -->
                 <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
-                <?php $showVid = $saved_term[0]->slug == 'pois_video'?'':'none';  ?>
+                <?php $showVid = in_array($saved_term[0]->slug, ['artifact','pois_video'])?'':'none'; ?>
 
                 <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
 
-                    <h3 class="mdc-typography--title">Video POI Details</h3>
-
+                    <h3 class="mdc-typography--title">Video</h3>
+                    
                     <div id="videoFileInputContainer" class="">
                         <?php
                         $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
@@ -698,7 +701,8 @@ if($asset_id != null) {
                         ?>
             
                         <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
-                            <video width="320" height="240" controls>
+                            <?php echo $attachment_file; ?>
+                            <video width="320" height="240" controls preload="auto">
                                 <source src="<?php echo $attachment_file;?>" type="video/mp4">
                                 <source src="<?php echo $attachment_file;?>" type="video/ogg">
                                 Your browser does not support the video tag.
@@ -712,27 +716,20 @@ if($asset_id != null) {
                     </div>
                 </div>
                 
+                <hr />
                 
             <?php } else { ?>
                     
                 <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
 
-                <!--  POI Image-Text -->
-                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
                 
-                <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
-                    <?php if($asset_id != null){ ?>
-                        <img id="poiImgFeaturedImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
-                    <?php } ?>
-                </div>
-
 
                 <!-- Video for POI video -->
                 <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
-                <?php $showVid = $saved_term[0]->slug == 'pois_video'?'':'none';  ?>
+                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact', 'pois_video'])?'':'none';  ?>
 
                 <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
-
+                    
                     <div id="videoFileInputContainer" class="">
                         <?php
                         $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
@@ -740,8 +737,8 @@ if($asset_id != null) {
                         $attachment_file = $attachment_post->guid;
                         ?>
             
-                        <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
-                            <video width="100%" height="auto    " controls>
+                        <?php if( strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
+                            <video style="width:3840px; height:auto" controls>
                                 <source src="<?php echo $attachment_file;?>" type="video/mp4">
                                 <source src="<?php echo $attachment_file;?>" type="video/ogg">
                                 Your browser does not support the video tag.
@@ -749,8 +746,19 @@ if($asset_id != null) {
                         <?php } ?>
                     </div>
                 </div>
-                
-                
+
+
+                <!--  POI Image-Text -->
+                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
+
+                <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                    <?php if($asset_id != null){ ?>
+                        <img id="poiImgFeaturedImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
+                    <?php } ?>
+                </div>
+
+
+
                 <!-- Languages -->
                 <ul class="langul">
                     <li class="langli"><a href="#English">English</a></li>
@@ -791,10 +799,7 @@ if($asset_id != null) {
                     <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                 </div>
                 </div>
-                
-                
-                
-                
+
             <?php } ?>
 
             
@@ -894,7 +899,7 @@ if($asset_id != null) {
         
             <div class="" id="objectPropertiesPanel">
         
-                <div style="display:<?php echo $isUserloggedIn?'':'none';?>">
+                <div style="display:<?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
                     <h3 class="mdc-typography--title">Object Properties</h3>
         
                     <ul class="RadioButtonList">
@@ -938,7 +943,7 @@ if($asset_id != null) {
                     <div class="">
                         <div class="">
         
-                            <?php if($isUserloggedIn) { ?>
+                            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
                             
                             <label>Select an asset to insert</label>
                             <ul id="lightSlider">
@@ -975,7 +980,7 @@ if($asset_id != null) {
                             
                             <input type="hidden" id="asset_sourceID" name="asset_sourceID" value=""/>
         
-                            <?php if($isUserloggedIn) { ?>
+                            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                             <?php } ?>
                             
@@ -994,7 +999,7 @@ if($asset_id != null) {
                         </div>
         
                         
-                        <div id="sshotFileInputContainer" class="" style="display: <?php echo $isUserloggedIn?'':'none';?>">
+                        <div id="sshotFileInputContainer" class="" style="display: <?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
                             <h3 class="mdc-typography--title">Screenshot</h3>
                             <?php
                                 if($asset_id==null) {
@@ -1337,7 +1342,7 @@ if($asset_id != null) {
             ?>
     
             <!-- CATEGORY IPR -->
-            <div class="" id="ipr-div" style="display:<?php echo $isUserloggedIn?'':'none';?>">
+            <div class="" id="ipr-div" style="display:<?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
     
                 <div class="">
     
@@ -1388,7 +1393,7 @@ if($asset_id != null) {
     
             <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         
-            <?php if($isUserloggedIn) { ?>
+            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
                 
                 <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
@@ -1615,18 +1620,15 @@ if($asset_id != null) {
                     // Archaeology cases
                     case 'doors':
                         jQuery("#doorDetailsPanel").show();
-
                         break;
                     case 'dynamic3dmodels':
-
                         break;
                     case 'pois_imagetext':
                     case 'artifact':
                         jQuery("#poiImgDetailsPanel").show();
-                        break;
                     case 'pois_video':
+                    case 'artifact':
                         jQuery("#poiVideoDetailsPanel").show();
-                        break;
                     // Energy cases
                     case 'terrain':
                         jQuery("#terrainPanel").show();
@@ -1919,11 +1921,15 @@ if($asset_id != null) {
             
             return false;
         }
-
-        document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
+        
+        if (document.getElementsByClassName("asset3d_desc_view").length > 1)
+            document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
+        
+        
         
     </script>
+
 <?php
-if($isUserloggedIn)
-    echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
+    if($isUserAdmin && $isPreviewMode)
+        echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
 ?>

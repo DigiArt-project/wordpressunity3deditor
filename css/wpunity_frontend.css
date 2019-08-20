@@ -501,8 +501,16 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     display: inline-block;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left:0%;
+    /*margin-left:0%;*/
 }
+
+#poiVideoDetailsPanel_preview{
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /*margin-left:0%;*/
+}
+
 
 .assetsListCardActions{
     padding:0px !important;
@@ -734,4 +742,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     padding:0!important;
 }
 
-
+video {
+    width: 100%;
+    height: auto;
+}
