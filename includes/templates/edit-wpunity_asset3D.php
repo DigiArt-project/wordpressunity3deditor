@@ -722,40 +722,107 @@ if($asset_id != null) {
                     
                 <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
 
+                <!--Carousel slideshow slides-->
+    
+                <!-- Video -->
+                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact', 'pois_video'])?'':'none';  ?>
+                <!-- Image -->
+                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
+                
+                <div class="slideshow-container">
+    
+                    <!-- Check if video slide should be shown -->
+                    <?php if ($showVid=='' && $asset_id != null){ ?>
+                         <div class="mySlides fade">
+                            <!-- Video slide -->
+                            <!--<div class="numbertext">1 / 2</div>-->
+                            <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
+    
+                                <div id="videoFileInputContainer" class="">
+                                    <?php
+                                    $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
+                                    $attachment_post = get_post($videoID);
+                                    $attachment_file = $attachment_post->guid;
+                                    ?>
+                
+                                    <?php if( strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
+                                        <video style="width:3840px; height:auto" controls>
+                                            <source src="<?php echo $attachment_file;?>" type="video/mp4">
+                                            <source src="<?php echo $attachment_file;?>" type="video/ogg">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                          </div>
+                     <?php } ?>
+
+
+                    <!--  Image check if should be shown -->
+                    <?php if ($showIMT=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
+                        <div class="mySlides fade">
+                            <!--  <div class="numbertext">2 / 2</div>-->
+                                <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                                <?php if($asset_id != null){ ?>
+                                    <img id="poiImgFeaturedImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
+                                <?php } ?>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                        </div>
+                    <?php } ?>
+                    
+                    <!--   Sliders prev next -->
+                    <?php if ($showVid=='' && $showIMT=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    <?php } ?>
+    
+                 </div>
+                 
+                <br>
+
+                <!--   Sliders dots below -->
+                <?php if ($showVid=='' && $showIMT=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
+                <div style="text-align:center">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+                <?php } ?>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
 
-                <!-- Video for POI video -->
-                <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
-                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact', 'pois_video'])?'':'none';  ?>
-
-                <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
-                    
-                    <div id="videoFileInputContainer" class="">
-                        <?php
-                        $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
-                        $attachment_post = get_post($videoID);
-                        $attachment_file = $attachment_post->guid;
-                        ?>
-            
-                        <?php if( strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
-                            <video style="width:3840px; height:auto" controls>
-                                <source src="<?php echo $attachment_file;?>" type="video/mp4">
-                                <source src="<?php echo $attachment_file;?>" type="video/ogg">
-                                Your browser does not support the video tag.
-                            </video>
-                        <?php } ?>
-                    </div>
-                </div>
+                
 
 
-                <!--  POI Image-Text -->
-                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
-
-                <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
-                    <?php if($asset_id != null){ ?>
-                        <img id="poiImgFeaturedImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
-                    <?php } ?>
-                </div>
+                
 
 
 
@@ -1924,6 +1991,40 @@ if($asset_id != null) {
         
         if (document.getElementsByClassName("asset3d_desc_view").length > 1)
             document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
+        
+        
+        
+        
+        // Slider (carousel in view mode)
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+        }
+        
+        
+        
         
         
         
