@@ -111,6 +111,10 @@ $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
 $isPreviewMode = isset($_GET['preview']);
 
+$isOwner = $current_user->ID == get_post_field ('post_author', $asset_id);
+
+
+
 
 $isEditable = false;
 
@@ -130,7 +134,7 @@ if ($isUserloggedIn) {
         $isEditable = true;
         $author_id = $user_id;
         
-    } else if ($isUserAdmin || ($user_id == $author_id)){
+    } else if ($isUserAdmin || $isOwner){
         // OLD ASSET
         $isEditable = true;
         $author_id = get_post_field ('post_author', $asset_id);
@@ -501,7 +505,7 @@ if($asset_id != null) {
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
-        <div class="" style="display:<?php echo (!$isUserloggedIn || $isPreviewMode) ? "none":""; ?>">
+        <div class="" style="display:<?php echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?>">
                     
                     <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -576,7 +580,7 @@ if($asset_id != null) {
         <div class="" id="informationPanel" style="display: none;padding-top:10px;">
 
             <!-- TITLE , DESCRIPTION -->
-            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
+            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
             
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
@@ -632,7 +636,7 @@ if($asset_id != null) {
                             });
                     </script>
     
-                    <label for="assetFonts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_fonts_label; ?></label>
+                    <label for="assetFonts" class="mdc-textfield__label" style="background: none; top: 0px"><?php echo $asset_fonts_label; ?></label>
                 </div>
     
                 <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
@@ -798,26 +802,6 @@ if($asset_id != null) {
                 
                 
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
 
                 
 
@@ -966,7 +950,7 @@ if($asset_id != null) {
         
             <div class="" id="objectPropertiesPanel">
         
-                <div style="display:<?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
+                <div style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
                     <h3 class="mdc-typography--title">Object Properties</h3>
         
                     <ul class="RadioButtonList">
@@ -1010,7 +994,7 @@ if($asset_id != null) {
                     <div class="">
                         <div class="">
         
-                            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
+                            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
                             
                             <label>Select an asset to insert</label>
                             <ul id="lightSlider">
@@ -1047,7 +1031,7 @@ if($asset_id != null) {
                             
                             <input type="hidden" id="asset_sourceID" name="asset_sourceID" value=""/>
         
-                            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
+                            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
                             <?php } ?>
                             
@@ -1066,7 +1050,7 @@ if($asset_id != null) {
                         </div>
         
                         
-                        <div id="sshotFileInputContainer" class="" style="display: <?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
+                        <div id="sshotFileInputContainer" class="" style="display: <?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
                             <h3 class="mdc-typography--title">Screenshot</h3>
                             <?php
                                 if($asset_id==null) {
@@ -1409,7 +1393,7 @@ if($asset_id != null) {
             ?>
     
             <!-- CATEGORY IPR -->
-            <div class="" id="ipr-div" style="display:<?php echo ($isUserloggedIn && !$isPreviewMode)?'':'none';?>">
+            <div class="" id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
     
                 <div class="">
     
@@ -1460,7 +1444,7 @@ if($asset_id != null) {
     
             <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         
-            <?php if($isUserloggedIn && !$isPreviewMode) { ?>
+            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
                 <input type="hidden" name="submitted" id="submitted" value="true" />
                 
                 <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>

@@ -83,7 +83,7 @@ get_header();
 
 // Display Login name at right
 if($isUserloggedIn){ ?>
-    <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
+    <span style="float:right; margin-right:5px; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
         <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
               <?php echo $login_username;?>
         </a>
