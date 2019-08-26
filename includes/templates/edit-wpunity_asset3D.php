@@ -706,7 +706,8 @@ if($asset_id != null) {
             
                         <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
                             <?php echo $attachment_file; ?>
-                            <video width="320" height="240" controls preload="auto">
+                            <video width="320" height="240"
+                                   poster="/wp-content/plugins/wordpressunity3deditor/images/video_img.png" controls preload="auto">
                                 <source src="<?php echo $attachment_file;?>" type="video/mp4">
                                 <source src="<?php echo $attachment_file;?>" type="video/ogg">
                                 Your browser does not support the video tag.

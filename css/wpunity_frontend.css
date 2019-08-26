@@ -180,7 +180,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     }
 
     .mdc-layout-grid {
-        grid-template-columns: repeat(1, minmax(0, 1fr))
+        /*grid-template-columns: repeat(1, minmax(0, 1fr))*/
     }
 
 
@@ -200,7 +200,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     }
 
     .mdc-layout-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        /*grid-template-columns: repeat(6, minmax(0, 1fr));*/
     }
 
 }
@@ -425,10 +425,10 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 
 .asset-shared-thumbnail {
     width: 100%;
-    max-width:265px;
-    height:100% !important;
-    min-height:100px;
-    max-height:150px;
+    /*max-width:265px;*/
+    /*height:100% !important;*/
+    /*min-height:100px;*/
+    /*max-height:150px;*/
 }
 
 .sharedAssetsIndicator {
@@ -846,7 +846,45 @@ video {
 }
 
 
+.sidebar-shared-assets-front {
+    width: 30%;
+    float: right;
+    top: 0;
+    right: 0;
+    padding-right: 5px;
+    position:absolute;
+
+}
+
+@media only screen and (max-width: 1024px) {
+    .sidebar-shared-assets-front {display: none;}
+}
+
+.assets-list-front {
+    width:70%;
+    float:left;
+    padding-top:5px;
+    padding-left:5px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .assets-list-front {width: 100%;}
+}
 
 
+@media only screen and (min-width: 801px) and (max-width: 1024px) {
+    .grid-system-custom {grid-template-columns: repeat(12, minmax(0, 1fr))}
+}
+
+@media only screen and (min-width: 601px) and (max-width: 801px) {
+    .grid-system-custom {grid-template-columns: repeat(9, minmax(0, 1fr))}
+}
 
 
+@media only screen and (max-width: 600px) {
+    .grid-system-custom {grid-template-columns: repeat(1, minmax(0, 1fr))}
+}
+
+#colophon {
+    margin:5px;
+}

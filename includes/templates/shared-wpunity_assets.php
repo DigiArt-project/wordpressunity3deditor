@@ -101,29 +101,33 @@ $assets = get_games_assets($user_games_slugs);
 
 
 ?>
-<div id="page-wrapper" style="display:inline-block">
+
 
     <!-- Display assets Grid-->
-    <div style="width:70%;float:left;padding-top:5px;padding-left:5px;" class="mdc-layout-grid">
+<div class="assets-list-front mdc-layout-grid" >
     <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets</span>
     
     <a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">?</a>
-    <div class="mdc-layout-grid__inner">
+     
+     <div class="mdc-layout-grid__inner grid-system-custom">
+     
         <!-- Card to add asset -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative;background: orangered">
-            <a href="<?php echo $isUserloggedIn ?
-                esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ) : wp_login_url();
-            ?>">
-            
-            <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
-            <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
-            </a>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="" >
+            <div class="asset-shared-thumbnail mdc-card mdc-theme--background" style="min-height:100px;height:100%;position:relative;background: orangered;">
+                <a href="<?php echo $isUserloggedIn ?
+                    esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ) : wp_login_url();
+                ?>">
+                
+                <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
+                <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
+                </a>
+            </div>
         </div>
         
         <!-- Each Asset -->
         <?php foreach ($assets as $asset) {    ?>
 
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="position:relative">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="position:relative">
 
                 <div class="asset-shared-thumbnail mdc-card mdc-theme--background" id="<?php echo $asset['assetid']; ?>">
     
@@ -192,11 +196,9 @@ $assets = get_games_assets($user_games_slugs);
     
 </div>
 
-<div style="width:30%;float:right; padding-right:5px;">
-   <?php get_sidebar(); ?>
-</div>
 
-</div>
+
+
 
 
 <!--  No Assets Empty Repo-->
@@ -211,6 +213,10 @@ $assets = get_games_assets($user_games_slugs);
     </div>
 <?php endif; ?>
 <!--                     -->
+
+<div class="sidebar-shared-assets-front">
+    <?php get_sidebar(); ?>
+</div>
 
 <script type="text/javascript">
 
