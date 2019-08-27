@@ -115,7 +115,7 @@ $assets = get_games_assets($user_games_slugs);
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="" >
             <div class="asset-shared-thumbnail mdc-card mdc-theme--background" style="min-height:100px;height:100%;position:relative;background: orangered;">
                 <a href="<?php echo $isUserloggedIn ?
-                    esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ) : wp_login_url();
+                    esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id .'#EnglishEdit') : wp_login_url();
                 ?>">
                 
                 <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>

@@ -53,6 +53,8 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
     // Replace empty spaces with underscores
     var title =   title.replace(new RegExp(" ", 'g'),"_"); // document.getElementById("wpunity_titles_search").value.replace(" ","%20");
 
+        //console.log("AAA" + title);
+
 
     var lang = "en";
 
@@ -77,7 +79,7 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
 
         success : function(response) {
 
-//            console.log(response);
+            //console.log(response);
 
             var json_content = jQuery.parseJSON(response);
 
@@ -89,9 +91,10 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
                         for (key in json_content.query.pages) {
                             if (json_content.query.pages[key].extract) {
 
-                                description_dom['multi-line'].value = "(Wikipedia)" + "\n" + json_content.query.pages[key].extract.trim();
+                                description_dom.value = "(Wikipedia)" + "\n" + json_content.query.pages[key].extract.trim();
 
-                                description_dom[1].style.display = 'none';
+                                //description_dom[1].style.display = 'none';
+
                             } else {
                                 //tinymce.activeEditor.setContent(json_content.query.pages[key].extract.trim());
 
@@ -108,40 +111,40 @@ function wpunity_fetchDescriptionAjaxFrontEnd( externalSource, title, descriptio
 
                     console.log(json_content);
 
-                    description_dom['multi-line'].value += "(Europeana)" + "\n";
+                    description_dom.value += "(Europeana)" + "\n";
 
                     if(json_content.items.length > 0 ){
 
                         for (var l=0; l<json_content.items.length; l++) {
 
-                            description_dom['multi-line'].value += '---------- ' + l +  ' -----------';
-                            description_dom['multi-line'].value += '\n';
+                            description_dom.value += '---------- ' + l +  ' -----------';
+                            description_dom.value += '\n';
 
                             if (json_content.items[l].title !== '') {
-                                description_dom['multi-line'].value += JSON.stringify(json_content.items[l].title[0]);
+                                description_dom.value += JSON.stringify(json_content.items[l].title[0]);
 
-                                description_dom['multi-line'].value += '\n';
-                                description_dom['multi-line'].value += '\n';
+                                description_dom.value += '\n';
+                                description_dom.value += '\n';
                             }
 
                             if (json_content.items[l].edmIsShownAt !== '') {
-                                description_dom['multi-line'].value += JSON.stringify(json_content.items[l].edmIsShownAt);
+                                description_dom.value += JSON.stringify(json_content.items[l].edmIsShownAt);
 
-                                description_dom['multi-line'].value += '\n';
-                                description_dom['multi-line'].value += '\n';
+                                description_dom.value += '\n';
+                                description_dom.value += '\n';
                             }
 
                             if (json_content.items[l].dcDescription !== undefined) {
-                                description_dom['multi-line'].value += " : " + JSON.stringify(json_content.items[l].dcDescription[0]);
+                                description_dom.value += " : " + JSON.stringify(json_content.items[l].dcDescription[0]);
 
-                                description_dom['multi-line'].value += '\n';
+                                description_dom.value += '\n';
 
-                                description_dom['multi-line'].value += '\n';
+                                description_dom.value += '\n';
 
                             }
 
 
-                            description_dom[1].style.display = 'none';
+                            //description_dom[1].style.display = 'none';
 
                         }
 

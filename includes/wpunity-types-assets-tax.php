@@ -85,24 +85,59 @@ function wpunity_assets_taxcategory_ipr_box_content($post){
 
         //if (term_exists( 'visible to all', 'wpunity_asset3d_ipr_cat')!=0) {
             wp_insert_term(
-                'visible to all', // the term
+                'Private', // the term
                 'wpunity_asset3d_ipr_cat', // the taxonomy
                 array(
-                    'description' => 'I allow everyone to make tours with this item inside.',
-                    'slug' => 'asset_visible_to_all',
+                    'description' => 'Nobody can view or edit the asset',
+                    'slug' => 'asset_private',
                 )
             );
         //}
 
             wp_insert_term(
-                'visible only to me', // the term
+                'Shared Type A', // the term
                 'wpunity_asset3d_ipr_cat', // the taxonomy
                 array(
-                    'description' => 'I do not want this item to be visible to others',
-                    'slug' => 'asset_visible_only_to_me',
+                    'description' => 'Others can view only',
+                    'slug' => 'asset_shared_type_a',
                 )
             );
 
+        wp_insert_term(
+            'Shared Type B', // the term
+            'wpunity_asset3d_ipr_cat', // the taxonomy
+            array(
+                'description' => 'Others can view and comment',
+                'slug' => 'asset_shared_type_b',
+            )
+        );
+
+        wp_insert_term(
+            'Shared Type C', // the term
+            'wpunity_asset3d_ipr_cat', // the taxonomy
+            array(
+                'description' => 'Others can view, comment, and clone asset with custom descriptions',
+                'slug' => 'asset_shared_type_c',
+            )
+        );
+
+        wp_insert_term(
+            'Shared Type D', // the term
+            'wpunity_asset3d_ipr_cat', // the taxonomy
+            array(
+                'description' => 'Others can view, comment, clone and use in experiences',
+                'slug' => 'asset_shared_type_d',
+            )
+        );
+
+        wp_insert_term(
+            'Shared Type E', // the term
+            'wpunity_asset3d_ipr_cat', // the taxonomy
+            array(
+                'description' => 'Others can view, comment, clone, use in experiences, and download',
+                'slug' => 'asset_shared_type_e',
+            )
+        );
         
         
         
