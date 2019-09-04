@@ -569,8 +569,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 }
 
 .langli  {
-    display: inline-block;
-    margin-right: 1rem;
+    padding:0 12px !important;
 }
 
 
@@ -888,3 +887,10 @@ video {
 #colophon {
     margin:5px;
 }
+
+
+.hideAtLocked{
+    font-size: large;
+}
+
+

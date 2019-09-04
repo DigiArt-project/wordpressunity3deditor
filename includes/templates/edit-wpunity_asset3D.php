@@ -464,9 +464,11 @@ if($asset_id != null) {
     <br />
         
     <?php if($isJokerGame ) { ?>
-        <a title="Back" style="color:dodgerblue" class="hideAtLocked" href="<?php echo $goBackTo_SharedAssets;?>">
-            <i class="material-icons" style="font-size: 24px; vertical-align: top;">arrow_back</i>Assets List
-        </a>
+        
+        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackTo_SharedAssets;?>">
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
+            Assets List</a>
+        
     <?php } else { ?>
         <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
             <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor
@@ -827,10 +829,10 @@ if($asset_id != null) {
                 
                 <!-- Languages -->
                 <ul class="langul">
-                    <li class="langli"><a href="#English">English</a></li>
-                    <li class="langli"><a href="#Greek" >Ελληνικά</a></li>
-                    <li class="langli"><a href="#Spanish" >Español</a></li>
-                    <li class="langli"><a href="#French" >Français</a></li>
+                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#English">English</a></li>
+                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#Greek" >ΕΛΛΗΝΙΚΑ</a></li>
+                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#Spanish" >Español</a></li>
+                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#French" >Français</a></li>
                 </ul>
 
                 <div class="wrapper_lang">
