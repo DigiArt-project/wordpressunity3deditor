@@ -81,7 +81,7 @@ document.addEventListener( 'keydown',
 document.addEventListener( 'keyup',
     function ( event ) {
 
-        triggerAutoSave();
+        //triggerAutoSave(); // too slow
         switch( event.keyCode ) {
             case 38: // up
             case 87: moveForward = false; break; // w

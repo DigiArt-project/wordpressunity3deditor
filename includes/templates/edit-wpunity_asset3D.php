@@ -283,6 +283,8 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
+$back_3d_color = 'rgb(0,0,0)';
+
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_id != null) {
     
@@ -290,6 +292,8 @@ if($asset_id != null) {
     $assetpostMeta = get_post_meta($asset_id);
    
     $back_3d_color = $assetpostMeta['wpunity_asset3d_back_3d_color'][0];
+    
+    
     $fonts = $assetpostMeta['wpunity_asset3d_fonts'][0];
     
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
@@ -671,7 +675,8 @@ if($asset_id != null) {
                 <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                      style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
     
-                    <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="cccccc" style="width:40%;margin-left:60%;padding:20px;">
+                    <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}"
+                           style="width:40%;margin-left:60%;padding:20px;" value="000000">
                     
                     <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                            name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
@@ -753,7 +758,9 @@ if($asset_id != null) {
                 <hr />
                 
             <?php } else { ?>
-                    
+            
+        <!--                Show-->
+                
                 <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
 
                 <!--Carousel slideshow slides-->
@@ -828,45 +835,136 @@ if($asset_id != null) {
                 
                 
                 <!-- Languages -->
-                <ul class="langul">
-                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#English">English</a></li>
-                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#Greek" >ΕΛΛΗΝΙΚΑ</a></li>
-                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#Spanish" >Español</a></li>
-                    <li class="langli mdc-button" style="padding:0px 1% !important;"><a href="#French" >Français</a></li>
+                <ul class="langul" style="margin:0">
+                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'English')" style="padding:0px 1% !important;">English</li>
+                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'Greek')" style="padding:0px 1% !important;">ΕΛΛΗΝΙΚΑ</li>
+                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'Spanish')" style="padding:0px 1% !important;">Español</li>
+                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'French')" style="padding:0px 1% !important;">Français</li>
                 </ul>
 
+                <!-- Accessibility -->
+                <div style="display:inline-block; margin-left:10px;" >
+                    
+                    <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
+                           name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
+
+                    <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
+                            style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;">
+                    </button>
+
+                    <div id="font-size-selector" style="display:inline-block; right: 10%;font-size: 1.5em;">
+                        <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
+                        <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
+                    </div>
+                </div>
+                
                 <div class="wrapper_lang">
-                    <div id="English" class="tab-container_lang asset3d_desc_view"
+                    <div id="English" class="tabcontent2 active"
                          style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
                         <?php echo trim($asset_desc_saved);?>
                     </div>
-                    <div id="Greek" class="tab-container_lang asset3d_desc_view"
+                    
+                    <div id="Greek" class="tabcontent2"
                          style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
                         <?php echo trim($asset_desc_greek_saved); ?>
                     </div>
-                    <div id="Spanish" class="tab-container_lang asset3d_desc_view"
+                    
+                    <div id="Spanish" class="tabcontent2"
                          style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
                         <?php echo trim($asset_desc_spanish_saved); ?>
                     </div>
-                    <div id="French" class="tab-container_lang asset3d_desc_view"
+                    
+                    <div id="French" class="tabcontent2"
                          style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
                         <?php echo trim($asset_desc_french_saved); ?>
                     </div>
                 </div>
                 
-                <div style="display:inline-block;" >
-                <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
-                       name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
-                
-                <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
-                        style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;">
-                </button>
+                <div id="confwindow" style="align-items: center; justify-content: center; border 0px; display:none" >
+                    <iframe id="iframeConf" width="100%" height="250px" style="margin-bottom:0;" frameBorder=0 src="" allow="camera,microphone"></iframe>
 
-                <div id="font-size-selector" style="display:inline-block; right: 10%;font-size: 1.5em;">
-                    <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
-                    <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                 </div>
+
+                <div id="confwindow_helper" style="padding-top: 20px;text-align: center;width: 200px;margin: 0 auto;">
+                    <h1><img src="/wp-content/plugins/wordpressunity3deditor/peer-calls/src/res/peer-calls.svg" alt="Peer Calls" ></h1>
+                    <p>Video-conference with the museum expert!</p>
+                    <button type="button" onclick="startConf()">Call</button>
                 </div>
+                
+
+
+
+                <script>
+
+                    function startConf(){
+                        jQuery("#confwindow")[0].style.display="";
+                        jQuery("#confwindow_helper")[0].style.display="none";
+
+                        document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $asset_title_saved; ?>"
+                    }
+                    
+                    tabcontent = document.getElementsByClassName("tabcontent2");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    
+                    var url = window.location.href;
+                    var langcurr= url.substring(url.indexOf("#")+1);
+                    
+                    jQuery("#"+langcurr + ".tabcontent2")[0].style.display = "block";
+
+                    
+                    
+                    function openLanguage(evt, cityName) {
+                        var i, tabcontent, tablinks;
+                        tabcontent = document.getElementsByClassName("tabcontent2");
+                        for (i = 0; i < tabcontent.length; i++) {
+                            tabcontent[i].style.display = "none";
+                        }
+                        tablinks = document.getElementsByClassName("tablinks2");
+                        for (i = 0; i < tablinks.length; i++) {
+                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+                        document.getElementById(cityName).style.display = "block";
+                        evt.currentTarget.className += " active";
+                    }
+                </script>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+
+                
+                
+                
+                
+
+
+
+
 
             <?php } ?>
 
@@ -1192,6 +1290,7 @@ if($asset_id != null) {
         // TODO: Remove also from register and enquire
         var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color );
 
+        
         wpunity_reset_panels(wu_webw_3d_view);
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
@@ -1446,6 +1545,7 @@ if($asset_id != null) {
 
                 //document.getElementById("sshotFileInputContainer").appendChild(canvas)
                 //document.body.appendChild(canvas)
+                wu_webw_3d_view_local.render();
                 document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
                 
                 
@@ -1565,8 +1665,12 @@ if($asset_id != null) {
             for (i = 0; i < dots.length; i++) {
                 dots[i].className = dots[i].className.replace(" active", "");
             }
-            slides[slideIndex-1].style.display = "block";
-            dots[slideIndex-1].className += " active";
+            
+            
+            slides[slideIndex - 1].style.display = "block";
+            if (typeof dots[slideIndex - 1] != "undefined")
+                dots[slideIndex - 1].className += " active";
+            
         }
         
         

@@ -1683,80 +1683,155 @@ function wpunity_upload_filter( $args  ) {
  * @return bool|int|WP_Error
  *
  */
-function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug, $type) {
- 
-	add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
-
-	require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug, $type)
+{
     
-	
-	$upload_dir = wp_upload_dir();
-	$upload_path = str_replace( '/',
-            DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-	
-	$hashed_filename = md5( $imgTitle . microtime() ) . '_' . $imgTitle.'.'.$type;
+    $fp = fopen('output_thumb.txt','w');
+    fwrite($fp, '0'.chr(10));
     
-	
-	$image_upload = file_put_contents($upload_path . $hashed_filename,
-		base64_decode(substr($imagefile, strpos($imagefile, ",")+1)));
+    $DS = DIRECTORY_SEPARATOR;
     
-	
-	// HANDLE UPLOADED FILE
-	if( !function_exists( 'wp_handle_sideload' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-	}
-
-	// Without that I'm getting a debug error!?
-	if( !function_exists( 'wp_get_current_user' ) ) {
-		require_once( ABSPATH . 'wp-includes/pluggable.php' );
-	}
-
-	$file = array (
-		'name'     => $hashed_filename,
-		'type'     => 'image/png',
-		'tmp_name' => $upload_path . $hashed_filename,
-		'error'    => 0,
-		'size'     => filesize( $upload_path . $hashed_filename ),
-	);
-
-	add_filter( 'upload_dir', 'wpunity_upload_filter');
-	// upload file to server
-	// @new use $file instead of $image_upload
-	$file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
-	remove_filter( 'upload_dir', 'wpunity_upload_filter' );
-
-	$filename = $file_return['file'];
-
-	$upload = wp_upload_dir();
-	$upload_dir = $upload['basedir'];
-	$upload_dir .= "/" . $parentGameSlug;
-	$upload_dir .= "/" . 'Models';
-	$upload_dir = str_replace('\\','/',$upload_dir);
-	$attachment = array(
-		'post_mime_type' => $file_return['type'],
-		'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-		'post_content' => '',
-		'post_status' => 'inherit',
-		'guid' => $file_return['url']
-	);
-
-	$attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
-	
-	require_once(ABSPATH . 'wp-admin/includes/image.php');
-	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
-	wp_update_attachment_metadata( $attachment_id, $attachment_data );
-
-	remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
-	
-	if( 0 < intval( $attachment_id, 10 ) ) {
-		return $attachment_id;
-	}
-
-	/*$jsonReturn = array(
-		'Status'  =>  'Success'
-	);*/
-
+    // Upload file
+    $hashed_filename = md5($imgTitle . microtime()) . '_' . $imgTitle . '.' . $type;
+    
+    fwrite($fp, '01'.chr(10));
+    
+    add_filter('intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2);
+    
+    require_once(ABSPATH . 'wp-admin/includes/admin.php');
+    
+    // Upload file
+    $upload_dir = wp_upload_dir();
+    $upload_path = str_replace('/', $DS, $upload_dir['path']) . $DS;
+    
+    fwrite($fp, '02'.chr(10));
+    
+    $image_upload = file_put_contents($upload_path . $hashed_filename,
+        base64_decode(substr($imagefile, strpos($imagefile, ",") + 1)));
+    
+    
+    // HANDLE UPLOADED FILE
+    if (!function_exists('wp_handle_sideload')) {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+    }
+    
+    // Without that I'm getting a debug error!?
+    if (!function_exists('wp_get_current_user')) {
+        require_once(ABSPATH . 'wp-includes/pluggable.php');
+    }
+    
+    fwrite($fp, '03'.chr(10));
+    
+    $file = array(
+        'name' => $hashed_filename,
+        'type' => 'image/png',
+        'tmp_name' => $upload_path . $hashed_filename,
+        'error' => 0,
+        'size' => filesize($upload_path . $hashed_filename),
+    );
+    
+    add_filter('upload_dir', 'wpunity_upload_filter');
+    // upload file to server
+    // @new use $file instead of $image_upload
+    $file_return = wp_handle_sideload($file, array('test_form' => false));
+    remove_filter('upload_dir', 'wpunity_upload_filter');
+    
+    $new_filename = $file_return['file'];
+    //--- End of upload ---
+    
+    // See  if has already a thumbnail
+    $thumbnails_ids = get_post_meta($parent_post_id,'_thumbnail_id');
+    
+    
+    fwrite($fp, $parent_post_id.chr(10));
+    
+    fwrite($fp, '1'.chr(10));
+    fwrite($fp, print_r($thumbnails_ids, true));
+    
+    
+    if (count($thumbnails_ids) > 0){
+    
+        fwrite($fp, chr(10).'2');
+        
+        $thumbnail_post_id = $thumbnails_ids[0];
+        
+        // Remove previous file from file system
+        $prevfile = get_post_meta($thumbnail_post_id, '_wp_attached_file', true);
+    
+        fwrite($fp, chr(10).'20');
+        
+        $del_prev_file_res = unlink($prevfile);
+    
+        fwrite($fp, chr(10).'21'. $prevfile);
+        fwrite($fp, chr(10).'22'. $del_prev_file_res);
+        
+        // Update the thumbnail post title into the database
+        $my_post = array(
+            'ID' => $thumbnail_post_id,
+            'post_title'   => $hashed_filename
+        );
+        wp_update_post( $my_post );
+        
+        // Update thumbnail meta _wp_attached_file
+        $res_thumb_upd = update_post_meta($thumbnail_post_id, '_wp_attached_file', $new_filename);
+    
+        fwrite($fp, chr(10).'23'. $res_thumb_upd);
+        
+        // update also _attachment_meta
+        $data = wp_get_attachment_metadata( $thumbnail_post_id);
+    
+        fwrite($fp, chr(10).'24'. print_r($data,true));
+    
+        fwrite($fp, chr(10).basename($prevfile));
+        fwrite($fp, chr(10).basename($new_filename));
+        
+        
+        
+        $data['file'] = '/Models/'.basename($new_filename);
+    
+        fwrite($fp, chr(10).'25'. print_r($data,true));
+        
+        wp_update_attachment_metadata( $thumbnail_post_id, $data );
+        
+        
+    } else {
+    
+        // Add new
+//        $upload = wp_upload_dir();
+//        $upload_dir = $upload['basedir'];
+//        $upload_dir .= "/" . $parentGameSlug;
+//        $upload_dir .= "/" . 'Models';
+//        $upload_dir = str_replace('\\', '/', $upload_dir);
+        
+        $attachment = array(
+            'post_mime_type' => $file_return['type'],
+            'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_filename)),
+            'post_content' => '',
+            'post_status' => 'inherit',
+            'guid' => $file_return['url']
+        );
+    
+        // Attach to
+        $attachment_id = wp_insert_attachment($attachment, $file_return['url'], $parent_post_id);
+    
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attachment_data = wp_generate_attachment_metadata($attachment_id, $new_filename);
+        wp_update_attachment_metadata($attachment_id, $attachment_data);
+    
+        remove_filter('intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2);
+    
+        if (0 < intval($attachment_id, 10)) {
+            return $attachment_id;
+        }
+    
+        /*$jsonReturn = array(
+            'Status'  =>  'Success'
+        );*/
+    
+    }
+    fclose($fp);
 	return false;
+	
 }
 
 /**
@@ -2632,6 +2707,7 @@ function wpunity_save_scene_async_action_callback()
 {
 	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
+	// Save screenshot
 	if (isset($_POST['scene_screenshot']))
 		$attachment_id = wpunity_upload_Assetimg64(
 		             $_POST['scene_screenshot'],
@@ -2640,8 +2716,10 @@ function wpunity_save_scene_async_action_callback()
                      get_post($_POST['scene_id'])->post_name,
             'jpg' );
 
+	// Set thumbnail of post
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
 	
+	// Save json of scene
 	$scene_new_info = array(
 		'ID' => $_POST['scene_id'],
 		'post_title' => $_POST['scene_title'],

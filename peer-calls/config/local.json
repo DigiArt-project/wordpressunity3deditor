@@ -1,0 +1,7 @@
+{
+ "ssl": {
+     "cert": "/home/ververid/SSL/heliosvr/cert.pem",
+	 "key": "/home/ververid/SSL/heliosvr/privkey.pem"
+  }     
+}
+

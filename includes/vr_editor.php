@@ -1,4 +1,9 @@
-<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+<?php
+if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
+if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
+if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
+$parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
+?>
 
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
@@ -695,7 +700,8 @@ echo '</script>';
                                 //create permalink depending the scene yaml category
                                 $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                                 if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
-                                $edit_page_link     = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
+                                
+                                $edit_page_link = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
                                 ?>
                                 <div style="" class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
                                 <a href="<?php echo $edit_page_link; ?>">
@@ -816,8 +822,11 @@ echo '</script>';
                             //create permalink depending the scene yaml category
                             $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                             if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+                            
+                            
+                            
                             $editurl = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type;
-                            $edit_page_link = esc_url( editurl );
+                            $edit_page_link = esc_url( $editurl );
 
                             if($default_scene) {
                                 //echo urlencode($edit_page_link);
