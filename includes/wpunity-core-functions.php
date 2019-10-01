@@ -533,62 +533,62 @@ function wpunity_extrapass_profile_fields( $user ) {
 //==========================================================================================================================================
 //==========================================================================================================================================
 // Assets
-function wpunity_assets_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'wpunity-list-shared-assets/' ) ).'">Assets</a>'
-        . '</li>';
-    return $menu;
-}
-add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 1, 2 );
-
-// Projects
-function wpunity_projects_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'wpunity-main/' ) ).'">Projects</a></li>';
-    return $menu;
-}
-add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 2, 2 );
-
-
-// Projects
-function wpunity_compiled_projects_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'compiled-projects/' ) ).'">Compiled Projects</a></li>';
-    return $menu;
-}
-add_filter( 'wp_nav_menu_items','wpunity_compiled_projects_menu_link', 2, 3 );
-
-
-
-
-// Display Members as menu item (Ultimatemember plugin)
-function wpunity_members_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'members/' ) ).'">Members</a></li>';
-    return $menu;
-}
-
-
-// Display Feedback page as menu item (Ultimatemember plugin)
-function wpunity_feedback_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'feedback/' ) ).'">Feedback</a></li>';
-    return $menu;
-}
-add_filter( 'wp_nav_menu_items','wpunity_feedback_menu_link', 4, 4 );
-
-function wpunity_contact_menu_link( $menu, $args ) {
-    $menu .= '<li class="nav-menu" class="menu-item">' .
-        '<a href="'.get_permalink( get_page_by_path( 'contact/' ) ).'">Contact</a>'
-        . '</li>';
-    return $menu;
-}
-add_filter( 'wp_nav_menu_items','wpunity_contact_menu_link', 5, 2 );
-
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-if ( is_plugin_active( 'ultimate-member/ultimate-member.php' ) ) {
-    add_filter( 'wp_nav_menu_items','wpunity_members_menu_link', 3, 2 );
-}
+//function wpunity_assets_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'wpunity-list-shared-assets/' ) ).'">Assets</a>'
+//        . '</li>';
+//    return $menu;
+//}
+//add_filter( 'wp_nav_menu_items','wpunity_assets_menu_link', 1, 2 );
+//
+//// Projects
+//function wpunity_projects_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'wpunity-main/' ) ).'">Projects</a></li>';
+//    return $menu;
+//}
+//add_filter( 'wp_nav_menu_items','wpunity_projects_menu_link', 2, 2 );
+//
+//
+//// Projects
+//function wpunity_compiled_projects_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'compiled-projects/' ) ).'">Compiled Projects</a></li>';
+//    return $menu;
+//}
+//add_filter( 'wp_nav_menu_items','wpunity_compiled_projects_menu_link', 2, 3 );
+//
+//
+//
+//
+//// Display Members as menu item (Ultimatemember plugin)
+//function wpunity_members_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'members/' ) ).'">Members</a></li>';
+//    return $menu;
+//}
+//
+//
+//// Display Feedback page as menu item (Ultimatemember plugin)
+//function wpunity_feedback_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'feedback/' ) ).'">Feedback</a></li>';
+//    return $menu;
+//}
+//add_filter( 'wp_nav_menu_items','wpunity_feedback_menu_link', 4, 4 );
+//
+//function wpunity_contact_menu_link( $menu, $args ) {
+//    $menu .= '<li class="nav-menu" class="menu-item">' .
+//        '<a href="'.get_permalink( get_page_by_path( 'contact/' ) ).'">Contact</a>'
+//        . '</li>';
+//    return $menu;
+//}
+//add_filter( 'wp_nav_menu_items','wpunity_contact_menu_link', 5, 2 );
+//
+//include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+//if ( is_plugin_active( 'ultimate-member/ultimate-member.php' ) ) {
+//    add_filter( 'wp_nav_menu_items','wpunity_members_menu_link', 3, 2 );
+//}
 
 
 
@@ -2182,6 +2182,85 @@ function wpunity_fetch_video_action_callback(){
 
 	wp_die();
 }
+
+
+function wpunity_notify_confpeers_callback(){
+    
+    
+    $ff = fopen("confroom_log.txt","a");
+    
+    fwrite($ff,chr(10));
+    
+    date_default_timezone_set("Europe/Sofia");
+    
+    $strDate = "<tr><td> +1 user</td><td>".$_POST['confroom']."</td><td>".date('d-m-y')."</td><td>".date('h:i:s')."</td></tr>:::".time().":::".$_POST['confroom'];
+    fwrite($ff, $strDate);
+    fclose($ff);
+    
+//    if (document.getElementById("ConfRoomReport"))
+//        document.getElementById("ConfRoomReport").innerHTML = "1 user in room:".$_POST['confroom'];
+        
+    echo $strDate;
+    
+    
+    wp_die();
+}
+
+
+
+// Read log content from conferences
+function wpunity_update_expert_log_callback()
+{
+    // reset
+    //unlink("wp-admin/confroom_log.txt");
+
+    $file = file("confroom_log.txt");
+    
+    $file = str_replace("\n", " ", $file);
+    $file = array_reverse($file);
+    
+    $content = '';
+    
+    $alerting = [];
+    $rooming = [];
+    
+    
+
+//    $ff = fopen("output_rooming.txt","w");
+//    fwrite($ff, chr(10));
+    
+    $index_max_recs=0;
+    foreach ($file as $f) {
+    
+        if ($index_max_recs < 12) {
+    
+            $f = str_replace("\n", " ", $f);
+    
+            list($f, $timestamp, $room) = explode(":::", $f);
+    
+//            fwrite($ff, time() . " " . $timestamp . " " . (time() - $timestamp));
+//            fwrite($ff, chr(10));
+    
+    
+            if (time() - $timestamp < 20) {
+                $alerting[] = $timestamp;
+                $rooming[] = $room;
+            }
+    
+            $content = $content . $f;
+    
+            $index_max_recs += 1;
+        }
+    }
+//    fclose($ff);
+    
+    $total_content = json_encode([$content, $alerting, $rooming]);
+    
+    echo $total_content;
+    
+    wp_die();
+}
+
 
 //====================== GAME ASSEMBLY AND COMPILATION =================================================================
 

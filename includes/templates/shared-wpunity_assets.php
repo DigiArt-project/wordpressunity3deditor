@@ -61,6 +61,15 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
 );
 
+// ajax php admin url
+wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
+    $pluginpath.'/js_libs/content_interlinking_commands/content_interlinking.js', array('jquery') );
+
+wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_update_content',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
+);
+
+
 
 //Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 //$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
@@ -178,7 +187,7 @@ $assets = get_games_assets($user_games_slugs);
                                >DEL</a>
                         <?php } ?>
     
-    
+                        <!-- Parent Game -->
                         <?php if ($asset['isJoker']=='true') { ?>
                             <!--                        <span class="sharedAssetsIndicator mdc-typography--subheading1" style="background: rgba(144,238,144,0.3);">Shared</span>-->
                         <?php } else { ?>
@@ -186,6 +195,22 @@ $assets = get_games_assets($user_games_slugs);
                                   style="background: rgba(250,250,210,0.3);">
                             <?php echo "@".$asset['assetParentGame']; ?></span>
                         <?php } ?>
+
+                    
+                        <!-- Phone Ring -->
+                    
+                        <!-- id = "phonering-Scladina terrain" -->
+                        
+                        <div class="phonering-alo-phone phonering-alo-green phonering-alo-show" style="display:none" id="phonering-<?php echo $asset['assetName'] ?>">
+                            <div class="phonering-alo-ph-circle"></div>
+                            <div class="phonering-alo-ph-circle-fill"></div>
+                            <a href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.'&wpunity_scene=&wpunity_asset='.$asset['assetid'].'&preview=1&directcall=1&#English';?>"
+                                 class="pps-btn-img" title="teleconference_ring">
+                                <div class="phonering-alo-ph-img-circle"></div>
+                            </a>
+                        </div>
+                    
+                    
 
                 </div>
             </div>
@@ -195,6 +220,9 @@ $assets = get_games_assets($user_games_slugs);
     
     
 </div>
+
+
+
 
 
 
@@ -218,8 +246,27 @@ $assets = get_games_assets($user_games_slugs);
     <?php get_sidebar(); ?>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
 
+
+    
+    //  wpunity_periodically_update_conf_log();
+    setInterval(wpunity_periodically_update_conf_log,3000);
+    
+    
+    
+    
     var mdc = window.mdc;
     mdc.autoInit();
     

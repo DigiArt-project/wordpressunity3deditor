@@ -136,7 +136,8 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
          jQuery("[id^=textureFileInput]")[0].remove();
    }
 
-    document.getElementById("fileUploadInput").value = "";
+    if (document.getElementById("fileUploadInput"))
+        document.getElementById("fileUploadInput").value = "";
 
     document.getElementById("sshotFileInput").value = "";
     /*jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);*/
@@ -220,7 +221,9 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
 
 
     };
-    multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
+
+    if(multipleFilesInputElem)
+        multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
 
     // Start rendering if even nothing is loaded
     var resizeWindow = function () {
@@ -491,3 +494,6 @@ function wpunity_create_slider_component(elemId, range, options) {
 
     return jQuery( elemId ).slider;
 }
+
+
+

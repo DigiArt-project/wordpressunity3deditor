@@ -27,6 +27,12 @@ if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')){
 use Google\Cloud\Translate\TranslateClient;
 
 
+// Is on back or front end ?
+$isAdmin = is_admin() ? 'back' : 'front';
+echo '<script>';
+echo 'var isAdmin="'.$isAdmin.'";';
+echo '</script>';
+
 // Load Scrinpts
 function loadAsset3DManagerScripts() {
 
@@ -64,7 +70,7 @@ function loadAsset3DManagerScripts() {
 	// content interlinking ajax
 	wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
 		$pluginpath.'/js_libs/content_interlinking_commands/content_interlinking.js', array('jquery') );
-
+	
 	// ajax php admin url
 	wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
 		array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
@@ -881,7 +887,8 @@ if($asset_id != null) {
                 </div>
                 
                 <div id="confwindow" style="align-items: center; justify-content: center; border 0px; display:none" >
-                    <iframe id="iframeConf" width="100%" height="250px" style="margin-bottom:0;" frameBorder=0 src="" allow="camera,microphone"></iframe>
+                    <iframe id="iframeConf" width="100%" height="350px" style="margin-bottom:0;" frameBorder=0 src=""
+                            allow="camera,microphone https://heliosvr.mklab.iti.gr.com"></iframe>
 
                 </div>
 
@@ -891,7 +898,7 @@ if($asset_id != null) {
                     <button type="button" onclick="startConf()">Call</button>
                 </div>
                 
-
+                
 
 
                 <script>
@@ -900,8 +907,11 @@ if($asset_id != null) {
                         jQuery("#confwindow")[0].style.display="";
                         jQuery("#confwindow_helper")[0].style.display="none";
 
-                        document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $asset_title_saved; ?>"
+                        document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $asset_title_saved; ?>";
+
+                        wpunity_notify_confpeers();
                     }
+                    
                     
                     tabcontent = document.getElementsByClassName("tabcontent2");
                     for (i = 0; i < tabcontent.length; i++) {
@@ -987,7 +997,7 @@ if($asset_id != null) {
     
                 <div style="display: none;">
     
-                    <hr class="WhiteSpaceSeparator">
+<!--                    <hr class="WhiteSpaceSeparator">-->
     
                     <h3 class="mdc-typography--title">Functional Group</h3>
     
@@ -1012,7 +1022,7 @@ if($asset_id != null) {
                     </div>
                     <input id="moleculeFunctionalGroupInput" name="moleculeFunctionalGroupInput" type="hidden">
     
-                    <hr class="WhiteSpaceSeparator">
+<!--                    <hr class="WhiteSpaceSeparator">-->
     
                     <h3 class="mdc-typography--title">Fluid Options</h3>
     
@@ -1148,23 +1158,26 @@ if($asset_id != null) {
         
                             <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
                                 <label id="fileUploadInputLabel" for="multipleFilesInput"> Or select an a) obj, b) mtl, & c) optional texture file</label>
-                            <?php } ?>
+                            
                             
                             <input id="fileUploadInput"
                                    class="FullWidth" type="file" name="multipleFilesInput" value=""
                                    style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                    multiple accept=".obj,.mtl,.jpg,.png"/>
-        
+
+                                <hr />
+                            <?php } ?>
                             
         
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
                             <input type="hidden" name="objFileInput" value="" id="objFileInput" />
                             <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                             <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
-        
+
+                            
                         </div>
         
-                        <hr />
+                        
                         
                         <div id="sshotFileInputContainer" class="" style="display: <?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
                             <h3 class="mdc-typography--title">Screenshot</h3>
@@ -1683,4 +1696,10 @@ if($asset_id != null) {
 <?php
     if($isUserAdmin && $isPreviewMode)
         echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
+?>
+
+
+<?php if ($_GET['directcall']){
+            echo '<script>startConf()</script>';
+        }
 ?>
