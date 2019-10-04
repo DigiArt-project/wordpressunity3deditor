@@ -57,7 +57,7 @@ export default class Chat extends React.PureComponent {
                   <div className="chat-item chat-item-me">
                     <div className="message">
                       <span className="message-user-name">
-                        {/*{message.userId}*/}
+                        {/*{message.userId}  REM: Ververidis*/}
                       </span>
                       <span className="icon icon-schedule" />
                       <time className="message-time">{message.timestamp}</time>

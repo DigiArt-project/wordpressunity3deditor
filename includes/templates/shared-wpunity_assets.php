@@ -65,7 +65,7 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 wp_enqueue_script( 'ajax-wpunity_content_interlinking_request',
     $pluginpath.'/js_libs/content_interlinking_commands/content_interlinking.js', array('jquery') );
 
-wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_update_content',
+wp_localize_script( 'ajax-wpunity_content_interlinking_request', 'my_ajax_object_fetch_content',
     array( 'ajax_url' => admin_url( 'admin-ajax.php' ), null )
 );
 

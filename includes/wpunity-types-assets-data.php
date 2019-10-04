@@ -954,6 +954,7 @@ add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_ca
 add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
 
 
+add_action( 'wp_ajax_nopriv_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
 add_action( 'wp_ajax_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
 
 add_action( 'wp_ajax_wpunity_update_expert_log_action', 'wpunity_update_expert_log_callback');

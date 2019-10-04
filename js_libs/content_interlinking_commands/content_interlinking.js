@@ -512,6 +512,9 @@ function wpunity_fetchVideoAjax(){
 
 // Notify that somebody has entered conference room
 function wpunity_notify_confpeers() {
+
+    console.log(my_ajax_object_fetch_content.ajax_url);
+
     jQuery.ajax({
         url : isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fetch_content.ajax_url,
         type : 'POST',
@@ -532,7 +535,7 @@ function wpunity_notify_confpeers() {
 // Periodically update expert log report
 function wpunity_periodically_update_conf_log() {
     jQuery.ajax({
-        url : isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_update_content.ajax_url,
+        url : isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fetch_content.ajax_url,
         type : 'POST',
         data : {'action': 'wpunity_update_expert_log_action'
         },

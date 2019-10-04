@@ -888,7 +888,7 @@ if($asset_id != null) {
                 
                 <div id="confwindow" style="align-items: center; justify-content: center; border 0px; display:none" >
                     <iframe id="iframeConf" width="100%" height="350px" style="margin-bottom:0;" frameBorder=0 src=""
-                            allow="camera,microphone https://heliosvr.mklab.iti.gr.com"></iframe>
+                            allow="camera;microphone"></iframe>
 
                 </div>
 
