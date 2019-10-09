@@ -312,8 +312,7 @@ $wpunity_databox1 = array(
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
-		array(
-			'name' => 'MTL File',
+		array('name' => 'MTL File',
 			'desc' => 'MTL File',
 			'id' => $wpunity_prefix . 'mtl',
 			'type' => 'text',
@@ -376,24 +375,185 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'isJoker',
             'type' => 'text',
             'std' => 'false'
+            
+            
+        ),array(
+            'name' => 'KidsDescription',
+            'desc' => 'Description in English for kids',
+            'id' => $wpunity_prefix . 'description_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'ExpertsDescription',
+            'desc' => 'Description in English for experts',
+            'id' => $wpunity_prefix . 'description_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'PerceptionDescription',
+            'desc' => 'Description in English for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_perception',
+            'type' => 'text',
+            'std' => ''
+            
+            
+        ),array(
+            'name' => 'GreekTitle',
+            'desc' => 'Title in Greek',
+            'id' => $wpunity_prefix . 'title_greek',
+            'type' => 'text',
+            'std' => ''
         ),array(
             'name' => 'Greek',
-            'desc' => 'Greek',
+            'desc' => 'Description in Greek',
             'id' => $wpunity_prefix . 'description_greek',
             'type' => 'text',
             'std' => ''
         ),array(
+            'name' => 'GreekKidsDescription',
+            'desc' => 'Description in Greek for kids',
+            'id' => $wpunity_prefix . 'description_greek_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'GreekExpertsDescription',
+            'desc' => 'Description in Greek for experts',
+            'id' => $wpunity_prefix . 'description_greek_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'GreekPerceptionDescription',
+            'desc' => 'Description in Greek for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_greek_perception',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'SpanishTitle',
+            'desc' => 'Title in Spanish',
+            'id' => $wpunity_prefix . 'title_spanish',
+            'type' => 'text',
+            'std' => ''
+            
+            
+        ),array(
             'name' => 'Spanish',
-            'desc' => 'Spanish',
+            'desc' => 'Description in Spanish',
             'id' => $wpunity_prefix . 'description_spanish',
             'type' => 'text',
             'std' => ''
         ),array(
+            'name' => 'SpanishKidsDescription',
+            'desc' => 'Description in Spanish for kids',
+            'id' => $wpunity_prefix . 'description_spanish_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'SpanishExpertsDescription',
+            'desc' => 'Description in Spanish for experts',
+            'id' => $wpunity_prefix . 'description_spanish_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'SpanishPerceptionDescription',
+            'desc' => 'Description in Spanish for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_spanish_perception',
+            'type' => 'text',
+            'std' => ''
+            
+        ),array(
+            'name' => 'FrenchTitle',
+            'desc' => 'Title in French',
+            'id' => $wpunity_prefix . 'title_french',
+            'type' => 'text',
+            'std' => ''
+        ),array(
             'name' => 'French',
-            'desc' => 'French',
+            'desc' => 'Description in French',
             'id' => $wpunity_prefix . 'description_french',
             'type' => 'text',
             'std' => ''
+        ),array(
+            'name' => 'FrenchKidsDescription',
+            'desc' => 'Description in French for kids',
+            'id' => $wpunity_prefix . 'description_french_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'FrenchExpertsDescription',
+            'desc' => 'Description in French for experts',
+            'id' => $wpunity_prefix . 'description_french_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'FrenchPerceptionDescription',
+            'desc' => 'Description in French for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_french_disabilities',
+            'type' => 'text',
+            'std' => ''
+        
+        ),array(
+            'name' => 'GermanTitle',
+            'desc' => 'Title in German',
+            'id' => $wpunity_prefix . 'title_german',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'German',
+            'desc' => 'Description in German',
+            'id' => $wpunity_prefix . 'description_german',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'GermanKidsDescription',
+            'desc' => 'Description in German for kids',
+            'id' => $wpunity_prefix . 'description_german_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'GermanExpertsDescription',
+            'desc' => 'Description in German for experts',
+            'id' => $wpunity_prefix . 'description_german_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'GermanPerceptionDescription',
+            'desc' => 'Description in German for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_german_perception',
+            'type' => 'text',
+            'std' => ''
+        
+        ),array(
+            'name' => 'RussianTitle',
+            'desc' => 'Title in Russian',
+            'id' => $wpunity_prefix . 'title_russian',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'Russian',
+            'desc' => 'Description in Russian',
+            'id' => $wpunity_prefix . 'description_russian',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'RussianKidsDescription',
+            'desc' => 'Description in Russian for kids',
+            'id' => $wpunity_prefix . 'description_russian_kids',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'RussianExpertsDescription',
+            'desc' => 'Description in Russian for experts',
+            'id' => $wpunity_prefix . 'description_russian_experts',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'RussianPerceptionDescription',
+            'desc' => 'Description in Russian for people with perception disabilities',
+            'id' => $wpunity_prefix . 'description_russian_perception',
+            'type' => 'text',
+            'std' => ''
+            
+        
         ),array(
             'name' => 'fonts',
             'desc' => 'fonts',
@@ -597,7 +757,14 @@ function wpunity_assets_databox_show(){
                     </td>
                 </tr>
                 <?php
-            }elseif (in_array($field['id'],['wpunity_asset3d_description_greek','wpunity_asset3d_description_spanish','wpunity_asset3d_description_french']  )) {
+            }elseif (in_array($field['id'],[
+                'wpunity_asset3d_description_kids','wpunity_asset3d_description_experts','wpunity_asset3d_description_perception',  // English
+'wpunity_asset3d_title_greek','wpunity_asset3d_description_greek','wpunity_asset3d_description_greek_kids','wpunity_asset3d_description_greek_experts', 'wpunity_asset3d_description_greek_perception',   // Greek
+'wpunity_asset3d_title_spanish','wpunity_asset3d_description_spanish','wpunity_asset3d_description_spanish_kids','wpunity_asset3d_description_spanish_experts','wpunity_asset3d_description_spanish_perception', // Spanish
+'wpunity_asset3d_title_french','wpunity_asset3d_description_french','wpunity_asset3d_description_french_kids','wpunity_asset3d_description_french_experts','wpunity_asset3d_description_french_perception', // French
+'wpunity_asset3d_title_german', 'wpunity_asset3d_description_german','wpunity_asset3d_description_german_kids','wpunity_asset3d_description_german_experts','wpunity_asset3d_description_german_perception', // German
+'wpunity_asset3d_title_russian','wpunity_asset3d_description_russian','wpunity_asset3d_description_russian_kids','wpunity_asset3d_description_russian_experts','wpunity_asset3d_description_russian_perception' // Russion
+                ]  )) {
                 ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
