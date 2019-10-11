@@ -1183,20 +1183,28 @@ if($asset_id != null) {
                 </ul>
 
                 <!-- Accessibility -->
-                <div style="display:inline-block; margin-left:10px;" >
+                <div style="display:inline-block; margin-left:10px; width:100%;" >
                     
                     <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                            name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
 
                     <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
-                            style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;">
+                            style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;vertical-align:bottom">
                     </button>
 
                     <div id="font-size-selector" style="display:inline-block; right: 10%;font-size: 1.5em;">
                         <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
                         <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                     </div>
+                    
+
+                    <button style="background-color:white; padding:0px; vertical-align:bottom; margin-left:10px; margin-right:20px; float:right" >
+                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_ldpi.png" width="40px" height="40px" style="background-color:white"/>
+                    </button>
+                    
+                    
                 </div>
+                
                 
                 <div class="wrapper_lang">
                     <div id="English" class="tabcontent2 active" style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
@@ -1229,6 +1237,7 @@ if($asset_id != null) {
                         <?php echo trim($asset_desc_russian_saved); ?>
                     </div>
 
+                    
 
                 </div>
                 
