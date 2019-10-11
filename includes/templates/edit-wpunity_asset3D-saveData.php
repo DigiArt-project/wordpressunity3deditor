@@ -1,7 +1,15 @@
 <?php
 
-function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm,$assetDescForm,$gameSlug, $assetCatIPRID,
-                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor){
+function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$gameSlug, $assetCatIPRID,
+      
+      $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
+      $assetTitleFormGreek, $assetDescFormGreek, $assetDescFormGreekKids, $assetDescFormGreekExperts, $assetDescFormGreekPerception,
+      $assetTitleFormSpanish, $assetDescFormSpanish, $assetDescFormSpanishKids, $assetDescFormSpanishExperts, $assetDescFormSpanishPerception,
+      $assetTitleFormFrench, $assetDescFormFrench,  $assetDescFormFrenchKids, $assetDescFormFrenchExperts, $assetDescFormFrenchPerception,
+      $assetTitleFormGerman, $assetDescFormGerman,  $assetDescFormGermanKids, $assetDescFormGermanExperts, $assetDescFormGermanPerception,
+      $assetTitleFormRussian, $assetDescFormRussian,  $assetDescFormRussianKids, $assetDescFormRussianExperts, $assetDescFormRussianPerception,
+      
+      $assetFonts, $assetback3dcolor){
    
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -26,9 +34,49 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm
     $asset_id = wp_insert_post($asset_information);
     update_post_meta($asset_id, 'wpunity_asset3d_pathData', $gameSlug);
     
+    update_post_meta($asset_id, 'wpunity_asset3d_title_greek', $assetTitleFormGreek);
+    update_post_meta($asset_id, 'wpunity_asset3d_title_spanish', $assetTitleFormSpanish);
+    update_post_meta($asset_id, 'wpunity_asset3d_title_french', $assetTitleFormFrench);
+    update_post_meta($asset_id, 'wpunity_asset3d_title_german', $assetTitleFormGerman);
+    update_post_meta($asset_id, 'wpunity_asset3d_title_russian', $assetTitleFormRussian);
+    
     update_post_meta($asset_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
     update_post_meta($asset_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
     update_post_meta($asset_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_german', $assetDescFormGerman);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_russian', $assetDescFormRussian);
+    
+    update_post_meta($asset_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_german', $assetDescFormGerman);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_russian', $assetDescFormRussian);
+    
+    update_post_meta($asset_id, 'wpunity_asset3d_description_kids', $assetDescFormKids);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_greek_kids', $assetDescFormGreekKids);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_spanish_kids', $assetDescFormSpanishKids);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_french_kids', $assetDescFormFrenchKids);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_german_kids', $assetDescFormGermanKids);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_russian_kids', $assetDescFormRussianKids);
+    
+    update_post_meta($asset_id, 'wpunity_asset3d_description_experts', $assetDescFormExperts);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_greek_experts', $assetDescFormGreekExperts);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_spanish_experts', $assetDescFormSpanishExperts);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_french_experts', $assetDescFormFrenchExperts);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_german_experts', $assetDescFormGermanExperts);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_russian_experts', $assetDescFormRussianExperts);
+    
+    update_post_meta($asset_id, 'wpunity_asset3d_description_perception', $assetDescFormPerception);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_greek_perception', $assetDescFormGreekPerception);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_spanish_perception', $assetDescFormSpanishPerception);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_french_perception', $assetDescFormFrenchPerception);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_german_perception', $assetDescFormGermanPerception);
+    update_post_meta($asset_id, 'wpunity_asset3d_description_russian_perception', $assetDescFormRussianPerception);
+    
+    
+    
+    
+    
     
     update_post_meta($asset_id, 'wpunity_asset3d_fonts', $assetFonts);
     update_post_meta($asset_id, 'wpunity_asset3d_back_3d_color', $assetback3dcolor);
@@ -38,8 +86,16 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$assetTitleForm
     if($asset_id){return $asset_id;}else{return 0;}
 }
 
-function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id, $assetTitleForm,$assetDescForm, $assetCatIPRID,
-                                       $assetDescFormGreek, $assetDescFormSpanish, $assetDescFormFrench, $assetFonts, $assetback3dcolor){
+function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_inserted_id, $assetCatIPRID,
+
+                                       $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
+                                       $assetTitleFormGreek, $assetDescFormGreek, $assetDescFormGreekKids, $assetDescFormGreekExperts, $assetDescFormGreekPerception,
+                                       $assetTitleFormSpanish, $assetDescFormSpanish, $assetDescFormSpanishKids, $assetDescFormSpanishExperts, $assetDescFormSpanishPerception,
+                                       $assetTitleFormFrench, $assetDescFormFrench,  $assetDescFormFrenchKids, $assetDescFormFrenchExperts, $assetDescFormFrenchPerception,
+                                       $assetTitleFormGerman, $assetDescFormGerman,  $assetDescFormGermanKids, $assetDescFormGermanExperts, $assetDescFormGermanPerception,
+                                       $assetTitleFormRussian, $assetDescFormRussian,  $assetDescFormRussianKids, $assetDescFormRussianExperts, $assetDescFormRussianPerception,
+                                       
+                                       $assetFonts, $assetback3dcolor){
     
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array(
@@ -62,9 +118,46 @@ function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_insert
 
     wp_update_post($asset_new_info);
     
+    
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_greek', $assetTitleFormGreek);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_spanish', $assetTitleFormSpanish);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_french', $assetTitleFormFrench);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_german', $assetTitleFormGerman);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_russian', $assetTitleFormRussian);
+    
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_german', $assetDescFormGerman);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_russian', $assetDescFormRussian);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek', $assetDescFormGreek);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish', $assetDescFormSpanish);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french', $assetDescFormFrench);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_german', $assetDescFormGerman);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_russian', $assetDescFormRussian);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_kids', $assetDescFormKids);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek_kids', $assetDescFormGreekKids);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish_kids', $assetDescFormSpanishKids);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french_kids', $assetDescFormFrenchKids);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_german_kids', $assetDescFormGermanKids);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_russian_kids', $assetDescFormRussianKids);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_experts', $assetDescFormExperts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek_experts', $assetDescFormGreekExperts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish_experts', $assetDescFormSpanishExperts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french_experts', $assetDescFormFrenchExperts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_german_experts', $assetDescFormGermanExperts);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_russian_experts', $assetDescFormRussianExperts);
+    
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_perception', $assetDescFormPerception);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_greek_perception', $assetDescFormGreekPerception);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_spanish_perception', $assetDescFormSpanishPerception);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_french_perception', $assetDescFormFrenchPerception);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_german_perception', $assetDescFormGermanPerception);
+    update_post_meta($asset_inserted_id, 'wpunity_asset3d_description_russian_perception', $assetDescFormRussianPerception);
     
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_fonts', $assetFonts);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_back_3d_color', $assetback3dcolor);
