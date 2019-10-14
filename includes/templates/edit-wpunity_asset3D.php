@@ -191,11 +191,11 @@ $goBackTo_SharedAssets = home_url()."/wpunity-list-shared-assets/?wpunity_game="
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
 	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
-    $assetTitleFormGreek = esc_attr(strip_tags($_POST['assetTitleGreek'])); //Title of the Asset (Form value)
-    $assetTitleFormSpanish = esc_attr(strip_tags($_POST['assetTitleSpanish'])); //Title of the Asset (Form value)
-    $assetTitleFormFrench = esc_attr(strip_tags($_POST['assetTitleFrench'])); //Title of the Asset (Form value)
-    $assetTitleFormGerman = esc_attr(strip_tags($_POST['assetTitleGerman'])); //Title of the Asset (Form value)
-    $assetTitleFormRussian = esc_attr(strip_tags($_POST['assetTitleRussian'])); //Title of the Asset (Form value)
+    $assetTitleFormGreek = esc_attr(strip_tags($_POST['assetTitGreek'])); //Title of the Asset (Form value)
+    $assetTitleFormSpanish = esc_attr(strip_tags($_POST['assetTitSpanish'])); //Title of the Asset (Form value)
+    $assetTitleFormFrench = esc_attr(strip_tags($_POST['assetTitFrench'])); //Title of the Asset (Form value)
+    $assetTitleFormGerman = esc_attr(strip_tags($_POST['assetTitGerman'])); //Title of the Asset (Form value)
+    $assetTitleFormRussian = esc_attr(strip_tags($_POST['assetTitRussian'])); //Title of the Asset (Form value)
     
     
 	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
@@ -398,6 +398,10 @@ $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 $asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
 $asset_title_label = ($asset_id == null ? "Enter a title for the asset in English" : "Edit the title of the asset in English");
 
+
+
+
+
 $asset_desc_label = ($asset_id == null ? "Add a description for the asset" : "Edit the description of the asset");
 $asset_desc_saved = ($asset_id == null ? "" : get_post_field('post_content', $asset_id));
 $asset_desc_kids_label = ($asset_id == null ? "Add a description of the asset for kids" : "Edit the description of the asset for kids");
@@ -471,7 +475,14 @@ $asset_desc_russian_experts_saved = ($asset_id == null ? "" : get_post_meta($ass
 $asset_desc_russian_perception_label = ($asset_id == null ? "Добавить описание актива для людей с проблемами восприятия" : "Изменить описание актива для людей с проблемами восприятия");
 $asset_desc_russian_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_russian_perception', true));
 
-
+echo '<script>';
+echo 'var asset_title_english_saved="'.$asset_title_saved.'";';
+echo 'var asset_title_greek_saved="'.$asset_title_greek_saved.'";';
+echo 'var asset_title_spanish_saved="'.$asset_title_spanish_saved.'";';
+echo 'var asset_title_french_saved="'.$asset_title_french_saved.'";';
+echo 'var asset_title_german_saved="'.$asset_title_german_saved.'";';
+echo 'var asset_title_russian_saved="'.$asset_title_russian_saved.'";';
+echo '</script>';
 
 
 
@@ -1173,13 +1184,13 @@ if($asset_id != null) {
                 
                 
                 <!-- Languages -->
-                <ul class="langul" style="margin:0">
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'English')" style="padding:0px 1% !important;">English</li>
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'Greek')" style="padding:0px 1% !important;">ΕΛΛΗΝΙΚΑ</li>
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'Spanish')" style="padding:0px 1% !important;">Español</li>
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'French')" style="padding:0px 1% !important;">Français</li>
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'German')" style="padding:0px 1% !important;">Deutsch</li>
-                    <li class="tablinks2 mdc-button"  onclick="openLanguage(event, 'Russian')" style="padding:0px 1% !important;">Pусский</li>
+                <ul class="langul" style="margin:5px">
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'English')" style="padding:0px 1% !important;">English</button>
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Greek')" style="padding:0px 1% !important;">ΕΛΛΗΝΙΚΑ</button>
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Spanish')" style="padding:0px 1% !important;">Español</button>
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'French')" style="padding:0px 1% !important;">Français</button>
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'German')" style="padding:0px 1% !important;">Deutsch</button>
+                    <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Russian')" style="padding:0px 1% !important;">Pусский</button>
                 </ul>
 
                 <!-- Accessibility -->
@@ -1188,7 +1199,8 @@ if($asset_id != null) {
                     <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                            name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
 
-                    <button id="jscolorpick" class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
+                    <button id="jscolorpick"
+                            class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
                             style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;vertical-align:bottom">
                     </button>
 
@@ -1196,12 +1208,27 @@ if($asset_id != null) {
                         <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
                         <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                     </div>
-                    
 
-                    <button style="background-color:white; padding:0px; vertical-align:bottom; margin-left:10px; margin-right:20px; float:right" >
-                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_ldpi.png" width="40px" height="40px" style="background-color:white"/>
+                    <button type='button' class="mdc-button" onclick="openAccess(event, '')"
+                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/general_population_icon.png" width="40px" height="40px" style="background-color:white"/>
                     </button>
                     
+                    <button type='button' class="mdc-button" onclick="openAccess(event, 'Experts')"
+                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/graduation_icon.png" width="40px" height="40px" style="background-color:white"/>
+                    </button>
+
+                    <button type='button' class="mdc-button" onclick="openAccess(event, 'Perception')"
+                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/heart_icon.png" width="40px" height="40px" style="background-color:white"/>
+                    </button>
+
+                    <button type='button' class="mdc-button"
+                            onclick="openAccess(event, 'Kids')"
+                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/children_icon.png" width="40px" height="40px" style="background-color:white"/>
+                    </button>
                     
                 </div>
                 
@@ -1210,32 +1237,45 @@ if($asset_id != null) {
                     <div id="English" class="tabcontent2 active" style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
                         <?php echo trim($asset_desc_saved);?>
                     </div>
-                    
-                    <div id="Greek" class="tabcontent2"
-                         style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
-                        <?php echo trim($asset_desc_greek_saved); ?>
-                    </div>
-                    
-                    <div id="Spanish" class="tabcontent2"
-                         style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
-                        <?php echo trim($asset_desc_spanish_saved); ?>
-                    </div>
-                    
-                    <div id="French" class="tabcontent2"
-                         style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
-                        <?php echo trim($asset_desc_french_saved); ?>
+
+                    <div id="EnglishKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
+                        <?php echo trim($asset_desc_kids_saved);?>
                     </div>
 
-                    <div id="German" class="tabcontent2"
-                         style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
-                        <?php echo trim($asset_desc_german_saved); ?>
+                    <div id="EnglishExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
+                        <?php echo trim($asset_desc_experts_saved);?>
+                    </div>
+
+                    <div id="EnglishPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
+                        <?php echo trim($asset_desc_perception_saved);?>
                     </div>
 
 
-                    <div id="Russian" class="tabcontent2"
-                         style="font-family:<?php echo str_replace("+"," ", $fonts);?>">
-                        <?php echo trim($asset_desc_russian_saved); ?>
-                    </div>
+                    <div id="Greek" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"> <?php echo trim($asset_desc_greek_saved); ?></div>
+                    <div id="GreekKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"> <?php echo trim($asset_desc_greek_kids_saved); ?></div>
+                    <div id="GreekExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"> <?php echo trim($asset_desc_greek_experts_saved); ?></div>
+                    <div id="GreekPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"> <?php echo trim($asset_desc_greek_perception_saved); ?></div>
+                    
+                    <div id="Spanish" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_spanish_saved); ?></div>
+                    <div id="SpanishKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_spanish_kids_saved); ?></div>
+                    <div id="SpanishExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_spanish_experts_saved); ?></div>
+                    <div id="SpanishPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_spanish_perception_saved); ?></div>
+                    
+                    
+                    <div id="French" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_french_saved); ?></div>
+                    <div id="FrenchKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_french_kids_saved); ?></div>
+                    <div id="FrenchExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_french_experts_saved); ?></div>
+                    <div id="FrenchPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_french_perception_saved); ?></div>
+
+                    <div id="German" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_german_saved); ?></div>
+                    <div id="GermanKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_german_kids_saved); ?></div>
+                    <div id="GermanExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_german_experts_saved); ?></div>
+                    <div id="GermanPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_german_perception_saved); ?></div>
+
+                    <div id="Russian" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_russian_saved); ?></div>
+                    <div id="RussianKids" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_russian_kids_saved); ?></div>
+                    <div id="RussianExperts" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_russian_experts_saved); ?></div>
+                    <div id="RussianPerception" class="tabcontent2" style="font-family:<?php echo str_replace("+"," ", $fonts);?>"><?php echo trim($asset_desc_russian_perception_saved); ?></div>
 
                     
 
@@ -1278,9 +1318,31 @@ if($asset_id != null) {
                     
                     jQuery("#"+langcurr + ".tabcontent2")[0].style.display = "block";
 
+
+
+                    function openAccess(evt, accessLevel) {
+                        
+                        var i, tabcontent, tablinks;
+                        
+                        // The description
+                        tabcontent = document.getElementsByClassName("tabcontent2");
+                        
+                        for (i = 0; i < tabcontent.length; i++) {
+                            tabcontent[i].style.display = "none";
+                        }
+                        
+                        // tablinks = document.getElementsByClassName("tablinks2");
+                        // for (i = 0; i < tablinks.length; i++) {
+                        //     tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        // }
+                        
+                        document.getElementById(currLanguage + accessLevel).style.display = "block";
+                        
+                        evt.currentTarget.className += " active";
+                    }
                     
                     
-                    function openLanguage(evt, cityName) {
+                    function openLanguage(evt, lang) {
                         var i, tabcontent, tablinks;
                         tabcontent = document.getElementsByClassName("tabcontent2");
                         for (i = 0; i < tabcontent.length; i++) {
@@ -1290,7 +1352,22 @@ if($asset_id != null) {
                         for (i = 0; i < tablinks.length; i++) {
                             tablinks[i].className = tablinks[i].className.replace(" active", "");
                         }
-                        document.getElementById(cityName).style.display = "block";
+                        
+                        currLanguage = lang;
+                        
+                        document.getElementById(lang).style.display = "block";
+
+                        var titLang = eval('asset_title_'+currLanguage.toLowerCase()+'_saved');
+                        
+                        console.log(titLang);
+                        
+                        if (titLang == '')
+                            titLang = eval('asset_title_english_saved');
+                        
+                        document.getElementById("assetTitleView").innerHTML = titLang;
+                        
+                        
+                        
                         evt.currentTarget.className += " active";
                     }
                 </script>
@@ -1647,7 +1724,7 @@ if($asset_id != null) {
 
         var mdc = window.mdc;
         mdc.autoInit();
-
+        var currLanguage = "English";
         
         var game_type_slug = "<?php echo $game_type_slug; ?>";
 
