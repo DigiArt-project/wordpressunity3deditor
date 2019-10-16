@@ -260,8 +260,35 @@ function wpunity_create_asset_producerExtra_frontend($asset_newID){
 
 function wpunity_create_asset_poisITExtra_frontend($asset_newID){
     $asset_featured_imageForm =  $_FILES['featured-image'];
+    
+    $asset_image2Form =  $_FILES['image2'];
+    $asset_image3Form =  $_FILES['image3'];
+    $asset_image4Form =  $_FILES['image4'];
+    $asset_image5Form =  $_FILES['image5'];
+    
     $attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
     set_post_thumbnail( $asset_newID, $attachment_id );
+    
+    if ($asset_image2Form['error'] != 4) {
+        $attachment_id_image2 = wpunity_upload_img_vid($asset_image2Form, $asset_newID);
+        update_post_meta($asset_newID, 'wpunity_asset3d_image2', $attachment_id_image2);
+    }
+    
+    if ($asset_image3Form['error'] != 4) {
+        $attachment_id_image3 = wpunity_upload_img_vid($asset_image3Form, $asset_newID);
+        update_post_meta($asset_newID, 'wpunity_asset3d_image3', $attachment_id_image3);
+    }
+    
+    if ($asset_image4Form['error'] != 4) {
+        $attachment_id_image4 = wpunity_upload_img_vid($asset_image4Form, $asset_newID);
+        update_post_meta($asset_newID, 'wpunity_asset3d_image4', $attachment_id_image4);
+    }
+    
+    if ($asset_image5Form['error'] != 4) {
+        $attachment_id_image5 = wpunity_upload_img_vid($asset_image5Form, $asset_newID);
+        update_post_meta($asset_newID, 'wpunity_asset3d_image5', $attachment_id_image5);
+    }
+
 }
 
 function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){

@@ -363,6 +363,24 @@ $wpunity_databox1 = array(
 			'id' => $wpunity_prefix . 'image1',
 			'type' => 'text',
 			'std' => ''
+        ),array(
+            'name' => 'Image 2',
+            'desc' => 'Image 2',
+            'id' => $wpunity_prefix . 'image2',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'Image 3',
+            'desc' => 'Image 3',
+            'id' => $wpunity_prefix . 'image3',
+            'type' => 'text',
+            'std' => ''
+        ),array(
+            'name' => 'Image 4',
+            'desc' => 'Image 4',
+            'id' => $wpunity_prefix . 'image4',
+            'type' => 'text',
+            'std' => ''
 		),array(
             'name' => 'isCloned',
             'desc' => 'isCloned',

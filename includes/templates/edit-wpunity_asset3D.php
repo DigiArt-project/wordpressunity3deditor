@@ -545,6 +545,28 @@ if($asset_id != null) {
 		//load the already saved featured image for POI image-text
 		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
 		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
+        
+        $the_image2_id = get_post_meta($asset_id, "wpunity_asset3d_image2");
+        $the_image3_id = get_post_meta($asset_id, "wpunity_asset3d_image3");
+        $the_image4_id = get_post_meta($asset_id, "wpunity_asset3d_image4");
+        $the_image5_id = get_post_meta($asset_id, "wpunity_asset3d_image5");
+        
+        
+        
+        $the_image2_url = wp_get_attachment_metadata($the_image2_id[0]);
+        $the_image3_url = wp_get_attachment_metadata($the_image3_id[0]);
+        $the_image4_url = wp_get_attachment_metadata($the_image4_id[0]);
+        $the_image5_url = wp_get_attachment_metadata($the_image5_id[0]);
+ 
+        
+        $the_image2_url = $the_image2_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image2_url['file'];
+        $the_image3_url = $the_image3_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image3_url['file'];
+        $the_image4_url = $the_image4_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image4_url['file'];
+        $the_image5_url = $the_image5_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image5_url['file'];
+ 
+        
+        
+        
 	} elseif ($saved_term[0]->slug == 'pois_video') {
 		//upload the featured image for POI video
 		//$asset_featured_image =  $_FILES['poi-video-featured-image'];
@@ -1067,6 +1089,51 @@ if($asset_id != null) {
                     <br />
                     <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
 
+                    <h3 class="mdc-typography--title">Image 2</h3>
+                    <?php if($asset_id == null){ ?>
+                        <img id="poiImg2Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <?php }else{ ?>
+                        <img id="poiImg2Preview" src="<?php echo $the_image2_url; ?>">
+                    <?php } ?>
+                    <input type="file" name="image2" title="Image 2" value="" id="poiImg2Input" accept="image/x-png,image/gif,image/jpeg">
+                    <br />
+                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
+
+                    <h3 class="mdc-typography--title">Image 3</h3>
+                    <?php if($asset_id == null){ ?>
+                        <img id="poiImg3Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <?php }else{ ?>
+                        <img id="poiImg3Preview" src="<?php echo $the_image3_url; ?>">
+                    <?php } ?>
+                    <input type="file" name="image3" title="Image 3" value="" id="poiImg3Input" accept="image/x-png,image/gif,image/jpeg">
+                    <br />
+                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
+
+                    <h3 class="mdc-typography--title">Image 4</h3>
+                    <?php if($asset_id == null){ ?>
+                        <img id="poiImg4Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <?php }else{ ?>
+                        <img id="poiImg4Preview" src="<?php echo $the_image4_url; ?>">
+                    <?php } ?>
+                    <input type="file" name="image4" title="Image 4" value="" id="poiImg4Input" accept="image/x-png,image/gif,image/jpeg">
+                    <br />
+                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
+
+
+                    <h3 class="mdc-typography--title">Image 5</h3>
+                    <?php if($asset_id == null){ ?>
+                        <img id="poiImg5Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
+                    <?php }else{ ?>
+                        <img id="poiImg5Preview" src="<?php echo $the_image5_url; ?>">
+                    <?php } ?>
+                    <input type="file" name="image5" title="Image 5" value="" id="poiImg5Input" accept="image/x-png,image/gif,image/jpeg">
+                    <br />
+                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
+                    
+                    
+                    
+                    
+
                     <hr class="WhiteSpaceSeparator">
                 </div>
                 
@@ -1163,12 +1230,70 @@ if($asset_id != null) {
                             <div class="text"></div>
                         </div>
                     <?php } ?>
-                    
+
+
+                    <!--  Image2 check if should be shown -->
+                    <?php if ($showIMT=='' && $asset_id != null && $the_image2_url!=null){ ?>
+                        <div class="mySlides fade">
+                            <!--  <div class="numbertext">2 / 2</div>-->
+                            <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                                <?php if($asset_id != null){ ?>
+                                    <img id="poiImg2Preview" style="width:auto" src="<?php echo $the_image2_url; ?>">
+                                <?php } ?>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                        </div>
+                    <?php } ?>
+
+                    <!--  Image3 check if should be shown -->
+                    <?php if ($showIMT=='' && $asset_id != null && $the_image3_url!=null){ ?>
+                        <div class="mySlides fade">
+                            <!--  <div class="numbertext">2 / 2</div>-->
+                            <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                                <?php if($asset_id != null){ ?>
+                                    <img id="poiImg3Preview" style="width:auto" src="<?php echo $the_image3_url; ?>">
+                                <?php } ?>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                        </div>
+                    <?php } ?>
+
+                    <!--  Image4 check if should be shown -->
+                    <?php if ($showIMT=='' && $asset_id != null && $the_image4_url!=null){ ?>
+                        <div class="mySlides fade">
+                            <!--  <div class="numbertext">2 / 2</div>-->
+                            <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                                <?php if($asset_id != null){ ?>
+                                    <img id="poiImg4Preview" style="width:auto" src="<?php echo $the_image4_url; ?>">
+                                <?php } ?>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                        </div>
+                    <?php } ?>
+
+                    <!--  Image5 check if should be shown -->
+                    <?php if ($showIMT=='' && $asset_id != null && $the_image5_url!=null){ ?>
+                        <div class="mySlides fade">
+                            <!--  <div class="numbertext">2 / 2</div>-->
+                            <div id="poiImgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
+                                <?php if($asset_id != null){ ?>
+                                    <img id="poiImg5Preview" style="width:auto" src="<?php echo $the_image5_url; ?>">
+                                <?php } ?>
+                            </div>
+                            <!-- Caption -->
+                            <div class="text"></div>
+                        </div>
+                    <?php } ?>
+
                     <!--   Sliders prev next -->
                     <?php if ($showVid=='' && $showIMT=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
                             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                             <a class="next" onclick="plusSlides(1)">&#10095;</a>
                     <?php } ?>
+                    
     
                  </div>
                  
@@ -1179,6 +1304,23 @@ if($asset_id != null) {
                 <div style="text-align:center">
                     <span class="dot" onclick="currentSlide(1)"></span>
                     <span class="dot" onclick="currentSlide(2)"></span>
+                    
+                    <?php if ($the_image2_url!=null){ ?>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                    <?php } ?>
+    
+                    <?php if ($the_image3_url!=null){ ?>
+                        <span class="dot" onclick="currentSlide(4)"></span>
+                    <?php } ?>
+    
+                    <?php if ($the_image4_url!=null){ ?>
+                        <span class="dot" onclick="currentSlide(5)"></span>
+                    <?php } ?>
+    
+                    <?php if ($the_image5_url!=null){ ?>
+                        <span class="dot" onclick="currentSlide(6)"></span>
+                    <?php } ?>
+                    
                 </div>
                 <?php } ?>
                 
@@ -1972,6 +2114,23 @@ if($asset_id != null) {
         jQuery("#poiImgFeaturedImgInput").change(function() {
             wpunity_read_url(this, "#poiImgFeaturedImgPreview");
         });
+
+        jQuery("#poiImg2Input").change(function() {
+            wpunity_read_url(this, "#poiImg2Preview");
+        });
+
+        jQuery("#poiImg3Input").change(function() {
+            wpunity_read_url(this, "#poiImg3Preview");
+        });
+
+        jQuery("#poiImg4Input").change(function() {
+            wpunity_read_url(this, "#poiImg4Preview");
+        });
+
+        jQuery("#poiImg5Input").change(function() {
+            wpunity_read_url(this, "#poiImg5Preview");
+        });
+        
 
         jQuery("#poiVideoFeaturedImgInput").change(function() {
             wpunity_read_url(this, "#poiVideoFeaturedImgPreview");
