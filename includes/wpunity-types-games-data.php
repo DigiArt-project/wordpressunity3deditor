@@ -193,6 +193,8 @@ add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback
 // Callback for Ajax for delete game
 add_action('wp_ajax_wpunity_delete_game_action','wpunity_delete_gameproject_frontend_callback');
 
+add_action('wp_ajax_wpunity_create_game_action','wpunity_create_gameproject_frontend_callback');
+
 
 //======================================================================================================================
 

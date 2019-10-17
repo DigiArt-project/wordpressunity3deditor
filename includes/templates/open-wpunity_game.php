@@ -10,6 +10,7 @@ $editscenePage = wpunity_getEditpage('scene');
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
+
 // Define Ajax for the delete Game functionality
 $thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
 wp_enqueue_script( 'ajax-script_delete_game', $thepath, array('jquery') );
@@ -18,62 +19,21 @@ wp_localize_script( 'ajax-script_delete_game', 'my_ajax_object_deletegame',
 );
 
 
+// Define Ajax for the create Game functionality
+$thepath2 = $pluginpath . '/js_libs/create_ajaxes/create_game_scene_asset.js';
+wp_enqueue_script( 'ajax-script_create_game', $thepath2, array('jquery') );
+wp_localize_script( 'ajax-script_create_game', 'my_ajax_object_creategame',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+);
 
 
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
 
-	//wpunity_compile_the_game($gameID,$gameSlug);
+$isAdmin = is_admin() ? 'back' : 'front';
+echo '<script>';
+echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
+echo '</script>';
 
-	$game_type_radioButton = esc_attr(strip_tags($_POST['gameTypeRadio']));//1 = Archaeology , 2 = Energy , 3 = Chemistry
-	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
-	$energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
-	$chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
 
-	$game_type_chosen_id = '';
-    $game_type_chosen_slug = '';
-
-	if($game_type_radioButton == 1){
-		$game_type_chosen_id = $archaeology_tax->term_id;
-        $game_type_chosen_slug = 'archaeology_games';
-	}else if($game_type_radioButton == 2){
-		$game_type_chosen_id = $energy_tax->term_id;
-        $game_type_chosen_slug = 'energy_games';
-	}else if($game_type_radioButton == 3){
-		$game_type_chosen_id = $chemistry_tax->term_id;
-        $game_type_chosen_slug = 'chemistry_games';
-	}
-
-	$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
-	$virtualplace_tax = get_term_by('slug', 'virtual_place', 'wpunity_game_cat');
-
-	$game_taxonomies = array(
-		'wpunity_game_type' => array(
-			$game_type_chosen_id,
-		),
-		'wpunity_game_cat' => array(
-			$realplace_tax->term_id,
-		)
-	);
-
-	$game_information = array(
-		'post_title' => esc_attr(strip_tags($_POST['title'])),
-		'post_content' => '',
-		'post_type' => 'wpunity_game',
-		'post_status' => 'publish',
-		'tax_input' => $game_taxonomies,
-	);
-
-	$game_id = wp_insert_post($game_information);
-
-	if($game_id){
-        //In latest version, the first (and main) scene, is the edit 3D Scene view
-        $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_type_chosen_slug);//first 3D scene id
-        $edit_scene_page_id = $editscenePage[0]->ID;
-        $loadMainSceneLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type'];
-        wp_redirect( $loadMainSceneLink );
-		exit;
-	}
-}
 
 $user_id = get_current_user_id();
 
@@ -358,7 +318,11 @@ get_header();
 
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
-                        <button id="createNewGameBtn" type="submit" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                            <!-- instead of type="submit" -->
+                            <button id="createNewGameBtn"
+                                type="button" onclick="wpunity_createGameAjax()"
+                                class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                            
                         <section id="create-game-progress-bar" class="CenterContents" style="display: none;">
                             <h3 class="mdc-typography--title">Creating <?php echo $single; ?>...</h3>
 
@@ -444,6 +408,10 @@ get_header();
         dialog.show();
     }
 
+    
+    
+    
+    
 
     jQuery('#deleteGameBtn').click( function (e) {
 
@@ -465,9 +433,13 @@ get_header();
     });
 
     jQuery('#createNewGameBtn').click( function (e) {
-        var val = document.getElementById('title').value;
+        
+        // Title of game project
+        var title_game_project = document.getElementById('title').value;
 
-        if (val.length > 2) {
+        if (title_game_project.length > 2) {
+            var  game_type_radio_button = document.getElementsByName("gameTypeRadio")[0].value;
+            wpunity_createGameAjax(title_game_project, game_type_radio_button);
             jQuery('#createNewGameBtn').hide();
             jQuery('#create-game-progress-bar').show();
         }
