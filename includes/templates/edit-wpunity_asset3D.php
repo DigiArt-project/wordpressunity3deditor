@@ -1,12 +1,14 @@
 
-<!--<style type="text/css" media="screen">-->
-<!--    html { margin-top: 0px !important; }-->
-<!--    * html body { margin-top: 0px !important; }-->
-<!--    @media screen and ( max-width: 782px ) {-->
-<!--        html { margin-top: 0px !important; }-->
-<!--        * html body { margin-top: 0px !important; }-->
-<!--    }-->
-<!--</style>-->
+<?php
+
+
+function remove_admin_login_header() {
+    remove_action('wp_head', '_admin_bar_bump_cb');
+}
+add_action('get_header', 'remove_admin_login_header');
+
+
+?>
 
 <?php //Create asset
 
@@ -122,7 +124,14 @@ $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
 $isPreviewMode = isset($_GET['preview']);
 
+
 $isOwner = $current_user->ID == get_post_field ('post_author', $asset_id);
+
+// New asset
+if (!$asset_id) {
+    $isOwner = true;
+}
+
 
 
 
@@ -132,8 +141,10 @@ $isEditable = false;
 // Old asset
 if(isset($_GET['wpunity_asset'])) {
     $author_id = get_post_field('post_author', $asset_id);
-    
 }
+
+
+
 
 
 
@@ -183,7 +194,16 @@ if($scene_id!=0) {
 }
 
 $goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
-$goBackTo_SharedAssets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id;
+
+if (!isset($_GET['singleproject']))
+    $goBackTo_Assets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
+else
+    $goBackTo_Assets = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
+
+
+
+
+
 
 // ============================================
 // Submit Handler
@@ -617,24 +637,13 @@ if($asset_id != null) {
     <div id="text-asset-sidebar" style="">
     
     
-    <div id="edit-asset-header">
-        <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
-        <table id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:170px;display:inline-block;text-align:left;float:right;right:0;">
-            <tr>
-                <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
-                <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
-            </tr>
-            <tr>
-                <td><span style=""><?php echo $author_country;?></span></td>
-            </tr>
-        </table>
-    </div>
+    
         
-    <br />
+    
         
     <?php if($isJokerGame ) { ?>
         
-        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackTo_SharedAssets;?>">
+        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackTo_Assets;?>">
             <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
             Assets List</a>
         
@@ -675,7 +684,21 @@ if($asset_id != null) {
                href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
     
     <?php  }     ?>
-    
+
+
+        <div id="edit-asset-header">
+            <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
+            <table id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:170px;display:inline-block;text-align:left;float:right;right:0;">
+                <tr>
+                    <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
+                    <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
+                </tr>
+                <tr>
+                    <td><span style=""><?php echo $author_country;?></span></td>
+                </tr>
+            </table>
+        </div>
+        
     
     
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
@@ -683,7 +706,9 @@ if($asset_id != null) {
         <!-- CATEGORY -->
         <div class="" style="display:<?php echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?>">
                     
-                    <h3 class="mdc-typography--title"><?php echo $dropdownHeading; ?></h3>
+                    <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
+                    <h6>(For Digital Labels select "Artifact")</h6>
+                    
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                         <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
 
@@ -1650,7 +1675,7 @@ if($asset_id != null) {
             <div class="" id="objectPropertiesPanel">
         
                 <div style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
-                    <h3 class="mdc-typography--title">Object Properties</h3>
+                    <h3 class="mdc-typography--title">3D Model of the Asset</h3>
         
                     <ul class="RadioButtonList">
                     <!--<li class="mdc-form-field" style="pointer-events: none; " disabled>
@@ -2294,3 +2319,6 @@ if($asset_id != null) {
             echo '<script>startConf()</script>';
         }
 ?>
+
+
+

@@ -6,7 +6,7 @@
  *
  *  All the above are encompassed in     wpunity_delete_gameproject_frontend($game_id)
  */
-function wpunity_deleteGameAjax(game_id) {
+function wpunity_deleteGameAjax(game_id, dialog, current_user_id, parameter_Scenepass) {
 
     jQuery.ajax({
         url: my_ajax_object_deletegame.ajax_url,
@@ -16,7 +16,15 @@ function wpunity_deleteGameAjax(game_id) {
             'game_id': game_id
         },
         success: function (res) {
-            location.reload();
+
+            jQuery('#delete-dialog-progress-bar').hide();
+            jQuery( "#deleteGameBtn" ).removeClass( "LinkDisabled" );
+            jQuery( "#cancelDeleteGameBtn" ).removeClass( "LinkDisabled" );
+
+            fetchAllProjectsAndAddToDOM(current_user_id, parameter_Scenepass);
+
+            dialog.close();
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
 

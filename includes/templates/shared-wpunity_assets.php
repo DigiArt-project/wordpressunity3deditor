@@ -20,7 +20,7 @@ if ($project_scope == 0) {
     //	$single_first = "Project";
 }
 
-$project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
+$joker_project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
 
 //if( isset($_GET['wpunity_asset']) ) {
 //	$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
@@ -31,8 +31,8 @@ $project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->I
 //	}
 //}
 
-$game_post = get_post($project_id);
-$gameSlug = $game_post->post_name;
+$joker_project_post = get_post($joker_project_id);
+$joker_project_slug = $joker_project_post->post_name;
 
 $isAdmin = is_admin() ? 'back' : 'front';
 echo '<script>';
@@ -105,16 +105,43 @@ if($isUserloggedIn){ ?>
 
 
 $user_id = get_current_user_id();
-$user_games_slugs = wpunity_get_user_game_projects($user_id, $isUserAdmin);
+
+$current_project = '';
+
+
+$single_project_asset_list = false;
+if(isset($_GET['wpunity_project_id'])) {
+    
+    $single_project_asset_list = true;
+    $current_game_project_id = $_GET['wpunity_project_id'];
+    $current_game_project_post = get_post($current_game_project_id);
+    $current_game_project_slug = $current_game_project_post->post_name;
+    $user_games_slugs = [$current_game_project_slug];
+} else {
+    $user_games_slugs = wpunity_get_user_game_projects($user_id, $isUserAdmin);
+}
+
 $assets = get_games_assets($user_games_slugs);
 
-
+if (!$isUserloggedIn)
+    $link_to_add = wp_login_url();
+else if ($isUserloggedIn && $single_project_asset_list)
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $current_game_project_id .'&singleproject=true&#EnglishEdit');
+else if ($isUserAdmin && !$single_project_asset_list)
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
 ?>
 
 
     <!-- Display assets Grid-->
 <div class="assets-list-front mdc-layout-grid" >
-    <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets</span>
+    
+    <?php if ($single_project_asset_list){ ?>
+        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;"><?php echo $current_game_project_post->post_title;?> Assets</span>
+    <?php } else if (!$isUserloggedIn) { ?>
+        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets</span>
+    <?php } else if ($isUserloggedIn) { ?>
+        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets in own projects</span>
+    <?php } ?>
     
     <a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">?</a>
      
@@ -122,13 +149,17 @@ $assets = get_games_assets($user_games_slugs);
      
         <!-- Card to add asset -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="" >
-            <div class="asset-shared-thumbnail mdc-card mdc-theme--background" style="min-height:100px;height:100%;position:relative;background: orangered;">
-                <a href="<?php echo $isUserloggedIn ?
-                    esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id .'#EnglishEdit') : wp_login_url();
-                ?>">
+            <div class="asset-shared-thumbnail mdc-card mdc-theme--background"
+                 style="min-height:100px;height:100%;min-height:120px;position:relative;background:<?php echo $single_project_asset_list? lightgreen: orangered;?>">
+                
+                
+                
+                <a href="<?php echo $link_to_add; ?>">
+
+                
                 
                 <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
-                <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">Shared Asset</span>
+                <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>"><?php echo $single_project_asset_list? 'Private Asset': 'Shared Asset';?></span>
                 </a>
             </div>
         </div>
@@ -148,7 +179,7 @@ $assets = get_games_assets($user_games_slugs);
                             <?php if ($asset['screenImagePath']){ ?>
                                 <img src="<?php echo $asset['screenImagePath']; ?>" class="asset-shared-thumbnail">
                             <?php } else { ?>
-                                <div style="min-height: 226px;" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
+                                <div style="min-height: 226px;width:70%" class="DisplayBlock mdc-theme--secondary-bg CenterContents">
                                     <i style="font-size: 64px; padding-top: 80px;" class="material-icons mdc-theme--text-icon-on-background">insert_photo</i>
                                 </div>
                             <?php } ?>
@@ -183,13 +214,13 @@ $assets = get_games_assets($user_games_slugs);
                         if( $isUserAdmin || ($user_id == $asset['author_id'])) {  ?>
                             <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
                                class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
-                               onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $gameSlug ?>',<?php echo $asset['isCloned'];?>)"
+                               onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $joker_project_slug ?>',<?php echo $asset['isCloned'];?>)"
                                >DEL</a>
                         <?php } ?>
     
                         <!-- Parent Game -->
                         <?php if ($asset['isJoker']=='true') { ?>
-                            <!--                        <span class="sharedAssetsIndicator mdc-typography--subheading1" style="background: rgba(144,238,144,0.3);">Shared</span>-->
+                              <span class="sharedAssetsIndicator mdc-typography--subheading1" style="background: rgba(144,238,144,0.3);">Shared</span>
                         <?php } else { ?>
                             <span class="sharedAssetsIndicator mdc-typography--subheading1"
                                   style="background: rgba(250,250,210,0.3);">
@@ -232,7 +263,7 @@ $assets = get_games_assets($user_games_slugs);
 <!--  No Assets Empty Repo-->
 <?php if ( !$assets ) :  ?>
     <hr class="WhiteSpaceSeparator">
-    <div class="CenterContents">
+    <div class="CenterContents" style="width:70%; min-height:800px;">
         <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true" title="No assets available">
             insert_photo
         </i>
@@ -284,4 +315,7 @@ $assets = get_games_assets($user_games_slugs);
         deleteDialog.focusTrap_.deactivate();
     }
 </script>
+
+
 <?php get_footer(); ?>
+

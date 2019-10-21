@@ -209,6 +209,14 @@ function wpunity_getEditpage($type){
 			'meta_value' => '/templates/edit-wpunity_asset3D.php'
 		));
 		return $edit_pages;
+    }elseif($type=='assetslist'){
+        $edit_pages = get_pages(array(
+            'hierarchical' => 0,
+            'parent' => -1,
+            'meta_key' => '_wp_page_template',
+            'meta_value' => '/templates/shared-wpunity_assets.php'
+        ));
+        return $edit_pages;
 	}else{
 		return false;
 	}
@@ -269,7 +277,10 @@ function wpunity_get_ftpCredentials(){
 /* Get all game projects of the user */
 function wpunity_get_user_game_projects($user_id, $isUserAdmin){
     
+    
     $games_slugs = ['archaeology-joker','energy-joker','chemistry-joker'];
+    
+    
     
     // user is not logged in return only joker game
     if($user_id==0)

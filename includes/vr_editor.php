@@ -86,7 +86,7 @@ echo 'var UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
 echo 'var scenefolder="'.$scenefolder.'";';
 echo 'var gamefolder="'.$gamefolder.'";';
 echo 'var sceneID="'.$sceneID.'";';
-echo 'var gameProjectID="'.$project_id.'";';
+echo 'var gameProjectID="'.$joker_project_id.'";';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var isUserAdmin="'.current_user_can('administrator').'";';
@@ -94,7 +94,7 @@ echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
 echo "var doorsAll=".json_encode($doorsAllInfo).";";
 echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
 echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
-echo "var scenesTargetChemistry=".json_encode(wpunity_getAllexams_byGame($project_id, true)).";";
+echo "var scenesTargetChemistry=".json_encode(wpunity_getAllexams_byGame($joker_project_id, true)).";";
 echo '</script>';
 
 ?>
@@ -427,7 +427,7 @@ echo '</script>';
     <a id="addNewAssetBtnAssetsList"
        style="" class="addNewAsset3DEditor" data-mdc-auto-init="MDCRipple"
        title="Add new private asset"
-       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
+       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
         <i class="material-icons" style="cursor: pointer; font-size:54px; color:orangered; ">add_circle</i>
     </a>
     
@@ -701,7 +701,7 @@ echo '</script>';
                                 $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                                 if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
                                 
-                                $edit_page_link = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type );
+                                $edit_page_link = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $joker_project_id . '&scene_type=' . $scene_type );
                                 ?>
                                 <div style="" class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
                                 <a href="<?php echo $edit_page_link; ?>">
@@ -825,7 +825,7 @@ echo '</script>';
                             
                             
                             
-                            $editurl = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_type;
+                            $editurl = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $joker_project_id . '&scene_type=' . $scene_type;
                             $edit_page_link = esc_url( $editurl );
 
                             if($default_scene) {

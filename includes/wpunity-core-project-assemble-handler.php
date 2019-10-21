@@ -37,80 +37,194 @@ function wpunity_convert_pdbYAML(){
 //CREATE GAME PROJECT
 function wpunity_create_gameproject_frontend_callback(){
     
-        // Game project title
-        $game_project_title =  strip_tags($_POST['game_project_title']);
-        $game_project_type_radiobutton = $_POST['game_project_type_radio'];//1 = Archaeology , 2 = Energy , 3 = Chemistry
+    // Game project title
+    $game_project_title =  strip_tags($_POST['game_project_title']);
+    $game_project_type_radiobutton = $_POST['game_project_type_radio'];//1 = Archaeology , 2 = Energy , 3 = Chemistry
     
     $archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
     $energy_tax = get_term_by('slug', 'energy_games', 'wpunity_game_type');
     $chemistry_tax = get_term_by('slug', 'chemistry_games', 'wpunity_game_type');
-    
-    
+
 //        $ff = fopen("output_create_ajax.txt","w");
 //        fwrite($ff, $game_project_title);
-//
 //        fwrite($ff, $game_project_type_radiobutton);
-//
 //        fwrite($ff, $archaeology_tax);
 //        fclose($ff);
     
-        
-        
-        $game_type_chosen_id = '';
-        //$game_type_chosen_slug = '';
-        
-        if($game_project_type_radiobutton == 1){
-            $game_type_chosen_id = $archaeology_tax->term_id;
-            //$game_type_chosen_slug = 'archaeology_games';
-        }else if($game_project_type_radiobutton == 2){
-            $game_type_chosen_id = $energy_tax->term_id;
-            //$game_type_chosen_slug = 'energy_games';
-        }else if($game_project_type_radiobutton == 3){
-            $game_type_chosen_id = $chemistry_tax->term_id;
-            //$game_type_chosen_slug = 'chemistry_games';
-        }
-        
-        
-        
-        $realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
-        
-        $game_taxonomies = array(
-            'wpunity_game_type' => array(
-                $game_type_chosen_id,
-            ),
-            'wpunity_game_cat' => array(
-                $realplace_tax->term_id,
-            )
-        );
-        
-        $game_project_information = array(
-            'post_title' => esc_attr($game_project_title),
-            'post_content' => '',
-            'post_type' => 'wpunity_game',
-            'post_status' => 'publish',
-            'tax_input' => $game_taxonomies,
-        );
-        
-        
-        
-        // REDIRECT automatically to game not actuall wanted
-//        if($game_id){
-//            //In latest version, the first (and main) scene, is the edit 3D Scene view
-//            $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_type_chosen_slug);//first 3D scene id
-//            $edit_scene_page_id = $editscenePage[0]->ID;
-//            $loadMainSceneLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type'];
-//            wp_redirect( $loadMainSceneLink );
-//            exit;
-//        }
+    $game_type_chosen_id = '';
+    //$game_type_chosen_slug = '';
     
+    if($game_project_type_radiobutton == 1){
+        $game_type_chosen_id = $archaeology_tax->term_id;
+        //$game_type_chosen_slug = 'archaeology_games';
+    }else if($game_project_type_radiobutton == 2){
+        $game_type_chosen_id = $energy_tax->term_id;
+        //$game_type_chosen_slug = 'energy_games';
+    }else if($game_project_type_radiobutton == 3){
+        $game_type_chosen_id = $chemistry_tax->term_id;
+        //$game_type_chosen_slug = 'chemistry_games';
+    }
+    
+    $realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
+   
+    $game_taxonomies = array(
+        'wpunity_game_type' => array(
+            $game_type_chosen_id,
+        ),
+        'wpunity_game_cat' => array(
+            $realplace_tax->term_id,
+        )
+    );
+    
+    $game_project_information = array(
+        'post_title' => esc_attr($game_project_title),
+        'post_content' => '',
+        'post_type' => 'wpunity_game',
+        'post_status' => 'publish',
+        'tax_input' => $game_taxonomies,
+    );
     
     $game_id = wp_insert_post($game_project_information);
-    
+   
     echo $game_id;
-    
     wp_die();
 }
 
+
+
+
+// Fetch list of project through ajax
+function wpunity_fetch_list_projects_callback(){
+
+    $user_id = $_POST['current_user_id'];
+    $parameter_Scenepass = $_POST['parameter_Scenepass'];
+    
+    // Define custom query parameters
+    $custom_query_args = array(
+        'post_type' => 'wpunity_game',
+        /*'posts_per_page' => 10,*/
+        'posts_per_page' => -1,
+        /*'paged' => $paged,*/
+    );
+    
+    if (current_user_can('administrator')){
+    } elseif (current_user_can('adv_game_master')) {
+        $custom_query_args['author'] = $user_id;
+    }elseif (current_user_can('game_master')) {
+        //$custom_query_args['author'] = $user_id;
+    }
+    
+    
+    // Get current page and append to custom query parameters array
+    //$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+    
+    // Instantiate custom query
+    $custom_query = new WP_Query($custom_query_args);
+    
+    // Pagination fix
+    //$temp_query = $wp_query;
+    //$wp_query = NULL;
+    //$wp_query = $custom_query;
+    
+    // Output custom query loop
+    if ($custom_query->have_posts()){
+    
+       echo '<ul class="mdc-list mdc-list--two-line mdc-list--avatar-list" style="max-height: 460px; overflow-y: auto">';
+       while ($custom_query->have_posts()) :
+           
+           $custom_query->the_post();
+           $game_id = get_the_ID();
+           $game_title = get_the_title();
+           $game_date = get_the_date();
+           //$game_link = get_permalink();
+          
+           //if ($project_scope==0)
+           //if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
+           //   continue;
+    
+           //if ($project_scope==1)
+           //   if ($game_title == 'Archaeology Joker')
+           //       continue;
+    
+           // Do not show Joker projects
+           if ($game_title == 'Archaeology Joker' || $game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
+                continue;
+    
+            $game_type_obj = wpunity_return_game_type($game_id);
+    
+            $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );
+            $game_category     = $all_game_category[0]->slug;
+            $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_category);//first 3D scene id
+        
+           $editscenePage = wpunity_getEditpage('scene');
+       
+            $edit_scene_page_id = $editscenePage[0]->ID;
+            
+            
+            $loadMainSceneLink = esc_url( (get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type']));
+    
+    
+            $assets_list_page =  wpunity_getEditpage('assetslist');
+            $assets_list_page_id = $assets_list_page[0]->ID;
+            $loadProjectAssets = esc_url( get_permalink($assets_list_page_id) . '?wpunity_project_id=' . $game_id );
+            
+            
+    
+            echo '<li class="mdc-list-item" style="" id="'. $game_id.'">';
+            
+            // Href when press on title
+                echo '<a href="'.$loadProjectAssets.'" class="mdc-list-item" style="float:left" data-mdc-auto-init="MDCRipple" title="Open '.$game_title.'">';
+                    echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
+                        echo '<span id="'.$game_id.'-title" class="mdc-list-item__text">'.$game_title.' Assets'.
+                                '<span id="'.$game_id.'-date" class="mdc-list-item__text__secondary">'.$game_date.'</span>'.
+                             '</span>';
+                echo '</a>';
+    
+    
+    
+           // VR button: Go to 3D Editor
+       
+           echo '<div style="margin-left:auto; margin-right:0">';
+       
+           echo '<a href="'.$loadMainSceneLink.'" class="" style="" data-mdc-auto-init="MDCRipple" title="Open 3D Editor for '.$game_title.'">';
+                //echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
+                echo '<span id="'.$game_id.'-vr-button" class="mdc-button ">VR</span>';
+           echo '</a>';
+                
+                
+                // Delete button
+                echo '<a href="javascript:void(0)" class="" style="" aria-label="Delete game" title="Delete project" onclick="deleteGame('.$game_id.')">';
+                     echo '<i class="material-icons mdc-button mdc-list-item__end-detail" aria-hidden="true" title="Delete project">delete</i>';
+                echo '</a>';
+                
+            echo '<div>';
+                
+            echo '</li>';
+       endwhile;
+       
+       echo '</ul>';
+    
+       wp_reset_postdata();
+       //$wp_query = NULL;
+       //$wp_query = $temp_query;
+       
+       
+    } else {
+        
+        echo '<hr class="WhiteSpaceSeparator">' .
+              '<div class="CenterContents">' .
+                '<i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true"' .
+                    ' title="No game projects available">' .
+                    'games' .
+                '</i>'.
+                '<h3 class="mdc-typography--headline"> projects available</h3>' .
+                '<hr class="WhiteSpaceSeparator">' .
+                '<h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new one</h4>' .
+              '</div>';
+    }
+
+  wp_die();
+}
 
 
 //DELETE GAME PROJECT

@@ -6,7 +6,7 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 $editgamePage = wpunity_getEditpage('game');
-$editscenePage = wpunity_getEditpage('scene');
+
 
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
@@ -29,13 +29,19 @@ wp_localize_script( 'ajax-script_create_game', 'my_ajax_object_creategame',
 
 
 $isAdmin = is_admin() ? 'back' : 'front';
+
+
+
+
+$current_user_id = get_current_user_id();
+
+
 echo '<script>';
-echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
+    echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
+    echo 'current_user_id="'.$current_user_id.'";';
+    echo 'parameter_Scenepass="'.$parameter_Scenepass.'";';
 echo '</script>';
 
-
-
-$user_id = get_current_user_id();
 
 $full_title = "Projects";
 $full_title_lowercase = "projects";
@@ -69,6 +75,7 @@ get_header();
 <!--    <a target="_blank" href="--><?php //echo plugin_dir_url( __DIR__ ); ?><!--files/usage-scenario.pdf" class="mdc-button mdc-button--primary" data-mdc-auto-init="MDCRipple">Read the Usage Scenario</a>-->
 <!--</p>-->
 
+<!-- if user not logged in then show a hint to login -->
 <?php if ( !is_user_logged_in() ) { ?>
 
     <div class="DisplayBlock CenterContents">
@@ -84,14 +91,12 @@ get_header();
 
 <?php } else {
     
-    
     $current_user = wp_get_current_user();
     $login_username = $current_user->user_login;
     
     ?>
 
-
-    
+    <!-- HELP button -->
     <a href="#" class="helpButton" onclick="alert('Create a new <?php echo $full_title_lowercase; ?> or edit an existing one')">
         ?
     </a>
@@ -115,124 +120,11 @@ get_header();
 
             <hr class="mdc-list-divider">
 
-			<?php
-			// Define custom query parameters
-			$custom_query_args = array(
-				'post_type' => 'wpunity_game',
-				/*'posts_per_page' => 10,*/
-				'posts_per_page' => -1,
-				/*'paged' => $paged,*/
-			);
+            <div id="ExistingProjectsDivDOM">
 
-			if (current_user_can('administrator')){
-			} elseif (current_user_can('adv_game_master')) {
-				$custom_query_args['author'] = $user_id;
-			}elseif (current_user_can('game_master')) {
-				//$custom_query_args['author'] = $user_id;
-			}
 
-			// Get current page and append to custom query parameters array
-			//$custom_query_args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-
-			// Instantiate custom query
-			$custom_query = new WP_Query($custom_query_args);
-
-			// Pagination fix
-			$temp_query = $wp_query;
-			$wp_query = NULL;
-			$wp_query = $custom_query;
-
-			// Output custom query loop
-			if ($custom_query->have_posts()) : ?>
-
-                <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list" style="max-height: 460px; overflow-y: auto">
-					<?php while ($custom_query->have_posts()) :
-                        
-                        $custom_query->the_post();
-					
-						$game_id = get_the_ID();
-						$game_title = get_the_title();
-						$game_date = get_the_date();
-						//$game_link = get_permalink();
-      
-//                        if ($project_scope==0)
-//                            if ($game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
-//                                continue;
-//
-//                        if ($project_scope==1)
-//                            if ($game_title == 'Archaeology Joker')
-//                                continue;
-//
-                        if ($game_title == 'Archaeology Joker' || $game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
-                            continue;
-                        
-                            
-                            
-						$game_type_obj = wpunity_return_game_type($id);
-
-                        $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );
-                        $game_category     = $all_game_category[0]->slug;
-                        $scene_data = wpunity_getFirstSceneID_byProjectID($game_id,$game_category);//first 3D scene id
-                        $edit_scene_page_id = $editscenePage[0]->ID;
-                        $loadMainSceneLink = esc_url( (get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $game_id . '&scene_type=' . $scene_data['type']));
-
-                        $isJokerGame = false;//if it's a joker game, link to old edit-game template
-                        if( $post->post_name == 'archaeology-joker' || $post->post_name == 'energy-joker' || $post->post_name == 'chemistry-joker'){ $isJokerGame = true;}
-                        if($isJokerGame){$loadMainSceneLink = esc_url(get_permalink($editgamePage[0]->ID) . $parameter_pass . $game_id);}
-						?>
-                        <li class="mdc-list-item" id="<?php echo $game_id; ?>">
-                            <a href="<?php echo $loadMainSceneLink; ?>"
-                               class="mdc-list-item" data-mdc-auto-init="MDCRipple"
-                               title="Open <?php echo $game_title; ?>">
-
-                                <i class="material-icons mdc-list-item__start-detail" aria-hidden="true"
-                                   title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?></i>
-                                <span id="<?php echo $game_id; ?>-title"
-                                      class="mdc-list-item__text"><?php echo $game_title; ?>
-                                    <span id="<?php echo $game_id; ?>-date"
-                                          class="mdc-list-item__text__secondary"><?php echo $game_date; ?></span>
-                                    </span>
-                            </a>
-                            
-                            <?php if( $post->post_name != 'archaeology-joker' && $post->post_name != 'energy-joker' && $post->post_name != 'chemistry-joker'){ ?>
-                            <a href="javascript:void(0)" class="mdc-list-item" aria-label="Delete game"
-                               title="Delete project"
-                               onclick="deleteGame(<?php echo $game_id; ?>)">
-                                <i class="material-icons mdc-list-item__end-detail" aria-hidden="true"
-                                   title="Delete project">
-                                    delete
-                                </i>
-                            </a>
-                            <?php } ?>
-                        </li>
-
-					<?php endwhile; ?>
-                </ul>
-
-			<?php else : ?>
-
-                <hr class="WhiteSpaceSeparator">
-
-                <div class="CenterContents">
-
-                    <i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true"
-                       title="No game projects available">
-                        games
-                    </i>
-
-                    <h3 class="mdc-typography--headline">No <?php echo $multiple; ?> available</h3>
-                    <hr class="WhiteSpaceSeparator">
-                    <h4 class="mdc-typography--title mdc-theme--text-secondary-on-light">You can try creating a new
-                        one</h4>
-
-                </div>
-			<?php endif;
-
-			wp_reset_postdata();
-			$wp_query = NULL;
-			$wp_query = $temp_query;
-			?>
-
+            </div>
+            
         </div>
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
@@ -319,9 +211,9 @@ get_header();
 						<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
                         <input type="hidden" name="submitted" id="submitted" value="true" />
                             <!-- instead of type="submit" -->
-                            <button id="createNewGameBtn"
-                                type="button" onclick="wpunity_createGameAjax()"
-                                class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised" data-mdc-auto-init="MDCRipple"> CREATE</button>
+                            <button id="createNewGameBtn"  type="button"
+                                class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised"
+                                    data-mdc-auto-init="MDCRipple"> CREATE</button>
                             
                         <section id="create-game-progress-bar" class="CenterContents" style="display: none;">
                             <h3 class="mdc-typography--title">Creating <?php echo $single; ?>...</h3>
@@ -421,7 +313,7 @@ get_header();
         jQuery( "#cancelDeleteGameBtn" ).addClass( "LinkDisabled" );
 
         //console.log("ID:", dialog.id);
-        wpunity_deleteGameAjax(dialog.id);
+        wpunity_deleteGameAjax(dialog.id, dialog, current_user_id, parameter_Scenepass);
 
     });
 
@@ -439,12 +331,14 @@ get_header();
 
         if (title_game_project.length > 2) {
             var  game_type_radio_button = document.getElementsByName("gameTypeRadio")[0].value;
-            wpunity_createGameAjax(title_game_project, game_type_radio_button);
+            wpunity_createGameAjax(title_game_project, game_type_radio_button, current_user_id, parameter_Scenepass);
             jQuery('#createNewGameBtn').hide();
             jQuery('#create-game-progress-bar').show();
         }
     });
 
     
+    
+    fetchAllProjectsAndAddToDOM(current_user_id, parameter_Scenepass);
 </script>
 <?php get_footer(); ?>
