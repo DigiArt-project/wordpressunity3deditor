@@ -129,11 +129,19 @@ else if ($isUserloggedIn && $single_project_asset_list)
     $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $current_game_project_id .'&singleproject=true&#EnglishEdit');
 else if ($isUserAdmin && !$single_project_asset_list)
     $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
+
+$link_to_edit = home_url().'/wpunity-3d-asset-creator/?';
+
+if ($single_project_asset_list)
+    $link_to_edit = $link_to_edit. "singleproject=true&";
+
+    
+
 ?>
 
 
     <!-- Display assets Grid-->
-<div class="assets-list-front mdc-layout-grid" >
+<div class="assets-list-front mdc-layout-grid" style="min-height:900px;">
     
     <?php if ($single_project_asset_list){ ?>
         <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;"><?php echo $current_game_project_post->post_title;?> Assets</span>
@@ -174,8 +182,7 @@ else if ($isUserAdmin && !$single_project_asset_list)
                         <?php $pGameId= get_page_by_path($asset['assetParentGameSlug'], OBJECT, 'wpunity_game')->ID; ?>
                         
                         <!-- Edit url -->
-                        <a class="editasseturl" href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
-                            '&wpunity_scene=&wpunity_asset='.$asset['assetid'].'#English'; ?>">
+                        <a class="editasseturl" href="<?php echo $link_to_edit.'wpunity_game='.$pGameId.'&wpunity_asset='.$asset['assetid'].'#English'; ?>">
                             <?php if ($asset['screenImagePath']){ ?>
                                 <img src="<?php echo $asset['screenImagePath']; ?>" class="asset-shared-thumbnail">
                             <?php } else { ?>
@@ -189,7 +196,7 @@ else if ($isUserAdmin && !$single_project_asset_list)
                         <h1 class="assetsListCardTitle mdc-card__title mdc-typography--title" style="">
                             <a class="mdc-theme--secondary"
                                href="<?php echo home_url().'/wpunity-3d-asset-creator/?wpunity_game='.$pGameId.
-                                   '&wpunity_scene=&wpunity_asset='.$asset['assetid'].'#English';
+                                   '&wpunity_asset='.$asset['assetid'].'#English';
                                ?>"><?php echo $asset['assetName'];?></a>
                         </h1>
 
@@ -212,18 +219,20 @@ else if ($isUserAdmin && !$single_project_asset_list)
                         <?php
                         // For joker assets, If the user is not administrator he should not be able to delete or edit them.
                         if( $isUserAdmin || ($user_id == $asset['author_id'])) {  ?>
-                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset"
+                            
+                            <a id="deleteAssetBtn" data-mdc-auto-init="MDCRipple" title="Delete asset" style="color:white; background: rgba(214,30,30,0.7);"
                                class="deleteAssetListButton mdc-button mdc-button--compact mdc-card__action"
                                onclick="wpunity_deleteAssetAjax(<?php echo $asset['assetid'];?>,'<?php echo $joker_project_slug ?>',<?php echo $asset['isCloned'];?>)"
                                >DEL</a>
+                            
                         <?php } ?>
     
                         <!-- Parent Game -->
                         <?php if ($asset['isJoker']=='true') { ?>
-                              <span class="sharedAssetsIndicator mdc-typography--subheading1" style="background: rgba(144,238,144,0.3);">Shared</span>
+                              <span class="sharedAssetsIndicator mdc-typography--subheading1" style="color:black; background: rgba(184,248,184,0.6);">Shared</span>
                         <?php } else { ?>
                             <span class="sharedAssetsIndicator mdc-typography--subheading1"
-                                  style="background: rgba(250,250,210,0.3);">
+                                  style="color:black; background: rgba(250,250,210,0.6);">
                             <?php echo "@".$asset['assetParentGame']; ?></span>
                         <?php } ?>
 

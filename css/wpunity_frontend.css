@@ -478,10 +478,12 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     top: 0px;
     right: 0px;
     position: absolute;
-    font-size:6pt;
+    font-size:10pt;
     padding:2px !important;
+    height:25px !important;
+    padding-top:10px;
     min-width:20px;
-    line-height: 1.1em;
+    line-height: 1.6em;
 }
 
 

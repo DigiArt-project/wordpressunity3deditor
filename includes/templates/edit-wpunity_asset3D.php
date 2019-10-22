@@ -104,9 +104,6 @@ $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
 $game_type_obj = wpunity_return_game_type($project_id);
-$isJokerGame = (strpos($gameSlug, 'joker') != false) || $_GET['wpunity_scene'] == '';
-
-
 
 
 //Get 'parent-game' taxonomy with the same slug as Game
@@ -186,19 +183,28 @@ $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//
 
 $edit_scene_page_id = $editscenePage[0]->ID;
 
-// GoBack links
-if($scene_id!=0) {
-    $goBackTo_MainLab_link = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_data['id'] . '&wpunity_game=' . $project_id . '&scene_type=' . $scene_data['type'];
-} else {
-    $goBackTo_MainLab_link ='';
+
+// GoBack link
+$goBackToLink = '';
+
+// If coming from scene then go to scene editor
+if($scene_id!=0)
+    $goBackToLink = get_permalink($edit_scene_page_id).$parameter_Scenepass.$scene_data['id'].'&wpunity_game='.$project_id.'&scene_type='.
+        $scene_data['type'];
+else {
+
+    if (!isset($_GET['singleproject']))
+        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
+    else
+        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
+    
 }
 
-$goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
 
-if (!isset($_GET['singleproject']))
-    $goBackTo_Assets = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
-else
-    $goBackTo_Assets = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
+
+
+
+
 
 
 
@@ -225,7 +231,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     $assetDescFormGerman = esc_attr(strip_tags($_POST['assetDescGerman'],"<b><i>")); //Description of the Asset (Form value)
     $assetDescFormRussian = esc_attr(strip_tags($_POST['assetDescRussian'],"<b><i>")); //Description of the Asset (Form value)
     
-    $assetDescFormKids = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
+    $assetDescFormKids = esc_attr(strip_tags($_POST['assetDescKids'],"<b><i>")); //Description of the Asset (Form value)
     $assetDescFormGreekKids = esc_attr(strip_tags($_POST['assetDescGreekKids'],"<b><i>")); //Description of the Asset (Form value)
     $assetDescFormSpanishKids = esc_attr(strip_tags($_POST['assetDescSpanishKids'],"<b><i>")); //Description of the Asset (Form value)
     $assetDescFormFrenchKids = esc_attr(strip_tags($_POST['assetDescFrenchKids'],"<b><i>")); //Description of the Asset (Form value)
@@ -509,7 +515,7 @@ echo '</script>';
 $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_fonts', true));
 $asset_fonts_label = ($asset_id == null ? "Fonts" : "Fonts");
 
-$asset_back_3d_color_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
+$asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
 $asset_back_3d_color_label = ($asset_id == null ? "3D viewer background color" : "3D viewer background color");
 
 //print_r(get_allowed_mime_types());
@@ -641,29 +647,45 @@ if($asset_id != null) {
         
     
         
-    <?php if($isJokerGame ) { ?>
+<!--    --><?php //if($isJoker == "true" ) {
+//        ?>
         
-        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackTo_Assets;?>">
+        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
             <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
             Assets List</a>
         
-    <?php } else { ?>
-        <a title="Back" style="color:dodgerblue" href="<?php echo $goBackTo_MainLab_link;?>">
-            <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor
-        </a>
-    <?php } ?>
+<!--    --><?php //} else { ?>
+<!--        <a title="Back" style="color:dodgerblue" href="--><?php //echo $goBackTolink;?><!--">-->
+<!--            <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor-->
+<!--        </a>-->
+<!--    --><?php //} ?>
 
     <?php
         if($isUserloggedIn && !$isPreviewMode){
             if($asset_id != null ) { ?>
-                <a class="mdc-button mdc-button--primary mdc-theme--primary"
-                href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?>"
-                data-mdc-auto-init="MDCRipple">Add New</a>
+<!--                <a class="mdc-button mdc-button--primary mdc-theme--primary"-->
+<!--                href="--><?php //echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id ); ?><!--"-->
+<!--                data-mdc-auto-init="MDCRipple">Add New</a>-->
     
                 <?php
+    
                 $previewLink = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ) .
-                    $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] . '&preview=1#English';
+                    $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                
+                // FROM NEW ASSET ONLY
+                if ( !strpos($_SERVER['REQUEST_URI'],"wpunity_asset"))
+                    $previewLink = $previewLink . '&wpunity_asset='.$asset_id;
+    
+                // IF from single project
+                if (isset($_GET['singleproject']))
+                    $previewLink = $previewLink . '&singleproject=true';
+                
+                
+                $previewLink = $previewLink . '&preview=1#English';
+                
                 ?>
+
+                
                 
                 <a class="mdc-button mdc-button--primary mdc-theme--primary"
                    href="<?php echo $previewLink; ?>"
