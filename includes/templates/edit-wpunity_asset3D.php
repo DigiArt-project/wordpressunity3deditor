@@ -650,7 +650,8 @@ if($asset_id != null) {
 <!--    --><?php //if($isJoker == "true" ) {
 //        ?>
         
-        <a title="Back" style="color:dodgerblue;" class="hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
+        <a title="Back" style="color:dodgerblue; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
+           class="hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
             <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
             Assets List</a>
         
@@ -682,10 +683,7 @@ if($asset_id != null) {
                 
                 
                 $previewLink = $previewLink . '&preview=1#English';
-                
                 ?>
-
-                
                 
                 <a class="mdc-button mdc-button--primary mdc-theme--primary"
                    href="<?php echo $previewLink; ?>"
@@ -710,7 +708,8 @@ if($asset_id != null) {
 
         <div id="edit-asset-header">
             <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
-            <table id="wpunity-asset-author" class="mdc-typography--caption" style="position:relative;width:170px;display:inline-block;text-align:left;float:right;right:0;">
+            <table id="wpunity-asset-author" class="mdc-typography--caption"
+                   style="display:inline-block;text-align:left;float:right;right:0;margin-top:10px">
                 <tr>
                     <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
                     <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
@@ -720,6 +719,7 @@ if($asset_id != null) {
                 </tr>
             </table>
         </div>
+        
         
     
     
@@ -820,7 +820,7 @@ if($asset_id != null) {
 
 
                 <!-- Languages -->
-                <ul class="langul" style="margin:0">
+                <ul class="langul" style="margin:0;">
                     <li class="langli"><a href="#EnglishEdit">English</a></li>
                     <li class="langli"><a href="#GreekEdit" >Ελληνικά</a></li>
                     <li class="langli"><a href="#SpanishEdit" >Español</a></li>
@@ -1373,7 +1373,7 @@ if($asset_id != null) {
                 
                 
                 <!-- Languages -->
-                <ul class="langul" style="margin:5px">
+                <ul class="langul" style="margin:5px;text-align:center;display:inline-block;width:100%">
                     <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'English')" style="padding:0px 1% !important;">English</button>
                     <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Greek')" style="padding:0px 1% !important;">ΕΛΛΗΝΙΚΑ</button>
                     <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Spanish')" style="padding:0px 1% !important;">Español</button>
@@ -1383,7 +1383,7 @@ if($asset_id != null) {
                 </ul>
 
                 <!-- Accessibility -->
-                <div style="display:inline-block; margin-left:10px; width:100%;" >
+                <div style="display:inline-block; margin-left:10px; width:100%; margin-top:10px; margin-bottom:10px" >
                     
                     <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
                            name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
@@ -1398,27 +1398,28 @@ if($asset_id != null) {
                         <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                     </div>
 
-                    <button type='button' class="mdc-button" onclick="openAccess(event, '')"
-                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/general_population_icon.png" width="40px" height="40px" style="background-color:white"/>
-                    </button>
-                    
-                    <button type='button' class="mdc-button" onclick="openAccess(event, 'Experts')"
-                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/graduation_icon.png" width="40px" height="40px" style="background-color:white"/>
-                    </button>
-
-                    <button type='button' class="mdc-button" onclick="openAccess(event, 'Perception')"
-                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/heart_icon.png" width="40px" height="40px" style="background-color:white"/>
-                    </button>
-
-                    <button type='button' class="mdc-button"
-                            onclick="openAccess(event, 'Kids')"
-                            style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                        <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/children_icon.png" width="40px" height="40px" style="background-color:white"/>
-                    </button>
-                    
+                    <div style="display:inline-block; float:right; right:0;">
+                        <button type='button' class="mdc-button" onclick="openAccess(event, '')"
+                                style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/general_population_icon.png" width="40px" height="40px" style="background-color:white"/>
+                        </button>
+                        
+                        <button type='button' class="mdc-button" onclick="openAccess(event, 'Experts')"
+                                style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/graduation_icon.png" width="40px" height="40px" style="background-color:white"/>
+                        </button>
+    
+                        <button type='button' class="mdc-button" onclick="openAccess(event, 'Perception')"
+                                style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/heart_icon.png" width="40px" height="40px" style="background-color:white"/>
+                        </button>
+    
+                        <button type='button' class="mdc-button"
+                                onclick="openAccess(event, 'Kids')"
+                                style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/children_icon.png" width="40px" height="40px" style="background-color:white"/>
+                        </button>
+                    </div>
                 </div>
                 
                 
@@ -1899,11 +1900,12 @@ if($asset_id != null) {
                 </button>
             <?php } ?>
     
-            <?php echo $isEditable?'':'*You do not have persmission to edit this asset'?>
+            
 
         </div>
     </form>
 
+    
     
 
     <!--                     Javascript                             -->

@@ -715,6 +715,8 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 
 #assetTitleView{
     width:100%;
+    display:flex;
+
     color: orangered;
     text-shadow: 2px 2px 2px aliceblue;
     padding-top: 10px;
