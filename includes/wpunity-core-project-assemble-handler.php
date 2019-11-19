@@ -107,12 +107,12 @@ function wpunity_fetch_list_projects_callback(){
         /*'paged' => $paged,*/
     );
     
-    if (current_user_can('administrator')){
-    } elseif (current_user_can('adv_game_master')) {
-        $custom_query_args['author'] = $user_id;
-    }elseif (current_user_can('game_master')) {
-        //$custom_query_args['author'] = $user_id;
-    }
+//    if (current_user_can('administrator')){
+//    } elseif (current_user_can('adv_game_master')) {
+//        $custom_query_args['author'] = $user_id;
+//    }elseif (current_user_can('game_master')) {
+//        //$custom_query_args['author'] = $user_id;
+//    }
     
     
     // Get current page and append to custom query parameters array
@@ -131,8 +131,21 @@ function wpunity_fetch_list_projects_callback(){
     
        echo '<ul class="mdc-list mdc-list--two-line mdc-list--avatar-list" style="max-height: 460px; overflow-y: auto">';
        while ($custom_query->have_posts()) :
-           
+    
            $custom_query->the_post();
+           
+           if (current_user_can('administrator')){
+           } elseif (current_user_can('adv_game_master')) {
+               
+               if ((get_the_author() != $user_id) && strpos(get_post_meta(get_the_ID(), 'wpunity_game_collaborators_ids')[0], ';'.$user_id.';')===false )
+                   continue;
+               
+            }elseif (current_user_can('game_master')) {
+                //$custom_query_args['author'] = $user_id;
+            }
+           
+           
+           
            $game_id = get_the_ID();
            $game_title = get_the_title();
            $game_date = get_the_date();

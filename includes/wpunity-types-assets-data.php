@@ -584,6 +584,7 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'back_3d_color',
             'type' => 'text',
             'std' => "rgb(221, 185, 155)"
+        
         )
 	)
 );

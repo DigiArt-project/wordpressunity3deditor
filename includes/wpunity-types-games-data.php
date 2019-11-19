@@ -36,6 +36,12 @@ $wpunity_databox3 = array(
             'id' => $wpunity_prefix . 'lng',
             'type' => 'text',
             'std' => ''
+        ),array(
+            'name' => 'collaborators_ids',
+            'desc' => 'ids of collaborators starting separated and ending by semicolon',
+            'id' => $wpunity_prefix . 'collaborators_ids',
+            'type' => 'text',
+            'std' => ""
         )
     )
 );
