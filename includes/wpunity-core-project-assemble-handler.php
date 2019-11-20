@@ -188,8 +188,7 @@ function wpunity_fetch_list_projects_callback(){
             // Href when press on title
                 echo '<a href="'.$loadProjectAssets.'" class="mdc-list-item" style="float:left" data-mdc-auto-init="MDCRipple" title="Open '.$game_title.'">';
                     echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
-                        echo '<span id="'.$game_id.'-title" class="mdc-list-item__text">'.$game_title.' Assets'.
-                                '<span id="'.$game_id.'-date" class="mdc-list-item__text__secondary">'.$game_date.'</span>'.
+                        echo '<span id="'.$game_id.'-title" class="mdc-list-item__text">'.$game_title.'<span id="'.$game_id.'-date" class="mdc-list-item__text__secondary">'.$game_date.'</span>'.
                              '</span>';
                 echo '</a>';
     
@@ -198,16 +197,36 @@ function wpunity_fetch_list_projects_callback(){
            // VR button: Go to 3D Editor
        
            echo '<div style="margin-left:auto; margin-right:0">';
-       
-           echo '<a href="'.$loadMainSceneLink.'" class="" style="" data-mdc-auto-init="MDCRipple" title="Open 3D Editor for '.$game_title.'">';
-                //echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
-                echo '<span id="'.$game_id.'-vr-button" class="mdc-button ">VR</span>';
-           echo '</a>';
+    
+               // Assets button
+               echo '<a href="'.$loadProjectAssets.'" class="" style="" data-mdc-auto-init="MDCRipple" title="Manage assets of '.$game_title.'">';
+                    echo '<span id="'.$game_id.'-assets-button" class="mdc-button" >Assets</span>';
+               echo '</a>';
+    
+    
+                // Get collaborators ids;
+                $collabs_ids_raw = get_post_meta($game_id, 'wpunity_game_collaborators_ids')[0];
                 
+                $collabs_ids = array_values(array_filter(explode(";", $collabs_ids_raw)));
+               
+               // Collaborators button
+               echo '<a href="javascript:void(0)" class="mdc-button mdc-list-item__end-detail" data-mdc-auto-init="MDCRipple" title="Add collaborators for '.
+                                $game_title.'" onclick="collaborateProject('.$game_id.',\''.$collabs_ids_raw.'\')">';
+       
+                    echo '<i class="material-icons" aria-hidden="true" '.' title="Add collaborators">group</i>' .'<sup>'.count($collabs_ids).'</sup>';
+       
+                    //echo get_user_by('id', $collabs_ids[0])->display_name;
+               echo '</a>';
+               
+               // 3D editor button
+               echo '<a href="'.$loadMainSceneLink.'" class="" style="" data-mdc-auto-init="MDCRipple" title="Open 3D Editor for '.$game_title.'">';
+                    //echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
+                    echo '<span id="'.$game_id.'-vr-button" class="mdc-button" >3D_Editor</span>';
+               echo '</a>';
                 
                 // Delete button
                 echo '<a href="javascript:void(0)" class="" style="" aria-label="Delete game" title="Delete project" onclick="deleteGame('.$game_id.')">';
-                     echo '<i class="material-icons mdc-button mdc-list-item__end-detail" aria-hidden="true" title="Delete project">delete</i>';
+                     echo '<i class="material-icons mdc-button mdc-list-item__end-detail" style="color:orangered" aria-hidden="true" title="Delete project">delete</i>';
                 echo '</a>';
                 
             echo '<div>';
@@ -238,6 +257,17 @@ function wpunity_fetch_list_projects_callback(){
 
   wp_die();
 }
+
+
+//COLLABORATE PROJECT
+function wpunity_collaborate_frontend_callback()
+{
+    $game_id = $_POST['game_id'];
+    echo "game id" . $game_id;
+    
+    wp_die();
+}
+
 
 
 //DELETE GAME PROJECT

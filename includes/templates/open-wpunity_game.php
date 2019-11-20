@@ -18,6 +18,14 @@ wp_localize_script( 'ajax-script_delete_game', 'my_ajax_object_deletegame',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php'))
 );
 
+// Define Ajax for the delete Game functionality
+$thepath = $pluginpath . '/js_libs/collaborate_ajaxes/collaborate_project.js';
+wp_enqueue_script( 'ajax-script_collaborate_project', $thepath, array('jquery') );
+wp_localize_script( 'ajax-script_collaborate_project', 'my_ajax_object_collaborate_project',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php'))
+);
+
+
 
 // Define Ajax for the create Game functionality
 $thepath2 = $pluginpath . '/js_libs/create_ajaxes/create_game_scene_asset.js';
@@ -68,7 +76,7 @@ $multiple = "projects";
 get_header();
 ?>
 
-<span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-top:10px"><?php echo $full_title; ?> Manager</span>
+<span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-left:10px;margin-top:20px"><?php echo $full_title; ?> Manager</span>
 
 
 <!--<p class="mdc-typography--subheading1 mdc-theme--text-secondary-on-light"> Not sure what to do?-->
@@ -102,7 +110,7 @@ get_header();
     </a>
 
     
-    <span style="float:right; right:0; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
+    <span style="float:right; right:0px; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px; margin-right:10px;">Welcome,
         <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
               <?php echo $login_username;?>
         </a>
@@ -114,7 +122,7 @@ get_header();
 
     <div class="mdc-layout-grid__inner">
 
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 
             <span class="mdc-typography--title mdc-theme--text-primary-on-background">Existing <?php echo $multiple; ?></span>
 
@@ -129,7 +137,7 @@ get_header();
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
 
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 
             <span class="mdc-typography--title mdc-theme--text-primary-on-background">Create new <?php echo $single; ?></span>
 
@@ -233,6 +241,7 @@ get_header();
 
 		<?php } ?>
 
+        
         <!--Delete Game Dialog-->
         <aside id="delete-dialog"
                class="mdc-dialog"
@@ -267,13 +276,62 @@ get_header();
             <div class="mdc-dialog__backdrop"></div>
         </aside>
 
+
+
+        <!--Delete Game Dialog-->
+        <aside id="collaborate-dialog"
+               class="mdc-dialog"
+               role="alertdialog"
+               aria-labelledby="Collaborate project dialog"
+               aria-describedby="Collaborate project dialog" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__surface">
+                <header class="mdc-dialog__header">
+                    <h2 id="collaborate-dialog-title" class="mdc-dialog__header__title">
+                        Collaborators on project
+                    </h2>
+                </header>
+                
+                <section id="collaborate-dialog-description" class="mdc-dialog__body mdc-typography--body1">
+                    Current collaborators for <?php echo $full_title_lowercase; ?>?
+                </section>
+
+<!--                <section id="delete-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">-->
+<!--                    <h3 class="mdc-typography--title">Deleting...</h3>-->
+<!---->
+<!--                    <div class="progressSlider">-->
+<!--                        <div class="progressSliderLine"></div>-->
+<!--                        <div class="progressSliderSubLine progressIncrease"></div>-->
+<!--                        <div class="progressSliderSubLine progressDecrease"></div>-->
+<!--                    </div>-->
+<!--                </section>-->
+<!---->
+<!--                <footer class="mdc-dialog__footer">-->
+<!--                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="cancelDeleteGameBtn">Cancel</a>-->
+<!--                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteGameBtn">Delete</a>-->
+<!--                </footer>-->
+            </div>
+            <div class="mdc-dialog__backdrop"></div>
+        </aside>
+        
+        
+        
+        
+        
+
     </div>
 </div>
 <script type="text/javascript">
     window.mdc.autoInit();
-
+    
     var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
     dialog.focusTrap_.deactivate();
+
+
+    var dialogCollaborators = new mdc.dialog.MDCDialog(document.querySelector('#collaborate-dialog'));
+    dialogCollaborators.focusTrap_.deactivate();
+    
+    
+    
 
     function loadGameDescription() {
         var checked = parseInt(jQuery( ":checked" ).val(), 10);
@@ -286,6 +344,23 @@ get_header();
         }
     }
 
+    function collaborateProject(id, collabs_ids) {
+
+        var dialogTitle = document.getElementById("collaborate-dialog-title");
+        var dialogDescription = document.getElementById("collaborate-dialog-description");
+        var gameTitle = document.getElementById(id+"-title").innerHTML;
+        gameTitle = gameTitle.substring(0, gameTitle.indexOf('<'));
+        gameTitle = gameTitle.trim();
+        
+        dialogTitle.innerHTML = "<b>Collaborators on " + gameTitle+"?</b>";
+        
+        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'?"+collabs_ids;
+        
+        dialogCollaborators.id = id;
+        dialogCollaborators.show();
+    }
+    
+    
     function deleteGame(id) {
 
         var dialogTitle = document.getElementById("delete-dialog-title");
