@@ -544,6 +544,7 @@ function wpunity_periodically_update_conf_log() {
             var json_content = jQuery.parseJSON(response);
 
             var arrPhones = jQuery('[id^=phonering-]');
+
             // Deactivate all
             for (var i=0; i < arrPhones.length; i++)
                 arrPhones[i].style.display = "none";

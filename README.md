@@ -50,6 +50,14 @@ Then you download the whole repository as a zip and install it from plugins->add
 * Code review: To appear
 * Other guidelines: Fill in the electronic questionnaire for the evaluation feedback:    https://docs.google.com/forms/d/e/1FAIpQLSfgh7draz7sJ5lx5VLUUtE8rhud4dt9d_ZbqJuW4qaKlCJJaQ/viewform?usp=sf_link
 
+### Peer calls ###
+
+A visitor to an artifact can speak with an expert through node.js peer-calls. It is installed in an iframe in artifact page.
+It starts in server in the peer-calls folder with
+* sudo npm run build
+* sudo npm start  
+
+
 ### Who do I talk to? ###
 
 * I am coordinating and contributing to this repository: Dimitrios Ververidis, ververid [at] iti.gr, jimver04 [at] gmail.com

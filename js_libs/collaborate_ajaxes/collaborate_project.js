@@ -1,22 +1,23 @@
 /**
  * Collaborate on Project:
  *
- *  All the above are encompassed in     wpunity_delete_gameproject_frontend($game_id)
+ *  All the above are encompassed in     wpunity_collaborate_project_frontend_callback
  */
-function wpunity_collaborateProjectAjax(game_id, dialog, current_user_id, parameter_Scenepass) {
+function wpunity_uypdateCollabsAjax(project_id, dialogCollab, collabs_ids) {
 
     jQuery.ajax({
         url: my_ajax_object_collaborate_project.ajax_url,
         type: 'POST',
         data: {
             'action': 'wpunity_collaborate_project_action',
-            'game_id': game_id
+            'project_id': project_id,
+            'collabs_ids': collabs_ids
         },
         success: function (res) {
 
+            console.log(res);
 
-
-            dialog.close();
+            dialogCollab.close();
 
         },
         error: function (xhr, ajaxOptions, thrownError) {

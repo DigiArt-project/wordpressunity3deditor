@@ -5,7 +5,9 @@
 function remove_admin_login_header() {
     remove_action('wp_head', '_admin_bar_bump_cb');
 }
-add_action('get_header', 'remove_admin_login_header');
+
+if ($_GET['preview']!=1)
+    add_action('get_header', 'remove_admin_login_header');
 
 
 ?>
@@ -653,7 +655,7 @@ if($asset_id != null) {
         <a title="Back" style="color:dodgerblue; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
            class="hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
             <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
-            Assets List</a>
+            Assets Manager</a>
         
 <!--    --><?php //} else { ?>
 <!--        <a title="Back" style="color:dodgerblue" href="--><?php //echo $goBackTolink;?><!--">-->
@@ -729,7 +731,7 @@ if($asset_id != null) {
         <div class="" style="display:<?php echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?>">
                     
                     <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
-                    <h6>(For Digital Labels select "Artifact")</h6>
+<!--                    <h6>(For Digital Labels select "Artifact")</h6>-->
                     
                     <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                         <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;

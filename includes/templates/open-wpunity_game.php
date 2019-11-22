@@ -38,18 +38,13 @@ wp_localize_script( 'ajax-script_create_game', 'my_ajax_object_creategame',
 
 $isAdmin = is_admin() ? 'back' : 'front';
 
-
-
-
 $current_user_id = get_current_user_id();
-
 
 echo '<script>';
     echo 'isAdmin="'.$isAdmin.'";'; // This variable is used in the request_game_assemble.js
     echo 'current_user_id="'.$current_user_id.'";';
     echo 'parameter_Scenepass="'.$parameter_Scenepass.'";';
 echo '</script>';
-
 
 $full_title = "Projects";
 $full_title_lowercase = "projects";
@@ -111,7 +106,7 @@ get_header();
 
     
     <span style="float:right; right:0px; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px; margin-right:10px;">Welcome,
-        <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
+        <a href="<?php echo get_site_url() ?>/account/" style="color:dodgerblue">
               <?php echo $login_username;?>
         </a>
     </span>
@@ -121,14 +116,23 @@ get_header();
 <div class="mdc-layout-grid FrontPageStyle">
 
     <div class="mdc-layout-grid__inner">
-
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-
+        
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-7">
+            
+            <span>
             <span class="mdc-typography--title mdc-theme--text-primary-on-background">Existing <?php echo $multiple; ?></span>
+            
+            
+            <?php
+                echo '<a href="'.get_site_url().'/wpunity-list-shared-assets/" class="" style="float:right" data-mdc-auto-init="MDCRipple" title="View or add shared assets">';
+                echo '<span id="shared-assets-button" class="mdc-button" >All Assets</span>';
+                echo '</a>';
+            ?>
+            </span>
+            
+            <hr class="mdc-list-divider" style="width:100%; float:right">
 
-            <hr class="mdc-list-divider">
-
-            <div id="ExistingProjectsDivDOM">
+            <div id="ExistingProjectsDivDOM" style="width:100%; float:right">
 
 
             </div>
@@ -136,7 +140,8 @@ get_header();
         </div>
 
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
-
+        
+        
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 
             <span class="mdc-typography--title mdc-theme--text-primary-on-background">Create new <?php echo $single; ?></span>
@@ -237,7 +242,7 @@ get_header();
                 </div>
             </div>
         </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
+<!--        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>-->
 
 		<?php } ?>
 
@@ -295,6 +300,21 @@ get_header();
                     Current collaborators for <?php echo $full_title_lowercase; ?>?
                 </section>
 
+                <div class="mdc-text-field mdc-text-field--textarea" style="width:80%;margin:auto">
+                    <textarea id="textarea-collaborators" class="mdc-text-field__input" rows="3" cols="40"></textarea>
+                    <div class="mdc-notched-outline">
+                        <div class="mdc-notched-outline__leading"></div>
+                        <div class="mdc-notched-outline__notch">
+                            <label for="textarea" class="mdc-floating-label mdc-dialog__body mdc-typography--body1">Current collaborators</label>
+                        </div>
+                        <div class="mdc-notched-outline__trailing"></div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
 <!--                <section id="delete-dialog-progress-bar" class="CenterContents mdc-dialog__body" style="display: none;">-->
 <!--                    <h3 class="mdc-typography--title">Deleting...</h3>-->
 <!---->
@@ -305,10 +325,10 @@ get_header();
 <!--                    </div>-->
 <!--                </section>-->
 <!---->
-<!--                <footer class="mdc-dialog__footer">-->
-<!--                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="cancelDeleteGameBtn">Cancel</a>-->
-<!--                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="deleteGameBtn">Delete</a>-->
-<!--                </footer>-->
+                <footer class="mdc-dialog__footer">
+                    <a class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button" id="cancelCollabsBtn">Cancel</a>
+                    <a class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised" id="updateCollabsBtn">Update</a>
+                </footer>
             </div>
             <div class="mdc-dialog__backdrop"></div>
         </aside>
@@ -344,19 +364,23 @@ get_header();
         }
     }
 
-    function collaborateProject(id, collabs_ids) {
+    function collaborateProject(project_id, collabs_ids) {
 
         var dialogTitle = document.getElementById("collaborate-dialog-title");
         var dialogDescription = document.getElementById("collaborate-dialog-description");
-        var gameTitle = document.getElementById(id+"-title").innerHTML;
+        var gameTitle = document.getElementById(project_id+"-title").innerHTML;
         gameTitle = gameTitle.substring(0, gameTitle.indexOf('<'));
         gameTitle = gameTitle.trim();
         
         dialogTitle.innerHTML = "<b>Collaborators on " + gameTitle+"?</b>";
         
-        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'?"+collabs_ids;
+        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'?";
+
+        var dialogTextarea = document.getElementById("textarea-collaborators");
+        //collabs_ids = collabs_ids.replace(/;/g," ");
+        dialogTextarea.innerHTML = collabs_ids;
         
-        dialogCollaborators.id = id;
+        dialogCollaborators.project_id = project_id;
         dialogCollaborators.show();
     }
     
@@ -398,6 +422,25 @@ get_header();
         dialog.close();
 
     });
+
+    jQuery('#updateCollabsBtn').click( function (e) {
+
+        var currCollabs = document.getElementById("textarea-collaborators").innerHTML;
+        
+        console.log(dialogCollaborators.project_id);
+        console.log(currCollabs);
+
+        
+        
+        wpunity_uypdateCollabsAjax(dialogCollaborators.project_id, dialogCollaborators, currCollabs);
+
+    });
+    
+    
+    jQuery('#cancelCollabsBtn').click( function (e) {
+        dialogCollaborators.close();
+    });
+    
 
     jQuery('#createNewGameBtn').click( function (e) {
         

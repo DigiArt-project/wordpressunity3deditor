@@ -142,16 +142,34 @@ if ($single_project_asset_list)
 
     <!-- Display assets Grid-->
 <div class="assets-list-front mdc-layout-grid" style="min-height:900px;">
+
+    <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Assets Manager</span>
+    
+    
+    
+    <?php
+        if ($isUserloggedIn){
+            if( $single_project_asset_list){
+                $helpMessage = 'A list of your private Assets belonging to [ '.$current_game_project_post->post_title.' ]. First tab allows to add a new private one.';
+            } else {
+                $helpMessage = 'Add a Shared Asset here. If you want to be private, make a project and add them there.';
+            }
+        } else {
+            $helpMessage = 'Login to a) add a Shared Asset or b) to create a Project and add your private Assets there';
+        }
+     ?>
+    
+     <a href="#" class="helpButton" onclick="alert('<?php echo $helpMessage ?>')">?</a>
+
+    <br />
     
     <?php if ($single_project_asset_list){ ?>
-        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;"><?php echo $current_game_project_post->post_title;?> Assets</span>
+        <span class="mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">for <?php echo $current_game_project_post->post_title;?></span>
     <?php } else if (!$isUserloggedIn) { ?>
-        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets</span>
+        <span class="mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">for shared <?php echo $isUserloggedIn?" and private": ""; ?> assets </span>
     <?php } else if ($isUserloggedIn) { ?>
-        <span class="mdc-typography--display1 mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">Shared <?php echo $isUserloggedIn?" and private": ""; ?> Assets in own projects</span>
+        <span class="mdc-theme--text-primary-on-background" style="display:inline-table;margin-bottom:20px;">for shared <?php echo $isUserloggedIn?" and private": ""; ?> assets in own projects</span>
     <?php } ?>
-    
-    <a href="#" class="helpButton" onclick="alert('Login to a) add a Shared Asset or b) to create a Project and add your private Assets there')">?</a>
      
      <div class="mdc-layout-grid__inner grid-system-custom">
      

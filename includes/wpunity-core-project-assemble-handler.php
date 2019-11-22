@@ -186,11 +186,11 @@ function wpunity_fetch_list_projects_callback(){
             echo '<li class="mdc-list-item" style="" id="'. $game_id.'">';
             
             // Href when press on title
-                echo '<a href="'.$loadProjectAssets.'" class="mdc-list-item" style="float:left" data-mdc-auto-init="MDCRipple" title="Open '.$game_title.'">';
+                echo '<span class="mdc-list-item" style="float:left" data-mdc-auto-init="MDCRipple" title="Open '.$game_title.'">';
                     echo '<i class="material-icons mdc-list-item__start-detail" aria-hidden="true" title="'.$game_type_obj->string.'">'.$game_type_obj->icon.'</i>';
                         echo '<span id="'.$game_id.'-title" class="mdc-list-item__text">'.$game_title.'<span id="'.$game_id.'-date" class="mdc-list-item__text__secondary">'.$game_date.'</span>'.
                              '</span>';
-                echo '</a>';
+                echo '</span>';
     
     
     
@@ -260,10 +260,11 @@ function wpunity_fetch_list_projects_callback(){
 
 
 //COLLABORATE PROJECT
-function wpunity_collaborate_frontend_callback()
+function wpunity_collaborate_project_frontend_callback()
 {
-    $game_id = $_POST['game_id'];
-    echo "game id" . $game_id;
+    $project_id = $_POST['project_id'];
+    $collabs_ids = $_POST['collabs_ids'];
+    echo "game id:" . $project_id. " , collabs:".$collabs_ids;
     
     wp_die();
 }
