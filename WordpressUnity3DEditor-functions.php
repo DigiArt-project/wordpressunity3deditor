@@ -46,6 +46,7 @@ function wpunity_load_jquery_scripts() {
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
 function wpunity_register_scripts() {
+ 
 	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ).'js_libs/wpunity_asset_editor_scripts.js');
 
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
@@ -109,7 +110,10 @@ function wpunity_register_scripts() {
     wp_register_script( 'wpunity_load_scene_importer_utils', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneImporter.js', null, null, false);
 	
 	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporter.js', null, null, false);
-
+    
+    //wp_register_script( 'wpunity_materialize_jslib', plugin_dir_url( __FILE__ ) . 'js_libs/materialize.min.js', null, null, false);
+	
+	
 // ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
 //wp_register_script( 'wpunity_load_pointerlockcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/PointerLockControls.js', null, null, false);
 //wp_register_script( 'wpunity_load_transformcontrols', plugin_dir_url( __FILE__ ) . '/js_libs/threejs79/TransformControls.js', null, null, false);
@@ -130,9 +134,14 @@ function wpunity_register_styles() {
 	wp_register_style( 'wpunity_vr_editor_filebrowser', plugin_dir_url( __FILE__ ) . 'css/vr_editor_fileBrowserStyle.css' );
 	wp_register_style( 'wpunity_material_stylesheet',  plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.css' );
 	wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ) . 'node_modules/material-components-web/dist/material-components-web.js');
+	
 	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 	wp_register_style( 'wpunity_lightslider_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/lightslider.min.css' );
-
+    
+    //wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.min.css' );
+    
+    
+	
 	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
 	// Material & Frontend CSS & Scripts
 	wp_enqueue_style('wpunity_material_stylesheet');

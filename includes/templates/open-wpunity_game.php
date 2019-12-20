@@ -11,6 +11,18 @@ $editgamePage = wpunity_getEditpage('game');
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
+
+//$thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
+//$thepath = $pluginpath . '/js_libs/materialize.min.js';
+//wp_enqueue_script('wpunity_materialize_jslib', $thepath);
+
+
+
+//$thepath = $pluginpath . '/css/materialize.min.css';
+//wp_enqueue_style('wpunity_materialize_stylesheet', $thepath);
+
+
+
 // Define Ajax for the delete Game functionality
 $thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
 wp_enqueue_script( 'ajax-script_delete_game', $thepath, array('jquery') );
@@ -302,6 +314,29 @@ get_header();
 
                 <div class="mdc-text-field mdc-text-field--textarea" style="width:80%;margin:auto">
                     <textarea id="textarea-collaborators" class="mdc-text-field__input" rows="3" cols="40"></textarea>
+
+
+<!--                    <div class="chips"></div>-->
+<!--                    <div class="chips chips-initial"></div>-->
+<!--                    <div class="chips chips-placeholder"></div>-->
+<!--                    <script>-->
+<!--                        jQuery('.chips').material_chip();-->
+<!--                        jQuery('.chips-initial').material_chip({-->
+<!--                            data: [{-->
+<!--                                tag: 'Apple',-->
+<!--                            }, {-->
+<!--                                tag: 'Banana',-->
+<!--                            }, {-->
+<!--                                tag: 'Mango',-->
+<!--                            }],-->
+<!--                        });-->
+<!--                        jQuery('.chips-placeholder').material_chip({-->
+<!--                            placeholder: 'Enter tag Name',-->
+<!--                            secondaryPlaceholder: '+Tag',-->
+<!--                        });-->
+<!--                    </script>-->
+                    
+                    
                     <div class="mdc-notched-outline">
                         <div class="mdc-notched-outline__leading"></div>
                         <div class="mdc-notched-outline__notch">

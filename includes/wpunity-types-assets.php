@@ -45,7 +45,7 @@ class Asset3DClass{
             'menu_position' => 25,
             'menu_icon' => 'dashicons-editor-textcolor',
             'taxonomies' => array('wpunity_asset3d_cat', 'wpunity_asset3d_pgame', 'wpunity_asset3d_ipr_cat'),
-            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail','revisions'),
+            'supports' => array('title', 'editor', 'custom-fields', 'thumbnail','revisions','author'),
             'hierarchical' => false,
             'has_archive' => false,
             'capabilities' => array(
@@ -190,5 +190,50 @@ function wpunity_create_pathdata_asset( $post_id ){
 add_action('save_post','wpunity_create_pathdata_asset',10,3);
 
 //==========================================================================================================================================
+
+
+function allowAuthorEditing()
+{
+    add_post_type_support( 'wpunity_asset3d', 'author' );
+}
+
+add_action('init','allowAuthorEditing');
+
+
+add_filter( 'wp_dropdown_users_args', 'change_user_dropdown', 10, 2 );
+
+function change_user_dropdown( $query_args, $r ){
+// get screen object
+    $screen = get_current_screen();
+
+    // list users whose role is e.g. 'Editor' for 'post' post type
+    if( $screen->post_type == 'wpunity_asset3d' ):
+    
+        if (isset($query_args['who'])) {
+            unset($query_args['who']);
+        }
+        
+        $query_args['role__in'] = array('administrator','adv_game_master');
+        
+        // unset default role
+        //unset( $query_args['who'] );
+        
+    endif;
+    
+
+    
+  
+//    // list users whose role is e.g. 'Administrator' for 'page' post type
+//    if( $screen->post_type == 'page' ):
+//        $query_args['role'] = array('adv_game_master');
+//
+//        // unset default role
+//        unset( $query_args['who'] );
+//    endif;
+    
+    
+    return $query_args;
+}
+
 
 ?>
