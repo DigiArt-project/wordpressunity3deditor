@@ -202,6 +202,10 @@ add_action('wp_ajax_wpunity_delete_game_action','wpunity_delete_gameproject_fron
 // Callback for add collaborators
 add_action('wp_ajax_wpunity_collaborate_project_action','wpunity_collaborate_project_frontend_callback');
 
+// Callback for fetching collaborators from db
+add_action('wp_ajax_wpunity_fetch_collaborators_action','wpunity_fetch_collaborators_frontend_callback');
+
+
 
 add_action('wp_ajax_wpunity_create_game_action','wpunity_create_gameproject_frontend_callback');
 

@@ -295,7 +295,7 @@ get_header();
 
 
 
-        <!--Delete Game Dialog-->
+        <!--Project Collaborators Dialog-->
         <aside id="collaborate-dialog"
                class="mdc-dialog"
                role="alertdialog"
@@ -399,7 +399,7 @@ get_header();
         }
     }
 
-    function collaborateProject(project_id, collabs_ids) {
+    function collaborateProject(project_id) {
 
         var dialogTitle = document.getElementById("collaborate-dialog-title");
         var dialogDescription = document.getElementById("collaborate-dialog-description");
@@ -409,13 +409,13 @@ get_header();
         
         dialogTitle.innerHTML = "<b>Collaborators on " + gameTitle+"?</b>";
         
-        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'?";
+        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'. For example ';15;1;5;'";
 
-        var dialogTextarea = document.getElementById("textarea-collaborators");
-        //collabs_ids = collabs_ids.replace(/;/g," ");
-        dialogTextarea.innerHTML = collabs_ids;
-        
         dialogCollaborators.project_id = project_id;
+        
+        // Fetch collaborators and insert to "textarea-collaborators"
+        wpunity_fetchCollabsAjax(project_id);
+
         dialogCollaborators.show();
     }
     
@@ -459,15 +459,14 @@ get_header();
     });
 
     jQuery('#updateCollabsBtn').click( function (e) {
+        
+        // Get collabs emails
+        var currCollabsEmails = document.getElementById("textarea-collaborators").value;
 
-        var currCollabs = document.getElementById("textarea-collaborators").innerHTML;
-        
-        console.log(dialogCollaborators.project_id);
-        console.log(currCollabs);
+        console.log("3", currCollabsEmails);
 
-        
-        
-        wpunity_uypdateCollabsAjax(dialogCollaborators.project_id, dialogCollaborators, currCollabs);
+        // 2. Update ids of collaborators ;15;5;4;
+        wpunity_updateCollabsAjax(dialogCollaborators.project_id, dialogCollaborators, currCollabsEmails);
 
     });
     

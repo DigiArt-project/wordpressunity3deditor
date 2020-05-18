@@ -208,10 +208,12 @@ function wpunity_fetch_list_projects_callback(){
                 $collabs_ids_raw = get_post_meta($game_id, 'wpunity_game_collaborators_ids')[0];
                 
                 $collabs_ids = array_values(array_filter(explode(";", $collabs_ids_raw)));
-               
+    
+                
+                
                // Collaborators button
                echo '<a href="javascript:void(0)" class="mdc-button mdc-list-item__end-detail" data-mdc-auto-init="MDCRipple" title="Add collaborators for '.
-                                $game_title.'" onclick="collaborateProject('.$game_id.',\''.$collabs_ids_raw.'\')">';
+                                $game_title.'" onclick="collaborateProject('.$game_id.')">';
        
                     echo '<i class="material-icons" aria-hidden="true" '.' title="Add collaborators">group</i>' .'<sup>'.count($collabs_ids).'</sup>';
        
@@ -230,7 +232,7 @@ function wpunity_fetch_list_projects_callback(){
                 echo '</a>';
                 
             echo '<div>';
-                
+            
             echo '</li>';
        endwhile;
        
@@ -259,13 +261,50 @@ function wpunity_fetch_list_projects_callback(){
 }
 
 
-//COLLABORATE PROJECT
+//UPDATE LIST OF COLLABORATORS ON PROJECT
 function wpunity_collaborate_project_frontend_callback()
 {
     $project_id = $_POST['project_id'];
-    $collabs_ids = $_POST['collabs_ids'];
-    echo "game id:" . $project_id. " , collabs:".$collabs_ids;
+    $collabs_emails = $_POST['collabs_emails'];
+    $collabs_emails = ltrim($collabs_emails, ";" );
+    $collabs_emails = rtrim($collabs_emails, ";" );
+    $collabs_emails = explode(';', $collabs_emails);
     
+    
+    
+    
+    // From email get id
+    
+    $collabs_ids = '';
+    foreach ($collabs_emails as $collab_email) {
+        $collab_id_data = get_user_by('email', $collab_email)->data;
+        $collabs_ids .= ';'.$collab_id_data->ID;
+    }
+    $collabs_ids .= ';';
+    
+    update_post_meta($project_id, 'wpunity_game_collaborators_ids', $collabs_ids);
+    
+    wp_die();
+}
+
+
+
+function wpunity_fetch_collaborators_frontend_callback()
+{
+    $project_id = $_POST['project_id'];
+    $collabs_ids = get_post_meta($project_id, 'wpunity_game_collaborators_ids', true);
+    $collabs_ids = ltrim($collabs_ids, ';');
+    $collabs_ids = rtrim($collabs_ids, ';');
+    
+    $collabs_ids = explode(';',$collabs_ids);
+    
+    $collabs_emails = '';
+    foreach ($collabs_ids as $collab_id) {
+        $collabs_emails =  $collabs_emails . ';' . get_user_by('id', $collab_id)->user_email;
+    }
+    $collabs_emails .= ';';
+    
+    echo $collabs_emails;
     wp_die();
 }
 
