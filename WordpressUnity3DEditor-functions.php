@@ -35,8 +35,15 @@ $project_scope = 0;
 
 //===================================== Styles & Scripts ====================================
 function wpunity_load_jquery_scripts() {
+
+//	global $wp_scripts;
+//	if(is_admin()) return;
+//	$wp_scripts->registered['jquery-core']->src = 'https://code.jquery.com/jquery-3.5.1.min.js';
+//	$wp_scripts->registered['jquery']->deps = ['jquery-core'];
+
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui-core');
+	
 	wp_enqueue_script('jquery-ui-slider');
 	wp_enqueue_script('jquery-ui-draggable');
 	wp_enqueue_script('jquery-effects-core');
@@ -44,6 +51,8 @@ function wpunity_load_jquery_scripts() {
 	wp_enqueue_style( 'jquery-ui-theme-css' , plugin_dir_url( __FILE__ ) . 'css/jquery-ui.theme.min.css' );
 }
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
+
+
 
 function wpunity_register_scripts() {
  
@@ -111,7 +120,7 @@ function wpunity_register_scripts() {
 	
 	wp_register_script( 'wpunity_load_sceneexporter', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/SceneExporter.js', null, null, false);
     
-    //wp_register_script( 'wpunity_materialize_jslib', plugin_dir_url( __FILE__ ) . 'js_libs/materialize.min.js', null, null, false);
+    wp_register_script( 'wpunity_materialize_jslib', plugin_dir_url( __FILE__ ) . 'js_libs/materialize.js', null, null, false);
 	
 	
 // ToDo: For some reason these can not be enqueued in vr_editor.php, try again when vr_editor is made as js
@@ -138,7 +147,7 @@ function wpunity_register_styles() {
 	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
 	wp_register_style( 'wpunity_lightslider_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/lightslider.min.css' );
     
-    //wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.min.css' );
+    wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.css' );
     
     
 	

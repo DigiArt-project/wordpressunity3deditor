@@ -266,24 +266,19 @@ function wpunity_collaborate_project_frontend_callback()
 {
     $project_id = $_POST['project_id'];
     $collabs_emails = $_POST['collabs_emails'];
-    $collabs_emails = ltrim($collabs_emails, ";" );
-    $collabs_emails = rtrim($collabs_emails, ";" );
     $collabs_emails = explode(';', $collabs_emails);
     
-    
-    
-    
     // From email get id
-    
     $collabs_ids = '';
     foreach ($collabs_emails as $collab_email) {
         $collab_id_data = get_user_by('email', $collab_email)->data;
-        $collabs_ids .= ';'.$collab_id_data->ID;
+        if (!$collab_id_data)
+            echo "ERROR 190520: an email was invalid";
+        else
+            $collabs_ids .= ';'.$collab_id_data->ID;
     }
-    $collabs_ids .= ';';
     
     update_post_meta($project_id, 'wpunity_game_collaborators_ids', $collabs_ids);
-    
     wp_die();
 }
 
@@ -293,8 +288,6 @@ function wpunity_fetch_collaborators_frontend_callback()
 {
     $project_id = $_POST['project_id'];
     $collabs_ids = get_post_meta($project_id, 'wpunity_game_collaborators_ids', true);
-    $collabs_ids = ltrim($collabs_ids, ';');
-    $collabs_ids = rtrim($collabs_ids, ';');
     
     $collabs_ids = explode(';',$collabs_ids);
     
@@ -302,7 +295,9 @@ function wpunity_fetch_collaborators_frontend_callback()
     foreach ($collabs_ids as $collab_id) {
         $collabs_emails =  $collabs_emails . ';' . get_user_by('id', $collab_id)->user_email;
     }
-    $collabs_emails .= ';';
+    
+    $collabs_emails = ltrim($collabs_emails, ";");
+    $collabs_emails = rtrim($collabs_emails, ";");
     
     echo $collabs_emails;
     wp_die();

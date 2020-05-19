@@ -16,6 +16,8 @@ function wpunity_updateCollabsAjax(project_id, dialogCollab, collabs_emails) {
         success: function (res) {
 
             console.log(res);
+            if (res.indexOf("ERROR")!=-1)
+                alert(res);
 
             dialogCollab.close();
 
@@ -46,8 +48,25 @@ function wpunity_fetchCollabsAjax(project_id) {
         success: function (res) {
             var collabs_emails = res;
 
-            var dialogTextarea = document.getElementById("textarea-collaborators");
-            dialogTextarea.innerHTML = collabs_emails;
+            console.log(collabs_emails);
+
+
+
+            if (collabs_emails=='') {
+                jQuery('.chips').material_chip({data: [{tag:''}], placeholder: 'Your collaborator email'});
+            } else {
+                collabs_emails = collabs_emails.split(";");
+
+                var collabsEmailArray = [];
+                for (i = 0; i < collabs_emails.length; i++) {
+                    collabsEmailArray.push({tag: collabs_emails[i]});
+                }
+
+                jQuery('.chips').material_chip({
+                    data: collabsEmailArray,
+                    placeholder: 'Your collaborator email'
+                });
+            }
 
 
         },

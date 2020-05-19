@@ -1,3 +1,4 @@
+
 <?php
 
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
@@ -12,14 +13,10 @@ $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
 
-//$thepath = $pluginpath . '/js_libs/delete_ajaxes/delete_game_scene_asset.js';
-//$thepath = $pluginpath . '/js_libs/materialize.min.js';
-//wp_enqueue_script('wpunity_materialize_jslib', $thepath);
 
 
 
-//$thepath = $pluginpath . '/css/materialize.min.css';
-//wp_enqueue_style('wpunity_materialize_stylesheet', $thepath);
+
 
 
 
@@ -79,6 +76,11 @@ $multiple = "projects";
 //	$single = "project";
 //	$multiple = "projects";
 //}
+
+
+wp_enqueue_style('wpunity_materialize_stylesheet', $pluginpath . '/css/materialize.css');
+
+wp_enqueue_script('wpunity_materialize_jslib', $pluginpath . '/js_libs/materialize.js');
 
 get_header();
 ?>
@@ -312,35 +314,22 @@ get_header();
                     Current collaborators for <?php echo $full_title_lowercase; ?>?
                 </section>
 
-                <div class="mdc-text-field mdc-text-field--textarea" style="width:80%;margin:auto">
-                    <textarea id="textarea-collaborators" class="mdc-text-field__input" rows="3" cols="40"></textarea>
+
+                
+                
+                <div class="mdc-text-field mdc-chip-set--input mdc-text-field--textarea" style="width:80%;margin:auto" role="grid">
 
 
-<!--                    <div class="chips"></div>-->
-<!--                    <div class="chips chips-initial"></div>-->
-<!--                    <div class="chips chips-placeholder"></div>-->
-<!--                    <script>-->
-<!--                        jQuery('.chips').material_chip();-->
-<!--                        jQuery('.chips-initial').material_chip({-->
-<!--                            data: [{-->
-<!--                                tag: 'Apple',-->
-<!--                            }, {-->
-<!--                                tag: 'Banana',-->
-<!--                            }, {-->
-<!--                                tag: 'Mango',-->
-<!--                            }],-->
-<!--                        });-->
-<!--                        jQuery('.chips-placeholder').material_chip({-->
-<!--                            placeholder: 'Enter tag Name',-->
-<!--                            secondaryPlaceholder: '+Tag',-->
-<!--                        });-->
-<!--                    </script>-->
+                    <!--  Input for collaborators as chips -->
+                    <div id="textarea-collaborators" class="chips chips-initial"></div>
+
                     
-                    
+
+
                     <div class="mdc-notched-outline">
                         <div class="mdc-notched-outline__leading"></div>
                         <div class="mdc-notched-outline__notch">
-                            <label for="textarea" class="mdc-floating-label mdc-dialog__body mdc-typography--body1">Current collaborators</label>
+                            <label for="textarea-collaborators" class="mdc-floating-label mdc-dialog__body mdc-typography--body1">Current collaborators</label>
                         </div>
                         <div class="mdc-notched-outline__trailing"></div>
                     </div>
@@ -377,6 +366,8 @@ get_header();
 </div>
 <script type="text/javascript">
     window.mdc.autoInit();
+
+   
     
     var dialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
     dialog.focusTrap_.deactivate();
@@ -409,9 +400,11 @@ get_header();
         
         dialogTitle.innerHTML = "<b>Collaborators on " + gameTitle+"?</b>";
         
-        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'. For example ';15;1;5;'";
+        dialogDescription.innerHTML = "Make your selection for  '" +gameTitle + "'. For example 'mail1@gmail.com'";
 
         dialogCollaborators.project_id = project_id;
+
+        //jQuery('.chips-initial').material_chip({data: [], placeholder: 'Your collaborator email'});
         
         // Fetch collaborators and insert to "textarea-collaborators"
         wpunity_fetchCollabsAjax(project_id);
@@ -461,10 +454,15 @@ get_header();
     jQuery('#updateCollabsBtn').click( function (e) {
         
         // Get collabs emails
-        var currCollabsEmails = document.getElementById("textarea-collaborators").value;
+        var currCollabsEmails = jQuery("#textarea-collaborators").material_chip('data');
 
-        console.log("3", currCollabsEmails);
+        console.log("currCollabsEmails1", currCollabsEmails);
 
+        
+        currCollabsEmails = currCollabsEmails.map(function(elem){return elem.tag}).join(";");
+
+        console.log("currCollabsEmails2", currCollabsEmails);
+        
         // 2. Update ids of collaborators ;15;5;4;
         wpunity_updateCollabsAjax(dialogCollaborators.project_id, dialogCollaborators, currCollabsEmails);
 
