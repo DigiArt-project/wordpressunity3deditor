@@ -38,6 +38,8 @@ function wpunity_updateCollabsAjax(project_id, dialogCollab, collabs_emails) {
 
 function wpunity_fetchCollabsAjax(project_id) {
 
+
+
     jQuery.ajax({
         url: my_ajax_object_collaborate_project.ajax_url,
         type: 'POST',
@@ -53,7 +55,7 @@ function wpunity_fetchCollabsAjax(project_id) {
 
 
             if (collabs_emails=='') {
-                jQuery('.chips').material_chip({data: [{tag:''}], placeholder: 'Your collaborator email'});
+                jQuery('.chips').chips({data: [], placeholder: 'Your collaborator email'});
             } else {
                 collabs_emails = collabs_emails.split(";");
 
@@ -62,12 +64,14 @@ function wpunity_fetchCollabsAjax(project_id) {
                     collabsEmailArray.push({tag: collabs_emails[i]});
                 }
 
-                jQuery('.chips').material_chip({
+                jQuery('.chips').chips({
                     data: collabsEmailArray,
-                    placeholder: 'Your collaborator email'
+                    placeholder: 'Your collaborator email',
+                    secondaryPlaceholder : 'Your collaborator email'
                 });
             }
 
+            dialogCollaborators.show();
 
         },
         error: function (xhr, ajaxOptions, thrownError) {

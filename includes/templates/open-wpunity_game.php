@@ -321,7 +321,7 @@ get_header();
 
 
                     <!--  Input for collaborators as chips -->
-                    <div id="textarea-collaborators" class="chips chips-initial"></div>
+                    <div id="textarea-collaborators" class="chips"></div>
 
                     
 
@@ -391,7 +391,8 @@ get_header();
     }
 
     function collaborateProject(project_id) {
-
+        
+        
         var dialogTitle = document.getElementById("collaborate-dialog-title");
         var dialogDescription = document.getElementById("collaborate-dialog-description");
         var gameTitle = document.getElementById(project_id+"-title").innerHTML;
@@ -409,7 +410,7 @@ get_header();
         // Fetch collaborators and insert to "textarea-collaborators"
         wpunity_fetchCollabsAjax(project_id);
 
-        dialogCollaborators.show();
+        
     }
     
     
@@ -452,9 +453,14 @@ get_header();
     });
 
     jQuery('#updateCollabsBtn').click( function (e) {
+
+
+        var allChipsContainers = document.querySelectorAll('.chips');
+        var singleChipContainer = M.Chips.getInstance(allChipsContainers[0]);
+        
         
         // Get collabs emails
-        var currCollabsEmails = jQuery("#textarea-collaborators").material_chip('data');
+        var currCollabsEmails = singleChipContainer.getData();
 
         console.log("currCollabsEmails1", currCollabsEmails);
 
@@ -471,6 +477,7 @@ get_header();
     
     jQuery('#cancelCollabsBtn').click( function (e) {
         dialogCollaborators.close();
+        
     });
     
 
