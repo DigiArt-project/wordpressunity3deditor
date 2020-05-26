@@ -232,10 +232,9 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                             // '<span class="megabytesAsset mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize + '</span>'+
                       '</span>';
 
-                var file = jQuery('<li id="asset-'+ f.assetid + '"  class="filebrowserIcon mdc-list-item mdc-elevation--z2">' +
-                    '<a class="filebrowserahref mdc-list-item editor-asset-tile-style" href="'+ f.objPath +
-                    '" title="Drag the card into the plane, (Size: '+ fileSize + ')"' +
-                    'data-assetslug="'+ f.assetSlug +
+                var file = jQuery('<li draggable="true" id="asset-'+ f.assetid + '"  class="mdc-list-item mdc-elevation--z2 mdc-list-item"' +
+                    ' title="Drag the card into the plane, (Size: '+ fileSize + ')"' +
+                    ' data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
                     '" data-objPath="'+ f.objPath +
                     '" data-objID="'+ f.objID +
@@ -261,7 +260,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-isJoker="'+ f.isJoker +
                     '" >' + img +
                     '<span class="FileListItemName mdc-list-item__text" title="Drag the card into the plane">'+ name +
-                    '<i class="assetCategoryNameInList mdc-list-item__text__secondary mdc-typography--caption material-icons">'+ f.categoryIcon +'</i></span></a>' +
+                    '<i class="assetCategoryNameInList mdc-list-item__text__secondary mdc-typography--caption material-icons">'+ f.categoryIcon
+                          +'</i></span>' +
                     '<span class="FileListItemFooter">' +
 
                     (f.isJoker==='false'?
