@@ -40,6 +40,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         img.css({
             "top": 0,
             "left": 0,
+            "width":"60px",
+            "height":"40px",
             "position": "absolute",
             "pointerEvents": "none"
         }).appendTo(document.body);
@@ -100,6 +102,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
         },
 
         dragstart: function(e) {
+
+            dragImg.src = e.target.attributes.getNamedItem("data-sshot-url").value;
 
             e.originalEvent.dataTransfer.setDragImage(dragImg, 32, 32);
 
