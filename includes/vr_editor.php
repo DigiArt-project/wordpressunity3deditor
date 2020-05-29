@@ -55,12 +55,15 @@ $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 
 $meta_json = get_post($current_scene_id)->post_content;
 
+// Load default scenes if no content
 // Do not put esc_attr, crashes the universe in 3D
 if ( $game_type_obj->string === "Energy" ) {
     $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
 }else{
     $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
 }
+
+
 
 // Find scene dir string
 $parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
@@ -86,7 +89,7 @@ echo 'var UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
 echo 'var scenefolder="'.$scenefolder.'";';
 echo 'var gamefolder="'.$gamefolder.'";';
 echo 'var sceneID="'.$sceneID.'";';
-echo 'var gameProjectID="'.$joker_project_id.'";';
+echo 'var gameProjectID="'.$parentGameId.'";';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var isUserAdmin="'.current_user_can('administrator').'";';
@@ -133,6 +136,7 @@ echo '</script>';
     post_revision_no = 1;
     isComposerOn = true;
     isPaused = false;
+    window.isAnyLight = true;
 
     game_type = parseInt("<?php echo strtolower($project_scope);?>");
     
@@ -154,7 +158,7 @@ echo '</script>';
 
         
 
-        if (!envir.isDebug)
+        //if (!envir.isDebug)
             wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
@@ -272,7 +276,7 @@ echo '</script>';
 <!--    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">-->
 <!--        <i class="material-icons">visibility</i>-->
 <!--    </a>-->
-    
+
 <!-- Remove game object-->
 <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
    title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
@@ -328,7 +332,7 @@ echo '</script>';
 <!--        </div>-->
 
 
-        
+    
     </div>
 
 
@@ -380,8 +384,8 @@ echo '</script>';
         <i class="material-icons">pause</i>
     </a>
 </div>
-    
-    
+
+
 <!--  Make form to submit user changes -->
 <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
     <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
@@ -1024,15 +1028,6 @@ echo '</script>';
     <!--    End of Scenes-->
 
     </div>   <!-- Scenes List Div -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 </div>   <!--   VR DIV   -->
 
@@ -1283,7 +1278,7 @@ echo '</script>';
 
         if (btn.data('toggle') === 'off') {
 
-            console.log("ROTATING !!!");
+            //console.log("ROTATING !!!");
 
             // envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
@@ -1332,6 +1327,8 @@ echo '</script>';
         var exporter = new THREE.SceneExporter();
         
         document.getElementById('wpunity_scene_json_input').value = exporter.parse(envir.scene);
+        
+        //console.log(document.getElementById('wpunity_scene_json_input').value);
 
         if(!is_scene_icon_manually_selected)
             takeScreenshot();
@@ -1379,15 +1376,18 @@ echo '</script>';
         var trs_tmp;
         var name;
 
+        
         for ( name in resources3D  ) {
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
 
-            if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
-                objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-                objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-                objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
-            }
+            // REM HERE
+            
+            //if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
+                // objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+                // objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                //objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            //}
         }
 
         // In the case the last asset is missing then put controls on the camera
@@ -1459,6 +1459,8 @@ echo '</script>';
 
 <!-- Load Scene - javascript var resources3D[] -->
 <?php require( "vr_editor_ParseJSON.php" );
+
+    /* Initial load as php*/
     $formRes = new ParseJSON($UPLOAD_DIR);
     $formRes->init($sceneToLoad);
 ?>
@@ -1466,13 +1468,16 @@ echo '</script>';
 <script>
 
     loaderMulti = new LoaderMulti();
+    
     loaderMulti.load(manager, resources3D);
     
     if (!isUserAdmin)
         document.getElementById("vr_editor_main_div").style.top = "28px";
    
+    
+    // Only in Undo redo as javascript not php!
     function parseJSON_LoadScene(scene_json){
-       
+
         resources3D = parseJSON_javascript(scene_json, UPLOAD_DIR);
         
         // CLEAR SCENE
@@ -1488,8 +1493,6 @@ echo '</script>';
         while(envir.scene.children.length > 0){
             envir.scene.remove(envir.scene.children[0]);
         }
-
-        
         
         envir.scene.add(mAh);
         envir.scene.add(mGH);
@@ -1503,19 +1506,13 @@ echo '</script>';
         
         transform_controls.attach(envir.scene.getObjectByName("avatarYawObject"));
         
-        console.log(transform_controls.children[4].handleGizmos); //.XZY[0][0].visible = false;
+        //console.log(transform_controls.children[4].handleGizmos); //.XZY[0][0].visible = false;
         
         jQuery("#removeAssetBtn").hide();
-        
-        
-        
+
         loaderMulti = new LoaderMulti();
         loaderMulti.load(manager, resources3D);
     }
-    
- 
-    
-    
     
     
     function takeScreenshot(){

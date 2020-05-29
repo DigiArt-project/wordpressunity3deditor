@@ -126,6 +126,9 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
 
+
+
+
         // Auto-save
         triggerAutoSave();
     };

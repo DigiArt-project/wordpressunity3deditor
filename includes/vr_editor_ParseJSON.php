@@ -7,6 +7,9 @@ class ParseJSON {
 
     public function init($sceneToLoad) {
         
+        
+        
+        
         $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
@@ -20,10 +23,22 @@ class ParseJSON {
                 $obj = '';
                 $mtl = '';
                 $type_behavior = 'avatar';
-                
+    
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = 0;
+    
+                $isLight = "false";
+            } elseif ( strpos($name, 'lightSun') !== false ){
+                $path = '';
+                $obj = '';
+                $mtl = '';
+    
+                $r_x = $value->rotation[0];
+                $r_y = $value->rotation[1];
+                $r_z = $value->rotation[2];
+                
+                $isLight = "true";
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $assetid=$value->assetid;
@@ -53,6 +68,8 @@ class ParseJSON {
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = $value->rotation[2];
+    
+                $isLight = "false";
             }
 
             $t_x = $value->position[0];
@@ -87,9 +104,14 @@ class ParseJSON {
                                             '","isreward":"'.$isreward.
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.
+                                            '","isLight":"'.$isLight.
                                             '","trs":selected_object_trs};';
+            
+           
+            
             echo '</script>';
         }
+        
         return true;
     }
 }

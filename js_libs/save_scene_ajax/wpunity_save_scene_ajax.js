@@ -52,6 +52,7 @@ function wpunity_undoSceneAjax(UPLOAD_DIR, post_revision_no_in) {
             jQuery('#undo-scene-button').html("<i class='material-icons'>undo</i>").removeClass("LinkDisabled");
             jQuery('#redo-scene-button').html("<i class='material-icons'>redo</i>").removeClass("LinkDisabled");
 
+                //console.log(scene_json);
                 parseJSON_LoadScene(scene_json);
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -103,7 +104,7 @@ function wpunity_saveGIOApKeyAjax() {
             //'scene_description':   document.getElementById("sceneCaptionInput").value
         },
         success: function (data) {
-            console.log("Ajax Save GIO:" + data);
+            //console.log("Ajax Save GIO:" + data);
             //jQuery('#save-scene-button').html("Save scene").removeClass("LinkDisabled");
 
         },

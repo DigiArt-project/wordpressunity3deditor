@@ -44,52 +44,7 @@
       "visible": true,
       "children": {}
     },
-    "phossy-jaw_1563518610": {
-      "position": [
-        4.9280661063919,
-        1.0677483358595,
-        -0.83866254388807
-      ],
-      "rotation": [
-        0,
-        -1.4172105808701,
-        0
-      ],
-      "quaternion": [
-        0,
-        0.6507754428240696,
-        0,
-        0.759270256902729
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "fnPath": "/Models/",
-      "assetid": "3190",
-      "fnObj": "99f58446c1e0cd8449b22f554b619a76_objPhossy-Jaw.txt",
-      "fnObjID": "3195",
-      "categoryName": "Artifact",
-      "categoryDescription": "undefined",
-      "categoryIcon": "undefined",
-      "categoryID": "145",
-      "diffImage": "undefined",
-      "diffImageID": "undefined",
-      "image1id": "",
-      "doorName_source": "",
-      "doorName_target": "",
-      "sceneName_target": "",
-      "sceneID_target": "",
-      "archaeology_penalty": "0",
-      "hv_penalty": "0",
-      "natural_penalty": "0",
-      "isreward": "0",
-      "isCloned": "false",
-      "fnMtl": "d7c9272c4a7d35ce2090bcbf6cf4696e_materialPhossy-Jaw.txt",
-      "fnMtlID": "3194",
-      "children": {}
-    },
+    "mylightSun_1590660685" : { "position" : [0,5,0], "rotation" : [0,0,0], "quaternion" : [0,0,0,1], "scale" : [1,1,1], "intensity" : 5, "isLight" : "true"},
     "stand-label_1563518633": {
       "position": [
         3.4804916223479,
@@ -228,52 +183,6 @@
       "fnMtlID": "2475",
       "children": {}
     },
-    "museum-room_1563518595": {
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
-      "quaternion": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "fnPath": "/Models/",
-      "assetid": "281",
-      "fnObj": "702d8f9f43cbb09accef21ab0dd67d44_objMuseum-Room.txt",
-      "fnObjID": "286",
-      "categoryName": "Site",
-      "categoryDescription": "undefined",
-      "categoryIcon": "undefined",
-      "categoryID": "148",
-      "diffImage": "undefined",
-      "diffImageID": "undefined",
-      "image1id": "",
-      "doorName_source": "",
-      "doorName_target": "",
-      "sceneName_target": "",
-      "sceneID_target": "",
-      "archaeology_penalty": "0",
-      "hv_penalty": "0",
-      "natural_penalty": "0",
-      "isreward": "0",
-      "isCloned": "false",
-      "fnMtl": "5f60b4fc38289cb86d917d9a06dca7d4_materialMuseum-Room.txt",
-      "fnMtlID": "285",
-      "children": {}
-    },
     "display-simple_1563543190": {
       "position": [
         4.5580385037669,
@@ -364,52 +273,6 @@
       "isCloned": "false",
       "fnMtl": "075e26c2a1120ff197a0b347f1bef21e_materialDisplay-simple.txt",
       "fnMtlID": "278",
-      "children": {}
-    },
-    "broken-femur_1563543195": {
-      "position": [
-        4.4526468189955,
-        1.0677538974758,
-        -6.2416507371272
-      ],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
-      "quaternion": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "fnPath": "/Models/",
-      "assetid": "3200",
-      "fnObj": "fb217334bdfa993e6e45cae6b50c7c20_objBroken-Femur.txt",
-      "fnObjID": "3203",
-      "categoryName": "Artifact",
-      "categoryDescription": "undefined",
-      "categoryIcon": "undefined",
-      "categoryID": "145",
-      "diffImage": "undefined",
-      "diffImageID": "undefined",
-      "image1id": "",
-      "doorName_source": "",
-      "doorName_target": "",
-      "sceneName_target": "",
-      "sceneID_target": "",
-      "archaeology_penalty": "0",
-      "hv_penalty": "0",
-      "natural_penalty": "0",
-      "isreward": "0",
-      "isCloned": "false",
-      "fnMtl": "b41b1a7ec73262e1869ec7ed8e109986_materialBroken-Femur.txt",
-      "fnMtlID": "3202",
       "children": {}
     }
   }

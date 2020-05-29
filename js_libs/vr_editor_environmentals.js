@@ -38,7 +38,10 @@ class vr_editor_environmentals {
         //this.setRecycleBin();
 
         //this.setArtificialFloor();
-        this.setLight();
+        // if (window.isAnyLight) {
+        //     this.setLight();
+        // }
+
 //         this.setStats();
         this.setSky();
         this.setSunSphere();
@@ -580,33 +583,50 @@ class vr_editor_environmentals {
     /**
      Set the Light
      */
-    setLight() {
-
-        // this.lightSun = new THREE.DirectionalLight( 0xffffff, 1 );
-        // this.lightSun.position.set( 500, 500, 100 );
-        // this.lightSun.name = "mylightSun";
-        // this.scene.add(this.lightSun);
-        //
-        // this.lightSun2 = new THREE.DirectionalLight( 0xffffff, 1 );
-        // this.lightSun2.position.set( -500, 500, 100 );
-        // this.lightSun2.name = "mylightSun2";
-        // this.scene.add(this.lightSun2);
-        //
-        // this.lightOrbit = new THREE.DirectionalLight( 0xffffff, 0.2 );
-        // this.lightOrbit.position.copy( this.cameraOrbit.position );
-        // this.lightOrbit.name = "mylightOrbit";
-        // this.scene.add(this.lightOrbit);
-        // //this.scene.add( new THREE.DirectionalLightHelper( this.lightOrbit, 150 ));
-        //
-        // this.lightAvatar = new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 ); //THREE.DirectionalLight( 0xffffff, 1 );
-        // this.lightAvatar.name = "mylightAvatar";
-        // this.lightAvatar.position.x =  this.cameraAvatar.position.x;
-        // this.lightAvatar.position.y =  this.cameraAvatar.position.y;
-        // this.lightAvatar.position.z =  this.cameraAvatar.position.z;
-        // this.scene.add(this.lightAvatar);
-
-        //this.scene.add( new THREE.PointLightHelper( this.lightAvatar, 1 ));
-    }
+    // setLight() {
+    //
+    //     this.lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+    //     this.lightSun.position.set( 0, 5, 0 );
+    //     this.lightSun.target.position.set(0, 0, 5); // where it points
+    //     this.lightSun.name = "mylightSun_1590660685";
+    //     this.lightSun.isDigiArt3DModel = true;
+    //     this.lightSun.isLight = true;
+    //
+    //     //// Add Sun Helper
+    //     var sunSphere = new THREE.Mesh(
+    //         new THREE.SphereBufferGeometry( 1, 16, 8 ),
+    //         new THREE.MeshBasicMaterial( { color: 0xffff00 } )
+    //     );
+    //     sunSphere.isDigiArt3DMesh = true;
+    //     sunSphere.name = "SunSphere";
+    //     this.lightSun.add(sunSphere);
+    //     // end of sphere
+    //
+    //     //this.lightSunHelper = new THREE.DirectionalLightHelper( this.lightSun, 5, 0x555500);
+    //
+    //     this.scene.add(this.lightSun);
+    //     //this.scene.add(this.lightSun.target);
+    //     //this.scene.add(this.lightSunHelper ); // new THREE.PointLightHelper( this.lightSun, 1 ));
+    //
+    //
+    //     this.lightSun.target.updateMatrixWorld();
+    //     //this.lightSunHelper.update();
+    //
+    //
+    //
+    //     setTimeout(function(){ envir.addInHierarchyViewer(envir.lightSun); }, 10000);
+    //
+    //     //
+    //     //this.sunSphere.position.y = - 700000;
+    //     //this.sunSphere.visible = false;
+    //     //this.scene.add( this.sunSphere );
+    //
+    //
+    //
+    //
+    //
+    //
+    // }
 
     /**
      Set the stats

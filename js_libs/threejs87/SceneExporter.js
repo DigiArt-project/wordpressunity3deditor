@@ -98,6 +98,10 @@ THREE.SceneExporter.prototype = {
 
                 } else if ( node instanceof THREE.Light ) {
 
+
+                    linesArray.push(ObjectString(node, pad));
+                    nobjects += 1;
+
                     // Lights are not modifiable
 
                     // linesArray.push( LightString( node, pad ) );
@@ -298,11 +302,9 @@ THREE.SceneExporter.prototype = {
         function ObjectString( o, n ) {
 
 
-
-            if (o.name != 'avatarYawObject'){
+            if (o.name != 'avatarYawObject' && !o.name.includes('lightSun')){
 
                 var quatR = new THREE.Quaternion();
-
 
                 var eulerR = new THREE.Euler( o.rotation._x,  -o.rotation.y , - o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
                 quatR.setFromEuler(eulerR);
@@ -345,6 +347,7 @@ THREE.SceneExporter.prototype = {
                     '   "natural_penalty" : ' + '"' + o.natural_penalty  + '"' + ',',
                     '   "isreward" : ' + '"' + o.isreward  + '"' + ',',
                     '   "isCloned" : ' + '"' + o.isCloned  + '"' + ',',
+                    '   "isLight" : ' + '"' + 'false'  + '"' + ',',
                     '	"fnMtl" : ' + '"' + o.fnMtl + '"' + ',',
                     '	"fnMtlID" : ' + '"' + o.fnMtlID + '"' + ( o.children.length ? ',' : '' )
 
@@ -353,13 +356,30 @@ THREE.SceneExporter.prototype = {
                 ];
                 //===============================================
                 //console.log(output);
-            } else {
+            } else if (o.name.includes("mylightSun")){
 
+                var quatR_light = new THREE.Quaternion();
 
-                // console.log(o);
-                //
-                // console.log(o.children[0]);
+                var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
+                quatR_light.setFromEuler(eulerR_light);
 
+                var output = [
+                    '\t\t' + LabelString(getObjectName(o)) + ' : {',
+                    '	"position" : ' + Vector3String(o.position) + ',',
+                    '	"rotation" : ' + "[" + o.rotation.x + "," +
+                    o.rotation.y + "," +
+                    o.rotation.z + "]" + ',', //+ Vector3String(o.rotation) + ',',
+
+                    '	"quaternion" : ' + "[" + quatR_light._x + "," +
+                    quatR_light._y + "," +
+                    quatR_light._z + "," +
+                    quatR_light._w + "]" + ',',
+                    '	"scale"	    : ' + Vector3String(o.scale) + ',',
+                    '	"intensity"	: ' + '5' + ',',
+                    '	"isLight"   : ' + '"' + 'true' + '"'  + "},   "
+                ];
+
+            } else if (o.name === 'avatarYawObject'){
 
                 var quatCombined = new THREE.Quaternion();
                 var camEulerCombined = new THREE.Euler(- o.children[0].rotation._x, (Math.PI - o.rotation.y)%(2*Math.PI), 0, 'YXZ');
@@ -377,9 +397,6 @@ THREE.SceneExporter.prototype = {
                 var quatR_camera = new THREE.Quaternion();
                 var eulerR_camera = new THREE.Euler( -o.children[0].rotation._x,  0 , 0, 'YXZ');
                 quatR_camera.setFromEuler(eulerR_camera);
-
-
-
 
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
@@ -402,13 +419,7 @@ THREE.SceneExporter.prototype = {
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
-
-
-                //console.log(output);
             }
-
-
-
 
             return generateMultiLineString( output, '\n\t\t', n );
         }
@@ -709,10 +720,8 @@ THREE.SceneExporter.prototype = {
 
         }
 
-
         if (objects.substr(objects.length-2,1) == ',' )
             objects = objects.substr(0,objects.length-2) + '\n';
-
 
         var output = [
             '{',

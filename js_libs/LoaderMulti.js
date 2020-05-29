@@ -8,6 +8,8 @@ class LoaderMulti {
 
     load(manager, resources3D) {
 
+
+
         for (var n in resources3D) {
             (function (name) {
 
@@ -18,14 +20,14 @@ class LoaderMulti {
                     //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
                     // STEVE is the CAMERA MESH
 
-                    mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinal.mtl", function (materials) {
+                    mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinal.mtl", function (materials) {
 
                         materials.preload();
 
                         var objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinal.obj', 'after',
+                        objloader.load(PLUGIN_PATH_VR + '/assets/Steve/SteveFinal.obj', 'after',
                             function (object) {
 
                                 // object.traverse(function (node) {
@@ -38,11 +40,16 @@ class LoaderMulti {
                                 object.children[0].name = "SteveMesh";
 
                                 // Make a shield around Steve
-                                var geometry = new THREE.BoxGeometry( 4.2, 4.2, 4.2);
+                                var geometry = new THREE.BoxGeometry(4.2, 4.2, 4.2);
                                 geometry.name = "SteveShieldGeometry";
-                                var material = new THREE.MeshBasicMaterial( {color: 0xaaaaaa, transparent:true, opacity:0.2, visible:false} );
+                                var material = new THREE.MeshBasicMaterial({
+                                    color: 0xaaaaaa,
+                                    transparent: true,
+                                    opacity: 0.2,
+                                    visible: false
+                                });
 
-                                var steveShieldMesh = new THREE.Mesh( geometry, material );
+                                var steveShieldMesh = new THREE.Mesh(geometry, material);
                                 steveShieldMesh.name = 'SteveShieldMesh';
                                 //--------------------------
 
@@ -53,17 +60,16 @@ class LoaderMulti {
                                 envir.scene.add(object);
                                 envir.setSteveToAvatarControls();
                                 envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
-                                                            resources3D[name]['trs']['translation'][1],
-                                                            resources3D[name]['trs']['translation'][2],
-                                                            resources3D[name]['trs']['rotation'][0],
-                                                            resources3D[name]['trs']['rotation'][1]
-                                                            );
+                                    resources3D[name]['trs']['translation'][1],
+                                    resources3D[name]['trs']['translation'][2],
+                                    resources3D[name]['trs']['rotation'][0],
+                                    resources3D[name]['trs']['rotation'][1]
+                                );
 
                                 // if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
                                 //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
                                 //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
                                 // }
-
 
 
                             }
@@ -73,14 +79,14 @@ class LoaderMulti {
 
                     // STEVE OLD IS THE HUMAN MESH
 
-                    mtlLoader.load(PLUGIN_PATH_VR+"/assets/Steve/SteveFinalOld.mtl", function (materials) {
+                    mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinalOld.mtl", function (materials) {
 
                         materials.preload();
 
                         var objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(PLUGIN_PATH_VR+'/assets/Steve/SteveFinalOld.obj', 'after',
+                        objloader.load(PLUGIN_PATH_VR + '/assets/Steve/SteveFinalOld.obj', 'after',
                             function (object) {
 
                                 object.name = "SteveOld";
@@ -106,13 +112,49 @@ class LoaderMulti {
                                 // }
 
 
-
                             }
                         );
                     });
 
-                }else {
+                }else if (resources3D[name]['isLight']==='true'){
 
+                        var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+
+                    // REM HERE
+                    lightSun.position.set(
+                            resources3D[name]['trs']['translation'][0],
+                            resources3D[name]['trs']['translation'][1],
+                            resources3D[name]['trs']['translation'][2] );
+
+                    lightSun.rotation.set(
+                        resources3D[name]['trs']['rotation'][0],
+                        resources3D[name]['trs']['rotation'][1],
+                        resources3D[name]['trs']['rotation'][2] );
+
+                    lightSun.scale.set( resources3D[name]['trs']['scale'],
+                        resources3D[name]['trs']['scale'],
+                        resources3D[name]['trs']['scale']);
+
+
+                        lightSun.target.position.set(0, 0, 5); // where it points
+                        lightSun.name = "mylightSun_1590660685";
+                        lightSun.isDigiArt3DModel = true;
+                        lightSun.isLight = true;
+
+                        //// Add Sun Helper
+                        var sunSphere = new THREE.Mesh(
+                            new THREE.SphereBufferGeometry( 1, 16, 8 ),
+                            new THREE.MeshBasicMaterial( { color: 0xffff00 } )
+                        );
+                        sunSphere.isDigiArt3DMesh = true;
+                        sunSphere.name = "SunSphere";
+                        lightSun.add(sunSphere);
+                        // end of sphere
+
+                        envir.scene.add(lightSun);
+                        lightSun.target.updateMatrixWorld();
+
+                }else {
 
 
                     mtlLoader.setPath(resources3D[name]['path']);
@@ -142,6 +184,8 @@ class LoaderMulti {
                                         }
                                     }
 
+
+
                                     if (node instanceof THREE.Mesh) {
                                         node.isDigiArt3DMesh = true;
 
@@ -152,13 +196,16 @@ class LoaderMulti {
 
                                             node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
 
-                                            console.log(node.renderOrder);
+
                                         }
 
                                     }
                                 });
 
+
+
                                 object.isDigiArt3DModel = true;
+                                object.isLight = resources3D[name]['isLight'];
                                 object.name = name;
                                 object.assetid = resources3D[name]['assetid'];
 
@@ -197,6 +244,22 @@ class LoaderMulti {
                                 object.isCloned = resources3D[name]['isCloned'];
 
                                 object.type_behavior = resources3D[name]['type_behavior'];
+
+                                // REM HERE
+                                object.position.set(
+                                    resources3D[name]['trs']['translation'][0],
+                                    resources3D[name]['trs']['translation'][1],
+                                    resources3D[name]['trs']['translation'][2] );
+
+                                object.rotation.set(
+                                    resources3D[name]['trs']['rotation'][0],
+                                    resources3D[name]['trs']['rotation'][1],
+                                    resources3D[name]['trs']['rotation'][2] );
+
+                                object.scale.set( resources3D[name]['trs']['scale'],
+                                                   resources3D[name]['trs']['scale'],
+                                                   resources3D[name]['trs']['scale']);
+
 
                                 envir.scene.add(object);
 

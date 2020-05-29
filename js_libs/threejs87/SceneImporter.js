@@ -2,6 +2,7 @@
 
 function parseJSON_javascript(scene_json, UPLOAD_DIR){
 
+
     if (scene_json.length==0)
         return [];
 
@@ -16,6 +17,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
         var name = jo_key;
         var value = scene_json_obj[jo_key];
 
+
         if (name == 'avatarYawObject') {
 
             // var path = '';
@@ -26,6 +28,43 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
             // var r_x = value['rotation'][0];
             // var r_y = value['rotation'][1];
             // var r_z = 0;
+
+            var isLight = "false";
+
+        } else if (name.includes('lightSun')){
+
+            var path = '';
+            var obj = '';
+            var mtl = '';
+
+            var t_x = value['position'][0];
+            var t_y = value['position'][1];
+            var t_z = value['position'][2];
+
+
+            var r_x = value['rotation'][0];
+            var r_y = value['rotation'][1];
+            var r_z = value['rotation'][2];
+
+            var scale = value['scale'][0];
+
+            var isLight = "true";
+            var selected_object_trs={"translation":[t_x,t_y,t_z],"rotation":[r_x,r_y,r_z],"scale":scale};
+
+            resources3D_local[name]= {"path":'',
+                "assetid":'',
+                "obj":'',
+                "objID":'',
+                "mtl":'',
+                "mtlID":'',
+                "diffImage":'',"diffImageID":'',"categoryName":'',"categoryID":'',
+                "image1id":'',"doorName_source":'',"doorName_target":'',
+                "sceneName_target":'',"sceneID_target":'',"archaeology_penalty":'',
+                "hv_penalty":'',"natural_penalty":'',"isreward":0,"isCloned":0,
+                "isJoker":0,
+                "isLight":"true",
+                "trs":selected_object_trs};
+
 
         } else {
             var path = UPLOAD_DIR + value['fnPath'];
@@ -58,7 +97,6 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
             var r_y = value['rotation'][1];
             var r_z = value['rotation'][2];
 
-
             var t_x = value['position'][0];
             var t_y = value['position'][1];
             var t_z = value['position'][2];
@@ -77,7 +115,9 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
                 "image1id":image1id,"doorName_source":doorName_source,"doorName_target":doorName_target,
                 "sceneName_target":sceneName_target,"sceneID_target":sceneID_target,"archaeology_penalty":archaeology_penalty,
                 "hv_penalty":hv_penalty,"natural_penalty":natural_penalty,"isreward":isreward,"isCloned":isCloned,
-                "isJoker":isJoker,"trs":selected_object_trs};
+                "isJoker":isJoker,
+                "isLight":"false",
+                "trs":selected_object_trs};
         }
     }
 
