@@ -176,17 +176,21 @@ echo '</script>';
     }
 
     function drop_handler(ev) {
+
+        var dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
         
         
         // REM HERE
-        if(ev.dataTransfer.getData("text")===""){
+        if(dataDrag.categoryName==="lightSun"){
             // SUN
+            console.log("lightSun drop");
             
             
         } else {
             // Asset
-
-            var dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
+            console.log("asset drop");
+            
+            
             var path = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/") + 1);
 
             var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/") + 1);
@@ -205,7 +209,7 @@ echo '</script>';
             var diffImageIDs = dataDrag.diffImageIDs;
 
             var image1id = dataDrag.image1id;
-
+            
             var doorName_source = dataDrag.doorName_source;
             var doorName_target = dataDrag.doorName_target;
             var sceneName_target = dataDrag.sceneName_target;
@@ -217,7 +221,7 @@ echo '</script>';
             var isreward = dataDrag.isreward;
             var isCloned = dataDrag.isCloned;
             var isJoker = dataDrag.isJoker;
-
+            
             // we take the behavior type from the path of the obj
             var slashesArr = allIndexOf("/", path);
 
@@ -226,6 +230,8 @@ echo '</script>';
 
             var coordsXYZ = dragDropVerticalRayCasting(ev);
 
+
+            
             // Asset is added to canvas
             addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
                 categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
@@ -249,9 +255,10 @@ echo '</script>';
                 transform_controls.setMode("rottrans");
                 jQuery("#translatePanelGui").show();
             }
-
-            ev.preventDefault();
+            
         }
+        
+        ev.preventDefault();
     }
 
     function dragover_handler(ev) {
@@ -291,9 +298,9 @@ echo '</script>';
 
 <!-- Lights -->
 <div class="lightcolumns">
-    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
-    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Lamp</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
-    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
+    <div class="lightcolumn" draggable="true"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
+    <div class="lightcolumn" draggable="true"><header draggable="false">Lamp</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
+    <div class="lightcolumn" draggable="true"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
 </div>
 
 
