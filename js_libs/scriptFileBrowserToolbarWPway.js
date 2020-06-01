@@ -2,7 +2,7 @@
 function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID){
 
 
-
+    console.log(gameProjectSlug, gameProjectID);
 
 
     jQuery.ajax({
@@ -15,6 +15,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
         },
 
         success : function(responseRecords) {
+
 
             responseRecords = responseRecords.items;
 

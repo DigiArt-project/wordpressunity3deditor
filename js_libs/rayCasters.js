@@ -910,6 +910,7 @@ function getActiveMeshes(){
     // ToDo: Is it possible to avoid traversing scene object in each drag event?
     envir.scene.traverse( function(child) {
         if (child.hasOwnProperty('isDigiArt3DMesh'))
+
             activeMeshes.push(child);
     });
 

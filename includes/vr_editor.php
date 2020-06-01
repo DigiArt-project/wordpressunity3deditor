@@ -67,7 +67,10 @@ if ( $game_type_obj->string === "Energy" ) {
 
 // Find scene dir string
 $parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
-$parentGameId = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
+$parentGameId = $_REQUEST['wpunity_game']; //wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
+
+
+
 $projectGameSlug = $parentGameSlug;
 
 $scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
@@ -89,7 +92,9 @@ echo 'var UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
 echo 'var scenefolder="'.$scenefolder.'";';
 echo 'var gamefolder="'.$gamefolder.'";';
 echo 'var sceneID="'.$sceneID.'";';
+echo 'console.log(sceneID);';
 echo 'var gameProjectID="'.$parentGameId.'";';
+echo 'console.log(gameProjectID);';
 echo 'var gameProjectSlug="'.$projectGameSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var isUserAdmin="'.current_user_can('administrator').'";';
@@ -156,6 +161,7 @@ echo '</script>';
         // Make filemanager draggable
         filemanager.draggable({cancel : 'ul'});
 
+        
         //if (!envir.isDebug)
             wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
@@ -178,19 +184,25 @@ echo '</script>';
     function drop_handler(ev) {
 
         var dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
+
+        var categoryName = dataDrag.categoryName;
         
+        var nameModel = dataDrag.title;
         
         // REM HERE
         if(dataDrag.categoryName==="lightSun"){
             // SUN
-            console.log("lightSun drop");
+
+            var path = objFname = objID = mtlID = mtlFname = assetid = categoryIcon = '';
+            
+            var categoryID = diffImages = diffImageIDs = image1id = doorName_source = '';
+            var doorName_target = sceneName_target = sceneID_target = archaeology_penalty = '';
+            var hv_penalty = natural_penalty = '';
+            var isreward = isCloned = isJoker = 0;
             
             
         } else {
-            // Asset
-            console.log("asset drop");
-            
-            
+
             var path = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/") + 1);
 
             var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/") + 1);
@@ -200,8 +212,7 @@ echo '</script>';
             var mtlID = dataDrag.mtlID;
 
             var assetid = dataDrag.assetid;
-
-            var categoryName = dataDrag.categoryName;
+            
             var categoryDescription = dataDrag.categoryDescription;
             var categoryIcon = dataDrag.categoryIcon;
             var categoryID = dataDrag.categoryID;
@@ -209,7 +220,7 @@ echo '</script>';
             var diffImageIDs = dataDrag.diffImageIDs;
 
             var image1id = dataDrag.image1id;
-            
+
             var doorName_source = dataDrag.doorName_source;
             var doorName_target = dataDrag.doorName_target;
             var sceneName_target = dataDrag.sceneName_target;
@@ -221,42 +232,36 @@ echo '</script>';
             var isreward = dataDrag.isreward;
             var isCloned = dataDrag.isCloned;
             var isJoker = dataDrag.isJoker;
-            
-            // we take the behavior type from the path of the obj
-            var slashesArr = allIndexOf("/", path);
-
-            var type_behavior = path.substring(slashesArr[slashesArr.length - 3] + 1, slashesArr[slashesArr.length - 2]);
-
-
-            var coordsXYZ = dragDropVerticalRayCasting(ev);
-
-
-            
-            // Asset is added to canvas
-            addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
-                categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-                sceneID_target,
-                archaeology_penalty,
-                hv_penalty,
-                natural_penalty,
-                isreward, isCloned, isJoker,
-                coordsXYZ[0],
-                coordsXYZ[1],
-                coordsXYZ[2]);
-
-            // Show options
-            jQuery('#object-manipulation-toggle').show();
-            jQuery('#axis-manipulation-buttons').show();
-            jQuery('#double-sided-switch').show();
-
-            showObjectPropertiesPanel(transform_controls.getMode());
-
-            if (envir.is2d) {
-                transform_controls.setMode("rottrans");
-                jQuery("#translatePanelGui").show();
-            }
-            
         }
+
+        var coordsXYZ = dragDropVerticalRayCasting(ev);
+
+        
+        // Asset is added to canvas
+        addAssetToCanvas(nameModel, assetid, path, objFname, objID, mtlFname, mtlID,
+            categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
+            sceneID_target,
+            archaeology_penalty,
+            hv_penalty,
+            natural_penalty,
+            isreward, isCloned, isJoker,
+            coordsXYZ[0],
+            coordsXYZ[1],
+            coordsXYZ[2]);
+
+        // Show options
+        jQuery('#object-manipulation-toggle').show();
+        jQuery('#axis-manipulation-buttons').show();
+        jQuery('#double-sided-switch').show();
+
+        showObjectPropertiesPanel(transform_controls.getMode());
+
+        if (envir.is2d) {
+            transform_controls.setMode("rottrans");
+            jQuery("#translatePanelGui").show();
+        }
+        
+        
         
         ev.preventDefault();
     }
@@ -1425,6 +1430,8 @@ echo '</script>';
             objItem = envir.scene.getObjectByName(name);
         }
         
+        
+        console.log("selected_object_name", selected_object_name);
         
         // place controls to last inserted obj
         if (typeof objItem !== "undefined") {

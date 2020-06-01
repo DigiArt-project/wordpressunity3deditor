@@ -243,7 +243,7 @@ class LoaderMulti {
                                 object.isreward = resources3D[name]['isreward'];
                                 object.isCloned = resources3D[name]['isCloned'];
 
-                                object.type_behavior = resources3D[name]['type_behavior'];
+                                //object.type_behavior = resources3D[name]['type_behavior'];
 
                                 // REM HERE
                                 object.position.set(

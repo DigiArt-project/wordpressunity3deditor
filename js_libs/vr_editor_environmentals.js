@@ -73,7 +73,7 @@ class vr_editor_environmentals {
     }
 
     handleLightDragStart(e) {
-        var dragData = { "categoryName": "lightSun"}
+        var dragData = { "categoryName": "lightSun", "title": "Sun_" + Math.floor(Date.now() / 1000) }
         var jsonDataDrag = JSON.stringify(dragData);
         e.dataTransfer.setData("text/plain", jsonDataDrag);
         //this.style.opacity = '0.7';  // this / e.target is the source node.

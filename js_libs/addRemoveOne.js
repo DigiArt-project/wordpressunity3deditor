@@ -39,34 +39,42 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         "trs": selected_object_trs
     };
 
+    if (categoryName==='lightSun'){
+
+        var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+        lightSun.position.set( 0, 5, 0 );
+        lightSun.target.position.set(0, 0, 5); // where it points
+        lightSun.name = nameModel3D;
+        lightSun.isDigiArt3DModel = true;
+        lightSun.isLight = true;
+
+        //// Add Sun Helper
+        var sunSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry( 1, 16, 8 ),
+            new THREE.MeshBasicMaterial( { color: 0xffff00 } )
+        );
+        sunSphere.isDigiArt3DMesh = true;
+        sunSphere.name = "SunSphere";
+        lightSun.add(sunSphere);
+        // end of sphere
+
+        //this.lightSunHelper = new THREE.DirectionalLightHelper( this.lightSun, 5, 0x555500);
+
+        envir.scene.add(lightSun);
+        //this.scene.add(this.lightSun.target);
+        //this.scene.add(this.lightSunHelper ); // new THREE.PointLightHelper( this.lightSun, 1 ));
 
 
-    // Make progress bar visible
-    jQuery("#progress").get(0).style.display = "block";
-
-    var manager = new THREE.LoadingManager();
-
-    jQuery("#infophp").get(0).style.visibility= "visible";
-    document.getElementById("result_download").innerHTML = "Loading";
-
-    manager.onProgress = function (item, loaded, total) {
-        //console.log( item, loaded, total );
-
-        document.getElementById("result_download").innerHTML = "Loading";
-    };
-
-    // When all are finished loading
-    manager.onLoad = function () {
-
-        jQuery("#infophp").get(0).style.visibility= "hidden";
+        lightSun.target.updateMatrixWorld();
+        //this.lightSunHelper.update();
 
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
 
-        if(!insertedObject) {
-            jQuery( "#dialog-message" ).dialog( "open" );
-        }
+        console.log("insertedObject", insertedObject);
 
         var trs_tmp = resources3D[nameModel3D]['trs'];
+
+        console.log("trs_tmp", trs_tmp);
 
         insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
         insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -78,7 +86,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
         // highlight
         envir.outlinePass.selectedObjects = [insertedObject];
-        envir.renderer.setClearColor( 0xeeeeee, 1 );
+        envir.renderer.setClearColor(0xeeeeee, 1);
         //envir.scene.add(transform_controls);
 
         // Position
@@ -91,56 +99,127 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         // Dimensions
         var dims = findDimensions(transform_controls.object);
         var sizeT = Math.max(...dims);
-        transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
+        transform_controls.setSize(sizeT > 1 ? sizeT : 1);
 
         jQuery("#removeAssetBtn").show();
         transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
-        if (categoryName==="Producer"){
-
-            //var plane = makeProducerPlane();
-
-            //insertedObject.add(plane);
-
-            var clonos = [];
-
-            var NClones = 6;
-            for (var i=0; i<NClones; i++){
-
-                clonos[i] = new THREE.Mesh();
-                clonos[i].copy(insertedObject);
-                clonos[i].position.set((i+1)*100, 0, 0);
-                clonos[i].children[0].material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent:true, opacity: 0.8/(i+1)});
-                clonos[i].children[1].material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent:true, opacity: 0.8/(i+1)});
-                clonos[i].name=  "clonosTurbine1";
-            }
-
-            for (var i=0; i<NClones; i++) {
-                insertedObject.add(clonos[i]);
-            }
-
-
-            insertedObject.position.set(0, 100, 0);
-        }
+        var extraResource = {};
+        extraResource[nameModel3D] = resources3D[nameModel3D];
 
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
 
 
-
-
         // Auto-save
         triggerAutoSave();
-    };
 
-    var extraResource = {};
-    extraResource[nameModel3D] = resources3D[nameModel3D];
+    } else {
 
-    var loaderMulti = new LoaderMulti();
+        // Make progress bar visible
+        jQuery("#progress").get(0).style.display = "block";
 
-    //console.log(extraResource);
+        var manager = new THREE.LoadingManager();
 
-    loaderMulti.load(manager, extraResource);
+        jQuery("#infophp").get(0).style.visibility = "visible";
+        document.getElementById("result_download").innerHTML = "Loading";
+
+        manager.onProgress = function (item, loaded, total) {
+            //console.log( item, loaded, total );
+
+            document.getElementById("result_download").innerHTML = "Loading";
+        };
+
+        // When all are finished loading
+        manager.onLoad = function () {
+
+            jQuery("#infophp").get(0).style.visibility = "hidden";
+
+            var insertedObject = envir.scene.getObjectByName(nameModel3D);
+
+            if (!insertedObject) {
+                jQuery("#dialog-message").dialog("open");
+            }
+
+            var trs_tmp = resources3D[nameModel3D]['trs'];
+
+            insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+            insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+            insertedObject.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+            insertedObject.parent = envir.scene;
+
+            // place controls to last inserted obj
+            transform_controls.attach(insertedObject);
+
+            // highlight
+            envir.outlinePass.selectedObjects = [insertedObject];
+            envir.renderer.setClearColor(0xeeeeee, 1);
+            //envir.scene.add(transform_controls);
+
+            // Position
+            transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+            transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+            transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+
+            selected_object_name = nameModel3D;
+
+            // Dimensions
+            var dims = findDimensions(transform_controls.object);
+            var sizeT = Math.max(...dims);
+            transform_controls.setSize(sizeT > 1 ? sizeT : 1);
+
+            jQuery("#removeAssetBtn").show();
+            transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
+
+            if (categoryName === "Producer") {
+
+                //var plane = makeProducerPlane();
+
+                //insertedObject.add(plane);
+
+                var clonos = [];
+
+                var NClones = 6;
+                for (var i = 0; i < NClones; i++) {
+
+                    clonos[i] = new THREE.Mesh();
+                    clonos[i].copy(insertedObject);
+                    clonos[i].position.set((i + 1) * 100, 0, 0);
+                    clonos[i].children[0].material = new THREE.MeshBasicMaterial({
+                        color: 0xffff00,
+                        transparent: true,
+                        opacity: 0.8 / (i + 1)
+                    });
+                    clonos[i].children[1].material = new THREE.MeshBasicMaterial({
+                        color: 0xffff00,
+                        transparent: true,
+                        opacity: 0.8 / (i + 1)
+                    });
+                    clonos[i].name = "clonosTurbine1";
+                }
+
+                for (var i = 0; i < NClones; i++) {
+                    insertedObject.add(clonos[i]);
+                }
+
+
+                insertedObject.position.set(0, 100, 0);
+            }
+
+            // Add in scene
+            envir.addInHierarchyViewer(insertedObject);
+
+
+            // Auto-save
+            triggerAutoSave();
+        };
+
+        var extraResource = {};
+        extraResource[nameModel3D] = resources3D[nameModel3D];
+
+        var loaderMulti = new LoaderMulti();
+        loaderMulti.load(manager, extraResource);
+    }
 }
 
 
