@@ -59,6 +59,17 @@ class vr_editor_environmentals {
         // // update the camera
         // camera.aspect	= dom.clientWidth/ dom.clientHeight;
         // camera.updateProjectionMatrix();
+
+        var cols = document.querySelectorAll('.lightcolumns .lightcolumn');
+        var currthis = this;
+        [].forEach.call(cols, function(col) {
+            col.addEventListener('dragstart', currthis.handleLightDragStart, false);
+            col.addEventListener('dragenter', currthis.handleLightDragEnter, false)
+            col.addEventListener('dragover', currthis.handleLightDragOver, false);
+            col.addEventListener('dragleave', currthis.handleLightDragLeave, false);
+            col.addEventListener('drop', currthis.handleLightDrop, false);
+            col.addEventListener('dragend', currthis.handleLightDragEnd, false);
+        });
     }
 
 
@@ -580,6 +591,12 @@ class vr_editor_environmentals {
     }
 
 
+
+
+
+
+
+
     /**
      Set the Light
      */
@@ -627,6 +644,54 @@ class vr_editor_environmentals {
     //
     //
     // }
+
+    handleLightDragStart(e) {
+        console.log('handleLightDragStart');
+        //this.style.opacity = '0.7';  // this / e.target is the source node.
+        console.log("1");
+    }
+
+    handleLightDragOver(e) {
+        console.log('handleLightDragOver');
+        if (e.preventDefault) {
+            e.preventDefault(); // Necessary. Allows us to drop.
+        }
+        e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+        return false;
+    }
+
+    handleLightDragEnter(e) {
+        console.log('handleLightDragEnter');
+        // this / e.target is the current hover target.
+        this.classList.add('over');
+    }
+
+    handleLightDragLeave(e) {
+        console.log('handleLightDragLeave');
+        this.classList.remove('over');  // this / e.target is previous target element.
+    }
+
+    handleLightDrop(e) {
+        // this / e.target is current target element.
+        console.log('handleLightDrop');
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+
+        // See the section on the DataTransfer object.
+
+        return false;
+    }
+
+    handleLightDragEnd(e) {
+    //     // this/e.target is the source node.
+    //     [].forEach.call(cols, function (col) {
+    //         col.classList.remove('over');
+    //     });
+    }
+
+
+
 
     /**
      Set the stats

@@ -156,8 +156,6 @@ echo '</script>';
         // Make filemanager draggable
         filemanager.draggable({cancel : 'ul'});
 
-        
-
         //if (!envir.isDebug)
             wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
@@ -178,71 +176,82 @@ echo '</script>';
     }
 
     function drop_handler(ev) {
-        var dataDrag = JSON.parse( ev.dataTransfer.getData("text"));
-        var path =     dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/")+1);
+        
+        
+        // REM HERE
+        if(ev.dataTransfer.getData("text")===""){
+            // SUN
+            
+            
+        } else {
+            // Asset
 
-        var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/")+1);
-        var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/")+1);
+            var dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
+            var path = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/") + 1);
 
-        var objID = dataDrag.objID;
-        var mtlID = dataDrag.mtlID;
+            var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/") + 1);
+            var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/") + 1);
 
-        var assetid = dataDrag.assetid;
+            var objID = dataDrag.objID;
+            var mtlID = dataDrag.mtlID;
 
-        var categoryName = dataDrag.categoryName;
-        var categoryDescription = dataDrag.categoryDescription;
-        var categoryIcon = dataDrag.categoryIcon;
-        var categoryID = dataDrag.categoryID;
-        var diffImages = dataDrag.diffImages;
-        var diffImageIDs = dataDrag.diffImageIDs;
+            var assetid = dataDrag.assetid;
 
-        var image1id = dataDrag.image1id;
+            var categoryName = dataDrag.categoryName;
+            var categoryDescription = dataDrag.categoryDescription;
+            var categoryIcon = dataDrag.categoryIcon;
+            var categoryID = dataDrag.categoryID;
+            var diffImages = dataDrag.diffImages;
+            var diffImageIDs = dataDrag.diffImageIDs;
 
-        var doorName_source = dataDrag.doorName_source;
-        var doorName_target = dataDrag.doorName_target;
-        var sceneName_target = dataDrag.sceneName_target;
-        var sceneID_target = dataDrag.sceneID_target;
-        var archaeology_penalty = dataDrag.archaeology_penalty;
-        var hv_penalty          = dataDrag.hv_penalty;
-        var natural_penalty     = dataDrag.natural_penalty;
+            var image1id = dataDrag.image1id;
 
-        var isreward = dataDrag.isreward;
-        var isCloned = dataDrag.isCloned;
-        var isJoker = dataDrag.isJoker;
+            var doorName_source = dataDrag.doorName_source;
+            var doorName_target = dataDrag.doorName_target;
+            var sceneName_target = dataDrag.sceneName_target;
+            var sceneID_target = dataDrag.sceneID_target;
+            var archaeology_penalty = dataDrag.archaeology_penalty;
+            var hv_penalty = dataDrag.hv_penalty;
+            var natural_penalty = dataDrag.natural_penalty;
 
-        // we take the behavior type from the path of the obj
-        var slashesArr = allIndexOf("/", path);
+            var isreward = dataDrag.isreward;
+            var isCloned = dataDrag.isCloned;
+            var isJoker = dataDrag.isJoker;
 
-        var type_behavior = path.substring(slashesArr[slashesArr.length-3]+1, slashesArr[slashesArr.length-2]);
+            // we take the behavior type from the path of the obj
+            var slashesArr = allIndexOf("/", path);
+
+            var type_behavior = path.substring(slashesArr[slashesArr.length - 3] + 1, slashesArr[slashesArr.length - 2]);
 
 
-        var coordsXYZ = dragDropVerticalRayCasting ( ev );
+            var coordsXYZ = dragDropVerticalRayCasting(ev);
 
-        // Asset is added to canvas
-        addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
-            categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-            sceneID_target,
-            archaeology_penalty,
-            hv_penalty,
-            natural_penalty,
-            isreward, isCloned, isJoker,
-            coordsXYZ[0],
-            coordsXYZ[1],
-            coordsXYZ[2]);
+            // Asset is added to canvas
+            addAssetToCanvas(dataDrag.title, assetid, path, objFname, objID, mtlFname, mtlID,
+                categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
+                sceneID_target,
+                archaeology_penalty,
+                hv_penalty,
+                natural_penalty,
+                isreward, isCloned, isJoker,
+                coordsXYZ[0],
+                coordsXYZ[1],
+                coordsXYZ[2]);
 
-        // Show options
-        jQuery('#object-manipulation-toggle').show();
-        jQuery('#axis-manipulation-buttons').show();
-        jQuery('#double-sided-switch').show();
+            // Show options
+            jQuery('#object-manipulation-toggle').show();
+            jQuery('#axis-manipulation-buttons').show();
+            jQuery('#double-sided-switch').show();
 
-        showObjectPropertiesPanel(transform_controls.getMode());
+            showObjectPropertiesPanel(transform_controls.getMode());
 
-        if (envir.is2d) {
-            transform_controls.setMode("rottrans");
-            jQuery("#translatePanelGui").show();
+            if (envir.is2d) {
+                transform_controls.setMode("rottrans");
+                jQuery("#translatePanelGui").show();
+            }
+
+            ev.preventDefault();
         }
-
-        ev.preventDefault();
     }
 
     function dragover_handler(ev) {
@@ -272,10 +281,22 @@ echo '</script>';
 <!-- 3D editor  -->
 <div id="vr_editor_main_div" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
+
+
     <!--Canvas center-->
 <!--    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">-->
 <!--        <i class="material-icons">visibility</i>-->
 <!--    </a>-->
+
+
+<!-- Lights -->
+<div class="lightcolumns">
+    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
+    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Lamp</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
+    <div class="lightcolumn" draggable="true" data-elme="light"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
+</div>
+
+
 
 <!-- Remove game object-->
 <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
@@ -1664,6 +1685,8 @@ echo '</script>';
     animate();
 
 </script>
+
+
 
 <?php
 //echo get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0];

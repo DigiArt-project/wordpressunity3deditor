@@ -128,11 +128,11 @@
 }
 
 
-/* Links have red color 
+/* Links have red color
 a { color:red }
 */
 
-/* This disables the mouse rotation of canvas 
+/* This disables the mouse rotation of canvas
 canvas { pointer-events:none; z-index:10; }
 */
 
@@ -684,4 +684,91 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     right: 0;
     cursor: pointer;
     top: 5px;
+}
+
+/* Lights Drag and Drop bar*/
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+}
+.lightcolumn {
+    height: 42px;
+    width: 40px;
+    float: left;
+    /*border: 1px solid #333;*/
+    background-color: #ccc;
+
+    -webkit-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    /*-webkit-box-shadow: inset 0 0 3px #000;*/
+    /*-ms-box-shadow: inset 0 0 3px #000;*/
+    /*box-shadow: inset 0 0 3px #000;*/
+    text-align: center;
+    cursor: move;
+    vertical-align: center ;
+}
+
+.lightcolumn:not(:last-child){
+    margin-right: 2px;
+}
+
+.lightcolumn header {
+    color: #fff;
+    text-shadow: #000 0 1px;
+    box-shadow: 5px;
+    padding:1px;
+    background: black;
+    font-size: 8pt;
+    /*-moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));*!*/
+    /*background: -webkit-gradient(linear, left top, right top,*/
+    /*color-stop(0, rgb(0,0,0)),*/
+    /*color-stop(0.50, rgb(79,79,79)),*/
+    /*color-stop(1, rgb(21,21,21)));*/
+    /*background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));*/
+    /*background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));*/
+    /*border-bottom: 1px solid #ddd;*/
+    -webkit-border-top-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -ms-border-radius-topleft: 10px;
+    border-top-left-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -ms-border-top-right-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    border-top-right-radius: 10px;
+}
+
+
+.lightcolumn.over {
+    border: 2px dashed #000;
+}
+.lighticon{
+    width:20px;
+    margin-top:3px;
+    margin-bottom:2px;
+}
+
+.lightcolumns{
+    position: relative;
+    left: 50%;
+    margin-left: -50px;
+
+    background-color:var(--mdc-theme-primary, #3f51b5);
+    display:inline-block;
+    padding:5px;
+    -webkit-border-bottom-left-radius: 10px;
+    -ms-border-bottom-left-radius: 10px;
+    -moz-border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -ms-border-bottom-right-radius: 10px;
+    -moz-border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
