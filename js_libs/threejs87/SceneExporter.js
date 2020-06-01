@@ -180,6 +180,8 @@ THREE.SceneExporter.prototype = {
         var defcamera = LabelString( activeCamera ? getObjectName( activeCamera ) : "" );
         var deffog = LabelString( scene.fog ? getFogName( scene.fog ) : "" );
 
+
+
         function LightString( o, n ) {
 
             if ( o instanceof THREE.AmbientLight ) {
@@ -257,6 +259,8 @@ THREE.SceneExporter.prototype = {
 
         }
 
+
+
         function CameraString( o, n ) {
 
             if ( o instanceof THREE.PerspectiveCamera ) {
@@ -301,8 +305,9 @@ THREE.SceneExporter.prototype = {
 
         function ObjectString( o, n ) {
 
+            console.log(o.name, o.categoryName);
 
-            if (o.name != 'avatarYawObject' && !o.name.includes('lightSun')){
+            if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun')){
 
                 var quatR = new THREE.Quaternion();
 
@@ -356,13 +361,14 @@ THREE.SceneExporter.prototype = {
                 ];
                 //===============================================
                 //console.log(output);
-            } else if (o.name.includes("mylightSun")){
+            } else if (o.categoryName.includes("lightSun")){
 
                 var quatR_light = new THREE.Quaternion();
 
                 var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
                 quatR_light.setFromEuler(eulerR_light);
 
+                // REM HERE Check with trailing comma
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
                     '	"position" : ' + Vector3String(o.position) + ',',

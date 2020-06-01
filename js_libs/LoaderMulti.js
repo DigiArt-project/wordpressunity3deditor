@@ -118,7 +118,7 @@ class LoaderMulti {
 
                 }else if (resources3D[name]['isLight']==='true'){
 
-                        var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+                     var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
 
                     // REM HERE
                     lightSun.position.set(
@@ -137,7 +137,8 @@ class LoaderMulti {
 
 
                         lightSun.target.position.set(0, 0, 5); // where it points
-                        lightSun.name = "mylightSun_1590660685";
+                        lightSun.name = name;
+                        lightSun.categoryName = "lightSun";
                         lightSun.isDigiArt3DModel = true;
                         lightSun.isLight = true;
 

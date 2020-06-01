@@ -16,6 +16,7 @@ THREE.PointerLockControls = function ( camera ) {
 	var yawObject = new THREE.Object3D();
 	yawObject.add( pitchObject );
 	yawObject.name = "avatarYawObject";
+	yawObject.categoryName = "avatarYawObject";
 
 	var PI_2 = Math.PI / 2;
 

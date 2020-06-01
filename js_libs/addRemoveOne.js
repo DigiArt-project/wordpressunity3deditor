@@ -46,6 +46,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         lightSun.target.position.set(0, 0, 5); // where it points
         lightSun.name = nameModel3D;
         lightSun.isDigiArt3DModel = true;
+        lightSun.categoryName = "lightSun";
         lightSun.isLight = true;
 
         //// Add Sun Helper

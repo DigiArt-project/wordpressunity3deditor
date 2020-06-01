@@ -22,7 +22,7 @@ class ParseJSON {
                 $path = '';
                 $obj = '';
                 $mtl = '';
-                $type_behavior = 'avatar';
+                $categoryName = 'avatarYawObject';
     
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
@@ -30,6 +30,7 @@ class ParseJSON {
     
                 $isLight = "false";
             } elseif ( strpos($name, 'lightSun') !== false ){
+                
                 $path = '';
                 $obj = '';
                 $mtl = '';
@@ -38,6 +39,7 @@ class ParseJSON {
                 $r_y = $value->rotation[1];
                 $r_z = $value->rotation[2];
                 
+                $categoryName = 'lightSun';
                 $isLight = "true";
             } else {
                 $path =$this->relativepath . $value->fnPath;
@@ -82,6 +84,8 @@ class ParseJSON {
             echo 'selected_object_trs={"translation":['.$t_x.','.$t_y.','.$t_z.'],"rotation":['.
                 $r_x .','.$r_y .','.$r_z .'],'.'"scale":'.$scale.'};';
 
+            console.log("PARSE", $name + " " + $categoryName);
+            
             echo 'resources3D["'.$name.'"]= {'.
                                             '"path":"'.$path.
                                             '","assetid":"'.$assetid.
