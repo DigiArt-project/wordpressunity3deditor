@@ -20,6 +20,7 @@ class LoaderMulti {
                     //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
                     // STEVE is the CAMERA MESH
 
+                    // Steve Final is the camera 3D model
                     mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinal.mtl", function (materials) {
 
                         materials.preload();
@@ -79,6 +80,7 @@ class LoaderMulti {
 
                     // STEVE OLD IS THE HUMAN MESH
 
+                    // Steve Final old is the Steve 3D model
                     mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinalOld.mtl", function (materials) {
 
                         materials.preload();
@@ -116,7 +118,11 @@ class LoaderMulti {
                         );
                     });
 
+
+
                 }else if (resources3D[name]['isLight']==='true'){
+
+                    // LIGHT
 
                      var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
 
@@ -136,30 +142,62 @@ class LoaderMulti {
                         resources3D[name]['trs']['scale']);
 
 
-                        lightSun.target.position.set(0, 0, 5); // where it points
-                        lightSun.name = name;
-                        lightSun.categoryName = "lightSun";
-                        lightSun.isDigiArt3DModel = true;
-                        lightSun.isLight = true;
+                    lightSun.target.position.set(0, 0, 0); // where it points
+                    lightSun.name = name;
+                    lightSun.categoryName = "lightSun";
+                    lightSun.isDigiArt3DModel = true;
+                    lightSun.isLight = true;
 
-                        //// Add Sun Helper
-                        var sunSphere = new THREE.Mesh(
-                            new THREE.SphereBufferGeometry( 1, 16, 8 ),
-                            new THREE.MeshBasicMaterial( { color: 0xffff00 } )
-                        );
-                        sunSphere.isDigiArt3DMesh = true;
-                        sunSphere.name = "SunSphere";
-                        lightSun.add(sunSphere);
-                        // end of sphere
+                    //// Add Sun Helper
+                    var sunSphere = new THREE.Mesh(
+                        new THREE.SphereBufferGeometry( 1, 16, 8 ),
+                        new THREE.MeshBasicMaterial( { color: 0xffff00 } )
+                    );
+                    sunSphere.isDigiArt3DMesh = true;
+                    sunSphere.name = "SunSphere";
+                    lightSun.add(sunSphere);
 
-                        envir.scene.add(lightSun);
-                        lightSun.target.updateMatrixWorld();
+                    var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, 0x555500);
+                    lightSunHelper.isLightHelper = true;
+                    lightSunHelper.name = 'lightHelper';
+                    lightSunHelper.categoryName = 'lightHelper';
+                    lightSunHelper.parentLightName = name;
+
+                    // end of sphere
+                    envir.scene.add(lightSunHelper);
+                    envir.scene.add(lightSun);
+
+                    lightSun.target.updateMatrixWorld();
+                    lightSunHelper.update();
+
+
+
+                    // REM LOAD ALSO THE SPOT HELPER AND EXPORT IMPORT IT : SEE FROM ADD REMOVE ONE !!!!
+                    // Target spot: Where Sun points
+                    var lightTargetSpot = new THREE.Object3D();
+
+                    lightTargetSpot.add(new THREE.Mesh(
+                        new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
+                        new THREE.MeshBasicMaterial( { color: 0xffaa00 } )
+                    ));
+
+                    lightTargetSpot.isDigiArt3DMesh = true;
+                    lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
+                    lightTargetSpot.categoryName = "lightTargetSpot";
+                    lightTargetSpot.isLightTargetSpot = true;
+                    lightTargetSpot.position.set(0,0,0);
+                    lightTargetSpot.parentLight = lightSun;
+                    lightTargetSpot.parentLightHelper = lightSunHelper;
+
+                    lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y, lightTargetSpot.position.z) ;
+
+                    envir.scene.add(lightTargetSpot);
+
+
 
                 }else {
 
-
                     mtlLoader.setPath(resources3D[name]['path']);
-
                     mtlLoader.load(resources3D[name]['mtl'], function (materials) {
 
                         materials.preload();

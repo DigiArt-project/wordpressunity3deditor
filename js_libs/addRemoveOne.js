@@ -42,8 +42,8 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
     if (categoryName==='lightSun'){
 
         var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
-        lightSun.position.set( 0, 5, 0 );
-        lightSun.target.position.set(0, 0, 5); // where it points
+        // lightSun.position.set( 0, 45, 0 ); set by raycaster
+
         lightSun.name = nameModel3D;
         lightSun.isDigiArt3DModel = true;
         lightSun.categoryName = "lightSun";
@@ -59,25 +59,46 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         lightSun.add(sunSphere);
         // end of sphere
 
-        //this.lightSunHelper = new THREE.DirectionalLightHelper( this.lightSun, 5, 0x555500);
+        // Helper
+        var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, 0x555500);
+        lightSunHelper.isLightHelper = true;
+        lightSunHelper.name = 'lightHelper';
+        lightSunHelper.categoryName = 'lightHelper';
+        lightSunHelper.parentLightName = lightSun.name;
+
+        // Target spot: Where Sun points
+        var lightTargetSpot = new THREE.Object3D();
+
+        lightTargetSpot.add(new THREE.Mesh(
+            new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
+            new THREE.MeshBasicMaterial( { color: 0xffaa00 } )
+        ));
+
+        lightTargetSpot.isDigiArt3DMesh = true;
+        lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
+        lightTargetSpot.categoryName = "lightTargetSpot";
+        lightTargetSpot.isLightTargetSpot = true;
+        lightTargetSpot.isLight = false;
+        lightTargetSpot.position = new THREE.Vector3(0,0,0);
+        lightTargetSpot.parentLight = lightSun;
+        lightTargetSpot.parentLightHelper = lightSunHelper;
+
+        lightSun.target.position = lightTargetSpot.position;
 
         envir.scene.add(lightSun);
-        //this.scene.add(this.lightSun.target);
-        //this.scene.add(this.lightSunHelper ); // new THREE.PointLightHelper( this.lightSun, 1 ));
-
+        envir.scene.add(lightSunHelper);
+        envir.scene.add(lightTargetSpot);
 
         lightSun.target.updateMatrixWorld();
-        //this.lightSunHelper.update();
+        lightSunHelper.update();
 
+        // Add transform controls
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
-
-        console.log("insertedObject", insertedObject);
-
         var trs_tmp = resources3D[nameModel3D]['trs'];
 
-        console.log("trs_tmp", trs_tmp);
+        trs_tmp['translation'][1] += 15; // Sun should be a little higher than objects;
 
-        insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+        insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][2]);
         insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         insertedObject.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
         insertedObject.parent = envir.scene;
@@ -105,11 +126,10 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         jQuery("#removeAssetBtn").show();
         transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
-        var extraResource = {};
-        extraResource[nameModel3D] = resources3D[nameModel3D];
-
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
+
+        envir.addInHierarchyViewer(lightTargetSpot);
 
 
         // Auto-save
@@ -257,6 +277,42 @@ function deleterFomScene(nameToRemove){
     // Remove from scene and add to recycle bin
     var objectSelected = envir.scene.getObjectByName(nameToRemove);
 
+    // If deleting light then remove also its LightHelper and lightTargetSpot
+    if (objectSelected.isLight){
+
+        for (var i=0; i< envir.scene.children.length; i++){
+
+
+            // Light Helper check
+            if (envir.scene.children[i].parentLightName === nameToRemove){
+                envir.scene.remove(envir.scene.children[i]);
+            }
+
+            // Target spot check
+            if (typeof envir.scene.children[i].parentLight !== 'undefined')
+            {
+                if (envir.scene.children[i].parentLight.name === nameToRemove) {
+                    envir.scene.remove(envir.scene.children[i]);
+
+                    console.log("nameToRemove", nameToRemove);
+
+                    // remove from hierarchy also
+                    jQuery('#hierarchy-viewer').find('#' + "lightTargetSpot_" + nameToRemove).remove();
+
+                    // REM: Too big the name of the lightTargetSpot in HViewer(remove datestamp)
+                    // REM: Transform controls for TargetSpot should not have rotate and delte
+                    // REM: Transform controls for Sun should not have rotate and resize
+                    // REM: Add x,y,z of targetspot in the save format
+                    // REM: Add interface to change the intensity of the sun
+                }
+            }
+
+
+        }
+
+      //
+    }
+
     transform_controls.detach(objectSelected);
 
     // prevent orbiting
@@ -265,6 +321,8 @@ function deleterFomScene(nameToRemove){
     envir.scene.remove(objectSelected);
 
     jQuery('#hierarchy-viewer').find('#' + nameToRemove).remove();
+
+
 
     transform_controls.detach();
 

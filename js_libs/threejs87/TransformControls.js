@@ -1032,6 +1032,34 @@
             worldPosition.setFromMatrixPosition( scope.object.matrixWorld );
             worldRotation.setFromRotationMatrix( tempMatrix.extractRotation( scope.object.matrixWorld ) );
 
+
+            for (var i = 0; i < envir.scene.children.length; i++){
+
+                var node = envir.scene.children[i];
+
+                if (node.isLightHelper){
+
+                    node.position.setFromMatrixPosition(node.light.matrix);
+                    node.updateMatrix();
+                    node.update();
+
+
+                }
+
+                if (node.isLightTargetSpot){
+
+                    node.parentLight.target.position.setFromMatrixPosition(node.matrix);
+                    node.parentLight.target.updateMatrixWorld();
+
+
+
+                }
+
+            }
+
+
+
+
             var camera;
 
             if(avatarControlsEnabled)

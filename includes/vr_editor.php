@@ -1414,6 +1414,10 @@ echo '</script>';
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
 
+            
+          
+            
+            
             // REM HERE
             
             //if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
@@ -1430,8 +1434,6 @@ echo '</script>';
             objItem = envir.scene.getObjectByName(name);
         }
         
-        
-        console.log("selected_object_name", selected_object_name);
         
         // place controls to last inserted obj
         if (typeof objItem !== "undefined") {

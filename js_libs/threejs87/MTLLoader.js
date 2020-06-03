@@ -505,12 +505,18 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
         }
 
+
+
         if (materialName === 'steveViewMaterial') {
 
             this.materials[materialName] = new THREE.MeshBasicMaterial({
                 depthTest: false, depthWrite: false,
                 side: THREE.FrontSide, transparent: true, color: 0xffffff, opacity: 0.25
             });
+
+        } else if (materialName === 'steveMaterial' || materialName === 'steveAroundMaterial'){ // We do not want the camera to receive light
+
+            this.materials[materialName] = new THREE.MeshBasicMaterial(params);
 
         }
         else {
@@ -519,7 +525,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
             params.transparent = true;
             //params.opacity = 0.5;
 
-
+            // Debug parameter
             if (window.isAnyLight)
                 this.materials[materialName] = new THREE.MeshPhongMaterial(params);
             else

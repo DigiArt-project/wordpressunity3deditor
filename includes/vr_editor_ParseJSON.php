@@ -81,10 +81,10 @@ class ParseJSON {
             $scale = $value->scale[0];
 
             echo '<script>';
-            echo 'selected_object_trs={"translation":['.$t_x.','.$t_y.','.$t_z.'],"rotation":['.
+            echo 'var selected_object_trs={"translation":['.$t_x.','.$t_y.','.$t_z.'],"rotation":['.
                 $r_x .','.$r_y .','.$r_z .'],'.'"scale":'.$scale.'};';
 
-            console.log("PARSE", $name + " " + $categoryName);
+            
             
             echo 'resources3D["'.$name.'"]= {'.
                                             '"path":"'.$path.

@@ -63,7 +63,7 @@ THREE.SceneExporter.prototype = {
                     node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
                     node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
                     node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
-                    node.name =='myGridHelper' || node.name =='myTransformControls'
+                    node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot'
                 )
                 continue;
 
@@ -98,16 +98,8 @@ THREE.SceneExporter.prototype = {
 
                 } else if ( node instanceof THREE.Light ) {
 
-
                     linesArray.push(ObjectString(node, pad));
                     nobjects += 1;
-
-                    // Lights are not modifiable
-
-                    // linesArray.push( LightString( node, pad ) );
-                    // nobjects += 1;
-
-                    continue;
 
                 } else if ( node instanceof THREE.Camera || node instanceof THREE.CameraHelper ) {
                     // Cameras are not modifiable
@@ -139,6 +131,10 @@ THREE.SceneExporter.prototype = {
                     linesArray.push( PaddingString( pad + 1 ) + "\t\t}" );
 
                 }
+
+
+
+
 
                 linesArray.push( PaddingString( pad ) + "\t\t}" + ( i < object.children.length - 1 ? ",\n" : "" ) );
 
@@ -305,9 +301,9 @@ THREE.SceneExporter.prototype = {
 
         function ObjectString( o, n ) {
 
-            console.log(o.name, o.categoryName);
 
-            if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun')){
+
+            if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') && !o.categoryName.includes('lightTargetSpot')){
 
                 var quatR = new THREE.Quaternion();
 
@@ -361,7 +357,7 @@ THREE.SceneExporter.prototype = {
                 ];
                 //===============================================
                 //console.log(output);
-            } else if (o.categoryName.includes("lightSun")){
+            } else if ( o.categoryName.includes("lightSun") && !o.categoryName.includes("lightTargetSpot") ){
 
                 var quatR_light = new THREE.Quaternion();
 
@@ -382,7 +378,7 @@ THREE.SceneExporter.prototype = {
                     quatR_light._w + "]" + ',',
                     '	"scale"	    : ' + Vector3String(o.scale) + ',',
                     '	"intensity"	: ' + '5' + ',',
-                    '	"isLight"   : ' + '"' + 'true' + '"'  + "},   "
+                    '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];
 
             } else if (o.name === 'avatarYawObject'){

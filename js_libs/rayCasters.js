@@ -154,12 +154,9 @@ function onMouseSelect(event ) {
     var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
    //transform_controls.getObjectByName('trs_modeChanger')
 
-    console.log(activMesh);
-
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
 
-    console.log(intersects);
 
     if (intersects.length === 0)
         return;
@@ -226,6 +223,8 @@ function onMouseSelect(event ) {
 function selectorMajor(event, objectSel){
 
     if (event.button === 0) {
+
+        console.log("objectSel", objectSel);
 
         // set the selected color of the hierarchy viewer
         envir.setBackgroundColorHierarchyViewer(objectSel.name);
@@ -781,7 +780,6 @@ function displayMarkerProperties(event, name){
         var url2 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_medium);
         var url3 = createIframeUrl(energy_fields.env, energy_fields.mapId, turbine_large);
 
-        console.log(url1, url2, url3);
 
         var iframe1 = jQuery('#turbine1-iframe');
         iframe1.attr('src', url1);
@@ -909,9 +907,9 @@ function getActiveMeshes(){
 
     // ToDo: Is it possible to avoid traversing scene object in each drag event?
     envir.scene.traverse( function(child) {
-        if (child.hasOwnProperty('isDigiArt3DMesh'))
-
+        if (child.hasOwnProperty('isDigiArt3DMesh')) {
             activeMeshes.push(child);
+        }
     });
 
     return activeMeshes;
