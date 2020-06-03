@@ -1159,6 +1159,15 @@ echo '</script>';
     // });
 
     jQuery("#object-manipulation-toggle").click(function() {
+        
+        console.log("categoryName", transform_controls.object.categoryName);
+        
+        // Sun and Target spot can not change control manipulation mode
+        if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
+            transform_controls.object.categoryName.includes("lightSun")){
+            return;
+        }
+        
         var value = jQuery("input[name='object-manipulation-switch']:checked").val();
         transform_controls.setMode(value);
         showObjectPropertiesPanel(value);
@@ -1413,14 +1422,7 @@ echo '</script>';
         for ( name in resources3D  ) {
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
-
-            
-          
-            
-            
-            // REM HERE
-            
-            //if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
+           //if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
                 // objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
                 // objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
                 //objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
@@ -1465,6 +1467,11 @@ echo '</script>';
                 var sizeT = Math.max(...dims);
                 jQuery("#removeAssetBtn").show();
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
+                
+                if (selected_object_name.includes("lightSun")){
+                    transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO: Sun can not be rotated
+                }
+                
             } else {
                 var sizeT = 1;
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;

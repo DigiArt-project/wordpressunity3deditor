@@ -2,6 +2,17 @@
  * @author arodic / https://github.com/arodic
  */
 
+
+// Children transform_controls.children
+
+// 3:  3D Translate
+// 4:  3D Rotate
+// 5:  3D Scale
+
+// 6:  2D Rot Trans Delete     .children[0].children[0]    :  Move
+// 6:  2D Rot Trans Delete     .children[0].children[1]    :  Rotate
+// 6:  2D Rot Trans Delete     .children[0].children[2]    :  Delete    (.handleGizmos.XZY[0][0])
+
 ( function () {
 
     'use strict';
@@ -120,6 +131,10 @@
             this.handles = new THREE.Object3D();
             this.pickers = new THREE.Object3D();
             this.planes = new THREE.Object3D();
+
+            this.handles.name = 'handles';
+            this.pickers.name = 'pickers';
+            this.planes.name = 'planes';
 
             this.add( this.handles );
             this.add( this.pickers );
@@ -605,6 +620,8 @@
 
         THREE.TransformGizmo.call( this );
 
+
+
         //--------- In Arrow --------------
         var arrowGeometry = new THREE.Geometry();
 
@@ -668,11 +685,15 @@
         xGeometry.merge( cylMesh2.geometry, cylMesh2.matrix );
 
 
+
+
         this.handleGizmos = {
-            XZ: [[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ) ]],
-            Y:  [[ new THREE.Mesh( arrowRotGeometry, new GizmoMaterial( { color: 0x00ffff } ) )]],
-            XZY:[[ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000 } ) ) ]]
+            XZ: [[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ) ]],   // Move
+            Y:  [[ new THREE.Mesh( arrowRotGeometry, new GizmoMaterial( { color: 0x00ffff } ) )]],  // Rotate
+            XZY:[[ new THREE.Mesh( xGeometry, new GizmoMaterial( { color: 0xff0000 } ) ) ]]             // Delete
         };
+
+
 
         this.handleGizmos.XZ[0][0].renderOrder = 1;
         this.handleGizmos.Y[0][0].renderOrder = 1;

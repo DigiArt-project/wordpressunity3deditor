@@ -124,7 +124,12 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.setSize(sizeT > 1 ? sizeT : 1);
 
         jQuery("#removeAssetBtn").show();
-        transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
+        transform_controls.children[6].handleGizmos.XZY[0][0].visible = true; // DELETE GIZMO
+
+
+        transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO
+
+
 
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
@@ -299,10 +304,7 @@ function deleterFomScene(nameToRemove){
                     // remove from hierarchy also
                     jQuery('#hierarchy-viewer').find('#' + "lightTargetSpot_" + nameToRemove).remove();
 
-                    // REM: Too big the name of the lightTargetSpot in HViewer(remove datestamp)
-                    // REM: Transform controls for TargetSpot should not have rotate and delte
-                    // REM: Transform controls for Sun should not have rotate and resize
-                    // REM: Add x,y,z of targetspot in the save format
+
                     // REM: Add interface to change the intensity of the sun
                 }
             }

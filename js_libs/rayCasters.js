@@ -224,7 +224,7 @@ function selectorMajor(event, objectSel){
 
     if (event.button === 0) {
 
-        console.log("objectSel", objectSel);
+
 
         // set the selected color of the hierarchy viewer
         envir.setBackgroundColorHierarchyViewer(objectSel.name);
@@ -235,16 +235,30 @@ function selectorMajor(event, objectSel){
         // X for deleting object is visible (only Steve can not be deleted)
         transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
+        // Rotate GIZMO
+        transform_controls.children[6].children[0].children[1].visible = true; // ROTATE GIZMO
+
+        if (objectSel.categoryName === "lightSun" || objectSel.categoryName === "lightTargetSpot") {
+            transform_controls.children[6].children[0].children[1].visible = false; // 2D ROTATE GIZMO
+
+            console.log("objectSel", objectSel.categoryName);
+
+
+
+        }
+
 
         if (objectSel.name === "avatarYawObject") {
             // case of selecting by hierarchy viewer
 
             transform_controls.size = 1;
+
+            // Can not be deleted
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
             jQuery("#removeAssetBtn").hide();
 
         } else {
-            // find dimenstions of object in order to resize transform controls
+            // find dimensions of object in order to resize transform controls
             var dims = findDimensions(transform_controls.object);
 
             var sizeT = Math.max(...dims);
@@ -253,6 +267,11 @@ function selectorMajor(event, objectSel){
 
             jQuery("#removeAssetBtn").show();
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
+        }
+
+
+        if (objectSel.categoryName === "lightTargetSpot"){
+            transform_controls.children[6].children[0].children[2].visible = false; // 2D DELETE GIZMO
         }
 
         transform_controls.setMode( envir.is2d ? "rottrans" : "translate" );

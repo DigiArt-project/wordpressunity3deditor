@@ -13,7 +13,12 @@ class ParseJSON {
         $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
         $content_JSON = json_decode($sceneToLoad);
         $json_objects = $content_JSON->objects;
-
+    
+        // For light target
+        $target_position_x = 0;
+        $target_position_y = 0;
+        $target_position_z = 0;
+        
         foreach ($json_objects as $key=>$value) {
 
             $name = $key;
@@ -38,6 +43,10 @@ class ParseJSON {
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = $value->rotation[2];
+                
+                $target_position_x = $value->targetposition[0];
+                $target_position_y = $value->targetposition[1];
+                $target_position_z = $value->targetposition[2];
                 
                 $categoryName = 'lightSun';
                 $isLight = "true";
@@ -109,7 +118,8 @@ class ParseJSON {
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.
                                             '","isLight":"'.$isLight.
-                                            '","trs":selected_object_trs};';
+                                            '","targetposition":['.$target_position_x.','.$target_position_y.','.$target_position_z.']'.
+                                            ',"trs":selected_object_trs};';
             
            
             

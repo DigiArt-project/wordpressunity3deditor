@@ -304,6 +304,7 @@ THREE.SceneExporter.prototype = {
 
 
             if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') && !o.categoryName.includes('lightTargetSpot')){
+                // Asset
 
                 var quatR = new THREE.Quaternion();
 
@@ -357,7 +358,9 @@ THREE.SceneExporter.prototype = {
                 ];
                 //===============================================
                 //console.log(output);
-            } else if ( o.categoryName.includes("lightSun") && !o.categoryName.includes("lightTargetSpot") ){
+            } else if ( o.categoryName==="lightSun" ){
+
+
 
                 var quatR_light = new THREE.Quaternion();
 
@@ -378,6 +381,7 @@ THREE.SceneExporter.prototype = {
                     quatR_light._w + "]" + ',',
                     '	"scale"	    : ' + Vector3String(o.scale) + ',',
                     '	"intensity"	: ' + '5' + ',',
+                    '	"targetposition" : ' + Vector3String(o.target.position) + ',',
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];
 

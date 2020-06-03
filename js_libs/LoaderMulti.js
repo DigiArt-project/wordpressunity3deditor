@@ -185,7 +185,13 @@ class LoaderMulti {
                     lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
                     lightTargetSpot.categoryName = "lightTargetSpot";
                     lightTargetSpot.isLightTargetSpot = true;
-                    lightTargetSpot.position.set(0,0,0);
+
+                    console.log();
+
+                    lightTargetSpot.position.set(resources3D[name]['targetposition'][0],
+                                                 resources3D[name]['targetposition'][1],
+                                                 resources3D[name]['targetposition'][2]);
+
                     lightTargetSpot.parentLight = lightSun;
                     lightTargetSpot.parentLightHelper = lightSunHelper;
 

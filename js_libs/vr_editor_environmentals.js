@@ -452,6 +452,7 @@ class vr_editor_environmentals {
 
     addInHierarchyViewer(obj){
 
+        // ALL but the lightTargetSpot
         if (obj.categoryName!='lightTargetSpot') {
 
             // ADD in the Hierarchy viewer
@@ -483,7 +484,10 @@ class vr_editor_environmentals {
         } else {
             // lightTargetSpot
 
-            var game_object_nameA_assetName = obj.name; //.substring(0, obj.name.length - 11);
+            // lightTargetSpot without the timestamp
+            var game_object_nameA_assetName = obj.name.substring(0, obj.name.length-11); //.substring(0, obj.name.length - 11);
+
+            // The timestamp
             var game_object_nameB_dateCreated = unixTimestamp_to_time(obj.name.substring(obj.name.length - 10, obj.name.length));
 
             // Add as a list item
