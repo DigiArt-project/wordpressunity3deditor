@@ -360,8 +360,6 @@ THREE.SceneExporter.prototype = {
                 //console.log(output);
             } else if ( o.categoryName==="lightSun" ){
 
-
-
                 var quatR_light = new THREE.Quaternion();
 
                 var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
@@ -380,7 +378,7 @@ THREE.SceneExporter.prototype = {
                     quatR_light._z + "," +
                     quatR_light._w + "]" + ',',
                     '	"scale"	    : ' + Vector3String(o.scale) + ',',
-                    '	"intensity"	: ' + o.intensity + ',',
+                    '	"lightintensity"	: ' + o.intensity + ',',
                     '	"lightcolor"	: ' + ColorString(o.color) + ',',  // To transfor object r g b to Hex ???
                     '	"targetposition" : ' + Vector3String(o.target.position) + ',',
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )

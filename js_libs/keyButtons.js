@@ -55,6 +55,7 @@ document.addEventListener( 'keydown',
 
         switch ( event.keyCode ) {
             //---------------------------- TRS ---------------------------------------
+            case 80: console.log("Pause"); pauseClickFun(); break; // r
             case 82: viewUp=true; break; // r
             case 70: viewDown=true; break; // f
             case 187: break;

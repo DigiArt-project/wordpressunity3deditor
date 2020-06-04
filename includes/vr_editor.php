@@ -42,6 +42,8 @@ wp_enqueue_script('wpunity_load_sceneexporterutils');
 wp_enqueue_script('wpunity_load_scene_importer_utils');
 wp_enqueue_script('wpunity_load_sceneexporter');
 
+// Colorpicker for the lights
+wp_enqueue_script('wpunity_jscolorpick');
 
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
@@ -391,8 +393,8 @@ echo '</script>';
 
 <!-- Pause rendering-->
 <div id="divPauseRendering" class="pauseRenderingDivStyle">
-    <a type="button" id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">pause</i>
+    <a id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">play_arrow</i>
     </a>
 </div>
 
@@ -1584,28 +1586,45 @@ echo '</script>';
     
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseSelect, false );
+    
 
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'contextmenu', contextMenuClick, false );
 
+    
+    // Prevent showing the context menu (normal behaviour when rightclicking in web items)
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpDoorPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
-    jQuery("#popSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popUpSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
+    
+    // Pause rendering (to cool down the machine sometimes)
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
-
-        isPaused = !isPaused;
-        jQuery("#pauseRendering").get(0).childNodes[1].innerText = isPaused?"play_arrow":"pause";
-
-        if(!isPaused)
-            animate();
-
+        pauseClickFun();
     }, false);
 
+    
+    function pauseClickFun(){
+        isPaused = !isPaused;
+        jQuery("#pauseRendering").get(0).childNodes[1].innerText = isPaused?"pause":"play_arrow";
+
+        if(!isPaused) {
+            animate();
+            document.getElementById('pauseRendering').style.background = '';
+        }else {
+            document.getElementById('pauseRendering').style.background = 'red';
+        }
+    }
+    
     animate();
 
+
+    
+    
+    
+    
 </script>
 
 

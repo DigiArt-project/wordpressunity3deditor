@@ -108,8 +108,7 @@
         Sun Color in Hex:</label>
 
     <input type="text" id="sunColor" name="sunColor" title="Set a hex number, ffffff is the default (white)"
-           value="ffffff" maxlength="6"
-           class="mdc-textfield__input" style="width:7ch" onkeyup="changeSunColor()"/>
-
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateColorPickerLight(this)'}" />
+    
 </div>
 

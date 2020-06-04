@@ -41,7 +41,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
     if (categoryName==='lightSun'){
 
-        var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+        var lightSun = new THREE.DirectionalLight( 0xffffff, 1 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
         // lightSun.position.set( 0, 45, 0 ); set by raycaster
 
         lightSun.name = nameModel3D;
@@ -62,7 +62,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         // Helper
         var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, 0x555500);
         lightSunHelper.isLightHelper = true;
-        lightSunHelper.name = 'lightHelper';
+        lightSunHelper.name = 'lightHelper_'+lightSun.name;
         lightSunHelper.categoryName = 'lightHelper';
         lightSunHelper.parentLightName = lightSun.name;
 

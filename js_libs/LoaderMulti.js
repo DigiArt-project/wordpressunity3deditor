@@ -122,9 +122,14 @@ class LoaderMulti {
 
                 }else if (resources3D[name]['isLight']==='true'){
 
-                    // LIGHT
+                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
+                        resources3D[name]['lightcolor'][1],
+                        resources3D[name]['lightcolor'][2]);
 
-                     var lightSun = new THREE.DirectionalLight( 0xffffff, 5 ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+                    var lightintensity = resources3D[name]['lightintensity'];
+
+                    // LIGHT
+                     var lightSun = new THREE.DirectionalLight( colora, lightintensity ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
 
                     // REM HERE
                     lightSun.position.set(
@@ -142,15 +147,16 @@ class LoaderMulti {
                         resources3D[name]['trs']['scale']);
 
 
-                    lightSun.target.position.set(0, 0, 0); // where it points
+                    lightSun.target.position.set(resources3D[name]['targetposition'][0],
+                                                 resources3D[name]['targetposition'][1],
+                                                 resources3D[name]['targetposition'][2]); // where it points
+
                     lightSun.name = name;
                     lightSun.categoryName = "lightSun";
                     lightSun.isDigiArt3DModel = true;
                     lightSun.isLight = true;
 
-                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
-                        resources3D[name]['lightcolor'][1],
-                        resources3D[name]['lightcolor'][2]);
+
 
                     //// Add Sun Helper
                     var sunSphere = new THREE.Mesh(
@@ -164,7 +170,7 @@ class LoaderMulti {
 
                     var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, colora);
                     lightSunHelper.isLightHelper = true;
-                    lightSunHelper.name = 'lightHelper';
+                    lightSunHelper.name = 'lightHelper_' + lightSun.name;
                     lightSunHelper.categoryName = 'lightHelper';
                     lightSunHelper.parentLightName = name;
 
@@ -190,8 +196,6 @@ class LoaderMulti {
                     lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
                     lightTargetSpot.categoryName = "lightTargetSpot";
                     lightTargetSpot.isLightTargetSpot = true;
-
-                    console.log();
 
                     lightTargetSpot.position.set(resources3D[name]['targetposition'][0],
                                                  resources3D[name]['targetposition'][1],

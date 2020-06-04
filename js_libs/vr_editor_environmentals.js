@@ -516,8 +516,6 @@ class vr_editor_environmentals {
             }
         );
 
-        console.log(name);
-
         jQuery('#hierarchy-viewer').find('#' + name )[0].style.background = '#a4addf';
     }
 

@@ -22,7 +22,8 @@ class ParseJSON {
         $light_color_r = 1;
         $light_color_g = 1;
         $light_color_b = 1;
-        
+    
+        $lightintensity = 1;
         
         
         foreach ($json_objects as $key=>$value) {
@@ -62,6 +63,8 @@ class ParseJSON {
 
                 $categoryName = 'lightSun';
                 $isLight = "true";
+                $lightintensity = $value->lightintensity;
+                
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $assetid=$value->assetid;
@@ -130,6 +133,7 @@ class ParseJSON {
                                             '","isCloned":"'.$isCloned.
                                             '","isJoker":"'.$isJoker.
                                             '","isLight":"'.$isLight.
+                                            '","lightintensity":"'.$lightintensity.
                                             '","lightcolor":['.$light_color_r.','.$light_color_g.','.$light_color_b.']'.
                                             ',"targetposition":['.$target_position_x.','.$target_position_y.','.$target_position_z.']'.
                                             ',"trs":selected_object_trs};';

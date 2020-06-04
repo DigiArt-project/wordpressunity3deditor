@@ -64,6 +64,8 @@ function dragDropVerticalRayCasting (event){
 
 function onMouseDoubleClickFocus( event , objectName) {
 
+
+
     //envir.scene.getObjectByName(selected_object_name);
 
     //console.log(selected_object_name, objectName);
@@ -279,9 +281,10 @@ function selectorMajor(event, objectSel){
     }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
-    if (event.button === 2)
+    if (event.button === 2) {
         activeOverides(event, objectSel);
-
+        event.preventDefault();
+    }
 }
 
 function contextMenuClick(event){
@@ -607,6 +610,18 @@ function displaySunProperties(event, name){
 
     // chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
 
+
+    //jQuery("#sunColor")
+    jQuery("#sunColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#sunIntensity")[0].value = transform_controls.object.intensity;
+
+    document.getElementById("sunColor").value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#sunColor")[0].style.background = "#" + jQuery("#sunColor")[0].value;
+
+
+
+
+
     // Show Selection
     ppPropertiesDiv.show();
     ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
@@ -895,17 +910,34 @@ function changeSunIntensity(){
 }
 
 
-function changeSunColor(){
+
+
+/// Font Selector
+function updateColorPickerLight(picker){
+
 
     var hexcol = "0x" + document.getElementById("sunColor").value;
+
+    // Sun as object
     transform_controls.object.color.setHex(hexcol);
+
+    // Sun as Sphere
     transform_controls.object.children[0].material.color.setHex(hexcol);
 
-    var lightTargetSpot = envir.scene.getChildByName("lightTargetSpot_"+transform_controls.object.name);
+    // Sun Helper
+    var lightHelper = envir.scene.getChildByName("lightHelper_"+transform_controls.object.name);
+    lightHelper.color.setHex(hexcol);
 
+    // TargetSpot
+    var lightTargetSpot = envir.scene.getChildByName("lightTargetSpot_"+transform_controls.object.name);
     lightTargetSpot.children[0].material.color.setHex(hexcol);
 
+    //document.getElementById('assetback3dcolorLight').value = picker.toRGBString();
+    // wu_webw_3d_view .scene.background.r = picker.rgb[0]/255;
+    // wu_webw_3d_view .scene.background.g = picker.rgb[1]/255;
+    // wu_webw_3d_view .scene.background.b = picker.rgb[2]/255;
 }
+
 
 
 // ----------------- Aux ----------------------------------------------------------
