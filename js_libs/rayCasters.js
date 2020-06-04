@@ -896,7 +896,15 @@ function changeSunIntensity(){
 
 
 function changeSunColor(){
-    transform_controls.object.color.setHex("0x" + document.getElementById("sunColor").value);
+
+    var hexcol = "0x" + document.getElementById("sunColor").value;
+    transform_controls.object.color.setHex(hexcol);
+    transform_controls.object.children[0].material.color.setHex(hexcol);
+
+    var lightTargetSpot = envir.scene.getChildByName("lightTargetSpot_"+transform_controls.object.name);
+
+    lightTargetSpot.children[0].material.color.setHex(hexcol);
+
 }
 
 

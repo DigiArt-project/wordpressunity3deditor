@@ -380,7 +380,8 @@ THREE.SceneExporter.prototype = {
                     quatR_light._z + "," +
                     quatR_light._w + "]" + ',',
                     '	"scale"	    : ' + Vector3String(o.scale) + ',',
-                    '	"intensity"	: ' + '5' + ',',
+                    '	"intensity"	: ' + o.intensity + ',',
+                    '	"lightcolor"	: ' + ColorString(o.color) + ',',  // To transfor object r g b to Hex ???
                     '	"targetposition" : ' + Vector3String(o.target.position) + ',',
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];

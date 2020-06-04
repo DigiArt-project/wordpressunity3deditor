@@ -148,16 +148,21 @@ class LoaderMulti {
                     lightSun.isDigiArt3DModel = true;
                     lightSun.isLight = true;
 
+                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
+                        resources3D[name]['lightcolor'][1],
+                        resources3D[name]['lightcolor'][2]);
+
                     //// Add Sun Helper
                     var sunSphere = new THREE.Mesh(
                         new THREE.SphereBufferGeometry( 1, 16, 8 ),
-                        new THREE.MeshBasicMaterial( { color: 0xffff00 } )
+                        new THREE.MeshBasicMaterial( { color: colora } )
                     );
                     sunSphere.isDigiArt3DMesh = true;
                     sunSphere.name = "SunSphere";
                     lightSun.add(sunSphere);
 
-                    var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, 0x555500);
+
+                    var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, colora);
                     lightSunHelper.isLightHelper = true;
                     lightSunHelper.name = 'lightHelper';
                     lightSunHelper.categoryName = 'lightHelper';
@@ -178,7 +183,7 @@ class LoaderMulti {
 
                     lightTargetSpot.add(new THREE.Mesh(
                         new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
-                        new THREE.MeshBasicMaterial( { color: 0xffaa00 } )
+                        new THREE.MeshBasicMaterial( { color: colora } )
                     ));
 
                     lightTargetSpot.isDigiArt3DMesh = true;
