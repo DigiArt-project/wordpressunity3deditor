@@ -5,6 +5,7 @@ if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass 
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 ?>
 
+<!--Three js staff: Several modifications on OBJLoader, MTLLoader, OrbitControls, TransformControls, PointerLockControls-->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
@@ -48,11 +49,6 @@ $UPLOAD_DIR = wp_upload_dir()['baseurl'];
 $UPLOAD_DIR_C = wp_upload_dir()['basedir'];
 $UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
 
-
-
-
-
-
 $meta_json = get_post($current_scene_id)->post_content;
 
 // Load default scenes if no content
@@ -63,13 +59,9 @@ if ( $game_type_obj->string === "Energy" ) {
     $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
 }
 
-
-
 // Find scene dir string
 $parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
 $parentGameId = $_REQUEST['wpunity_game']; //wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
-
-
 
 $projectGameSlug = $parentGameSlug;
 
@@ -108,8 +100,6 @@ echo '</script>';
 ?>
 
 
-
-
 <!-- Todo: put these js libraries in wp_register -->
 <!-- JS libraries -->
 <!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
@@ -120,7 +110,6 @@ echo '</script>';
 
 <!-- Handle keyboard buttons shortcuts -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/keyButtons.js'></script>
-
 
 <!-- Functions for clicking on 3D objects -->
 <script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/rayCasters.js'></script>
@@ -308,21 +297,16 @@ echo '</script>';
     <div class="lightcolumn" draggable="true"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
 </div>
 
-
-
 <!-- Remove game object-->
 <a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
    title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
     <i class="material-icons">delete</i>
 </a>
 
-
-
 <!--  Open/Close Right Hierarchy panel-->
 <a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
     <i class="material-icons">menu</i>
 </a>
-
 
 
 <div id="right-elements-panel" class="right-elements-panel-style">
@@ -359,19 +343,13 @@ echo '</script>';
         
         
         
-<!--        <div id="thirdPersonBlocker" class="">-->
         <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
             <i class="material-icons">person</i></a>
-<!--        </div>-->
-
-
-    
     </div>
 
 
     <!--  Object Controls  -->
     <div id="row3" class="row-right-panel" style="display:block">
-        
         
         <div style="padding-left:5px; padding-top:10px;"> Object controls</div>
 
@@ -593,89 +571,9 @@ echo '</script>';
 
 </div>
 
+<?php include 'vr_editor_popups.php'; ?>
 
-<!-- Chemistry: Popup menu to Select a scene to go, from Microscope or Textbook -->
-<?php if ($project_scope == 1) { ?>
-    <div id="chemistrySceneSelectPopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
-
-        <a style="float: right;" type="button" class="mdc-theme--primary"
-           onclick='this.parentNode.style.display = "none"; clearAndUnbindMicroscopeTextbookProperties(); return false;'>
-            <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-        </a>
-
-        <i title="Select a scene to load" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">directions</i>
-        <select title="Select a scene" id="chemistrySceneSelectComponent" class="mdc-select">
-        </select>
-    </div>
-<?php } ?>
-
-<!-- Popup menu to Select a scene to go, from Gate-->
-<div id="chemistryGatePopupDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 360px; display:none">
-
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbindBoxProperties(); return false;'>
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-    <i title="Select a functional Category label" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom">label</i>
-    <select title="Select a functional category label" id="chemistryGateComponent" class="mdc-select">
-    </select>
-</div>
-
-
-<!-- Popup menu to for Reward item checkbox, from Artifact -->
-<div id="popUpArtifactPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-    <!-- The close button-->
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("artifact_reward_checkbox"); return false;'>
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-    <!-- The checkbox-->
-    <input type="checkbox" title="Select if it is a reward item"  id="artifact_reward_checkbox" name="artifact_reward_checkbox"
-           class="mdc-textfield__input mdc-theme--text-primary-on-light"
-           style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
-    <label for="artifact_reward_checkbox" class="mdc-textfield__label"
-           style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
-</div>
-
-
-<!-- Popup menu to for Reward item checkbox, from POI IT -->
-<div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-    <!-- The close button-->
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox"); return false;'>
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-    <!-- The checkbox-->
-    <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"
-           class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">
-    <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"
-           style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">Is a reward item?</label>
-
-</div>
-
-<!-- Popup menu to for Reward item checkbox, from POI Video -->
-<div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">
-
-    <!-- The close button-->
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox"); return false;'>
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-    <!-- The checkbox-->
-
-    <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"
-           class="mdc-textfield__input mdc-theme--text-primary-on-light"
-           style="margin-left: 29px; width: 150px !important; float: right;">
-    <label for="poi_video_reward_checkbox" class="mdc-textfield__label" style="margin-left: 10px; bottom: 8px; margin-bottom: 0px;">
-        Is a reward item?</label>
-
-</div>
+    
 
 
     <!--  Open/Close Right Hierarchy panel-->
@@ -1694,6 +1592,7 @@ echo '</script>';
 
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
 
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
 
@@ -1720,6 +1619,3 @@ echo '</script>';
 
 <!-- Change dat GUI style: Override the inside js style -->
 <link rel="stylesheet" type="text/css" href="<?php echo $PLUGIN_PATH_VR?>/css/dat-gui.css">
-
-
-

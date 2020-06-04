@@ -222,14 +222,13 @@ function onMouseSelect(event ) {
  */
 function selectorMajor(event, objectSel){
 
-    if (event.button === 0) {
-
-
+    if (event.button === 0 || event.button === 2) {
 
         // set the selected color of the hierarchy viewer
         envir.setBackgroundColorHierarchyViewer(objectSel.name);
 
-        transform_controls.attach(objectSel);
+        transform_controls.attach( objectSel );
+
         envir.renderer.setClearColor( 0xeeeeee  );
 
         // X for deleting object is visible (only Steve can not be deleted)
@@ -240,13 +239,7 @@ function selectorMajor(event, objectSel){
 
         if (objectSel.categoryName === "lightSun" || objectSel.categoryName === "lightTargetSpot") {
             transform_controls.children[6].children[0].children[1].visible = false; // 2D ROTATE GIZMO
-
-            console.log("objectSel", objectSel.categoryName);
-
-
-
         }
-
 
         if (objectSel.name === "avatarYawObject") {
             // case of selecting by hierarchy viewer
@@ -268,7 +261,6 @@ function selectorMajor(event, objectSel){
             jQuery("#removeAssetBtn").show();
             transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
         }
-
 
         if (objectSel.categoryName === "lightTargetSpot"){
             transform_controls.children[6].children[0].children[2].visible = false; // 2D DELETE GIZMO
@@ -411,6 +403,10 @@ function activeOverides(event, object){
 
     if( categ === 'Box' ) // for chemistry box
         displayBoxProperties(event, name);
+
+    if( categ === 'lightSun')
+        displaySunProperties(event, name);
+
 }
 
 
@@ -590,7 +586,35 @@ function displayPoiVideoProperties(event, name){
     chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
 }
 
+/**
+ * Poi video properties
+ *
+ * @param event
+ * @param name
+ */
+function displaySunProperties(event, name){
 
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpSunPropertiesDiv");
+
+    // // The checkbox only
+    // var chbox = jQuery("#poi_video_reward_checkbox");
+    //
+    // // Save the previous artifact properties values (in case of  direct mouse click on another item)
+    // chbox.trigger("change");
+    //
+    // clearAndUnbind(null, null, "poi_video_reward_checkbox");
+
+    // chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+
+    // Add change listener
+    // chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
+}
 
 
 /**
@@ -863,6 +887,16 @@ function displayMarkerProperties(event, name){
         clearIframes();
         loadPISAMarkerIframes(jQuery("#archaeology_penalty").val(), jQuery("#hv_distance_penalty"), jQuery("#natural_resource_proximity_penalty"));
     });
+}
+
+
+function changeSunIntensity(){
+    transform_controls.object.intensity = document.getElementById("sunIntensity").value;
+}
+
+
+function changeSunColor(){
+    transform_controls.object.color.setHex("0x" + document.getElementById("sunColor").value);
 }
 
 
