@@ -137,7 +137,9 @@ function firstPersonViewWithoutLock(){
 
         envir.isComposerOn = true;
 
-        transform_controls.visible  = true;
+        if(!envir.is2d)
+            transform_controls.visible  = true;
+
         envir.getSteveFrustum().visible = true;
 
         // ToDo: Zoom

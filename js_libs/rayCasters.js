@@ -153,7 +153,7 @@ function onMouseSelect(event ) {
     var raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes().concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
+    var activMesh = getActiveMeshes(); //.concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
    //transform_controls.getObjectByName('trs_modeChanger')
 
     // Find the intersections (it can be more than one)
@@ -925,11 +925,12 @@ function updateColorPickerLight(picker){
     transform_controls.object.children[0].material.color.setHex(hexcol);
 
     // Sun Helper
-    var lightHelper = envir.scene.getChildByName("lightHelper_"+transform_controls.object.name);
-    lightHelper.color.setHex(hexcol);
+    var lightHelper = envir.scene.getObjectByName("lightHelper_"+transform_controls.object.name);
+    lightHelper.children[0].material.color.setHex(hexcol);
+    lightHelper.children[1].material.color.setHex(hexcol);
 
     // TargetSpot
-    var lightTargetSpot = envir.scene.getChildByName("lightTargetSpot_"+transform_controls.object.name);
+    var lightTargetSpot = envir.scene.getObjectByName("lightTargetSpot_" + transform_controls.object.name);
     lightTargetSpot.children[0].material.color.setHex(hexcol);
 
     //document.getElementById('assetback3dcolorLight').value = picker.toRGBString();

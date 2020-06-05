@@ -288,17 +288,12 @@ get_header(); ?>
     </div>
 
     <span class="mdc-typography--caption" style="font-size:16pt">
-        
+    
 
     </span>
 
-<!--    <ul class="EditPageBreadcrumb">-->
-<!--        <li><a class="mdc-typography--caption mdc-theme--primary" href="--><?php //echo $goBackTo_AllProjects_link; ?><!--" title="Go back to Project selection">Home</a></li>-->
-<!--        <li><i class="material-icons EditPageBreadcrumbArr mdc-theme--text-hint-on-background">arrow_drop_up</i></li>-->
-<!--        <li class="mdc-typography--caption"><span class="EditPageBreadcrumbSelected">3D Scene Editor</span></li>-->
-<!--    </ul>-->
 
-    <div class="mdc-toolbar" style="display:block;position:fixed;z-index:1000;">
+    <div class="mdc-toolbar hidable" style="display:block;position:fixed;z-index:1000;">
         
         <div class="" style="width:90%">
             <div class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-start"
@@ -991,6 +986,8 @@ get_header(); ?>
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
+
+        
     </script>
 
 <?php } ?>

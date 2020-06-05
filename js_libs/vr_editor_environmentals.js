@@ -51,6 +51,7 @@ class vr_editor_environmentals {
         this.setComposer();
 
 
+
         // Toggle UIs to clear out vision
         jQuery('#toggleUIBtn').click(function() {
             var btn = jQuery('#toggleUIBtn');
@@ -68,13 +69,23 @@ class vr_editor_environmentals {
                 icon.html('<i class="material-icons">visibility_off</i>');
                 btn.data('toggle', 'off');
 
-                jQuery(".hidable").show();
+                jQuery(".hidable").hide();  // Lights bar
 
                 envir.isComposerOn = false;
                 transform_controls.visible  = false;
-                envir.getSteveFrustum().visible = true;
-                envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
+                envir.getSteveFrustum().visible = false;
 
+
+                envir.setVisiblitySunHelpingElements(false);
+
+                jQuery("#wpadminbar").hide();
+
+                // footer that is high up below admin bar
+                jQuery("#colophon").hide();
+
+                jQuery("#vr_editor_main_div")[0].style.top = 0;
+
+                jQuery('#cookie-law-info-again').hide();
             } else {
                 // Show
                 btn.removeClass('mdc-theme--text-hint-on-light');
@@ -82,14 +93,31 @@ class vr_editor_environmentals {
                 icon.html('<i class="material-icons">visibility</i>');
                 btn.data('toggle', 'on');
 
-                jQuery(".hidable").hide();
+                jQuery(".hidable").show(); // Lights bar
                 envir.isComposerOn = true;
                 transform_controls.visible  = true;
 
-                // if in 3rd person view then show the cameraobject
+                envir.setVisiblitySunHelpingElements(true);
 
-                envir.getSteveFrustum().visible = true;
+                // wp admin bar show
+                jQuery("#wpadminbar").show();
+
+                // footer that is high up below admin bar
+                jQuery("#colophon").show();
+
+                jQuery("#vr_editor_main_div")[0].style.top = "60px";
+                // if in 3rd person view then show the cameraobject
+                //envir.getSteveFrustum().visible = true;
+
+                if (envir.thirdPersonView || avatarControlsEnabled)
+                    envir.getSteveFrustum().visible = false;
+                else
+                    envir.getSteveFrustum().visible = true; // envir.thirdPersonView && avatarControlsEnabled;
+
             }
+
+
+            envir.turboResize();
         });
 
 
@@ -128,7 +156,17 @@ class vr_editor_environmentals {
         return false;
     }
 
+    setVisiblitySunHelpingElements(statusVisibility){
+        for (var i=0; i < envir.scene.children.length; i++){
+            var curr_obj = envir.scene.children[i];
 
+            if (curr_obj.categoryName === 'lightHelper' || curr_obj.categoryName === 'lightTargetSpot')
+                curr_obj.visible = statusVisibility;
+
+            if (curr_obj.categoryName === 'lightSun')
+                curr_obj.children[0].visible = statusVisibility;
+        }
+    }
 
 
     turboResize(){

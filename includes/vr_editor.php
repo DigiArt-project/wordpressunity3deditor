@@ -292,7 +292,7 @@ echo '</script>';
 </a>
 
 <!--  Open/Close Right Hierarchy panel-->
-<a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
+<a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
     <i class="material-icons">menu</i>
 </a>
 
@@ -405,7 +405,7 @@ echo '</script>';
 <!--   ================================= FileBrowserToolbar ============================================ -->
 
 <!--  Open/Close button-->
-<a id="bt_close_file_toolbar" data-toggle='on' type="button" class="AssetsToggleStyle AssetsToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense mdc-ripple-upgraded" title="Toggle asset viewer" data-mdc-auto-init="MDCRipple">
+<a id="bt_close_file_toolbar" data-toggle='on' type="button" class="AssetsToggleStyle AssetsToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense mdc-ripple-upgraded" title="Toggle asset viewer" data-mdc-auto-init="MDCRipple">
     <i class="material-icons">menu</i>
 </a>
 
@@ -565,7 +565,7 @@ echo '</script>';
 
 
     <!--  Open/Close Right Hierarchy panel-->
-    <a id="scenesList-toggle-btn" data-toggle='on' type="button" class="scenesListToggleStyle scenesListToggleOn mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle scenes list" data-mdc-auto-init="MDCRipple">
+    <a id="scenesList-toggle-btn" data-toggle='on' type="button" class="scenesListToggleStyle scenesListToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle scenes list" data-mdc-auto-init="MDCRipple">
         <i class="material-icons" style="margin:auto">menu</i>
     </a>
 
@@ -1520,6 +1520,8 @@ echo '</script>';
     }
     
     animate();
+    
+    
 </script>
 
 <?php
