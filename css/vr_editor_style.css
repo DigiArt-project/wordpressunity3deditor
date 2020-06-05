@@ -427,7 +427,7 @@ canvas { pointer-events:none; z-index:10; }
 
 .ToggleUIButtonStyle {
     position: absolute;
-    left: calc(50% - 72px);
+    left: calc(50% + 152px);
     top: 2px;
     background: transparent;
     -webkit-appearance: none;

@@ -130,7 +130,7 @@ echo '</script>';
 
 <script type="text/javascript">
     post_revision_no = 1;
-    isComposerOn = true;
+    
     isPaused = false;
     window.isAnyLight = true;
 
@@ -243,7 +243,7 @@ echo '</script>';
         // Show options
         jQuery('#object-manipulation-toggle').show();
         jQuery('#axis-manipulation-buttons').show();
-        jQuery('#double-sided-switch').show();
+        //jQuery('#double-sided-switch').show();
 
         showObjectPropertiesPanel(transform_controls.getMode());
 
@@ -261,20 +261,6 @@ echo '</script>';
         ev.preventDefault();
     }
 
-    /**
-     * Resize div and renderer
-     *
-     * @param ev
-     */
-    function resize_handler(ev){
-
-        // var vr_editor = jQuery('#vr_editor_main_div');
-        // var cw = vr_editor.width();
-        // vr_editor.css({'height':cw*2/3+'px'});
-        envir.turboResize();
-    }
-
-    window.addEventListener('resize', resize_handler, true);
 
     //===================== End of drag n drop for INSERT ========================================================
 </script>
@@ -287,20 +273,20 @@ echo '</script>';
 
 
     <!--Canvas center-->
-<!--    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">-->
-<!--        <i class="material-icons">visibility</i>-->
-<!--    </a>-->
+    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
+        <i class="material-icons">visibility</i>
+    </a>
 
 
 <!-- Lights -->
-<div class="lightcolumns">
+<div class="lightcolumns hidable">
     <div class="lightcolumn" draggable="true"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
     <div class="lightcolumn" draggable="true"><header draggable="false">Lamp</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
     <div class="lightcolumn" draggable="true"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
 </div>
 
 <!-- Remove game object-->
-<a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+<a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
    title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
     <i class="material-icons">delete</i>
 </a>
@@ -700,16 +686,11 @@ echo '</script>';
                 </div>
             
             <?php } ?>
-
-        
+       
         
         <?php endif;
         wp_reset_query();
         ?>
-
-
-
-
 
     <!-- Scenes -->
     <?php
@@ -760,21 +741,14 @@ echo '</script>';
                             $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
                             if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
                             
-                            
-                            
                             $editurl = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $joker_project_id . '&scene_type=' . $scene_type;
                             $edit_page_link = esc_url( $editurl );
 
                             if($default_scene) {
-                                //echo urlencode($edit_page_link);
-    
-                                
-                                
                                 echo '<script>';
                                 echo 'var url_scene_redirect="'.$editurl.'";';
                                 echo '</script>';
                             }
-                            
                             
                             ?>
                             <div class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
@@ -989,6 +963,7 @@ echo '</script>';
     var transform_controls = new THREE.TransformControls( envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
 
+    // Hierarchy close button
     jQuery("#hierarchy-toggle-btn").click(function() {
 
         if (jQuery("#hierarchy-toggle-btn").hasClass("HierarchyToggleOn")) {
@@ -1018,50 +993,21 @@ echo '</script>';
         
     });
 
-    //------------- Scenes List Toolbar close button -------------
-
+    // Scenes List Toolbar close button
     jQuery("#scenesList-toggle-btn").click(function() {
 
         if (jQuery("#scenesList-toggle-btn").hasClass("scenesListToggleOn")) {
-
             jQuery("#scenesList-toggle-btn").addClass("scenesListToggleOff").removeClass("scenesListToggleOn");
         } else {
-
             jQuery("#scenesList-toggle-btn").addClass("scenesListToggleOn").removeClass("scenesListToggleOff");
         }
 
         jQuery("#scenesInsideVREditor").toggle("slow");
-        
-
     });
-    
-    
 
-
-    // var closeButton = jQuery('#bt_close_file_toolbar');
-    //
-    // closeButton.on('click', function(e){
-    //     console.log("1111");
-    //     // e.preventDefault();
-    //
-    //     // if (fileList[0].style.display === "") {
-    //     //     fileList[0].style.display = 'none';
-    //     //     fileList[0].style.height = '0';
-    //     //     filemanager[0].style.height = '0';
-    //     //     // closeButton[0].innerHTML = 'Open';
-    //     // } else {
-    //     //     fileList[0].style.display = '';
-    //     //     fileList[0].style.height = '27vw';
-    //     //     filemanager[0].style.height = 'auto';
-    //     //     // closeButton[0].innerHTML = 'Close';
-    //     // }
-    //
-    // });
-
+    // 3D Widgets change mode (Translation-Rotation-Scale)
     jQuery("#object-manipulation-toggle").click(function() {
-        
-        console.log("categoryName", transform_controls.object.categoryName);
-        
+
         // Sun and Target spot can not change control manipulation mode
         if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
             transform_controls.object.categoryName.includes("lightSun")){
@@ -1156,30 +1102,7 @@ echo '</script>';
 
     }, false);
 
-    // // // First person view
-    // jQuery('#toggleUIBtn').click(function() {
-    //     var btn = jQuery('#toggleUIBtn');
-    //     var icon = jQuery('#toggleUIBtn i');
-    //
-    //     if (btn.data('toggle') === 'on') {
-    //
-    //         btn.addClass('mdc-theme--text-hint-on-light');
-    //         btn.removeClass('mdc-theme--secondary');
-    //         icon.html('<i class="material-icons">visibility_off</i>');
-    //         btn.data('toggle', 'off');
-    //         hideEditorUI();
-    //
-    //     } else {
-    //         btn.removeClass('mdc-theme--text-hint-on-light');
-    //         btn.addClass('mdc-theme--secondary');
-    //         icon.html('<i class="material-icons">visibility</i>');
-    //         btn.data('toggle', 'on');
-    //
-    //         showEditorUI();
-    //     }
-    // });
-
-
+    
     // Toggle 3rd person view
     jQuery('#thirdPersonBlockerBtn').click(function() {
 
@@ -1187,9 +1110,6 @@ echo '</script>';
 
         envir.scene.getObjectByName("SteveOld").visible = true;
         envir.scene.getObjectByName("Steve").visible = false;
-
-        // var btnDiv = jQuery('#thirdPersonBlocker');
-        // btnDiv[0].style.display = "none";
 
         var btnFirst = jQuery('#firstPersonBlockerBtn')[0];
         btnFirst.click();
@@ -1209,7 +1129,7 @@ echo '</script>';
 
     });
 
-    // Autor rotate in 3D
+    // Autorotate in 3D
     jQuery('#toggle-tour-around-btn').click(function() {
 
         var btn = jQuery('#toggle-tour-around-btn');
@@ -1217,15 +1137,10 @@ echo '</script>';
         if (envir.is2d)
             jQuery("#dim-change-btn").click();
 
-
         if (btn.data('toggle') === 'off') {
 
-            //console.log("ROTATING !!!");
-
-            // envir.orbitControls.enableRotate = true;
             envir.orbitControls.autoRotate = true;
             envir.orbitControls.autoRotateSpeed = 0.6;
-
             btn.data('toggle', 'on');
 
         } else {
@@ -1238,7 +1153,7 @@ echo '</script>';
     });
 
 
-
+    // UNDO button
     jQuery('#undo-scene-button').click(function() {
 
         jQuery('#undo-scene-button').html("...").addClass("LinkDisabled");
@@ -1248,6 +1163,7 @@ echo '</script>';
         wpunity_undoSceneAjax(UPLOAD_DIR, post_revision_no);
     });
 
+    // REDO button
     jQuery('#redo-scene-button').click(function() {
 
         if(post_revision_no>1)
@@ -1257,9 +1173,8 @@ echo '</script>';
 
         wpunity_undoSceneAjax();
     });
-    
-    
-    
+
+
     // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
     jQuery('#save-scene-button').click(function() {
 
@@ -1282,12 +1197,6 @@ echo '</script>';
 
     // When Dat.Gui changes update php, javascript vars and transform_controls
     controllerDatGuiOnChange();
-
-    // Is Recycle Bin deployed
-    // var isRecycleBinDeployed = false;
-
-    /* The items in the recycle bin */
-    // var delArchive = [];
 
     // Load all 3D including Steve
     var loaderMulti;
@@ -1395,8 +1304,8 @@ echo '</script>';
     }
 
     function showObjectPropertiesPanel(type) {
-        hideObjectPropertiesPanels();
-        jQuery("#"+type+"PanelGui").show();
+         hideObjectPropertiesPanels();
+         jQuery("#"+type+"PanelGui").show();
     }
 
 </script>
@@ -1487,9 +1396,7 @@ echo '</script>';
     //--- initiate PointerLockControls ---------------
     initPointerLock();
 
-    //--------------------------- UPDATERS ---------------------------------------------------------------------
     // ANIMATE
-
     function animate()
     {
         if(isPaused)
@@ -1505,7 +1412,7 @@ echo '</script>';
 
         envir.labelRenderer.render( envir.scene, curr_camera);
 
-        if (isComposerOn)
+        if (envir.isComposerOn)
             envir.composer.render();
 
         // Update it
@@ -1540,12 +1447,10 @@ echo '</script>';
         }
     }
 
-
     var mapActions = {}; // You could also use an array
+    
+    // Save scene
     function saveScene(e) {
-        // console.log("Event", event.type);
-        // console.log("Saved time: " + Date.now());
-
         // A change has been made and mouseup then save
         if (e.type ==  'modificationPendingSave')
             mapActions[e.type] = true;
@@ -1559,7 +1464,6 @@ echo '</script>';
                 return;
             }
         }
-        
     }
     
     // trigger autosave for the automatic cases (insert, delete asset from scene)
@@ -1571,10 +1475,11 @@ echo '</script>';
         jQuery("#vr_editor_main_div canvas").get(0).dispatchEvent(clickEvent);
     }
     
-    
+    // Main canvas handlers
     // Select event listener
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'dblclick', onMouseDoubleClickFocus, false );
 
+    // Mouse Up
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mouseup', saveScene, false );
 
     // Capture save events on scene: envir.scene.dispatchEvent({type:"save"});
@@ -1583,13 +1488,11 @@ echo '</script>';
     // To detect enter button press for saving scene
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'keypress', saveScene, false );
     
-    
     /*jQuery("#vr_editor_main_div").get(0).addEventListener( 'mousedown', onMouseDown );*/
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'mousedown', onMouseSelect, false );
     
-
+    // Context Menu click (right click)
     jQuery("#vr_editor_main_div canvas").get(0).addEventListener( 'contextmenu', contextMenuClick, false );
-
     
     // Prevent showing the context menu (normal behaviour when rightclicking in web items)
     jQuery("#popUpArtifactPropertiesDiv").bind('contextmenu', function(e) { return false; });
@@ -1598,13 +1501,11 @@ echo '</script>';
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
-
     
     // Pause rendering (to cool down the machine sometimes)
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
         pauseClickFun();
     }, false);
-
     
     function pauseClickFun(){
         isPaused = !isPaused;
@@ -1619,15 +1520,7 @@ echo '</script>';
     }
     
     animate();
-
-
-    
-    
-    
-    
 </script>
-
-
 
 <?php
 //echo get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0];

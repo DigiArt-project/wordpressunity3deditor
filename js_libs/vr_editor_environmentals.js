@@ -3,6 +3,7 @@ class vr_editor_environmentals {
 
     constructor(container_3D_all){
 
+        this.isComposerOn = true;
         this.is2d = true;
         this.isDebug = false; // Debug mode
 
@@ -49,6 +50,49 @@ class vr_editor_environmentals {
         // This is to make selected items glow
         this.setComposer();
 
+
+        // Toggle UIs to clear out vision
+        jQuery('#toggleUIBtn').click(function() {
+            var btn = jQuery('#toggleUIBtn');
+            var icon = jQuery('#toggleUIBtn i');
+
+            jQuery("#hierarchy-toggle-btn").click();
+            jQuery("#bt_close_file_toolbar").click();
+            jQuery("#scenesList-toggle-btn").click();
+
+            if (btn.data('toggle') === 'on') {
+
+                // Hide
+                btn.addClass('mdc-theme--text-hint-on-light');
+                btn.removeClass('mdc-theme--secondary');
+                icon.html('<i class="material-icons">visibility_off</i>');
+                btn.data('toggle', 'off');
+
+                jQuery(".hidable").show();
+
+                envir.isComposerOn = false;
+                transform_controls.visible  = false;
+                envir.getSteveFrustum().visible = true;
+                envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
+
+            } else {
+                // Show
+                btn.removeClass('mdc-theme--text-hint-on-light');
+                btn.addClass('mdc-theme--secondary');
+                icon.html('<i class="material-icons">visibility</i>');
+                btn.data('toggle', 'on');
+
+                jQuery(".hidable").hide();
+                envir.isComposerOn = true;
+                transform_controls.visible  = true;
+
+                // if in 3rd person view then show the cameraobject
+
+                envir.getSteveFrustum().visible = true;
+            }
+        });
+
+
         // this.setTerrain(); // test after 74
 
         // Window resize event (container was added)
@@ -70,6 +114,9 @@ class vr_editor_environmentals {
             //col.addEventListener('drop', currthis.handleLightDrop, false);
             //col.addEventListener('dragend', currthis.handleLightDragEnd, false);
         });
+
+        // Resize handle
+        window.addEventListener('resize', this.resize_handler, true);
     }
 
     handleLightDragStart(e) {
@@ -80,6 +127,9 @@ class vr_editor_environmentals {
 
         return false;
     }
+
+
+
 
     turboResize(){
         this.SCREEN_WIDTH = this.container_3D_all.clientWidth; // 500; //window.innerWidth;
@@ -113,6 +163,11 @@ class vr_editor_environmentals {
             this.composer.renderer.setPixelRatio(this.ASPECT);
             this.effectFXAA.uniforms['resolution'].value.set(1 / this.SCREEN_WIDTH / this.ASPECT, 1 / this.SCREEN_HEIGHT / this.ASPECT);
 
+    }
+
+    resize_handler(ev){
+
+        envir.turboResize();
     }
 
     makeFullScreen() {
@@ -802,4 +857,8 @@ class vr_editor_environmentals {
         //this.sky.uniforms.sunPosition.value.copy( this.sunSphere.position );
 
     }
+
+
+
+
 }

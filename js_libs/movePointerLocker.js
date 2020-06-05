@@ -107,7 +107,7 @@ function firstPersonViewWithoutLock(){
         envir.composer = [];
         envir.setComposer();
 
-        isComposerOn = true;
+        envir.isComposerOn = true;
 
         // if in 3rd person view then show the cameraobject
         envir.getSteveFrustum().visible = envir.thirdPersonView && avatarControlsEnabled;
@@ -135,7 +135,7 @@ function firstPersonViewWithoutLock(){
         envir.composer = [];
         envir.setComposer();
 
-        isComposerOn = true;
+        envir.isComposerOn = true;
 
         transform_controls.visible  = true;
         envir.getSteveFrustum().visible = true;
