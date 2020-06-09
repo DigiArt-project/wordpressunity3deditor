@@ -129,6 +129,9 @@ else if ($isUserloggedIn && $single_project_asset_list)
     $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $current_game_project_id .'&singleproject=true&#EnglishEdit');
 else if ($isUserAdmin && !$single_project_asset_list)
     $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
+else if ($isUserloggedIn)
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
+
 
 $link_to_edit = home_url().'/wpunity-3d-asset-creator/?';
 
@@ -176,7 +179,7 @@ if ($single_project_asset_list)
         <!-- Card to add asset -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="" >
             <div class="asset-shared-thumbnail mdc-card mdc-theme--background"
-                 style="min-height:100px;height:100%;min-height:120px;position:relative;background:<?php echo $single_project_asset_list? lightgreen: orangered;?>">
+                 style="min-height:100px;height:100%;min-height:120px;position:relative;background:<?php echo $single_project_asset_list? 'lightgreen': 'orangered';?>">
                 
                 
                 

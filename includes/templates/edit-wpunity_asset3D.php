@@ -6,8 +6,10 @@ function remove_admin_login_header() {
     remove_action('wp_head', '_admin_bar_bump_cb');
 }
 
-if ($_GET['preview']!=1)
-    add_action('get_header', 'remove_admin_login_header');
+
+
+//if ($_GET['preview']!=1)
+//    add_action('get_header', 'remove_admin_login_header');
 
 
 ?>
@@ -525,6 +527,7 @@ $asset_back_3d_color_label = ($asset_id == null ? "3D viewer background color" :
 //Check if its new/saved and get data for Terrain Options
 if($asset_id != null) {
 	$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
+	
 	if($saved_term[0]->slug == 'terrain'){
 		$physics = get_post_meta($asset_id,'wpunity_physicsValues',true);
 		if($physics) {
@@ -646,9 +649,9 @@ if($asset_id != null) {
     
     
     
-        
     
-        
+    
+    
 <!--    --><?php //if($isJoker == "true" ) {
 //        ?>
         
@@ -1124,7 +1127,12 @@ if($asset_id != null) {
                 
                 <?php
                 
-                $showIMT = in_array($saved_term[0]->slug, ['pois_imagetext','artifact']) ?'':'none';  ?>
+                
+                if (count($saved_term) > 0)
+                    $showIMT = in_array($saved_term[0]->slug, ['pois_imagetext','artifact']) ?'':'none';
+                else
+                    $showIMT = 'none';
+                ?>
                 
                 <div id="poiImgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showIMT; ?>">
                     <h3 class="mdc-typography--title">Featured Image</h3>
@@ -1190,7 +1198,17 @@ if($asset_id != null) {
 
                 <!-- Video for POI video -->
                 <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
-                <?php $showVid = in_array($saved_term[0]->slug, ['artifact','pois_video'])?'':'none'; ?>
+                
+                
+                
+                <?php
+                
+                if(count($saved_term)>0)
+                    $showVid = in_array($saved_term[0]->slug, ['artifact','pois_video'])?'':'none';
+                else
+                    $showVid = 'none';
+                
+                ?>
 
                 <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
 
@@ -1606,7 +1624,17 @@ if($asset_id != null) {
 
             
             <!-- MOLECULE -->
-            <?php $showMolType = $saved_term[0]->slug == 'molecule'?'':'none'; ?>
+            
+            
+            <?php
+            
+            if (count($saved_term)>0)
+                $showMolType = $saved_term[0]->slug == 'molecule'?'':'none';
+            else
+                $showMolType = 'none';
+            
+            
+            ?>
     
             <div id="moleculeOptionsPanel" style="display: <?php echo ($asset_id == null)?'none':$showMolType; ?>;">
     
@@ -2327,9 +2355,9 @@ if($asset_id != null) {
                 dots[slideIndex - 1].className += " active";
             
         }
-        
-        
-        
+
+
+        jQuery("#wpadminbar").hide();
         
         
         
@@ -2341,9 +2369,11 @@ if($asset_id != null) {
 ?>
 
 
-<?php if ($_GET['directcall']){
-            echo '<script>startConf()</script>';
-        }
+<?php
+
+    if(isset($_GET['directcall']))
+        echo '<script>startConf()</script>';
+
 ?>
 
 

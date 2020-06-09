@@ -52,6 +52,8 @@ function wpunity_createGameAjax(game_project_title, game_project_type_radio,
 
 function fetchAllProjectsAndAddToDOM(current_user_id, parameter_Scenepass){
 
+    console.log(current_user_id, parameter_Scenepass);
+
     jQuery.ajax({
         url: isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_creategame.ajax_url,
         type: 'POST',

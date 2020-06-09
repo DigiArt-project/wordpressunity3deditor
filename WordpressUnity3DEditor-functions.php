@@ -401,8 +401,25 @@ add_action( 'rest_api_init', 'prefix_register_example_routes' );
 
 
 
+// Back-end restrict by author filtering
+function rudr_filter_by_the_author() {
+	$params = array(
+		'name' => 'author', // this is the "name" attribute for filter <select>
+		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
+	);
+	
+	if ( isset($_GET['user']) )
+		$params['selected'] = $_GET['user']; // choose selected user by $_GET variable
+	
+	wp_dropdown_users( $params ); // print the ready author list
+}
 
+add_action('restrict_manage_posts', 'rudr_filter_by_the_author');
 
-
+// Back-end show author for games
+function my_cpt_support_author() {
+	add_post_type_support( 'wpunity_game', 'author' );
+}
+add_action('init', 'my_cpt_support_author');
 
 ?>

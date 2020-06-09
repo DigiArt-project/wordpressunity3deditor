@@ -107,12 +107,16 @@ function wpunity_fetch_list_projects_callback(){
         /*'paged' => $paged,*/
     );
     
-//    if (current_user_can('administrator')){
-//    } elseif (current_user_can('adv_game_master')) {
-//        $custom_query_args['author'] = $user_id;
-//    }elseif (current_user_can('game_master')) {
-//        //$custom_query_args['author'] = $user_id;
-//    }
+    
+    
+    if (current_user_can('administrator')){
+    
+    } elseif (current_user_can('adv_game_master')) {
+        //$custom_query_args['author'] = $user_id;
+    
+    }elseif (current_user_can('game_master')) {
+        //$custom_query_args['author'] = $user_id;
+    }
     
     
     // Get current page and append to custom query parameters array
@@ -120,6 +124,8 @@ function wpunity_fetch_list_projects_callback(){
     
     // Instantiate custom query
     $custom_query = new WP_Query($custom_query_args);
+    
+    $fp = fopen("output_ccq.txt","w");
     
     // Pagination fix
     //$temp_query = $wp_query;
@@ -135,14 +141,28 @@ function wpunity_fetch_list_projects_callback(){
            $custom_query->the_post();
            
            if (current_user_can('administrator')){
+           
            } elseif (current_user_can('adv_game_master')) {
+
+               $collaborators = get_post_meta(get_the_ID(),'wpunity_game_collaborators_ids')[0];
+    
+               fwrite($fp, 'Author:' . print_r(get_the_author_meta('ID'), true));
+               fwrite($fp, 'UserId:' . print_r($user_id, true));
+               fclose($fp);
                
-               if ((get_the_author() != $user_id) && strpos(get_post_meta(get_the_ID(), 'wpunity_game_collaborators_ids')[0], ';'.$user_id.';')===false )
-                   continue;
+               if ( get_the_author_meta('ID') != $user_id ) {                    // Not the author of the game
+                   if (strpos($collaborators, $user_id) === false) {  // and not the collaborator then skip
+
+                       continue;
+                   }
+               }
                
-            }elseif (current_user_can('game_master')) {
-                //$custom_query_args['author'] = $user_id;
-            }
+           }
+           
+           
+//           elseif (current_user_can('game_master')) {
+//                //$custom_query_args['author'] = $user_id;
+//            }
            
            
            
