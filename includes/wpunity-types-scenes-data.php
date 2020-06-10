@@ -148,6 +148,10 @@ function wpunity_scenes_databox_helpdata_show(){
 
 function wpunity_scenes_databox_save($post_id) {
     global $wpunity_databox4,$wpunity_databox_helpdata;
+    
+    if (!isset($_POST['wpunity_scenes_databox_nonce']))
+        return;
+    
     // verify nonce
     if (!wp_verify_nonce($_POST['wpunity_scenes_databox_nonce'], basename(__FILE__))) {
         return $post_id;

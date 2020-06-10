@@ -320,13 +320,8 @@ if ($single_project_asset_list)
 
 <script type="text/javascript">
 
-
-    
     //  wpunity_periodically_update_conf_log();
     setInterval(wpunity_periodically_update_conf_log,3000);
-    
-    
-    
     
     var mdc = window.mdc;
     mdc.autoInit();

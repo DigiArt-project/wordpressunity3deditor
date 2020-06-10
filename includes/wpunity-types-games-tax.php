@@ -106,6 +106,10 @@ function wpunity_games_taxcategory_box_content_save( $post_id ) {
 
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
+    
+    if (!isset($_POST['wpunity_game_cat_noncename']))
+        return;
+    
     if ( !wp_verify_nonce( $_POST['wpunity_game_cat_noncename'], plugin_basename( __FILE__ ) ) )
         return;
 
@@ -140,7 +144,10 @@ function wpunity_games_taxtype_box_content_save( $post_id ) {
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
         return;
-
+    
+    if (!isset($_POST['wpunity_game_cat_noncename']))
+        return;
+    
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
     if ( !wp_verify_nonce( $_POST['wpunity_game_type_noncename'], plugin_basename( __FILE__ ) ) )

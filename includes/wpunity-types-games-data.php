@@ -133,6 +133,10 @@ function wpunity_games_databox_show(){
 // Save data from this metabox with Custom Field for Game ($wpunity_databox3)
 function wpunity_games_databox_save($post_id) {
     global $wpunity_databox3;
+    
+    if (!isset($_POST['wpunity_games_databox_nonce']))
+        return;
+    
     // verify nonce
     if (!wp_verify_nonce($_POST['wpunity_games_databox_nonce'], basename(__FILE__))) {
         return $post_id;

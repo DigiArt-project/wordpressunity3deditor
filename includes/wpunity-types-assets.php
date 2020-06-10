@@ -178,7 +178,16 @@ function wpunity_create_pathdata_asset( $post_id ){
         $post = get_post($post_id);
         //FORMAT: uploads / slug Game / Models / ...
 
-        $parentGameID = intval($_POST['wpunity_asset3d_pgame'], 10);
+        $parentGameID = substr($_POST['_wp_http_referer'], strpos($_POST['_wp_http_referer'], 'wpunity_game=') + 13);
+        
+        if (!is_numeric($parentGameID))
+            echo "ERROR 455: ParentGameID is not numberic.";
+        
+        $fp = fopen("output_savepathdata.txt","w");
+        fwrite($fp, print_r($parentGameID,true));
+        fclose($fp);
+        
+        $parentGameID = intval($parentGameID, 10);
         $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_asset3d_pgame' )->slug : NULL;
 
         $upload_dirpath = $parentGameSlug;

@@ -513,8 +513,6 @@ function wpunity_fetchVideoAjax(){
 // Notify that somebody has entered conference room
 function wpunity_notify_confpeers() {
 
-    console.log(my_ajax_object_fetch_content.ajax_url);
-
     jQuery.ajax({
         url : isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fetch_content.ajax_url,
         type : 'POST',

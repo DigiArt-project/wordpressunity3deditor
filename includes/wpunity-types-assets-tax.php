@@ -217,7 +217,11 @@ function wpunity_assets_taxcategory_box_content_save( $post_id ) {
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
         return;
-
+    
+    
+    if (!isset($_POST['wpunity_asset3d_cat_noncename']))
+        return;
+    
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times
 
@@ -254,6 +258,9 @@ function wpunity_assets_taxcategory_ipr_box_content_save( $post_id ) {
     // verify if this is an auto save routine.
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
+        return;
+    
+    if (!isset($_POST['wpunity_asset3d_ipr_cat_noncename']))
         return;
     
     // verify this came from the our screen and with proper authorization,
@@ -300,7 +307,9 @@ function wpunity_assets_taxpgame_box_content_save( $post_id ) {
     // If it is our form has not been submitted, so we dont want to do anything
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
         return;
-        
+    
+    if (!isset($_POST['wpunity_asset3d_pgame_noncename']))
+        return;
     
     // verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times

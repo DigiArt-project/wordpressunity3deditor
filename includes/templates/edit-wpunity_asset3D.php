@@ -23,10 +23,13 @@ function remove_admin_login_header() {
 putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
 
 $hasTranslator = false;
-if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')){
+
+if ($hasTranslator) {
+    if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')) {
 // Include Google Cloud dependendencies using Composer
-    require(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php');
-    $hasTranslator = true;
+        require(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php');
+        $hasTranslator = true;
+    }
 }
 
 //// [START translate_translate_text]
@@ -578,26 +581,37 @@ if($asset_id != null) {
 		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
         
         $the_image2_id = get_post_meta($asset_id, "wpunity_asset3d_image2");
+        $the_image2_url = null;
+        if (count($the_image2_id)>0) {
+            $the_image2_url = wp_get_attachment_metadata($the_image2_id[0]);
+            $the_image2_url = $the_image2_url['file'] == '' ? null :
+                wp_get_upload_dir()['baseurl'] . "/" . $the_image2_url['file'];
+        }
+        
         $the_image3_id = get_post_meta($asset_id, "wpunity_asset3d_image3");
+        $the_image3_url = null;
+        if (count($the_image3_id)>0) {
+            $the_image3_url = wp_get_attachment_metadata($the_image3_id[0]);
+            $the_image3_url = $the_image3_url['file'] == '' ? null :
+                wp_get_upload_dir()['baseurl'] . "/" . $the_image3_url['file'];
+        }
+        
         $the_image4_id = get_post_meta($asset_id, "wpunity_asset3d_image4");
+        $the_image4_url = null;
+        if (count($the_image4_id)>0) {
+            $the_image4_url = wp_get_attachment_metadata($the_image4_id[0]);
+            $the_image4_url = $the_image4_url['file'] == '' ? null :
+                wp_get_upload_dir()['baseurl'] . "/" . $the_image4_url['file'];
+        }
+        
         $the_image5_id = get_post_meta($asset_id, "wpunity_asset3d_image5");
-        
-        
-        
-        $the_image2_url = wp_get_attachment_metadata($the_image2_id[0]);
-        $the_image3_url = wp_get_attachment_metadata($the_image3_id[0]);
-        $the_image4_url = wp_get_attachment_metadata($the_image4_id[0]);
-        $the_image5_url = wp_get_attachment_metadata($the_image5_id[0]);
- 
-        
-        $the_image2_url = $the_image2_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image2_url['file'];
-        $the_image3_url = $the_image3_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image3_url['file'];
-        $the_image4_url = $the_image4_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image4_url['file'];
-        $the_image5_url = $the_image5_url['file']==''?null:wp_get_upload_dir()['baseurl']."/".$the_image5_url['file'];
- 
-        
-        
-        
+        $the_image5_url = null;
+        if (count($the_image5_id)>0) {
+            $the_image5_url = wp_get_attachment_metadata($the_image5_id[0]);
+            $the_image5_url = $the_image5_url['file'] == '' ? null :
+                wp_get_upload_dir()['baseurl'] . "/" . $the_image5_url['file'];
+        }
+
 	} elseif ($saved_term[0]->slug == 'pois_video') {
 		//upload the featured image for POI video
 		//$asset_featured_image =  $_FILES['poi-video-featured-image'];

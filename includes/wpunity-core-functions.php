@@ -2186,7 +2186,6 @@ function wpunity_fetch_video_action_callback(){
 
 function wpunity_notify_confpeers_callback(){
     
-    
     $ff = fopen("confroom_log.txt","a");
     
     fwrite($ff,chr(10));
@@ -2199,7 +2198,7 @@ function wpunity_notify_confpeers_callback(){
     
 //    if (document.getElementById("ConfRoomReport"))
 //        document.getElementById("ConfRoomReport").innerHTML = "1 user in room:".$_POST['confroom'];
-        
+    
     echo $strDate;
     
     

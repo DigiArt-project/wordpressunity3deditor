@@ -42,7 +42,7 @@ function loadTypesAssetsDataScripts() {
 
 	}
 
-    
+ 
 // Some parameters to pass in the classification.js  ajax
 //	wp_localize_script('wpunity_classification_request', 'phpvars',
 //		array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
@@ -252,7 +252,7 @@ function wpunity_assets_segment_obj_box_content($post){
 
 function wpunity_assets_classify_obj_box_content($post){
 
-	echo '<div id="wpunity_classifyObj_bt" class="wpunity_fetchContentButton" 
+	echo '<div id="wpunity_classifyObj_bt" class="wpunity_fetchContentButton"
                                 onclick="wpunity_classifyObjAjax()">Classify obj</div>';
 	?>
 
@@ -1099,6 +1099,10 @@ function wpunity_assets_databox_show(){
 // Save data from this metabox with Custom Field for Asset3D ($wpunity_databox)
 function wpunity_assets_databox_save($post_id) {
 	global $wpunity_databox1;
+    
+    if (!isset($_POST['wpunity_assets_databox_nonce']))
+        return;
+
 	// verify nonce
 	if (!wp_verify_nonce($_POST['wpunity_assets_databox_nonce'], basename(__FILE__))) {
 		return $post_id;
