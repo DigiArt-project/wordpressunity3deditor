@@ -734,12 +734,14 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 
 #text-asset-sidebar {
     padding:15px;
+    padding-top:0px;
     height:100% !important;
     width:40%;
     background:white;
     border:0px solid black;
     z-index:1000;
     overflow-y:auto;
+
 }
 
 #content {

@@ -1,17 +1,10 @@
-
 <?php
-
 
 function remove_admin_login_header() {
     remove_action('wp_head', '_admin_bar_bump_cb');
 }
-
-
-
 //if ($_GET['preview']!=1)
 //    add_action('get_header', 'remove_admin_login_header');
-
-
 ?>
 
 <?php //Create asset
@@ -20,20 +13,22 @@ function remove_admin_login_header() {
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
 
-putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
-
+// For auto-translation by Google
 $hasTranslator = false;
 
 if ($hasTranslator) {
+    
+    putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
+
     if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')) {
-// Include Google Cloud dependendencies using Composer
+        // Include Google Cloud dependendencies using Composer
         require(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php');
         $hasTranslator = true;
     }
 }
-
 //// [START translate_translate_text]
-use Google\Cloud\Translate\TranslateClient;
+//use Google\Cloud\Translate\TranslateClient;
+
 
 
 // Is on back or front end ?
@@ -90,11 +85,8 @@ add_action('wp_enqueue_scripts', 'loadAsset3DManagerScripts' );
 
 // End Of Scripts Loading
 
-$mean_speed_wind = 14;$var_speed_wind = 30;$min_speed_wind = 0;$max_speed_wind = 40;$income_when_overpower = 0.5;
-$income_when_correct_power = 1;$income_when_under_power = 0;$access_penalty = 0;$archaeology_penalty = 0;
-$natural_reserve_penalty = 0;$hvdistance_penalty = 0;$min_consumption = 50;$max_consumption = 150;
-$mean_consumption = 100;$var_consumption = 50;$optCosts_size = 90;$optCosts_dmg = 0.005;$optCosts_cost = 3;
-$optCosts_repaid = 1;$optGen_class = 'A';$optGen_speed = 10;$optGen_power = 3;$optProductionVal = null;
+// Variables of vr labs
+//include plugins_url( '', dirname(__FILE__)  ).'/vr_labs_variables.php';
 
 
 $perma_structure = get_option('permalink_structure') ? true : false;
@@ -136,21 +128,12 @@ if (!$asset_id) {
     $isOwner = true;
 }
 
-
-
-
-
 $isEditable = false;
 
 // Old asset
 if(isset($_GET['wpunity_asset'])) {
     $author_id = get_post_field('post_author', $asset_id);
 }
-
-
-
-
-
 
 if ($isUserloggedIn) {
     $user_id = get_current_user_id();
@@ -206,17 +189,6 @@ else {
         $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
     
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // ============================================
 // Submit Handler
@@ -290,17 +262,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         $assetDescFormRussian = $result[text];
     }
     
-    
-    
-    
-    
     $assetFonts = esc_attr(strip_tags($_POST['assetFonts']));
     $assetback3dcolor=  esc_attr(strip_tags($_POST['assetback3dcolor']));
     
-    
 	$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
 	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
-    
     
     $assetCatIPRID = intval($_POST['term_id_ipr']); //ID of Asset Category IPR (hidden input)
     $assetCatIPRTerm = get_term_by('id', $assetCatIPRID, 'wpunity_asset3d_ipr_cat');
@@ -431,10 +397,6 @@ $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 $asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
 $asset_title_label = ($asset_id == null ? "Enter a title for the asset in English" : "Edit the title of the asset in English");
 
-
-
-
-
 $asset_desc_label = ($asset_id == null ? "Add a description for the asset" : "Edit the description of the asset");
 $asset_desc_saved = ($asset_id == null ? "" : get_post_field('post_content', $asset_id));
 $asset_desc_kids_label = ($asset_id == null ? "Add a description of the asset for kids" : "Edit the description of the asset for kids");
@@ -520,7 +482,7 @@ echo '</script>';
 
 
 $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_fonts', true));
-$asset_fonts_label = ($asset_id == null ? "Fonts" : "Fonts");
+
 
 $asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
 $asset_back_3d_color_label = ($asset_id == null ? "3D viewer background color" : "3D viewer background color");
@@ -637,6 +599,8 @@ if($asset_id != null) {
         .site-branding {display:none;}
         #content {padding:0px;}
         .site-content-contain{margin:0;overflow:hidden;}
+        html { margin-top: 0px !important; }
+        * html body { margin-top: 0px !important; }
     </style>
 
     <div id="wrapper_3d_inner" style="position: fixed; top:0; right:0;width:60%;height:100%;z-index:1">
@@ -727,6 +691,8 @@ if($asset_id != null) {
 
         <div id="edit-asset-header">
             <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
+            
+
             <table id="wpunity-asset-author" class="mdc-typography--caption"
                    style="display:inline-block;text-align:left;float:right;right:0;margin-top:10px">
                 <tr>
@@ -738,10 +704,10 @@ if($asset_id != null) {
                 </tr>
             </table>
         </div>
-        
-        
     
     
+        
+        
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
@@ -803,6 +769,13 @@ if($asset_id != null) {
 
 								<?php foreach ( $cat_terms as $term ) { ?>
 
+                                    <?php
+                                    if (  strpos($term->name, "Points") !== false )
+                                        continue;
+                                    
+                                    ?>
+                                    
+                                    
                                     <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
 										<?php echo $term->name; ?>
                                     </li>
@@ -818,16 +791,20 @@ if($asset_id != null) {
                 <input id="termIdInput" type="hidden" name="term_id" value="">
         </div>
 
+        
+        <?php $curr_font = str_replace("+"," ", $fonts); ?>
+        
         <!--   TITLE , DESCRIPTION , 3D files  -->
+        
         <div class="" id="informationPanel" style="display: none;padding-top:10px;">
 
             <!-- TITLE , DESCRIPTION -->
             <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
             
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
-                    <input id="assetTitle" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
+                    <input id="assetTitle" type="text" class="changablefont mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="3" maxlength="40"
-                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em"
+                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em; font-family: <?php echo $curr_font?>;"
                            value="<?php echo trim($asset_title_saved); ?>">
                     <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                     <div class="mdc-textfield__bottom-line"></div>
@@ -854,32 +831,32 @@ if($asset_id != null) {
                     <!--     English EDIT-->
                     <div id="EnglishEdit" class="tab-container_lang" style="position:relative;">
                         
-                        <div id="assetDescription" class=" mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                        <div id="assetDescription" class="changablefont mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDesc" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDesc" class="mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family: <?php echo $curr_font?>;"
                               name="assetDesc" form="3dAssetForm"><?php echo trim($asset_desc_saved); ?></textarea>
                             <label for="assetDesc" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_label; ?></label>
                         </div>
 
 
-                        <div id="assetDescriptionKids" class=" mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                        <div id="assetDescriptionKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family: <?php echo $curr_font?>;"
                                       name="assetDescKids" form="3dAssetForm"><?php echo trim($asset_desc_kids_saved); ?></textarea>
                             <label for="assetDescKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_kids_label; ?></label>
                         </div>
 
 
-                        <div id="assetDescriptionExperts" class=" mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                        <div id="assetDescriptionExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none;  resize:vertical;font-family: <?php echo $curr_font?>;"
                                       name="assetDescExperts" form="3dAssetForm"><?php echo trim($asset_desc_experts_saved); ?></textarea>
                             <label for="assetDescExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_experts_label; ?></label>
                         </div>
 
-                        <div id="assetDescriptionPerception" class=" mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                        <div id="assetDescriptionPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none;  resize:vertical;font-family: <?php echo $curr_font?>;"
                                       name="assetDescPerception" form="3dAssetForm"><?php echo trim($asset_desc_perception_saved); ?></textarea>
                             <label for="assetDescPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_perception_label; ?></label>
                         </div>
@@ -894,14 +871,14 @@ if($asset_id != null) {
 
                         <div id="assetTitleGreek" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetTitGreek" class="mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
+                            <textarea id="assetTitGreek" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;font-family: <?php echo $curr_font?>;"
                                       name="assetTitGreek" form="3dAssetForm"><?php echo trim($asset_title_greek_saved); ?></textarea>
                             <label for="assetTitGreek" class="mdc-textfield__label" style="background: none;"><?php echo $asset_title_greek_label; ?></label>
                         </div>
                         
                         <div id="assetDescriptionGreek" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                                  style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescGreek" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescGreek" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family: <?php echo $curr_font?>; "
                                       name="assetDescGreek" form="3dAssetForm"><?php echo trim($asset_desc_greek_saved); ?></textarea>
                             <label for="assetDescGreek" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_label; ?></label>
                         </div>
@@ -909,21 +886,21 @@ if($asset_id != null) {
 
                         <div id="assetDescriptionGreekKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescGreekKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescGreekKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family: <?php echo $curr_font?>;"
                                       name="assetDescGreekKids" form="3dAssetForm"><?php echo trim($asset_desc_greek_kids_saved); ?></textarea>
                             <label for="assetDescGreekKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_kids_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGreekExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescGreekExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescGreekExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family: <?php echo $curr_font?>;"
                                       name="assetDescGreekExperts" form="3dAssetForm"><?php echo trim($asset_desc_greek_experts_saved); ?></textarea>
                             <label for="assetDescGreekExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_experts_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGreekPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescGreekPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescGreekPerception" class="mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family: <?php echo $curr_font?>;"
                                       name="assetDescGreekPerception" form="3dAssetForm"><?php echo trim($asset_desc_greek_perception_saved); ?></textarea>
                             <label for="assetDescGreekPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_greek_perception_label; ?></label>
                         </div>
@@ -936,35 +913,35 @@ if($asset_id != null) {
                         
                         <div id="assetTitleSpanish" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetTitSpanish" class="mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
+                                <textarea id="assetTitSpanish" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;font-family: <?php echo $curr_font?>;"
                                           name="assetTitSpanish" form="3dAssetForm"><?php echo trim($asset_title_spanish_saved); ?></textarea>
                             <label for="assetTitSpanish" class="mdc-textfield__label" style="background: none;"><?php echo $asset_title_spanish_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionSpanish" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescSpanish" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescSpanish" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family: <?php echo $curr_font?>;"
                                       name="assetDescSpanish" form="3dAssetForm"><?php echo trim($asset_desc_spanish_saved); ?></textarea>
                             <label for="assetDescSpanish" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_spanish_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionSpanishKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescSpanishKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescSpanishKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescSpanishKids" form="3dAssetForm"><?php echo trim($asset_desc_spanish_kids_saved); ?></textarea>
                             <label for="assetDescSpanishKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_spanish_kids_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionSpanishExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescSpanishExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescSpanishExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescSpanishExperts" form="3dAssetForm"><?php echo trim($asset_desc_spanish_experts_saved); ?></textarea>
                             <label for="assetDescSpanishExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_spanish_experts_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionSpanishPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescSpanishPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescSpanishPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescSpanishPerception" form="3dAssetForm"><?php echo trim($asset_desc_spanish_perception_saved); ?></textarea>
                             <label for="assetDescSpanishPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_spanish_perception_label; ?></label>
                         </div>
@@ -977,35 +954,35 @@ if($asset_id != null) {
                         
                         <div id="assetTitleFrench" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetTitFrench" class="mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
+                                <textarea id="assetTitFrench" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
                                           name="assetTitFrench" form="3dAssetForm"><?php echo trim($asset_title_french_saved); ?></textarea>
                             <label for="assetTitFrench" class="mdc-textfield__label" style="background: none;"><?php echo $asset_title_french_label; ?></label>
                         </div>
                         
                         <div id="assetDescriptionFrench" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                                  style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescFrench" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescFrench" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                       name="assetDescFrench" form="3dAssetForm"><?php echo trim($asset_desc_french_saved); ?></textarea>
                             <label for="assetDescFrench" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionFrenchKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescFrenchKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescFrenchKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescFrenchKids" form="3dAssetForm"><?php echo trim($asset_desc_french_kids_saved); ?></textarea>
                             <label for="assetDescFrenchKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_kids_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionFrenchExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescFrenchExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescFrenchExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescFrenchExperts" form="3dAssetForm"><?php echo trim($asset_desc_french_experts_saved); ?></textarea>
                             <label for="assetDescFrenchExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_experts_label; ?></label>
                         </div>
     
                         <div id="assetDescriptionFrenchPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescFrenchPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescFrenchPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescFrenchPerception" form="3dAssetForm"><?php echo trim($asset_desc_french_perception_saved); ?></textarea>
                             <label for="assetDescFrenchPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_french_perception_label; ?></label>
                         </div>
@@ -1017,35 +994,35 @@ if($asset_id != null) {
 
                         <div id="assetTitleGerman" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetTitGerman" class="mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
+                                <textarea id="assetTitGerman" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
                                           name="assetTitGerman" form="3dAssetForm"><?php echo trim($asset_title_german_saved); ?></textarea>
                             <label for="assetTitGerman" class="mdc-textfield__label" style="background: none;"><?php echo $asset_title_german_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGerman" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescGerman" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescGerman" class="changablefont mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
                                       name="assetDescGerman" form="3dAssetForm"><?php echo trim($asset_desc_german_saved); ?></textarea>
                             <label for="assetDescGerman" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_german_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGermanKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescGermanKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescGermanKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescGermanKids" form="3dAssetForm"><?php echo trim($asset_desc_german_kids_saved); ?></textarea>
                             <label for="assetDescGermanKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_german_kids_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGermanExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescGermanExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescGermanExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescGermanExperts" form="3dAssetForm"><?php echo trim($asset_desc_german_experts_saved); ?></textarea>
                             <label for="assetDescGermanExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_german_experts_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionGermanPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescGermanPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescGermanPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescGermanPerception" form="3dAssetForm"><?php echo trim($asset_desc_german_perception_saved); ?></textarea>
                             <label for="assetDescGermanPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_german_perception_label; ?></label>
                         </div>
@@ -1056,35 +1033,35 @@ if($asset_id != null) {
 
                         <div id="assetTitleRussian" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetTitRussian" class="mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
+                                <textarea id="assetTitRussian" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0px;"
                                           name="assetTitRussian" form="3dAssetForm"><?php echo trim($asset_title_russian_saved); ?></textarea>
                             <label for="assetTitRussian" class="mdc-textfield__label" style="background: none;"><?php echo $asset_title_russian_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionRussian" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                            <textarea id="assetDescRussian" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                            <textarea id="assetDescRussian" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                       name="assetDescRussian" form="3dAssetForm"><?php echo trim($asset_desc_russian_saved); ?></textarea>
                             <label for="assetDescRussian" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_russian_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionRussianKids" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescRussianKids" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescRussianKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescRussianKids" form="3dAssetForm"><?php echo trim($asset_desc_russian_kids_saved); ?></textarea>
                             <label for="assetDescRussianKids" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_russian_kids_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionRussianExperts" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescRussianExperts" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescRussianExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescRussianExperts" form="3dAssetForm"><?php echo trim($asset_desc_russian_experts_saved); ?></textarea>
                             <label for="assetDescRussianExperts" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_russian_experts_label; ?></label>
                         </div>
 
                         <div id="assetDescriptionRussianPerception" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
                              style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                                <textarea id="assetDescRussianPerception" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; "
+                                <textarea id="assetDescRussianPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; "
                                           name="assetDescRussianPerception" form="3dAssetForm"><?php echo trim($asset_desc_russian_perception_saved); ?></textarea>
                             <label for="assetDescRussianPerception" class="mdc-textfield__label" style="background: none;"><?php echo $asset_desc_russian_perception_label; ?></label>
                         </div>
@@ -1092,12 +1069,16 @@ if($asset_id != null) {
     
                 </div>
                 
-                <div id="assetFontsDiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
-                     style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-                
-                    <input id="assetFonts" type="hidden" class="mdc-textfield__input" style="box-shadow: none;width:40%;margin-left:60%;position:absolute"
+                <div id="assetFontsDiv" style="width:100%;margin-bottom:15px;">
+
+
+                    <span for="assetFonts" class="mdc-textfield" style="width:40%; height:40px; ">Fonts</span>
+                    
+                    <input id="assetFonts" type="hidden" class="mdc-textfield__input" style="bottom:5px; width:40%;margin-left:10%;"
                            name="assetFonts" form="3dAssetForm" value="<?php echo trim($asset_fonts_saved); ?>">
-    
+
+                    
+                    
                     <script>
                         jQuery('#assetFonts')
                             .fontselect()
@@ -1106,19 +1087,10 @@ if($asset_id != null) {
                             });
                     </script>
     
-                    <label for="assetFonts" class="mdc-textfield__label" style="background: none; top: 0px"><?php echo $asset_fonts_label; ?></label>
-                </div>
-    
-                <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
-                     style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%;">
-    
-                    <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}"
-                           style="width:40%;margin-left:60%;padding:20px;" value="000000">
                     
-                    <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
-                           name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
-                    <label for="assetback3dcolor" class="mdc-textfield__label" style="background: none;"><?php echo $asset_back_3d_color_label; ?></label>
                 </div>
+    
+                
 
                 <!-- WIKIPEDIA button -->
                 <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
@@ -1224,7 +1196,7 @@ if($asset_id != null) {
                 
                 ?>
 
-                <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid; ?>;">
+                <div id="poiVideoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid;?>; background:lightgrey; padding:5px; width:100%">
 
                     <h3 class="mdc-typography--title">Video</h3>
                     
@@ -1238,7 +1210,8 @@ if($asset_id != null) {
                         <?php if(strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
                             <?php echo $attachment_file; ?>
                             <video width="320" height="240"
-                                   poster="/wp-content/plugins/wordpressunity3deditor/images/video_img.png" controls preload="auto">
+                                   poster="<?php echo plugins_url( '../images/', dirname(__FILE__)  ).'/video_img.png'?>" controls preload="auto">
+                                
                                 <source src="<?php echo $attachment_file;?>" type="video/mp4">
                                 <source src="<?php echo $attachment_file;?>" type="video/ogg">
                                 Your browser does not support the video tag.
@@ -1432,26 +1405,28 @@ if($asset_id != null) {
                         <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
                     </div>
 
+                    <?php $images_accesicons_path = plugins_url( '../images/accessibility_icons/', dirname(__FILE__)  );?>
+                    
                     <div style="display:inline-block; float:right; right:0;">
                         <button type='button' class="mdc-button" onclick="openAccess(event, '')"
                                 style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/general_population_icon.png" width="40px" height="40px" style="background-color:white"/>
+                            <img src="<?php echo $images_accesicons_path.'/general_population_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                         </button>
                         
                         <button type='button' class="mdc-button" onclick="openAccess(event, 'Experts')"
                                 style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/graduation_icon.png" width="40px" height="40px" style="background-color:white"/>
+                            <img src="<?php echo $images_accesicons_path.'/graduation_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                         </button>
     
                         <button type='button' class="mdc-button" onclick="openAccess(event, 'Perception')"
                                 style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/heart_icon.png" width="40px" height="40px" style="background-color:white"/>
+                            <img src="<?php echo $images_accesicons_path.'/heart_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                         </button>
     
                         <button type='button' class="mdc-button"
                                 onclick="openAccess(event, 'Kids')"
                                 style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
-                            <img src="/wp-content/plugins/wordpressunity3deditor/images/accessibility_icons/children_icon.png" width="40px" height="40px" style="background-color:white"/>
+                            <img src="<?php echo $images_accesicons_path.'/children_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                         </button>
                     </div>
                 </div>
@@ -1512,7 +1487,7 @@ if($asset_id != null) {
                 </div>
 
                 <div id="confwindow_helper" style="padding-top: 20px;text-align: center;width: 200px;margin: 0 auto;">
-                    <h1><img src="/wp-content/plugins/wordpressunity3deditor/peer-calls/src/res/peer-calls.svg" alt="Peer Calls" ></h1>
+                    <h1><img src="<?php echo plugins_url( '../peer-calls/src/res/', dirname(__FILE__)  ).'/peer-calls.svg';?>" alt="Peer Calls" ></h1>
                     <p>Video-conference with the museum expert!</p>
                     <button type="button" onclick="startConf()">Call</button>
                 </div>
@@ -1842,10 +1817,11 @@ if($asset_id != null) {
 
                             
                         </div>
-        
+
                         
                         
-                        <div id="sshotFileInputContainer" class="" style="display: <?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
+                        
+                        <div id="sshotFileInputContainer" class="" style="display: <?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>; width:100%; background:lightgrey; padding:5px;">
                             <h3 class="mdc-typography--title">Screenshot</h3>
                             <?php
                                 if($asset_id==null) {
@@ -1864,6 +1840,21 @@ if($asset_id != null) {
                             <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
                             <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                          </div>
+    
+                        <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
+                            <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield"
+                                 style="border: 1px solid rgba(0, 0, 0, 0.3);width:100%; margin-top:0px;">
+
+                                <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}"
+                                       style="width:40%;margin-left:60%;" value="000000">
+
+                                <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; display:none; "
+                                       name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
+                                <label for="assetback3dcolor" class="mdc-textfield__label" style="background: none;"><?php echo $asset_back_3d_color_label; ?></label>
+                            </div>
+    
+                        <?php } ?>
+                        
 
                         <hr />
                         
@@ -1942,6 +1933,10 @@ if($asset_id != null) {
                         data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
                     <?php echo $buttonTitleText; ?>
                 </button>
+
+                
+                
+                
             <?php } ?>
     
             
@@ -2307,7 +2302,7 @@ if($asset_id != null) {
             var fontWeight = font[1] || 400;
 
             // Set selected font on paragraphs
-            jQuery('p').css({fontFamily:"'"+fontFamily+"'", fontWeight:fontWeight});
+            jQuery('.changablefont').css({fontFamily:"'"+fontFamily+"'", fontWeight:fontWeight});
         }
 
 
@@ -2372,13 +2367,16 @@ if($asset_id != null) {
 
 
         jQuery("#wpadminbar").hide();
-        
+        jQuery(".js no-svg").css("margin-top:0px");
         
         
     </script>
 
 <?php
-    if($isUserAdmin && $isPreviewMode)
+
+
+
+if($isUserAdmin && $isPreviewMode)
         echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
 ?>
 
@@ -2389,6 +2387,4 @@ if($asset_id != null) {
         echo '<script>startConf()</script>';
 
 ?>
-
-
 
