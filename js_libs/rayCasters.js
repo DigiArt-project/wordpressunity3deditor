@@ -410,6 +410,9 @@ function activeOverides(event, object){
     if( categ === 'lightSun')
         displaySunProperties(event, name);
 
+    if( categ === 'lightLamp')
+        displayLampProperties(event, name);
+
 }
 
 
@@ -600,17 +603,6 @@ function displaySunProperties(event, name){
     // The whole popup div
     var ppPropertiesDiv = jQuery("#popUpSunPropertiesDiv");
 
-    // // The checkbox only
-    // var chbox = jQuery("#poi_video_reward_checkbox");
-    //
-    // // Save the previous artifact properties values (in case of  direct mouse click on another item)
-    // chbox.trigger("change");
-    //
-    // clearAndUnbind(null, null, "poi_video_reward_checkbox");
-
-    // chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
-
-
     //jQuery("#sunColor")
     jQuery("#sunColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
     jQuery("#sunIntensity")[0].value = transform_controls.object.intensity;
@@ -618,17 +610,31 @@ function displaySunProperties(event, name){
     document.getElementById("sunColor").value = transform_controls.object.children[0].material.color.getHexString();
     jQuery("#sunColor")[0].style.background = "#" + jQuery("#sunColor")[0].value;
 
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+}
 
+// LAMP PROPERTIES DIV show
+function displayLampProperties(event, name){
 
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpLampPropertiesDiv");
 
+    //jQuery("#sunColor")
+    jQuery("#lampColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#lampPower")[0].value = transform_controls.object.power;
+    jQuery("#lampDecay")[0].value = transform_controls.object.decay;
+    jQuery("#lampDistance")[0].value = transform_controls.object.distance;
+
+    document.getElementById("lampColor").value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#lampColor")[0].style.background = "#" + jQuery("#lampColor")[0].value;
 
     // Show Selection
     ppPropertiesDiv.show();
     ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
-
-    // Add change listener
-    // chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
 }
 
 
@@ -910,10 +916,22 @@ function changeSunIntensity(){
 }
 
 
+function changeLampPower(){
+    transform_controls.object.power = document.getElementById("lampPower").value;
+}
+
+function changeLampDistance(){
+    transform_controls.object.distance = document.getElementById("lampDistance").value;
+}
+
+function changeLampDecay(){
+    transform_controls.object.decay = document.getElementById("lampDecay").value;
+}
 
 
-/// Font Selector
-function updateColorPickerLight(picker){
+
+/// Sun Color Selector
+function updateSunColorPickerLight(picker){
 
 
     var hexcol = "0x" + document.getElementById("sunColor").value;
@@ -933,10 +951,21 @@ function updateColorPickerLight(picker){
     var lightTargetSpot = envir.scene.getObjectByName("lightTargetSpot_" + transform_controls.object.name);
     lightTargetSpot.children[0].material.color.setHex(hexcol);
 
-    //document.getElementById('assetback3dcolorLight').value = picker.toRGBString();
-    // wu_webw_3d_view .scene.background.r = picker.rgb[0]/255;
-    // wu_webw_3d_view .scene.background.g = picker.rgb[1]/255;
-    // wu_webw_3d_view .scene.background.b = picker.rgb[2]/255;
+
+}
+
+
+/// Lamp Color Selector
+function updateLampColorPickerLight(picker){
+
+
+    var hexcol = "0x" + document.getElementById("lampColor").value;
+
+    // Sun as object
+    transform_controls.object.color.setHex(hexcol);
+
+    // Lamp as Sphere
+    transform_controls.object.children[0].material.color.setHex(hexcol);
 }
 
 

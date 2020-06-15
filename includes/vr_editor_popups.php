@@ -104,11 +104,62 @@
 
 
     <!-- The Color of the sun-->
-    <label for="sunIntensity" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
+    <label for="sunColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
         Sun Color in Hex:</label>
 
     <input type="text" id="sunColor" name="sunColor" title="Set a hex number, ffffff is the default (white)"
-           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateColorPickerLight(this)'}" />
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateSunColorPickerLight(this)'}" />
     
 </div>
+
+
+<!-- Lamp @ Archaeology: Popup menu to for Lamp Decay, Power, Distance and Color -->
+<div id="popUpLampPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 250px;display:none; max-width:300px">
+
+    <!-- The close button-->
+    <a style="float: right;" type="button" class="mdc-theme--primary"
+       onclick='this.parentNode.style.display = "none";  return false;'>
+        <!--        clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox");-->
+        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
+    </a>
+
+    <!-- The intensity-->
+    <label for="lampPower" class="mdc-textfield__label" style="top: 8px; position: initial">
+        Set Lamp Power:</label>
+
+    <input type="text" id="lampPower" name="lampPower" title="Set a number from 0 to infinite, 1 is the default"
+           value="1" maxlength="4"
+           class="mdc-textfield__input" style="width:7ch" onkeyup="changeLampPower()"/>
+
+
+    <!-- The Color of the Lamp-->
+    <label for="lampColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
+        Lamp Color in Hex:</label>
+
+    <input type="text" id="lampColor" name="lampColor" title="Set a hex number, ffffff is the default (white)"
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateLampColorPickerLight(this)'}" />
+
+
+    <!-- The distance-->
+    <label for="lampDistance" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+        Set Lamp Distance:</label>
+
+    <input type="text" id="lampDistance" name="lampDistance" title="Set a number from 0 to infinite, 1 is the default"
+           value="100" maxlength="4"
+           class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeLampDistance()"/>
+
+
+    <!-- The Decay -->
+    <label for="lampDecay" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+        Set Lamp Decay:</label>
+
+    <input type="text" id="lampDecay" name="lampDecay" title="Set a number from 0 to infinite, 1 is the default"
+           value="2" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeLampDecay()"/>
+
+
+
+
+
+</div>
+
 

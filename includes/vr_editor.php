@@ -181,8 +181,8 @@ echo '</script>';
         var nameModel = dataDrag.title;
         
         // REM HERE
-        if(dataDrag.categoryName==="lightSun"){
-            // SUN
+        if(dataDrag.categoryName==="lightSun" || dataDrag.categoryName==="lightLamp"){
+            // SUN or LAMP
 
             var path = objFname = objID = mtlID = mtlFname = assetid = categoryIcon = '';
             
@@ -280,9 +280,9 @@ echo '</script>';
 
 <!-- Lights -->
 <div class="lightcolumns hidable">
-    <div class="lightcolumn" draggable="true"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
-    <div class="lightcolumn" draggable="true"><header draggable="false">Lamp</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
-    <div class="lightcolumn" draggable="true"><header draggable="false">Spot</header><img src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
+    <div class="lightcolumn" data-light="Sun" draggable="true"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
+    <div class="lightcolumn" data-light="Lamp" draggable="true"><header draggable="false">Lamp</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
+    <div class="lightcolumn" data-light="Spot" draggable="true"><header draggable="false">Spot</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
 </div>
 
 <!-- Remove game object-->
@@ -1501,6 +1501,7 @@ echo '</script>';
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    //jQuery("#popUpLampPropertiesDiv").bind('contextmenu', function(e) { return false; });
     
     // Pause rendering (to cool down the machine sometimes)
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {
