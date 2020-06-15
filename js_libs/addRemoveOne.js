@@ -222,7 +222,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         envir.addInHierarchyViewer(insertedObject);
 
 
-        // Auto-save
+        // REM HERE
         //triggerAutoSave();
 
 

@@ -273,8 +273,10 @@ echo '</script>';
 
 
     <!--Canvas center-->
-    <a id="toggleUIBtn" data-toggle='on' type="button" class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
-        <i class="material-icons">visibility</i>
+    <a id="toggleUIBtn" data-toggle='on' type="button"
+       class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface"
+        >
+        <i class="material-icons" style="background: #ffffff; opacity:0.2">visibility</i>
     </a>
 
 
@@ -1010,7 +1012,8 @@ echo '</script>';
 
         // Sun and Target spot can not change control manipulation mode
         if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
-            transform_controls.object.categoryName.includes("lightSun")){
+            transform_controls.object.categoryName.includes("lightSun") ||
+            transform_controls.object.categoryName.includes("lightLamp")){
             return;
         }
         
@@ -1277,8 +1280,8 @@ echo '</script>';
                 jQuery("#removeAssetBtn").show();
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
                 
-                if (selected_object_name.includes("lightSun")){
-                    transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO: Sun can not be rotated
+                if (selected_object_name.includes("lightSun") || selected_object_name.includes("lightLamp")){
+                    transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO: Sun and lamp can not be rotated
                 }
                 
             } else {
@@ -1501,7 +1504,7 @@ echo '</script>';
     jQuery("#popUpPoiImageTextPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
-    //jQuery("#popUpLampPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popUpLampPropertiesDiv").bind('contextmenu', function(e) { return false; });
     
     // Pause rendering (to cool down the machine sometimes)
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {

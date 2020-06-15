@@ -76,7 +76,7 @@ class vr_editor_environmentals {
                 envir.getSteveFrustum().visible = false;
 
 
-                envir.setVisiblitySunHelpingElements(false);
+                envir.setVisiblityLightHelpingElements(false);
 
                 jQuery("#wpadminbar").hide();
 
@@ -97,7 +97,7 @@ class vr_editor_environmentals {
                 envir.isComposerOn = true;
                 transform_controls.visible  = true;
 
-                envir.setVisiblitySunHelpingElements(true);
+                envir.setVisiblityLightHelpingElements(true);
 
                 // wp admin bar show
                 jQuery("#wpadminbar").show();
@@ -160,15 +160,23 @@ class vr_editor_environmentals {
         return false;
     }
 
-    setVisiblitySunHelpingElements(statusVisibility){
+    setVisiblityLightHelpingElements(statusVisibility){
+
         for (var i=0; i < envir.scene.children.length; i++){
             var curr_obj = envir.scene.children[i];
 
-            if (curr_obj.categoryName === 'lightHelper' || curr_obj.categoryName === 'lightTargetSpot')
+            if (curr_obj.categoryName === 'lightHelper' || curr_obj.categoryName === 'lightTargetSpot' )
                 curr_obj.visible = statusVisibility;
 
             if (curr_obj.categoryName === 'lightSun')
                 curr_obj.children[0].visible = statusVisibility;
+
+            if (curr_obj.categoryName === 'lightLamp')
+                curr_obj.children[0].visible = statusVisibility;
+
+            if (curr_obj.categoryName === 'lightSpot')
+                curr_obj.children[0].visible = statusVisibility;
+
         }
     }
 
