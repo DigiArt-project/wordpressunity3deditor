@@ -146,15 +146,10 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var lightLamp = new THREE.PointLight( 0xffffff, 1, 100, 2 );
         lightLamp.power = 1;
 
-
-        console.log(lightLamp);
-        //lightlamp.position.set( 50, 50, 50 ); // Set by raycaster
-
         lightLamp.name = nameModel3D;
         lightLamp.isDigiArt3DModel = true;
         lightLamp.categoryName = "lightLamp";
         lightLamp.isLight = true;
-
 
         //// Add Lamp Helper
         var lampSphere = new THREE.Mesh(
@@ -175,8 +170,6 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
         envir.scene.add(lightLamp);
         envir.scene.add(lightLampHelper);
-
-
 
         lightLampHelper.update();
 
@@ -204,8 +197,6 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-
-
         selected_object_name = nameModel3D;
 
         // Dimensions
@@ -221,10 +212,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         // Add in scene
         envir.addInHierarchyViewer(insertedObject);
 
-
-        // REM HERE
-        //triggerAutoSave();
-
+        triggerAutoSave();
 
     } else {
 

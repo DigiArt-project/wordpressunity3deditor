@@ -23,7 +23,11 @@ class ParseJSON {
         $light_color_g = 1;
         $light_color_b = 1;
     
-        $lightintensity = 1;
+        $lightintensity = 1; // Sun
+    
+        $lightpower = 1; // Lamp
+        $lightdecay = 1; // Lamp
+        $lightdistance = 100; // Lamp
         
         
         foreach ($json_objects as $key=>$value) {
@@ -64,6 +68,30 @@ class ParseJSON {
                 $categoryName = 'lightSun';
                 $isLight = "true";
                 $lightintensity = $value->lightintensity;
+    
+            } elseif ( strpos($name, 'lightLamp') !== false ){
+    
+                $path = '';
+                $obj = '';
+                $mtl = '';
+    
+                $r_x = 0;
+                $r_y = 0;
+                $r_z = 0;
+    
+                $target_position_x = 0;
+                $target_position_y = 0;
+                $target_position_z = 0;
+    
+                $light_color_r = $value->lightcolor[0];
+                $light_color_g = $value->lightcolor[1];
+                $light_color_b = $value->lightcolor[2];
+    
+                $categoryName = 'lightLamp';
+                $isLight = "true";
+                $lightpower = $value->lightpower;
+                $lightdecay = $value->lightdecay;
+                $lightdistance = $value->lightdistance;
                 
             } else {
                 $path =$this->relativepath . $value->fnPath;
@@ -134,6 +162,9 @@ class ParseJSON {
                                             '","isJoker":"'.$isJoker.
                                             '","isLight":"'.$isLight.
                                             '","lightintensity":"'.$lightintensity.
+                                            '","lightpower":"'.$lightpower.
+                                            '","lightdecay":"'.$lightdecay.
+                                            '","lightdistance":"'.$lightdistance.
                                             '","lightcolor":['.$light_color_r.','.$light_color_g.','.$light_color_b.']'.
                                             ',"targetposition":['.$target_position_x.','.$target_position_y.','.$target_position_z.']'.
                                             ',"trs":selected_object_trs};';

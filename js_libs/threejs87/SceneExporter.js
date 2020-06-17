@@ -303,7 +303,8 @@ THREE.SceneExporter.prototype = {
 
 
 
-            if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') && !o.categoryName.includes('lightTargetSpot')){
+            if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') &&
+                !o.categoryName.includes('lightTargetSpot') && !o.categoryName.includes('lightLamp')){
                 // Asset
 
                 var quatR = new THREE.Quaternion();
@@ -378,11 +379,40 @@ THREE.SceneExporter.prototype = {
                     quatR_light._z + "," +
                     quatR_light._w + "]" + ',',
                     '	"scale"	    : ' + Vector3String(o.scale) + ',',
-                    '	"lightintensity"	: ' + o.intensity + ',',
+                    '	"lightintensity"	: "' + o.intensity + '",',
                     '	"lightcolor"	: ' + ColorString(o.color) + ',',  // To transfor object r g b to Hex ???
                     '	"targetposition" : ' + Vector3String(o.target.position) + ',',
+                    '	"categoryName" : "' + o.categoryName + '",',
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];
+            } else if ( o.categoryName==="lightLamp" ){
+
+                var quatR_light = new THREE.Quaternion();
+
+                var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
+                quatR_light.setFromEuler(eulerR_light);
+
+                // REM HERE Check with trailing comma
+                var output = [
+                    '\t\t' + LabelString(getObjectName(o)) + ' : {',
+                    '	"position" : ' + Vector3String(o.position) + ',',
+                    '	"rotation" : ' + "[" + o.rotation.x + "," +
+                    o.rotation.y + "," +
+                    o.rotation.z + "]" + ',', //+ Vector3String(o.rotation) + ',',
+
+                    '	"quaternion" : ' + "[" + quatR_light._x + "," +
+                    quatR_light._y + "," +
+                    quatR_light._z + "," +
+                    quatR_light._w + "]" + ',',
+                    '	"scale"	    : ' + Vector3String(o.scale) + ',',
+                    '	"lightpower"	: "' + o.power + '",',
+                    '	"lightcolor"	: ' + ColorString(o.color) + ',',  // To transfor object r g b to Hex ???
+                    '	"lightdecay" : "' + o.decay + '",',
+                    '	"lightdistance" : "' + o.distance + '",',
+                    '	"categoryName" : "' + o.categoryName + '",',
+                    '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
+                ];
+
 
             } else if (o.name === 'avatarYawObject'){
 
@@ -422,6 +452,7 @@ THREE.SceneExporter.prototype = {
                     quatR_camera._z.toFixed(4) + "," +
                     quatR_camera._w.toFixed(4) + "]" + ',',
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
+                    '	"categoryName" : "' + 'avatarYawObject' + '",',
                     '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
                 ];
             }
