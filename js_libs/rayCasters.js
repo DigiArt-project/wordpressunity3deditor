@@ -413,6 +413,9 @@ function activeOverides(event, object){
     if( categ === 'lightLamp')
         displayLampProperties(event, name);
 
+    if( categ === 'lightSpot')
+        displaySpotProperties(event, name);
+
 }
 
 
@@ -636,6 +639,31 @@ function displayLampProperties(event, name){
     ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
     ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
 }
+
+
+// LAMP PROPERTIES DIV show
+function displaySpotProperties(event, name){
+
+    // The whole popup div
+    var ppPropertiesDiv = jQuery("#popUpSpotPropertiesDiv");
+
+    //jQuery("#sunColor")
+    jQuery("#spotColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#spotPower")[0].value = transform_controls.object.power;
+    jQuery("#spotDecay")[0].value = transform_controls.object.decay;
+    jQuery("#spotDistance")[0].value = transform_controls.object.distance;
+    jQuery("#spotAngle")[0].value = transform_controls.object.angle;
+    jQuery("#spotPenumbra")[0].value = transform_controls.object.penumbra;
+
+    document.getElementById("spotColor").value = transform_controls.object.children[0].material.color.getHexString();
+    jQuery("#spotColor")[0].style.background = "#" + jQuery("#spotColor")[0].value;
+
+    // Show Selection
+    ppPropertiesDiv.show();
+    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+}
+
 
 
 /**
@@ -910,12 +938,13 @@ function displayMarkerProperties(event, name){
     });
 }
 
-
+// Sun
 function changeSunIntensity(){
     transform_controls.object.intensity = document.getElementById("sunIntensity").value;
 }
 
 
+// Lamp
 function changeLampPower(){
     transform_controls.object.power = document.getElementById("lampPower").value;
 }
@@ -927,6 +956,31 @@ function changeLampDistance(){
 function changeLampDecay(){
     transform_controls.object.decay = document.getElementById("lampDecay").value;
 }
+
+
+// Spot
+function changeSpotPower(){
+    transform_controls.object.power = document.getElementById("spotPower").value;
+}
+
+function changeSpotDistance(){
+    transform_controls.object.distance = document.getElementById("spotDistance").value;
+}
+
+function changeSpotDecay(){
+    transform_controls.object.decay = document.getElementById("spotDecay").value;
+}
+
+function changeSpotAngle(){
+    transform_controls.object.angle = document.getElementById("spotAngle").value;
+}
+
+function changeSpotPenumbra(){
+    transform_controls.object.penumbra = document.getElementById("spotPenumbra").value;
+}
+
+
+
 
 
 
@@ -957,14 +1011,20 @@ function updateSunColorPickerLight(picker){
 
 /// Lamp Color Selector
 function updateLampColorPickerLight(picker){
-
-
     var hexcol = "0x" + document.getElementById("lampColor").value;
-
-    // Sun as object
+    // Lamp as object
     transform_controls.object.color.setHex(hexcol);
-
     // Lamp as Sphere
+    transform_controls.object.children[0].material.color.setHex(hexcol);
+}
+
+
+/// Spot Color Selector
+function updateSpotColorPickerLight(picker){
+    var hexcol = "0x" + document.getElementById("spotColor").value;
+    // Spot as object
+    transform_controls.object.color.setHex(hexcol);
+    // Spot as Sphere
     transform_controls.object.children[0].material.color.setHex(hexcol);
 }
 

@@ -181,8 +181,8 @@ echo '</script>';
         var nameModel = dataDrag.title;
         
         // REM HERE
-        if(dataDrag.categoryName==="lightSun" || dataDrag.categoryName==="lightLamp"){
-            // SUN or LAMP
+        if(dataDrag.categoryName==="lightSun" || dataDrag.categoryName==="lightLamp" || dataDrag.categoryName==="lightSpot"){
+            // SUN or LAMP or Spot
 
             var path = objFname = objID = mtlID = mtlFname = assetid = categoryIcon = '';
             
@@ -1013,7 +1013,8 @@ echo '</script>';
         // Sun and Target spot can not change control manipulation mode
         if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
             transform_controls.object.categoryName.includes("lightSun") ||
-            transform_controls.object.categoryName.includes("lightLamp")){
+            transform_controls.object.categoryName.includes("lightLamp") ||
+            transform_controls.object.categoryName.includes("lightSpot")){
             return;
         }
         
@@ -1280,7 +1281,8 @@ echo '</script>';
                 jQuery("#removeAssetBtn").show();
                 transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
                 
-                if (selected_object_name.includes("lightSun") || selected_object_name.includes("lightLamp")){
+                if (selected_object_name.includes("lightSun") || selected_object_name.includes("lightLamp") ||
+                    selected_object_name.includes("lightSpot")){
                     transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO: Sun and lamp can not be rotated
                 }
                 
@@ -1505,6 +1507,7 @@ echo '</script>';
     jQuery("#popUpPoiVideoPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpSunPropertiesDiv").bind('contextmenu', function(e) { return false; });
     jQuery("#popUpLampPropertiesDiv").bind('contextmenu', function(e) { return false; });
+    jQuery("#popUpSpotPropertiesDiv").bind('contextmenu', function(e) { return false; });
     
     // Pause rendering (to cool down the machine sometimes)
     jQuery("#pauseRendering").get(0).addEventListener('mousedown', function (event) {

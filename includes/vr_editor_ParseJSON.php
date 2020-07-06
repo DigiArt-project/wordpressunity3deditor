@@ -29,6 +29,8 @@ class ParseJSON {
         $lightdecay = 1; // Lamp
         $lightdistance = 100; // Lamp
         
+        $lightangle = 0.7;
+        $lightpenumbra = 0;
         
         foreach ($json_objects as $key=>$value) {
 
@@ -43,10 +45,9 @@ class ParseJSON {
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];
                 $r_z = 0;
-    
-                
-                
+
                 $isLight = "false";
+
             } elseif ( strpos($name, 'lightSun') !== false ){
                 
                 $path = '';
@@ -92,6 +93,34 @@ class ParseJSON {
                 $lightpower = $value->lightpower;
                 $lightdecay = $value->lightdecay;
                 $lightdistance = $value->lightdistance;
+    
+            } elseif ( strpos($name, 'lightSpot') !== false ){
+    
+                $path = '';
+                $obj = '';
+                $mtl = '';
+                
+                $r_x = $value->rotation[0];
+                $r_y = $value->rotation[1];
+                $r_z = $value->rotation[2];
+                
+                $target_position_x = 0;
+                $target_position_y = 0;
+                $target_position_z = 0;
+    
+                $light_color_r = $value->lightcolor[0];
+                $light_color_g = $value->lightcolor[1];
+                $light_color_b = $value->lightcolor[2];
+    
+                $categoryName = 'lightSpot';
+                $isLight = "true";
+                $lightpower = $value->lightpower;
+                $lightdecay = $value->lightdecay;
+                $lightdistance = $value->lightdistance;
+    
+                $lightangle = $value->lightangle;
+                $lightpenumbra = $value->lightpenumbra;
+                
                 
             } else {
                 $path =$this->relativepath . $value->fnPath;
@@ -165,6 +194,8 @@ class ParseJSON {
                                             '","lightpower":"'.$lightpower.
                                             '","lightdecay":"'.$lightdecay.
                                             '","lightdistance":"'.$lightdistance.
+                                            '","lightangle":"'.$lightangle.
+                                            '","lightpenumbra":"'.$lightpenumbra.
                                             '","lightcolor":['.$light_color_r.','.$light_color_g.','.$light_color_b.']'.
                                             ',"targetposition":['.$target_position_x.','.$target_position_y.','.$target_position_z.']'.
                                             ',"trs":selected_object_trs};';

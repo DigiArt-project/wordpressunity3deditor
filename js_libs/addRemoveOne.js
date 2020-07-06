@@ -214,6 +214,88 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
         triggerAutoSave();
 
+    } else if (categoryName==='lightSpot') {
+
+        var lightSpot = new THREE.SpotLight( 0xffffff, 1, 5, 0.39, 0, 2 );
+        lightSpot.power = 1;
+
+        lightSpot.name = nameModel3D;
+        lightSpot.isDigiArt3DModel = true;
+        lightSpot.categoryName = "lightSpot";
+        lightSpot.isLight = true;
+
+        //// Add Lamp Helper
+        var lampSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry( 1, 16, 8 ), //new THREE.ConeBufferGeometry(0.5, 1, 16, 8),
+            new THREE.MeshBasicMaterial({color: 0xffff00})
+        );
+        lampSphere.rotation.set(Math.PI/2, 0, 0);
+
+        lampSphere.isDigiArt3DMesh = true;
+        lampSphere.name = "LampSphere";
+
+        lightSpot.add(lampSphere);
+
+        // end of sphere
+
+        // Helper
+        var lightSpotHelper = new THREE.SpotLightHelper(lightSpot, 0x555500);
+        lightSpotHelper.isLightHelper = true;
+        lightSpotHelper.name = 'lightHelper_' + lightSpot.name;
+        lightSpotHelper.categoryName = 'lightHelper';
+        lightSpotHelper.parentLightName = lightSpot.name;
+
+
+
+        envir.scene.add(lightSpot);
+        envir.scene.add(lightSpotHelper);
+
+
+        lightSpotHelper.update();
+
+
+        // Add transform controls
+        var insertedObject = envir.scene.getObjectByName(nameModel3D);
+        var trs_tmp = resources3D[nameModel3D]['trs'];
+
+        trs_tmp['translation'][1] += 15; // Sun should be a little higher than objects;
+
+        insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+        insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+        insertedObject.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+        insertedObject.parent = envir.scene;
+
+        // place controls to last inserted obj
+        transform_controls.attach(insertedObject);
+
+        // highlight
+        envir.outlinePass.selectedObjects = [insertedObject];
+        envir.renderer.setClearColor(0xeeeeee, 1);
+        //envir.scene.add(transform_controls);
+
+        // Position
+        transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
+        transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+        transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
+
+        selected_object_name = nameModel3D;
+
+        // Dimensions
+        var dims = findDimensions(transform_controls.object);
+        var sizeT = Math.max(...dims);
+        transform_controls.setSize(sizeT > 1 ? sizeT : 1);
+
+        jQuery("#removeAssetBtn").show();
+        transform_controls.children[6].handleGizmos.XZY[0][0].visible = true; // DELETE GIZMO
+
+        transform_controls.children[6].children[0].children[1].visible = false; // ROTATE GIZMO
+
+        // Add in scene
+        envir.addInHierarchyViewer(insertedObject);
+
+        triggerAutoSave();
+
+
     } else {
 
         // Make progress bar visible

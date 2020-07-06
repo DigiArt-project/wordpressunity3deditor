@@ -304,7 +304,9 @@ THREE.SceneExporter.prototype = {
 
 
             if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') &&
-                !o.categoryName.includes('lightTargetSpot') && !o.categoryName.includes('lightLamp')){
+                !o.categoryName.includes('lightTargetSpot') && !o.categoryName.includes('lightLamp')
+                && !o.categoryName.includes('lightSpot')
+                ){
                 // Asset
 
                 var quatR = new THREE.Quaternion();
@@ -413,6 +415,37 @@ THREE.SceneExporter.prototype = {
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];
 
+
+
+            } else if ( o.categoryName==="lightSpot" ){
+
+                var quatR_light = new THREE.Quaternion();
+
+                var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
+                quatR_light.setFromEuler(eulerR_light);
+
+                // REM HERE Check with trailing comma
+                var output = [
+                    '\t\t' + LabelString(getObjectName(o)) + ' : {',
+                    '	"position" : ' + Vector3String(o.position) + ',',
+                    '	"rotation" : ' + "[" + o.rotation.x + "," +
+                    o.rotation.y + "," +
+                    o.rotation.z + "]" + ',', //+ Vector3String(o.rotation) + ',',
+
+                    '	"quaternion" : ' + "[" + quatR_light._x + "," +
+                    quatR_light._y + "," +
+                    quatR_light._z + "," +
+                    quatR_light._w + "]" + ',',
+                    '	"scale"	    : ' + Vector3String(o.scale) + ',',
+                    '	"lightpower"	: "' + o.power + '",',
+                    '	"lightcolor"	: ' + ColorString(o.color) + ',',  // To transfor object r g b to Hex ???
+                    '	"lightdecay" : "' + o.decay + '",',
+                    '	"lightdistance" : "' + o.distance + '",',
+                    '	"lightangle" : "' + o.angle + '",',
+                    '	"lightpenumbra" : "' + o.penumbra + '",',
+                    '	"categoryName" : "' + o.categoryName + '",',
+                    '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
+                ];
 
             } else if (o.name === 'avatarYawObject'){
 
