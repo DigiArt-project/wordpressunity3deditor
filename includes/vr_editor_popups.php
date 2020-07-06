@@ -221,6 +221,17 @@
 
     <input type="text" id="spotPenumbra" name="spotPenumbra" title="Set a number from 0 to 1,  0 is the default"
            value="0" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotPenumbra()"/>
+
+
+    <!-- The Target object -->
+    <!-- REM HERE -->
+    <label for="spotTargetObject" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+        Set Penumbra:</label>
+
+    <input type="text" id="spotTargetObject" name="spotTargetObject" title="Set a number from 0 to 1,  0 is the default"
+           value="0" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotPenumbra()"/>
+    
+    
     
     
 </div>
