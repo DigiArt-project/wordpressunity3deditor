@@ -1300,6 +1300,18 @@ echo '</script>';
         envir.updateCameraGivenSceneLimits();
         
         envir.setHierarchyViewer();
+
+
+        // Set Target light for Spots
+        for (var n in resources3D) {
+            (function (name) {
+                if (resources3D[name]['categoryName'] === 'lightSpot') {
+                    var lightSpot = envir.scene.getObjectByName(name);
+                    lightSpot.target = envir.scene.getObjectByName(resources3D[name]['lighttargetobjectname']);
+                }
+            })(n);
+        }
+        
     };
 
     function hideObjectPropertiesPanels() {

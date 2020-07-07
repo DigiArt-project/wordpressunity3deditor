@@ -85,7 +85,7 @@
 
 
 <!-- Sun @ Archaeology: Popup menu to for Sun Intensity and Color -->
-<div id="popUpSunPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 250px;display:none">
+<div id="popUpSunPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="max-width: 280px; display:none">
 
     <!-- The close button-->
     <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -95,20 +95,21 @@
     </a>
 
     <!-- The intensity-->
-    <label for="sunIntensity" class="mdc-textfield__label" style="top: 8px; position: initial">
+    <label for="sunIntensity" class="mdc-textfield__label" style="top: 8px; position: initial; width: 150px; display: inline-block;margin-top: 15px;">
         Set Sun intensity:</label>
     
     <input type="text" id="sunIntensity" name="sunIntensity" title="Set a number from 0 to infinite, 1 is the default"
            value="1" maxlength="4"
-           class="mdc-textfield__input" style="width:7ch" onkeyup="changeSunIntensity()"/>
+           class="mdc-textfield__input" style="width: 6ch;padding: 2px;display: inline-block; text-align: right;" onkeyup="changeSunIntensity()"/>
 
 
     <!-- The Color of the sun-->
-    <label for="sunColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
+    <label for="sunColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px; width: 150px; display: inline-block; vertical-align: bottom;">
         Sun Color in Hex:</label>
 
     <input type="text" id="sunColor" name="sunColor" title="Set a hex number, ffffff is the default (white)"
-           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateSunColorPickerLight(this)'}" />
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateSunColorPickerLight(this)'}"
+           style="width: 70px;display: inline-block;padding: 2px;text-align: right;"/>
     
 </div>
 
@@ -118,7 +119,7 @@
 
 
 <!-- Lamp @ Archaeology: Popup menu to for Lamp Decay, Power, Distance and Color -->
-<div id="popUpLampPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 250px;display:none; max-width:300px">
+<div id="popUpLampPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width:250px;display:none; max-width:300px">
 
     <!-- The close button-->
     <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -128,34 +129,35 @@
     </a>
 
     <!-- The intensity-->
-    <label for="lampPower" class="mdc-textfield__label" style="top: 8px; position: initial">
+    <label for="lampPower" class="mdc-textfield__label" style="top: 8px; position: initial; width: 160px; display: inline-block;margin-top: 15px;">
         Set Lamp Power:</label>
 
     <input type="text" id="lampPower" name="lampPower" title="Set a number from 0 to infinite, 1 is the default"
            value="1" maxlength="4"
-           class="mdc-textfield__input" style="width:7ch" onkeyup="changeLampPower()"/>
+           class="mdc-textfield__input" style="width: 6ch; padding: 2px; display: inline; text-align: right;" onkeyup="changeLampPower()"/>
 
     <!-- The Color of the Lamp-->
-    <label for="lampColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
+    <label for="lampColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px; width: 160px; display: inline-block; vertical-align: bottom;">
         Lamp Color in Hex:</label>
 
     <input type="text" id="lampColor" name="lampColor" title="Set a hex number, ffffff is the default (white)"
-           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateLampColorPickerLight(this)'}" />
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateLampColorPickerLight(this)'}"
+           style="width: 70px;display: inline-block;padding: 2px;text-align: right;"/>
 
     <!-- The distance-->
-    <label for="lampDistance" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="lampDistance" class="mdc-textfield__label" style="position: initial; width: 160px; display: inline-block; margin-top: 15px;">
         Set Lamp Distance:</label>
 
     <input type="text" id="lampDistance" name="lampDistance" title="Set a number from 0 to infinite, 100 is the default"
            value="100" maxlength="4"
-           class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeLampDistance()"/>
+           class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;text-align: right;" onkeyup="changeLampDistance()"/>
 
     <!-- The Decay -->
-    <label for="lampDecay" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="lampDecay" class="mdc-textfield__label" style="position: initial; width: 160px; display: inline-block; margin-top: 15px;">
         Set Lamp Decay:</label>
 
     <input type="text" id="lampDecay" name="lampDecay" title="Set a number from 0 to infinite, 2 is the default"
-           value="2" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeLampDecay()"/>
+           value="2" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;text-align: right;" onkeyup="changeLampDecay()"/>
 </div>
 
 
@@ -168,7 +170,7 @@
 
 
 <!-- Spot @ Archaeology: Popup menu to for Lamp Decay, Power, Distance and Color -->
-<div id="popUpSpotPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 250px;display:none; max-width:300px">
+<div id="popUpSpotPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 250px;display:none; max-width:280px">
 
     <!-- The close button-->
     <a style="float: right;" type="button" class="mdc-theme--primary"
@@ -177,59 +179,65 @@
         <i class="material-icons" style="cursor: pointer; float: right;">close</i>
     </a>
 
+
+    <!-- The Target object -->
+    <label for="spotTargetObject" class="mdc-textfield__label" style="position: initial; width: 150px; display: inline-block; margin-top: 15px;">
+        Set target object:</label>
+
+    <select id="spotTargetObject" name="spotTargetObject" title="Set object to place spot among the scene objects"
+             class="mdc-select" style="padding: 2px; display: inline-block;" onchange="changeSpotTargetObject()">
+    </select>
+    
+    
     <!-- The intensity-->
-    <label for="spotPower" class="mdc-textfield__label" style="top: 8px; position: initial">
+    <label for="spotPower" class="mdc-textfield__label" style="top: 8px; position: initial; width: 150px; display: inline-block;margin-top: 15px;">
         Set Spot Power:</label>
 
     <input type="text" id="spotPower" name="spotPower" title="Set a number from 0 to infinite, 1 is the default"
            value="1" maxlength="4"
-           class="mdc-textfield__input" style="width:7ch" onkeyup="changeSpotPower()"/>
+           class="mdc-textfield__input" style="width: 7ch;padding: 2px;display: inline; text-align: right;"
+           onkeyup="changeSpotPower()"/>
 
     <!-- The Color of the Lamp-->
-    <label for="spotColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px;">
+    <label for="spotColor" class="mdc-textfield__label" style="top: 12px; position: relative; bottom: 5px; margin-bottom: 15px; width: 150px; display: inline-block; vertical-align: bottom;">
         Spot Color in Hex:</label>
 
     <input type="text" id="spotColor" name="spotColor" title="Set a hex number, ffffff is the default (white)"
-           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateSpotColorPickerLight(this)'}" />
+           value="ffffff" maxlength="6" class="jscolor {onFineChange:'updateSpotColorPickerLight(this)'}"
+           style="width: 70px;display: inline-block;padding: 2px;text-align: right;"/>
 
     <!-- The distance-->
-    <label for="spotDistance" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="spotDistance" class="mdc-textfield__label" style="position: initial; width: 150px; display: inline-block; margin-top: 15px;">
         Set Spot Distance:</label>
 
     <input type="text" id="spotDistance" name="spotDistance" title="Set a number from 0 to infinite, 100 is the default"
            value="100" maxlength="4"
-           class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotDistance()"/>
+           class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block; text-align: right;" onkeyup="changeSpotDistance()"/>
 
     <!-- The Decay -->
-    <label for="spotDecay" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="spotDecay" class="mdc-textfield__label" style="position: initial; width: 150px; display: inline-block; margin-top: 15px;">
         Set Spot Decay:</label>
 
     <input type="text" id="spotDecay" name="spotDecay" title="Set a number from 0 to infinite, 2 is the default"
-           value="2" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotDecay()"/>
+           value="2" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;text-align: right;" onkeyup="changeSpotDecay()"/>
 
     <!-- The Angle -->
-    <label for="spotAngle" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="spotAngle" class="mdc-textfield__label" style="position: initial; width: 150px; display: inline-block; margin-top: 15px;">
         Set Spot Angle:</label>
 
     <input type="text" id="spotAngle" name="spotAngle" title="Set a number from 0 to pi/2,  pi/4 is the default"
-           value="0.785" maxlength="5" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotAngle()"/>
+           value="0.785" maxlength="5" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;text-align: right;" onkeyup="changeSpotAngle()"/>
 
 
     <!-- The Penumbra -->
-    <label for="spotPenumbra" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
+    <label for="spotPenumbra" class="mdc-textfield__label" style="position: initial; width: 150px; display: inline-block; margin-top: 15px;">
         Set Penumbra:</label>
 
     <input type="text" id="spotPenumbra" name="spotPenumbra" title="Set a number from 0 to 1,  0 is the default"
-           value="0" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotPenumbra()"/>
+           value="0" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;text-align: right;" onkeyup="changeSpotPenumbra()"/>
 
 
-    <!-- The Target object -->
-    <!-- REM HERE -->
-    <label for="spotTargetObject" class="mdc-textfield__label" style="position: initial; width: 70%; display: inline-block; margin-top: 15px;">
-        Set Penumbra:</label>
 
-    <input type="text" id="spotTargetObject" name="spotTargetObject" title="Set a number from 0 to 1,  0 is the default"
-           value="0" maxlength="4" class="mdc-textfield__input" style="width: 7ch; padding: 2px; display: inline-block;" onkeyup="changeSpotPenumbra()"/>
     
     
     

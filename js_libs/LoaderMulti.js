@@ -8,10 +8,12 @@ class LoaderMulti {
 
     load(manager, resources3D) {
 
-
-
-        for (var n in resources3D) {
+         for (var n in resources3D) {
             (function (name) {
+
+                // Lights are in a different loop
+                if (resources3D[name]['categoryName'].startsWith("light"))
+                    return;
 
                 var mtlLoader = new THREE.MTLLoader();
 
@@ -117,216 +119,6 @@ class LoaderMulti {
                             }
                         );
                     });
-
-
-
-                }else if (resources3D[name]['categoryName']==='lightSun' ){
-
-                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
-                        resources3D[name]['lightcolor'][1],
-                        resources3D[name]['lightcolor'][2]);
-
-                    var lightintensity = resources3D[name]['lightintensity'];
-
-                    // LIGHT
-                     var lightSun = new THREE.DirectionalLight( colora, lightintensity ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
-
-                    // REM HERE
-                    lightSun.position.set(
-                            resources3D[name]['trs']['translation'][0],
-                            resources3D[name]['trs']['translation'][1],
-                            resources3D[name]['trs']['translation'][2] );
-
-                    lightSun.rotation.set(
-                        resources3D[name]['trs']['rotation'][0],
-                        resources3D[name]['trs']['rotation'][1],
-                        resources3D[name]['trs']['rotation'][2] );
-
-                    lightSun.scale.set( resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale']);
-
-
-                    lightSun.target.position.set(resources3D[name]['targetposition'][0],
-                                                 resources3D[name]['targetposition'][1],
-                                                 resources3D[name]['targetposition'][2]); // where it points
-
-                    lightSun.name = name;
-                    lightSun.categoryName = "lightSun";
-                    lightSun.isDigiArt3DModel = true;
-                    lightSun.isLight = true;
-
-
-
-                    //// Add Sun Helper
-                    var sunSphere = new THREE.Mesh(
-                        new THREE.SphereBufferGeometry( 1, 16, 8 ),
-                        new THREE.MeshBasicMaterial( { color: colora } )
-                    );
-                    sunSphere.isDigiArt3DMesh = true;
-                    sunSphere.name = "SunSphere";
-                    lightSun.add(sunSphere);
-
-
-                    var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, colora);
-                    lightSunHelper.isLightHelper = true;
-                    lightSunHelper.name = 'lightHelper_' + lightSun.name;
-                    lightSunHelper.categoryName = 'lightHelper';
-                    lightSunHelper.parentLightName = name;
-
-                    // end of sphere
-                    envir.scene.add(lightSunHelper);
-                    envir.scene.add(lightSun);
-
-                    lightSun.target.updateMatrixWorld();
-                    lightSunHelper.update();
-
-
-
-                    // REM LOAD ALSO THE SPOT HELPER AND EXPORT IMPORT IT : SEE FROM ADD REMOVE ONE !!!!
-                    // Target spot: Where Sun points
-                    var lightTargetSpot = new THREE.Object3D();
-
-                    lightTargetSpot.add(new THREE.Mesh(
-                        new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
-                        new THREE.MeshBasicMaterial( { color: colora } )
-                    ));
-
-                    lightTargetSpot.isDigiArt3DMesh = true;
-                    lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
-                    lightTargetSpot.categoryName = "lightTargetSpot";
-                    lightTargetSpot.isLightTargetSpot = true;
-
-                    lightTargetSpot.position.set(resources3D[name]['targetposition'][0],
-                                                 resources3D[name]['targetposition'][1],
-                                                 resources3D[name]['targetposition'][2]);
-
-                    lightTargetSpot.parentLight = lightSun;
-                    lightTargetSpot.parentLightHelper = lightSunHelper;
-
-                    lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y, lightTargetSpot.position.z) ;
-
-                    envir.scene.add(lightTargetSpot);
-
-
-                }else if (resources3D[name]['categoryName']==='lightLamp' ){
-
-                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
-                        resources3D[name]['lightcolor'][1],
-                        resources3D[name]['lightcolor'][2]);
-
-                    var lightpower = resources3D[name]['lightpower'];
-                    var lightdecay = resources3D[name]['lightdecay'];
-                    var lightdistance = resources3D[name]['lightdistance'];
-
-
-                    // LIGHT
-                    var lightLamp = new THREE.PointLight(colora, lightpower, lightdistance, lightdecay);
-                    lightLamp.power = lightpower;
-
-
-                    lightLamp.position.set(
-                        resources3D[name]['trs']['translation'][0],
-                        resources3D[name]['trs']['translation'][1],
-                        resources3D[name]['trs']['translation'][2] );
-
-                    lightLamp.rotation.set(
-                        resources3D[name]['trs']['rotation'][0],
-                        resources3D[name]['trs']['rotation'][1],
-                        resources3D[name]['trs']['rotation'][2] );
-
-                    lightLamp.scale.set( resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale']);
-
-                    lightLamp.name = name;
-                    lightLamp.categoryName = "lightLamp";
-                    lightLamp.isDigiArt3DModel = true;
-                    lightLamp.isLight = true;
-
-                    //// Add Lamp Sphere
-                    var lampSphere = new THREE.Mesh(
-                        new THREE.SphereBufferGeometry(0.5, 16, 8),
-                        new THREE.MeshBasicMaterial({color: colora})
-                    );
-                    lampSphere.isDigiArt3DMesh = true;
-                    lampSphere.name = "LampSphere";
-                    lightLamp.add(lampSphere);
-                    // end of sphere
-
-                    // Helper
-                    var lightLampHelper = new THREE.PointLightHelper(lightLamp, 1, colora);
-                    lightLampHelper.isLightHelper = true;
-                    lightLampHelper.name = 'lightHelper_' + lightLamp.name;
-                    lightLampHelper.categoryName = 'lightHelper';
-                    lightLampHelper.parentLightName = lightLamp.name;
-
-                    envir.scene.add(lightLamp);
-                    envir.scene.add(lightLampHelper);
-
-                    lightLampHelper.update();
-
-                }else if (resources3D[name]['categoryName']==='lightSpot' ){
-
-                    var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
-                        resources3D[name]['lightcolor'][1],
-                        resources3D[name]['lightcolor'][2]);
-
-                    var lightpower = resources3D[name]['lightpower'];
-                    var lightdecay = resources3D[name]['lightdecay'];
-                    var lightdistance = resources3D[name]['lightdistance'];
-                    var lightangle = resources3D[name]['lightangle'];
-                    var lightpenumbra = resources3D[name]['lightpenumbra'];
-
-
-
-
-                    // LIGHT
-                    var lightSpot = new THREE.SpotLight(colora, lightpower, lightdistance, lightangle, lightpenumbra, lightdecay);
-                    lightSpot.power = lightpower;
-
-
-                    lightSpot.position.set(
-                        resources3D[name]['trs']['translation'][0],
-                        resources3D[name]['trs']['translation'][1],
-                        resources3D[name]['trs']['translation'][2] );
-
-                    lightSpot.rotation.set(
-                        resources3D[name]['trs']['rotation'][0],
-                        resources3D[name]['trs']['rotation'][1],
-                        resources3D[name]['trs']['rotation'][2] );
-
-                    lightSpot.scale.set( resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale'],
-                        resources3D[name]['trs']['scale']);
-
-                    lightSpot.name = name;
-                    lightSpot.categoryName = "lightSpot";
-                    lightSpot.isDigiArt3DModel = true;
-                    lightSpot.isLight = true;
-
-                    //// Add Spot Cone
-                    var spotSphere = new THREE.Mesh(
-                        new THREE.SphereBufferGeometry( 1, 16, 8 ), //new THREE.ConeBufferGeometry(0.5, 1, 16, 8),
-                        new THREE.MeshBasicMaterial({color: colora})
-                    );
-                    spotSphere.isDigiArt3DMesh = true;
-                    spotSphere.name = "SpotSphere";
-                    lightSpot.add(spotSphere);
-                    // end of sphere
-
-                    // Helper
-                    var lightSpotHelper = new THREE.SpotLightHelper(lightSpot, colora);
-                    lightSpotHelper.isLightHelper = true;
-                    lightSpotHelper.name = 'lightHelper_' + lightSpot.name;
-                    lightSpotHelper.categoryName = 'lightHelper';
-                    lightSpotHelper.parentLightName = lightSpot.name;
-
-                    envir.scene.add(lightSpot);
-                    envir.scene.add(lightSpotHelper);
-
-                    lightSpotHelper.update();
-
 
 
                 }else {
@@ -457,8 +249,227 @@ class LoaderMulti {
                 }
             })(n);
         }
+
+
+
+
+
+
+        // Lights loop
+        for (var n in resources3D) {
+            (function (name) {
+
+             if (!resources3D[name]['categoryName'].startsWith("light"))
+                return;
+
+             if (resources3D[name]['categoryName']==='lightSun' ){
+
+                var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
+                    resources3D[name]['lightcolor'][1],
+                    resources3D[name]['lightcolor'][2]);
+
+                var lightintensity = resources3D[name]['lightintensity'];
+
+                // LIGHT
+                var lightSun = new THREE.DirectionalLight( colora, lightintensity ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+
+                // REM HERE
+                lightSun.position.set(
+                    resources3D[name]['trs']['translation'][0],
+                resources3D[name]['trs']['translation'][1],
+                resources3D[name]['trs']['translation'][2] );
+
+                lightSun.rotation.set(
+                    resources3D[name]['trs']['rotation'][0],
+                resources3D[name]['trs']['rotation'][1],
+                resources3D[name]['trs']['rotation'][2] );
+
+                lightSun.scale.set( resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale']);
+
+
+                lightSun.target.position.set(resources3D[name]['targetposition'][0],
+                resources3D[name]['targetposition'][1],
+                resources3D[name]['targetposition'][2]); // where it points
+
+                lightSun.name = name;
+                lightSun.categoryName = "lightSun";
+                lightSun.isDigiArt3DModel = true;
+                lightSun.isLight = true;
+
+
+                //// Add Sun Helper
+                var sunSphere = new THREE.Mesh(
+                    new THREE.SphereBufferGeometry( 1, 16, 8 ),
+                    new THREE.MeshBasicMaterial( { color: colora } )
+                );
+                sunSphere.isDigiArt3DMesh = true;
+                sunSphere.name = "SunSphere";
+                lightSun.add(sunSphere);
+
+
+                var lightSunHelper = new THREE.DirectionalLightHelper( lightSun, 3, colora);
+                lightSunHelper.isLightHelper = true;
+                lightSunHelper.name = 'lightHelper_' + lightSun.name;
+                lightSunHelper.categoryName = 'lightHelper';
+                lightSunHelper.parentLightName = name;
+
+                // end of sphere
+                envir.scene.add(lightSunHelper);
+                envir.scene.add(lightSun);
+
+                lightSun.target.updateMatrixWorld();
+                lightSunHelper.update();
+
+
+
+                // REM LOAD ALSO THE SPOT HELPER AND EXPORT IMPORT IT : SEE FROM ADD REMOVE ONE !!!!
+                // Target spot: Where Sun points
+                var lightTargetSpot = new THREE.Object3D();
+
+                lightTargetSpot.add(new THREE.Mesh(
+                new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
+                new THREE.MeshBasicMaterial( { color: colora } )
+            ));
+
+                lightTargetSpot.isDigiArt3DMesh = true;
+                lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
+                lightTargetSpot.categoryName = "lightTargetSpot";
+                lightTargetSpot.isLightTargetSpot = true;
+
+                lightTargetSpot.position.set(resources3D[name]['targetposition'][0],
+                resources3D[name]['targetposition'][1],
+                resources3D[name]['targetposition'][2]);
+
+                lightTargetSpot.parentLight = lightSun;
+                lightTargetSpot.parentLightHelper = lightSunHelper;
+
+                lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y, lightTargetSpot.position.z) ;
+
+                envir.scene.add(lightTargetSpot);
+
+        } else if (resources3D[name]['categoryName']==='lightLamp' ){
+
+            var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
+                resources3D[name]['lightcolor'][1],
+                resources3D[name]['lightcolor'][2]);
+
+            var lightpower = resources3D[name]['lightpower'];
+            var lightdecay = resources3D[name]['lightdecay'];
+            var lightdistance = resources3D[name]['lightdistance'];
+
+
+            // LIGHT
+            var lightLamp = new THREE.PointLight(colora, lightpower, lightdistance, lightdecay);
+            lightLamp.power = lightpower;
+
+
+            lightLamp.position.set(
+                resources3D[name]['trs']['translation'][0],
+                resources3D[name]['trs']['translation'][1],
+                resources3D[name]['trs']['translation'][2] );
+
+            lightLamp.rotation.set(
+                resources3D[name]['trs']['rotation'][0],
+                resources3D[name]['trs']['rotation'][1],
+                resources3D[name]['trs']['rotation'][2] );
+
+            lightLamp.scale.set( resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale']);
+
+            lightLamp.name = name;
+            lightLamp.categoryName = "lightLamp";
+            lightLamp.isDigiArt3DModel = true;
+            lightLamp.isLight = true;
+
+            //// Add Lamp Sphere
+            var lampSphere = new THREE.Mesh(
+                new THREE.SphereBufferGeometry(0.5, 16, 8),
+                new THREE.MeshBasicMaterial({color: colora})
+            );
+            lampSphere.isDigiArt3DMesh = true;
+            lampSphere.name = "LampSphere";
+            lightLamp.add(lampSphere);
+            // end of sphere
+
+            // Helper
+            var lightLampHelper = new THREE.PointLightHelper(lightLamp, 1, colora);
+            lightLampHelper.isLightHelper = true;
+            lightLampHelper.name = 'lightHelper_' + lightLamp.name;
+            lightLampHelper.categoryName = 'lightHelper';
+            lightLampHelper.parentLightName = lightLamp.name;
+
+            envir.scene.add(lightLamp);
+            envir.scene.add(lightLampHelper);
+
+            lightLampHelper.update();
+
+        } else if (resources3D[name]['categoryName']==='lightSpot' ){
+
+            var colora = new THREE.Color(resources3D[name]['lightcolor'][0],
+                resources3D[name]['lightcolor'][1],
+                resources3D[name]['lightcolor'][2]);
+
+            var lightpower = resources3D[name]['lightpower'];
+            var lightdecay = resources3D[name]['lightdecay'];
+            var lightdistance = resources3D[name]['lightdistance'];
+            var lightangle = resources3D[name]['lightangle'];
+            var lightpenumbra = resources3D[name]['lightpenumbra'];
+
+            // LIGHT
+            var lightSpot = new THREE.SpotLight(colora, lightpower, lightdistance, lightangle, lightpenumbra, lightdecay);
+            lightSpot.power = lightpower;
+
+            lightSpot.position.set(
+                resources3D[name]['trs']['translation'][0],
+                resources3D[name]['trs']['translation'][1],
+                resources3D[name]['trs']['translation'][2] );
+
+            lightSpot.rotation.set(
+                resources3D[name]['trs']['rotation'][0],
+                resources3D[name]['trs']['rotation'][1],
+                resources3D[name]['trs']['rotation'][2] );
+
+            lightSpot.scale.set( resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale'],
+                resources3D[name]['trs']['scale']);
+
+            lightSpot.name = name;
+            lightSpot.categoryName = "lightSpot";
+            lightSpot.isDigiArt3DModel = true;
+            lightSpot.isLight = true;
+
+
+            //// Add Spot Cone
+            var spotSphere = new THREE.Mesh(
+                new THREE.SphereBufferGeometry( 1, 16, 8 ), //new THREE.ConeBufferGeometry(0.5, 1, 16, 8),
+                new THREE.MeshBasicMaterial({color: colora})
+            );
+            spotSphere.isDigiArt3DMesh = true;
+            spotSphere.name = "SpotSphere";
+            lightSpot.add(spotSphere);
+            // end of sphere
+
+            // Helper
+            var lightSpotHelper = new THREE.SpotLightHelper(lightSpot, colora);
+            lightSpotHelper.isLightHelper = true;
+            lightSpotHelper.name = 'lightHelper_' + lightSpot.name;
+            lightSpotHelper.categoryName = 'lightHelper';
+            lightSpotHelper.parentLightName = lightSpot.name;
+
+            envir.scene.add(lightSpot);
+            envir.scene.add(lightSpotHelper);
+
+            lightSpotHelper.update();
+        }
+        })(n);
+        }
+
+
     }
-
-
-
 }
+
+
+

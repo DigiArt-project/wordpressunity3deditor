@@ -6,8 +6,10 @@ class ParseJSON {
     }
 
     public function init($sceneToLoad) {
-        
-        
+    
+//        $fp = fopen("output_saved2.txt","w");
+//        fwrite($fp, print_r($sceneToLoad,true));
+//        fclose($fp);
         
         
         $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
@@ -31,6 +33,8 @@ class ParseJSON {
         
         $lightangle = 0.7;
         $lightpenumbra = 0;
+    
+        $lighttargetobjectname = '';
         
         foreach ($json_objects as $key=>$value) {
 
@@ -120,8 +124,14 @@ class ParseJSON {
     
                 $lightangle = $value->lightangle;
                 $lightpenumbra = $value->lightpenumbra;
+    
+//                $fp = fopen("output_saved.txt","w");
+//                fwrite($fp, print_r($value,true));
+//                fclose($fp);
                 
                 
+                $lighttargetobjectname = $value->lighttargetobjectname;
+
             } else {
                 $path =$this->relativepath . $value->fnPath;
                 $assetid=$value->assetid;
@@ -196,6 +206,7 @@ class ParseJSON {
                                             '","lightdistance":"'.$lightdistance.
                                             '","lightangle":"'.$lightangle.
                                             '","lightpenumbra":"'.$lightpenumbra.
+                                            '","lighttargetobjectname":"'.$lighttargetobjectname.
                                             '","lightcolor":['.$light_color_r.','.$light_color_g.','.$light_color_b.']'.
                                             ',"targetposition":['.$target_position_x.','.$target_position_y.','.$target_position_z.']'.
                                             ',"trs":selected_object_trs};';

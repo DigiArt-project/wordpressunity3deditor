@@ -647,6 +647,17 @@ function displaySpotProperties(event, name){
     // The whole popup div
     var ppPropertiesDiv = jQuery("#popUpSpotPropertiesDiv");
 
+    var spotTargetObject = document.getElementById("spotTargetObject");
+    spotTargetObject.innerText = null;
+
+    for (var i=0; i<jQuery('#hierarchy-viewer')[0].childNodes.length; i++){
+        //if (envir.scene.getChildByName(jQuery('#hierarchy-viewer')[0].childNodes[2].id).categoryName ){
+            var id_Hierarchy = jQuery('#hierarchy-viewer')[0].childNodes[i].id;
+            var scene_object = envir.scene.getChildByName(id_Hierarchy);
+            spotTargetObject.appendChild(new Option(scene_object.name));
+        //}
+    }
+
     //jQuery("#sunColor")
     jQuery("#spotColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
     jQuery("#spotPower")[0].value = transform_controls.object.power;
@@ -959,6 +970,12 @@ function changeLampDecay(){
 
 
 // Spot
+
+function changeSpotTargetObject(){
+
+    transform_controls.object.target = envir.scene.getChildByName(document.getElementById("spotTargetObject").value);
+}
+
 function changeSpotPower(){
     transform_controls.object.power = document.getElementById("spotPower").value;
 }

@@ -424,6 +424,7 @@ THREE.SceneExporter.prototype = {
                 var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
                 quatR_light.setFromEuler(eulerR_light);
 
+                
                 // REM HERE Check with trailing comma
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',
@@ -443,6 +444,7 @@ THREE.SceneExporter.prototype = {
                     '	"lightdistance" : "' + o.distance + '",',
                     '	"lightangle" : "' + o.angle + '",',
                     '	"lightpenumbra" : "' + o.penumbra + '",',
+                    '	"lighttargetobjectname" : "' + o.target.name + '",',
                     '	"categoryName" : "' + o.categoryName + '",',
                     '	"isLight"   : ' + '"' + 'true' + '"' + ( o.children.length ? ',' : '' )
                 ];
