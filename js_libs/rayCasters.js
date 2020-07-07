@@ -658,13 +658,14 @@ function displaySpotProperties(event, name){
         //}
     }
 
-    //jQuery("#sunColor")
+
     jQuery("#spotColor")[0].value = transform_controls.object.children[0].material.color.getHexString();
     jQuery("#spotPower")[0].value = transform_controls.object.power;
     jQuery("#spotDecay")[0].value = transform_controls.object.decay;
     jQuery("#spotDistance")[0].value = transform_controls.object.distance;
     jQuery("#spotAngle")[0].value = transform_controls.object.angle;
     jQuery("#spotPenumbra")[0].value = transform_controls.object.penumbra;
+    jQuery("#spotTargetObject")[0].value = transform_controls.object.target.name;
 
     document.getElementById("spotColor").value = transform_controls.object.children[0].material.color.getHexString();
     jQuery("#spotColor")[0].style.background = "#" + jQuery("#spotColor")[0].value;
