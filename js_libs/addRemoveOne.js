@@ -42,6 +42,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
     if (categoryName==='lightSun') {
 
         var lightSun = new THREE.DirectionalLight(0xffffff, 1); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+        lightSun.castShadow = true;
         // lightSun.position.set( 0, 45, 0 ); set by raycaster
 
         lightSun.name = nameModel3D;
@@ -96,7 +97,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
         var trs_tmp = resources3D[nameModel3D]['trs'];
 
-        trs_tmp['translation'][1] += 15; // Sun should be a little higher than objects;
+        trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
         insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
         insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -177,7 +178,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
         var trs_tmp = resources3D[nameModel3D]['trs'];
 
-        trs_tmp['translation'][1] += 15; // Sun should be a little higher than objects;
+        trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
         insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
         insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -258,7 +259,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var insertedObject = envir.scene.getObjectByName(nameModel3D);
         var trs_tmp = resources3D[nameModel3D]['trs'];
 
-        trs_tmp['translation'][1] += 15; // Sun should be a little higher than objects;
+        trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
         insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
         insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);

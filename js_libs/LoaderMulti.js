@@ -154,14 +154,14 @@ class LoaderMulti {
                                     if (node instanceof THREE.Mesh) {
                                         node.isDigiArt3DMesh = true;
 
+                                        node.castShadow = true;
+                                        node.receiveShadow = true;
 
                                         if (node.name.includes("renderOrder")) {
 
                                             var iR = node.name.indexOf("renderOrder");
 
                                             node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
-
-
                                         }
 
                                     }
@@ -187,6 +187,21 @@ class LoaderMulti {
 
                                 object.categoryID = resources3D[name]['categoryID'];
                                 object.categoryName = resources3D[name]['categoryName'];
+
+
+                                // REM: HERE NO SHADOWS ?????
+                                // if (object.categoryName === "Site"){
+                                //     object.receiveShadow = true;
+                                // }
+                                //
+                                // if (object.categoryName === "Artifact"){
+                                //     object.receiveShadow = true;
+                                //     object.castShadow = true;
+                                //}
+
+
+                                console.log(object.name, object.receiveShadow, object.castShadow);
+
 
 
 
@@ -230,6 +245,8 @@ class LoaderMulti {
 
 
                                 //jQuery("#infophp").get(0).style.visibility= "hidden";
+
+
                             },
 
                             //onObjProgressLoad
@@ -272,6 +289,18 @@ class LoaderMulti {
 
                 // LIGHT
                 var lightSun = new THREE.DirectionalLight( colora, lightintensity ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
+                //lightSun.castShadow = true;
+
+                console.log("lightSun.castShadow.enabled", lightSun.castShadow);
+
+                 //Set up shadow properties for the light
+                 lightSun.shadow.mapSize.width = 2048;  // default
+                 lightSun.shadow.mapSize.height = 2048; // default
+                 lightSun.shadow.camera.near = 0.5;    // default
+                 lightSun.shadow.camera.far = 500;     // default
+
+
+
 
                 // REM HERE
                 lightSun.position.set(
@@ -298,6 +327,17 @@ class LoaderMulti {
                 lightSun.isDigiArt3DModel = true;
                 lightSun.isLight = true;
 
+                lightSun.castShadow = true;
+                lightSun.shadow.mapSize.width = 512;
+                lightSun.shadow.mapSize.height = 512;
+
+                 lightSun.shadow.camera.near = 0.5;
+                 lightSun.shadow.camera.far = 1000;
+
+                 lightSun.shadow.camera.left = -10;
+                 lightSun.shadow.camera.right = 10;
+                 lightSun.shadow.camera.top = 10;
+                 lightSun.shadow.camera.bottom = -10;
 
                 //// Add Sun Helper
                 var sunSphere = new THREE.Mesh(
@@ -331,7 +371,7 @@ class LoaderMulti {
                 lightTargetSpot.add(new THREE.Mesh(
                 new THREE.SphereBufferGeometry( 0.5, 16, 8 ),
                 new THREE.MeshBasicMaterial( { color: colora } )
-            ));
+                ));
 
                 lightTargetSpot.isDigiArt3DMesh = true;
                 lightTargetSpot.name = "lightTargetSpot_" + lightSun.name;
@@ -348,6 +388,11 @@ class LoaderMulti {
                 lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y, lightTargetSpot.position.z) ;
 
                 envir.scene.add(lightTargetSpot);
+
+
+                 //Create a helper for the shadow camera (optional)
+                 var lightSunShadowhelper = new THREE.CameraHelper( lightSun.shadow.camera );
+                 envir.scene.add( lightSunShadowhelper );
 
         } else if (resources3D[name]['categoryName']==='lightLamp' ){
 
@@ -383,6 +428,8 @@ class LoaderMulti {
             lightLamp.categoryName = "lightLamp";
             lightLamp.isDigiArt3DModel = true;
             lightLamp.isLight = true;
+
+                 lightLamp.castShadow = true;
 
             //// Add Lamp Sphere
             var lampSphere = new THREE.Mesh(
@@ -441,6 +488,17 @@ class LoaderMulti {
             lightSpot.isDigiArt3DModel = true;
             lightSpot.isLight = true;
 
+                  lightSpot.castShadow = true;
+
+
+
+                  lightSpot.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 0.5, 100 ) );
+                  lightSpot.shadow.bias = 0.0001;
+                 //
+                  lightSpot.shadow.mapSize.width = 1024;
+                  lightSpot.shadow.mapSize.height = 1024;
+
+
 
             //// Add Spot Cone
             var spotSphere = new THREE.Mesh(
@@ -463,6 +521,28 @@ class LoaderMulti {
             envir.scene.add(lightSpotHelper);
 
             lightSpotHelper.update();
+
+            // var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xff0055 } );
+            // var mesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), planeMaterial );
+            // mesh.position.x = 0;
+            // mesh.position.y = 2;
+            // mesh.position.z = 0;
+            // mesh.castShadow = true;
+            // mesh.receiveShadow = true;
+            // envir.scene.add( mesh );
+            //
+            //
+            //      var planeMaterial2 = new THREE.MeshPhongMaterial( { color: 0x00ff55 } );
+            //      var mesh2 = new THREE.Mesh( new THREE.BoxGeometry( 4, 0.1, 4 ), planeMaterial2 );
+            //      mesh2.position.x = 0;
+            //      mesh2.position.y = 0.5;
+            //      mesh2.position.z = 0;
+            //      mesh2.castShadow = true;
+            //      mesh2.receiveShadow = true;
+            //      envir.scene.add( mesh2 );
+
+
+
         }
         })(n);
         }
