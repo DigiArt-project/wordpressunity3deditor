@@ -57,6 +57,7 @@ add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 function wpunity_register_scripts() {
  
 	wp_register_script( 'wpunity_asset_editor_scripts', plugin_dir_url( __FILE__ ).'js_libs/wpunity_asset_editor_scripts.js');
+	
 
 	wp_register_script( 'wpunity_scripts', plugin_dir_url( __FILE__ ) . 'js_libs/wpunity_scripts.js');
 	wp_register_script( 'wpunity_lightslider', plugin_dir_url( __FILE__ ) . 'js_libs/lightslider.min.js');
@@ -99,7 +100,9 @@ function wpunity_register_scripts() {
 //	wp_register_script( 'wpunity_load_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OBJLoader.js', null, null, false);
 //	wp_register_script( 'wpunity_load_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/MTLLoader.js', null, null, false);
 // wp_register_script( 'wpunity_load_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs79/OrbitControls.js', null, null, false);
-
+	
+	wp_register_script( 'wpunity_qrcode_generator', plugin_dir_url( __FILE__ ).'js_libs/qrcode.js');
+	
 	wp_register_script( 'wpunity_load87_threejs', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/three.js', null, null, false);
     wp_register_script( 'wpunity_load87_objloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader.js', null, null, false);
 	wp_register_script( 'wpunity_load87_objloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OBJLoader2.js', null, null, false);

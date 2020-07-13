@@ -1,34 +1,27 @@
 <?php
-
-function remove_admin_login_header() {
-    remove_action('wp_head', '_admin_bar_bump_cb');
-}
-//if ($_GET['preview']!=1)
-//    add_action('get_header', 'remove_admin_login_header');
-?>
-
-<?php //Create asset
+//Create asset interfaces
 
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
 
+
+function remove_admin_login_header() {
+    remove_action('wp_head', '_admin_bar_bump_cb');
+}
+
 // For auto-translation by Google
 $hasTranslator = false;
-
-if ($hasTranslator) {
-    
-    putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
-
-    if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')) {
-        // Include Google Cloud dependendencies using Composer
-        require(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php');
-        $hasTranslator = true;
-    }
-}
+//if ($hasTranslator) {
+//    putenv("GOOGLE_APPLICATION_CREDENTIALS=".get_option( 'general_settings' )['wpunity_google_application_credentials']);
+//    if (file_exists(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php')) {
+//        // Include Google Cloud dependendencies using Composer
+//        require(plugin_dir_path(__DIR__) . '/translate/vendor/autoload.php');
+//        $hasTranslator = true;
+//    }
+//}
 //// [START translate_translate_text]
 //use Google\Cloud\Translate\TranslateClient;
-
 
 
 // Is on back or front end ?
@@ -42,6 +35,7 @@ function loadAsset3DManagerScripts() {
 
     // Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
+    wp_enqueue_script('wpunity_qrcode_generator');
 	wp_enqueue_script('wpunity_load87_threejs');
 	// For loading on clicking on image of previously uploaded obj
 	wp_enqueue_script('wpunity_load87_objloader');
@@ -194,84 +188,28 @@ else {
 // Submit Handler
 //=============================================
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
-
-	$assetTitleForm = esc_attr(strip_tags($_POST['assetTitle'])); //Title of the Asset (Form value)
-    $assetTitleFormGreek = esc_attr(strip_tags($_POST['assetTitGreek'])); //Title of the Asset (Form value)
-    $assetTitleFormSpanish = esc_attr(strip_tags($_POST['assetTitSpanish'])); //Title of the Asset (Form value)
-    $assetTitleFormFrench = esc_attr(strip_tags($_POST['assetTitFrench'])); //Title of the Asset (Form value)
-    $assetTitleFormGerman = esc_attr(strip_tags($_POST['assetTitGerman'])); //Title of the Asset (Form value)
-    $assetTitleFormRussian = esc_attr(strip_tags($_POST['assetTitRussian'])); //Title of the Asset (Form value)
     
+    include 'edit-wpunity_asset3D_languages_support1.php';
     
-	$assetDescForm = esc_attr(strip_tags($_POST['assetDesc'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGreek = esc_attr(strip_tags($_POST['assetDescGreek'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormSpanish = esc_attr(strip_tags($_POST['assetDescSpanish'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormFrench = esc_attr(strip_tags($_POST['assetDescFrench'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGerman = esc_attr(strip_tags($_POST['assetDescGerman'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormRussian = esc_attr(strip_tags($_POST['assetDescRussian'],"<b><i>")); //Description of the Asset (Form value)
-    
-    $assetDescFormKids = esc_attr(strip_tags($_POST['assetDescKids'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGreekKids = esc_attr(strip_tags($_POST['assetDescGreekKids'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormSpanishKids = esc_attr(strip_tags($_POST['assetDescSpanishKids'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormFrenchKids = esc_attr(strip_tags($_POST['assetDescFrenchKids'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGermanKids = esc_attr(strip_tags($_POST['assetDescGermanKids'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormRussianKids = esc_attr(strip_tags($_POST['assetDescRussianKids'],"<b><i>")); //Description of the Asset (Form value)
-    
-    $assetDescFormExperts = esc_attr(strip_tags($_POST['assetDescExperts'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGreekExperts = esc_attr(strip_tags($_POST['assetDescGreekExperts'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormSpanishExperts = esc_attr(strip_tags($_POST['assetDescSpanishExperts'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormFrenchExperts = esc_attr(strip_tags($_POST['assetDescFrenchExperts'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGermanExperts = esc_attr(strip_tags($_POST['assetDescGermanExperts'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormRussianExperts = esc_attr(strip_tags($_POST['assetDescRussianExperts'],"<b><i>")); //Description of the Asset (Form value)
-    
-    $assetDescFormPerception = esc_attr(strip_tags($_POST['assetDescPerception'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGreekPerception = esc_attr(strip_tags($_POST['assetDescGreekPerception'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormSpanishPerception = esc_attr(strip_tags($_POST['assetDescSpanishPerception'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormFrenchPerception = esc_attr(strip_tags($_POST['assetDescFrenchPerception'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormGermanPerception = esc_attr(strip_tags($_POST['assetDescGermanPerception'],"<b><i>")); //Description of the Asset (Form value)
-    $assetDescFormRussianPerception = esc_attr(strip_tags($_POST['assetDescRussianPerception'],"<b><i>")); //Description of the Asset (Form value)
-    
-    
-    if($assetDescFormGreek=='' && $assetDescForm !='' && $hasTranslator){
-        $translate = new TranslateClient();
-        $result = $translate->translate($assetDescForm, ['target' => 'el']);
-        $assetDescFormGreek = $result[text];
-    }
-    
-    if($assetDescFormSpanish=='' && $assetDescForm !='' && $hasTranslator){
-        $translate = new TranslateClient();
-        $result = $translate->translate($assetDescForm, ['target' => 'es']);
-        $assetDescFormSpanish = $result[text];
-    }
-    
-    if($assetDescFormFrench=='' && $assetDescForm !='' && $hasTranslator){
-        $translate = new TranslateClient();
-        $result = $translate->translate($assetDescForm, ['target' => 'fr']);
-        $assetDescFormFrench = $result[text];
-    }
-    
-    if($assetDescFormGerman=='' && $assetDescForm !='' && $hasTranslator){
-        $translate = new TranslateClient();
-        $result = $translate->translate($assetDescForm, ['target' => 'de']);
-        $assetDescFormGerman = $result[text];
-    }
-    
-    if($assetDescFormRussian=='' && $assetDescForm !='' && $hasTranslator){
-        $translate = new TranslateClient();
-        $result = $translate->translate($assetDescForm, ['target' => 'ru']);
-        $assetDescFormRussian = $result[text];
-    }
-    
+    // Fonts Selected
     $assetFonts = esc_attr(strip_tags($_POST['assetFonts']));
+
+    // 3D background color
     $assetback3dcolor=  esc_attr(strip_tags($_POST['assetback3dcolor']));
     
+    // Asset category
 	$assetCatID = intval($_POST['term_id']);//ID of Asset Category (hidden input)
-	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
     
+    // Term
+	$assetCatTerm = get_term_by('id', $assetCatID, 'wpunity_asset3d_cat');
+ 
+	// IPR Term id
     $assetCatIPRID = intval($_POST['term_id_ipr']); //ID of Asset Category IPR (hidden input)
+    
+    // IPR Term id cat
     $assetCatIPRTerm = get_term_by('id', $assetCatIPRID, 'wpunity_asset3d_ipr_cat');
 
-	// NEW
+	// NEW Asset: submit info to backend
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $gameSlug, $assetCatIPRID,
@@ -283,8 +221,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             $assetTitleFormRussian, $assetDescFormRussian,  $assetDescFormRussianKids, $assetDescFormRussianExperts, $assetDescFormRussianPerception,
             $assetFonts, $assetback3dcolor);
 	}else {
-	 
-		// Edit an existing asset: Return true if updated, false if failed
+	 	// Edit an existing asset: Return true if updated, false if failed
+   
 		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID,
             
             $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
@@ -320,10 +258,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		wpunity_create_asset_terrainExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'producer') {
 		wpunity_create_asset_producerExtra_frontend($asset_id);
-	}elseif ( $assetCatTerm->slug == 'pois_imagetext') {
-		wpunity_create_asset_poisITExtra_frontend($asset_id);
-	}elseif ( $assetCatTerm->slug == 'pois_video') {
-		wpunity_create_asset_poisVideoExtra_frontend($asset_id);
 	}elseif ($assetCatTerm->slug == 'molecule') {
 		wpunity_create_asset_moleculeExtra_frontend($asset_id);
     }elseif ( $assetCatTerm->slug == 'artifact') {
@@ -340,6 +274,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	//exit;
 }
+//---------------------------- End of handle Submit  -------------------------
+
 
 if ($project_scope == 0) {
 	$single_first = "Tour";
@@ -394,90 +330,9 @@ else
     $breacrumbsTitle = "";
 
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
-$asset_title_saved = ($asset_id == null ? "" : get_the_title( $asset_id ));
-$asset_title_label = ($asset_id == null ? "Enter a title for the asset in English" : "Edit the title of the asset in English");
-
-$asset_desc_label = ($asset_id == null ? "Add a description for the asset" : "Edit the description of the asset");
-$asset_desc_saved = ($asset_id == null ? "" : get_post_field('post_content', $asset_id));
-$asset_desc_kids_label = ($asset_id == null ? "Add a description of the asset for kids" : "Edit the description of the asset for kids");
-$asset_desc_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_kids', true));
-$asset_desc_experts_label = ($asset_id == null ? "Add a description of the asset for experts in archaeology" : "Edit the description of the asset for experts in archaeology");
-$asset_desc_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_experts', true));
-$asset_desc_perception_label = ($asset_id == null ? "Add a description of the asset for people with perception problems" : "Edit the description of the asset for people with perception problems");
-$asset_desc_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_perception', true));
-
-// 'wpunity_asset3d_title_greek','wpunity_asset3d_description_greek','wpunity_asset3d_description_greek_kids','wpunity_asset3d_description_greek_experts', 'wpunity_asset3d_description_greek_perception',   // Greek
-//     // Spanish
-//     // French
-//     // German
-//     // Russion
 
 
-$asset_title_greek_label = ($asset_id == null ? "Ο τίτλος του αντικειμένου" : "Τροποποίηση τίτλου αντικειμένου");
-$asset_title_greek_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_greek', true));
-$asset_desc_greek_label = ($asset_id == null ? "Πρόσθεσε μια περιγραφή για το αντικείμενο" : "Τροποποίηση περιγραφής αντικειμένου");
-$asset_desc_greek_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_greek', true));
-$asset_desc_greek_kids_label = ($asset_id == null ? "Η περιγραφή του αντικειμένου για παιδιά" : "Τροποποίηση περιγραφής του αντικειμένου για παιδιά");
-$asset_desc_greek_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_greek_kids', true));
-$asset_desc_greek_experts_label = ($asset_id == null ? "Η περιγραφή του αντικειμένου για ειδικούς στην αρχαιολογία" : "Τροποποίηση περιγραφής του αντικειμένου για ειδικούς στην αρχαιολογία");
-$asset_desc_greek_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_greek_experts', true));
-$asset_desc_greek_perception_label = ($asset_id == null ? "Η περιγραφή του αντικειμένου για άτομα με προβλήματατα αντίληψης" : "Τροποποίηση περιγραφής του αντικειμένου για άτομα με προβλήματατα αντίληψης");
-$asset_desc_greek_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_greek_perception', true));
-
-
-
-$asset_title_spanish_label = ($asset_id == null ? "Ingrese un título para su activo" : "Edite el título del activo");
-$asset_title_spanish_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_spanish', true));
-$asset_desc_spanish_label = ($asset_id == null ? "Agregue una pequeña descripción para su activo" : "Edite la descripción de su activo");
-$asset_desc_spanish_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_spanish', true));
-$asset_desc_spanish_kids_label = ($asset_id == null ? "Agregue una descripción de su activo para niños" : "Editar la descripción del activo para niños");
-$asset_desc_spanish_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_spanish_kids', true));
-$asset_desc_spanish_experts_label = ($asset_id == null ? "Agregar una descripción del activo para expertos en arqueología" : "Edite la descripción del activo para expertos en arqueología.");
-$asset_desc_spanish_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_spanish_experts', true));
-$asset_desc_spanish_perception_label = ($asset_id == null ? "Agregue una descripción del activo para personas con problemas de percepción" : "Edite la descripción del activo para personas con problemas de percepción");
-$asset_desc_spanish_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_spanish_perception', true));
-
-$asset_title_french_label = ($asset_id == null ? "Entrez un titre pour votre bien" : "Modifier le titre de l'actif");
-$asset_title_french_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_french', true));
-$asset_desc_french_label = ($asset_id == null ? "Ajouter une description de votre actif" : "Modifier la description de votre bien");
-$asset_desc_french_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french', true));
-$asset_desc_french_kids_label = ($asset_id == null ? "Ajouter une description pour votre bien pour enfants" : "Modifier la description de l'actif pour les enfants");
-$asset_desc_french_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french_kids', true));
-$asset_desc_french_experts_label = ($asset_id == null ? "Ajouter une description de l'actif pour les experts en archéologie" : "Modifier la description de l'actif pour les experts en archéologie");
-$asset_desc_french_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french_experts', true));
-$asset_desc_french_perception_label = ($asset_id == null ? "Ajouter une description de l'actif pour les personnes ayant des problèmes de perception" : "Modifier la description de l'actif pour les personnes ayant des problèmes de perception");
-$asset_desc_french_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_french_perception', true));
-
-$asset_title_german_label = ($asset_id == null ? "Geben Sie einen Titel für Ihr Asset ein" : "Bearbeiten Sie den Titel des Assets");
-$asset_title_german_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_german', true));
-$asset_desc_german_label = ($asset_id == null ? "Geben Sie eine Beschriebung" : "Ändern Sie die Beschreibung");
-$asset_desc_german_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_german', true));
-$asset_desc_german_kids_label = ($asset_id == null ? "Fügen Sie eine Beschreibung für Ihr Asset auf Englisch für Kinder hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Kinder");
-$asset_desc_german_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_german_kids', true));
-$asset_desc_german_experts_label = ($asset_id == null ? "Fügen Sie eine Beschreibung des Objekts für Experten der Archäologie hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Experten in Archäologie");
-$asset_desc_german_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_german_experts', true));
-$asset_desc_german_perception_label = ($asset_id == null ? "Fügen Sie eine Beschreibung des Assets für Personen mit Wahrnehmungsproblemen hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Personen mit Wahrnehmungsproblemen");
-$asset_desc_german_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_german_perception', true));
-
-$asset_title_russian_label = ($asset_id == null ? "Введите название для вашего актива" : "Изменить заголовок актива");
-$asset_title_russian_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_russian', true));
-$asset_desc_russian_label = ($asset_id == null ? "Дать описание" : "Изменить описание");
-$asset_desc_russian_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_russian', true));
-$asset_desc_russian_kids_label = ($asset_id == null ? "Добавить описание для вашего имущества для детей" : "Редактировать описание актива для детей");
-$asset_desc_russian_kids_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_russian_kids', true));
-$asset_desc_russian_experts_label = ($asset_id == null ? "Добавить описание актива для специалистов по археологии" : "Редактировать описание актива для специалистов по археологии");
-$asset_desc_russian_experts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_russian_experts', true));
-$asset_desc_russian_perception_label = ($asset_id == null ? "Добавить описание актива для людей с проблемами восприятия" : "Изменить описание актива для людей с проблемами восприятия");
-$asset_desc_russian_perception_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_russian_perception', true));
-
-echo '<script>';
-echo 'var asset_title_english_saved="'.$asset_title_saved.'";';
-echo 'var asset_title_greek_saved="'.$asset_title_greek_saved.'";';
-echo 'var asset_title_spanish_saved="'.$asset_title_spanish_saved.'";';
-echo 'var asset_title_french_saved="'.$asset_title_french_saved.'";';
-echo 'var asset_title_german_saved="'.$asset_title_german_saved.'";';
-echo 'var asset_title_russian_saved="'.$asset_title_russian_saved.'";';
-echo '</script>';
+include 'edit-wpunity_asset3D_languages_support2.php';
 
 
 
@@ -487,57 +342,61 @@ $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_
 $asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
 $asset_back_3d_color_label = ($asset_id == null ? "3D viewer background color" : "3D viewer background color");
 
-//print_r(get_allowed_mime_types());
+
 
 //Check if its new/saved and get data for Terrain Options
 if($asset_id != null) {
 	$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
 	
 	if($saved_term[0]->slug == 'terrain'){
-		$physics = get_post_meta($asset_id,'wpunity_physicsValues',true);
-		if($physics) {
-			$mean_speed_wind = $physics['mean'];
-			$var_speed_wind = $physics['variance'];
-			$min_speed_wind = $physics['min'];
-			$max_speed_wind = $physics['max'];
-		}
-		$energy_income = get_post_meta($asset_id,'wpunity_energyConsumptionIncome',true);
-		if($energy_income) {
-			$income_when_overpower = $energy_income['over'];
-			$income_when_correct_power = $energy_income['correct'];
-			$income_when_under_power = $energy_income['under'];
-		}
-		$constr_pen = get_post_meta($asset_id,'wpunity_constructionPenalties',true);
-		if($constr_pen){
-			$access_penalty = $constr_pen['access'];
-			$archaeology_penalty = $constr_pen['arch'];
-			$natural_reserve_penalty = $constr_pen['natural'];
-			$hvdistance_penalty = $constr_pen['hiVolt'];
-		}
-	}elseif($saved_term[0]->slug == 'consumer'){
-		$consumptions = get_post_meta($asset_id,'wpunity_energyConsumption',true);
-		if($consumptions) {
-			$min_consumption = $consumptions['min'];
-			$max_consumption = $consumptions['max'];
-			$mean_consumption = $consumptions['mean'];
-			$var_consumption = $consumptions['var'];
-		}
-	}elseif($saved_term[0]->slug == 'producer') {
-		$optCosts = get_post_meta($asset_id,'wpunity_producerOptCosts',true);
-		if($optCosts) {
-			$optCosts_size = $optCosts['size'];
-			$optCosts_dmg = $optCosts['dmg'];
-			$optCosts_cost = $optCosts['cost'];
-			$optCosts_repaid = $optCosts['repaid'];
-		}
-		$optGen = get_post_meta($asset_id,'wpunity_producerOptGen',true);
-		if($optGen) {
-			$optGen_class = $optGen['class'];
-			$optGen_speed = $optGen['speed'];
-			$optGen_power = $optGen['power'];
-		}
-		$optProductionVal = get_post_meta($asset_id,'wpunity_producerPowerProductionVal',true);
-	}elseif (in_array($saved_term[0]->slug , ['artifact','pois_imagetext'])) {
+	
+//		$physics = get_post_meta($asset_id,'wpunity_physicsValues',true);
+//		if($physics) {
+//			$mean_speed_wind = $physics['mean'];
+//			$var_speed_wind = $physics['variance'];
+//			$min_speed_wind = $physics['min'];
+//			$max_speed_wind = $physics['max'];
+//		}
+//		$energy_income = get_post_meta($asset_id,'wpunity_energyConsumptionIncome',true);
+//		if($energy_income) {
+//			$income_when_overpower = $energy_income['over'];
+//			$income_when_correct_power = $energy_income['correct'];
+//			$income_when_under_power = $energy_income['under'];
+//		}
+//		$constr_pen = get_post_meta($asset_id,'wpunity_constructionPenalties',true);
+//		if($constr_pen){
+//			$access_penalty = $constr_pen['access'];
+//			$archaeology_penalty = $constr_pen['arch'];
+//			$natural_reserve_penalty = $constr_pen['natural'];
+//			$hvdistance_penalty = $constr_pen['hiVolt'];
+//		}
+//	}elseif($saved_term[0]->slug == 'consumer'){
+//		$consumptions = get_post_meta($asset_id,'wpunity_energyConsumption',true);
+//		if($consumptions) {
+//			$min_consumption = $consumptions['min'];
+//			$max_consumption = $consumptions['max'];
+//			$mean_consumption = $consumptions['mean'];
+//			$var_consumption = $consumptions['var'];
+//		}
+//	}elseif($saved_term[0]->slug == 'producer') {
+//		$optCosts = get_post_meta($asset_id,'wpunity_producerOptCosts',true);
+//		if($optCosts) {
+//			$optCosts_size = $optCosts['size'];
+//			$optCosts_dmg = $optCosts['dmg'];
+//			$optCosts_cost = $optCosts['cost'];
+//			$optCosts_repaid = $optCosts['repaid'];
+//		}
+//		$optGen = get_post_meta($asset_id,'wpunity_producerOptGen',true);
+//		if($optGen) {
+//			$optGen_class = $optGen['class'];
+//			$optGen_speed = $optGen['speed'];
+//			$optGen_power = $optGen['power'];
+//		}
+//		$optProductionVal = get_post_meta($asset_id,'wpunity_producerPowerProductionVal',true);
+	
+	
+	}elseif (in_array($saved_term[0]->slug , ['artifact'])) {
+	 
 		//load the already saved featured image for POI image-text
 		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
 		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
@@ -574,16 +433,6 @@ if($asset_id != null) {
                 wp_get_upload_dir()['baseurl'] . "/" . $the_image5_url['file'];
         }
 
-	} elseif ($saved_term[0]->slug == 'pois_video') {
-		//upload the featured image for POI video
-		//$asset_featured_image =  $_FILES['poi-video-featured-image'];
-		//$attachment_id = wpunity_upload_img( $asset_featured_image, $asset_id);
-		//set_post_thumbnail( $asset_id, $attachment_id );
-
-		//upload video file for POI video
-		//$asset_video = $_FILES['videoFileInput'];
-		//$attachment_video_id = wpunity_upload_img( $asset_video, $asset_id);
-		//update_post_meta( $asset_id, 'wpunity_asset3d_video', $attachment_video_id );
 	}
 }
 
@@ -603,7 +452,7 @@ if($asset_id != null) {
         * html body { margin-top: 0px !important; }
     </style>
 
-    <div id="wrapper_3d_inner" style="position: fixed; top:0; right:0;width:60%;height:100%;z-index:1">
+    <div id="wrapper_3d_inner" class="asset_editor_3dpanel">
 
         <div id="previewProgressSlider" style="visibility:hidden; position: absolute; z-index:2;width:100%;top:0" class="CenterContents">
             <h6 class="mdc-theme--text-primary-on-light mdc-typography--title" style="position: absolute; left:0; right: 0;color:white !important; mix-blend-mode: difference;">Loading 3D object</h6>
@@ -620,31 +469,81 @@ if($asset_id != null) {
         </div>
 
         <canvas id="previewCanvas" style="height:100%; width:100%;position: relative"></canvas>
+
+
+        <?php if (!isset($_GET['qrcode'])){ ?>
+
+            <div style="width:180px;position:absolute;bottom:0;right:0;text-align:center;height:200px">
+            
+            <button id='button_qrcode' class="button_qrcode"  style="top:0;right:0;position:absolute;margin-top:55px;z-index:15;padding:0px;padding-left:3px;padding-right:5px;font-family: Arial, sans-serif;"
+                    onclick="toggleQRcode()">
+                x
+            </button>
+
+
+            
+            
+            <script>
+                function toggleQRcode(){
+
+                    var dom = document.getElementById('qrcode_div');
+                    var dombutton = document.getElementById('button_qrcode');
+                    
+                    if(dom.style.display!='none') {
+                        dom.style.display = 'none';
+                        dombutton.innerText = 'o';
+                    }else {
+                        dom.style.display = 'block';
+                        dombutton.innerText = 'x';
+                    }
+                }
+                
+                
+            </script>
+            
+            
+            <div id="qrcode_div" style="width:180px;position:absolute;bottom:0;right:0;text-align:center">
+                View at your device
+                
+                
+                
+                
+                <div id="qrcode" style="width: 128px;margin-left: auto;margin-right: auto;text-align: center;margin-top: 10px;margin-bottom: 15px">
+    
+                </div>
+                <script type="text/javascript">
+                    var qrcode = new QRCode(document.getElementById("qrcode"), {
+                        text: window.location.href.replace('#','&qrcode=none#'),
+                        width: 128,
+                        height: 128,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                </script>
+            </div>
+            <?php } ?>
+            </div>
     </div>
 
 
-    <div id="text-asset-sidebar" style="">
-    
-    
-    
-    
-    
-    
-<!--    --><?php //if($isJoker == "true" ) {
-//        ?>
-        
-        <a title="Back" style="color:dodgerblue; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
-           class="hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
-            <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
-            Assets Manager</a>
-        
-<!--    --><?php //} else { ?>
-<!--        <a title="Back" style="color:dodgerblue" href="--><?php //echo $goBackTolink;?><!--">-->
-<!--            <i class="material-icons" style="font-size: 24px; vertical-align: top;" >arrow_back</i>3D Editor-->
-<!--        </a>-->
-<!--    --><?php //} ?>
+    <div id="text-asset-sidebar" class="asset_editor_textpanel">
 
-    <?php
+
+        <?php
+           if ($isUserloggedIn && !$isPreviewMode) {
+    
+               echo '<a title="Back" style="color:dodgerblue; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
+                   class="hideAtLocked mdc-button" href="'.$goBackToLink.'">
+                    <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
+                    Assets Manager
+                </a>';
+           }
+           
+
+        
+        
+        
         if($isUserloggedIn && !$isPreviewMode){
             if($asset_id != null ) { ?>
 <!--                <a class="mdc-button mdc-button--primary mdc-theme--primary"-->
@@ -693,16 +592,7 @@ if($asset_id != null) {
             <span class="mdc-typography--headline mdc-theme--text-primary-on-light" style="width:50%;display:inline-block;"><span><?php echo $breacrumbsTitle; ?></span></span>
             
 
-            <table id="wpunity-asset-author" class="mdc-typography--caption"
-                   style="display:inline-block;text-align:left;float:right;right:0;margin-top:10px">
-                <tr>
-                    <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
-                    <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
-                </tr>
-                <tr>
-                    <td><span style=""><?php echo $author_country;?></span></td>
-                </tr>
-            </table>
+            
         </div>
     
     
@@ -796,7 +686,7 @@ if($asset_id != null) {
         
         <!--   TITLE , DESCRIPTION , 3D files  -->
         
-        <div class="" id="informationPanel" style="display: none;padding-top:10px;">
+        <div class="" id="informationPanel" style="display: none;padding-top:0px;">
 
             <!-- TITLE , DESCRIPTION -->
             <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
@@ -804,7 +694,7 @@ if($asset_id != null) {
                 <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield">
                     <input id="assetTitle" type="text" class="changablefont mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="3" maxlength="40"
-                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em; font-family: <?php echo $curr_font?>;"
+                           style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em; font-family: <?php echo $curr_font?>; "
                            value="<?php echo trim($asset_title_saved); ?>">
                     <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
                     <div class="mdc-textfield__bottom-line"></div>
@@ -1115,7 +1005,7 @@ if($asset_id != null) {
                 
                 
                 if (count($saved_term) > 0)
-                    $showIMT = in_array($saved_term[0]->slug, ['pois_imagetext','artifact']) ?'':'none';
+                    $showIMT = in_array($saved_term[0]->slug, ['artifact']) ?'':'none';
                 else
                     $showIMT = 'none';
                 ?>
@@ -1231,14 +1121,16 @@ if($asset_id != null) {
             
         <!--                Show-->
                 
-                <span id="assetTitleView" style="font-size:24pt"><?php echo trim($asset_title_saved); ?></span>
+                <div id="assetTitleView" style="font-size:24pt; width:-moz-fit-content;margin:auto; "><?php echo trim($asset_title_saved); ?></div>
 
+                <hr />
+                
                 <!--Carousel slideshow slides-->
     
                 <!-- Video -->
-                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact', 'pois_video'])?'':'none';  ?>
+                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact'])?'':'none';  ?>
                 <!-- Image -->
-                <?php $showIMT = in_array($saved_term[0]->slug,['artifact','pois_imagetext'])?'':'none';  ?>
+                <?php $showIMT = in_array($saved_term[0]->slug,['artifact'])?'':'none';  ?>
                 
                 <div class="slideshow-container">
     
@@ -1480,6 +1372,7 @@ if($asset_id != null) {
 
                 </div>
                 
+                <hr />
                 <div id="confwindow" style="align-items: center; justify-content: center; border 0px; display:none" >
                     <iframe id="iframeConf" width="100%" height="350px" style="margin-bottom:0;" frameBorder=0 src=""
                             allow="camera;microphone"></iframe>
@@ -1939,11 +1832,32 @@ if($asset_id != null) {
                 
             <?php } ?>
     
+
             
 
         </div>
+
+       
+      
+        
+        
+        <table id="wpunity-asset-author" class="mdc-typography--caption"
+               style="display:inline-block;text-align:left;float:right;right:0;margin-top:0px;width:auto">
+            <tr><td>Author</td></tr>
+            <tr>
+                
+                <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
+                <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
+            </tr>
+            <tr>
+                <td><span style=""><?php echo $author_country;?></span></td>
+            </tr>
+        </table>
+        
+        
     </form>
 
+    
     
     
 
@@ -1974,6 +1888,30 @@ if($asset_id != null) {
         
         loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
 
+
+        if (window.innerWidth<window.innerHeight) {
+            const initCH = document.getElementById('text-asset-sidebar').clientHeight;
+            const initCH2 = document.getElementById('wrapper_3d_inner').clientHeight;
+
+
+            document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
+
+                var value = this.scrollTop;
+
+                //console.log(this.scrollTop, this.scrollHeight, this.clientHeight, initCH );
+
+                document.getElementById("text-asset-sidebar").style.height = initCH + this.scrollTop / 2 + 5;
+                //document.getElementById("text-asset-sidebar").style.height += value + "px";
+
+                document.getElementById("wrapper_3d_inner").style.height = initCH2 - this.scrollTop / 2 + 5;
+                wu_webw_3d_view.resizeDisplayGL();
+
+            });
+        }
+        
+
+        
+        
         
 
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
@@ -2160,12 +2098,10 @@ if($asset_id != null) {
                         break;
                     case 'dynamic3dmodels':
                         break;
-                    case 'pois_imagetext':
                     case 'artifact':
                         jQuery("#poiImgDetailsPanel").show();
-                    case 'pois_video':
-                    case 'artifact':
                         jQuery("#poiVideoDetailsPanel").show();
+                        break;
                     // Energy cases
                     case 'terrain':
                         jQuery("#terrainPanel").show();
@@ -2284,11 +2220,30 @@ if($asset_id != null) {
         /// Font Selector
         function updateColorPicker(picker){
             document.getElementById('assetback3dcolor').value = picker.toRGBString();
-            wu_webw_3d_view .scene.background.r = picker.rgb[0]/255;
-            wu_webw_3d_view .scene.background.g = picker.rgb[1]/255;
-            wu_webw_3d_view .scene.background.b = picker.rgb[2]/255;
+            wu_webw_3d_view.scene.background.r = picker.rgb[0]/255;
+            wu_webw_3d_view.scene.background.g = picker.rgb[1]/255;
+            wu_webw_3d_view.scene.background.b = picker.rgb[2]/255;
+            
+            
+
+            document.getElementById('text-asset-sidebar').style.borderTop="5px solid " +
+                         rgbToHex(picker.rgb[0]-40, picker.rgb[1]-40, picker.rgb[2]-40) ;
         }
 
+        function rgbToHex(r, g, b) {
+            if(r<0)
+                r=0;
+            
+            if(g<0)
+                g=0;
+            
+            if (b<0)
+                b=0;
+            
+            
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+        
         function applyFont(font) {
             console.log('You selected font: ' + font);
 
@@ -2371,14 +2326,6 @@ if($asset_id != null) {
         
         
     </script>
-
-<?php
-
-
-
-if($isUserAdmin && $isPreviewMode)
-        echo "<script>document.children[0].children[1].style.marginTop='-33px';</script>";
-?>
 
 
 <?php

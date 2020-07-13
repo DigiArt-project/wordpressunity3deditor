@@ -1010,15 +1010,20 @@ echo '</script>';
     // 3D Widgets change mode (Translation-Rotation-Scale)
     jQuery("#object-manipulation-toggle").click(function() {
 
+        var value = jQuery("input[name='object-manipulation-switch']:checked").val();
+        
+        
         // Sun and Target spot can not change control manipulation mode
         if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
             transform_controls.object.categoryName.includes("lightSun") ||
             transform_controls.object.categoryName.includes("lightLamp") ||
             transform_controls.object.categoryName.includes("lightSpot")){
-            return;
+            
+            if (value === 'rotate')
+                return;
         }
         
-        var value = jQuery("input[name='object-manipulation-switch']:checked").val();
+        
         transform_controls.setMode(value);
         showObjectPropertiesPanel(value);
     });
@@ -1232,14 +1237,10 @@ echo '</script>';
         var name;
 
         
+        // Get the last inserted object
         for ( name in resources3D  ) {
             trs_tmp = resources3D[name]['trs'];
             objItem = envir.scene.getObjectByName(name);
-           //if (name != 'avatarYawObject' && typeof objItem !== "undefined") {
-                // objItem.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-                // objItem.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
-                //objItem.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
-            //}
         }
 
         // In the case the last asset is missing then put controls on the camera
@@ -1383,8 +1384,8 @@ echo '</script>';
         loaderMulti = new LoaderMulti();
         loaderMulti.load(manager, resources3D);
     }
-    
-    
+
+
     function takeScreenshot(){
 
         //envir.cameraAvatarHelper.visible = false;

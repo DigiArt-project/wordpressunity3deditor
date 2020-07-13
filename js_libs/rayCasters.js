@@ -239,7 +239,8 @@ function selectorMajor(event, objectSel){
         // Rotate GIZMO
         transform_controls.children[6].children[0].children[1].visible = true; // ROTATE GIZMO
 
-        if (objectSel.categoryName === "lightSun" || objectSel.categoryName === "lightTargetSpot") {
+        if (objectSel.categoryName === "lightSun" || objectSel.categoryName === "lightTargetSpot"
+            || objectSel.categoryName === "lightSpot" || objectSel.categoryName === "lightLamp") {
             transform_controls.children[6].children[0].children[1].visible = false; // 2D ROTATE GIZMO
         }
 

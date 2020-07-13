@@ -732,17 +732,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
     text-transform: inherit;
 }
 
-#text-asset-sidebar {
-    padding:15px;
-    padding-top:0px;
-    height:100% !important;
-    width:40%;
-    background:white;
-    border:0px solid black;
-    z-index:1000;
-    overflow-y:auto;
 
-}
 
 #content {
     padding:0!important;
@@ -949,7 +939,7 @@ video {
 
 
 
-
+/*Peer calls css*/
 
 .phonering-alo-phone.phonering-alo-static {
     opacity:.6
@@ -1394,53 +1384,63 @@ video {
         transform:rotate(0) scale(1) skew(1deg)
     }
 }
+/* -------- End of peer calls ------------- */
 
 
 
-.chip {
-    display: inline-block;
-    padding: 0 20px;
-    height: 40px;
-    font-size: 14px;
-    line-height: 40px;
-    border-radius: 20px;
-    background-color: #f1f1f1;
-    margin:5px;
+
+/* ----------- Asset Editor -----------------*/
+
+.asset_editor_textpanel{
+    background:#ffffff;
+    padding:15px;
+    padding-top:0px;
+
+    border:0px;
+
+    z-index:1000;
+    overflow-y:auto;
 }
 
-.chip > .material-icons {
-    vertical-align: middle;
-    padding-left: 5px;
+.asset_editor_3dpanel{
+    position: fixed;
+    top:0;
+    right:0;
+    z-index:1
 }
 
-#textarea-collaborators > .input {
-    border:none;
-    border-bottom: 1px solid #1890ff;
-    padding: 5px 10px;
-    outline: none;
-    placeholder: "Collaborator email"
+@media only screen and (orientation: landscape) {
+    .asset_editor_textpanel{
+        height: 100% !important;
+        width:40%;
+    }
+
+    .asset_editor_3dpanel{
+        width:60%;
+        height:100%;
+     }
 }
 
-/*.chip img {*/
-/*    float: left;*/
-/*    margin: 0 10px 0 -25px;*/
-/*    height: 50px;*/
-/*    width: 50px;*/
-/*    border-radius: 50%;*/
-/*}*/
+@media only screen and (orientation: portrait) {
+    .asset_editor_textpanel{
+        height: 40%;
+        width:100%;
+        border-top: 5px solid;
+        position:fixed;
+        bottom:0;
+    }
 
-/*.closebtn {*/
-/*    padding-left: 10px;*/
-/*    color: #888;*/
-/*    font-weight: bold;*/
-/*    float: right;*/
-/*    font-size: 20px;*/
-/*    cursor: pointer;*/
-/*}*/
 
-/*.closebtn:hover {*/
-/*    color: #000;*/
-/*}*/
+    .asset_editor_3dpanel{
+        width:100%;
+        height:60%;
+    }
+}
+
+
+
+
+
 
 
 

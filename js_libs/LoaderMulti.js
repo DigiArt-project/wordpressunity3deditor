@@ -200,7 +200,7 @@ class LoaderMulti {
                                 //}
 
 
-                                console.log(object.name, object.receiveShadow, object.castShadow);
+//                                console.log(object.name, object.receiveShadow, object.castShadow);
 
 
 
@@ -488,15 +488,15 @@ class LoaderMulti {
             lightSpot.isDigiArt3DModel = true;
             lightSpot.isLight = true;
 
-                  lightSpot.castShadow = true;
+              lightSpot.castShadow = true;
 
 
 
-                  lightSpot.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 0.5, 100 ) );
-                  lightSpot.shadow.bias = 0.0001;
-                 //
-                  lightSpot.shadow.mapSize.width = 1024;
-                  lightSpot.shadow.mapSize.height = 1024;
+              lightSpot.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 0.5, 100 ) );
+              lightSpot.shadow.bias = 0.0001;
+             //
+              lightSpot.shadow.mapSize.width = 1024;
+              lightSpot.shadow.mapSize.height = 1024;
 
 
 
