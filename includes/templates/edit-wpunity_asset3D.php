@@ -1132,6 +1132,13 @@ if($asset_id != null) {
                     }
                 </script>
                 
+                <?php
+                    // Peer calls: audiovisual conferencing, answer to calls directly (for museum operators)
+                    if(isset($_GET['directcall']))
+                        echo '<script>startConf()</script>';
+                ?>
+                
+                
             <?php } ?>
             <!--  End of Edit or Show  -->
 
@@ -1395,10 +1402,16 @@ if($asset_id != null) {
         
         
     </form>
+    
+    
 
     
 
-    <!--                     Javascript                             -->
+    
+
+
+
+        <!--                     Javascript                             -->
 
     <script type="text/javascript">
         'use strict';
@@ -1680,21 +1693,9 @@ if($asset_id != null) {
         if (document.getElementsByClassName("asset3d_desc_view").length > 1)
             document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
 
-      
-
         // Hide admin bar of wordpress
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
-        
-        
     </script>
 
-
-<?php
-
-    // Peer calls: audiovisual conferencing
-    if(isset($_GET['directcall']))
-        echo '<script>startConf()</script>';
-
-?>
 
