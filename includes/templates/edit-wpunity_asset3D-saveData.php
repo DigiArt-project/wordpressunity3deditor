@@ -258,7 +258,8 @@ function wpunity_create_asset_producerExtra_frontend($asset_newID){
     update_post_meta($asset_newID, 'wpunity_producerOptGen', $producerOptGen);
 }
 
-function wpunity_create_asset_poisITExtra_frontend($asset_newID){
+function wpunity_create_asset_addImages_frontend($asset_newID){
+    
     $asset_featured_imageForm =  $_FILES['featured-image'];
     
     $asset_image2Form =  $_FILES['image2'];
@@ -291,23 +292,15 @@ function wpunity_create_asset_poisITExtra_frontend($asset_newID){
 
 }
 
-function wpunity_create_asset_poisVideoExtra_frontend($asset_newID){
-    //$asset_featured_imageForm =  $_FILES['poi-video-featured-image'];
+function wpunity_create_asset_addVideo_frontend($asset_newID){
     $asset_videoForm = $_FILES['videoFileInput'];
     
-    // 4 error means empty: Then do not proceed to update meta of video
+    // 4 error means empty
     if ( $asset_videoForm['error'] == 4  )
         return;
 
-    //$attachment_id = wpunity_upload_img_vid( $asset_featured_imageForm, $asset_newID);
-    //set_post_thumbnail( $asset_newID, $attachment_id );
-    
     $attachment_video_id = wpunity_upload_img_vid( $asset_videoForm, $asset_newID);
-    
-    
     update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
-    
-    
 }
 
 function wpunity_create_asset_moleculeExtra_frontend($asset_newID){
@@ -357,6 +350,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
    
     $mtl_content = $_POST['mtlFileInput'];
     $obj_content = $_POST['objFileInput'];
+    $fbx_content = $_POST['fbxFileInput'];
     
 //    $fl = fopen("output_png.txt","w");
     
@@ -417,6 +411,24 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
         }
     }
+    
+    
+    if (isset($_POST['fbxFileInput']) ) {
+        if (strlen($_POST['fbxFileInput'])>0) {
+            
+            $fbxFile_id = wpunity_upload_AssetText($fbx_content, 'fbx' . $assetTitleForm, $asset_newID, $gameSlug);
+            
+            // Set value of attachment IDs at custom fields
+            update_post_meta($asset_newID, 'wpunity_asset3d_obj', $fbxFile_id);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     
     
     // PDB

@@ -325,6 +325,13 @@ $wpunity_databox1 = array(
 			'type' => 'text',
 			'std' => ''
 		),
+        array(
+            'name' => 'Fbx File',
+            'desc' => 'Fbx File',
+            'id' => $wpunity_prefix . 'fbx',
+            'type' => 'text',
+            'std' => ''
+        ),
 		array(
 			'name' => 'Diffusion Image',
 			'desc' => 'Diffusion Image',
@@ -667,6 +674,10 @@ function wpunity_assets_databox_show(){
                             </textarea>
                     </td>
                 </tr>
+                
+                
+                
+                
 				<?php
 			}elseif ($field['id'] == 'wpunity_asset3d_obj') {
 
@@ -703,6 +714,45 @@ function wpunity_assets_databox_show(){
                             </textarea>
                     </td>
                 </tr>
+                
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_fbx') {?>
+
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td>
+                        <?php
+                        $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                        if ($valMaxUpload < 100){
+                            echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                            echo "Add to .htaccess the following two lines<br/>";
+                            echo "php_value upload_max_filesize 256M <br />";
+                            echo "php_value post_max_size 512M";
+                        }
+                        $meta_fbx_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                        <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                               value="<?php echo esc_attr($meta_fbx_id ? $meta_fbx_id : $field['std']); ?>" size="30" style="width:65%"/>
+
+                        <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+
+                        <br /><br />
+                        Pathfile: <?php echo wp_get_attachment_url($meta_fbx_id); ?><br />
+                        Preview fbx:<br />
+                        <textarea id="wpunity_asset3d_fbx_preview" readonly style="width:100%;height:200px;"><?php
+                            if(!$meta_fbx_id){
+                                echo "fbx is not defined";
+                            }else{
+                                echo "fbx text is too big to state here.";
+                                //readfile(wp_get_attachment_url($meta_fbx_id), "100");
+                            }
+                            ?>
+                            </textarea>
+                    </td>
+                </tr>
+                
+                
+                
 				<?php
 			}elseif ($field['id'] == 'wpunity_asset3d_diffimage') {
 				?>
@@ -950,6 +1000,40 @@ function wpunity_assets_databox_show(){
                 file_frame.open();
             });
 
+            jQuery('#wpunity_asset3d_fbx_btn').on('click', function( event ){
+
+                event.preventDefault();
+
+                // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                wp.media.model.settings.post.id = set_to_post_id;
+
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select FBX file to upload',
+                    button: {
+                        text: 'Use this file',
+                    },
+                    multiple: false	// Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected, run a callback.
+                file_frame.on( 'select', function(html) {
+                    // We set multiple to false so only get one image from the uploader
+                    attachment = file_frame.state().get('selection').first().toJSON();
+
+                    // Do something with attachment.id and/or attachment.url here
+                    jQuery('#wpunity_asset3d_fbx').val(attachment.id);
+                    
+
+                    // Restore the main post ID
+                    wp.media.model.settings.post.id = wp_media_post_id;
+                });
+
+                // Finally, open the modal
+                file_frame.open();
+            });
+            
+            
             jQuery('#wpunity_asset3d_diffimage_btn').on('click', function( event ){
 
                 event.preventDefault();
@@ -1144,6 +1228,7 @@ add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_ca
 add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
 
 
+// Peer conferencing
 add_action( 'wp_ajax_nopriv_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
 add_action( 'wp_ajax_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
 

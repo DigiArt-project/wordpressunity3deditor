@@ -110,6 +110,10 @@ function wpunity_register_scripts() {
     wp_register_script( 'wpunity_load87_wwobjloader2', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/WWOBJLoader2.js', null, null, false);
     
     wp_register_script( 'wpunity_load87_mtlloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/MTLLoader.js', null, null, false);
+	wp_register_script( 'wpunity_load87_fbxloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/FBXLoader.js', null, null, false);
+	wp_register_script( 'wpunity_inflate', plugin_dir_url( __FILE__ ) . 'js_libs/inflate.min.js', null, null, false);
+    
+    
     wp_register_script( 'wpunity_load87_orbitcontrols', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/OrbitControls.js', null, null, false);
     wp_register_script( 'wpunity_load87_pdbloader', plugin_dir_url( __FILE__ ) . 'js_libs/threejs87/PDBLoader.js', null, null, false);
 	
@@ -262,6 +266,7 @@ function my_myme_types($mime_types){
 	$mime_types['mtl'] = 'text/plain';
 	$mime_types['mat'] = 'text/plain';
 	$mime_types['pdb'] = 'text/plain';
+	$mime_types['fbx'] = 'application/octet-stream';
 	return $mime_types;
 }
 

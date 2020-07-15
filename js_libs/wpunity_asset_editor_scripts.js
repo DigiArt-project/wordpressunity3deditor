@@ -16,7 +16,29 @@ var nJpg = 0;
 var nPng = 0;
 var nPdb = 0;
 
-//jQuery('#3dAssetForm').remove
+
+
+function loadFileInputLabel(objectType) {
+
+    //var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
+
+    var inputLabel = document.getElementById('fileUploadInputLabel');
+    var input = document.getElementById('fileUploadInput');
+
+    if (inputLabel)
+        if (objectType === 'pdb') {
+            inputLabel.innerHTML = 'Select a pdb file';
+            input.accept = ".pdb";
+        } else if (objectType === 'obj') {
+            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
+            input.accept = ".obj,.mtl,.jpg,.png";
+        } else if (objectType === 'fbx') {
+            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file';
+            input.accept = ".fbx,jpg,.png";
+        }
+}
+
+
 
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
@@ -48,9 +70,8 @@ function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
 function wpunity_load_file_callback(content, type, canvas, filename) {
 
     switch (type) {
-        case 'fbx':
-            fbxFileContent = content ? content : '';
-            break;
+
+
 
         case 'mtl':
             mtlFileContent = content ? content : '';
@@ -74,6 +95,21 @@ function wpunity_load_file_callback(content, type, canvas, filename) {
             checkerCompleteReading(canvas);
 
             break;
+
+        case 'fbx':
+            fbxFileContent = content ? content : '';
+
+            var dec = new TextDecoder();
+
+            document.getElementById('fbxFileInput').value = dec.decode(fbxFileContent);
+
+
+            console.log(document.getElementById('fbxFileInput').value);
+
+            //checkerCompleteReading(canvas);
+
+            break;
+
 
         case 'pdb':
             pdbFileContent = content ? content : '';
@@ -170,8 +206,8 @@ function wpunity_reset_panels(wu_webw_3d_view) {
     jQuery("#terrainPanel").hide();
     jQuery("#consumerPanel").hide();
     jQuery("#producerPanel").hide();
-    //jQuery("#poiImgDetailsPanel").hide();
-    //jQuery("#poiVideoDetailsPanel").hide();
+    //jQuery("#imgDetailsPanel").hide();
+    //jQuery("#videoDetailsPanel").hide();
     jQuery("#objectPreviewTitle").hide();
     //jQuery("#moleculeOptionsPanel").hide();
     jQuery("#moleculeFluidPanel").hide();
@@ -247,11 +283,18 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
 
 
     // for existing 3D models
+    // 1 OBJ
     if (typeof path_url != "undefined")
         loader_asset_exists(path_url, mtl_file_name, obj_file_name, null);
 
+    // 2 PDB
     if (typeof pdb_file_name != "undefined")
         loader_asset_exists(null, null, null, pdb_file_name);
+
+    // 3 FBX
+    if (typeof path_url_fbx != "undefined")
+        loader_asset_exists(null, null, null, null, fbx_file_name);
+
 }
 
 /**
@@ -324,7 +367,7 @@ function checkerCompleteReading(canvas){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
+function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename){
 
 
     jQuery('#previewProgressSlider')[0].style.visibility = "visible";
@@ -405,95 +448,188 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent){
 
 
 
-// for the Energy Turbines
-function wpunity_create_slider_component(elemId, range, options) {
-
-    if (range) {
-
-        jQuery( elemId ).slider({
-            range: range,
-            min: options.min,
-            max: options.max,
-            values: [ options.values[0], options.values[1] ],
-            create: function() {
-                jQuery( options.valIds[0] ).val(options.values[0]);
-                jQuery( options.valIds[1] ).val(options.values[1]);
-            },
-            slide: function( event, ui ) {
-                jQuery( elemId+"-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " " +options.units);
-
-            },
-            stop: function( event, ui ) {
-                jQuery( options.valIds[0] ).val(ui.values[ 0 ]);
-                jQuery( options.valIds[1] ).val(ui.values[ 1 ]);
-            }
-
-        });
-        jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) +
-            " - " + jQuery( elemId ).slider( "values", 1 ) + " " + options.units );
-
-    } else {
-
-        if (options.inputText) {
-
-            jQuery( elemId ).slider({
-                min: options.min,
-                max: options.max,
-                value: options.value,
-                create: function() {
-                    jQuery( options.valId ).val(options.value);
-                },
-                slide: function( event, ui ) {
-                    jQuery( elemId+"-label" ).val( ui.value );
-
-                },
-                stop: function( event, ui ) {
-                    jQuery( options.valId ).val(ui.value);
-                }
-            });
-            jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ));
 
 
-            jQuery(elemId+"-label").change(function () {
-                var value = this.value;
-                jQuery( elemId ).slider("value", parseInt(value));
-
-            });
-
-            jQuery(elemId+"-label").on('input', function() {
-                var value = this.value;
-                jQuery( elemId ).slider("value", parseInt(value));
-            });
 
 
-        } else {
 
-            jQuery( elemId ).slider({
-                min: options.min,
-                max: options.max,
-                value: options.value,
-                create: function() {
-                    jQuery( options.valId ).val(options.value);
-                },
-                slide: function( event, ui ) {
 
-                    jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
-                },
-                stop: function( event, ui ) {
-                    jQuery( options.valId ).val(ui.value);
-                }
-            });
-            jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ) + " " + options.units );
+function updateColorPicker(picker){
+    document.getElementById('assetback3dcolor').value = picker.toRGBString();
+    wu_webw_3d_view.scene.background.r = picker.rgb[0]/255;
+    wu_webw_3d_view.scene.background.g = picker.rgb[1]/255;
+    wu_webw_3d_view.scene.background.b = picker.rgb[2]/255;
 
-        }
-    }
+    // Change top border line color for portrait mode
+    document.getElementById('text-asset-sidebar').style.borderTop="5px solid " +
+        rgbToHex(picker.rgb[0]-40, picker.rgb[1]-40, picker.rgb[2]-40) ;
+}
 
-    if (options.step) {
-        jQuery( elemId ).slider({step: options.step});
-    }
+function rgbToHex(r, g, b) {
+    if(r<0){r=0;}
+    if(g<0){g=0;}
+    if (b<0){b=0};
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
 
-    return jQuery( elemId ).slider;
+function applyFont(font) {
+    console.log('You selected font: ' + font);
+
+    // Replace + signs with spaces for css
+    font = font.replace(/\+/g, ' ');
+
+    // Split font into family and weight
+    font = font.split(':');
+
+    var fontFamily = font[0];
+    var fontWeight = font[1] || 400;
+
+    // Set selected font on paragraphs
+    jQuery('.changablefont').css({fontFamily:"'"+fontFamily+"'", fontWeight:fontWeight});
 }
 
 
 
+
+function resizeText(multiplier,e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if (document.body.style.fontSize == "") {
+        document.body.style.fontSize = "1.0em";
+    }
+    document.body.style.fontSize = parseFloat(document.body.style.fontSize) + (multiplier * 0.2) + "em";
+
+    document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop =
+        (parseFloat(document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop)+multiplier*10)+"px";
+
+    return false;
+}
+
+
+
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+
+    if(slides.length == 0)
+        return;
+
+    var dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+
+
+    slides[slideIndex - 1].style.display = "block";
+    if (typeof dots[slideIndex - 1] != "undefined")
+        dots[slideIndex - 1].className += " active";
+
+}
+
+
+
+
+
+// // for the Energy Turbines
+// function wpunity_create_slider_component(elemId, range, options) {
+//
+//     if (range) {
+//
+//         jQuery( elemId ).slider({
+//             range: range,
+//             min: options.min,
+//             max: options.max,
+//             values: [ options.values[0], options.values[1] ],
+//             create: function() {
+//                 jQuery( options.valIds[0] ).val(options.values[0]);
+//                 jQuery( options.valIds[1] ).val(options.values[1]);
+//             },
+//             slide: function( event, ui ) {
+//                 jQuery( elemId+"-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " " +options.units);
+//
+//             },
+//             stop: function( event, ui ) {
+//                 jQuery( options.valIds[0] ).val(ui.values[ 0 ]);
+//                 jQuery( options.valIds[1] ).val(ui.values[ 1 ]);
+//             }
+//
+//         });
+//         jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) +
+//             " - " + jQuery( elemId ).slider( "values", 1 ) + " " + options.units );
+//
+//     } else {
+//
+//         if (options.inputText) {
+//
+//             jQuery( elemId ).slider({
+//                 min: options.min,
+//                 max: options.max,
+//                 value: options.value,
+//                 create: function() {
+//                     jQuery( options.valId ).val(options.value);
+//                 },
+//                 slide: function( event, ui ) {
+//                     jQuery( elemId+"-label" ).val( ui.value );
+//
+//                 },
+//                 stop: function( event, ui ) {
+//                     jQuery( options.valId ).val(ui.value);
+//                 }
+//             });
+//             jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ));
+//
+//
+//             jQuery(elemId+"-label").change(function () {
+//                 var value = this.value;
+//                 jQuery( elemId ).slider("value", parseInt(value));
+//
+//             });
+//
+//             jQuery(elemId+"-label").on('input', function() {
+//                 var value = this.value;
+//                 jQuery( elemId ).slider("value", parseInt(value));
+//             });
+//
+//
+//         } else {
+//
+//             jQuery( elemId ).slider({
+//                 min: options.min,
+//                 max: options.max,
+//                 value: options.value,
+//                 create: function() {
+//                     jQuery( options.valId ).val(options.value);
+//                 },
+//                 slide: function( event, ui ) {
+//
+//                     jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
+//                 },
+//                 stop: function( event, ui ) {
+//                     jQuery( options.valId ).val(ui.value);
+//                 }
+//             });
+//             jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ) + " " + options.units );
+//
+//         }
+//     }
+//
+//     if (options.step) {
+//         jQuery( elemId ).slider({step: options.step});
+//     }
+//
+//     return jQuery( elemId ).slider;
+// }
