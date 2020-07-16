@@ -495,6 +495,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 
 #imgDetailsPanel_preview{
     display: inline-block;
+    width:100%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -750,7 +751,6 @@ video {
 
 /* Slideshow container */
 .slideshow-container {
-    max-width: 1000px;
     position: relative;
     margin: auto;
 }
@@ -769,6 +769,7 @@ video {
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;
     user-select: none;
+    mix-blend-mode: difference;
 }
 
 /* Position the "next button" to the right */
@@ -779,7 +780,7 @@ video {
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
+    mix-blend-mode: luminosity;
 }
 
 /* Caption text */

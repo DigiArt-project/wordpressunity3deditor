@@ -60,7 +60,7 @@ function loadAsset3DManagerScripts() {
 	wp_enqueue_script('wu_3d_view_pdb');
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 
-	// scroll for images
+	// scroll for images thumnbnails (in clone)
 	wp_enqueue_script('wpunity_lightslider');
  
 	// Select colors
@@ -361,7 +361,7 @@ $asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($ass
 $asset_back_3d_color_label = "3D viewer background color";
 
 
-//Check if its new/saved and get data for Terrain Options
+//Check if its new/saved and get data for artifact and Terrain
 if($asset_id != null) {
 	$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
 	
@@ -372,44 +372,19 @@ if($asset_id != null) {
 		
 	}elseif (in_array($saved_term[0]->slug , ['artifact'])) {
 	 
+	    $images_urls = [null, null, null, null, null];
+	    
 		// Image 1 : Featured image
-		$the_featured_image_id =  get_post_thumbnail_id($asset_id);
-		
-		$the_featured_image_url = get_the_post_thumbnail_url($asset_id);
-  
-		// Image 2
-        $the_image2_id = get_post_meta($asset_id, "wpunity_asset3d_image2");
-        $the_image2_url = null;
-        if (count($the_image2_id)>0) {
-            $the_image2_url = wp_get_attachment_metadata($the_image2_id[0]);
-            $the_image2_url = $the_image2_url['file'] == '' ? null :
-                wp_get_upload_dir()['baseurl'] . "/" . $the_image2_url['file'];
-        }
-        
-        // Image 3
-        $the_image3_id = get_post_meta($asset_id, "wpunity_asset3d_image3");
-        $the_image3_url = null;
-        if (count($the_image3_id)>0) {
-            $the_image3_url = wp_get_attachment_metadata($the_image3_id[0]);
-            $the_image3_url = $the_image3_url['file'] == '' ? null :
-                wp_get_upload_dir()['baseurl'] . "/" . $the_image3_url['file'];
-        }
-        // Image 4
-        $the_image4_id = get_post_meta($asset_id, "wpunity_asset3d_image4");
-        $the_image4_url = null;
-        if (count($the_image4_id)>0) {
-            $the_image4_url = wp_get_attachment_metadata($the_image4_id[0]);
-            $the_image4_url = $the_image4_url['file'] == '' ? null :
-                wp_get_upload_dir()['baseurl'] . "/" . $the_image4_url['file'];
-        }
-        
-        // Image 5
-        $the_image5_id = get_post_meta($asset_id, "wpunity_asset3d_image5");
-        $the_image5_url = null;
-        if (count($the_image5_id)>0) {
-            $the_image5_url = wp_get_attachment_metadata($the_image5_id[0]);
-            $the_image5_url = $the_image5_url['file'] == '' ? null :
-                wp_get_upload_dir()['baseurl'] . "/" . $the_image5_url['file'];
+        $images_urls[0] = get_the_post_thumbnail_url($asset_id);
+
+		// Image 1,2,3,4
+        for ($i=1; $i <= 4; $i++){
+            $image_id = get_post_meta($asset_id, "wpunity_asset3d_image".$i);
+            if (count($image_id)>0) {
+                $images_urls[$i] = wp_get_attachment_metadata($image_id[0]);
+                $images_urls[$i] = $images_urls[$i]['file'] == '' ? null :
+                    wp_get_upload_dir()['baseurl'] . "/" . $images_urls[$i]['file'];
+            }
         }
 
 	}
@@ -463,8 +438,8 @@ if($asset_id != null) {
         <?php
            if ($isUserloggedIn && !$isPreviewMode) {
     
-               echo '<a title="Back" style="color:dodgerblue; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
-                   class="hideAtLocked mdc-button" href="'.$goBackToLink.'">
+               echo '<a title="Back" style="color:#1e90ff; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
+                   class="hideAtLocked mdc-button" href="' .$goBackToLink.'">
                     <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
                     Assets Manager
                 </a>';
@@ -587,7 +562,6 @@ if($asset_id != null) {
                                     <?php
                                     if (  strpos($term->name, "Points") !== false )
                                         continue;
-                                    
                                     ?>
                                     
                                     
@@ -681,65 +655,40 @@ if($asset_id != null) {
                     $showImageFields = in_array($saved_term[0]->slug, ['artifact']) ?'':'none';
                 else
                     $showImageFields = 'none';
+
+                $defaultImage = plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  );
                 ?>
-                
+
+                <!-- Images Input Fields-->
                 <div id="imgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
-                    <h3 class="mdc-typography--title">Featured Image</h3>
-    
-                    <?php if($asset_id == null){ ?>
-                        <img id="featuredImgPreview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <?php }else{ ?>
-                        <img id="featuredImgPreview" src="<?php echo $the_featured_image_url; ?>">
-                    <?php } ?>
-                    <input type="file" name="featured-image" title="Featured image" value="" id="featuredImgInput" accept="image/x-png,image/gif,image/jpeg">
-                    <br />
-                    <span class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-                    <h3 class="mdc-typography--title">Image 2</h3>
-                    <?php if($asset_id == null){ ?>
-                        <img id="img2Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <?php }else{ ?>
-                        <img id="img2Preview" src="<?php echo $the_image2_url; ?>">
-                    <?php } ?>
-                    <input type="file" name="image2" title="Image 2" value="" id="img2Input" accept="image/x-png,image/gif,image/jpeg">
-                    <br />
-                    <span  class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-                    <h3 class="mdc-typography--title">Image 3</h3>
-                    <?php if($asset_id == null){ ?>
-                        <img id="img3Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <?php }else{ ?>
-                        <img id="img3Preview" src="<?php echo $the_image3_url; ?>">
-                    <?php } ?>
-                    <input type="file" name="image3" title="Image 3" value="" id="img3Input" accept="image/x-png,image/gif,image/jpeg">
-                    <br />
-                    <span  class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-                    <h3 class="mdc-typography--title">Image 4</h3>
-                    <?php if($asset_id == null){ ?>
-                        <img id="img4Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <?php }else{ ?>
-                        <img id="img4Preview" src="<?php echo $the_image4_url; ?>">
-                    <?php } ?>
-                    <input type="file" name="image4" title="Image 4" value="" id="img4Input" accept="image/x-png,image/gif,image/jpeg">
-                    <br />
-                    <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-
-                    <h3 class="mdc-typography--title">Image 5</h3>
-                    <?php if($asset_id == null){ ?>
-                        <img id="img5Preview" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                    <?php }else{ ?>
-                        <img id="img5Preview" src="<?php echo $the_image5_url; ?>">
-                    <?php } ?>
-                    <input type="file" name="image5" title="Image 5" value="" id="img5Input" accept="image/x-png,image/gif,image/jpeg">
-                    <br />
-                    <span class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>
-
-                    <hr class="WhiteSpaceSeparator">
+                    <?php
+                        for ($i=0; $i<=4; $i++){
+                            echo '<h3 class="mdc-typography--title">Image '. $i .'</h3>';
+                            if($asset_id == null){
+                                echo '<img id="img'.$i.'Preview" src="'.$defaultImage.'">';
+                            }else {
+                                echo '<img id="img'.$i.'Preview" src="'.$images_urls[$i].'">';
+                            }
+                            echo '<input type="file" name="image'.$i.'Input" title="Image '.$i.
+                                '" value="" id="img'.$i.'Input" accept="image/x-png,image/gif,image/jpeg">';
+                            echo '<br />';
+                            echo '<span  class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>';
+                        }
+                    ?>
                 </div>
+
+                <script>
+                    // On select image alter preview thumbnail
+                    for (let i=0; i<=4; i++){
+                        jQuery("#img"+i.toString()+"Input").change(function() {
+                            wpunity_read_url(this, "#img"+i.toString()+"Preview");
+                        });
+                    }
+                </script>
                 
-                <hr />
+                <!-- End of Images -->
+
+                <hr class="WhiteSpaceSeparator">
 
                 <!-- Video for POI video -->
                 <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
@@ -794,14 +743,16 @@ if($asset_id != null) {
                 <!--Carousel slideshow slides-->
     
                 <!-- Video -->
-                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact'])?'':'none';  ?>
+                <?php $showVid = in_array( $saved_term[0]->slug , ['artifact'])?'':'none';
+                      $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
+                ?>
                 <!-- Image -->
                 <?php $showImageFields = in_array($saved_term[0]->slug,['artifact'])?'':'none';  ?>
                 
                 <div class="slideshow-container">
     
                     <!-- Check if video slide should be shown -->
-                    <?php if ($showVid=='' && $asset_id != null){ ?>
+                    <?php if ($showVid=='' && $asset_id != null && $videoID!=null){ ?>
                          <div class="mySlides fade">
                             <!-- Video slide -->
                             <!--<div class="numbertext">1 / 2</div>-->
@@ -809,7 +760,7 @@ if($asset_id != null) {
     
                                 <div id="videoFileInputContainer" class="">
                                     <?php
-                                    $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
+
                                     $attachment_post = get_post($videoID);
                                     $attachment_file = $attachment_post->guid;
                                     ?>
@@ -829,112 +780,31 @@ if($asset_id != null) {
                      <?php } ?>
 
 
-                    <!--  Image check if should be shown -->
-                    <?php if ($showImageFields=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
+                    <!--  Image 0,1,2,3,4,5 check if should be shown -->
+                    <?php
+                       for ($i=0; $i<=4; $i++){
+                         if ($showImageFields=='' && $asset_id != null && $images_urls[$i]!=null){ ?>
                         <div class="mySlides fade">
-                            <!--  <div class="numbertext">2 / 2</div>-->
-                                <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
-                                <?php if($asset_id != null){ ?>
-                                    <img id="featuredImgPreview" style="width:auto" src="<?php echo $the_featured_image_url; ?>">
-                                <?php } ?>
-                            </div>
-                            <!-- Caption -->
-                            <div class="text"></div>
-                        </div>
-                    <?php } ?>
-
-
-                    <!--  Image2 check if should be shown -->
-                    <?php if ($showImageFields=='' && $asset_id != null && $the_image2_url!=null){ ?>
-                        <div class="mySlides fade">
-                            <!--  <div class="numbertext">2 / 2</div>-->
                             <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
                                 <?php if($asset_id != null){ ?>
-                                    <img id="img2Preview" style="width:auto" src="<?php echo $the_image2_url; ?>">
+                                    <img id="img<?php echo $i;?>Preview" style="width:100%" src="<?php echo $images_urls[$i]; ?>">
                                 <?php } ?>
                             </div>
-                            <!-- Caption -->
                             <div class="text"></div>
                         </div>
-                    <?php } ?>
+                        <?php } ?>
+                   <?php } ?>
 
-                    <!--  Image3 check if should be shown -->
-                    <?php if ($showImageFields=='' && $asset_id != null && $the_image3_url!=null){ ?>
-                        <div class="mySlides fade">
-                            <!--  <div class="numbertext">2 / 2</div>-->
-                            <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
-                                <?php if($asset_id != null){ ?>
-                                    <img id="img3Preview" style="width:auto" src="<?php echo $the_image3_url; ?>">
-                                <?php } ?>
-                            </div>
-                            <!-- Caption -->
-                            <div class="text"></div>
-                        </div>
-                    <?php } ?>
-
-                    <!--  Image4 check if should be shown -->
-                    <?php if ($showImageFields=='' && $asset_id != null && $the_image4_url!=null){ ?>
-                        <div class="mySlides fade">
-                            <!--  <div class="numbertext">2 / 2</div>-->
-                            <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
-                                <?php if($asset_id != null){ ?>
-                                    <img id="img4Preview" style="width:auto" src="<?php echo $the_image4_url; ?>">
-                                <?php } ?>
-                            </div>
-                            <!-- Caption -->
-                            <div class="text"></div>
-                        </div>
-                    <?php } ?>
-
-                    <!--  Image5 check if should be shown -->
-                    <?php if ($showImageFields=='' && $asset_id != null && $the_image5_url!=null){ ?>
-                        <div class="mySlides fade">
-                            <!--  <div class="numbertext">2 / 2</div>-->
-                            <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
-                                <?php if($asset_id != null){ ?>
-                                    <img id="img5Preview" style="width:auto" src="<?php echo $the_image5_url; ?>">
-                                <?php } ?>
-                            </div>
-                            <!-- Caption -->
-                            <div class="text"></div>
-                        </div>
-                    <?php } ?>
 
                     <!--   Sliders prev next -->
-                    <?php if ($showVid=='' && $showImageFields=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
+                    <?php if ($showVid=='' && $showImageFields=='' && $asset_id != null && $images_urls[0]!=null){ ?>
                             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                             <a class="next" onclick="plusSlides(1)">&#10095;</a>
                     <?php } ?>
-                    
-    
                  </div>
-                 
                 <br>
 
-                <!--   Sliders dots below -->
-                <?php if ($showVid=='' && $showImageFields=='' && $asset_id != null && $the_featured_image_url!=null){ ?>
-                <div style="text-align:center">
-                    <span class="dot" onclick="currentSlide(1)"></span>
-                    <span class="dot" onclick="currentSlide(2)"></span>
-                    
-                    <?php if ($the_image2_url!=null){ ?>
-                        <span class="dot" onclick="currentSlide(3)"></span>
-                    <?php } ?>
-    
-                    <?php if ($the_image3_url!=null){ ?>
-                        <span class="dot" onclick="currentSlide(4)"></span>
-                    <?php } ?>
-    
-                    <?php if ($the_image4_url!=null){ ?>
-                        <span class="dot" onclick="currentSlide(5)"></span>
-                    <?php } ?>
-    
-                    <?php if ($the_image5_url!=null){ ?>
-                        <span class="dot" onclick="currentSlide(6)"></span>
-                    <?php } ?>
-                    
-                </div>
-                <?php } ?>
+                
                 
                 
                 <!-- Languages -->
@@ -1402,17 +1272,8 @@ if($asset_id != null) {
         
         
     </form>
-    
-    
 
-    
-
-    
-
-
-
-        <!--                     Javascript                             -->
-
+    <!--                     Javascript                             -->
     <script type="text/javascript">
         'use strict';
 
@@ -1531,18 +1392,23 @@ if($asset_id != null) {
                 }, 0);
             };
 
-
             <!-- Select carousel options for images -->
             var lightSliderOpts = {
                 item: 4, loop: false, slideMove: 1, easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
                 speed: 600, responsive : [{breakpoint:800, settings: {item:3, slideMove:1,slideMargin:6}
-                    },
+                },
                     {
                         breakpoint:480, settings: {item:2, slideMove:1}
                     }
                 ]
             };
 
+
+          
+
+            
+            
+            
             // Function to initialize layout
             // paramter denotes if new asset or edit asset
             function loadLayout(createAsset) {
@@ -1563,6 +1429,8 @@ if($asset_id != null) {
                     descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
                     cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
+
+                    
                 } else {
                     descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
                     cat = jQuery("#currently-selected").attr("data-cat-slug");
@@ -1583,17 +1451,18 @@ if($asset_id != null) {
 
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
 
-                // Images carousel
-                jQuery('#lightSlider').lightSlider(lightSliderOpts);
-                var slideIndex = 1;
-                showSlides(slideIndex);
-
                 // Hide some panels but decide based on category as below what to show
                 jQuery("#imgDetailsPanel").hide();
                 jQuery("#videoDetailsPanel").hide();
                 jQuery("#moleculeOptionsPanel").hide();
                 jQuery("#moleculeFluidPanel").hide();
 
+                // Thumbnail images carousel for cloning
+                jQuery('#lightSlider').lightSlider(lightSliderOpts);
+                // Thumbnail Images Carousel for cloning
+        
+               
+                
                 // Category
                 switch(cat) {
                     // Archaeology cases
@@ -1630,68 +1499,38 @@ if($asset_id != null) {
 
         })();
 
-
+        // Current Slide shown
+        var slideIndex = 0;
         
+        function showSlides(i) {
 
-        jQuery("#featuredImgInput").change(function() {
-            wpunity_read_url(this, "#featuredImgPreview");
-        });
-
-        jQuery("#img2Input").change(function() {
-            wpunity_read_url(this, "#img2Preview");
-        });
-
-        jQuery("#img3Input").change(function() {
-            wpunity_read_url(this, "#img3Preview");
-        });
-
-        jQuery("#img4Input").change(function() {
-            wpunity_read_url(this, "#img4Preview");
-        });
-
-        jQuery("#img5Input").change(function() {
-            wpunity_read_url(this, "#img5Preview");
-        });
-        
-
-        // jQuery("#poiVideoFeaturedImgInput").change(function() {
-        //     wpunity_read_url(this, "#poiVideoFeaturedImgPreview");
-        // });
-
-        // Create model screenshot
-        function wpunity_create_model_sshot(wu_webw_3d_view_local) {
+            // Get slides div
+            var slides = document.getElementsByClassName("mySlides");
             
-            wu_webw_3d_view_local.render();
+            if(slides.length == 0)
+                return;
+            
+            // Hide all
+            for (let j = 0; j < slides.length; j++) {
+                slides[j].style.display = "none";
+            }
 
-            // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels
-            html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
+            console.log(i);
+            
+            if (i >= slides.length) {slideIndex = 0}
+            if (i < 0) {slideIndex = slides.length}
 
-                wu_webw_3d_view_local.render();
-                document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
-                
-                //------------ Resize ------------
-                var resizedCanvas = document.createElement("canvas");
-                var resizedContext = resizedCanvas.getContext("2d");
-                var context = canvas.getContext("2d");
-                resizedCanvas.height = "150";
-                resizedCanvas.width = "265";
-                resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
-                var myResizedData = resizedCanvas.toDataURL();
-                //-----------------------------------------------------------
-
-                document.getElementById("sshotFileInput").value = myResizedData;
-            });
+            i = slideIndex;
+            
+            // Show only one
+            slides[i].style.display = "block";
         }
 
-        function wpunity_reset_sshot_field() {
-            document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
-            document.getElementById("sshotFileInput").value = "";
+        function plusSlides(i) {
+            showSlides(slideIndex += i);
         }
 
-       
-
-        if (document.getElementsByClassName("asset3d_desc_view").length > 1)
-            document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop = "30px";
+        showSlides(0);
 
         // Hide admin bar of wordpress
         jQuery("#wpadminbar").hide();

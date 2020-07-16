@@ -18,6 +18,37 @@ var nPdb = 0;
 
 
 
+// Create model screenshot
+function wpunity_create_model_sshot(wu_webw_3d_view_local) {
+
+    wu_webw_3d_view_local.render();
+
+    // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels
+    html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
+
+        wu_webw_3d_view_local.render();
+        document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
+
+        //------------ Resize ------------
+        var resizedCanvas = document.createElement("canvas");
+        var resizedContext = resizedCanvas.getContext("2d");
+        var context = canvas.getContext("2d");
+        resizedCanvas.height = "150";
+        resizedCanvas.width = "265";
+        resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+        var myResizedData = resizedCanvas.toDataURL();
+        //-----------------------------------------------------------
+
+        document.getElementById("sshotFileInput").value = myResizedData;
+    });
+}
+
+// Reset screenshot image
+function wpunity_reset_sshot_field() {
+    document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+    document.getElementById("sshotFileInput").value = "";
+}
+
 function loadFileInputLabel(objectType) {
 
     //var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
@@ -508,37 +539,7 @@ function resizeText(multiplier,e) {
 
 
 
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
 
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-    var i;
-    var slides = document.getElementsByClassName("mySlides");
-
-    if(slides.length == 0)
-        return;
-
-    var dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {slideIndex = 1}
-    if (n < 1) {slideIndex = slides.length}
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-
-
-    slides[slideIndex - 1].style.display = "block";
-    if (typeof dots[slideIndex - 1] != "undefined")
-        dots[slideIndex - 1].className += " active";
-
-}
 
 
 
