@@ -5,13 +5,6 @@
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
 
-
-
-
-function remove_admin_login_header() {
-    remove_action('wp_head', '_admin_bar_bump_cb');
-}
-
 // For auto-translation by Google
 $hasTranslator = false;
 //if ($hasTranslator) {
@@ -242,10 +235,17 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             $assetFonts, $assetback3dcolor);
 	}
 	
+	echo "A";
+	
 	// Create new or updated of main fields edit successfull
 	if($asset_id != 0 || $asset_updatedConf == 1) {
+        
+        echo "B";
+	    
 		if ($_POST['asset_sourceID']=='') {
 			// NoCloning
+            
+            echo "C";
 			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug);
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
@@ -1287,7 +1287,13 @@ if($asset_id != null) {
         var back_3d_color = "<?php echo $back_3d_color; ?>";
         
         document.getElementById("jscolorpick").value = back_3d_color;
+
+        // Current  Slide index (carousel top)
+        var slideIndex = 0;
         
+        // Initial slide to show (carousel top)
+        showSlides(0);
+
         // Main 3D canvas handler
         var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color );
         
@@ -1392,7 +1398,7 @@ if($asset_id != null) {
                 }, 0);
             };
 
-            <!-- Select carousel options for images -->
+            <!-- Select carousel options for images cloning -->
             var lightSliderOpts = {
                 item: 4, loop: false, slideMove: 1, easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
                 speed: 600, responsive : [{breakpoint:800, settings: {item:3, slideMove:1,slideMargin:6}
@@ -1402,12 +1408,6 @@ if($asset_id != null) {
                     }
                 ]
             };
-
-
-          
-
-            
-            
             
             // Function to initialize layout
             // paramter denotes if new asset or edit asset
@@ -1421,7 +1421,6 @@ if($asset_id != null) {
 
                 wpunity_reset_panels(wu_webw_3d_view);
 
-                
                 var cat;
                 var descText = document.getElementById('categoryDescription');
                 
@@ -1439,12 +1438,18 @@ if($asset_id != null) {
 
                 if (cat === 'molecule') {
                     jQuery("#mtlRadio").prop("checked", false);
-                    jQuery("#mtlRadioListItem").hide();
+                    jQuery('#mtlRadioListItem').hide();
                     jQuery("#pdbRadio").prop("checked", true);
                     jQuery("#pdbRadioListItem").show();
                 } else {
+
+                    // jQuery("#fbxRadio").prop("checked", true);
+                    // jQuery("#fbxRadioListItem").show();
+                    
                     jQuery("#mtlRadio").prop("checked", true);
                     jQuery("#mtlRadioListItem").show();
+                    
+                    
                     jQuery("#pdbRadio").prop("checked", false);
                     jQuery("#pdbRadioListItem").hide();
                 }
@@ -1459,10 +1464,7 @@ if($asset_id != null) {
 
                 // Thumbnail images carousel for cloning
                 jQuery('#lightSlider').lightSlider(lightSliderOpts);
-                // Thumbnail Images Carousel for cloning
-        
-               
-                
+
                 // Category
                 switch(cat) {
                     // Archaeology cases
@@ -1499,42 +1501,13 @@ if($asset_id != null) {
 
         })();
 
-        // Current Slide shown
-        var slideIndex = 0;
-        
-        function showSlides(i) {
-
-            // Get slides div
-            var slides = document.getElementsByClassName("mySlides");
-            
-            if(slides.length == 0)
-                return;
-            
-            // Hide all
-            for (let j = 0; j < slides.length; j++) {
-                slides[j].style.display = "none";
-            }
-
-            console.log(i);
-            
-            if (i >= slides.length) {slideIndex = 0}
-            if (i < 0) {slideIndex = slides.length}
-
-            i = slideIndex;
-            
-            // Show only one
-            slides[i].style.display = "block";
-        }
-
-        function plusSlides(i) {
-            showSlides(slideIndex += i);
-        }
-
-        showSlides(0);
-
         // Hide admin bar of wordpress
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
+        
+        // UNIT TEST:  REMOVE
+        //setTimeout( function(){jQuery('#assetTitle')[0].value = 'a12';},3000);
+        
     </script>
 
 

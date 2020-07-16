@@ -11,65 +11,11 @@ var fbxFileContent = '';
 var pdbFileContent = '';
 
 var nObj = 0;
+var nFbx = 0;
 var nMtl = 0;
 var nJpg = 0;
 var nPng = 0;
 var nPdb = 0;
-
-
-
-// Create model screenshot
-function wpunity_create_model_sshot(wu_webw_3d_view_local) {
-
-    wu_webw_3d_view_local.render();
-
-    // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels
-    html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
-
-        wu_webw_3d_view_local.render();
-        document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
-
-        //------------ Resize ------------
-        var resizedCanvas = document.createElement("canvas");
-        var resizedContext = resizedCanvas.getContext("2d");
-        var context = canvas.getContext("2d");
-        resizedCanvas.height = "150";
-        resizedCanvas.width = "265";
-        resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
-        var myResizedData = resizedCanvas.toDataURL();
-        //-----------------------------------------------------------
-
-        document.getElementById("sshotFileInput").value = myResizedData;
-    });
-}
-
-// Reset screenshot image
-function wpunity_reset_sshot_field() {
-    document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
-    document.getElementById("sshotFileInput").value = "";
-}
-
-function loadFileInputLabel(objectType) {
-
-    //var objectType = jQuery('input[name=objectTypeRadio]:checked').val();
-
-    var inputLabel = document.getElementById('fileUploadInputLabel');
-    var input = document.getElementById('fileUploadInput');
-
-    if (inputLabel)
-        if (objectType === 'pdb') {
-            inputLabel.innerHTML = 'Select a pdb file';
-            input.accept = ".pdb";
-        } else if (objectType === 'obj') {
-            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
-            input.accept = ".obj,.mtl,.jpg,.png";
-        } else if (objectType === 'fbx') {
-            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file';
-            input.accept = ".fbx,jpg,.png";
-        }
-}
-
-
 
 function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
     var content = '';
@@ -101,8 +47,6 @@ function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
 function wpunity_load_file_callback(content, type, canvas, filename) {
 
     switch (type) {
-
-
 
         case 'mtl':
             mtlFileContent = content ? content : '';
@@ -217,6 +161,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     pdbFileContent = '';
 
     nObj = 0;
+    nFbx = 0;
     nMtl = 0;
     nJpg = 0;
     nPng = 0;
@@ -270,6 +215,13 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
                 nObj = 1;
                 wpunity_read_file('ArrayBuffer' , file, 'obj', wpunity_load_file_callback, wu_webw_3d_view_local);
             }
+
+
+            if ( file.name.indexOf( '\.fbx' ) > 0 ) {
+                nFbx = 1;
+                wpunity_read_file('ArrayBuffer' , file, 'fbx', wpunity_load_file_callback, wu_webw_3d_view_local);
+            }
+
             if ( file.name.indexOf( '\.mtl' ) > 0 ) {
                 nMtl = 1;
                 wpunity_read_file('Text', file, 'mtl', wpunity_load_file_callback, wu_webw_3d_view_local );
@@ -539,9 +491,80 @@ function resizeText(multiplier,e) {
 
 
 
+function showSlides(i) {
 
+    // Get slides div
+    var slides = document.getElementsByClassName("mySlides");
 
+    if(slides.length == 0)
+        return;
 
+    // Hide all
+    for (let j = 0; j < slides.length; j++) {
+        slides[j].style.display = "none";
+    }
+
+    if (i >= slides.length) {slideIndex = 0}
+    if (i < 0) {slideIndex = slides.length}
+
+    i = slideIndex;
+
+    // Show only one
+    slides[i].style.display = "block";
+}
+
+function plusSlides(i) {
+    showSlides(slideIndex += i);
+}
+
+// Create model screenshot
+function wpunity_create_model_sshot(wu_webw_3d_view_local) {
+
+    wu_webw_3d_view_local.render();
+
+    // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels
+    html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
+
+        wu_webw_3d_view_local.render();
+        document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
+
+        //------------ Resize ------------
+        var resizedCanvas = document.createElement("canvas");
+        var resizedContext = resizedCanvas.getContext("2d");
+        var context = canvas.getContext("2d");
+        resizedCanvas.height = "150";
+        resizedCanvas.width = "265";
+        resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+        var myResizedData = resizedCanvas.toDataURL();
+        //-----------------------------------------------------------
+
+        document.getElementById("sshotFileInput").value = myResizedData;
+    });
+}
+
+// Reset screenshot image
+function wpunity_reset_sshot_field() {
+    document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+    document.getElementById("sshotFileInput").value = "";
+}
+
+function loadFileInputLabel(objectType) {
+
+    var inputLabel = document.getElementById('fileUploadInputLabel');
+    var input = document.getElementById('fileUploadInput');
+
+    if (inputLabel)
+        if (objectType === 'pdb') {
+            inputLabel.innerHTML = 'Select a pdb file';
+            input.accept = ".pdb";
+        } else if (objectType === 'obj') {
+            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
+            input.accept = ".obj,.mtl,.jpg,.png";
+        } else if (objectType === 'fbx') {
+            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file';
+            input.accept = ".fbx,jpg,.png";
+        }
+}
 
 
 

@@ -435,7 +435,8 @@ class WU_webw_3d_view {
             //     console.log('Material ', i, material[i]);
             // }
 
-            console.log("----------------------------------")
+            console.log("----------------------------------");
+
         };
 
         // Function on Completed Loading
@@ -446,8 +447,11 @@ class WU_webw_3d_view {
 
             document.getElementById('previewProgressSliderLine').style.width = 0;
             document.getElementById('previewProgressLabel').innerHTML = "";
-            scope._reportProgress('');
+
             scope.zoomer();
+
+            // Auto create screenshot;
+            jQuery("#createModelScreenshotBtn").click();
         };
         this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
         this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);

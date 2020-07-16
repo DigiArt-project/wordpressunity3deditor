@@ -398,14 +398,23 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         }
     }
     
-    
+    echo "1";
     if (isset($_POST['fbxFileInput']) ) {
+        echo "2";
+        echo $_POST['fbxFileInput'];
         if (strlen($_POST['fbxFileInput'])>0) {
+            echo "3";
             
+            // Upload file
             $fbxFile_id = wpunity_upload_AssetText($fbx_content, 'fbx' . $assetTitleForm, $asset_newID, $gameSlug);
             
+            echo "fbx_content".$fbx_content;
+            echo "fbxFile_id:".$fbxFile_id;
+            echo "<br />";
+            
+            
             // Set value of attachment IDs at custom fields
-            update_post_meta($asset_newID, 'wpunity_asset3d_obj', $fbxFile_id);
+            update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
         }
     }
     
