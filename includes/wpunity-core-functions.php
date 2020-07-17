@@ -1784,16 +1784,13 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     
         fwrite($fp, chr(10).basename($prevfile));
         fwrite($fp, chr(10).basename($new_filename));
-        
-        
-        
+
         $data['file'] = '/Models/'.basename($new_filename);
-    
+
         fwrite($fp, chr(10).'25'. print_r($data,true));
         
         wp_update_attachment_metadata( $thumbnail_post_id, $data );
-        
-        
+
     } else {
     
         // Add new

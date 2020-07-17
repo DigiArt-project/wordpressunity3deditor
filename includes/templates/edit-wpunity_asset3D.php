@@ -234,19 +234,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             
             $assetFonts, $assetback3dcolor);
 	}
-	
-	echo "A";
-	
+
+
 	// Create new or updated of main fields edit successfull
 	if($asset_id != 0 || $asset_updatedConf == 1) {
-        
-        echo "B";
-	    
 		if ($_POST['asset_sourceID']=='') {
 			// NoCloning
-            
-            echo "C";
+            // Upload files from POST
 			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug);
+			
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
 		}else {
@@ -1301,8 +1297,51 @@ if($asset_id != null) {
 
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
         
-        loadAssetPreviewer(wu_webw_3d_view, multipleFilesInputElem);
+        
+        // ----------- Canvas Renderer ------------------------
+        // handler to resize canvas window
+        var resizeWindow = function () {
+            wu_webw_3d_view.resizeDisplayGL();
+        };
 
+        // Add window resize handler
+        window.addEventListener( 'resize', resizeWindow, false );
+
+        // render handler
+        var render = function () {
+            requestAnimationFrame( render );
+            wu_webw_3d_view.render();
+        };
+
+        // Initialize
+        wu_webw_3d_view.initGL();
+
+        // Resize for first time just to be sure
+        wu_webw_3d_view.resizeDisplayGL();
+
+        // After
+        wu_webw_3d_view.initPostGL();
+
+        // kick render loop
+        render();
+        //---------
+        
+        addHandlerFor3Dfiles(wu_webw_3d_view, multipleFilesInputElem);
+
+        // For existing 3D models
+        // 1 OBJ
+        if (typeof path_url != "undefined")
+            loader_asset_exists(path_url, mtl_file_name, obj_file_name, null);
+
+        // 2 PDB
+        if (typeof pdb_file_name != "undefined")
+            loader_asset_exists(null, null, null, pdb_file_name);
+
+        // 3 FBX
+        if (typeof path_url_fbx != "undefined")
+            loader_asset_exists(null, null, null, null, fbx_file_name);
+        
+        
         // Responsive Layout (text panel vs 3D model panel
         if (window.innerWidth<window.innerHeight) {
             const initCH = document.getElementById('text-asset-sidebar').clientHeight;

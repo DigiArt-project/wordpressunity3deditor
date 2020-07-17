@@ -2,13 +2,9 @@
  * Created by tpapazoglou on 11/7/2017.
  * Modified by dverver on 18/10/2017: Multiple jpgs as textures. fReader called once not twice for the same file.
  * dverver 02/04/2018
+ * dverver 17/07/2020
  */
 'use strict';
-
-var mtlFileContent = '';
-var objFileContent = '';
-var fbxFileContent = '';
-var pdbFileContent = '';
 
 var nObj = 0;
 var nFbx = 0;
@@ -16,121 +12,6 @@ var nMtl = 0;
 var nJpg = 0;
 var nPng = 0;
 var nPdb = 0;
-
-function wpunity_read_file(howtoread, file, type, callback, canvas, filename) {
-    var content = '';
-    var reader = new FileReader();
-
-    if (file) {
-
-        if (howtoread === 'Url')
-            reader.readAsDataURL(file);
-        else if (howtoread === 'Text')
-            reader.readAsText(file);
-        else if (howtoread === 'ArrayBuffer')
-            reader.readAsArrayBuffer(file);
-
-        // Closure to capture the file information.
-        reader.onload = (function(reader) {
-            return function() {
-                content = reader.result;
-                callback(content, type, canvas, filename);
-            };
-        })(reader);
-    } else {
-        callback(content, type, canvas, filename);
-    }
-}
-
-// Callback is fired when obj & mtl inputs have files. Preview is loaded automatically.
-// We can expand this for 'fbx' files too.
-function wpunity_load_file_callback(content, type, canvas, filename) {
-
-    switch (type) {
-
-        case 'mtl':
-            mtlFileContent = content ? content : '';
-
-            // Replace quotes because they create a bug in input form
-            mtlFileContent = mtlFileContent.replace(/'/g, "");
-
-            document.getElementById('mtlFileInput').value = mtlFileContent;
-            checkerCompleteReading( canvas);
-            break;
-
-        case 'obj':
-            // Obj as ArrayBuffer (needed for ObjLoader2 and webworkers)
-            objFileContent = content ? content : '';
-
-            // Obj as text (needed for ObjLoader in 3D editor)
-            var dec = new TextDecoder();
-
-            document.getElementById('objFileInput').value = dec.decode(objFileContent);
-
-            checkerCompleteReading(canvas);
-
-            break;
-
-        case 'fbx':
-            fbxFileContent = content ? content : '';
-
-            var dec = new TextDecoder();
-
-            document.getElementById('fbxFileInput').value = dec.decode(fbxFileContent);
-
-
-            console.log(document.getElementById('fbxFileInput').value);
-
-            //checkerCompleteReading(canvas);
-
-            break;
-
-
-        case 'pdb':
-            pdbFileContent = content ? content : '';
-
-            console.log("loaded pdb file", pdbFileContent);
-
-            // set the input value
-            document.getElementById('pdbFileInput').value = pdbFileContent;
-
-            canvas.loadMolecule(content);
-
-            break;
-    }
-
-
-    if (content) {
-        if(type === 'texture') {
-
-            /*jQuery("#texturePreviewImg").attr('src', '').attr('src', content);*/
-
-            jQuery('#3dAssetForm').append('<input type="hidden" name="textureFileInput['+filename+']" id="textureFileInput" value="' + content + '" />');
-
-            //var textureFileInput = document.getElementsByName('textureFileInput[]');
-            // textureFileInput[0] = document.createElement("INPUT");
-            // textureFileInput[filename].setAttribute("type", "hidden");
-            //textureFileInput[filename].value = content;
-
-            checkerCompleteReading(canvas);
-        }
-
-        if ((objFileContent && mtlFileContent) || pdbFileContent) {
-
-        } else {
-            wpunity_reset_sshot_field();
-        }
-
-    } else {
-        document.getElementById("assetPreviewContainer").innerHTML = "";
-    }
-
-}
-
-function wpunity_extract_file_extension(fn) {
-    return fn ? fn.split('.').pop().toLowerCase() : '';
-}
-
 
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
@@ -155,11 +36,6 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
     jQuery("#objectPreviewTitle").hide();
 
-    objFileContent = '';
-    fbxFileContent = '';
-    mtlFileContent = '';
-    pdbFileContent = '';
-
     nObj = 0;
     nFbx = 0;
     nMtl = 0;
@@ -168,116 +44,83 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nPdb = 0;
 }
 
-function wpunity_reset_panels(wu_webw_3d_view) {
 
-    // Clear all
-    wpunity_clear_asset_files(wu_webw_3d_view);
+function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
-    if (jQuery("ProducerPlotTooltip")) {
-        jQuery("div.ProducerPlotTooltip").remove();
-    }
+    // PREVIEW Handler (not uploaded yet): Load from selected files
+    var _handleFileSelect = function ( event ) {
 
-    jQuery("#assetDescription").show();
-    jQuery("#doorDetailsPanel").hide();
-    jQuery("#terrainPanel").hide();
-    jQuery("#consumerPanel").hide();
-    jQuery("#producerPanel").hide();
-    //jQuery("#imgDetailsPanel").hide();
-    //jQuery("#videoDetailsPanel").hide();
-    jQuery("#objectPreviewTitle").hide();
-    //jQuery("#moleculeOptionsPanel").hide();
-    jQuery("#moleculeFluidPanel").hide();
-    jQuery("#chemistryBoxOptionsPanel").hide();
-}
-
-
-function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
-
-    // Load from selected files
-    var _handleFileSelect = function ( event  ) {
-
+        // For cloning
         document.getElementById('asset_sourceID').value ="";
 
-        // copy because clear asset files in the following clears the total input fields also
+        // Reset Screenshot
+        document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
+        document.getElementById("sshotFileInput").value = "";
+
+        // Copy because clear asset files in the following clears the total input fields also.
+        // Files are blobs
         var files = {... event.target.files};
 
         // Clear the previously loaded
         wpunity_clear_asset_files(wu_webw_3d_view_local);
 
         //  Read each file and put the string content in an input dom
-        for ( var i = 0, file; file = files[ i ]; i++) {
-            if ( file.name.indexOf( '\.pdb' ) > 0 ) {
-                nPdb = 1;
-                wpunity_read_file('Text' , file, 'pdb', wpunity_load_file_callback, wu_webw_3d_view_local);
+        for ( let i = 0; i < Object.keys(files).length; i++) {
+
+            let file = files[i];
+
+            // Get the extension
+            let type = file.name.split('.').pop();
+
+            // set the reader
+            let reader = new FileReader();
+
+            switch (type) {
+                case 'pdb': nPdb = 1; reader.readAsText(file);        break;
+                case 'mtl': nMtl = 1; reader.readAsText(file);        break;
+                case 'obj': nObj = 1; reader.readAsArrayBuffer(file); break;
+                case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
+                case 'jpg': nJpg++;   reader.readAsDataURL(file);     break;
+                case 'png': nPng++;   reader.readAsDataURL(file);     break;
             }
 
-            if ( file.name.indexOf( '\.obj' ) > 0 ) {
-                nObj = 1;
-                wpunity_read_file('ArrayBuffer' , file, 'obj', wpunity_load_file_callback, wu_webw_3d_view_local);
-            }
+            // --- Read it ------------------------
+            reader.onload = (function(reader) {
+                return function() {
 
+                    let fileContent = reader.result ? reader.result : '';
+                    let dec = new TextDecoder();
 
-            if ( file.name.indexOf( '\.fbx' ) > 0 ) {
-                nFbx = 1;
-                wpunity_read_file('ArrayBuffer' , file, 'fbx', wpunity_load_file_callback, wu_webw_3d_view_local);
-            }
+                    switch (type) {
+                        case 'mtl':
+                            // Replace quotes because they create a bug in input form
+                            document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
+                            break;
+                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
+                        case 'fbx': document.getElementById('fbxFileInput').value = dec.decode(fileContent); break;
+                        case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
+                        case 'jpg' || 'png':
+                            jQuery('#3dAssetForm').append(
+                                '<input type="hidden" name="textureFileInput['+file.name+
+                                            ']" id="textureFileInput" value="' + fileContent + '" />');
+                            break;
+                    }
 
-            if ( file.name.indexOf( '\.mtl' ) > 0 ) {
-                nMtl = 1;
-                wpunity_read_file('Text', file, 'mtl', wpunity_load_file_callback, wu_webw_3d_view_local );
-            }
-            if ( file.name.indexOf( '\.jpg' ) > 0 ) {
-                nJpg ++;
+                    // Check if everything is loaded
+                    if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx')
+                        checkerCompleteReading(wu_webw_3d_view_local);
+                    else if ( type==='pdb')
+                        canvas.loadMolecule(content);
 
-                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, wu_webw_3d_view_local, file.name);
-            }
-            if ( file.name.indexOf( '\.png' ) > 0 ) {
-                nPng ++;
-
-                wpunity_read_file('Url', file, 'texture', wpunity_load_file_callback, wu_webw_3d_view_local, file.name);
-            }
+                };
+            })(reader);
         }
-
-
     };
+    // End of event handler
 
+    // Set event handler on input dom element
     if(multipleFilesInputElem)
         multipleFilesInputElem.addEventListener( 'change' , _handleFileSelect, false );
-
-    // Start rendering if even nothing is loaded
-    var resizeWindow = function () {
-        wu_webw_3d_view_local.resizeDisplayGL();
-    };
-
-    window.addEventListener( 'resize', resizeWindow, false );
-
-    var render = function () {
-        requestAnimationFrame( render );
-        wu_webw_3d_view_local.render();
-    };
-
-    wu_webw_3d_view_local.initGL();
-    wu_webw_3d_view_local.resizeDisplayGL();
-    wu_webw_3d_view_local.initPostGL();
-
-    // kick render loop
-    render();
-
-
-
-    // for existing 3D models
-    // 1 OBJ
-    if (typeof path_url != "undefined")
-        loader_asset_exists(path_url, mtl_file_name, obj_file_name, null);
-
-    // 2 PDB
-    if (typeof pdb_file_name != "undefined")
-        loader_asset_exists(null, null, null, pdb_file_name);
-
-    // 3 FBX
-    if (typeof path_url_fbx != "undefined")
-        loader_asset_exists(null, null, null, null, fbx_file_name);
-
 }
 
 /**
@@ -286,13 +129,17 @@ function loadAssetPreviewer(wu_webw_3d_view_local, multipleFilesInputElem) {
  */
 function checkerCompleteReading(canvas){
 
-    if (nObj==1 && objFileContent!=='' ){
+    var objFileContent = document.getElementById('objFileInput').value;
+    var mtlFileContent = document.getElementById('mtlFileInput').value;
 
-        // Add loader
+    if (nObj==1 && objFileContent!==''){
+
+        // Show progress slider
         jQuery('#previewProgressSlider').show();
 
         // Make the definition with the obj
-        var uint8Array = new Uint8Array( objFileContent );
+        var encoder = new TextEncoder();
+        var uint8Array = encoder.encode(objFileContent);
 
         var objectDefinition = {
             name: 'userObj',
@@ -314,7 +161,6 @@ function checkerCompleteReading(canvas){
                     wu_webw_3d_view.loadFilesUser(objectDefinition);
 
                 } else {
-
                     if ((nPng>0 && nPng === jQuery("input[id='textureFileInput']").length) || ( nJpg>0 && nJpg === jQuery("input[id='textureFileInput']").length) ) {
 
                         // Get textureFileInput array with jQuery
@@ -334,8 +180,8 @@ function checkerCompleteReading(canvas){
                         }
 
                         // Start with textures
+                        console.log("start textures");
                         canvas.loadFilesUser(objectDefinition);
-
                     }
                 }
             }
@@ -432,9 +278,7 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
 
 
 
-
-
-
+//--------------------- Auxiliary (Easy stuff) -------------------------------------------------------------
 
 
 function updateColorPicker(picker){
@@ -542,11 +386,7 @@ function wpunity_create_model_sshot(wu_webw_3d_view_local) {
     });
 }
 
-// Reset screenshot image
-function wpunity_reset_sshot_field() {
-    document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
-    document.getElementById("sshotFileInput").value = "";
-}
+
 
 function loadFileInputLabel(objectType) {
 
@@ -566,6 +406,27 @@ function loadFileInputLabel(objectType) {
         }
 }
 
+function wpunity_reset_panels(wu_webw_3d_view) {
+
+    // Clear all
+    wpunity_clear_asset_files(wu_webw_3d_view);
+
+    if (jQuery("ProducerPlotTooltip")) {
+        jQuery("div.ProducerPlotTooltip").remove();
+    }
+
+    jQuery("#assetDescription").show();
+    jQuery("#doorDetailsPanel").hide();
+    jQuery("#terrainPanel").hide();
+    jQuery("#consumerPanel").hide();
+    jQuery("#producerPanel").hide();
+    //jQuery("#imgDetailsPanel").hide();
+    //jQuery("#videoDetailsPanel").hide();
+    jQuery("#objectPreviewTitle").hide();
+    //jQuery("#moleculeOptionsPanel").hide();
+    jQuery("#moleculeFluidPanel").hide();
+    jQuery("#chemistryBoxOptionsPanel").hide();
+}
 
 
 // // for the Energy Turbines

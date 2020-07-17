@@ -85,7 +85,7 @@ class WU_webw_3d_view {
             objDef.name,
             objDef.objAsArrayBuffer,
             objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
-            objDef.mtlAsString,
+            objDef.mtlAsString
         );
         prepData.setSceneGraphBaseNode(this.pivot);
         prepData.setStreamMeshes(true);
@@ -419,7 +419,7 @@ class WU_webw_3d_view {
         // Function for OBJ: Function to load materials
         var materialsLoaded = function (materials) {
             for (var key in materials) {
-                console.log( materials[key]);
+                //console.log( materials[key]);
                 materials[key].transparent = true;
                 materials[key].alphaTest = 0.1;
             }

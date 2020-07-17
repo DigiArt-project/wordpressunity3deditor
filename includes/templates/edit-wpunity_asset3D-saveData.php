@@ -1,5 +1,201 @@
 <?php
 
+function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
+
+    //--------------- Upload textures and get final filenames as uploaded on server ------------------------------------
+    $textureNamesIn  = [];
+    
+    $content_texture = [];
+    
+    // store the extensions
+    $extension_texture_file = [];
+    
+    // Texture
+    if (isset($_POST['textureFileInput'])) {
+        
+        foreach (array_keys($_POST['textureFileInput']) as $texture) {
+            
+            // Get the basename of texture
+            $basename_texture = str_replace(['.jpg','.png'], '', $texture);
+            
+            // Get the content
+            $content_texture[$basename_texture]    = $_POST['textureFileInput'][$texture];
+            
+            // Get the extension (jpg or png)
+            $extension_texture_file[$basename_texture] =  strpos($texture, "jpg") !== false ? 'jpg' : 'png';
+            
+            // Store basenames to an array
+            $textureNamesIn[]    = $basename_texture;
+        }
+        
+        // Processed basenames
+        $textureNamesOut = [];
+        
+        for ($i = 0; $i < count($content_texture); $i++) {
+            
+            // Upload texture content
+            $textureFile_id = wpunity_upload_Assetimg64(
+                $content_texture[$textureNamesIn[$i]], // content of file
+                'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm, // new filename
+                $asset_newID, // asset id
+                $gameSlug,    // game slug
+                $extension_texture_file[$textureNamesIn[$i]]  // extension
+            );
+            
+            // Get filename in the server
+            $textureFile_filename = basename(get_attached_file($textureFile_id));
+            
+            // Store filenames
+            $textureNamesOut[] = $textureFile_filename;
+            
+            // store each texture in a post meta that receives multiple files
+            add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
+            
+            //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
+        }
+    }
+    
+    //---------- Change filenames of textures inside mtl according to the final filenames on server --------------------
+    $mtl_content = $_POST['mtlFileInput'];
+
+    // MTL : Open mtl file and replace jpg filename
+    if($_POST['mtlFileInput'] && isset($_POST['textureFileInput'])) {
+        if(strlen($_POST['mtlFileInput']) > 0) {
+            
+            // parse texture names
+            for ($k = 0; $k < count($textureNamesIn); $k++) {
+
+                // Find if it is jpg or png by content header
+                $imageContentLine = substr($content_texture[$textureNamesIn[$k]], 0, 20);
+    
+                // replace the original basename of jpg with the final name of jpg in the server
+                if ( strpos($imageContentLine, "jpeg") ) {
+                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".jpg\b/ui",
+                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
+                } else if (strpos($imageContentLine, "png")){
+                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".png\b/ui",
+                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
+                } else {
+                    echo "Uknown texture file type: Error 856";
+                    return;
+                }
+                
+            }
+        }
+    }
+
+    //-------------------------------                          ------------------------
+    $obj_content = $_POST['objFileInput'];
+
+    if (isset($_POST['mtlFileInput']) && isset($_POST['objFileInput'])) {
+        if (strlen(trim($_POST['mtlFileInput']))>0 && strlen(trim($_POST['objFileInput']))>0) {
+            
+            //--------------------  MTL --------------------------------------------------------------------------------
+            
+            // 1. Upload mtl content as text and get the id of meta
+            $mtlFile_id = wpunity_upload_AssetText(
+                            $mtl_content,               // the content
+                    'material' .                 // it should have the keyword material in finale basename
+                            $assetTitleForm,            // It should have also the title of Asset
+                            $asset_newID,               // Asset id
+                            $gameSlug                   // Game slug
+            );
+            
+            // 2. Add id of mtl as post meta on asset
+            update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
+    
+            // ----------- OBJ: replace mtllib filename, upload, and add postmeta -------------------------------------
+    
+            // 1. Get filename of mtl (remove path and txt extension) on the server
+            $mtl_filename = basename(get_attached_file($mtlFile_id),'txt'). 'mtl';
+
+            $nCharsToSearch = strlen($obj_content) > 500 ? 500 : strlen($obj_content);
+
+            // 2. Search for replace only in the first 500 characters to avoid memory issues
+            $obj_contentfirst = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", // find mtllib line
+                                             "mtllib " . $mtl_filename . "\n", // replace
+                                             substr($obj_content, 0, $nCharsToSearch)); // search on first nchrs
+
+            // Replace the patch
+            $obj_content = substr_replace($obj_content, $obj_contentfirst, 0, $nCharsToSearch);
+            
+            // 3. Upload OBJ
+            $objFile_id = wpunity_upload_AssetText($obj_content, // the OBJ content
+                                           'obj' .$assetTitleForm, // it should have the obj and title as name
+                                                  $asset_newID,
+                                                  $gameSlug
+                                                );
+
+            // 4. Add id of obj as post meta on asset
+            update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
+        }
+    }
+    
+    // FBX
+    $fbx_content = $_POST['fbxFileInput'];
+    if (isset($_POST['fbxFileInput']) ) {
+        if (strlen(trim($_POST['fbxFileInput']))>0) {
+
+            // 1. Upload FBX file
+            $fbxFile_id = wpunity_upload_AssetText($fbx_content, // content
+                                            'fbx'.$assetTitleForm, // asset title
+                                                    $asset_newID,
+                                                    $gameSlug
+                                                    );
+
+            // 2. Set value of attachment IDs at custom fields
+            update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
+        }
+    }
+    
+    // PDB upload and add id of uploaded file to postmeta wpunity_asset3d_pdb of asset
+    if (isset($_POST['pdbFileInput'])){
+        if (strlen($_POST['pdbFileInput'])>0) {
+            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'material' . $assetTitleForm, $asset_newID, $gameSlug);
+            update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
+        }
+    }
+    
+    // SCREENSHOT upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
+    if (isset($_POST['sshotFileInput']) ) {
+        if (strlen($_POST['sshotFileInput'])>0) {
+            
+            $screenShotFile_id =
+                wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID,
+                    $gameSlug, 'jpg');
+            
+            $res = update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
+        }
+    }
+    
+}
+
+//--------------  For Cloning only -------------------------------------------------------------------------------------
+function wpunity_copy_3Dfiles($asset_newID, $asset_sourceID){
+    
+    // Get the source post
+    $assetpostMeta = get_post_meta($asset_sourceID);
+    
+    if ($assetpostMeta['wpunity_asset3d_pdb'][0])
+        update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $assetpostMeta['wpunity_asset3d_pdb'][0]);
+    
+    if ($assetpostMeta['wpunity_asset3d_mtl'][0])
+        update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $assetpostMeta['wpunity_asset3d_mtl'][0]);
+    
+    if($assetpostMeta['wpunity_asset3d_obj'][0])
+        update_post_meta($asset_newID, 'wpunity_asset3d_obj', $assetpostMeta['wpunity_asset3d_obj'][0]);
+    
+    if($assetpostMeta['wpunity_asset3d_screenimage'][0])
+        update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $assetpostMeta['wpunity_asset3d_screenimage'][0]);
+    
+    if (count($assetpostMeta['wpunity_asset3d_diffimage']) > 0) {
+        delete_post_meta($asset_newID, 'wpunity_asset3d_diffimage');
+        for ($m = 0; $m < count($assetpostMeta['wpunity_asset3d_diffimage']); $m++)
+            add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $assetpostMeta['wpunity_asset3d_diffimage'][$m]);
+    }
+}
+
+
 function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$gameSlug, $assetCatIPRID,
       
       $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
@@ -72,17 +268,10 @@ function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$gameSlug, $ass
     update_post_meta($asset_id, 'wpunity_asset3d_description_french_perception', $assetDescFormFrenchPerception);
     update_post_meta($asset_id, 'wpunity_asset3d_description_german_perception', $assetDescFormGermanPerception);
     update_post_meta($asset_id, 'wpunity_asset3d_description_russian_perception', $assetDescFormRussianPerception);
-    
-    
-    
-    
-    
-    
+
     update_post_meta($asset_id, 'wpunity_asset3d_fonts', $assetFonts);
     update_post_meta($asset_id, 'wpunity_asset3d_back_3d_color', $assetback3dcolor);
-    
-    
-    
+
     if($asset_id){return $asset_id;}else{return 0;}
 }
 
@@ -117,8 +306,6 @@ function wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_insert
     );
 
     wp_update_post($asset_new_info);
-    
-    
     
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_greek', $assetTitleFormGreek);
     update_post_meta($asset_inserted_id, 'wpunity_asset3d_title_spanish', $assetTitleFormSpanish);
@@ -302,172 +489,5 @@ function wpunity_create_asset_moleculeExtra_frontend($asset_newID){
 
 }
 
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
-    $textureNamesIn = [];
-    $tContent = [];
-    $tContentExt = []; // store the extensions
-
-    // Texture
-    if (isset($_POST['textureFileInput'])) {
-        
-        foreach (array_keys($_POST['textureFileInput']) as $texture) {
-            $tname = str_replace(['.jpg','.png'], '', $texture);
-            $tContent[$tname] = $_POST['textureFileInput'][$texture];
-            $tContentExt[$tname] =  strpos($texture, "jpg") !== false ? 'jpg' : 'png';
-            $textureNamesIn[] = $tname;
-        }
-
-        $textureNamesOut = [];
-        
-        for ($i = 0; $i < count($tContent); $i++) {
-            $textureFile_id = wpunity_upload_Assetimg64(
-                $tContent[$textureNamesIn[$i]], 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm,
-                $asset_newID, $gameSlug, $tContentExt[$textureNamesIn[$i]]);
-
-            $textureFile_filename = basename(get_attached_file($textureFile_id));
-            $textureNamesOut[] = $textureFile_filename;
-            add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-          
-            //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-        }
-    }
-   
-   
-    $mtl_content = $_POST['mtlFileInput'];
-    $obj_content = $_POST['objFileInput'];
-    $fbx_content = $_POST['fbxFileInput'];
-    
-//    $fl = fopen("output_png.txt","w");
-    
-    // MTL : Open mtl file and replace jpg filename
-    if($_POST['mtlFileInput'] && isset($_POST['textureFileInput'])) {
-        if(strlen($_POST['mtlFileInput']) > 0) {
-            
-            for ($k = 0; $k < count($textureNamesIn); $k++) {
-//                fwrite($fl , $textureNamesIn[$k]);
-    
-                $isJPG = false;
-                $isPNG = false;
-                
-                $imageContentLine = substr($tContent[$textureNamesIn[$k]], 0, 20);
-                
-                if ( strpos($imageContentLine, "jpeg") )
-                    $isJPG = true;
-                
-                if (strpos($imageContentLine, "png"))
-                    $isPNG = true;
-                
-                if ($isJPG)
-                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".jpg\b/ui",
-                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
-                
-                if($isPNG)
-                    $mtl_content = preg_replace("/.*\bmap_Kd\b.*\b" . $textureNamesIn[$k] . ".png\b/ui",
-                        "map_Kd " . $textureNamesOut[$k], $mtl_content);
-    
-            }
-        }
-    }
-    
-//    fclose($fl);
-
-    // OBJ and MTL
-    if (isset($_POST['mtlFileInput']) && isset($_POST['objFileInput'])) {
-        if (strlen($_POST['mtlFileInput'])>0 && strlen($_POST['objFileInput'])>0) {
-            $mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material' . $assetTitleForm, $asset_newID, $gameSlug);
-            $mtlFile_filename = basename(get_attached_file($mtlFile_id));
-        
-            // OBJ
-            $mtlFile_filename_notxt = substr($mtlFile_filename, 0, -4);
-            $mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
-
-//    $obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
-        
-            // Search for replace only in the first 500 characters to avoid memory issues
-            $obj_contentfirst = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", substr($obj_content, 0, 500));
-        
-            $obj_content = substr_replace($obj_content, $obj_contentfirst, 0, 500);
-        
-            $objFile_id = wpunity_upload_AssetText($obj_content, 'obj' . $assetTitleForm, $asset_newID, $gameSlug);
-        
-            // Set value of attachment IDs at custom fields
-            update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $mtlFile_id);
-            update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
-            //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-        }
-    }
-    
-    echo "1";
-    if (isset($_POST['fbxFileInput']) ) {
-        echo "2";
-        echo $_POST['fbxFileInput'];
-        if (strlen($_POST['fbxFileInput'])>0) {
-            echo "3";
-            
-            // Upload file
-            $fbxFile_id = wpunity_upload_AssetText($fbx_content, 'fbx' . $assetTitleForm, $asset_newID, $gameSlug);
-            
-            echo "fbx_content".$fbx_content;
-            echo "fbxFile_id:".$fbxFile_id;
-            echo "<br />";
-            
-            
-            // Set value of attachment IDs at custom fields
-            update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // PDB
-    if (isset($_POST['pdbFileInput']))
-        if (strlen($_POST['pdbFileInput'])>0) {
-            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'material' . $assetTitleForm, $asset_newID, $gameSlug);
-            update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
-        }
-    
-    // SCREENSHOT
-    if (isset($_POST['sshotFileInput']) ) {
-        if (strlen($_POST['sshotFileInput'])>0) {
-            
-            $screenShotFile_id =
-                wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID,
-                    $gameSlug, 'jpg');
-
-            $res = update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
-        }
-    }
-
-}
-
-function wpunity_copy_3Dfiles($asset_newID, $asset_sourceID){
-    
-    // Get the source post
-    $assetpostMeta = get_post_meta($asset_sourceID);
-    
-    if ($assetpostMeta['wpunity_asset3d_pdb'][0])
-        update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $assetpostMeta['wpunity_asset3d_pdb'][0]);
-    
-    if ($assetpostMeta['wpunity_asset3d_mtl'][0])
-        update_post_meta($asset_newID, 'wpunity_asset3d_mtl', $assetpostMeta['wpunity_asset3d_mtl'][0]);
-    
-    if($assetpostMeta['wpunity_asset3d_obj'][0])
-        update_post_meta($asset_newID, 'wpunity_asset3d_obj', $assetpostMeta['wpunity_asset3d_obj'][0]);
-    
-    if($assetpostMeta['wpunity_asset3d_screenimage'][0])
-        update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $assetpostMeta['wpunity_asset3d_screenimage'][0]);
-    
-    if (count($assetpostMeta['wpunity_asset3d_diffimage']) > 0) {
-        delete_post_meta($asset_newID, 'wpunity_asset3d_diffimage');
-        for ($m = 0; $m < count($assetpostMeta['wpunity_asset3d_diffimage']); $m++)
-            add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $assetpostMeta['wpunity_asset3d_diffimage'][$m]);
-    }
-}
 ?>
