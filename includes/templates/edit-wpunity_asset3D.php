@@ -1318,6 +1318,7 @@ if($asset_id != null) {
         var render = function () {
             requestAnimationFrame( render );
             wu_webw_3d_view.render();
+            
         };
 
         // Initialize
@@ -1551,8 +1552,18 @@ if($asset_id != null) {
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
         
-        // UNIT TEST:  REMOVE
-        //setTimeout( function(){jQuery('#assetTitle')[0].value = 'a12';},3000);
+        
+        
+        // UNIT TEST: Select artifact, Remove
+        setTimeout( function(){
+            
+            jQuery("#category-select").click(); // Expand category
+            jQuery("#78").click(); // Select Artifact category
+            jQuery('#assetTitle')[0].value = 'a12'; // Set title
+            jQuery("#fbxRadio-label").click(); // Set fbx type
+            jQuery("#fileUploadInput").click(); // Click browse files
+            
+        },500);
         
     </script>
 

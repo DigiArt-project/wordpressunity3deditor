@@ -37,6 +37,7 @@ class WU_webw_3d_view {
 
         this.flatShading = false;
 
+        this.clock = new THREE.Clock();
 
         // Make a pivot to ensure that the object is centered correctly
         this.pivot = null;
@@ -60,6 +61,9 @@ class WU_webw_3d_view {
             console.warn('File API is not supported! Disabling file loading.');
         }
         // - End of OBJ specific -
+
+
+        this.mixers = [];
     }
 
 
@@ -126,6 +130,12 @@ class WU_webw_3d_view {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
+
+        if ( this.mixers.length > 0 ) {
+            for ( let i = 0; i < this.mixers.length; i ++ ) {
+                this.mixers[ i ].update( this.clock.getDelta() );
+            }
+        }
     }
 
 
@@ -188,10 +198,38 @@ class WU_webw_3d_view {
 
         let loader = new THREE.FBXLoader( manager );
 
-        let fbxgraph = loader.parse(url_or_text_fbx,'');
+        let fbxobject = loader.parse(url_or_text_fbx,'');
+
+
+        // // Convert the array of data into a base64 string
+        // var stringData = String.fromCharCode.apply(null, new Uint16Array(jpgData));
+        // var encodedData = window.btoa(stringData);
+        // var dataURI = "data:image/jpeg;base64," + encodedData;
+        //
+        // // Connect the image to the Texture
+        // var texture = new THREE.Texture();
+        //
+        // var image = new Image();
+        // image.onload = function () {
+        //     texture.image = image;
+        //     texture.needsUpdate = true;
+        // };
+        // image.src = dataURI;
+
+
+
+        fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
+        this.mixers.push( fbxobject.mixer );
+
+
+
+
+        let action = fbxobject.mixer.clipAction( fbxobject.animations[ 0] );
+        action.play();
+
 
         let scope = this;
-        scope.root.add(fbxgraph);
+        scope.root.add(fbxobject);
         scope.render();
     }
 

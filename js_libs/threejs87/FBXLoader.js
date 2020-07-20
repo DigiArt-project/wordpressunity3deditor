@@ -122,6 +122,8 @@
 			var geometryMap = parseGeometries( FBXTree, connections, deformers );
 			var sceneGraph = parseScene( FBXTree, connections, deformers, geometryMap, materials );
 
+
+
 			return sceneGraph;
 
 		}
@@ -290,6 +292,7 @@
 		if ( 'Texture' in FBXTree.Objects.subNodes ) {
 
 			var textureNodes = FBXTree.Objects.subNodes.Texture;
+
 			for ( var nodeID in textureNodes ) {
 
 				var texture = parseTexture( textureNodes[ nodeID ], loader, imageMap, connections );
