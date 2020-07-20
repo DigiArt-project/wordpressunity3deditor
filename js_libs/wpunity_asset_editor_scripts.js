@@ -6,13 +6,6 @@
  */
 'use strict';
 
-var nObj = 0;
-var nFbx = 0;
-var nMtl = 0;
-var nJpg = 0;
-var nPng = 0;
-var nPdb = 0;
-
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
     if (wu_webw_3d_view.renderer) {
@@ -48,7 +41,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
 function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
     // PREVIEW Handler (not uploaded yet): Load from selected files
-    var _handleFileSelect = function ( event ) {
+    let _handleFileSelect = function ( event ) {
 
         // For cloning
         document.getElementById('asset_sourceID').value ="";
@@ -59,7 +52,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
         // Copy because clear asset files in the following clears the total input fields also.
         // Files are blobs
-        var files = {... event.target.files};
+        let files = {... event.target.files};
 
         // Clear the previously loaded
         wpunity_clear_asset_files(wu_webw_3d_view_local);
@@ -93,13 +86,17 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
                     switch (type) {
                         case 'mtl':
+                            console.log("End mtl");
                             // Replace quotes because they create a bug in input form
                             document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
                             break;
-                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
+                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent);
+                            console.log("End obj");
+                            break;
                         case 'fbx': document.getElementById('fbxFileInput').value = dec.decode(fileContent); break;
                         case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                         case 'jpg' || 'png':
+                            console.log("End jpg");
                             jQuery('#3dAssetForm').append(
                                 '<input type="hidden" name="textureFileInput['+file.name+
                                             ']" id="textureFileInput" value="' + fileContent + '" />');
@@ -129,67 +126,82 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
  */
 function checkerCompleteReading(canvas){
 
-    var objFileContent = document.getElementById('objFileInput').value;
-    var mtlFileContent = document.getElementById('mtlFileInput').value;
+    let objFileContent = document.getElementById('objFileInput').value;
+    let fbxFileContent = document.getElementById('fbxFileInput').value;
+    let mtlFileContent = document.getElementById('mtlFileInput').value;
 
-    if (nObj==1 && objFileContent!==''){
+    if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && fbxFileContent !== '') ){
 
         // Show progress slider
         jQuery('#previewProgressSlider').show();
 
         // Make the definition with the obj
-        var encoder = new TextEncoder();
-        var uint8Array = encoder.encode(objFileContent);
+        let encoder = new TextEncoder();
 
-        var objectDefinition = {
-            name: 'userObj',
-            objAsArrayBuffer: uint8Array,
-            pathTexture: "",
-            mtlAsString: null
-        };
+        if (nObj === 1){
 
-        if (nMtl == 0) {
-            // Start without MTL
-            wu_webw_3d_view.loadFilesUser(objectDefinition);
-        } else {
-            if (mtlFileContent!==''){
+            let uint8Array = encoder.encode(objFileContent);
 
-                objectDefinition.mtlAsString = mtlFileContent;
+            let objectDefinition = {
+                name: nObj === 1 ? 'userObj':'userFbx',
+                objAsArrayBuffer: uint8Array,
+                pathTexture: "",
+                mtlAsString: null
+            };
 
-                if (nJpg==0 && nPng==0){
-                    // Start without Textures
-                    wu_webw_3d_view.loadFilesUser(objectDefinition);
+            if (nMtl === 0) {
+                // Start without MTL
+                wu_webw_3d_view.loadObjStream(objectDefinition);
+            } else {
+                if (mtlFileContent!==''){
 
-                } else {
-                    if ((nPng>0 && nPng === jQuery("input[id='textureFileInput']").length) || ( nJpg>0 && nJpg === jQuery("input[id='textureFileInput']").length) ) {
+                    objectDefinition.mtlAsString = mtlFileContent;
 
-                        // Get textureFileInput array with jQuery
-                        var textFil = jQuery("input[id='textureFileInput']");
+                    if (nJpg===0 && nPng===0){
+                        // Start without Textures
+                        wu_webw_3d_view.loadObjStream(objectDefinition);
 
-                        // Store here the raw image textures
-                        objectDefinition.pathTexture = [];
+                    } else {
+                        // Else check if textures have been loaded
+                        let nTexturesLength = jQuery("input[id='textureFileInput']").length;
+                        if ((nPng>0 && nPng === nTexturesLength)
+                            || ( nJpg>0 && nJpg === nTexturesLength) ) {
 
-                        for (var k = 0; k < textFil.length; k++){
-                            var myname = textFil[k].name;
+                            // Get textureFileInput array with jQuery
+                            var textFil = jQuery("input[id='textureFileInput']");
 
-                            // do some text processing on the names to remove textureFileInput[ and ] from name
-                            myname = myname.replace('textureFileInput[','');
-                            myname = myname.replace(']','');
+                            // Store here the raw image textures
+                            objectDefinition.pathTexture = [];
 
-                            objectDefinition.pathTexture[myname] = textFil[k].value;
+                            for (var k = 0; k < textFil.length; k++){
+                                var myname = textFil[k].name;
+
+                                // do some text processing on the names to remove textureFileInput[ and ] from name
+                                myname = myname.replace('textureFileInput[','');
+                                myname = myname.replace(']','');
+
+                                objectDefinition.pathTexture[myname] = textFil[k].value;
+                            }
+
+                            // Start with textures
+                            console.log("start textures");
+                            canvas.loadObjStream(objectDefinition);
                         }
-
-                        // Start with textures
-                        console.log("start textures");
-                        canvas.loadFilesUser(objectDefinition);
                     }
                 }
             }
+        } else if (nFbx === 1){
+
+            let fBXBuffer = encoder.encode(fbxFileContent);
+
+            canvas.loadFbxStream(fBXBuffer);
+
+
         }
+
     }
 }
-
-
+//-------------------- loading from saved data --------------------------------------
 /**
  * Reading from url in server side
  * @param pathUrl

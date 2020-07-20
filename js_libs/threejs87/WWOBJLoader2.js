@@ -468,6 +468,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
 
                         material = this.materials[ 'defaultMaterial' ];
                         material.transparent = true;
+
                     } else if ( materialDescription.flat ) {
 
                         materialName = material.name + '_flat';

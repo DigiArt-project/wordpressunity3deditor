@@ -1273,6 +1273,13 @@ if($asset_id != null) {
     <script type="text/javascript">
         'use strict';
 
+        var nObj = 0;
+        var nFbx = 0;
+        var nMtl = 0;
+        var nJpg = 0;
+        var nPng = 0;
+        var nPdb = 0;
+        
         var mdc = window.mdc;
         mdc.autoInit();
         

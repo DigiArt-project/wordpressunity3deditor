@@ -36,7 +36,6 @@ class WU_webw_3d_view {
         this.controls = null;
 
         this.flatShading = false;
-        this.doubleSide = false;
 
 
         // Make a pivot to ensure that the object is centered correctly
@@ -50,9 +49,6 @@ class WU_webw_3d_view {
         this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
         this.wwObjLoader2.setCrossOrigin('anonymous');
 
-        // - FBX Specific -
-        // REM HERE !!!
-        this.fbxloader = new THREE.FBXLoader();
 
 
         // Check for the various File API support.
@@ -78,15 +74,18 @@ class WU_webw_3d_view {
         console.log('Progress: ' + text);
     }
 
-    // Start loader
-    loadFilesUser(objDef) {
 
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
+
+    // Start loader
+    loadObjStream(objDef) {
+
+        let prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
             objDef.name,
             objDef.objAsArrayBuffer,
             objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
             objDef.mtlAsString
         );
+
         prepData.setSceneGraphBaseNode(this.pivot);
         prepData.setStreamMeshes(true);
         this.wwObjLoader2.prepareRun(prepData);
@@ -174,6 +173,26 @@ class WU_webw_3d_view {
         scope.pivot.traverse(remover);
 
         scope.createPivot();
+    }
+
+    /* Molecule loader */
+    loadFbxStream(url_or_text_fbx) {
+
+        // Clear Previous
+        this.clearAllAssets();
+
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function( item, loaded, total ) {
+            console.log( item, loaded, total );
+        };
+
+        let loader = new THREE.FBXLoader( manager );
+
+        let fbxgraph = loader.parse(url_or_text_fbx,'');
+
+        let scope = this;
+        scope.root.add(fbxgraph);
+        scope.render();
     }
 
 
