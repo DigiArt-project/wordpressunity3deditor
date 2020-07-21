@@ -200,16 +200,15 @@ function checkerCompleteReading(wu_webw_3d_view_local){
 
             var textFil = jQuery("input[id='textureFileInput']");
 
-            console.log(textFil);
+            //console.log(textFil);
 
-            console.log("textFil[k].value;", textFil[0].value);
+            //console.log("textFil[k].value;", textFil[0].value);
 
 
-            let textureStream = textFil[0].value;
+            let texturesStreams = textFil; // textFil[0].value;
 
-            console.log(textureStream);
 
-            wu_webw_3d_view_local.loadFbxStream(fBXBuffer, textureStream);
+            wu_webw_3d_view_local.loadFbxStream(fBXBuffer, texturesStreams);
 
         }
 

@@ -137,7 +137,7 @@
 		 * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
 		 * @returns {THREE.Group}
 		 */
-		parseStream: function ( FBXBuffer, textureStream) {
+		parseStream: function ( FBXBuffer, texturesStreams) {
 
 			var FBXTree;
 
@@ -173,7 +173,7 @@
 			var textures = parseTexturesStream( FBXTree,
 								new THREE.TextureLoader( this.manager ).setPath( '' ),
 								images,
-								connections, textureStream );
+								connections, texturesStreams );
 
 
 
@@ -377,7 +377,7 @@
 	 * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
 	 * @returns {Map<number, THREE.Texture>}
 	 */
-	function parseTexturesStream( FBXTree, loader, imageMap, connections, textureStream ) {
+	function parseTexturesStream( FBXTree, loader, imageMap, connections, texturesStreams ) {
 
 		/**
 		 * @type {Map<number, THREE.Texture>}
@@ -388,9 +388,18 @@
 
 			var textureNodes = FBXTree.Objects.subNodes.Texture;
 
-			for ( var nodeID in textureNodes ) {
+			for ( let nodeID in textureNodes ) {
 
-				var texture = parseTextureStream( textureNodes[ nodeID ], loader, imageMap, connections, textureStream );
+				let fname = baseName(textureNodes[ nodeID ].properties.FileName);
+
+				for (let i=0; i< texturesStreams.length; i ++ ) {
+					console.log(texturesStreams[i].name, 'textureFileInput[' + fname + ']');
+					if (texturesStreams[i].name === ('textureFileInput[' + fname + ']')) {
+						textureStream = texturesStreams[i];
+					}
+				}
+
+				let texture = parseTextureStream( textureNodes[ nodeID ], loader, imageMap, connections, textureStream.value );
 				textureMap.set( parseInt( nodeID ), texture );
 
 			}
@@ -399,6 +408,14 @@
 
 		return textureMap;
 
+	}
+
+
+
+	function baseName(str)
+	{
+		let li = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
+		return new String(str).substring(li + 1);
 	}
 
 	/**
@@ -495,7 +512,7 @@
 	 * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
 	 * @returns {THREE.Texture}
 	 */
-	function parseTextureStream( textureNode, loader, imageMap, connections, texturesArrayStrings ) {
+	function parseTextureStream( textureNode, loader, imageMap, connections, textureStream ) {
 
 		let texture = new THREE.Texture();
 		texture.name = textureNode.name;
@@ -508,7 +525,7 @@
 			texture.image = image;
 			texture.needsUpdate = true;
 		};
-		image.src = texturesArrayStrings;
+		image.src = textureStream;
 
 
 		// // Convert the array of data into a base64 string
