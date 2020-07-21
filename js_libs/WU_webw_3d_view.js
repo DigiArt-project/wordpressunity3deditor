@@ -145,7 +145,10 @@ class WU_webw_3d_view {
 
         console.log("CLEARING");
 
-        // PDB Specific
+        // Clear animations
+        this.mixers = [];
+
+        // PDB and FBX Specific
         while (scope.root.children.length > 0) {
             var object = scope.root.children[0];
             object.parent.remove(object);
@@ -167,7 +170,6 @@ class WU_webw_3d_view {
 
                 var mat = object3d.material;
                 if (mat.hasOwnProperty('materials')) {
-
                     var materials = mat.materials;
                     for (var name in materials) {
                         if (materials.hasOwnProperty(name)) materials[name].dispose();
@@ -185,7 +187,7 @@ class WU_webw_3d_view {
         scope.createPivot();
     }
 
-    /* Molecule loader */
+    /* FBX loader */
     loadFbxStream(url_or_text_fbx, texturesStreams) {
 
         // Clear Previous
@@ -200,33 +202,11 @@ class WU_webw_3d_view {
 
         let fbxobject = loader.parseStream(url_or_text_fbx, texturesStreams);
 
-
-        // // Convert the array of data into a base64 string
-        // var stringData = String.fromCharCode.apply(null, new Uint16Array(jpgData));
-        // var encodedData = window.btoa(stringData);
-        // var dataURI = "data:image/jpeg;base64," + encodedData;
-        //
-        // // Connect the image to the Texture
-        // var texture = new THREE.Texture();
-        //
-        // var image = new Image();
-        // image.onload = function () {
-        //     texture.image = image;
-        //     texture.needsUpdate = true;
-        // };
-        // image.src = dataURI;
-
-
-
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
         this.mixers.push( fbxobject.mixer );
 
-
-
-
-        let action = fbxobject.mixer.clipAction( fbxobject.animations[ 0] );
+        let action = fbxobject.mixer.clipAction( fbxobject.animations[0] );
         action.play();
-
 
         let scope = this;
         scope.root.add(fbxobject);

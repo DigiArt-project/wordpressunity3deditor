@@ -390,10 +390,12 @@
 
 			for ( let nodeID in textureNodes ) {
 
+				// The name of the texture file from fbx
 				let fname = baseName(textureNodes[ nodeID ].properties.FileName);
 
+				// Search for the loaded imamges for the same name
 				for (let i=0; i< texturesStreams.length; i ++ ) {
-					console.log(texturesStreams[i].name, 'textureFileInput[' + fname + ']');
+
 					if (texturesStreams[i].name === ('textureFileInput[' + fname + ']')) {
 						textureStream = texturesStreams[i];
 					}

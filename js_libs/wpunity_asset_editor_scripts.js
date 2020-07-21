@@ -88,13 +88,10 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
                     switch (type) {
                         case 'mtl':
-                            console.log("End mtl");
                             // Replace quotes because they create a bug in input form
                             document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
                             break;
-                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent);
-                            console.log("End obj");
-                            break;
+                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
                         case 'fbx': document.getElementById('fbxFileInput').value = dec.decode(fileContent); break;
                         case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                         case 'jpg':
@@ -108,7 +105,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
                     // Check if everything is loaded
                     if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif')
-                        checkerCompleteReading(wu_webw_3d_view_local);
+                        checkerCompleteReading(wu_webw_3d_view_local, type);
                     else if ( type==='pdb')
                         canvas.loadMolecule(content);
 
@@ -127,7 +124,9 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
  * Reading from text files on client side
  * @param wu_webw_3d_view_local
  */
-function checkerCompleteReading(wu_webw_3d_view_local){
+function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
+
+    console.log("checkerCompleteReading by", whocalls)
 
     let objFileContent = document.getElementById('objFileInput').value;
     let fbxFileContent = document.getElementById('fbxFileInput').value;
@@ -197,19 +196,15 @@ function checkerCompleteReading(wu_webw_3d_view_local){
 
             let fBXBuffer = encoder.encode(fbxFileContent);
 
-
-            var textFil = jQuery("input[id='textureFileInput']");
-
-            //console.log(textFil);
-
-            //console.log("textFil[k].value;", textFil[0].value);
-
-
-            let texturesStreams = textFil; // textFil[0].value;
-
+            // Get all fields
+            let texturesStreams = jQuery("input[id='textureFileInput']");
+            let nTexturesLoaded = texturesStreams.length;
+            if ( nTexturesLoaded < nJpg || nTexturesLoaded < nPng || nTexturesLoaded < nGif){
+                // Not all textures loaded yet
+                return;
+            }
 
             wu_webw_3d_view_local.loadFbxStream(fBXBuffer, texturesStreams);
-
         }
 
     }
