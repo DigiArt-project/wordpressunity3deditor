@@ -141,13 +141,19 @@
 
 			var FBXTree;
 
+			//console.log(parseInt(FBXBuffer,2).toString(10));
+
 			if ( isFbxFormatBinary( FBXBuffer ) ) {
 
 				FBXTree = new BinaryParser().parse( FBXBuffer );
 
 			} else {
 
-				var FBXText = convertArrayBufferToString( FBXBuffer );
+				let encoder = new TextEncoder();
+
+				let FBXBufferEncoded = encoder.encode(FBXBuffer);
+
+				var FBXText = convertArrayBufferToString( FBXBufferEncoded );
 
 				if ( ! isFbxFormatASCII( FBXText ) ) {
 
@@ -5060,8 +5066,8 @@
 		var CORRECT = 'Kaydara FBX Binary  \0';
 
 		return buffer.byteLength >= CORRECT.length && CORRECT === convertArrayBufferToString( buffer, 0, CORRECT.length );
-
 	}
+
 
 	/**
 	 * @returns {boolean}

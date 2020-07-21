@@ -198,9 +198,9 @@ class WU_webw_3d_view {
             console.log( item, loaded, total );
         };
 
-        let loader = new THREE.FBXLoader( manager );
+        let fbxloader = new THREE.FBXLoader( manager );
 
-        let fbxobject = loader.parseStream(url_or_text_fbx, texturesStreams);
+        let fbxobject = fbxloader.parseStream(url_or_text_fbx, texturesStreams);
 
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
         this.mixers.push( fbxobject.mixer );

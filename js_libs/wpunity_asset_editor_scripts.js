@@ -84,6 +84,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                 return function() {
 
                     let fileContent = reader.result ? reader.result : '';
+
                     let dec = new TextDecoder();
 
                     switch (type) {
@@ -138,10 +139,10 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
         jQuery('#previewProgressSlider').show();
 
         // Make the definition with the obj
-        let encoder = new TextEncoder();
+
 
         if (nObj === 1){
-
+            let encoder = new TextEncoder();
             let uint8Array = encoder.encode(objFileContent);
 
             let objectDefinition = {
@@ -193,9 +194,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                 }
             }
         } else if (nFbx === 1){
-
-            let fBXBuffer = encoder.encode(fbxFileContent);
-
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
@@ -204,7 +202,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                 return;
             }
 
-            wu_webw_3d_view_local.loadFbxStream(fBXBuffer, texturesStreams);
+            wu_webw_3d_view_local.loadFbxStream(fbxFileContent, texturesStreams);
         }
 
     }
