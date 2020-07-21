@@ -35,6 +35,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nJpg = 0;
     nPng = 0;
     nPdb = 0;
+    nGif = 0;
 }
 
 
@@ -75,6 +76,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                 case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
                 case 'jpg': nJpg++;   reader.readAsDataURL(file);     break;
                 case 'png': nPng++;   reader.readAsDataURL(file);     break;
+                case 'gif': nGif++;   reader.readAsDataURL(file);     break;
             }
 
             // --- Read it ------------------------
@@ -95,8 +97,9 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                             break;
                         case 'fbx': document.getElementById('fbxFileInput').value = dec.decode(fileContent); break;
                         case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
-                        case 'jpg' || 'png':
-                            console.log("End jpg");
+                        case 'jpg':
+                        case 'png':
+                        case 'gif':
                             jQuery('#3dAssetForm').append(
                                 '<input type="hidden" name="textureFileInput['+file.name+
                                             ']" id="textureFileInput" value="' + fileContent + '" />');
@@ -104,7 +107,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                     }
 
                     // Check if everything is loaded
-                    if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx')
+                    if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif')
                         checkerCompleteReading(wu_webw_3d_view_local);
                     else if ( type==='pdb')
                         canvas.loadMolecule(content);
@@ -122,9 +125,9 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
 /**
  * Reading from text files on client side
- * @param canvas
+ * @param wu_webw_3d_view_local
  */
-function checkerCompleteReading(canvas){
+function checkerCompleteReading(wu_webw_3d_view_local){
 
     let objFileContent = document.getElementById('objFileInput').value;
     let fbxFileContent = document.getElementById('fbxFileInput').value;
@@ -151,15 +154,15 @@ function checkerCompleteReading(canvas){
 
             if (nMtl === 0) {
                 // Start without MTL
-                wu_webw_3d_view.loadObjStream(objectDefinition);
+                wu_webw_3d_view_local.loadObjStream(objectDefinition);
             } else {
                 if (mtlFileContent!==''){
 
                     objectDefinition.mtlAsString = mtlFileContent;
 
-                    if (nJpg===0 && nPng===0){
+                    if (nJpg===0 && nPng===0 ){
                         // Start without Textures
-                        wu_webw_3d_view.loadObjStream(objectDefinition);
+                        wu_webw_3d_view_local.loadObjStream(objectDefinition);
 
                     } else {
                         // Else check if textures have been loaded
@@ -185,7 +188,7 @@ function checkerCompleteReading(canvas){
 
                             // Start with textures
                             console.log("start textures");
-                            canvas.loadObjStream(objectDefinition);
+                            wu_webw_3d_view_local.loadObjStream(objectDefinition);
                         }
                     }
                 }
@@ -194,8 +197,19 @@ function checkerCompleteReading(canvas){
 
             let fBXBuffer = encoder.encode(fbxFileContent);
 
-            canvas.loadFbxStream(fBXBuffer);
 
+            var textFil = jQuery("input[id='textureFileInput']");
+
+            console.log(textFil);
+
+            console.log("textFil[k].value;", textFil[0].value);
+
+
+            let textureStream = textFil[0].value;
+
+            console.log(textureStream);
+
+            wu_webw_3d_view_local.loadFbxStream(fBXBuffer, textureStream);
 
         }
 
@@ -410,11 +424,11 @@ function loadFileInputLabel(objectType) {
             inputLabel.innerHTML = 'Select a pdb file';
             input.accept = ".pdb";
         } else if (objectType === 'obj') {
-            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture file';
+            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture files (jpgs or pngs)';
             input.accept = ".obj,.mtl,.jpg,.png";
         } else if (objectType === 'fbx') {
-            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file';
-            input.accept = ".fbx,jpg,.png";
+            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file (gif, jpg, png)';
+            input.accept = ".fbx,.jpg,.png,.gif";
         }
 }
 

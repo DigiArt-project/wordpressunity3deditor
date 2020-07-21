@@ -186,7 +186,7 @@ class WU_webw_3d_view {
     }
 
     /* Molecule loader */
-    loadFbxStream(url_or_text_fbx) {
+    loadFbxStream(url_or_text_fbx, textureStream) {
 
         // Clear Previous
         this.clearAllAssets();
@@ -198,7 +198,7 @@ class WU_webw_3d_view {
 
         let loader = new THREE.FBXLoader( manager );
 
-        let fbxobject = loader.parse(url_or_text_fbx,'');
+        let fbxobject = loader.parseStream(url_or_text_fbx,textureStream);
 
 
         // // Convert the array of data into a base64 string

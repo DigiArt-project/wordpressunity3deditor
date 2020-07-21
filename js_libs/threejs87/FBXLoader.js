@@ -126,7 +126,70 @@
 
 			return sceneGraph;
 
+		},
+
+
+		/**
+		 * Parses an ASCII/Binary FBX file and returns a THREE.Group.
+		 * THREE.Group will have an animations property of AnimationClips
+		 * of the different animations within the FBX file.
+		 * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
+		 * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
+		 * @returns {THREE.Group}
+		 */
+		parseStream: function ( FBXBuffer, textureStream) {
+
+			var FBXTree;
+
+			if ( isFbxFormatBinary( FBXBuffer ) ) {
+
+				FBXTree = new BinaryParser().parse( FBXBuffer );
+
+			} else {
+
+				var FBXText = convertArrayBufferToString( FBXBuffer );
+
+				if ( ! isFbxFormatASCII( FBXText ) ) {
+
+					throw new Error( 'THREE.FBXLoader: Unknown format.' );
+
+				}
+
+				if ( getFbxVersion( FBXText ) < 7000 ) {
+
+					throw new Error( 'THREE.FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion( FBXText ) );
+
+				}
+
+				FBXTree = new TextParser().parse( FBXText );
+
+			}
+
+			// console.log( FBXTree );
+
+			var connections = parseConnections( FBXTree );
+			var images = parseImages( FBXTree );
+
+			var textures = parseTexturesStream( FBXTree,
+								new THREE.TextureLoader( this.manager ).setPath( '' ),
+								images,
+								connections, textureStream );
+
+
+
+
+
+			var materials = parseMaterials( FBXTree, textures, connections );
+			var deformers = parseDeformers( FBXTree, connections );
+			var geometryMap = parseGeometries( FBXTree, connections, deformers );
+			var sceneGraph = parseScene( FBXTree, connections, deformers, geometryMap, materials );
+
+
+
+			return sceneGraph;
+
 		}
+
 
 	} );
 
@@ -307,13 +370,45 @@
 	}
 
 	/**
+	 * Parses map of textures referenced in FBXTree.
+	 * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+	 * @param {THREE.TextureLoader} loader
+	 * @param {Map<number, string(image blob/data URL)>} imageMap
+	 * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+	 * @returns {Map<number, THREE.Texture>}
+	 */
+	function parseTexturesStream( FBXTree, loader, imageMap, connections, textureStream ) {
+
+		/**
+		 * @type {Map<number, THREE.Texture>}
+		 */
+		var textureMap = new Map();
+
+		if ( 'Texture' in FBXTree.Objects.subNodes ) {
+
+			var textureNodes = FBXTree.Objects.subNodes.Texture;
+
+			for ( var nodeID in textureNodes ) {
+
+				var texture = parseTextureStream( textureNodes[ nodeID ], loader, imageMap, connections, textureStream );
+				textureMap.set( parseInt( nodeID ), texture );
+
+			}
+
+		}
+
+		return textureMap;
+
+	}
+
+	/**
 	 * @param {textureNode} textureNode - Node to get texture information from.
 	 * @param {THREE.TextureLoader} loader
 	 * @param {Map<number, string(image blob/data URL)>} imageMap
 	 * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
 	 * @returns {THREE.Texture}
 	 */
-	function parseTexture( textureNode, loader, imageMap, connections ) {
+	function parseTexture( textureNode, loader, imageMap, connections) {
 
 		var FBX_ID = textureNode.id;
 
@@ -324,14 +419,14 @@
 		var filePath = textureNode.properties.FileName;
 		var relativeFilePath = textureNode.properties.RelativeFilename;
 
-		var children = connections.get( FBX_ID ).children;
+		var children = connections.get(FBX_ID).children;
 
-		if ( children !== undefined && children.length > 0 && imageMap.has( children[ 0 ].ID ) ) {
+		if (children !== undefined && children.length > 0 && imageMap.has(children[0].ID)) {
 
-			fileName = imageMap.get( children[ 0 ].ID );
+			fileName = imageMap.get(children[0].ID);
 
-		} else if ( relativeFilePath !== undefined && relativeFilePath[ 0 ] !== '/' &&
-				relativeFilePath.match( /^[a-zA-Z]:/ ) === null ) {
+		} else if (relativeFilePath !== undefined && relativeFilePath[0] !== '/' &&
+			relativeFilePath.match(/^[a-zA-Z]:/) === null) {
 
 			// use textureNode.properties.RelativeFilename
 			// if it exists and it doesn't seem an absolute path
@@ -340,11 +435,11 @@
 
 		} else {
 
-			var split = filePath.split( /[\\\/]/ );
+			var split = filePath.split(/[\\\/]/);
 
-			if ( split.length > 0 ) {
+			if (split.length > 0) {
 
-				fileName = split[ split.length - 1 ];
+				fileName = split[split.length - 1];
 
 			} else {
 
@@ -356,16 +451,23 @@
 
 		var currentPath = loader.path;
 
-		if ( fileName.indexOf( 'blob:' ) === 0 || fileName.indexOf( 'data:' ) === 0 ) {
+		if (fileName.indexOf('blob:') === 0 || fileName.indexOf('data:') === 0) {
 
-			loader.setPath( undefined );
+			loader.setPath(undefined);
 
 		}
 
 		/**
 		 * @type {THREE.Texture}
 		 */
-		var texture = loader.load( fileName );
+		if (texturesArrayStrings === null) {
+			var texture = loader.load(fileName);
+			console.log(texture);
+
+		} else {
+			var texture = texturesArrayStrings[0];
+		}
+
 		texture.name = name;
 		texture.FBX_ID = FBX_ID;
 
@@ -385,6 +487,44 @@
 
 		return texture;
 
+	}
+	/**
+	 * @param {textureNode} textureNode - Node to get texture information from.
+	 * @param {THREE.TextureLoader} loader
+	 * @param {Map<number, string(image blob/data URL)>} imageMap
+	 * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+	 * @returns {THREE.Texture}
+	 */
+	function parseTextureStream( textureNode, loader, imageMap, connections, texturesArrayStrings ) {
+
+		let texture = new THREE.Texture();
+		texture.name = textureNode.name;
+		texture.FBX_ID = textureNode.id;
+		let wrapModeU = textureNode.properties.WrapModeU;
+		let wrapModeV = textureNode.properties.WrapModeV;
+
+		let image = new Image();
+		image.onload = function () {
+			texture.image = image;
+			texture.needsUpdate = true;
+		};
+		image.src = texturesArrayStrings;
+
+
+		// // Convert the array of data into a base64 string
+		// var stringData = String.fromCharCode.apply(null, new Uint16Array(jpgData));
+		// var encodedData = window.btoa(stringData);
+		// var dataURI = "data:image/jpeg;base64," + encodedData;
+		//
+		// // Connect the image to the Texture
+
+		let valueU = wrapModeU !== undefined ? wrapModeU.value : 0;
+		let valueV = wrapModeV !== undefined ? wrapModeV.value : 0;
+
+		texture.wrapS = valueU === 0 ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+		texture.wrapT = valueV === 0 ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+
+		return texture;
 	}
 
 	/**

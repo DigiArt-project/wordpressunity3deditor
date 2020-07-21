@@ -1279,6 +1279,7 @@ if($asset_id != null) {
         var nJpg = 0;
         var nPng = 0;
         var nPdb = 0;
+        var nGif = 0;
         
         var mdc = window.mdc;
         mdc.autoInit();
