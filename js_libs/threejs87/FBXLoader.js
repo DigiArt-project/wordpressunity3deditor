@@ -141,19 +141,13 @@
 
 			var FBXTree;
 
-			//console.log(parseInt(FBXBuffer,2).toString(10));
-
 			if ( isFbxFormatBinary( FBXBuffer ) ) {
 
 				FBXTree = new BinaryParser().parse( FBXBuffer );
 
 			} else {
 
-				let encoder = new TextEncoder();
-
-				let FBXBufferEncoded = encoder.encode(FBXBuffer);
-
-				var FBXText = convertArrayBufferToString( FBXBufferEncoded );
+				var FBXText = convertArrayBufferToString( FBXBuffer );
 
 				if ( ! isFbxFormatASCII( FBXText ) ) {
 
@@ -198,6 +192,7 @@
 
 
 	} );
+
 
 	/**
 	 * Parses map of relationships between objects.
@@ -5090,6 +5085,7 @@
 		for ( var i = 0; i < CORRECT.length; ++ i ) {
 
 			var num = read( 1 );
+
 			if ( num === CORRECT[ i ] ) {
 
 				return false;

@@ -188,7 +188,7 @@ class WU_webw_3d_view {
     }
 
     /* FBX loader */
-    loadFbxStream(url_or_text_fbx, texturesStreams) {
+    loadFbxStream(fbxBuffer, texturesStreams) {
 
         // Clear Previous
         this.clearAllAssets();
@@ -200,7 +200,7 @@ class WU_webw_3d_view {
 
         let fbxloader = new THREE.FBXLoader( manager );
 
-        let fbxobject = fbxloader.parseStream(url_or_text_fbx, texturesStreams);
+        let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
 
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
         this.mixers.push( fbxobject.mixer );

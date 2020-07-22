@@ -1281,6 +1281,8 @@ if($asset_id != null) {
         var nPdb = 0;
         var nGif = 0;
         
+        var FbxBuffer = '';
+        
         var mdc = window.mdc;
         mdc.autoInit();
         

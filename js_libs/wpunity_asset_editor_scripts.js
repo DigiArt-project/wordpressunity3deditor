@@ -16,6 +16,8 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("pdbFileInput").value = "";
+    FbxBuffer = '';
+
 
     while ( jQuery("[id^=textureFileInput]").length > 0) {
          jQuery("[id^=textureFileInput]")[0].remove();
@@ -93,7 +95,9 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                             document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
                             break;
                         case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
-                        case 'fbx': document.getElementById('fbxFileInput').value = dec.decode(fileContent); break;
+                        case 'fbx':
+                            FbxBuffer =  fileContent;
+                            break;
                         case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                         case 'jpg':
                         case 'png':
@@ -130,10 +134,9 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
     console.log("checkerCompleteReading by", whocalls)
 
     let objFileContent = document.getElementById('objFileInput').value;
-    let fbxFileContent = document.getElementById('fbxFileInput').value;
     let mtlFileContent = document.getElementById('mtlFileInput').value;
 
-    if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && fbxFileContent !== '') ){
+    if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') ){
 
         // Show progress slider
         jQuery('#previewProgressSlider').show();
@@ -202,7 +205,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                 return;
             }
 
-            wu_webw_3d_view_local.loadFbxStream(fbxFileContent, texturesStreams);
+            wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
         }
 
     }
