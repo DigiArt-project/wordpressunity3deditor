@@ -561,8 +561,14 @@ function wpunity_periodically_update_conf_log() {
             }
 
 
-            document.getElementById('ConfRoomReport').innerHTML= '<table><tbody>'+json_content[0]+'</table></tbody>';
-        },
+            if (document.getElementById('ConfRoomReport')){
+                document.getElementById('ConfRoomReport').innerHTML= '<table><tbody>'+json_content[0]+'</table></tbody>';
+            }
+        }
+
+        ,
+
+
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR");
             console.log(thrownError);

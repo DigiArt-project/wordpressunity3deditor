@@ -200,7 +200,10 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.
 
 //===================================== Other ============================================
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-upload-functions.php' );
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
+
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
 

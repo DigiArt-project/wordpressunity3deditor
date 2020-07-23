@@ -167,38 +167,26 @@ class Asset3DClass{
 
 }
 
-//==========================================================================================================================================
-
 //Create PathData for each asset as custom field in order to upload files at pathdata/Models folder
 function wpunity_create_pathdata_asset( $post_id ){
-
-    $post_type = get_post_type($post_id);
-
-    if ($post_type == 'wpunity_asset3d') {
-        $post = get_post($post_id);
-        //FORMAT: uploads / slug Game / Models / ...
-
-        $parentGameID = substr($_POST['_wp_http_referer'], strpos($_POST['_wp_http_referer'], 'wpunity_game=') + 13);
+    
+    if (get_post_type($post_id) === 'wpunity_asset3d') {
         
-        if (!is_numeric($parentGameID))
+        $parentGameID = $_GET['wpunity_game'];
+        
+        if (!is_numeric($parentGameID)) {
             echo "ERROR 455: ParentGameID is not numberic.";
-        
-        $fp = fopen("output_savepathdata.txt","w");
-        fwrite($fp, print_r($parentGameID,true));
-        fclose($fp);
+            return;
+        }
         
         $parentGameID = intval($parentGameID, 10);
         $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_asset3d_pgame' )->slug : NULL;
-
-        $upload_dirpath = $parentGameSlug;
-
-        update_post_meta($post_id,'wpunity_asset3d_pathData',$upload_dirpath);
+        
+        update_post_meta($post_id,'wpunity_asset3d_pathData',$parentGameSlug);
     }
 }
 
 add_action('save_post','wpunity_create_pathdata_asset',10,3);
-
-//==========================================================================================================================================
 
 
 function allowAuthorEditing()

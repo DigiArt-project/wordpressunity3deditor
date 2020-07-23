@@ -25,6 +25,8 @@ echo '<script>';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo '</script>';
 
+
+
 // Load Scrinpts
 function loadAsset3DManagerScripts() {
 
@@ -212,42 +214,29 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	// NEW Asset: submit info to backend
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$asset_id = wpunity_create_asset_frontend($assetPGameID, $assetCatID, $gameSlug, $assetCatIPRID,
-            $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
-            $assetTitleFormGreek, $assetDescFormGreek, $assetDescFormGreekKids, $assetDescFormGreekExperts, $assetDescFormGreekPerception,
-            $assetTitleFormSpanish, $assetDescFormSpanish, $assetDescFormSpanishKids, $assetDescFormSpanishExperts, $assetDescFormSpanishPerception,
-            $assetTitleFormFrench, $assetDescFormFrench,  $assetDescFormFrenchKids, $assetDescFormFrenchExperts, $assetDescFormFrenchPerception,
-            $assetTitleFormGerman, $assetDescFormGerman,  $assetDescFormGermanKids, $assetDescFormGermanExperts, $assetDescFormGermanPerception,
-            $assetTitleFormRussian, $assetDescFormRussian,  $assetDescFormRussianKids, $assetDescFormRussianExperts, $assetDescFormRussianPerception,
-            $assetFonts, $assetback3dcolor);
+		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID,
+                                                $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}else {
 	 	// Edit an existing asset: Return true if updated, false if failed
-   
-		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID,
-            
-            $assetTitleForm, $assetDescForm, $assetDescFormKids, $assetDescFormExperts, $assetDescFormPerception,
-            $assetTitleFormGreek, $assetDescFormGreek, $assetDescFormGreekKids, $assetDescFormGreekExperts, $assetDescFormGreekPerception,
-            $assetTitleFormSpanish, $assetDescFormSpanish, $assetDescFormSpanishKids, $assetDescFormSpanishExperts, $assetDescFormSpanishPerception,
-            $assetTitleFormFrench, $assetDescFormFrench,  $assetDescFormFrenchKids, $assetDescFormFrenchExperts, $assetDescFormFrenchPerception,
-            $assetTitleFormGerman, $assetDescFormGerman,  $assetDescFormGermanKids, $assetDescFormGermanExperts, $assetDescFormGermanPerception,
-            $assetTitleFormRussian, $assetDescFormRussian,  $assetDescFormRussianKids, $assetDescFormRussianExperts, $assetDescFormRussianPerception,
-            
-            $assetFonts, $assetback3dcolor);
+   		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID,
+                                                           $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}
 
 
-	// Create new or updated of main fields edit successfull
+	// Upload 3D files
 	if($asset_id != 0 || $asset_updatedConf == 1) {
 		if ($_POST['asset_sourceID']=='') {
-			// NoCloning
+			
+		    // NoCloning
             // Upload files from POST
 			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug);
-			
+
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
 		}else {
 			// Cloning
 			wpunity_copy_3Dfiles($asset_id, $_POST['asset_sourceID']);
+			
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'true');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', "false");
 		}
@@ -268,8 +257,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         wpunity_create_asset_addVideo_frontend($asset_id);
     }
 
+	
+	
 	if($scene_id == 0) {
         echo '<script>alert("Asset created or edited successfully");</script>';
+        
+        // Redirect to central otherwise the form is not loaded with the new data
+        echo '<script>window.location.href = "'.$_SERVER['HTTP_REFERER'].'&wpunity_asset='.$asset_id.'#English'.'";</script>';
     }
 }
 //---------------------------- End of handle Submit  -------------------------
@@ -496,6 +490,8 @@ if($asset_id != null) {
     <!-- Form to submit data -->
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
+        
+        
         <!-- CATEGORY -->
         <div class="" style="display:<?php echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?>">
                     
@@ -1240,11 +1236,15 @@ if($asset_id != null) {
             <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
         
             <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
-                <input type="hidden" name="submitted" id="submitted" value="true" />
+                <input type="hidden" name="submitted" id="submitted" value="true"
+                       />
                 
                 <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
                 
-                <button id="formSubmitBtn" style="display: none;" class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
+                <button id="formSubmitBtn" style="display: none;"
+
+                        
+                        class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
                         data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
                     <?php echo $buttonTitleText; ?>
                 </button>
@@ -1559,14 +1559,17 @@ if($asset_id != null) {
         
         // UNIT TEST: Select artifact, Remove
         setTimeout( function(){
-            
+
             jQuery("#category-select").click(); // Expand category
             jQuery("#78").click(); // Select Artifact category
             jQuery('#assetTitle')[0].value = 'a12'; // Set title
-            jQuery("#fbxRadio-label").click(); // Set fbx type
+            //jQuery("#fbxRadio-label").click(); // Set fbx type
             jQuery("#fileUploadInput").click(); // Click browse files
-            
+
         },500);
+
+
+
         
     </script>
 
