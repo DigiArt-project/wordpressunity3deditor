@@ -2,6 +2,9 @@
 
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
+    $ff = fopen("output_3D_files.txt","w");
+    fwrite($ff, "1");
+    
     //--------------- Upload textures and get final filenames as uploaded on server ------------------------------------
     $textureNamesIn  = [];
     
@@ -137,6 +140,9 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             update_post_meta($asset_newID, 'wpunity_asset3d_obj', $objFile_id);
         }
     }
+    
+    fwrite($ff, chr(13));
+    fwrite($ff, "2:".$_POST['fbxFileInput']);
     
     // FBX
     $fbx_content = $_POST['fbxFileInput'];

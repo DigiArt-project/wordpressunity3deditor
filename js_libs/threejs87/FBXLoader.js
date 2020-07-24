@@ -385,6 +385,9 @@
 		 */
 		var textureMap = new Map();
 
+		if (texturesStreams==='' || texturesStreams==null)
+			return textureMap;
+
 		if ( 'Texture' in FBXTree.Objects.subNodes ) {
 
 			var textureNodes = FBXTree.Objects.subNodes.Texture;
@@ -480,14 +483,7 @@
 		/**
 		 * @type {THREE.Texture}
 		 */
-		if (texturesArrayStrings === null) {
-			var texture = loader.load(fileName);
-			console.log(texture);
-
-		} else {
-			var texture = texturesArrayStrings[0];
-		}
-
+	    var texture = loader.load(fileName);
 		texture.name = name;
 		texture.FBX_ID = FBX_ID;
 
@@ -1720,7 +1716,7 @@
 			}
 
 		}
-		if ( BindPoseNode ) {
+		if ( BindPoseNode && BindPoseNode.subNodes) {
 
 			var PoseNode = BindPoseNode.subNodes.PoseNode;
 			var worldMatrices = new Map();

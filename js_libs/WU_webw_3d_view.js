@@ -183,7 +183,6 @@ class WU_webw_3d_view {
 
         scope.scene.remove(scope.pivot);
         scope.pivot.traverse(remover);
-
         scope.createPivot();
     }
 
@@ -199,18 +198,21 @@ class WU_webw_3d_view {
         };
 
         let fbxloader = new THREE.FBXLoader( manager );
-
         let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
-
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
         this.mixers.push( fbxobject.mixer );
 
-        let action = fbxobject.mixer.clipAction( fbxobject.animations[0] );
-        action.play();
+        if (fbxobject.animations.length>0) {
+            let action = fbxobject.mixer.clipAction(fbxobject.animations[0]);
+            action.play();
+        } else {
+            console.log("Your FBX does not have animation");
+        }
 
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
+        jQuery("#createModelScreenshotBtn").click();
     }
 
 

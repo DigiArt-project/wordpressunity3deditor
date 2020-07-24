@@ -222,7 +222,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
                                                            $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}
 
-
 	// Upload 3D files
 	if($asset_id != 0 || $asset_updatedConf == 1) {
 		if ($_POST['asset_sourceID']=='') {
@@ -242,7 +241,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		}
 	}
 
-
 	// Save parameters
 	if($assetCatTerm->slug == 'consumer') {
 		wpunity_create_asset_consumerExtra_frontend($asset_id);
@@ -257,8 +255,6 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         wpunity_create_asset_addVideo_frontend($asset_id);
     }
 
-	
-	
 	if($scene_id == 0) {
         echo '<script>alert("Asset created or edited successfully");</script>';
         
@@ -1342,15 +1338,15 @@ if($asset_id != null) {
         // For existing 3D models
         // 1 OBJ
         if (typeof path_url != "undefined")
-            loader_asset_exists(path_url, mtl_file_name, obj_file_name, null);
+            loader_asset_exists(path_url, mtl_file_name, obj_file_name, null, null);
 
         // 2 PDB
         if (typeof pdb_file_name != "undefined")
-            loader_asset_exists(null, null, null, pdb_file_name);
+            loader_asset_exists(null, null, null, pdb_file_name, null);
 
         // 3 FBX
         if (typeof path_url_fbx != "undefined")
-            loader_asset_exists(null, null, null, null, fbx_file_name);
+            loader_asset_exists(path_url_fbx, null, null, null, fbx_file_name);
         
         
         // Responsive Layout (text panel vs 3D model panel
@@ -1557,16 +1553,16 @@ if($asset_id != null) {
         
         
         
-        // UNIT TEST: Select artifact, Remove
-        setTimeout( function(){
-
-            jQuery("#category-select").click(); // Expand category
-            jQuery("#78").click(); // Select Artifact category
-            jQuery('#assetTitle')[0].value = 'a12'; // Set title
-            //jQuery("#fbxRadio-label").click(); // Set fbx type
-            jQuery("#fileUploadInput").click(); // Click browse files
-
-        },500);
+        // // UNIT TEST: Select artifact, Remove
+        // setTimeout( function(){
+        //
+        //     jQuery("#category-select").click(); // Expand category
+        //     jQuery("#78").click(); // Select Artifact category
+        //     jQuery('#assetTitle')[0].value = 'a12'; // Set title
+        //     jQuery("#fbxRadio-label").click(); // Set fbx type
+        //     jQuery("#fileUploadInput").click(); // Click browse files
+        //
+        // },500);
 
 
 

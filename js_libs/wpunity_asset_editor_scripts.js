@@ -96,6 +96,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                             break;
                         case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
                         case 'fbx':
+                            document.getElementById('fbxFileInput').value = dec.decode(fileContent);
                             FbxBuffer =  fileContent;
                             break;
                         case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
@@ -131,7 +132,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
  */
 function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
-    console.log("checkerCompleteReading by", whocalls)
+    //console.log("checkerCompleteReading by", whocalls)
 
     let objFileContent = document.getElementById('objFileInput').value;
     let mtlFileContent = document.getElementById('mtlFileInput').value;
@@ -200,10 +201,15 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
+
+
             if ( nTexturesLoaded < nJpg || nTexturesLoaded < nPng || nTexturesLoaded < nGif){
                 // Not all textures loaded yet
                 return;
             }
+
+            if ( nTexturesLoaded === 0 )
+                texturesStreams = '';
 
             wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
         }
@@ -217,7 +223,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename){
+function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename) {
 
 
     jQuery('#previewProgressSlider')[0].style.visibility = "visible";
@@ -226,7 +232,7 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
 
     if (wu_webw_3d_view.scene != null) {
         if (wu_webw_3d_view.renderer)
-             wu_webw_3d_view.clearAllAssets();
+            wu_webw_3d_view.clearAllAssets();
     }
 
     if (pdbFileContent) {
@@ -235,64 +241,132 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
     }
 
     //--------------- load all from url (in edit asset) --------------
-    if (pathUrl  && objFilename ) { // this means that 3D model exists for this asset
+    if (pathUrl) {
 
-        var manager = new THREE.LoadingManager();
-        var mtlLoader = new THREE.MTLLoader();
+        let manager = new THREE.LoadingManager();
 
-        //var mtl_url = "bfcff4ceba79910cfed496e0b19d2ac3_materialTurbine1.txt";
-        //var obj_file_name = "f74d834f96148080b5822a409a4299ff_objTurbine1.txt";
-        //var pathUrl = "http://127.0.0.1:8080/digiart-project_Jan17/wp-content/uploads/Models/";
+        if (objFilename) { // this means that 3D model exists for this asset
 
-        mtlLoader.setPath(pathUrl);
+            var mtlLoader = new THREE.MTLLoader();
 
-        mtlLoader.load(mtlFilename, function (materials) {
-            materials.preload();
+            mtlLoader.setPath(pathUrl);
 
-            var objLoader = new THREE.OBJLoader(manager);
-            objLoader.setMaterials(materials);
-            objLoader.setPath(pathUrl);
+            mtlLoader.load(mtlFilename, function (materials) {
+                materials.preload();
 
-            objLoader.load(objFilename, 'after',
-                // OnObjLoad
-                function (object) {
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials(materials);
+                objLoader.setPath(pathUrl);
 
-                    // Find bounding sphere
-                    var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll ( object) ;
+                objLoader.load(objFilename, 'after',
+                    // OnObjLoad
+                    function (object) {
 
-                    // translate object to the center
-                    object.traverse( function (object) {
-                        if (object instanceof THREE.Mesh) {
-                            object.geometry.translate(- sphere[0].x, - sphere[0].y, - sphere[0].z) ;
+                        // Find bounding sphere
+                        var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(object);
+
+                        // translate object to the center
+                        object.traverse(function (object) {
+                            if (object instanceof THREE.Mesh) {
+                                object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                            }
+                        });
+
+                        // Add to pivot
+                        wu_webw_3d_view.pivot.add(object);
+
+                        // Find new zoom
+                        var totalradius = sphere[1];
+                        wu_webw_3d_view.controls.minDistance = 0.001 * totalradius;
+                        wu_webw_3d_view.controls.maxDistance = 3 * totalradius;
+
+                        jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                    },
+                    //onObjProgressLoad
+                    function (xhr) {
+
+                        //console.log(xhr);
+                        document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
+                        if (xhr.lengthComputable) {
+
                         }
-                    });
+                    },
+                    //onObjErrorLoad
+                    function (xhr) {
+                        console.log("Error 351");
+                    }
+                );
+            });
+        } else if (fbxFilename){
 
-                    // Add to pivot
+
+            let loader = new THREE.FBXLoader();
+
+            // REM HERE better to implement it as stream
+            loader.load( pathUrl+fbxFilename, function( object ) {
+                // object.position.y += 0;
+                // object.scale = 0.5;
+
+                if (object.animations.length > 0) {
+                    object.mixer = new THREE.AnimationMixer(object);
+                    let mixers = [];
+                    mixers.push(object.mixer);
+                    let action = object.mixer.clipAction(object.animations[0]);
+                    action.play();
+                }
+
                     wu_webw_3d_view.pivot.add(object);
 
-                    // Find new zoom
-                    var totalradius = sphere[1];
-                    wu_webw_3d_view.controls.minDistance = 0.001*totalradius;
-                    wu_webw_3d_view.controls.maxDistance = 3*totalradius;
 
-                    jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
-                },
-                //onObjProgressLoad
+                // // Find bounding sphere
+                // var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(object);
+                //
+                // console.log(sphere);
+                //
+                // // translate object to the center
+                // object.traverse(function (object) {
+                //         if (object instanceof THREE.Mesh) {
+                //             object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                //         }
+                // });
+                //
+                //     console.log(object);
+                //
+                // // Add to pivot
+                // wu_webw_3d_view.pivot.add(object);
+                //
+                // // Find new zoom
+                // var totalradius = sphere[1];
+                // wu_webw_3d_view.controls.minDistance = 0.001 * totalradius;
+                // wu_webw_3d_view.controls.maxDistance = 3 * totalradius;
+
+                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
+
+            }, function (xhr) {
+
+                //console.log(xhr);
+                document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
+                if (xhr.lengthComputable) {
+
+                }
+            }, //onObjErrorLoad
                 function (xhr) {
-
-                    //console.log(xhr);
-                    document.getElementById( 'previewProgressLabel' ).innerHTML = Math.round(xhr.loaded / 1000 ) + "KB";
-                    if (xhr.lengthComputable) {
-
-                    }
-                },
-                //onObjErrorLoad
-                function (xhr) {
-                    console.log("Error 351");
+                    console.log(xhr, "Error 352");
                 }
             );
-        });
+
+
+        }
     }
+
+
+
+
+
+
+
+
 
 }
 

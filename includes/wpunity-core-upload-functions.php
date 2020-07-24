@@ -375,6 +375,9 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
 // Immitation of $_FILE through $_POST . This is for objs and mtls
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $parentGameSlug) {
 
+    $fp = fopen("output_fbx_upload.txt","w");
+    fwrite($fp, "1");
+    
     // Filters the image sizes automatically generated when uploading an image.
     add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     
@@ -385,15 +388,21 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $pa
     $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
     
     $hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
+    fwrite($fp, chr(13));
+    fwrite($fp, "2:".$hashed_filename);
     
     $image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
     //base64_decode(substr($textContent, strpos($textContent, ",")+1)));
-
+    fwrite($fp, chr(13));
+    fwrite($fp, "3:".print_r($image_upload,true));
+    
     // HANDLE UPLOADED FILE
     if( !function_exists( 'wp_handle_sideload' ) ) {
         require_once( ABSPATH . 'wp-admin/includes/file.php' );
     }
-
+    
+    
+    
     // Without that I'm getting a debug error!?
     if( !function_exists( 'wp_get_current_user' ) ) {
         require_once( ABSPATH . 'wp-includes/pluggable.php' );
@@ -407,10 +416,18 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $pa
         'size'     => filesize( $upload_path.$hashed_filename ),
     );
     
+    fwrite($fp, chr(13));
+    fwrite($fp, "4:".print_r($image_upload,true));
+    
     add_filter( 'upload_dir', 'wpunity_upload_filter');
     // upload file to server
     // @new use $file instead of $image_upload
     $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+    
+    fwrite($fp, chr(13));
+    fwrite($fp, "5:".print_r($file_return,true));
+    
+    // Remove filter
     remove_filter( 'upload_dir', 'wpunity_upload_filter' );
     
     $filename = $file_return['file'];
@@ -431,9 +448,16 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $pa
     
     $attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
     
+    fwrite($fp, chr(13));
+    fwrite($fp, "6:".print_r($attachment_id,true));
+    
+    
     require_once(ABSPATH . 'wp-admin/includes/image.php');
     $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
     wp_update_attachment_metadata( $attachment_id, $attachment_data );
+    
+    fwrite($fp, chr(13));
+    fwrite($fp, "7:".print_r($attachment_data,true));
     
     remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     
