@@ -41,6 +41,68 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
 }
 
 
+function file_reader_cortex(file, wu_webw_3d_view_local){
+
+    // Get the extension
+    let type = file.name.split('.').pop();
+
+
+
+    // set the reader
+    let reader = new FileReader();
+
+    switch (type) {
+        case 'pdb': nPdb = 1; reader.readAsText(file);        break;
+        case 'mtl': nMtl = 1; reader.readAsText(file);        break;
+        case 'obj': nObj = 1; reader.readAsArrayBuffer(file); break;
+        case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
+        case 'jpg': nJpg++;   reader.readAsDataURL(file);     break;
+        case 'png': nPng++;   reader.readAsDataURL(file);     break;
+        case 'gif': nGif++;   reader.readAsDataURL(file);     break;
+    }
+
+    // --- Read it ------------------------
+    reader.onload = (function(reader) {
+        return function() {
+
+            let fileContent = reader.result ? reader.result : '';
+
+            let dec = new TextDecoder();
+
+            switch (type) {
+                case 'mtl':
+                    // Replace quotes because they create a bug in input form
+                    document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
+                    break;
+                case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
+                case 'fbx':
+                    console.log(fileContent);
+                    document.getElementById('fbxFileInput').value = dec.decode(fileContent);
+
+                    FbxBuffer =  fileContent;
+                    break;
+                case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
+                case 'jpg':
+                case 'png':
+                case 'gif':
+                    jQuery('#3dAssetForm').append(
+                        '<input type="hidden" name="textureFileInput['+file.name+
+                        ']" id="textureFileInput" value="' + fileContent + '" />');
+                    break;
+            }
+
+            // Check if everything is loaded
+            if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif') {
+                checkerCompleteReading(wu_webw_3d_view_local, type);
+            }else if ( type==='pdb') {
+                wu_webw_3d_view_local.loadMolecule(content);
+            }
+
+        };
+    })(reader);
+
+}
+
 function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
     // PREVIEW Handler (not uploaded yet): Load from selected files
@@ -57,6 +119,8 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
         // Files are blobs
         let files = {... event.target.files};
 
+
+
         // Clear the previously loaded
         wpunity_clear_asset_files(wu_webw_3d_view_local);
 
@@ -65,58 +129,9 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
             let file = files[i];
 
-            // Get the extension
-            let type = file.name.split('.').pop();
+            console.log(file);
+            file_reader_cortex(file, wu_webw_3d_view_local);
 
-            // set the reader
-            let reader = new FileReader();
-
-            switch (type) {
-                case 'pdb': nPdb = 1; reader.readAsText(file);        break;
-                case 'mtl': nMtl = 1; reader.readAsText(file);        break;
-                case 'obj': nObj = 1; reader.readAsArrayBuffer(file); break;
-                case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
-                case 'jpg': nJpg++;   reader.readAsDataURL(file);     break;
-                case 'png': nPng++;   reader.readAsDataURL(file);     break;
-                case 'gif': nGif++;   reader.readAsDataURL(file);     break;
-            }
-
-            // --- Read it ------------------------
-            reader.onload = (function(reader) {
-                return function() {
-
-                    let fileContent = reader.result ? reader.result : '';
-
-                    let dec = new TextDecoder();
-
-                    switch (type) {
-                        case 'mtl':
-                            // Replace quotes because they create a bug in input form
-                            document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
-                            break;
-                        case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
-                        case 'fbx':
-                            document.getElementById('fbxFileInput').value = dec.decode(fileContent);
-                            FbxBuffer =  fileContent;
-                            break;
-                        case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
-                        case 'jpg':
-                        case 'png':
-                        case 'gif':
-                            jQuery('#3dAssetForm').append(
-                                '<input type="hidden" name="textureFileInput['+file.name+
-                                            ']" id="textureFileInput" value="' + fileContent + '" />');
-                            break;
-                    }
-
-                    // Check if everything is loaded
-                    if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif')
-                        checkerCompleteReading(wu_webw_3d_view_local, type);
-                    else if ( type==='pdb')
-                        canvas.loadMolecule(content);
-
-                };
-            })(reader);
         }
     };
     // End of event handler
@@ -136,6 +151,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
     let objFileContent = document.getElementById('objFileInput').value;
     let mtlFileContent = document.getElementById('mtlFileInput').value;
+
 
     if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') ){
 
@@ -198,6 +214,8 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                 }
             }
         } else if (nFbx === 1){
+
+
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
@@ -211,6 +229,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             if ( nTexturesLoaded === 0 )
                 texturesStreams = '';
 
+
             wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
         }
 
@@ -223,20 +242,20 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename) {
+function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename) {
 
 
     jQuery('#previewProgressSlider')[0].style.visibility = "visible";
 
     jQuery('#previewProgressSlider').show();// = "visible";
 
-    if (wu_webw_3d_view.scene != null) {
-        if (wu_webw_3d_view.renderer)
-            wu_webw_3d_view.clearAllAssets();
+    if (wu_webw_3d_view_local.scene != null) {
+        if (wu_webw_3d_view_local.renderer)
+            wu_webw_3d_view_local.clearAllAssets();
     }
 
     if (pdbFileContent) {
-        wu_webw_3d_view.loadMolecule(pdbFileContent);
+        wu_webw_3d_view_local.loadMolecule(pdbFileContent);
         return;
     }
 
@@ -263,7 +282,7 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
                     function (object) {
 
                         // Find bounding sphere
-                        var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(object);
+                        var sphere = wu_webw_3d_view_local.computeSceneBoundingSphereAll(object);
 
                         // translate object to the center
                         object.traverse(function (object) {
@@ -273,12 +292,12 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
                         });
 
                         // Add to pivot
-                        wu_webw_3d_view.pivot.add(object);
+                        wu_webw_3d_view_local.pivot.add(object);
 
                         // Find new zoom
                         var totalradius = sphere[1];
-                        wu_webw_3d_view.controls.minDistance = 0.001 * totalradius;
-                        wu_webw_3d_view.controls.maxDistance = 3 * totalradius;
+                        wu_webw_3d_view_local.controls.minDistance = 0.001 * totalradius;
+                        wu_webw_3d_view_local.controls.maxDistance = 3 * totalradius;
 
                         jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                     },
@@ -300,22 +319,48 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
         } else if (fbxFilename){
 
 
-            let loader = new THREE.FBXLoader();
+            let fbxFilename2 = fbxFilename.replace('.txt', '.fbx');
 
-            // REM HERE better to implement it as stream
-            loader.load( pathUrl+fbxFilename, function( object ) {
-                // object.position.y += 0;
-                // object.scale = 0.5;
+            var xhr = new XMLHttpRequest();
 
-                if (object.animations.length > 0) {
-                    object.mixer = new THREE.AnimationMixer(object);
-                    let mixers = [];
-                    mixers.push(object.mixer);
-                    let action = object.mixer.clipAction(object.animations[0]);
-                    action.play();
+            let finalurl = pathUrl+fbxFilename;
+            finalurl = finalurl.replace('http:','https:');
+
+            xhr.open('GET', finalurl, true);
+            xhr.responseType = 'text';
+
+            xhr.onload = function(e) {
+
+                if (this.status == 200) {
+
+                    // Replace escaped quotes \" with normal quotes "
+                    let file_get = this.response.replace(/\\"/g, "\"");
+
+                    let file = new File([file_get], fbxFilename2);
+
+                    file_reader_cortex(file, wu_webw_3d_view_local);
                 }
+            };
+            xhr.send();
 
-                    wu_webw_3d_view.pivot.add(object);
+
+
+
+
+            // // REM HERE better to implement it as stream
+            // loader.load( pathUrl+fbxFilename, function( object ) {
+            //     // object.position.y += 0;
+            //     // object.scale = 0.5;
+            //
+            //     if (object.animations.length > 0) {
+            //         object.mixer = new THREE.AnimationMixer(object);
+            //         let mixers = [];
+            //         mixers.push(object.mixer);
+            //         let action = object.mixer.clipAction(object.animations[0]);
+            //         action.play();
+            //     }
+            //
+            //         wu_webw_3d_view.pivot.add(object);
 
 
                 // // Find bounding sphere
@@ -340,21 +385,21 @@ function loader_asset_exists(pathUrl, mtlFilename, objFilename, pdbFileContent, 
                 // wu_webw_3d_view.controls.minDistance = 0.001 * totalradius;
                 // wu_webw_3d_view.controls.maxDistance = 3 * totalradius;
 
-                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
 
-            }, function (xhr) {
-
-                //console.log(xhr);
-                document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
-                if (xhr.lengthComputable) {
-
-                }
-            }, //onObjErrorLoad
-                function (xhr) {
-                    console.log(xhr, "Error 352");
-                }
-            );
+            // }, function (xhr) {
+            //
+            //     //console.log(xhr);
+            //     document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
+            //     if (xhr.lengthComputable) {
+            //
+            //     }
+            // }, //onObjErrorLoad
+            //     function (xhr) {
+            //         console.log(xhr, "Error 352");
+            //     }
+            // );
 
 
         }

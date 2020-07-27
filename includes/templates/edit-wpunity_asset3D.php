@@ -1338,15 +1338,15 @@ if($asset_id != null) {
         // For existing 3D models
         // 1 OBJ
         if (typeof path_url != "undefined")
-            loader_asset_exists(path_url, mtl_file_name, obj_file_name, null, null);
+            loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null);
 
         // 2 PDB
         if (typeof pdb_file_name != "undefined")
-            loader_asset_exists(null, null, null, pdb_file_name, null);
+            loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null);
 
         // 3 FBX
         if (typeof path_url_fbx != "undefined")
-            loader_asset_exists(path_url_fbx, null, null, null, fbx_file_name);
+            loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name);
         
         
         // Responsive Layout (text panel vs 3D model panel
