@@ -170,24 +170,25 @@
 			var connections = parseConnections( FBXTree );
 			var images = parseImages( FBXTree );
 
+			for (let i = 0 ; i<texturesStreams.length; i++){
+
+				// Todo: check for pngs and gifs
+				texturesStreams[i].value =
+					texturesStreams[i].value.replace('data:application/octet-stream;','data:image/jpeg;');
+
+     		}
+
 			var textures = parseTexturesStream( FBXTree,
 								new THREE.TextureLoader( this.manager ).setPath( '' ),
 								images,
 								connections, texturesStreams );
-
-
-
-
 
 			var materials = parseMaterials( FBXTree, textures, connections );
 			var deformers = parseDeformers( FBXTree, connections );
 			var geometryMap = parseGeometries( FBXTree, connections, deformers );
 			var sceneGraph = parseScene( FBXTree, connections, deformers, geometryMap, materials );
 
-
-
 			return sceneGraph;
-
 		}
 
 

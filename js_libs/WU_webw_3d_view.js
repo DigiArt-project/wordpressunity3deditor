@@ -198,7 +198,9 @@ class WU_webw_3d_view {
         };
 
         let fbxloader = new THREE.FBXLoader( manager );
+
         let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
+
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
         this.mixers.push( fbxobject.mixer );
 
@@ -212,7 +214,12 @@ class WU_webw_3d_view {
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
-        jQuery("#createModelScreenshotBtn").click();
+        setTimeout(function(){
+            jQuery("#button_qrcode").click(); // close qr code
+            jQuery("#createModelScreenshotBtn").click();
+        },1000);
+
+
     }
 
 
@@ -490,7 +497,11 @@ class WU_webw_3d_view {
             scope.zoomer();
 
             // Auto create screenshot;
-            jQuery("#createModelScreenshotBtn").click();
+            setTimeout(function(){
+                jQuery("#button_qrcode").click(); // close qr code
+                jQuery("#createModelScreenshotBtn").click();
+            },1000);
+
         };
         this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
         this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);

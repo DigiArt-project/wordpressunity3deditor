@@ -317,6 +317,36 @@ if($asset_id != null) {
     
     
     if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
+        
+        
+        // Get texture attachments of post
+        $args = array(
+            'posts_per_page' => 100,
+            'order'          => 'DESC',
+            'post_mime_type' => 'image',
+            'post_parent'    => $asset_id,
+            'post_type'      => 'attachment'
+        );
+    
+        
+        $attachments_array =  get_children( $args,OBJECT );  //returns Array ( [$image_ID].
+        
+        // Add texture urls to a string separated by |
+        $textures_fbx_string_connected = '';
+        foreach ($attachments_array as $k){
+            $url = $k->guid;
+            
+            // ignore screenshot attachment
+            if (!strpos($url, 'texture'))
+                continue;
+            
+            $textures_fbx_string_connected .= $url.'|';
+        }
+    
+        // remove the last separator
+        $textures_fbx_string_connected = trim($textures_fbx_string_connected, "|");
+        
+        
         $fbxpost = get_post($assetpostMeta['wpunity_asset3d_fbx'][0]);
         $fbx_file_name = basename($fbxpost->guid);
         $path_url_fbx = pathinfo($fbxpost->guid)['dirname'];
@@ -324,6 +354,7 @@ if($asset_id != null) {
         echo '<script>';
         echo 'var fbx_file_name="'.$fbx_file_name.'";';
         echo 'var path_url_fbx="'.$path_url_fbx . '/'    .'";';
+        echo 'var textures_fbx_string_connected="'.$textures_fbx_string_connected.'";';
         echo '</script>';
     }
     
@@ -1276,6 +1307,9 @@ if($asset_id != null) {
         var nPng = 0;
         var nPdb = 0;
         var nGif = 0;
+
+        
+        
         
         var FbxBuffer = '';
         
@@ -1299,8 +1333,10 @@ if($asset_id != null) {
         // Main 3D canvas handler
         var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color );
         
-        wpunity_reset_panels(wu_webw_3d_view);
+        wpunity_reset_panels(wu_webw_3d_view, "initial script");
 
+       
+        
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
         
         
@@ -1465,7 +1501,7 @@ if($asset_id != null) {
                 
                 wu_webw_3d_view.resizeDisplayGL();
 
-                wpunity_reset_panels(wu_webw_3d_view);
+                //wpunity_reset_panels(wu_webw_3d_view, "loadlayout");
 
                 var cat;
                 var descText = document.getElementById('categoryDescription');
@@ -1474,8 +1510,6 @@ if($asset_id != null) {
                     descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
                     cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
-
-                    
                 } else {
                     descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
                     cat = jQuery("#currently-selected").attr("data-cat-slug");
@@ -1552,7 +1586,7 @@ if($asset_id != null) {
         jQuery(".js no-svg").css("margin-top:0px");
         
         
-        
+        //
         // // UNIT TEST: Select artifact, Remove
         // setTimeout( function(){
         //

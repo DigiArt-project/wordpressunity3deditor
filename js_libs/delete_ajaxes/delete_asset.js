@@ -34,13 +34,13 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
             // remove asset from scene (if we are at scene editor
             if (typeof envir != "undefined") {
                 // Remove objects from scene
-                var i;
-                var names_to_remove = [];
-                for (i = 0; i < envir.scene.children.length; i++)
+
+                let names_to_remove = [];
+                for (let i = 0; i < envir.scene.children.length; i++)
                     if (envir.scene.children[i].assetid == "" + res + "")
                         names_to_remove.push(envir.scene.children[i].name);
 
-                for (i = 0; i < names_to_remove.length; i++)
+                for (let i = 0; i < names_to_remove.length; i++)
                     envir.scene.remove(envir.scene.getObjectByName(names_to_remove[i]));
 
                 jQuery("#deleteAssetProgressBar-" + asset_id).hide();
@@ -48,10 +48,7 @@ function wpunity_deleteAssetAjax(asset_id, game_slug, isCloned) {
                 jQuery("#delete-dialog").hide();
 
                 jQuery("#asset-"+asset_id).fadeOut(300, function() {
-
                     jQuery("#asset-"+asset_id).remove();
-
-
                 });
             } else {
                 // remove the respective tile from the Project editor

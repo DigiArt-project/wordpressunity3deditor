@@ -445,6 +445,15 @@ function wpunity_delete_asset3d_frontend_callback(){
         
         // Delete attachment
         wp_delete_attachment($mtlID, true); // True : Not go to trash
+    
+        // ------- FBX --------
+        $fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx', true); // True : single value
+    
+        // Delete the file from the system
+        wp_delete_file($containerFolder.basename(get_attached_file($fbxID)));
+    
+        // Delete attachment
+        wp_delete_attachment($fbxID, true); // True : Not go to trash
 
         // ---------- OBJ -------
         $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true);

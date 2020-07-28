@@ -141,11 +141,12 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         }
     }
     
-    fwrite($ff, chr(13));
-    fwrite($ff, "2:".$_POST['fbxFileInput']);
     
-    // FBX
-    $fbx_content = $_POST['fbxFileInput'];
+    
+    $fbx_content = stripslashes($_POST['fbxFileInput']);
+    fwrite($ff, chr(13));
+    
+    fwrite($ff, "2:".$fbx_content);
     if ($fbx_content !=null ) {
 
             // 1. Upload FBX file

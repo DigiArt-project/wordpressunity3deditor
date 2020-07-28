@@ -8,6 +8,8 @@
 
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
+
+
     if (wu_webw_3d_view.renderer) {
         wu_webw_3d_view.clearAllAssets();
     }
@@ -46,8 +48,6 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
     // Get the extension
     let type = file.name.split('.').pop();
 
-
-
     // set the reader
     let reader = new FileReader();
 
@@ -56,9 +56,9 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
         case 'mtl': nMtl = 1; reader.readAsText(file);        break;
         case 'obj': nObj = 1; reader.readAsArrayBuffer(file); break;
         case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
-        case 'jpg': nJpg++;   reader.readAsDataURL(file);     break;
-        case 'png': nPng++;   reader.readAsDataURL(file);     break;
-        case 'gif': nGif++;   reader.readAsDataURL(file);     break;
+        case 'jpg': reader.readAsDataURL(file);     break;
+        case 'png': reader.readAsDataURL(file);     break;
+        case 'gif': reader.readAsDataURL(file);     break;
     }
 
     // --- Read it ------------------------
@@ -76,8 +76,9 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                     break;
                 case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
                 case 'fbx':
-                    console.log(fileContent);
+
                     document.getElementById('fbxFileInput').value = dec.decode(fileContent);
+
 
                     FbxBuffer =  fileContent;
                     break;
@@ -93,11 +94,10 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
 
             // Check if everything is loaded
             if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif') {
-                checkerCompleteReading(wu_webw_3d_view_local, type);
+                checkerCompleteReading( wu_webw_3d_view_local, type );
             }else if ( type==='pdb') {
                 wu_webw_3d_view_local.loadMolecule(content);
             }
-
         };
     })(reader);
 
@@ -119,19 +119,24 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
         // Files are blobs
         let files = {... event.target.files};
 
-
-
-        // Clear the previously loaded
+        // Clear the previously loaded and the files fields, so do not put be before files =
         wpunity_clear_asset_files(wu_webw_3d_view_local);
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
+            if (files[i].name.includes('jpg')){
+                nJpg ++;
+            } else if (files[i].name.includes('png')){
+                nPng ++;
+            } else if (files[i].name.includes('gif')){
+                nGif ++;
+            }
+        }
 
-            let file = files[i];
 
-            console.log(file);
-            file_reader_cortex(file, wu_webw_3d_view_local);
-
+        //  Read each file and put the string content in an input dom
+        for ( let i = 0; i < Object.keys(files).length; i++) {
+            file_reader_cortex(files[i], wu_webw_3d_view_local);
         }
     };
     // End of event handler
@@ -146,6 +151,8 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
  * @param wu_webw_3d_view_local
  */
 function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
+
+
 
     //console.log("checkerCompleteReading by", whocalls)
 
@@ -215,21 +222,19 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             }
         } else if (nFbx === 1){
 
-
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
 
-
             if ( nTexturesLoaded < nJpg || nTexturesLoaded < nPng || nTexturesLoaded < nGif){
-                // Not all textures loaded yet
+                console.log("Not all textures loaded yet");
                 return;
             }
 
             if ( nTexturesLoaded === 0 )
                 texturesStreams = '';
 
-
+            console.log("Ignite reading fbx");
             wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
         }
 
@@ -316,102 +321,67 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
                     }
                 );
             });
+
         } else if (fbxFilename){
 
+            // split texture string into each texture
+            let url_files = textures_fbx_string_connected.split('|');
 
-            let fbxFilename2 = fbxFilename.replace('.txt', '.fbx');
+            if (url_files[0].includes('.jpg')){
+                nJpg = url_files.length;
+            } else if (url_files[0].includes('.png')){
+                nPng = url_files.length;
+            } else if (url_files[0].includes('.gif')){
+                nGif = url_files.length;
+            }
 
-            var xhr = new XMLHttpRequest();
+            // Add the fbx also
+            url_files.push(pathUrl+fbxFilename);
 
-            let finalurl = pathUrl+fbxFilename;
-            finalurl = finalurl.replace('http:','https:');
+            for (let i=0; i < url_files.length; i++) {
 
-            xhr.open('GET', finalurl, true);
-            xhr.responseType = 'text';
+                let xhr = new XMLHttpRequest();
+                let basename = '';
 
-            xhr.onload = function(e) {
+                let url = url_files[i].replace('http:', 'https:');
 
-                if (this.status == 200) {
+                if( url.includes(".txt") ) {
 
-                    // Replace escaped quotes \" with normal quotes "
-                    let file_get = this.response.replace(/\\"/g, "\"");
+                    // We want the basename and the extension for naming the file object
+                    basename = url.replace('.txt', '.fbx');
+                    basename = new String(basename).substring(basename.lastIndexOf('/') + 1);
 
-                    let file = new File([file_get], fbxFilename2);
+                    // Set xhr to get the url as text
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'text';
 
-                    file_reader_cortex(file, wu_webw_3d_view_local);
+                } else if (url.includes("texture") ) {
+
+                    basename = new String(url).substring(url.lastIndexOf('/') + 1);
+
+                    let file_extension = basename.split('.').pop();
+
+                    let i_first_underscore = basename.indexOf('_');
+                    let i_last_underscore = basename.lastIndexOf('_');
+                    basename = basename.substring(i_first_underscore+1, i_last_underscore);
+                    basename = basename.replace('texture_','');
+
+                    basename = basename  + "." + file_extension;
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'blob';
                 }
-            };
-            xhr.send();
 
+                xhr.onload = function (e) {
+                    if (this.status == 200) {
+                        let file = new File([this.response], basename);
+                        file_reader_cortex(file, wu_webw_3d_view_local);
+                    }
+                };
 
-
-
-
-            // // REM HERE better to implement it as stream
-            // loader.load( pathUrl+fbxFilename, function( object ) {
-            //     // object.position.y += 0;
-            //     // object.scale = 0.5;
-            //
-            //     if (object.animations.length > 0) {
-            //         object.mixer = new THREE.AnimationMixer(object);
-            //         let mixers = [];
-            //         mixers.push(object.mixer);
-            //         let action = object.mixer.clipAction(object.animations[0]);
-            //         action.play();
-            //     }
-            //
-            //         wu_webw_3d_view.pivot.add(object);
-
-
-                // // Find bounding sphere
-                // var sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(object);
-                //
-                // console.log(sphere);
-                //
-                // // translate object to the center
-                // object.traverse(function (object) {
-                //         if (object instanceof THREE.Mesh) {
-                //             object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
-                //         }
-                // });
-                //
-                //     console.log(object);
-                //
-                // // Add to pivot
-                // wu_webw_3d_view.pivot.add(object);
-                //
-                // // Find new zoom
-                // var totalradius = sphere[1];
-                // wu_webw_3d_view.controls.minDistance = 0.001 * totalradius;
-                // wu_webw_3d_view.controls.maxDistance = 3 * totalradius;
-
-                //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
-
-
-            // }, function (xhr) {
-            //
-            //     //console.log(xhr);
-            //     document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
-            //     if (xhr.lengthComputable) {
-            //
-            //     }
-            // }, //onObjErrorLoad
-            //     function (xhr) {
-            //         console.log(xhr, "Error 352");
-            //     }
-            // );
-
-
+                xhr.send();
+            }
         }
     }
-
-
-
-
-
-
-
-
 
 }
 
@@ -546,7 +516,7 @@ function loadFileInputLabel(objectType) {
         }
 }
 
-function wpunity_reset_panels(wu_webw_3d_view) {
+function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
 
     // Clear all
     wpunity_clear_asset_files(wu_webw_3d_view);

@@ -372,7 +372,7 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     return false;
 }
 
-// Immitation of $_FILE through $_POST . This is for objs and mtls
+// Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $parentGameSlug) {
 
     $fp = fopen("output_fbx_upload.txt","w");
@@ -388,8 +388,10 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $pa
     $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
     
     $hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
-    fwrite($fp, chr(13));
-    fwrite($fp, "2:".$hashed_filename);
+    fwrite($fp, "2:".chr(13));
+    fwrite($fp, $textContent);
+    
+    
     
     $image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
     //base64_decode(substr($textContent, strpos($textContent, ",")+1)));
