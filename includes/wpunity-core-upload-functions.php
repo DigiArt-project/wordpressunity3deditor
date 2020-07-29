@@ -372,94 +372,115 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     return false;
 }
 
-// Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
-function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $parentGameSlug) {
 
-    $fp = fopen("output_fbx_upload.txt","w");
-    fwrite($fp, "1");
+
+
+
+
+
+
+
+// Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
+function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $TheFiles, $index_file) {
     
-    // Filters the image sizes automatically generated when uploading an image.
+    $DS = DIRECTORY_SEPARATOR;
+    
+    $fp = fopen("output_fbx_upload.txt","w");
+    
+    
+    // ?? Filters the image sizes automatically generated when uploading an image.
     add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     
     require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
+    // --------------  1. Upload file ---------------
+    
     // Upload dir
     $upload_dir = wp_upload_dir();
-    $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+    
+    fwrite($fp, "1".print_r($upload_dir, true));
+    
+    $upload_path = str_replace('/',$DS,$upload_dir['basedir']) . $DS .'Models'.$DS;
     
     $hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
-    fwrite($fp, "2:".chr(13));
-    fwrite($fp, $textContent);
-    
-    
-    
-    $image_upload = file_put_contents($upload_path.$hashed_filename, $textContent);
-    //base64_decode(substr($textContent, strpos($textContent, ",")+1)));
-    fwrite($fp, chr(13));
-    fwrite($fp, "3:".print_r($image_upload,true));
-    
-    // HANDLE UPLOADED FILE
-    if( !function_exists( 'wp_handle_sideload' ) ) {
-        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+    if ($textContent) {
+        file_put_contents($upload_path . $hashed_filename, $textContent);
+        $type = 'text/plain';
+    } else {
+        move_uploaded_file(
+            $TheFiles['multipleFilesInput']['tmp_name'][$index_file],
+                    $upload_path . $hashed_filename);
+        $type = 'application/octet-stream';
     }
+
+    //----------------- QUESTIONABLE CODE --------------------
     
+//    // HANDLE UPLOADED FILE
+//    if( !function_exists( 'wp_handle_sideload' ) ) {
+//        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+//    }
+//
+//    // Without that I'm getting a debug error!?
+//    if( !function_exists( 'wp_get_current_user' ) ) {
+//        require_once( ABSPATH . 'wp-includes/pluggable.php' );
+//    }
+//
+//
+//
+//    $file = array (
+//        'name'     => $hashed_filename,
+//        'type'     => $type,
+//        'tmp_name' => $upload_path.$hashed_filename,
+//        'error'    => 0,
+//        'size'     => filesize( $upload_path.$hashed_filename ),
+//    );
+//
+////    fwrite($fp, chr(13));
+////    fwrite($fp, "4:".print_r($image_upload,true));
+//
+//    add_filter( 'upload_dir', 'wpunity_upload_filter');
+//    // upload file to server
+//    // @new use $file instead of $image_upload
+//    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+//
+////    fwrite($fp, chr(13));
+////    fwrite($fp, "5:".print_r($file_return,true));
+//
+//    // Remove filter
+//    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
+//
+//    $filename = $file_return['file'];
     
+    //------------------- 2 Add to SQL as attachment ----------------------------
     
-    // Without that I'm getting a debug error!?
-    if( !function_exists( 'wp_get_current_user' ) ) {
-        require_once( ABSPATH . 'wp-includes/pluggable.php' );
-    }
-    
-    $file = array (
-        'name'     => $hashed_filename,
-        'type'     => 'text/plain',
-        'tmp_name' => $upload_path.$hashed_filename,
-        'error'    => 0,
-        'size'     => filesize( $upload_path.$hashed_filename ),
-    );
-    
-    fwrite($fp, chr(13));
-    fwrite($fp, "4:".print_r($image_upload,true));
-    
-    add_filter( 'upload_dir', 'wpunity_upload_filter');
-    // upload file to server
-    // @new use $file instead of $image_upload
-    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
-    
-    fwrite($fp, chr(13));
-    fwrite($fp, "5:".print_r($file_return,true));
-    
-    // Remove filter
-    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
-    
-    $filename = $file_return['file'];
-    
-    $upload = wp_upload_dir();
-    $upload_dir = $upload['basedir'];
-    $upload_dir .= "/" . $parentGameSlug;
-    $upload_dir .= "/" . 'Models';
-    $upload_dir = str_replace('\\','/',$upload_dir);
+    $file_url = $upload_dir['baseurl'].'/Models/'.$hashed_filename;
     
     $attachment = array(
-        'post_mime_type' => $file_return['type'],
-        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+        'post_mime_type' => $type,
+        'post_title' =>
+            preg_replace( '/\.[^.]+$/', '', $hashed_filename) ,
         'post_content' => '',
         'post_status' => 'inherit',
-        'guid' => $file_return['url']
+        'guid' => $file_url      //$file_return['url']
     );
     
-    $attachment_id = wp_insert_attachment( $attachment, $file_return['url'], $parent_post_id );
+    $attachment_id = wp_insert_attachment( $attachment, $file_url, $parent_post_id );
     
-    fwrite($fp, chr(13));
-    fwrite($fp, "6:".print_r($attachment_id,true));
+//    fwrite($fp, chr(13));
+//    fwrite($fp, "6:".print_r($attachment_id,true));
     
     
-    require_once(ABSPATH . 'wp-admin/includes/image.php');
-    $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+    //require_once(ABSPATH . 'wp-admin/includes/image.php');
+    
+    
+    // ----------------- 3. Add Attachment metadata to SQL --------------------------
+    $attachment_data = wp_generate_attachment_metadata( $attachment_id, $hashed_filename );
     wp_update_attachment_metadata( $attachment_id, $attachment_data );
     
-    fwrite($fp, chr(13));
-    fwrite($fp, "7:".print_r($attachment_data,true));
+//    fwrite($fp, chr(13));
+//    fwrite($fp, "7:".print_r($attachment_data,true));
+    fclose($fp);
     
     remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     

@@ -1259,14 +1259,14 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 		$obj_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/Site1/site1.obj");
 	}
 
-	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, $gameSlug);
+	$mtlFile_id = wpunity_upload_AssetText($mtl_content, 'material'.$assetTitleForm, $asset_newID, null, null);
 	$mtlFile_filename = basename(get_attached_file($mtlFile_id));
 
 	// OBJ
 	$mtlFile_filename_notxt = substr( $mtlFile_filename, 0, -4 );
 	$mtlFile_filename_withMTLext = $mtlFile_filename_notxt . '.mtl';
 	$obj_content = preg_replace("/.*\b" . 'mtllib' . "\b.*\n/ui", "mtllib " . $mtlFile_filename_withMTLext . "\n", $obj_content);
-	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, $gameSlug);
+	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, null, null);
 
 	if($has_image){
 		$attachment_id = wpunity_upload_img_vid( $image_content, $asset_newID);

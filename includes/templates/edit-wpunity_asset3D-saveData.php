@@ -110,7 +110,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
                     'material' .                 // it should have the keyword material in finale basename
                             $assetTitleForm,            // It should have also the title of Asset
                             $asset_newID,               // Asset id
-                            $gameSlug                   // Game slug
+                            null, null
             );
             
             // 2. Add id of mtl as post meta on asset
@@ -133,7 +133,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             $objFile_id = wpunity_upload_AssetText($obj_content, // the OBJ content
                                            'obj' .$assetTitleForm, // it should have the obj and title as name
                                                   $asset_newID,
-                                                  $gameSlug
+                                                  null, null
                                                 );
 
             // 6. Add id of obj as post meta on asset
@@ -144,40 +144,55 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
     
     $fbx_content = stripslashes($_POST['fbxFileInput']);
-    
-    $fbx_content2 = $TheFiles;
-    
-//    $info = pathinfo($fbx_content2['name']);
-//    $ext = $info['extension']; // get the extension of the file
-//    $newname = "new_________name.".$ext;
-    
-    
-    // REM: HERE : Achieved to upload however how can I set from selector ?
-//    move_uploaded_file( $fbx_content2['tmp_name'], "c:/xampp7/htdocs/wordpress/cccccccccc.fbx");
-    
-    
-    fwrite($ff, chr(13));
-    
-    fwrite($ff, "22:".print_r($fbx_content2, true));
-    
-    if ($fbx_content !=null ) {
 
-            // 1. Upload FBX file
-            $fbxFile_id = wpunity_upload_AssetText($fbx_content, // content
-                                            'fbx'.$assetTitleForm, // asset title
-                                                    $asset_newID,
-                                                    $gameSlug
-                                                    );
+    
+    
+    
+    
+    $nFiles = count($_FILES['multipleFilesInput']['name']);
+    
+    $index_file_fbx = -1;
+    for ( $i = 0 ; $i < $nFiles; $i ++){
+       if ( strpos($_FILES['multipleFilesInput']['name'][$i],'.fbx')>0 ){
+           $index_file_fbx = $i;
+        }
+   }
+    
+    
+    
+    
 
-            // 2. Set value of attachment IDs at custom fields
-            update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
+
+
+
+    
+    if (strlen($fbx_content) > 50 ) { // Text   // 20 is the Kaydara header for fbx binary. 50 to be sure.
+    
+        // 1. Upload FBX file as TEXT
+        $fbxFile_id = wpunity_upload_AssetText($fbx_content, // content
+            'fbx'.$assetTitleForm, // asset title
+            $asset_newID,
+            null, null);
+    
+        // 2. Set value of attachment IDs at custom fields
+        update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
         
+    } else {
+    
+        // 1. Upload FBX file as BINARY
+        $fbxFile_id = wpunity_upload_AssetText(null, // content
+            'fbx'.$assetTitleForm, // asset title
+            $asset_newID,
+            $_FILES, $index_file_fbx);
+    
+        // 2. Set value of attachment IDs at custom fields
+        update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
     }
     
     // PDB upload and add id of uploaded file to postmeta wpunity_asset3d_pdb of asset
     if ($_POST['pdbFileInput']!=null){
         if (strlen($_POST['pdbFileInput'])>0) {
-            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'material' . $assetTitleForm, $asset_newID, $gameSlug);
+            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'material' . $assetTitleForm, $asset_newID, null, null);
             update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
         }
     }

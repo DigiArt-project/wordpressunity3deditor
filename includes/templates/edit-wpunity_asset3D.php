@@ -1140,7 +1140,7 @@ if($asset_id != null) {
 
                             
                                 <input id="fileUploadInput"
-                                       class="FullWidth" type="file" name="multipleFilesInput" value=""
+                                       class="FullWidth" type="file" name="multipleFilesInput[]" value=""
                                        style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                        multiple
                                        accept=".obj,.mtl,.jpg,.png,.fbx"/>
