@@ -81,6 +81,10 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
 
 
                     FbxBuffer =  fileContent;
+
+
+                    //jQuery("#fbxFileInputbinary")[0].src = FbxBuffer;
+
                     break;
                 case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                 case 'jpg':
@@ -120,7 +124,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
         let files = {... event.target.files};
 
         // Clear the previously loaded and the files fields, so do not put be before files =
-        wpunity_clear_asset_files(wu_webw_3d_view_local);
+        //wpunity_clear_asset_files(wu_webw_3d_view_local);
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {

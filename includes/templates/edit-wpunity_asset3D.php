@@ -116,7 +116,7 @@ $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
 $isPreviewMode = isset($_GET['preview']);
 
-
+$curr_font = "Arial";
 $isOwner = $current_user->ID == get_post_field ('post_author', $asset_id);
 
 // New asset
@@ -169,6 +169,8 @@ $scene_data = wpunity_getFirstSceneID_byProjectID($project_id,$game_category);//
 
 $edit_scene_page_id = $editscenePage[0]->ID;
 
+$path_url = wp_upload_dir()['baseurl'].'/Models/';
+
 
 // GoBack link
 $goBackToLink = '';
@@ -190,6 +192,11 @@ else {
 // Submit Handler
 //=============================================
 if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+    
+    $fp = fopen("output_check_files.txt","w");
+    fwrite($fp, print_r($_FILES, true));
+    fclose($fp);
+    
     
     include 'edit-wpunity_asset3D_languages_support1.php';
     
@@ -228,7 +235,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			
 		    // NoCloning
             // Upload files from POST
-			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug);
+			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug, $_FILES);
 
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
@@ -289,6 +296,7 @@ if($asset_id != null) {
     
     // Font type for text
     $fonts = $assetpostMeta['wpunity_asset3d_fonts'][0];
+    
     $curr_font = str_replace("+", " ", $fonts);
     
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
@@ -1112,7 +1120,7 @@ if($asset_id != null) {
                                          ' data-mtl-file="'. basename( get_attached_file( $mtlID ) ) .'"'.
                                          ' data-obj-file="'. basename( get_attached_file( $objID ) ) .'"'.
                                          ' data-pdb-content="'. $pdb_sample_file_contents  .'"'.
-                                         ' data-path-url="'. pathinfo(wp_get_attachment_url($mtlID))['dirname'] .'/"'.
+                                         ' data-path-url="'. $path_url .'/"'. // pathinfo(wp_get_attachment_url($mtlID))['dirname']
                                          ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile, this.dataset.pdbContent);'.
                                          'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
                                          '"/>';
@@ -1134,7 +1142,8 @@ if($asset_id != null) {
                                 <input id="fileUploadInput"
                                        class="FullWidth" type="file" name="multipleFilesInput" value=""
                                        style="display: <?php echo $isUserloggedIn?'':'none';?>"
-                                       multiple accept=".obj,.mtl,.jpg,.png,.fbx"/>
+                                       multiple
+                                       accept=".obj,.mtl,.jpg,.png,.fbx"/>
 
                                 <script>
                                     // Handler for radio buttons
@@ -1153,7 +1162,9 @@ if($asset_id != null) {
                             <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
 
-                            
+<!--                            <input type="file" name="fbxFileInputbinary" value="" id="fbxFileInputbinary" accept="application/octet-stream">-->
+
+                        
                         </div>
 
                         
@@ -1213,6 +1224,9 @@ if($asset_id != null) {
             <?php
                 $cat_ipr_terms = get_terms('wpunity_asset3d_ipr_cat', array('get' => 'all'));
                 $saved_ipr_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_ipr_cat');
+                
+                
+                
             ?>
     
             <!-- CATEGORY IPR -->
@@ -1222,10 +1236,16 @@ if($asset_id != null) {
                 <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
                     <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
                 
-                    <?php if($asset_id == null) { ?>
+                    <?php if($asset_id == null || count($saved_ipr_term)===0 ) { ?>
                         <span id="currently-ipr-selected" class="mdc-select__selected-text mdc-typography--subheading2">No IPR category selected</span>
                     <?php } else { ?>
-                        <span data-cat-ipr-desc="<?php echo $saved_ipr_term[0]->description; ?>" data-cat-ipr-slug="<?php echo $saved_ipr_term[0]->slug; ?>" data-cat-ipr-id="<?php echo $saved_ipr_term[0]->term_ipr_id; ?>" id="currently-ipr-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_ipr_term[0]->name; ?></span>
+                        <span
+                                data-cat-ipr-desc="<?php echo $saved_ipr_term[0]->description; ?>"
+                                data-cat-ipr-slug="<?php echo $saved_ipr_term[0]->slug; ?>"
+                                data-cat-ipr-id="<?php echo $saved_ipr_term[0]->term_ipr_id; ?>"
+                                id="currently-ipr-selected"
+                                class="mdc-select__selected-text mdc-typography--subheading2">
+                            <?php echo $saved_ipr_term[0]->name; ?></span>
                     <?php } ?>
 
            

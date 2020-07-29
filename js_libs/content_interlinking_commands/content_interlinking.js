@@ -539,14 +539,16 @@ function wpunity_periodically_update_conf_log() {
         },
         success : function(response) {
 
-            var json_content = jQuery.parseJSON(response);
-
             var arrPhones = jQuery('[id^=phonering-]');
 
             // Deactivate all
             for (var i=0; i < arrPhones.length; i++)
                 arrPhones[i].style.display = "none";
 
+            if(response==0)
+                return;
+
+            var json_content = jQuery.parseJSON(response);
 
             var rooms_rings = json_content[2];
 
@@ -560,15 +562,11 @@ function wpunity_periodically_update_conf_log() {
                     document.getElementById("phonering-" + rooms_rings[i].trim()).style.display = "block";
             }
 
-
             if (document.getElementById('ConfRoomReport')){
                 document.getElementById('ConfRoomReport').innerHTML= '<table><tbody>'+json_content[0]+'</table></tbody>';
             }
         }
-
         ,
-
-
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR");
             console.log(thrownError);

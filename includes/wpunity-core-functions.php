@@ -1746,7 +1746,9 @@ function wpunity_update_expert_log_callback()
 {
     // reset
     //unlink("wp-admin/confroom_log.txt");
-
+    if (!file_exists("confroom_log.txt"))
+        return;
+    
     $file = file("confroom_log.txt");
     
     $file = str_replace("\n", " ", $file);

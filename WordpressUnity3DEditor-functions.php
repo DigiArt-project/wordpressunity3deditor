@@ -269,7 +269,8 @@ function my_myme_types($mime_types){
 	$mime_types['mtl'] = 'text/plain';
 	$mime_types['mat'] = 'text/plain';
 	$mime_types['pdb'] = 'text/plain';
-	$mime_types['fbx'] = 'text/plain';
+//	$mime_types['fbx'] = 'text/plain';
+	$mime_types['fbx'] = 'application/octet-stream';
 	return $mime_types;
 }
 

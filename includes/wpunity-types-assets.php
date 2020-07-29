@@ -180,9 +180,17 @@ function wpunity_create_pathdata_asset( $post_id ){
         }
         
         $parentGameID = intval($parentGameID, 10);
-        $parentGameSlug = ( $parentGameID > 0 ) ? get_term( $parentGameID, 'wpunity_asset3d_pgame' )->slug : NULL;
         
-        update_post_meta($post_id,'wpunity_asset3d_pathData',$parentGameSlug);
+        $ff = fopen("output_ffaa.txt",'w');
+        fwrite($ff, "post_id:".$post_id);
+        fwrite($ff, "parentGameID:". $parentGameID);
+        fwrite($ff, get_term( $post_id, 'wpunity_asset3d_pgame' ));
+        fclose($ff);
+        
+        $parentGameSlug = ( $parentGameID > 0 ) ?
+            get_post( $parentGameID)->post_name : NULL;
+        
+        update_post_meta($post_id,'wpunity_asset3d_pathData', $parentGameSlug);
     }
 }
 

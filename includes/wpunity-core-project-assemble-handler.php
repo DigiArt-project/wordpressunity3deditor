@@ -447,13 +447,30 @@ function wpunity_delete_asset3d_frontend_callback(){
         wp_delete_attachment($mtlID, true); // True : Not go to trash
     
         // ------- FBX --------
-        $fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx', true); // True : single value
     
-        // Delete the file from the system
-        wp_delete_file($containerFolder.basename(get_attached_file($fbxID)));
+        // Get texture attachments of post
+        $args = array(
+            'posts_per_page' => 100,
+            'order'          => 'DESC',
+            'post_parent'    => $asset_id
+        );
     
-        // Delete attachment
-        wp_delete_attachment($fbxID, true); // True : Not go to trash
+        $attachments_array =  get_children( $args,OBJECT );  //returns Array ( [$image_ID].
+    
+        // Add texture urls to a string separated by |
+    
+        foreach ($attachments_array as $k){
+            $child_post_id = $k->ID;
+    
+            //$fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx', true); // True : single value
+    
+            // Delete the file from the system
+            wp_delete_file($containerFolder.basename(get_attached_file($child_post_id)));
+            
+            // Delete attachment
+            wp_delete_attachment($child_post_id, true); // True : Not go to trash
+        }
+        
 
         // ---------- OBJ -------
         $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true);
@@ -516,6 +533,12 @@ function wpunity_delete_asset3d_noscenes_frontend($asset_id){
 function wpunity_delete_asset3d_from_games_and_scenes($asset_id, $gameSlug){
 
     $scenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+    
+    if (!$scenePGame) {
+        wp_reset_postdata();
+        return;
+    }
+    
     $scenePGameID = $scenePGame->term_id;
 
     $custom_query_args2 = array(

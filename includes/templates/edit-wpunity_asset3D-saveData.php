@@ -1,6 +1,6 @@
 <?php
 
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
+function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug, $TheFiles){
 
     $ff = fopen("output_3D_files.txt","w");
     fwrite($ff, "1");
@@ -144,9 +144,22 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
     
     $fbx_content = stripslashes($_POST['fbxFileInput']);
+    
+    $fbx_content2 = $TheFiles;
+    
+//    $info = pathinfo($fbx_content2['name']);
+//    $ext = $info['extension']; // get the extension of the file
+//    $newname = "new_________name.".$ext;
+    
+    
+    // REM: HERE : Achieved to upload however how can I set from selector ?
+//    move_uploaded_file( $fbx_content2['tmp_name'], "c:/xampp7/htdocs/wordpress/cccccccccc.fbx");
+    
+    
     fwrite($ff, chr(13));
     
-    fwrite($ff, "2:".$fbx_content);
+    fwrite($ff, "22:".print_r($fbx_content2, true));
+    
     if ($fbx_content !=null ) {
 
             // 1. Upload FBX file
