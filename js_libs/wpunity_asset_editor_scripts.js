@@ -8,29 +8,33 @@
 
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
-
-
     if (wu_webw_3d_view.renderer) {
         wu_webw_3d_view.clearAllAssets();
     }
 
+    // Clear inputs
     document.getElementById("fbxFileInput").value = "";
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("pdbFileInput").value = "";
     FbxBuffer = '';
 
-
+    // Clear add texture hidden fields
     while ( jQuery("[id^=textureFileInput]").length > 0) {
          jQuery("[id^=textureFileInput]")[0].remove();
    }
 
+    // Clear select 3D files input
     if (document.getElementById("fileUploadInput"))
         document.getElementById("fileUploadInput").value = "";
 
     document.getElementById("sshotFileInput").value = "";
-    /*jQuery("#texturePreviewImg").attr('src', texturePreviewDefaultImg);*/
+
+
+    // Clear screenshot
     jQuery("#sshotPreviewImg").attr('src', sshotPreviewDefaultImg);
+
+    // Clear Title in Preview
     jQuery("#objectPreviewTitle").hide();
 
     nObj = 0;
@@ -137,7 +141,6 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
             }
         }
 
-
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
             file_reader_cortex(files[i], wu_webw_3d_view_local);
@@ -198,6 +201,8 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                     } else {
                         // Else check if textures have been loaded
                         let nTexturesLength = jQuery("input[id='textureFileInput']").length;
+
+
                         if ((nPng>0 && nPng === nTexturesLength)
                             || ( nJpg>0 && nJpg === nTexturesLength) ) {
 
@@ -229,6 +234,8 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
+
+
 
             if ( nTexturesLoaded < nJpg || nTexturesLoaded < nPng || nTexturesLoaded < nGif){
                 console.log("Not all textures loaded yet");
@@ -349,6 +356,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
 
                 let url = url_files[i].replace('http:', 'https:');
 
+
                 if( url.includes(".txt") ) {
 
                     // We want the basename and the extension for naming the file object
@@ -357,7 +365,8 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
 
                     // Set xhr to get the url as text
                     xhr.open('GET', url, true);
-                    xhr.responseType = 'text';
+                    //xhr.responseType = 'text';
+                    xhr.responseType = 'arraybuffer';
 
                 } else if (url.includes("texture") ) {
 
@@ -540,6 +549,16 @@ function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
     //jQuery("#moleculeOptionsPanel").hide();
     jQuery("#moleculeFluidPanel").hide();
     jQuery("#chemistryBoxOptionsPanel").hide();
+}
+
+function updateList() {
+    var input = document.getElementById('fileUploadInput');
+    var output = document.getElementById('fileList3D');
+    var children = "";
+    for (var i = 0; i < input.files.length; ++i) {
+        children += '<li>' + input.files.item(i).name + '</li>';
+    }
+    output.innerHTML = '<ul>'+children+'</ul>';
 }
 
 

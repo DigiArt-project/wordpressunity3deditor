@@ -172,9 +172,21 @@
 
 			for (let i = 0 ; i<texturesStreams.length; i++){
 
-				// Todo: check for pngs and gifs
+
+
+				let type;
+				if (texturesStreams[i].name.includes('.gif'))
+					type = 'gif';
+				else if (texturesStreams[i].name.includes('.png'))
+					type = 'png';
+				else
+					type = 'jpeg';
+
 				texturesStreams[i].value =
-					texturesStreams[i].value.replace('data:application/octet-stream;','data:image/jpeg;');
+					texturesStreams[i].value.replace('data:application/octet-stream;',
+						'data:image/' + type + ';');
+
+
 
      		}
 

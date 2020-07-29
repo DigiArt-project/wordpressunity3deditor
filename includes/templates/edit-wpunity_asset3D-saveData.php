@@ -1,9 +1,13 @@
 <?php
 
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug, $TheFiles){
+function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
+                                                    $assetTitleForm, $gameSlug){
 
     $ff = fopen("output_3D_files.txt","w");
     fwrite($ff, "1");
+    fwrite($ff, chr(13));
+    fwrite($ff, print_r($_FILES, true));
+    
     
     //--------------- Upload textures and get final filenames as uploaded on server ------------------------------------
     $textureNamesIn  = [];
@@ -27,14 +31,14 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         foreach (array_keys($_POST['textureFileInput']) as $texture) {
             
             // Get the basename of texture
-            $basename_texture = str_replace(['.jpg','.png'], '', $texture);
+            $basename_texture = str_replace(['.jpg','.png','.gif'], '', $texture);
             
             // Get the content
             $content_texture[$basename_texture] = $_POST['textureFileInput'][$texture];
             
-            // Get the extension (jpg or png)
-            $extension_texture_file[$basename_texture] =  strpos($texture, "jpg") !== false ? 'jpg' : 'png';
-            
+            // Get the extension (jpg or png or gif)
+            $extension_texture_file[$basename_texture] = pathinfo($texture, PATHINFO_EXTENSION);
+ 
             // Store basenames to an array
             $textureNamesIn[]    = $basename_texture;
         }
@@ -69,9 +73,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     //-MTL: Change filenames of textures inside mtl according to the final filenames on server
     $mtl_content = $_POST['mtlFileInput'];
 
-    
-    
-    
     // MTL : Open mtl file and replace jpg filename
     if($_POST['mtlFileInput']!=null) {
         if(strlen($_POST['mtlFileInput']) > 0) {
@@ -142,13 +143,10 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     }
     
     
-    
+    // Fbx as text
     $fbx_content = stripslashes($_POST['fbxFileInput']);
-
     
-    
-    
-    
+    // Fbx as binary
     $nFiles = count($_FILES['multipleFilesInput']['name']);
     
     $index_file_fbx = -1;
@@ -156,15 +154,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
        if ( strpos($_FILES['multipleFilesInput']['name'][$i],'.fbx')>0 ){
            $index_file_fbx = $i;
         }
-   }
-    
-    
-    
-    
-
-
-
-
+    }
     
     if (strlen($fbx_content) > 50 ) { // Text   // 20 is the Kaydara header for fbx binary. 50 to be sure.
     

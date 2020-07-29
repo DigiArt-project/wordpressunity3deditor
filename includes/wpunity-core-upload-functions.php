@@ -1,9 +1,6 @@
 <?php
 // All functions related to uploading files
 
-
-
-
 // Get the directory for media uploading of a scene or an asset
 function wpunity_upload_dir_forScenesOrAssets( $args ) {
     
@@ -27,7 +24,6 @@ function wpunity_upload_dir_forScenesOrAssets( $args ) {
 }
 
 add_filter( 'upload_dir', 'wpunity_upload_dir_forScenesOrAssets' );
-
 
 // Disable all auto created thumbnails for Assets3D
 function wpunity_disable_imgthumbs_assets( $image_sizes ){
@@ -372,14 +368,6 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     return false;
 }
 
-
-
-
-
-
-
-
-
 // Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $TheFiles, $index_file) {
     
@@ -387,15 +375,12 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     
     $fp = fopen("output_fbx_upload.txt","w");
     
-    
     // ?? Filters the image sizes automatically generated when uploading an image.
     add_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     
     require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
     // --------------  1. Upload file ---------------
-    
-    // Upload dir
     $upload_dir = wp_upload_dir();
     
     fwrite($fp, "1".print_r($upload_dir, true));
@@ -414,46 +399,7 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
         $type = 'application/octet-stream';
     }
 
-    //----------------- QUESTIONABLE CODE --------------------
-    
-//    // HANDLE UPLOADED FILE
-//    if( !function_exists( 'wp_handle_sideload' ) ) {
-//        require_once( ABSPATH . 'wp-admin/includes/file.php' );
-//    }
-//
-//    // Without that I'm getting a debug error!?
-//    if( !function_exists( 'wp_get_current_user' ) ) {
-//        require_once( ABSPATH . 'wp-includes/pluggable.php' );
-//    }
-//
-//
-//
-//    $file = array (
-//        'name'     => $hashed_filename,
-//        'type'     => $type,
-//        'tmp_name' => $upload_path.$hashed_filename,
-//        'error'    => 0,
-//        'size'     => filesize( $upload_path.$hashed_filename ),
-//    );
-//
-////    fwrite($fp, chr(13));
-////    fwrite($fp, "4:".print_r($image_upload,true));
-//
-//    add_filter( 'upload_dir', 'wpunity_upload_filter');
-//    // upload file to server
-//    // @new use $file instead of $image_upload
-//    $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
-//
-////    fwrite($fp, chr(13));
-////    fwrite($fp, "5:".print_r($file_return,true));
-//
-//    // Remove filter
-//    remove_filter( 'upload_dir', 'wpunity_upload_filter' );
-//
-//    $filename = $file_return['file'];
-    
     //------------------- 2 Add to SQL as attachment ----------------------------
-    
     $file_url = $upload_dir['baseurl'].'/Models/'.$hashed_filename;
     
     $attachment = array(
@@ -467,26 +413,15 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     
     $attachment_id = wp_insert_attachment( $attachment, $file_url, $parent_post_id );
     
-//    fwrite($fp, chr(13));
-//    fwrite($fp, "6:".print_r($attachment_id,true));
-    
-    
-    //require_once(ABSPATH . 'wp-admin/includes/image.php');
-    
-    
     // ----------------- 3. Add Attachment metadata to SQL --------------------------
     $attachment_data = wp_generate_attachment_metadata( $attachment_id, $hashed_filename );
     wp_update_attachment_metadata( $attachment_id, $attachment_data );
-    
-//    fwrite($fp, chr(13));
-//    fwrite($fp, "7:".print_r($attachment_data,true));
-    fclose($fp);
     
     remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
     
     if( 0 < intval( $attachment_id, 10 ) ) {
         return $attachment_id;
     }
-    
+   
     return false;
 }

@@ -232,11 +232,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	// Upload 3D files
 	if($asset_id != 0 || $asset_updatedConf == 1) {
 		if ($_POST['asset_sourceID']=='') {
-			
-		    // NoCloning
-            // Upload files from POST
-			wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm, $gameSlug, $_FILES);
-
+            // NoCloning: Upload files from POST but check first
+            // if any 3D files have been selected for upload
+		    if (count($_FILES['multipleFilesInput']['name']) > 0 &&
+                $_FILES['multipleFilesInput']['error'][0] != 4 ){
+                wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm,
+                    $gameSlug);
+            }
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
 		}else {
@@ -1140,11 +1142,20 @@ if($asset_id != null) {
 
                             
                                 <input id="fileUploadInput"
-                                       class="FullWidth" type="file" name="multipleFilesInput[]" value=""
+                                       class="FullWidth" type="file"
+                                       name="multipleFilesInput[]"
+                                       value=""
                                        style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                        multiple
-                                       accept=".obj,.mtl,.jpg,.png,.fbx"/>
+                                       accept=".obj,.mtl,.jpg,.png,.fbx"
+                                       onchange="javascript:updateList()"
+                                       />
 
+                                <p>Selected files:</p>
+                                <div id="fileList3D" style="margin-left:5px"></div>
+                                
+                                <?php print_r($_FILES, true) ?>
+                                
                                 <script>
                                     // Handler for radio buttons
                                     loadFileInputLabel('obj');
@@ -1358,7 +1369,7 @@ if($asset_id != null) {
        
         
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-        
+
         
         // ----------- Canvas Renderer ------------------------
         // handler to resize canvas window
@@ -1604,8 +1615,9 @@ if($asset_id != null) {
         // Hide admin bar of wordpress
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
-        
-        
+
+        // Update List of 3D files selected
+        updateList();
         //
         // // UNIT TEST: Select artifact, Remove
         // setTimeout( function(){
