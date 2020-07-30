@@ -10,6 +10,28 @@ class ParseJSON {
 //        $fp = fopen("output_saved2.txt","w");
 //        fwrite($fp, print_r($sceneToLoad,true));
 //        fclose($fp);
+    
+        $assetid ='';
+        $objID = '';
+        $mtlID = '';
+        $diffImage = '';
+        $diffImageID = '';
+    
+        $categoryID = '';
+        $image1id = '';
+        $doorName_source = '';
+        $doorName_target = '';
+        $sceneName_target = '';
+        $sceneID_target = '';
+        $archaeology_penalty = '';
+        $hv_penalty = '';
+        $natural_penalty = '';
+        $isreward = '';
+        $isCloned = '';
+        $isJoker = '';
+
+
+
         
         
         $sceneToLoad = htmlspecialchars_decode($sceneToLoad);
@@ -133,8 +155,8 @@ class ParseJSON {
                 $lighttargetobjectname = $value->lighttargetobjectname;
 
             } else {
-                $path =$this->relativepath . $value->fnPath;
-                $assetid=$value->assetid;
+                $path = $this->relativepath . $value->fnPath;
+                $assetid= $value->assetid;
                 $obj = $value->fnObj;
                 $objID = $value->fnObjID;
                 $mtl = $value->fnMtl;
@@ -156,7 +178,11 @@ class ParseJSON {
 
                 $isreward = $value->isreward;
                 $isCloned = $value->isCloned;
-                $isJoker = $value->isJoker;
+                
+                if (property_exists($value, 'isJoker') )
+                    $isJoker = $value->isJoker;
+                else
+                    $isJoker = 'false';
 
                 $r_x = $value->rotation[0];
                 $r_y = $value->rotation[1];

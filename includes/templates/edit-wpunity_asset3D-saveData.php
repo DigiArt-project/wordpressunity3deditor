@@ -169,14 +169,16 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
         
     } else {
     
-        // 1. Upload FBX file as BINARY
-        $fbxFile_id = wpunity_upload_AssetText(null, // content
-            'fbx'.$assetTitleForm, // asset title
-            $asset_newID,
-            $_FILES, $index_file_fbx);
+        if ($index_file_fbx!=-1) {
+            // 1. Upload FBX file as BINARY
+            $fbxFile_id = wpunity_upload_AssetText(null, // content
+                'fbx' . $assetTitleForm, // asset title
+                $asset_newID,
+                $_FILES, $index_file_fbx);
     
-        // 2. Set value of attachment IDs at custom fields
-        update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
+            // 2. Set value of attachment IDs at custom fields
+            update_post_meta($asset_newID, 'wpunity_asset3d_fbx', $fbxFile_id);
+        }
     }
     
     // PDB upload and add id of uploaded file to postmeta wpunity_asset3d_pdb of asset

@@ -429,19 +429,19 @@ function wpunity_fetch_game_assets_action_callback(){
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug'], $_POST['gameProjectID']);
 
 	for ($i=0; $i<count($response); $i++){
-		$response[$i][name] = $response[$i][assetName];
-		$response[$i][type] = 'file';
-		$response[$i][path] = $response[$i][objPath];
+		$response[$i]['name'] = $response[$i]['assetName'];
+		$response[$i]['type'] = 'file';
+		$response[$i]['path'] = $response[$i]['objPath'];
 
 		// Find kb size
-		$ch = curl_init($response[$i][objPath]);
+		$ch = curl_init($response[$i]['objPath']);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_HEADER, TRUE);
 		curl_setopt($ch, CURLOPT_NOBODY, TRUE);
 		$dataCurl = curl_exec($ch);
 		$size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 		curl_close($ch);
-		$response[$i][size] =$size;
+		$response[$i]['size'] =$size;
 	}
 
 	$jsonResp =  json_encode(

@@ -79,6 +79,15 @@ $sceneID = $current_scene_id;
 
 $isAdmin = is_admin() ? 'back' : 'front';
 
+if ($project_scope === 0){
+    $joker_project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
+} elseif ($project_scope === 1) {
+    $joker_project_id = get_page_by_path( 'chemistry-joker', OBJECT, 'wpunity_game' )->ID;
+} elseif ($project_scope === 2) {
+    $joker_project_id = get_page_by_path( 'energy-joker', OBJECT, 'wpunity_game' )->ID;
+}
+
+
 // Also available in Javascript side
 echo '<script>';
 echo 'var PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
@@ -1546,9 +1555,12 @@ echo '</script>';
 
 <?php
 //echo get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0];
-echo '<script>';
-echo 'envir.sceneType="'.get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment")[0].'";';
-echo '</script>';
+$sceneType = get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment");
+if (count($sceneType)>0) {
+    echo '<script>';
+    echo 'envir.sceneType="' . $sceneType[0] . '";';
+    echo '</script>';
+}
 ?>
 
 <!-- Change dat GUI style: Override the inside js style -->

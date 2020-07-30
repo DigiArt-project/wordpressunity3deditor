@@ -33,22 +33,66 @@ function loadAsset3DManagerScripts() {
     // Three js : for simple rendering
 	wp_enqueue_script('wpunity_scripts');
     wp_enqueue_script('wpunity_qrcode_generator');
-	wp_enqueue_script('wpunity_load87_threejs');
-	// For loading on clicking on image of previously uploaded obj
-	wp_enqueue_script('wpunity_load87_objloader');
-
-	// For loading on newly uploaded model
-	wp_enqueue_script('wpunity_load87_objloader2');
-	wp_enqueue_script('wpunity_load87_wwobjloader2');
-	wp_enqueue_script('wpunity_load87_pdbloader');
-	wp_enqueue_script('wpunity_load87_mtlloader');
     
-    wp_enqueue_script('wpunity_load87_fbxloader');
+    // For fbx binary
     wp_enqueue_script('wpunity_inflate'); // to uncompress fbx binary
-	
-	wp_enqueue_script('wpunity_load87_orbitcontrols');
-	wp_enqueue_script('wpunity_load87_trackballcontrols');
-
+    
+    $ThreeJSversion = 87;
+    
+    if ($ThreeJSversion === 87) {
+        // ------------------ THREE JS 87 ------------------------------
+    
+        // 1. Three js library
+        wp_enqueue_script('wpunity_load87_threejs');
+    
+        // 2. Obj loader simple; For loading an uploaded obj
+        wp_enqueue_script('wpunity_load87_objloader');
+    
+        // 3. Obj loader 2: For preview loading
+        wp_enqueue_script('wpunity_load87_objloader2');
+        wp_enqueue_script('wpunity_load87_wwobjloader2');
+    
+        // 4. Mtl loader
+        wp_enqueue_script('wpunity_load87_mtlloader');
+    
+        // 5. Pdb loader for molecules
+        wp_enqueue_script('wpunity_load87_pdbloader');
+    
+        // 6. Fbx loader
+        wp_enqueue_script('wpunity_load87_fbxloader');
+    
+        // 7. Trackball controls
+        wp_enqueue_script('wpunity_load87_trackballcontrols');
+    
+        //-------------------------------------------------------------------
+    } elseif ($ThreeJSversion===119){
+    
+        // 1. Three js library
+        wp_enqueue_script('wpunity_load119_threejs');
+    
+        // 2. Obj loader simple; For loading an uploaded obj
+        wp_enqueue_script('wpunity_load119_objloader');
+    
+        // 3. Obj loader 2: For preview loading
+//        wp_enqueue_script('wpunity_load119_objloader2');
+//        wp_enqueue_script('wpunity_load119_wwobjloader2');
+    
+        // 4. Mtl loader
+        wp_enqueue_script('wpunity_load119_mtlloader');
+    
+        // 5. Pdb loader for molecules
+        //wp_enqueue_script('wpunity_load119_pdbloader');
+    
+        // 6. Fbx loader
+        wp_enqueue_script('wpunity_load119_fbxloader');
+    
+        // 7. Trackball controls
+        wp_enqueue_script('wpunity_load119_trackballcontrols');
+    }
+ 
+ 
+ 
+ 
 	// For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_CSS2DRenderer');
 	wp_enqueue_script('WU_webw_3d_view');

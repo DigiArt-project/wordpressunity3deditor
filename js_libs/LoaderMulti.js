@@ -291,8 +291,6 @@ class LoaderMulti {
                 var lightSun = new THREE.DirectionalLight( colora, lightintensity ); //  new THREE.PointLight( 0xC0C090, 0.4, 1000, 0.01 );
                 //lightSun.castShadow = true;
 
-                console.log("lightSun.castShadow.enabled", lightSun.castShadow);
-
                  //Set up shadow properties for the light
                  lightSun.shadow.mapSize.width = 2048;  // default
                  lightSun.shadow.mapSize.height = 2048; // default

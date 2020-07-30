@@ -2319,7 +2319,8 @@ function wpunity_append_scenes_in_EditorBuildSettings_dot_asset($filepath, $scen
 
 function wpunity_save_scene_async_action_callback()
 {
-	$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
+    // ToDo: Probably useful in Chemistry
+	//$mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
 
 	// Save screenshot
 	if (isset($_POST['scene_screenshot']))
