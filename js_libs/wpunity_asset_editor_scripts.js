@@ -80,15 +80,8 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                     break;
                 case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
                 case 'fbx':
-
                     document.getElementById('fbxFileInput').value = dec.decode(fileContent);
-
-
                     FbxBuffer =  fileContent;
-
-
-                    //jQuery("#fbxFileInputbinary")[0].src = FbxBuffer;
-
                     break;
                 case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                 case 'jpg':
@@ -99,6 +92,8 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                         ']" id="textureFileInput" value="' + fileContent + '" />');
                     break;
             }
+
+
 
             // Check if everything is loaded
             if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif') {
@@ -159,8 +154,6 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
  */
 function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
-
-
     //console.log("checkerCompleteReading by", whocalls)
 
     let objFileContent = document.getElementById('objFileInput').value;
@@ -173,8 +166,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
         jQuery('#previewProgressSlider').show();
 
         // Make the definition with the obj
-
-
         if (nObj === 1){
             let encoder = new TextEncoder();
             let uint8Array = encoder.encode(objFileContent);
@@ -207,13 +198,13 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                             || ( nJpg>0 && nJpg === nTexturesLength) ) {
 
                             // Get textureFileInput array with jQuery
-                            var textFil = jQuery("input[id='textureFileInput']");
+                            let textFil = jQuery("input[id='textureFileInput']");
 
                             // Store here the raw image textures
                             objectDefinition.pathTexture = [];
 
-                            for (var k = 0; k < textFil.length; k++){
-                                var myname = textFil[k].name;
+                            for (let k = 0; k < textFil.length; k++){
+                                let myname = textFil[k].name;
 
                                 // do some text processing on the names to remove textureFileInput[ and ] from name
                                 myname = myname.replace('textureFileInput[','');
@@ -234,8 +225,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             // Get all fields
             let texturesStreams = jQuery("input[id='textureFileInput']");
             let nTexturesLoaded = texturesStreams.length;
-
-
 
             if ( nTexturesLoaded < nJpg || nTexturesLoaded < nPng || nTexturesLoaded < nGif){
                 console.log("Not all textures loaded yet");

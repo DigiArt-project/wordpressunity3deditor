@@ -109,8 +109,6 @@ function wpunity_register_scripts() {
 	$scriptsC = array(
 		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
 		array( 'wpunity_load119_objloader', $pluginDirJS.'threejs119/OBJLoader.js'),
-//		array( 'wpunity_load119_objloader2', $pluginDirJS.'threejs119/OBJLoader2.js'),
-//		array( 'wpunity_load119_wwobjloader2', $pluginDirJS. 'threejs119/WWOBJLoader2.js'),
 		array( 'wpunity_load119_mtlloader', $pluginDirJS.'threejs119/MTLLoader.js'),
 		array( 'wpunity_load119_fbxloader', $pluginDirJS.'threejs119/FBXLoader.js'),
 //		array( 'wpunity_load119_pdbloader', $pluginDirJS.'threejs119/PDBLoader.js'),

@@ -47,8 +47,12 @@ class WU_webw_3d_view {
         this.root = new THREE.Group();
 
         // - OBJ Specific - Setup loader
-        this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
-        this.wwObjLoader2.setCrossOrigin('anonymous');
+        try {
+            this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
+            this.wwObjLoader2.setCrossOrigin('anonymous');
+        } catch (e) {
+
+        }
 
 
 
@@ -432,7 +436,7 @@ class WU_webw_3d_view {
         this.controls.dynamicDampingFactor = 0.3;
 
         // Light
-        var ambientLight = new THREE.AmbientLight(0x404040);
+        var ambientLight = new THREE.AmbientLight(0x404040,5);
         var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
         var directionalLight2 = new THREE.DirectionalLight(0x909050);
         var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
@@ -503,10 +507,15 @@ class WU_webw_3d_view {
             },1000);
 
         };
-        this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
-        this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
-        this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
-        this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+
+        try {
+            this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
+            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
+            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
+            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+        } catch (e){
+
+        }
 
         return true;
     }

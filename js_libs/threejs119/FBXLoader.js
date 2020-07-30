@@ -101,14 +101,56 @@ THREE.FBXLoader = ( function () {
 
             return new FBXTreeParser( textureLoader, this.manager ).parse( fbxTree );
 
+        },
+
+        parseStream: function ( FBXBuffer, texturesStreams ) {
+
+            if ( isFbxFormatBinary( FBXBuffer ) ) {
+
+                fbxTree = new BinaryParser().parse( FBXBuffer );
+
+            } else {
+
+                var FBXText = convertArrayBufferToString( FBXBuffer );
+
+                if ( ! isFbxFormatASCII( FBXText ) ) {
+
+                    throw new Error( 'THREE.FBXLoader: Unknown format.' );
+
+                }
+
+                if ( getFbxVersion( FBXText ) < 7000 ) {
+
+                    throw new Error( 'THREE.FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion( FBXText ) );
+
+                }
+
+                fbxTree = new TextParser().parse( FBXText );
+
+            }
+
+
+
+            var textureLoader = new THREE.TextureLoader( this.manager ); //.setPath( this.resourcePath || path ).setCrossOrigin( this.crossOrigin );
+
+            console.log( texturesStreams );
+
+            return new FBXTreeParser( textureLoader, this.manager, texturesStreams ).parseStream( fbxTree );
+
         }
+
 
     } );
 
+
+
+
+
     // Parse the FBXTree object returned by the BinaryParser or TextParser and return a THREE.Group
-    function FBXTreeParser( textureLoader, manager ) {
+    function FBXTreeParser( textureLoader, manager, texturesStreams=null ) {
 
         this.textureLoader = textureLoader;
+        this.texturesStreams = texturesStreams
         this.manager = manager;
 
     }
@@ -132,6 +174,49 @@ THREE.FBXLoader = ( function () {
             return sceneGraph;
 
         },
+
+
+        parseStream: function () {
+
+            connections = this.parseConnections();
+
+            var images = this.parseImages();
+
+            console.log("this.texturesStreams", this.texturesStreams);
+
+            for (let i = 0 ; i<this.texturesStreams.length; i++){
+                let type;
+                if (this.texturesStreams[i].name.includes('.gif'))
+                    type = 'gif';
+                else if (this.texturesStreams[i].name.includes('.png'))
+                    type = 'png';
+                else
+                    type = 'jpeg';
+
+                this.texturesStreams[i].value =
+                    this.texturesStreams[i].value.replace(
+                        'data:application/octet-stream;',
+                        'data:image/' + type + ';');
+            }
+
+
+
+            var textures = this.parseTexturesStream( images );
+
+
+
+
+            var materials = this.parseMaterials( textures );
+            var deformers = this.parseDeformers();
+            var geometryMap = new GeometryParser().parse( deformers );
+
+            this.parseScene( deformers, geometryMap, materials );
+
+            return sceneGraph;
+
+        },
+
+
 
         // Parses FBXTree.Connections which holds parent-child connections between objects (e.g. material -> texture, model->geometry )
         // and details the connection type
@@ -320,6 +405,39 @@ THREE.FBXLoader = ( function () {
 
         },
 
+        parseTexturesStream: function ( images ) {
+
+            var textureMap = new Map();
+
+            if (this.texturesStreams === '' || this.texturesStreams == null)
+                return textureMap;
+
+            if ( 'Texture' in fbxTree.Objects ) {
+
+                var textureNodes = fbxTree.Objects.Texture;
+
+                for ( var nodeID in textureNodes ) {
+
+                    // The name of the texture file from fbx
+                    let fname = baseName(textureNodes[nodeID].FileName);
+
+                    // Search for the loaded imamges for the same name
+                    for (let i=0; i< this.texturesStreams.length; i ++ ) {
+
+                        if (this.texturesStreams[i].name === ('textureFileInput[' +
+                                           fname + ']')) {
+                            textureStream = this.texturesStreams[i];
+                        }
+                    }
+
+                    var texture = this.parseTextureStream( textureNodes[ nodeID ], images, textureStream.value );
+                    textureMap.set( parseInt( nodeID ), texture );
+                }
+            }
+
+            return textureMap;
+        },
+
         // Parse individual node in FBXTree.Objects.Texture
         parseTexture: function ( textureNode, images ) {
 
@@ -353,6 +471,49 @@ THREE.FBXLoader = ( function () {
             return texture;
 
         },
+
+        // Parse individual node in FBXTree.Objects.Texture
+        parseTextureStream: function ( textureNode, images, textureStream ) {
+
+            //var texture = this.loadTexture( textureNode, images );
+            let texture = new THREE.Texture();
+            texture.ID = textureNode.id;
+
+            texture.name = textureNode.attrName;
+
+            let image = new Image();
+            image.onload = function () {
+                texture.image = image;
+                texture.needsUpdate = true;
+            };
+
+            image.src = textureStream;
+
+            var wrapModeU = textureNode.WrapModeU;
+            var wrapModeV = textureNode.WrapModeV;
+
+            var valueU = wrapModeU !== undefined ? wrapModeU.value : 0;
+            var valueV = wrapModeV !== undefined ? wrapModeV.value : 0;
+
+            // http://download.autodesk.com/us/fbx/SDKdocs/FBX_SDK_Help/files/fbxsdkref/class_k_fbx_texture.html#889640e63e2e681259ea81061b85143a
+            // 0: repeat(default), 1: clamp
+
+            texture.wrapS = valueU === 0 ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+            texture.wrapT = valueV === 0 ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+
+            if ( 'Scaling' in textureNode ) {
+
+                var values = textureNode.Scaling.value;
+
+                texture.repeat.x = values[ 0 ];
+                texture.repeat.y = values[ 1 ];
+
+            }
+
+            return texture;
+
+        },
+
 
         // load a texture specified as a blob or data URI, or via an external URL using THREE.TextureLoader
         loadTexture: function ( textureNode, images ) {
@@ -3551,7 +3712,9 @@ THREE.FBXLoader = ( function () {
 
                     }
 
-                    var inflate = new Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) ); // eslint-disable-line no-undef
+                    //var inflate = new Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) ); // eslint-disable-line no-undef
+                    var inflate = new Zlib.Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) );
+
                     var reader2 = new BinaryReader( inflate.decompress().buffer );
 
                     switch ( type ) {
@@ -3844,6 +4007,10 @@ THREE.FBXLoader = ( function () {
 
     };
 
+
+
+
+
     // ************** UTILITY FUNCTIONS **************
 
     function isFbxFormatBinary( buffer ) {
@@ -4130,6 +4297,15 @@ THREE.FBXLoader = ( function () {
 
     }
 
+
+    function baseName(str)
+    {
+        let li = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
+        return new String(str).substring(li + 1);
+    }
+
     return FBXLoader;
+
+
 
 } )();
