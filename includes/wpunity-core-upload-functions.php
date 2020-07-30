@@ -111,16 +111,19 @@ function wpunity_upload_filter( $args  ) {
 // Upload image(s) or video for a certain post_id (asset or scene3D)
 function wpunity_upload_img_vid($file = array(), $parent_post_id) {
 
-    $ff  =  fopen ("output_imv.txt","a");
+    //$ff  =  fopen ("output_imv.txt","a");
     
 //    fwrite($ff, print_r($file, true));
 //    fwrite($ff,"\n");
     
     // For Sprites
-    if($file['type']==='image/jpeg' || $file['type']==='image/png') {
+    if($file['type'] === 'image/jpeg' || $file['type'] === 'image/png') {
         if (strpos($file['name'], 'sprite') == false) {
-            $file['name'] = str_replace(".jpg", "_sprite.jpg", $file['name']);
-            $file['name'] = str_replace(".png", "_sprite.png", $file['name']);
+    
+            $hashed_prefix = md5($parent_post_id . microtime());
+            
+            $file['name'] = str_replace(".jpg", $hashed_prefix."_sprite.jpg", $file['name']);
+            $file['name'] = str_replace(".png", $hashed_prefix."_sprite.png", $file['name']);
         }
     }
 

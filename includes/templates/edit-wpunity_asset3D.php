@@ -1616,9 +1616,6 @@ if($asset_id != null) {
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
 
-        // Update List of 3D files selected
-        updateList();
-        //
         // // UNIT TEST: Select artifact, Remove
         // setTimeout( function(){
         //
@@ -1630,9 +1627,6 @@ if($asset_id != null) {
         //
         // },500);
 
-
-
-        
     </script>
 
 
