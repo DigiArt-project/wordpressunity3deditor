@@ -3712,9 +3712,8 @@ THREE.FBXLoader = ( function () {
 
                     }
 
-                    //var inflate = new Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) ); // eslint-disable-line no-undef
-                    var inflate = new Zlib.Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) );
-
+                    var inflate = new Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) ); // eslint-disable-line no-undef
+        
                     var reader2 = new BinaryReader( inflate.decompress().buffer );
 
                     switch ( type ) {
