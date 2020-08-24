@@ -42,7 +42,7 @@ class WU_webw_3d_view {
         // Make a pivot to ensure that the object is centered correctly
         this.pivot = null;
 
-        // - PDB specific -
+        // - PDB and FBX specific -
         // Here all chemistry 3D and 2D labels items are stored
         this.root = new THREE.Group();
 

@@ -25,9 +25,7 @@ echo '<script>';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo '</script>';
 
-
-
-// Load Scrinpts
+// Load Scripts
 function loadAsset3DManagerScripts() {
 
     // Three js : for simple rendering
@@ -385,7 +383,7 @@ if($asset_id != null) {
 }
 //--------------------------------------------------------
 get_header();
-
+//width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no
 
 
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
