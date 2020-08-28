@@ -15,9 +15,10 @@ class WU_webw_3d_view {
         this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
     };
 
-    constructor(canvasToBindTo, back_3d_color) {
+    constructor(canvasToBindTo, back_3d_color, audioElement) {
 
         this.renderer = null;
+        this.audioElement = audioElement;
         this.canvas = canvasToBindTo;
         this.aspectRatio = 1;
         this.recalcAspectRatio();
@@ -31,6 +32,7 @@ class WU_webw_3d_view {
             fov: 45
         };
         this.camera = null;
+        this.listener = null;
         this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
         this.controls = null;
@@ -407,8 +409,7 @@ class WU_webw_3d_view {
 
         this.scene.background = new THREE.Color(back_3d_color);
 
-        // - PDB Specific -
-        this.scene.add(this.root);
+
 
         // - Label renderer -
         this.labelRenderer = new THREE.CSS2DRenderer();
@@ -426,6 +427,22 @@ class WU_webw_3d_view {
         // Set up camera
         this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+
+        // Add audio listener to the camera
+
+        this.listener = new THREE.AudioListener();
+        this.camera.add( this.listener );
+        this.audioElement.play();
+
+
+        this.positionalAudio = new THREE.PositionalAudio( this.listener );
+        this.positionalAudio.setMediaElementSource( this.audioElement );
+        this.positionalAudio.setRefDistance( 200 );
+        this.positionalAudio.setDirectionalCone( 330, 230, 0.01);
+
+        // // - PDB, FBX Specific -
+        this.root.add(this.positionalAudio);
+        this.scene.add(this.root);
 
         this.resetCamera();
 

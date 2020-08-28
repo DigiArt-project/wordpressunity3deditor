@@ -205,8 +205,8 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
 
 
 // Create asset
-function wpunity_create_asset_frontend($assetPGameID,$assetCatID,$gameSlug, $assetCatIPRID, $asset_language_pack,
-      $assetFonts, $assetback3dcolor){
+function wpunity_create_asset_frontend($assetPGameID, $assetCatID, $gameSlug, $assetCatIPRID,
+                                       $asset_language_pack, $assetFonts, $assetback3dcolor){
     
     $asset_taxonomies = array(
         'wpunity_asset3d_pgame' => array($assetPGameID,),
@@ -261,16 +261,28 @@ function wpunity_create_asset_addImages_frontend($asset_newID){
         
         if ($i==0){
             // Featured image (thumbnail)
-            $attachment_id = wpunity_upload_img_vid( $asset_imageForm[0], $asset_newID);
+            $attachment_id = wpunity_upload_img_vid_aud( $asset_imageForm[0], $asset_newID);
             set_post_thumbnail( $asset_newID, $attachment_id );
         } else { // Images 1,2,3,4
             if ($asset_imageForm[$i]['error'] != 4) { // No error
-                $attachment_id_image = wpunity_upload_img_vid($asset_imageForm[$i], $asset_newID);
+                $attachment_id_image = wpunity_upload_img_vid_aud($asset_imageForm[$i], $asset_newID);
                 update_post_meta($asset_newID, 'wpunity_asset3d_image'.$i, $attachment_id_image);
             }
         }
     }
     
+}
+
+
+function wpunity_create_asset_addAudio_frontend($asset_newID){
+    $asset_audioForm = $_FILES['audioFileInput'];
+    
+    // 4 error means empty
+    if ( $asset_audioForm['error'] == 4  )
+        return;
+    
+    $attachment_audio_id = wpunity_upload_img_vid_aud( $asset_audioForm, $asset_newID);
+    update_post_meta( $asset_newID, 'wpunity_asset3d_audio', $attachment_audio_id );
 }
 
 function wpunity_create_asset_addVideo_frontend($asset_newID){
@@ -280,7 +292,7 @@ function wpunity_create_asset_addVideo_frontend($asset_newID){
     if ( $asset_videoForm['error'] == 4  )
         return;
     
-    $attachment_video_id = wpunity_upload_img_vid( $asset_videoForm, $asset_newID);
+    $attachment_video_id = wpunity_upload_img_vid_aud( $asset_videoForm, $asset_newID);
     update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
 }
 

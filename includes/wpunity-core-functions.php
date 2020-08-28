@@ -1016,8 +1016,8 @@ Characteristics :
 		$scene2_id = wp_insert_post( $secondSceneData );
 		$scene3_id = wp_insert_post( $thirdSceneData );
 
-		$attachment2_id = wpunity_upload_img_vid( $image_content2, $scene2_id);
-		$attachment3_id = wpunity_upload_img_vid( $image_content3, $scene3_id);
+		$attachment2_id = wpunity_upload_img_vid_aud( $image_content2, $scene2_id);
+		$attachment3_id = wpunity_upload_img_vid_aud( $image_content3, $scene3_id);
 		set_post_thumbnail( $scene2_id, $attachment2_id );
 		set_post_thumbnail( $scene3_id, $attachment3_id );
 	}else {
@@ -1087,7 +1087,7 @@ Characteristics :
 	if($game_category == 'energy_games'){
 
 		$image_content1 = WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/regions/img1.png";
-		$attachment1_id = wpunity_upload_img_vid( $image_content1, $scene1_id);
+		$attachment1_id = wpunity_upload_img_vid_aud( $image_content1, $scene1_id);
 		set_post_thumbnail( $scene1_id, $attachment1_id );
 	}
 }
@@ -1269,12 +1269,12 @@ function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_
 	$objFile_id = wpunity_upload_AssetText($obj_content, 'obj'.$assetTitleForm, $asset_newID, null, null);
 
 	if($has_image){
-		$attachment_id = wpunity_upload_img_vid( $image_content, $asset_newID);
+		$attachment_id = wpunity_upload_img_vid_aud( $image_content, $asset_newID);
 		set_post_thumbnail( $asset_newID, $attachment_id );
 	}
 
 	if($has_video){
-		$attachment_video_id = wpunity_upload_img_vid( $video_content, $asset_newID);
+		$attachment_video_id = wpunity_upload_img_vid_aud( $video_content, $asset_newID);
 		update_post_meta( $asset_newID, 'wpunity_asset3d_video', $attachment_video_id );
 	}
 

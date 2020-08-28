@@ -133,7 +133,6 @@ THREE.FBXLoader = ( function () {
 
             var textureLoader = new THREE.TextureLoader( this.manager ); //.setPath( this.resourcePath || path ).setCrossOrigin( this.crossOrigin );
 
-            console.log( texturesStreams );
 
             return new FBXTreeParser( textureLoader, this.manager, texturesStreams ).parseStream( fbxTree );
 
@@ -182,7 +181,6 @@ THREE.FBXLoader = ( function () {
 
             var images = this.parseImages();
 
-            console.log("this.texturesStreams", this.texturesStreams);
 
             for (let i = 0 ; i<this.texturesStreams.length; i++){
                 let type;
@@ -3713,7 +3711,7 @@ THREE.FBXLoader = ( function () {
                     }
 
                     var inflate = new Inflate( new Uint8Array( reader.getArrayBuffer( compressedLength ) ) ); // eslint-disable-line no-undef
-        
+
                     var reader2 = new BinaryReader( inflate.decompress().buffer );
 
                     switch ( type ) {

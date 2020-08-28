@@ -332,6 +332,13 @@ $wpunity_databox1 = array(
             'type' => 'text',
             'std' => ''
         ),
+        array(
+            'name' => 'Audio File',
+            'desc' => 'Audio File for the fbx',
+            'id' => $wpunity_prefix . 'audio',
+            'type' => 'text',
+            'std' => ''
+        ),
 		array(
 			'name' => 'Diffusion Image',
 			'desc' => 'Diffusion Image',

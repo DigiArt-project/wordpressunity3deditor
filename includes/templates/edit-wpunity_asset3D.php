@@ -232,12 +232,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	// NEW Asset: submit info to backend
 	if($asset_id == null){
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID,
-                                                $asset_language_pack, $assetFonts, $assetback3dcolor);
+		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}else {
 	 	// Edit an existing asset: Return true if updated, false if failed
-   		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID,
-                                                           $asset_language_pack, $assetFonts, $assetback3dcolor);
+   		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}
 
 	// Upload 3D files
@@ -272,10 +270,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		wpunity_create_asset_moleculeExtra_frontend($asset_id);
     }elseif ( $assetCatTerm->slug == 'artifact') {
         wpunity_create_asset_addImages_frontend($asset_id);
+        wpunity_create_asset_addAudio_frontend($asset_id);
         wpunity_create_asset_addVideo_frontend($asset_id);
     }
-
-	if($scene_id == 0) {
+    if($scene_id == 0) {
         echo '<script>alert("Asset created or edited successfully");</script>';
         
         // Redirect to central otherwise the form is not loaded with the new data
@@ -728,20 +726,67 @@ if($asset_id != null) {
                 
                 <!-- End of Images -->
 
+            <!-- Audio -->
+            <hr class="WhiteSpaceSeparator">
+
+            <!-- Show only if the asset is artifact  -->
+            <?php
+
+                if(count($saved_term)>0) {
+                    $showAudio = in_array($saved_term[0]->slug, ['artifact']) ? '' : 'none';
+                }else {
+                    $showAudio = 'none';
+                }
+
+            ?>
+
+                <div id="audioDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showAudio;?>; background:grey; padding:5px; width:100%">
+
+                    <h3 class="mdc-typography--title">Audio</h3>
+
+                    <div id="audioFileInputContainer" class="">
+                        <?php
+                        $audioID = get_post_meta($asset_id, 'wpunity_asset3d_audio', true);
+                        $attachment_post = get_post( $audioID );
+                        $attachment_file = $attachment_post->guid;
+                        ?>
+            
+                        <?php if(strpos($attachment_file, "mp3" )!==false || strpos($attachment_file, "wav" )!==false){?>
+                            <?php echo $attachment_file; ?>
+                            <audio controls loop preload="auto" id ='audioFile'>
+                                <source src="<?php echo $attachment_file;?>" type="audio/mp3">
+                                <source src="<?php echo $attachment_file;?>" type="audio/wav">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        <?php } ?>
+
+                        <label for="audioFileInput"> Select a new audio</label>
+                        <input class="FullWidth" type="file" name="audioFileInput" value="" id="audioFileInput" accept="audio/mp3,audio/wav"/>
+                        <br />
+                        <span id="audio-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">mp3 or wav is recommended </span>
+                    </div>
+                </div>
+
+            <hr />
+                
+                <!-- Video -->
                 <hr class="WhiteSpaceSeparator">
 
-                <!-- Video for POI video -->
-                <!-- Show only if the asset is poi video else do not show at all (it will be shown when the categ is selected) -->
+                <!-- Show only if the asset is artifact  -->
                 <?php
                 
-                    if(count($saved_term)>0)
-                        $showVid = in_array($saved_term[0]->slug, ['artifact','pois_video'])?'':'none';
-                    else
-                        $showVid = 'none';
+                    if(count($saved_term)>0) {
+                        // Edit Asset
+                        $showVid = in_array($saved_term[0]->slug, ['artifact']) ? '' : 'none';
+                    }else {
+                        // New Asset
+                        $showVid = ($asset_id == null) ? 'none' : '';
+                    }
                 
                 ?>
 
-                <div id="videoDetailsPanel" style="display:<?php echo ($asset_id == null)?'none':$showVid;?>; background:lightgrey; padding:5px; width:100%">
+                <div id="videoDetailsPanel" style =
+                "display:<?php echo $showVid;?>;background:lightgrey; padding:5px; width:100%">
 
                     <h3 class="mdc-typography--title">Video</h3>
                     
@@ -764,7 +809,7 @@ if($asset_id != null) {
                         <?php } ?>
 
                         <label for="videoFileInput"> Select a new video</label>
-                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/*"/>
+                        <input class="FullWidth" type="file" name="videoFileInput" value="" id="videoFileInput" accept="video/mp4"/>
                         <br />
                         <span id="video-description-label" class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">mp4 is recommended </span>
                     </div>
@@ -845,6 +890,22 @@ if($asset_id != null) {
                 <br>
 
                 
+                <!-- Audio hidden object -->
+                <div id="audioFileInputContainer" style="display:none">
+                    <?php
+                    $audioID = get_post_meta($asset_id, 'wpunity_asset3d_audio', true);
+                    $attachment_post = get_post( $audioID );
+                    $attachment_file = $attachment_post->guid;
+                    ?>
+        
+                    <?php if(strpos($attachment_file, "mp3" )!==false || strpos($attachment_file, "wav" )!==false){?>
+                        <?php echo $attachment_file; ?>
+                        <audio loop preload="auto" id ='audioFile' autoplay>
+                            <source src="<?php echo $attachment_file;?>" type="audio/mp3">
+                            <source src="<?php echo $attachment_file;?>" type="audio/wav">
+                         </audio>
+                    <?php } ?>
+                </div>
                 
                 
                 <!-- Languages -->
@@ -948,7 +1009,6 @@ if($asset_id != null) {
                     <div id="RussianExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_experts_saved); ?></div>
                     <div id="RussianPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_perception_saved); ?></div>
 
-                    
 
                 </div>
                 
@@ -1047,16 +1107,13 @@ if($asset_id != null) {
                     if(isset($_GET['directcall']))
                         echo '<script>startConf()</script>';
                 ?>
-                
-                
+
             <?php } ?>
             <!--  End of Edit or Show  -->
 
-            
             <!-- MOLECULES  only-->
             <?php include 'edit-wpunity_asset3D_ChemistrySupport1.php'; ?>
-            
-            
+
             <!-- 3D Models -->
             <div class="" id="objectPropertiesPanel">
         
@@ -1369,11 +1426,14 @@ if($asset_id != null) {
         // Current  Slide index (carousel top)
         var slideIndex = 0;
         
+        let audio_file = document.getElementById( 'audioFile' );
+        
+        
         // Initial slide to show (carousel top)
         showSlides(0);
 
         // Main 3D canvas handler
-        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color );
+        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
         
         wpunity_reset_panels(wu_webw_3d_view, "initial script");
 
@@ -1598,6 +1658,7 @@ if($asset_id != null) {
                     case 'artifact':
                         jQuery("#imgDetailsPanel").show();
                         jQuery("#videoDetailsPanel").show();
+                        jQuery("#audioDetailsPanel").show();
                         break;
                     // Energy cases
                     case 'terrain':

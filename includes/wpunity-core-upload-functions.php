@@ -85,7 +85,7 @@ function wpunity_remove_allthumbs_sizes( $sizes, $metadata ) {
 
 
 // Change directory for images and videos to uploads/Models
-function wpunity_upload_img_vid_directory( $dir ) {
+function wpunity_upload_img_vid_aud_directory( $dir ) {
     return array(
                 'path'   => $dir['basedir'] . '/Models',
                 'url'    => $dir['baseurl'] . '/Models',
@@ -108,10 +108,10 @@ function wpunity_upload_filter( $args  ) {
 }
 
 
-// Upload image(s) or video for a certain post_id (asset or scene3D)
-function wpunity_upload_img_vid($file = array(), $parent_post_id) {
+// Upload image(s) or video or audio for a certain post_id (asset or scene3D)
+function wpunity_upload_img_vid_aud($file = array(), $parent_post_id) {
 
-    // For Sprites
+    // For Images (Sprites in Unity)
     if($file['type'] === 'image/jpeg' || $file['type'] === 'image/png') {
         if (strpos($file['name'], 'sprite') == false) {
     
@@ -129,13 +129,13 @@ function wpunity_upload_img_vid($file = array(), $parent_post_id) {
     require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
     // Add all models to "uploads/Models/" folder
-    add_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
+    add_filter( 'upload_dir', 'wpunity_upload_img_vid_aud_directory' );
 
     // Upload
     $file_return = wp_handle_upload( $file, array('test_form' => false ) );
     
     // Remove upload filter to "Models" folder
-    remove_filter( 'upload_dir', 'wpunity_upload_img_vid_directory' );
+    remove_filter( 'upload_dir', 'wpunity_upload_img_vid_aud_directory' );
     
     // if file has been uploaded succesfully
     if( !isset( $file_return['error'] ) && !isset( $file_return['upload_error_handler'] ) ) {
