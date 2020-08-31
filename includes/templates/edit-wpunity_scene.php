@@ -1,102 +1,107 @@
 <?php
-
-//---------------------------------------------------------------------
 if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$perma_structure = false;}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else {$parameter_Scenepass = '&wpunity_scene=';}
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
-$current_scene_id = intval( $_GET['wpunity_scene'] );
-$current_scene_id = sanitize_text_field( $current_scene_id );
+// Load VR_Editor Scripts
+function load_vreditor_scripts()
+{
+    $vthreejs = 119;
 
-$project_id    = intval( $_GET['wpunity_game'] );
-$project_id    = sanitize_text_field( $project_id );
-$game_post     = get_post($project_id);
-$game_type_obj = wpunity_return_game_type($project_id);
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_threejs');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_CSS2DRenderer');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_CopyShader');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_FXAAShader');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_EffectComposer');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_RenderPass');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_OutlinePass');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_ShaderPass');
+    
+    // Fixed at 87 (forked of original 87)
+    wp_enqueue_script('wpunity_load87_datgui');
+    wp_enqueue_script('wpunity_load87_OBJloader');
+    wp_enqueue_script('wpunity_load87_MTLloader');
+    wp_enqueue_script('wpunity_load87_OrbitControls');
+    wp_enqueue_script('wpunity_load87_TransformControls');
+    wp_enqueue_script('wpunity_load87_PointerLockControls');
+    
+    wp_enqueue_script('wpunity_load87_sceneexporterutils');
+    wp_enqueue_script('wpunity_load87_scene_importer_utils');
+    wp_enqueue_script('wpunity_load87_sceneexporter');
+    
+    // Colorpicker for the lights
+    wp_enqueue_script('wpunity_jscolorpick');
+    
+    wp_enqueue_style('wpunity_vr_editor');
+    wp_enqueue_style('wpunity_vr_editor_filebrowser');
+}
+add_action('wp_enqueue_scripts', 'load_vreditor_scripts' );
 
+$project_id    = sanitize_text_field( intval( $_GET['wpunity_game'] ) );
+$project_post     = get_post($project_id);
+$projectSlug = $project_post->post_name;
+$project_type_obj = wpunity_return_project_type($project_id);
+
+$current_scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
+$scene_post = get_post($current_scene_id);
+$sceneTitle = $scene_post->post_name;
+
+// For analytics
 $project_saved_keys = wpunity_getProjectKeys($project_id, $project_scope);
 
+// if Virtual Lab
 if($project_scope === 1) {
-    if (!array_key_exists('gioID',$project_saved_keys)) {
+    if (!array_key_exists('gioID', $project_saved_keys)) {
         echo "<script type='text/javascript'>alert(\"APP KEY not found." .
             " Please make sure that your user account has been registered correctly, " .
             "and you have loaded the correct page\");</script>";
     }
 }
 
-$userid = get_current_user_id();
-$user_data = get_userdata( $userid );
+$user_data = get_userdata( get_current_user_id() );
 $user_email = $user_data->user_email;
 
 
-$scene_post = get_post($current_scene_id);
-$sceneTitle = $scene_post->post_name;
-
-//$asset_inserted_id = sanitize_text_field( intval( $_GET['wpunity_asset'] ));
-//$asset_post = get_post($asset_inserted_id);
-//if($asset_post->post_type == 'wpunity_asset3d') {$create_new = 0;$asset_checked_id=$asset_inserted_id;}
-
-
-$editgamePage = wpunity_getEditpage('game');
-$allGamesPage = wpunity_getEditpage('allgames');
+$allProjectsPage = wpunity_getEditpage('allgames');
 $newAssetPage = wpunity_getEditpage('asset');
 $editscenePage = wpunity_getEditpage('scene');
 $editscene2DPage = wpunity_getEditpage('scene2D');
 $editsceneExamPage = wpunity_getEditpage('sceneExam');
 
-
-$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$current_scene_id . '&wpunity_asset=' ); // . asset_id
-
+// for vr_editor
+$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$current_scene_id . '&wpunity_asset=' );
 
 // Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
-$game_post = get_post($project_id);
-$gameSlug = $game_post->post_name;
-$allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
+$allScenePGame = get_term_by('slug', $projectSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
-if ($game_type_obj->string === "Chemistry") {
-
-	$analytics_molecule_list = array('HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4');
-	$analytics_molecule_checklist = array(0,0,0,0,0,0,0,0);
-	$molecules = wpunity_get_all_molecules_of_game($project_id);
-	$molecule_list = [];
-	foreach ($molecules as $molecule) {
-		array_push($molecule_list, $molecule['moleculeType']);
-	}
-
-	foreach ($analytics_molecule_list as $idx => $molecule) {
-		if (in_array( $molecule, $molecule_list)) {
-			$analytics_molecule_checklist[$idx] = 1;
-		}
-	}
-	$analytics_molecule_checklist = implode("", $analytics_molecule_checklist);
-
+if ($project_type_obj->string === "Chemistry") {
+    $analytics_molecule_checklist = wpunity_derive_molecules_checklist();
 }
 
-
-
-$upload_dir = wp_upload_dir()['basedir'];
-$upload_dir = str_replace('\\','/',$upload_dir);
+$upload_dir = str_replace('\\','/',wp_upload_dir()['basedir']);
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
-$pluginpath = dirname (plugin_dir_url( __DIR__  ));
-$pluginpath = str_replace('\\','/',$pluginpath);
+$pluginpath = str_replace('\\','/', dirname(plugin_dir_url( __DIR__  )) );
 
 // COMPILE Ajax
 if(wpunity_getUnity_local_or_remote() != 'remote') {
 
-	$gameUnityProject_dirpath = $upload_dir . '\\' . $gameSlug . 'Unity';
-	$gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $gameSlug . 'Unity/';
+    // Local compile
+	$gameUnityProject_dirpath = $upload_dir . '\\' . $projectSlug . 'Unity';
+	$gameUnityProject_urlpath = $pluginpath . '/../../uploads/' . $projectSlug . 'Unity/';
 
 } else {
 
+    // Remote compile
 	$ftp_cre = wpunity_get_ftpCredentials();
 	$ftp_host = $ftp_cre['address'];
 
 	$gamesFolder = 'COMPILE_UNITY3D_GAMES';
 
-	$gameUnityProject_dirpath = $gamesFolder."/".$gameSlug."Unity";
-	$gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$gameSlug."Unity";
+	$gameUnityProject_dirpath = $gamesFolder."/".$projectSlug."Unity";
+	$gameUnityProject_urlpath = "http://".$ftp_host."/".$gamesFolder."/".$projectSlug."Unity";
 }
 
 
@@ -105,7 +110,7 @@ wp_enqueue_script( 'ajax-script_assepile', $thepath, array('jquery') );
 wp_localize_script( 'ajax-script_assepile', 'my_ajax_object_assepile',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php'),
 	       'id' => $project_id,
-	       'slug' => $gameSlug,
+	       'slug' => $projectSlug,
 	       'gameUnityProject_dirpath' => $gameUnityProject_dirpath,
 	       'gameUnityProject_urlpath' => $gameUnityProject_urlpath
 	)
@@ -123,14 +128,17 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'project_id' => $project_id )
 );
 
+// Asset Browser
 wp_enqueue_script( 'ajax-script_filebrowse', $pluginpath.'/js_libs/scriptFileBrowserToolbarWPway.js', array('jquery') );
 wp_localize_script( 'ajax-script_filebrowse', 'my_ajax_object_fbrowse', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
+// Save scene
 wp_enqueue_script( 'ajax-script_savescene', $pluginpath.'/js_libs/save_scene_ajax/wpunity_save_scene_ajax.js', array('jquery') );
 wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'scene_id' => $current_scene_id )
 );
 
+// Delete Asset
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
@@ -251,7 +259,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	}
 }
 
-$goBackTo_AllProjects_link = esc_url( get_permalink($allGamesPage[0]->ID));
+$goBackTo_AllProjects_link = esc_url( get_permalink($allProjectsPage[0]->ID));
 
 get_header(); ?>
 
@@ -312,17 +320,17 @@ get_header(); ?>
     
                         <i class="material-icons mdc-theme--text-icon-on-dark"
                            style="font-size: 16px; vertical-align: middle;margin-bottom:3px;"
-                           title="<?php echo $game_type_obj->string; ?>"><?php echo $game_type_obj->icon; ?> </i>&nbsp;<?php
+                           title="<?php echo $project_type_obj->string; ?>"><?php echo $project_type_obj->icon; ?> </i>&nbsp;<?php
         
-                        //        if ($game_type_obj->string === "Archaeology")
+                        //        if ($project_type_obj->string === "Archaeology")
                         //            echo "Museum";
                         //        else
-                            echo $game_type_obj->string;
-                        //echo $game_type_obj->string;
+                            echo $project_type_obj->string;
+                        //echo $project_type_obj->string;
                         ?>
                         <i class="material-icons mdc-theme--text-icon-on-dark" title="" style="font-size:20px;vertical-align:middle">chevron_right</i>&nbsp;
                         <?php
-                            echo $game_post->post_title;
+                            echo $project_post->post_title;
                         ?>
                         <i class="material-icons mdc-theme--text-icon-on-dark" title="" style="font-size:20px;vertical-align:middle">chevron_right</i>
 
@@ -343,7 +351,7 @@ get_header(); ?>
 <!--                <div class="mdc-toolbar__section" style="display:block;float:left">-->
 <!--                    <nav id="dynamic-tab-bar" class="mdc-tab-bar--indicator-secondary" style="text-transform: uppercase" role="tablist">-->
 <!--                        <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>-->
-<!--                        --><?php //if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) { ?>
+<!--                        --><?php //if ( $project_type_obj->string === "Energy" || $project_type_obj->string === "Chemistry" ) { ?>
 <!---->
 <!--                            <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" onclick="">Analytics</a>-->
 <!--        -->
@@ -352,7 +360,7 @@ get_header(); ?>
 <!--                            --><?php //} ?>
 <!--        -->
 <!--        -->
-<!--                            --><?php //if($game_type_obj->string === "Chemistry"){ ?>
+<!--                            --><?php //if($project_type_obj->string === "Chemistry"){ ?>
 <!--                                <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>-->
 <!--                            --><?php //} ?>
 <!--    -->
@@ -448,8 +456,6 @@ get_header(); ?>
 
 												<?php $screenshotImgUrl = get_the_post_thumbnail_url( $current_scene_id );
 
-												echo '<script>var is_scene_icon_manually_selected = false;</script>';
-
 												if($screenshotImgUrl=='') {
 													echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
 												}else{
@@ -519,7 +525,7 @@ get_header(); ?>
 
 
             <!--Add information for Wind Energy games-->
-			<?php if($game_type_obj->string === "Energy") { ?>
+			<?php if($project_type_obj->string === "Energy") { ?>
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner mdc-theme--text-primary-on-light">
 
@@ -549,7 +555,7 @@ get_header(); ?>
 			<?php } ?>
 
 
-		<?php if ( $game_type_obj->string === "Energy" || $game_type_obj->string === "Chemistry" ) {  ?>
+		<?php if ( $project_type_obj->string === "Energy" || $project_type_obj->string === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
@@ -572,7 +578,7 @@ get_header(); ?>
 
 			<?php } ?>
 
-			<?php if($game_type_obj->string === "Chemistry"){ ?>
+			<?php if($project_type_obj->string === "Chemistry"){ ?>
                 <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
                     <div style="position: relative; overflow: hidden; padding-top: 100%;">
                         <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
@@ -588,7 +594,7 @@ get_header(); ?>
                class="mdc-dialog"
                role="alertdialog"
                style="z-index: 1000;"
-               data-game-slug="<?php echo $gameSlug; ?>"
+               data-game-slug="<?php echo $projectSlug; ?>"
                data-project-id="<?php echo $project_id; ?>"
                aria-labelledby="my-mdc-dialog-label"
                aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
@@ -678,8 +684,6 @@ get_header(); ?>
         var mdc = window.mdc;
         mdc.autoInit();
 
-        
-        
         var optionsDialog = document.querySelector('#options-dialog');
         if (optionsDialog) {
             optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
@@ -771,7 +775,7 @@ get_header(); ?>
         var project_keys = [];
         project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id, $project_scope)); ?>;
         var scene_id = <?php echo $current_scene_id; ?>;
-        var game_type = "<?php echo strtolower($game_type_obj->string);?>";
+        var game_type = "<?php echo strtolower($project_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
 
         // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
@@ -941,25 +945,14 @@ get_header(); ?>
         });
 
         jQuery("#clear-image-button").click(function() {
-            //document.getElementById("wpunity_scene_sshot").src = "noimagemagicword";
-            //document.getElementById("wpunity_scene_sshot").src = envir.renderer.domElement.toDataURL("image/jpeg");
-            //document.getElementById("wpunity_scene_sshot").style.display = "none";
-
             takeScreenshot();
             is_scene_icon_manually_selected = false;
         });
 
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
-
-            //console.log("ID:", deleteDialog.id);
-
             jQuery('#delete-scene-dialog-progress-bar').show();
-
             jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
             jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
-
-            
-            //console.log(url_scene_redirect);
             wpunity_deleteSceneAjax(deleteDialog.id, url_scene_redirect);
         });
 
@@ -990,10 +983,7 @@ get_header(); ?>
             jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
             jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
         }
-
-        
     </script>
 
 <?php } ?>
-
 <?php get_footer(); ?>

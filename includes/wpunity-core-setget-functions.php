@@ -1,13 +1,15 @@
 <?php
 
 function wpunity_getDefaultJSONscene($mygameType){
-
-	$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
-
-	if($mygameType == 'energy') {
+	
+	if($mygameType == 'archaeology') {
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
+	}else if($mygameType == 'energy') {
 		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene_energy.json");
 	}elseif($mygameType == 'chemistry'){
 		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene_chemistry.json");
+	} else {
+		$def_json = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/assets/standard_scene.json");
 	}
 
 	return $def_json;

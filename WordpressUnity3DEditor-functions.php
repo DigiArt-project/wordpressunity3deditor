@@ -86,18 +86,28 @@ function wpunity_register_scripts() {
 	
 	$scriptsB = array(
 			array( 'wpunity_load87_threejs', $pluginDirJS.'threejs87/three.js'),
-			array( 'wpunity_load87_objloader', $pluginDirJS.'threejs87/OBJLoader.js'),
-			array( 'wpunity_load87_objloader2', $pluginDirJS.'threejs87/OBJLoader2.js'),
-			array( 'wpunity_load87_wwobjloader2', $pluginDirJS. 'threejs87/WWOBJLoader2.js'),
-			array( 'wpunity_load87_mtlloader', $pluginDirJS.'threejs87/MTLLoader.js'),
-			array( 'wpunity_load87_fbxloader', $pluginDirJS.'threejs87/FBXLoader.js'),
-			array( 'wpunity_load87_orbitcontrols', $pluginDirJS.'threejs87/OrbitControls.js'),
-			array( 'wpunity_load87_pdbloader', $pluginDirJS.'threejs87/PDBLoader.js'),
-			array( 'wpunity_load87_trackballcontrols', $pluginDirJS.'threejs87/TrackballControls.js'),
-			array( 'wpunity_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
-			array( 'wpunity_load_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
-			array( 'wpunity_load_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
-			array( 'wpunity_load_sceneexporter', $pluginDirJS.'threejs87/SceneExporter.js'),
+			array( 'wpunity_load87_OBJloader', $pluginDirJS.'threejs87/OBJLoader.js'),
+			array( 'wpunity_load87_OBJloader2', $pluginDirJS.'threejs87/OBJLoader2.js'),
+			array( 'wpunity_load87_WWOBJloader2', $pluginDirJS. 'threejs87/WWOBJLoader2.js'),
+			array( 'wpunity_load87_MTLloader', $pluginDirJS.'threejs87/MTLLoader.js'),
+			array( 'wpunity_load87_FBXloader', $pluginDirJS.'threejs87/FBXLoader.js'),
+			array( 'wpunity_load87_OrbitControls', $pluginDirJS.'threejs87/OrbitControls.js'),
+            array( 'wpunity_load87_TransformControls', $pluginDirJS.'threejs87/TransformControls.js'),
+			array( 'wpunity_load87_PointerLockControls', $pluginDirJS.'threejs87/PointerLockControls.js'),
+			array( 'wpunity_load87_datgui', $pluginDirJS.'threejs87/dat.gui.js'),
+			
+			array( 'wpunity_load87_CopyShader', $pluginDirJS.'threejs87/CopyShader.js'),
+			array( 'wpunity_load87_FXAAShader', $pluginDirJS.'threejs87/FXAAShader.js'),
+			array( 'wpunity_load87_EffectComposer', $pluginDirJS.'threejs87/EffectComposer.js'),
+			array( 'wpunity_load87_RenderPass', $pluginDirJS.'threejs87/RenderPass.js'),
+			array( 'wpunity_load87_OutlinePass', $pluginDirJS.'threejs87/OutlinePass.js'),
+			array( 'wpunity_load87_ShaderPass', $pluginDirJS.'threejs87/ShaderPass.js'),
+			array( 'wpunity_load87_PDBloader', $pluginDirJS.'threejs87/PDBLoader.js'),
+			array( 'wpunity_load87_TrackballControls', $pluginDirJS.'threejs87/TrackballControls.js'),
+			array( 'wpunity_load87_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
+			array( 'wpunity_load87_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
+			array( 'wpunity_load87_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
+			array( 'wpunity_load87_sceneexporter', $pluginDirJS.'threejs87/SceneExporter.js'),
 		);
 	
 	for ( $i = 0 ; $i < count($scriptsB); $i ++){
@@ -108,15 +118,35 @@ function wpunity_register_scripts() {
 	
 	$scriptsC = array(
 		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
-		array( 'wpunity_load119_objloader', $pluginDirJS.'threejs119/OBJLoader.js'),
-		array( 'wpunity_load119_mtlloader', $pluginDirJS.'threejs119/MTLLoader.js'),
-		array( 'wpunity_load119_fbxloader', $pluginDirJS.'threejs119/FBXLoader.js'),
+		
+		array( 'wpunity_load119_FBXloader', $pluginDirJS.'threejs119/FBXLoader.js'),
 //		array( 'wpunity_load119_pdbloader', $pluginDirJS.'threejs119/PDBLoader.js'),
-		array( 'wpunity_load119_trackballcontrols', $pluginDirJS.'threejs119/TrackballControls.js'),
+		
+		array( 'wpunity_load119_OrbitControls', $pluginDirJS.'threejs119/OrbitControls.js'),
+		array( 'wpunity_load119_TransformControls', $pluginDirJS.'threejs119/TransformControls.js'),
+		array( 'wpunity_load119_TrackballControls', $pluginDirJS.'threejs119/TrackballControls.js'),
+		array( 'wpunity_load119_PointerLockControls', $pluginDirJS.'threejs119/PointerLockControls.js'),
 //		array( 'wpunity_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
 //		array( 'wpunity_load_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
 //		array( 'wpunity_load_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
 //		array( 'wpunity_load_sceneexporter', $pluginDirJS.'threejs87/SceneExporter.js'),
+		
+		
+		array( 'wpunity_load119_CSS2DRenderer', $pluginDirJS.'threejs119/CSS2DRenderer.js'),
+		
+		array( 'wpunity_load119_CopyShader', $pluginDirJS.'threejs119/CopyShader.js'),
+		array( 'wpunity_load119_FXAAShader', $pluginDirJS.'threejs119/FXAAShader.js'),
+		array( 'wpunity_load119_EffectComposer', $pluginDirJS.'threejs119/EffectComposer.js'),
+		array( 'wpunity_load119_RenderPass', $pluginDirJS.'threejs119/RenderPass.js'),
+		array( 'wpunity_load119_OutlinePass', $pluginDirJS.'threejs119/OutlinePass.js'),
+		array( 'wpunity_load119_ShaderPass', $pluginDirJS.'threejs119/ShaderPass.js'),
+		
+		
+		
+		
+	
+	
+	
 	);
 	
 	for ( $i = 0 ; $i < count($scriptsC); $i ++){

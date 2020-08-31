@@ -30,7 +30,7 @@ $project_id = intval( $_GET['wpunity_game'] );
 $project_id = sanitize_text_field( $project_id );
 
 $game_post = get_post($project_id);
-$game_type_obj = wpunity_return_game_type($project_id);
+$game_type_obj = wpunity_return_project_type($project_id);
 $gameSlug = $game_post->post_name;
 
 $scene_post = get_post($scene_id);

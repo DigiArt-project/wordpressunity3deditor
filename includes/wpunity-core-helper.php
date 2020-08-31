@@ -6,28 +6,25 @@
  * Time: 3:40 μμ
  */
 
-function wpunity_return_game_type($id) {
+function wpunity_return_project_type($id) {
 
-	$all_game_category = get_the_terms( $id, 'wpunity_game_type' );
-	$game_category     = $all_game_category[0]->name;
+	$all_project_category = get_the_terms( $id, 'wpunity_game_type' );
+	$project_category     = $all_project_category[0]->name;
 
 	// Default is Archaeology
-	$game_type_icon = "account_balance"; // Archaeology
-	/*if ( $game_category === 'Archaeology' )
-		$game_type_icon = "account_balance";*/
+	$project_type_icon = "account_balance";
 
 	// Set game type icon
-	if ( $game_category === 'Energy' )
-		$game_type_icon = "blur_on";
+	if ( $project_category === 'Energy' )
+		$project_type_icon = "blur_on";
 
-
-    if ( $game_category === 'Chemistry' )
-        $game_type_icon = "bubble_chart";
+    if ( $project_category === 'Chemistry' )
+        $project_type_icon = "bubble_chart";
 
 
 	$obj = new stdClass();
-	$obj->string = $game_category;
-	$obj->icon = $game_type_icon;
+	$obj->string = $project_category;
+	$obj->icon = $project_type_icon;
 
 	return $obj;
 }

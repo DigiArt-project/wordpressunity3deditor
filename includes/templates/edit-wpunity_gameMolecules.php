@@ -79,7 +79,7 @@ if (!$project_saved_keys['gioID'] && $project_scope === 1) { // In Envisage only
 $allScenePGame = get_term_by('slug', $gameSlug, 'wpunity_scene_pgame');
 $allScenePGameID = $allScenePGame->term_id;
 
-$game_type_obj = wpunity_return_game_type($project_id);
+$game_type_obj = wpunity_return_project_type($project_id);
 
 $editscenePage = wpunity_getEditpage('scene');
 $editscene2DPage = wpunity_getEditpage('scene2D');

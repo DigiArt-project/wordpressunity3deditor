@@ -3,67 +3,20 @@ if ( get_option('permalink_structure') ) { $perma_structure = true; } else {$per
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
 if( $perma_structure){$parameter_pass = '?wpunity_game=';} else{$parameter_pass = '&wpunity_game=';}
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
-?>
-
-<!--Three js staff: Several modifications on OBJLoader, MTLLoader, OrbitControls, TransformControls, PointerLockControls-->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/three.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OBJLoader.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/MTLLoader.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OrbitControls.js'></script>
-
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CSS2DRenderer.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/TransformControls.js"></script>
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/PointerLockControls.js"></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/dat.gui.js'></script>
-<!--<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/stats.min.js'></script>-->
-
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/CopyShader.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/FXAAShader.js'></script>
-
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/EffectComposer.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/RenderPass.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/OutlinePass.js'></script>
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/threejs87/ShaderPass.js'></script>
-
-
-<!-- vr_editor.php -->
-<?php
-
-wp_enqueue_style('wpunity_vr_editor');
-wp_enqueue_style('wpunity_vr_editor_filebrowser');
-
-//wp_enqueue_script('wpunity_load87_threejs');
-//wp_enqueue_script('wpunity_load87_objloader');
-//wp_enqueue_script('wpunity_load87_mtlloader');
-//wp_enqueue_script('wpunity_load87_orbitcontrols');
-
-
-wp_enqueue_script('wpunity_load_sceneexporterutils');
-wp_enqueue_script('wpunity_load_scene_importer_utils');
-wp_enqueue_script('wpunity_load_sceneexporter');
-
-// Colorpicker for the lights
-wp_enqueue_script('wpunity_jscolorpick');
 
 // Define current path
 $PLUGIN_PATH_VR = plugins_url().'/wordpressunity3deditor';
 $UPLOAD_DIR = wp_upload_dir()['baseurl'];
-$UPLOAD_DIR_C = wp_upload_dir()['basedir'];
-$UPLOAD_DIR_C = str_replace('/','\\',$UPLOAD_DIR_C);
+$UPLOAD_DIR_C = str_replace('/','\\',wp_upload_dir()['basedir']);
 
 $meta_json = get_post($current_scene_id)->post_content;
 
-// Load default scenes if no content
-// Do not put esc_attr, crashes the universe in 3D
-if ( $game_type_obj->string === "Energy" ) {
-    $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('energy');
-}else{
-    $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene('chemistry');
-}
+// Load default scenes if no content. Do not put esc_attr, crashes the universe in 3D.
+$sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene(strtolower($project_type_obj->string));
 
 // Find scene dir string
 $parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
-$parentGameId = $_REQUEST['wpunity_game']; //wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->term_id;
+$parentGameId = $_REQUEST['wpunity_game'];
 
 $projectGameSlug = $parentGameSlug;
 
@@ -807,7 +760,7 @@ echo '</script>';
         <?php endwhile;?>
 
         <!--ADD NEW SCENE-->
-        <?php if($game_type_obj->string !== "Energy") { ?>
+        <?php if($project_type_obj->string !== "Energy") { ?>
 
         <div id="add-new-scene-card" class="SceneCardContainer">
             <form name="create_new_scene_form" action="" id="create_new_scene_form" method="POST" enctype="multipart/form-data">
@@ -834,11 +787,11 @@ echo '</script>';
                     </section>
 
                     <section class="mdc-card__primary" style="display:none">
-                        <?php if($game_type_obj->string != "Archaeology"){ ?>
+                        <?php if($project_type_obj->string != "Archaeology"){ ?>
                             <label class="mdc-typography--subheading2 mdc-theme--text-primary">Scene type</label>
                         <?php } ?>
                         <!--Scene Type-->
-                        <?php if($game_type_obj->string === "Chemistry"){ ?>
+                        <?php if($project_type_obj->string === "Chemistry"){ ?>
                             <ul>
                                 <li class="mdc-form-field">
                                     <div class="mdc-radio">
@@ -875,7 +828,7 @@ echo '</script>';
                             </ul>
                         <?php } ?>
                         
-                        <?php if($game_type_obj->string === "Energy"){ ?>
+                        <?php if($project_type_obj->string === "Energy"){ ?>
                             <div class="mdc-form-field">
                                 <div class="mdc-checkbox" id="regional-checkbox-component">
                                     <input name="regionalSceneCheckbox" type="checkbox" id="regional-scene-checkbox" class="mdc-checkbox__native-control">

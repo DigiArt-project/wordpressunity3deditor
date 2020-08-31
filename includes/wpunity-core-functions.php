@@ -1334,6 +1334,29 @@ function wpunity_get_all_Available_molecules_of_game($scene_id){
 	return	$moleculesData;
 }
 
+
+// Chemistry: Get molecule list for analytics
+function wpunity_derive_molecules_checklist(){
+    
+    $analytics_molecule_list = array('HCL','H2O','NaF','NaCl','KBr','CH4','CaCl2','CF4');
+	$analytics_molecule_checklist = array(0,0,0,0,0,0,0,0);
+	$molecules = wpunity_get_all_molecules_of_game($project_id);
+	$molecule_list = [];
+	foreach ($molecules as $molecule) {
+		array_push($molecule_list, $molecule['moleculeType']);
+	}
+
+	foreach ($analytics_molecule_list as $idx => $molecule) {
+		if (in_array( $molecule, $molecule_list)) {
+			$analytics_molecule_checklist[$idx] = 1;
+		}
+	}
+	$analytics_molecule_checklist = implode("", $analytics_molecule_checklist);
+ 
+	return $analytics_molecule_checklist;
+}
+
+
 //Get All MOLECULES of specific game by given project ID
 function wpunity_get_all_molecules_of_game($project_id) {
 

@@ -1,8 +1,3 @@
-/**
- * @author arodic / https://github.com/arodic
- */
-
-
 // Children transform_controls.children
 
 // 3:  3D Translate

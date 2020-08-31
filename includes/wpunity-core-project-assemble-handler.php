@@ -182,7 +182,7 @@ function wpunity_fetch_list_projects_callback(){
            if ($game_title == 'Archaeology Joker' || $game_title == 'Energy Joker' || $game_title == 'Chemistry Joker' )
                 continue;
     
-            $game_type_obj = wpunity_return_game_type($game_id);
+            $game_type_obj = wpunity_return_project_type($game_id);
     
             $all_game_category = get_the_terms( $game_id, 'wpunity_game_type' );
             $game_category     = $all_game_category[0]->slug;

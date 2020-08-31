@@ -430,19 +430,21 @@ class WU_webw_3d_view {
 
         // Add audio listener to the camera
 
-        this.listener = new THREE.AudioListener();
-        this.camera.add( this.listener );
-        this.audioElement.play();
+        if (this.audioElement!=null) {
+            this.listener = new THREE.AudioListener();
+            this.camera.add(this.listener);
 
+            this.audioElement.play();
+            this.positionalAudio = new THREE.PositionalAudio(this.listener);
+            this.positionalAudio.setMediaElementSource(this.audioElement);
+            this.positionalAudio.setRefDistance(200);
+            this.positionalAudio.setDirectionalCone(330, 230, 0.01);
 
-        this.positionalAudio = new THREE.PositionalAudio( this.listener );
-        this.positionalAudio.setMediaElementSource( this.audioElement );
-        this.positionalAudio.setRefDistance( 200 );
-        this.positionalAudio.setDirectionalCone( 330, 230, 0.01);
-
-        // // - PDB, FBX Specific -
-        this.root.add(this.positionalAudio);
+            // // - PDB, FBX Specific -
+            this.root.add(this.positionalAudio);
+        }
         this.scene.add(this.root);
+
 
         this.resetCamera();
 

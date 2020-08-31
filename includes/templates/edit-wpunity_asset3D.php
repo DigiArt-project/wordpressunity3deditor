@@ -39,29 +39,27 @@ function loadAsset3DManagerScripts() {
     wp_enqueue_script('wpunity_load119_threejs');
 
     // 2. Obj loader simple; For loading an uploaded obj
-    wp_enqueue_script('wpunity_load87_objloader');
+    wp_enqueue_script('wpunity_load87_OBJloader');
 
     // 3. Obj loader 2: For preview loading
-    wp_enqueue_script('wpunity_load87_objloader2');
-    wp_enqueue_script('wpunity_load87_wwobjloader2');
+    wp_enqueue_script('wpunity_load87_OBJloader2');
+    wp_enqueue_script('wpunity_load87_WWOBJloader2');
 
     // 4. Mtl loader
-    wp_enqueue_script('wpunity_load87_mtlloader');
+    wp_enqueue_script('wpunity_load87_MTLloader');
 
     // 5. Pdb loader for molecules
     //wp_enqueue_script('wpunity_load119_pdbloader');
 
     // 6. Fbx loader
-    wp_enqueue_script('wpunity_load119_fbxloader');
+    wp_enqueue_script('wpunity_load119_FBXloader');
 
     // 7. Trackball controls
-    wp_enqueue_script('wpunity_load119_trackballcontrols');
-    
- 
- 
+    wp_enqueue_script('wpunity_load119_TrackballControls');
+
  
 	// For the PDB files to annotate molecules in 3D
-	wp_enqueue_script('wpunity_CSS2DRenderer');
+	wp_enqueue_script('wpunity_load119_CSS2DRenderer');
 	wp_enqueue_script('WU_webw_3d_view');
 	wp_enqueue_script('wu_3d_view_pdb');
 	wp_enqueue_script('wpunity_asset_editor_scripts');
@@ -109,7 +107,7 @@ $scene_id = isset($_GET['wpunity_scene']) ? sanitize_text_field( intval( $_GET['
 // Game project variables
 $game_post = get_post($project_id);
 $gameSlug = $game_post->post_name;
-$game_type_obj = wpunity_return_game_type($project_id);
+$game_type_obj = wpunity_return_project_type($project_id);
 
 
 //Get 'parent-game' taxonomy with the same slug as Game
