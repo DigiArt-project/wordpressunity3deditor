@@ -1421,7 +1421,7 @@ function wpunity_get_all_molecules_of_game($project_id) {
 }
 
 //Get All DOORS of specific game (from all scenes) by given project ID (parent game ID)
-function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
+function wpunity_get_all_doors_of_project_fastversion($allScenePGameID){
 
 	$sceneIds = [];
 
@@ -1483,7 +1483,7 @@ function wpunity_get_all_doors_of_game_fastversion($allScenePGameID){
 	return $doorInfoGathered;
 }
 
-function wpunity_get_all_scenesMarker_of_game_fastversion($allScenePGameID){
+function wpunity_get_all_scenesMarker_of_project_fastversion($allScenePGameID){
 
 	$sceneIds = [];
 

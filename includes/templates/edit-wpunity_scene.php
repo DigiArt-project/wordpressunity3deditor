@@ -38,6 +38,19 @@ function load_vreditor_scripts()
 }
 add_action('wp_enqueue_scripts', 'load_vreditor_scripts' );
 
+
+function load_custom_functions_vreditor(){
+    wp_enqueue_script('wpunity_vr_editor_environmentals');
+    wp_enqueue_script('wpunity_keyButtons');
+    wp_enqueue_script('wpunity_rayCasters');
+    wp_enqueue_script('wpunity_auxControlers');
+    wp_enqueue_script('wpunity_LoaderMulti');
+    wp_enqueue_script('wpunity_movePointerLocker');
+    wp_enqueue_script('wpunity_addRemoveOne');
+}
+add_action('wp_enqueue_scripts', 'load_custom_functions_vreditor' );
+
+
 $project_id    = sanitize_text_field( intval( $_GET['wpunity_game'] ) );
 $project_post     = get_post($project_id);
 $projectSlug = $project_post->post_name;

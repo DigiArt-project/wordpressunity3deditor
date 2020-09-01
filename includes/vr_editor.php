@@ -14,44 +14,35 @@ $meta_json = get_post($current_scene_id)->post_content;
 // Load default scenes if no content. Do not put esc_attr, crashes the universe in 3D.
 $sceneToLoad = $meta_json ? $meta_json : wpunity_getDefaultJSONscene(strtolower($project_type_obj->string));
 
-// Find scene dir string
-$parentGameSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
+
+$projectSlug = wp_get_object_terms( $current_scene_id, 'wpunity_scene_pgame')[0]->slug;
 $parentGameId = $_REQUEST['wpunity_game'];
+//echo '<div style="position:absolute;z-index:2000;background:white">';
+//echo strtolower($project_type_obj->string);
+//echo '<div>';
 
-$projectGameSlug = $parentGameSlug;
-
+// Wind Energy Only
 $scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
+$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_project_fastversion($parentGameId);
 
-$doorsAllInfo = wpunity_get_all_doors_of_game_fastversion($parentGameId);
-
-$scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_game_fastversion($parentGameId);
-
-$scenefolder = $sceneTitle;
-$gamefolder = $parentGameSlug;
-$sceneID = $current_scene_id;
+// Archaeology only
+$doorsAllInfo = wpunity_get_all_doors_of_project_fastversion($parentGameId);
 
 $isAdmin = is_admin() ? 'back' : 'front';
 
-if ($project_scope === 0){
-    $joker_project_id = get_page_by_path( 'archaeology-joker', OBJECT, 'wpunity_game' )->ID;
-} elseif ($project_scope === 1) {
-    $joker_project_id = get_page_by_path( 'chemistry-joker', OBJECT, 'wpunity_game' )->ID;
-} elseif ($project_scope === 2) {
-    $joker_project_id = get_page_by_path( 'energy-joker', OBJECT, 'wpunity_game' )->ID;
-}
+$project_type = strtolower($project_type_obj->string);
+$joker_project_id = get_page_by_path( $project_type.'-joker', OBJECT, 'wpunity_game' )->ID;
 
 
 // Also available in Javascript side
 echo '<script>';
 echo 'var PLUGIN_PATH_VR="'.$PLUGIN_PATH_VR.'";';
 echo 'var UPLOAD_DIR="'.wp_upload_dir()['baseurl'].'";';
-echo 'var scenefolder="'.$scenefolder.'";';
-echo 'var gamefolder="'.$gamefolder.'";';
-echo 'var sceneID="'.$sceneID.'";';
-echo 'console.log(sceneID);';
+echo 'var scenefolder="'.$sceneTitle.'";';
+echo 'var gamefolder="'.$projectSlug.'";';
+echo 'var sceneID="'.$current_scene_id.'";';
 echo 'var gameProjectID="'.$parentGameId.'";';
-echo 'console.log(gameProjectID);';
-echo 'var gameProjectSlug="'.$projectGameSlug.'";';
+echo 'var gameProjectSlug="'.$projectSlug.'";';
 echo 'var isAdmin="'.$isAdmin.'";';
 echo 'var isUserAdmin="'.current_user_can('administrator').'";';
 echo 'var urlforAssetEdit="'.$urlforAssetEdit.'";';
@@ -60,35 +51,7 @@ echo "var scenesMarkerAll=".json_encode($scenesMarkerAllInfo).";";
 echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
 echo "var scenesTargetChemistry=".json_encode(wpunity_getAllexams_byGame($joker_project_id, true)).";";
 echo '</script>';
-
 ?>
-
-
-<!-- Todo: put these js libraries in wp_register -->
-<!-- JS libraries -->
-<!--<link rel="import" href="--><?php //echo $PLUGIN_PATH_VR?><!--/includes/vr_editor_header_js.html">-->
-
-<!--  My libraries  -->
-<!-- Scene Environmentals -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/vr_editor_environmentals.js'></script>
-
-<!-- Handle keyboard buttons shortcuts -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/keyButtons.js'></script>
-
-<!-- Functions for clicking on 3D objects -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/rayCasters.js'></script>
-
-<!-- Functions for controllers (axes, dat.gui, phpForm) -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/auxControlers.js'></script>
-
-<!-- Load multiple objs -->
-<script type="text/javascript" src='../wp-content/plugins/wordpressunity3deditor/js_libs/LoaderMulti.js'></script>
-
-<!-- Controls for walking in the model -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/movePointerLocker.js"></script>
-
-<!-- Add one more item -->
-<script type="text/javascript" src="../wp-content/plugins/wordpressunity3deditor/js_libs/addRemoveOne.js"></script>
 
 <script type="text/javascript">
     post_revision_no = 1;
@@ -100,10 +63,6 @@ echo '</script>';
     
     //  Save Button implemented with Ajax
     jQuery(document).ready(function(){
-
-        // var vr_editor = jQuery('#vr_editor_main_div');
-        // var cw = vr_editor.width();
-        // vr_editor.css({'height':cw*2/3+'px'});
         envir.turboResize();
 
         // make filebrowser draggable
@@ -114,98 +73,44 @@ echo '</script>';
         // Make filemanager draggable
         filemanager.draggable({cancel : 'ul'});
 
-        
-        //if (!envir.isDebug)
-            wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
+        wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID);
     });
 
-    // function removeSavedText(){
-    //     jQuery(".result").html("");
-    // }
-
-    //========== Drag and drop 3D objects into scene for INSERT  =========================================
-    //var raycasterDrag = new THREE.Raycaster();
-
-    // find all indexes of the needle inside the str
-    function allIndexOf(needle, str){
-        var indices = [];
-        for(var i=0; i<str.length;i++)
-            if (str[i] === needle) indices.push(i);
-        return indices;
-    }
-
+    // Drag and drop 3D objects into scene for INSERT
     function drop_handler(ev) {
 
-        var dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
+        let dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
+        let categoryName = dataDrag.categoryName;
+        let nameModel = dataDrag.title;
 
-        var categoryName = dataDrag.categoryName;
-        
-        var nameModel = dataDrag.title;
-        
-        // REM HERE
-        if(dataDrag.categoryName==="lightSun" || dataDrag.categoryName==="lightLamp" || dataDrag.categoryName==="lightSpot"){
-            // SUN or LAMP or Spot
+        // SUN or LAMP or Spot
+        if(dataDrag.categoryName==="lightSun" ||
+            dataDrag.categoryName==="lightLamp" ||
+            dataDrag.categoryName==="lightSpot"){
 
-            var path = objFname = objID = mtlID = mtlFname = assetid = categoryIcon = '';
+            var path = objFname = mtlFname = '';
+            dataDrag.objID = dataDrag.mtlID = dataDrag.assetid = dataDrag.categoryIcon = '';
             
-            var categoryID = diffImages = diffImageIDs = image1id = doorName_source = '';
-            var doorName_target = sceneName_target = sceneID_target = archaeology_penalty = '';
-            var hv_penalty = natural_penalty = '';
-            var isreward = isCloned = isJoker = 0;
-            
+            dataDrag.categoryID = dataDrag.diffImages = dataDrag.diffImageIDs = dataDrag.image1id = dataDrag.doorName_source = '';
+            dataDrag.doorName_target = dataDrag.sceneName_target = dataDrag.sceneID_target = dataDrag.archaeology_penalty = '';
+            dataDrag.hv_penalty = dataDrag.natural_penalty = '';
+            dataDrag.isreward = dataDrag.isCloned = dataDrag.isJoker = 0;
             
         } else {
 
-            var path = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/") + 1);
-
+            var path     = dataDrag.obj.substring(0, dataDrag.obj.lastIndexOf("/") + 1);
             var objFname = dataDrag.obj.substring(dataDrag.obj.lastIndexOf("/") + 1);
             var mtlFname = dataDrag.mtl.substring(dataDrag.mtl.lastIndexOf("/") + 1);
-
-            var objID = dataDrag.objID;
-            var mtlID = dataDrag.mtlID;
-
-            var assetid = dataDrag.assetid;
-            
-            var categoryDescription = dataDrag.categoryDescription;
-            var categoryIcon = dataDrag.categoryIcon;
-            var categoryID = dataDrag.categoryID;
-            var diffImages = dataDrag.diffImages;
-            var diffImageIDs = dataDrag.diffImageIDs;
-
-            var image1id = dataDrag.image1id;
-
-            var doorName_source = dataDrag.doorName_source;
-            var doorName_target = dataDrag.doorName_target;
-            var sceneName_target = dataDrag.sceneName_target;
-            var sceneID_target = dataDrag.sceneID_target;
-            var archaeology_penalty = dataDrag.archaeology_penalty;
-            var hv_penalty = dataDrag.hv_penalty;
-            var natural_penalty = dataDrag.natural_penalty;
-
-            var isreward = dataDrag.isreward;
-            var isCloned = dataDrag.isCloned;
-            var isJoker = dataDrag.isJoker;
         }
 
-        var coordsXYZ = dragDropVerticalRayCasting(ev);
-
+        let translation = dragDropVerticalRayCasting(ev);
         
-        // Asset is added to canvas
-        addAssetToCanvas(nameModel, assetid, path, objFname, objID, mtlFname, mtlID,
-            categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id, doorName_source, doorName_target, sceneName_target,
-            sceneID_target,
-            archaeology_penalty,
-            hv_penalty,
-            natural_penalty,
-            isreward, isCloned, isJoker,
-            coordsXYZ[0],
-            coordsXYZ[1],
-            coordsXYZ[2]);
+        // Asset add to canvas
+        addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, dataDrag, translation);
 
         // Show options
         jQuery('#object-manipulation-toggle').show();
         jQuery('#axis-manipulation-buttons').show();
-        //jQuery('#double-sided-switch').show();
 
         showObjectPropertiesPanel(transform_controls.getMode());
 
@@ -213,326 +118,216 @@ echo '</script>';
             transform_controls.setMode("rottrans");
             jQuery("#translatePanelGui").show();
         }
-        
-        
-        
+
         ev.preventDefault();
     }
 
     function dragover_handler(ev) {
         ev.preventDefault();
     }
-
-
-    //===================== End of drag n drop for INSERT ========================================================
+    // End of drag n drop
 </script>
-
 
 
 <!-- 3D editor  -->
 <div id="vr_editor_main_div" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
 
-
-
-    <!--Canvas center-->
+    <!-- Close all 2D UIs-->
     <a id="toggleUIBtn" data-toggle='on' type="button"
-       class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface"
-        >
+       class="ToggleUIButtonStyle mdc-theme--secondary" title="Toggle interface">
         <i class="material-icons" style="background: #ffffff; opacity:0.2">visibility</i>
     </a>
 
-
-<!-- Lights -->
-<div class="lightcolumns hidable">
-    <div class="lightcolumn" data-light="Sun" draggable="true"><header draggable="false">Sun</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/></div>
-    <div class="lightcolumn" data-light="Lamp" draggable="true"><header draggable="false">Lamp</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/></div>
-    <div class="lightcolumn" data-light="Spot" draggable="true"><header draggable="false">Spot</header><img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false" class="lighticon"/></div>
-</div>
-
-<!-- Remove game object-->
-<a type="button" id="removeAssetBtn" class="RemoveAssetFromSceneBtnStyle hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
-   title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
-    <i class="material-icons">delete</i>
-</a>
-
-<!--  Open/Close Right Hierarchy panel-->
-<a id="hierarchy-toggle-btn" data-toggle='on' type="button" class="HierarchyToggleStyle HierarchyToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
-    <i class="material-icons">menu</i>
-</a>
-
-
-<div id="right-elements-panel" class="right-elements-panel-style">
-
-    <div id="row0" class="row-right-panel" style="height:65px;vertical-align: bottom; bottom:0; display:table-cell; padding-left:5px;">
-        Scene controls
-    </div>
-    
-    <div id="row1" class="row-right-panel">
-            <!-- Options -->
-            <a type="button" id="optionsPopupBtn" class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Edit scene options" data-mdc-auto-init="MDCRipple">
-                <i class="material-icons">settings</i>
-            </a>
-    </div>
-
-    <div id="row2" class="row-right-panel">
-
-        <!--  Toggle Around Tour -->
-        <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple" title="Auto-rotate 3D tour"
-           class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
-            <i class="material-icons">rotate_90_degrees_ccw</i>
-        </a>
-
-        <!--  Dimensionality 2D 3D toggle -->
-        <a id="dim-change-btn" data-mdc-auto-init="MDCRipple" title="Toggle between 2D mode (top view) and 3D mode (view with angle). 3D mode is more difficult to manipulate but allows for more modifications in assets of the scenes." class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">2D</a>
-
-        <!-- The button to start walking in the 3d environment -->
-        <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
-            <a type="button" id="firstPersonBlockerBtn" data-toggle='on' class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
-               title="Change camera to First Person View - Move: W,A,S,D,Q,E,R,F keys" data-mdc-auto-init="MDCRipple">
-                VIEW
-            </a>
+    <!-- Lights -->
+    <div class="lightcolumns hidable">
+        <div class="lightcolumn" data-light="Sun" draggable="true">
+            <header draggable="false">Sun</header><img draggable="false"
+                    src="<?php echo $PLUGIN_PATH_VR?>/images/lights/sun.png" class="lighticon"/>
         </div>
-        
-        
-        
-        <a type="button" id="thirdPersonBlockerBtn" class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse" data-mdc-auto-init="MDCRipple">
-            <i class="material-icons">person</i></a>
-    </div>
-
-
-    <!--  Object Controls  -->
-    <div id="row3" class="row-right-panel" style="display:block">
-        
-        <div style="padding-left:5px; padding-top:10px;"> Object controls</div>
-
-        <!-- Move, Rotate, Scale Buttons -->
-        <div id="object-manipulation-toggle" class="ObjectManipulationToggle mdc-typography" style="display: none;">
-            <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
-            <label for="translate-switch">Move</label>
-            <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
-            <label for="rotate-switch">Rotate</label>
-            <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
-            <label for="scale-switch">Scale</label>
+        <div class="lightcolumn" data-light="Lamp" draggable="true">
+            <header draggable="false">Lamp</header><img draggable="false"
+                src="<?php echo $PLUGIN_PATH_VR?>/images/lights/lamp.png" draggable="false" class="lighticon"/>
+        </div>
+        <div class="lightcolumn" data-light="Spot" draggable="true"><header draggable="false">Spot</header>
+            <img draggable="false" src="<?php echo $PLUGIN_PATH_VR?>/images/lights/spot.png" draggable="false"
+                 class="lighticon"/>
         </div>
     </div>
 
-    <!-- Numerical input for Move rotate scale -->
-    <div id="row4" class="row-right-panel">
-        <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
-    </div>
-
-    <!--  Axis controls size -->
-    <div id="row5" class="row-right-panel" style="padding-top:12px; padding-left:5px; padding-bottom:10px">
-        <span class="mdc-typography--subheading1" style="font-size:12px">Axes controls size:</span>
-        <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
-            <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
-            <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
-        </div>
-    </div>
-
-    <!-- Hierarchy viewer -->
-    <div id="row6" class="row-right-panel">
-        <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
-            <span class="hierarchyViewerTitle mdc-typography--subheading1 mdc-theme--text-primary-on-background" style="">Hierarchy Viewer</span>
-            <hr class="mdc-list-divider">
-            <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
-        </div>
-    </div>
-    
-</div>
-
-<!-- Pause rendering-->
-<div id="divPauseRendering" class="pauseRenderingDivStyle">
-    <a id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary" title="Pause rendering" data-mdc-auto-init="MDCRipple">
-        <i class="material-icons">play_arrow</i>
+    <!-- Remove game object from scene -->
+    <a type="button" id="removeAssetBtn"
+       class="RemoveAssetFromSceneBtnStyle hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+       title="Remove selected asset from the scene" data-mdc-auto-init="MDCRipple">
+       <i class="material-icons">delete</i>
     </a>
-</div>
-
-
-<!--  Make form to submit user changes -->
-<div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
-    <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
-        <!--            <span id="scene_loading_message">Downloading ...</span>-->
-        <!--            <div id="progressbar">-->
-        <!--                <div id="scene_loading_bar"></div>-->
-        <!--            </div>-->
-    </div>
-
-    <!--        <div id="downloadIndicator" class="result"></div>-->
-    <div id="result_download" class="result"></div>
-    <div id="result_download2" class="result"></div>
-</div>
-
-
-
-
-<!--   ================================= FileBrowserToolbar ============================================ -->
-
-<!--  Open/Close button-->
-<a id="bt_close_file_toolbar" data-toggle='on' type="button" class="AssetsToggleStyle AssetsToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense mdc-ripple-upgraded" title="Toggle asset viewer" data-mdc-auto-init="MDCRipple">
-    <i class="material-icons">menu</i>
-</a>
-
-<div class="filemanager" id="fileBrowserToolbar">
-
-    <!-- Categories of assets -->
-    <div id="assetCategTab"  >
-        <button id="allAssetsViewBt" class="tablinks active">All</button>
-    </div>
-
-    <!-- Search bar -->
-    <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield" style="margin-top:0px; height:40px;margin-left:10px;">
-        <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find...">
-        <i class="material-icons mdc-theme--text-primary-on-background">search</i>
-        <div class="mdc-textfield__bottom-line"></div>
-    </div>
-    
-    <ul id="filesList" class="data mdc-list mdc-list--two-line mdc-list--avatar-list"></ul>
-
-
-    <!-- ADD NEW ASSET FROM ASSETS LIST -->
-    <a id="addNewAssetBtnAssetsList"
-       style="" class="addNewAsset3DEditor" data-mdc-auto-init="MDCRipple"
-       title="Add new private asset"
-       href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
-        <i class="material-icons" style="cursor: pointer; font-size:54px; color:orangered; ">add_circle</i>
-    </a>
-    
-</div>
-
-<!-- Interface for Picking two overlapping objects -->
-<!--    <div id="popUpDiv" class="EditorObjOverlapSelectStyle">-->
-<!--        <select title="Select an object" id="popupSelect" class="mdc-select"></select>-->
-<!--    </div>-->
-
-<!-- Interface for Changing the door properties -->
-<div id="popUpDoorPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-     style="min-width: 240px; max-width:300px; display:none">
-
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbind("popupDoorSelect", "doorid", ""); return false;'>
-
-    <!-- clearAndUnbindDoorProperties(); -->
-        
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-    <p class="mdc-typography--subheading1" style=""> Door options </p>
-    <div class="mdc-textfield FullWidth" data-mdc-auto-init="MDCTextfield" id="doorInputTextfield">
-        <input id="doorid" name="doorid" type="text" class="mdc-textfield__input mdc-theme--text-primary-on-light FullWidth"
-               style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0;">
-        <label for="doorid" class="mdc-textfield__label">Enter a door name </label>
-        <div class="mdc-textfield__bottom-line"></div>
-    </div>
-
-    <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"
-       style="vertical-align: text-bottom;">directions</i>
-
-    <select title="Select a destination" id="popupDoorSelect" name="popupDoorSelect"
-            class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">
-    </select>
-
-    <input type="checkbox" title="Select if it is a reward item" id="door_reward_checkbox" name="door_reward_checkbox"
-           class="mdc-textfield__input mdc-theme--text-primary-on-light" style="margin-top:20px; margin-left:10px;">
-    <label for="door_reward_checkbox" class="mdc-textfield__label" style="margin-left:15px;">Is a reward item?</label>
-</div>
-
-<!--======================= Interface for Changing the Marker properties : WindEnergy ======================= -->
-
-<div id="popUpMarkerPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2"
-     style="min-width: 100%; width: auto; bottom: auto;">
-
-    <a style="float: right;" type="button" class="mdc-theme--primary"
-       onclick='this.parentNode.style.display = "none"; clearAndUnbind("archaeology_penalty", null, null); clearAndUnbind("hv_distance_penalty", null, null); clearAndUnbind("natural_resource_proximity_penalty", null, null); return false;'>
-        <i class="material-icons" style="cursor: pointer; float: right;">close</i>
-    </a>
-
-<!--    <p class="mdc-typography--title"> Marker options</p>-->
-
-
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-
-            <?php if ($project_scope == 1) { ?>
-            
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                <table>
-                    <tr>
-                        <td>
-                            <label for="archaeology_penalty" class="mdc-textfield__label" style="position:inherit">Archaeology penalty</label>
-                        </td>
-                        <td>
-                            <select title="" id="archaeology_penalty" name="archaeology_penalty" style="width:50px" ></select>
-                        </td>
-                        <td>
-                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <label for="hv_distance_penalty" class="mdc-textfield__label" style="position:inherit">Distance from High voltage lines penalty</label>
-                        </td>
-                        <td>
-                            <select title="" id="hv_distance_penalty" name="hv_distance_penalty" style="width:50px">
-                            </select>
-                        </td>
-                        <td>
-                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <label for="natural_resource_proximity_penalty" class="mdc-textfield__label" style="position:inherit">Natural park proximity penalty</label>
-                        </td>
-                        <td>
-                            <select title="" id="natural_resource_proximity_penalty" name="natural_resource_proximity_penalty" style="width:50px">
-                            </select>
-                        </td>
-                        <td>
-                            <i title="Define penalties" class="material-icons mdc-theme--text-icon-on-background" style="vertical-align: text-bottom;">attach_money</i>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <?php } ?>
-            
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-<!--                <p class="mdc-typography--title">Small Turbine</p>-->
-                <iframe style="height: 400px; width: 100%; border:none;" id="turbine1-iframe"></iframe>
-            </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-<!--                <p class="mdc-typography--title">Normal Turbine</p>-->
-                <iframe style="height: 400px; width: 100%; border:none;" id="turbine2-iframe"></iframe>
-            </div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-<!--                <p class="mdc-typography--title">Big Turbine</p>-->
-                <iframe style="height: 400px; width: 100%; border:none;" id="turbine3-iframe"></iframe>
-            </div>
-
-        </div>
-    </div>
-
-    <!--        <i title="Select a destination" class="material-icons mdc-theme--text-icon-on-background"-->
-    <!--           style="vertical-align: text-bottom;">directions</i>-->
-    <!--        <select title="Select a destination" id="popupMarkerSelect" name="popupMarkerSelect"-->
-    <!--                class="mdc-select--subheading1" style="min-width: 70%; max-width:85%; overflow:hidden; border: none; border-bottom: 1px solid rgba(0,0,0,.23);">-->
-    <!--        </select>-->
-
-</div>
-
-<?php include 'vr_editor_popups.php'; ?>
-
-    
-
 
     <!--  Open/Close Right Hierarchy panel-->
+    <a id="hierarchy-toggle-btn" data-toggle='on' type="button"
+       class="HierarchyToggleStyle HierarchyToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+       title="Toggle hierarchy viewer" data-mdc-auto-init="MDCRipple">
+       <i class="material-icons">menu</i>
+    </a>
+
+    <!-- Right Panel -->
+    <div id="right-elements-panel" class="right-elements-panel-style">
+
+        <!-- Title -->
+        <div id="vr_editor_right_panel_title" class="row-right-panel">Scene controls</div>
+        
+        <!-- Cogwheel options -->
+        <div id="row_cogwheel" class="row-right-panel">
+            <a type="button" id="optionsPopupBtn"
+               class="VrEditorOptionsBtnStyle mdc-button mdc-button--raised mdc-button--primary mdc-button--dense"
+               title="Edit scene options" data-mdc-auto-init="MDCRipple">
+               <i class="material-icons">settings</i>
+            </a>
+        </div>
+    
+        <!-- 4 Buttons in a row -->
+        <div id="row2" class="row-right-panel">
+
+            <!--  Toggle Around Tour -->
+            <a type="button" id="toggle-tour-around-btn" data-toggle='off' data-mdc-auto-init="MDCRipple"
+               title="Auto-rotate 3D tour"
+               class="EditorTourToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+               <i class="material-icons">rotate_90_degrees_ccw</i>
+            </a>
+
+            <!--  Dimensionality 2D 3D toggle -->
+            <a id="dim-change-btn" data-mdc-auto-init="MDCRipple"
+               title="Toggle between 2D mode (top view) and 3D mode (view with angle)."
+               class="EditorDimensionToggleBtn mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">
+               2D
+            </a>
+
+            <!-- The button to start walking in the 3d environment -->
+            <div id="firstPersonBlocker" class="VrWalkInButtonStyle">
+                <a type="button" id="firstPersonBlockerBtn" data-toggle='on'
+                   class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+                   title="Change camera to First Person View - Move: W,A,S,D,Q,E,R,F keys"
+                   data-mdc-auto-init="MDCRipple">
+                   VIEW
+                </a>
+            </div>
+
+            <!-- Third person button -->
+            <a type="button" id="thirdPersonBlockerBtn"
+               class="ThirdPersonVrWalkInButtonStyle mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+               title="Change camera to Third Person View - Move: W,A,S,D,Q,E keys, Orientation: Mouse"
+               data-mdc-auto-init="MDCRipple">
+               <i class="material-icons">person</i>
+            </a>
+        </div>
+
+        <!--  Object Controls T,R,S -->
+        <div id="row3" class="row-right-panel" style="display:block">
+            
+            <div style="padding-left:5px; padding-top:10px;"> Object controls</div>
+    
+            <!-- Translate, Rotate, Scale Buttons -->
+            <div id="object-manipulation-toggle"
+                 class="ObjectManipulationToggle mdc-typography" style="display: none;">
+                <!-- Translate -->
+                <input type="radio" id="translate-switch" name="object-manipulation-switch" value="translate" checked/>
+                <label for="translate-switch">Move</label>
+                <!-- Rotate -->
+                <input type="radio" id="rotate-switch" name="object-manipulation-switch" value="rotate" />
+                <label for="rotate-switch">Rotate</label>
+                <!-- Scale -->
+                <input type="radio" id="scale-switch" name="object-manipulation-switch" value="scale" />
+                <label for="scale-switch">Scale</label>
+            </div>
+        </div>
+    
+        <!-- Numerical input for Move rotate scale -->
+        <div id="row4" class="row-right-panel">
+            <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
+        </div>
+    
+        <!--  Axes resize -->
+        <div id="row5" class="row-right-panel" style="padding-top:12px; padding-left:5px; padding-bottom:10px">
+            <span class="mdc-typography--subheading1" style="font-size:12px">Axes controls size:</span>
+            <div id="axis-manipulation-buttons" class="AxisManipulationBtns mdc-typography" style="display: none;">
+                <a id="axis-size-decrease-btn" data-mdc-auto-init="MDCRipple" title="Decrease axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">-</a>
+                <a id="axis-size-increase-btn" data-mdc-auto-init="MDCRipple" title="Increase axes size" class="mdc-button mdc-button--raised mdc-button--dense mdc-button--primary">+</a>
+            </div>
+        </div>
+    
+        <!-- Hierarchy viewer -->
+        <div id="row6" class="row-right-panel">
+            <div class="HierarchyViewerStyle mdc-card" id="hierarchy-viewer-container">
+                <span class="hierarchyViewerTitle mdc-typography--subheading1 mdc-theme--text-primary-on-background" style="">Hierarchy Viewer</span>
+                <hr class="mdc-list-divider">
+                <ul class="mdc-list" id="hierarchy-viewer" style="max-height: 460px; overflow-y: scroll"></ul>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Pause rendering-->
+    <div id="divPauseRendering" class="pauseRenderingDivStyle">
+        <a id="pauseRendering" class="mdc-button mdc-button--dense mdc-button--raised mdc-button--primary"
+           title="Pause rendering" data-mdc-auto-init="MDCRipple">
+           <i class="material-icons">play_arrow</i>
+        </a>
+    </div>
+
+
+    <!--  Make form to submit user changes -->
+    <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
+        <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
+        </div>
+    
+        <div id="result_download" class="result"></div>
+        <div id="result_download2" class="result"></div>
+    </div>
+
+
+
+
+    <!--   ================================= Asset browse Left panel ==================================== -->
+
+    <!-- Open/Close button-->
+    <a id="bt_close_file_toolbar" data-toggle='on' type="button"
+       class="AssetsToggleStyle AssetsToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense mdc-ripple-upgraded"
+       title="Toggle asset viewer" data-mdc-auto-init="MDCRipple">
+        <i class="material-icons">menu</i>
+    </a>
+
+    <!-- The panel -->
+    <div class="filemanager" id="fileBrowserToolbar">
+
+        <!-- Categories of assets -->
+        <div id="assetCategTab">
+            <button id="allAssetsViewBt" class="tablinks active">All</button>
+        </div>
+    
+        <!-- Search bar -->
+        <div class="mdc-textfield search" data-mdc-auto-init="MDCTextfield" style="margin-top:0px; height:40px;margin-left:10px;">
+            <input type="search" class="mdc-textfield__input mdc-typography--subheading2" placeholder="Find...">
+            <i class="material-icons mdc-theme--text-primary-on-background">search</i>
+            <div class="mdc-textfield__bottom-line"></div>
+        </div>
+        
+        <ul id="filesList" class="data mdc-list mdc-list--two-line mdc-list--avatar-list"></ul>
+    
+        <!-- ADD NEW ASSET FROM ASSETS LIST -->
+        <a id="addNewAssetBtnAssetsList"
+           style="" class="addNewAsset3DEditor" data-mdc-auto-init="MDCRipple"
+           title="Add new private asset"
+           href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) .
+               $parameter_pass . $joker_project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
+            <i class="material-icons" style="cursor: pointer; font-size:54px; color:orangered; ">add_circle</i>
+        </a>
+    
+    </div>
+    
+    <?php include 'vr_editor_popups.php'; ?>
+
+    <!--  Open/Close Scene list panel-->
     <a id="scenesList-toggle-btn" data-toggle='on' type="button" class="scenesListToggleStyle scenesListToggleOn hidable mdc-button mdc-button--raised mdc-button--primary mdc-button--dense" title="Toggle scenes list" data-mdc-auto-init="MDCRipple">
         <i class="material-icons" style="margin:auto">menu</i>
     </a>
-
 
     <!-- Scenes List -->
     <div id="scenesInsideVREditor" class="" style="">
@@ -581,14 +376,22 @@ echo '</script>';
 
                             <div class="SceneThumbnail">
                                 <?php
+                                // Default scene - NOT DELETE-ABLE
+                                $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true );
+
+                                //=menu,scene,credits - EDITABLE
+                                $scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true );
                                 
-                                $default_scene = get_post_meta( $scene_id, 'wpunity_scene_default', true ); //=true Default scene - NOT DELETE-ABLE
-                                $scene_type    = get_post_meta( $scene_id, 'wpunity_scene_metatype', true ); //=menu,scene,credits - EDITABLE
                                 //create permalink depending the scene yaml category
-                                $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID : $editscene2DPage[0]->ID);
-                                if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){$edit_scene_page_id = $editsceneExamPage[0]->ID;}
+                                $edit_scene_page_id = ( $scene_type == 'scene' ? $editscenePage[0]->ID :
+                                    $editscene2DPage[0]->ID);
                                 
-                                $edit_page_link = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $joker_project_id . '&scene_type=' . $scene_type );
+                                if($scene_type == 'sceneExam2d' ||  $scene_type == 'sceneExam3d'){
+                                    $edit_scene_page_id = $editsceneExamPage[0]->ID;
+                                }
+                                
+                                $edit_page_link = esc_url( get_permalink($edit_scene_page_id) . $parameter_Scenepass .
+                                    $scene_id . '&wpunity_game=' . $joker_project_id . '&scene_type=' . $scene_type );
                                 ?>
                                 <div style="" class="sceneDisplayBlock mdc-theme--primary-bg CenterContents">
                                 <a href="<?php echo $edit_page_link; ?>">
@@ -596,8 +399,8 @@ echo '</script>';
                                     <?php if(has_post_thumbnail($scene_id)) {
                                             echo get_the_post_thumbnail( $scene_id );
                                           } else { ?>
-                                            <i class="landscapeIcon material-icons mdc-theme--text-icon-on-background">landscape</i>
-                                      
+                                            <i class="landscapeIcon material-icons mdc-theme--text-icon-on-background">
+                                                landscape</i>
                                     <?php } ?>
                                 </a>
                                 </div>
@@ -899,7 +702,8 @@ echo '</script>';
     <!--    End of Scenes-->
 
     </div>   <!-- Scenes List Div -->
-
+    
+    
 </div>   <!--   VR DIV   -->
 
 

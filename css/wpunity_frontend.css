@@ -1480,7 +1480,13 @@ video {
 }
 
 
-
+#vr_editor_right_panel_title{
+    height:65px;
+    vertical-align: bottom;
+    bottom:0;
+    display:table-cell;
+    padding-left:5px;
+}
 
 
 

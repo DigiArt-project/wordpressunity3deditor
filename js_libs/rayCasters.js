@@ -1,15 +1,11 @@
-// ------------------------ raycasting for picking objects --------------------------------
-
-/**
- *   Sets the correct values for the raycaster
- */
+// raycasting for picking objects
 function raycasterSetter(event){
 
     // option to show or not the ray line
-    var showRayPickLine = false; // Do not show raycast line
+    let showRayPickLine = false;
 
     /* Keep mouse clicks */
-    var mouse = new THREE.Vector2();
+    let mouse = new THREE.Vector2();
 
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
@@ -17,15 +13,9 @@ function raycasterSetter(event){
     mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
     // Main Raycast object
-    var raycasterPick = new THREE.Raycaster();
+    let raycasterPick = new THREE.Raycaster();
 
-    if (avatarControlsEnabled) {
-        // calculate objects intersecting the picking ray
-        raycasterPick.setFromCamera(mouse, envir.cameraAvatar);
-    }else {
-        // calculate objects intersecting the picking ray
-        raycasterPick.setFromCamera(mouse, envir.cameraOrbit);
-    }
+    raycasterPick.setFromCamera(mouse, avatarControlsEnabled?envir.cameraAvatar:envir.cameraOrbit);
 
     // Show the myBulletLine (raycast)
     if (showRayPickLine)
@@ -44,16 +34,16 @@ function raycasterSetter(event){
 function dragDropVerticalRayCasting (event){
 
     // Init the raycaster
-    var raycasterPick = raycasterSetter(event);
+    let raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+    let activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
 
     if (activMesh.length == 0)
         return [0,0,0];
 
     // // Find the intersections (it can be more than one)
-    var intersects = raycasterPick.intersectObjects( activMesh , true );
+    let intersects = raycasterPick.intersectObjects( activMesh , true );
 
     if(intersects.length == 0)
         return [0,0,0];
@@ -64,11 +54,9 @@ function dragDropVerticalRayCasting (event){
 
 function onMouseDoubleClickFocus( event , objectName) {
 
-
-
-    //envir.scene.getObjectByName(selected_object_name);
-
-    //console.log(selected_object_name, objectName);
+    if (typeof objectName == 'undefined') {
+        objectName = envir.scene.getObjectByName(selected_object_name);
+    }
 
     if (arguments.length === 2) {
         selectorMajor(event, envir.scene.getObjectByName(objectName) );
@@ -76,7 +64,6 @@ function onMouseDoubleClickFocus( event , objectName) {
 
     // // This makes the camera to go on top of the selected item
     if (envir.is2d) {
-
 
         //var borders = findBorders(transform_controls.object);
 
@@ -99,24 +86,16 @@ function onMouseDoubleClickFocus( event , objectName) {
         // envir.orbitControls.object.left  += minBorders.z;
         // envir.orbitControls.object.right += maxBorders.z;
 
-        //
-        //
         // envir.orbitControls.object.top  += transform_controls.object.position.x;
         // envir.orbitControls.object.down += transform_controls.object.position.x;
         //
         //
         // console.log(envir.orbitControls.object.left);
 
-
-
-
-
         // This is not valid
         // envir.orbitControls.target.x = transform_controls.object.position.x;
         // envir.orbitControls.target.y = transform_controls.object.position.y;
         // envir.orbitControls.target.z = transform_controls.object.position.z;
-
-
 
         // envir.orbitControls.object.rotation._x = - Math.PI/2;
         // envir.orbitControls.object.rotation._y = 0;
@@ -141,7 +120,7 @@ function onMouseDoubleClickFocus( event , objectName) {
  *
  * @param event
  */
-function onMouseSelect(event ) {
+function onMouseSelect( event ) {
 
     // Middle click return
     if(event.button === 1)
@@ -150,15 +129,15 @@ function onMouseSelect(event ) {
     event.preventDefault();
     event.stopPropagation();
 
-    var raycasterPick = raycasterSetter(event);
+    let raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    var activMesh = getActiveMeshes(); //.concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
+    let activMesh = getActiveMeshes();
+    //.concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
    //transform_controls.getObjectByName('trs_modeChanger')
 
     // Find the intersections (it can be more than one)
     var intersects = raycasterPick.intersectObjects( activMesh , true );
-
 
     if (intersects.length === 0)
         return;
@@ -187,7 +166,6 @@ function onMouseSelect(event ) {
 
             return;
         }
-
     }
 
     // If only one object is intersected
@@ -279,6 +257,8 @@ function selectorMajor(event, objectSel){
 
         // highlight
         envir.outlinePass.selectedObjects = [objectSel];
+
+        selected_object_name = objectSel.name;
     }
 
     // Right click: overide its properties ( Door, MicroscopeTextbook, Box )
@@ -373,12 +353,8 @@ function displayBoxProperties(event, nameBoxSource){
 
 
 
-
-
-
 // Right click raycast operations
 function activeOverides(event, object){
-
 
     if (object.name === "Steve")
         alert("Do not right click the camera or its front part");
@@ -421,7 +397,7 @@ function activeOverides(event, object){
 
 
 /**
- *  Microscope and Textbook
+ *  Gate
  *
  * @param event
  * @param nameGateSource
@@ -536,65 +512,7 @@ function displayArtifactProperties(event, name){
 }
 
 
-/**
- * Poi image text properties
- *
- * @param event
- * @param name
- */
-function displayPoiImageTextProperties(event, name){
-
-    // The whole popup div
-    var ppPropertiesDiv = jQuery("#popUpPoiImageTextPropertiesDiv");
-
-    // The checkbox only
-    var chbox = jQuery("#poi_image_text_reward_checkbox");
-
-    // Save the previous artifact properties values (in case of  direct mouse click on another item)
-    chbox.trigger("change");
-
-    clearAndUnbind(null, null, "poi_image_text_reward_checkbox");
-
-    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
-
-    // Show Selection
-    ppPropertiesDiv.show();
-    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
-
-    // Add change listener
-    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
-}
-
-/**
- * Poi video properties
- *
- * @param event
- * @param name
- */
-function displayPoiVideoProperties(event, name){
-
-    // The whole popup div
-    var ppPropertiesDiv = jQuery("#popUpPoiVideoPropertiesDiv");
-
-    // The checkbox only
-    var chbox = jQuery("#poi_video_reward_checkbox");
-
-    // Save the previous artifact properties values (in case of  direct mouse click on another item)
-    chbox.trigger("change");
-
-    clearAndUnbind(null, null, "poi_video_reward_checkbox");
-
-    chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
-
-    // Show Selection
-    ppPropertiesDiv.show();
-    ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
-    ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
-
-    // Add change listener
-    chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
-}
+//
 
 /**
  * Poi video properties
@@ -972,9 +890,7 @@ function changeLampDecay(){
 
 
 // Spot
-
 function changeSpotTargetObject(){
-
     transform_controls.object.target = envir.scene.getChildByName(document.getElementById("spotTargetObject").value);
 }
 
@@ -1109,6 +1025,7 @@ function getActiveMeshes(){
 
     // ToDo: Is it possible to avoid traversing scene object in each drag event?
     envir.scene.traverse( function(child) {
+
         if (child.hasOwnProperty('isDigiArt3DMesh')) {
             activeMeshes.push(child);
         }
@@ -1120,31 +1037,33 @@ function getActiveMeshes(){
 
 function raylineVisualize(raycasterPick){
 
-    var geolinecast = new THREE.Geometry();
+    let geolinecast = new THREE.Geometry();
 
-    var c = 10000;
+    let c = 10000;
     geolinecast.vertices.push(raycasterPick.ray.origin,
         new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
             (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
             (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
     );
 
-    var myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
+    let myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
     myBulletLine.name = 'rayLine';
 
     envir.scene.add(myBulletLine);
 
+
     // This will force scene to update and show the line
-    envir.scene.getObjectByName('orbitCamera').position.x += 1;
+    envir.scene.getObjectByName('orbitCamera').position.x += 0.1;
 
     setTimeout(function () {
-        envir.scene.getObjectByName('orbitCamera').position.x -= 1;
+        envir.scene.getObjectByName('orbitCamera').position.x -= 0.1;
     }, 1500);
 
     // Remove the line
     setTimeout(function () {
         envir.scene.remove(envir.scene.getObjectByName('rayLine'));
     }, 1500);
+
 
 }
 
@@ -1174,7 +1093,6 @@ function showWholePopupDiv(popUpDiv, event) {
     } else {
         popUpDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
     }
-
 
     event.preventDefault();
 }
@@ -1220,4 +1138,65 @@ function showWholePopupDiv(popUpDiv, event) {
 //         ppSelect.options[i] = null;
 //
 //     jQuery("#chemistryGateComponent").unbind('change');
+// }
+
+
+/**
+ //  * Poi image text properties
+ //  *
+ //  * @param event
+ //  * @param name
+ //  */
+// function displayPoiImageTextProperties(event, name){
+//
+//     // The whole popup div
+//     var ppPropertiesDiv = jQuery("#popUpPoiImageTextPropertiesDiv");
+//
+//     // The checkbox only
+//     var chbox = jQuery("#poi_image_text_reward_checkbox");
+//
+//     // Save the previous artifact properties values (in case of  direct mouse click on another item)
+//     chbox.trigger("change");
+//
+//     clearAndUnbind(null, null, "poi_image_text_reward_checkbox");
+//
+//     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+//
+//     // Show Selection
+//     ppPropertiesDiv.show();
+//     ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+//     ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+//
+//     // Add change listener
+//     chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
+// }
+//
+// /**
+//  * Poi video properties
+//  *
+//  * @param event
+//  * @param name
+//  */
+// function displayPoiVideoProperties(event, name){
+//
+//     // The whole popup div
+//     var ppPropertiesDiv = jQuery("#popUpPoiVideoPropertiesDiv");
+//
+//     // The checkbox only
+//     var chbox = jQuery("#poi_video_reward_checkbox");
+//
+//     // Save the previous artifact properties values (in case of  direct mouse click on another item)
+//     chbox.trigger("change");
+//
+//     clearAndUnbind(null, null, "poi_video_reward_checkbox");
+//
+//     chbox.prop('checked', envir.scene.getObjectByName(name).isreward == 1);
+//
+//     // Show Selection
+//     ppPropertiesDiv.show();
+//     ppPropertiesDiv[0].style.left = event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft() + 'px';
+//     ppPropertiesDiv[0].style.top  = event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop() + 'px';
+//
+//     // Add change listener
+//     chbox.change(function(e) { envir.scene.getObjectByName(name).isreward = this.checked ? 1 : 0; });
 // }

@@ -1,41 +1,36 @@
-function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, mtlID,
-                          categoryName, categoryDescription, categoryIcon, categoryID, diffImages, diffImageIDs, image1id,
-                          doorName_source, doorName_target, sceneName_target, sceneID_target, archaeology_penalty,
-                          hv_penalty, natural_penalty,
-                          isreward, isCloned, isJoker,
-                          x, y, z, r1=0, r2=0, r3=0, s=1){
+function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, dataDrag, translation){
 
     // Add javascript variables for viewing the object correctly
-    var selected_object_trs = {
-        "translation": [x, y, z],
-        "rotation": [r1,r2,r3],
-        "scale": s
+    let selected_object_trs = {
+        "translation": [translation[0], translation[1], translation[2]],
+        "rotation": [0,0,0],
+        "scale": 1
     };
 
-    resources3D[nameModel3D] = {
+    resources3D[nameModel] = {
         "path": path,
-        "assetid": assetid,
-        "obj": objPath,
-        "objID": objID,
-        "mtl": mtlPath,
-        "mtlID": mtlID,
-        "categoryName": categoryName,
-        "categoryDescription": categoryDescription,
-        "categoryIcon": categoryIcon,
-        "categoryID": categoryID,
-        "diffImages": diffImages,
-        "diffImageIDs": diffImageIDs,
-        "image1id": image1id,
-        "doorName_source":doorName_source,
-        "doorName_target":doorName_target,
-        "sceneName_target":sceneName_target,
-        "sceneID_target":sceneID_target,
-        "archaeology_penalty":archaeology_penalty,
-        "hv_penalty":hv_penalty,
-        "natural_penalty":natural_penalty,
-        "isreward":isreward,
-        "isCloned":isCloned,
-        "isJoker":isJoker,
+        "assetid": dataDrag.assetid,
+        "obj": objFname,
+        "objID": dataDrag.objID,
+        "mtl": mtlFname,
+        "mtlID": dataDrag.mtlID,
+        "categoryName": dataDrag.categoryName,
+        "categoryDescription": dataDrag.categoryDescription,
+        "categoryIcon": dataDrag.categoryIcon,
+        "categoryID": dataDrag.categoryID,
+        "diffImages": dataDrag.diffImages,
+        "diffImageIDs": dataDrag.diffImageIDs,
+        "image1id": dataDrag.image1id,
+        "doorName_source":dataDrag.doorName_source,
+        "doorName_target":dataDrag.doorName_target,
+        "sceneName_target":dataDrag.sceneName_target,
+        "sceneID_target":dataDrag.sceneID_target,
+        "archaeology_penalty":dataDrag.archaeology_penalty,
+        "hv_penalty":dataDrag.hv_penalty,
+        "natural_penalty":dataDrag.natural_penalty,
+        "isreward":dataDrag.isreward,
+        "isCloned":dataDrag.isCloned,
+        "isJoker":dataDrag.isJoker,
         "trs": selected_object_trs
     };
 
@@ -45,7 +40,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         lightSun.castShadow = true;
         // lightSun.position.set( 0, 45, 0 ); set by raycaster
 
-        lightSun.name = nameModel3D;
+        lightSun.name = nameModel;
         lightSun.isDigiArt3DModel = true;
         lightSun.categoryName = "lightSun";
         lightSun.isLight = true;
@@ -94,8 +89,8 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         lightSunHelper.update();
 
         // Add transform controls
-        var insertedObject = envir.scene.getObjectByName(nameModel3D);
-        var trs_tmp = resources3D[nameModel3D]['trs'];
+        var insertedObject = envir.scene.getObjectByName(nameModel);
+        var trs_tmp = resources3D[nameModel]['trs'];
 
         trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
@@ -117,7 +112,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-        selected_object_name = nameModel3D;
+        selected_object_name = nameModel;
 
         // Dimensions
         var dims = findDimensions(transform_controls.object);
@@ -147,7 +142,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var lightLamp = new THREE.PointLight( 0xffffff, 1, 100, 2 );
         lightLamp.power = 1;
 
-        lightLamp.name = nameModel3D;
+        lightLamp.name = nameModel;
         lightLamp.isDigiArt3DModel = true;
         lightLamp.categoryName = "lightLamp";
         lightLamp.isLight = true;
@@ -175,8 +170,8 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         lightLampHelper.update();
 
         // Add transform controls
-        var insertedObject = envir.scene.getObjectByName(nameModel3D);
-        var trs_tmp = resources3D[nameModel3D]['trs'];
+        var insertedObject = envir.scene.getObjectByName(nameModel);
+        var trs_tmp = resources3D[nameModel]['trs'];
 
         trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
@@ -198,7 +193,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-        selected_object_name = nameModel3D;
+        selected_object_name = nameModel;
 
         // Dimensions
         var dims = findDimensions(transform_controls.object);
@@ -220,7 +215,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         var lightSpot = new THREE.SpotLight( 0xffffff, 1, 5, 0.39, 0, 2 );
         lightSpot.power = 1;
 
-        lightSpot.name = nameModel3D;
+        lightSpot.name = nameModel;
         lightSpot.isDigiArt3DModel = true;
         lightSpot.categoryName = "lightSpot";
         lightSpot.isLight = true;
@@ -256,8 +251,8 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
 
         // Add transform controls
-        var insertedObject = envir.scene.getObjectByName(nameModel3D);
-        var trs_tmp = resources3D[nameModel3D]['trs'];
+        var insertedObject = envir.scene.getObjectByName(nameModel);
+        var trs_tmp = resources3D[nameModel]['trs'];
 
         trs_tmp['translation'][1] += 3; // Sun should be a little higher than objects;
 
@@ -279,7 +274,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
         transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-        selected_object_name = nameModel3D;
+        selected_object_name = nameModel;
 
         // Dimensions
         var dims = findDimensions(transform_controls.object);
@@ -318,13 +313,13 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
 
             jQuery("#infophp").get(0).style.visibility = "hidden";
 
-            var insertedObject = envir.scene.getObjectByName(nameModel3D);
+            var insertedObject = envir.scene.getObjectByName(nameModel);
 
             if (!insertedObject) {
                 jQuery("#dialog-message").dialog("open");
             }
 
-            var trs_tmp = resources3D[nameModel3D]['trs'];
+            var trs_tmp = resources3D[nameModel]['trs'];
 
             insertedObject.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
             insertedObject.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
@@ -344,7 +339,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
             transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
             transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
 
-            selected_object_name = nameModel3D;
+            selected_object_name = nameModel;
 
             // Dimensions
             var dims = findDimensions(transform_controls.object);
@@ -398,7 +393,7 @@ function addAssetToCanvas(nameModel3D, assetid, path, objPath, objID, mtlPath, m
         };
 
         var extraResource = {};
-        extraResource[nameModel3D] = resources3D[nameModel3D];
+        extraResource[nameModel] = resources3D[nameModel];
 
         var loaderMulti = new LoaderMulti();
         loaderMulti.load(manager, extraResource);

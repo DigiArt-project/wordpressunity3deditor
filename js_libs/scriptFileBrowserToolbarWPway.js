@@ -2,9 +2,6 @@
 function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit, gameProjectID){
 
 
-    console.log(gameProjectSlug, gameProjectID);
-
-
     jQuery.ajax({
         url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
         type : 'POST',
@@ -15,7 +12,6 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
         },
 
         success : function(responseRecords) {
-
 
             responseRecords = responseRecords.items;
 
@@ -34,9 +30,9 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
 function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
     var filemanager = jQuery('#fileBrowserToolbar'),
-        //breadcrumbs = jQuery('.breadcrumbs'),
+        // breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data');
-        //closeButton = jQuery('#bt_close_file_toolbar');
+        // closeButton = jQuery('#bt_close_file_toolbar');
 
     // Create drag image BEFORE event is fired - THEN call it inside the event
     function createDragImage() {
@@ -189,7 +185,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                 f = enlistData[i];
 
-                var fileSize = bytesToSize(f.size);
+                var fileSize = ''; //bytesToSize(f.size);
 
                 name = escapeHTML(f.name);
 
@@ -215,7 +211,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     foo.appendChild(element);
                 }
 
-                if(!f.objPath)
+                if(!f.objPath && !f.fbxPath)
                     continue;
 
                 var fileType = f.objPath.split('.').pop();
@@ -247,6 +243,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-assetid="'+ f.assetid +
                     '" data-objPath="'+ f.objPath +
                     '" data-objID="'+ f.objID +
+                    '" data-fbxPath="'+ f.fbxPath +
+                    '" data-fbxID="'+ f.fbxID +
                     '" data-mtlPath="'+ f.mtlPath +
                     '" data-mtlID="'+ f.mtlID +
                     '" data-diffImages="'+ f.diffImages +

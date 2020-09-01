@@ -140,21 +140,37 @@ function wpunity_register_scripts() {
 		array( 'wpunity_load119_RenderPass', $pluginDirJS.'threejs119/RenderPass.js'),
 		array( 'wpunity_load119_OutlinePass', $pluginDirJS.'threejs119/OutlinePass.js'),
 		array( 'wpunity_load119_ShaderPass', $pluginDirJS.'threejs119/ShaderPass.js'),
-		
-		
-		
-		
-	
-	
-	
 	);
 	
 	for ( $i = 0 ; $i < count($scriptsC); $i ++){
 		wp_register_script($scriptsC[$i][0] , $scriptsC[$i][1], null, null, false );
 	}
+	
+	
+	//------------------------------------------------------------------
+	
+	$scriptsD = array(
+			array( 'wpunity_vr_editor_environmentals', $pluginDirJS.'vr_editor_environmentals.js'),
+			array( 'wpunity_keyButtons', $pluginDirJS.'keyButtons.js'),
+			array( 'wpunity_rayCasters', $pluginDirJS.'rayCasters.js'),
+			array( 'wpunity_auxControlers', $pluginDirJS.'auxControlers.js'),
+			array( 'wpunity_LoaderMulti', $pluginDirJS.'LoaderMulti.js'),
+			array( 'wpunity_movePointerLocker', $pluginDirJS.'movePointerLocker.js'),
+			array( 'wpunity_addRemoveOne', $pluginDirJS.'addRemoveOne.js'),
+		);
+	
+	for ( $i = 0 ; $i < count($scriptsD); $i ++){
+		wp_register_script($scriptsD[$i][0] , $scriptsD[$i][1], null, null, false );
+	}
 }
 
 add_action('wp_enqueue_scripts', 'wpunity_register_scripts' );
+
+
+
+
+
+
 
 function wpunity_register_styles() {
 	wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );

@@ -340,9 +340,6 @@ function get_games_assets($games_slugs){
             $asset_name = get_the_title();
             $asset_pgame = wp_get_post_terms($asset_id, 'wpunity_asset3d_pgame');
             
-            
-            
-            
             // ALL DATA WE NEED
             $objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
             $objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
@@ -430,20 +427,26 @@ function wpunity_fetch_game_assets_action_callback(){
 
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug'], $_POST['gameProjectID']);
 
+
+	
 	for ($i=0; $i<count($response); $i++){
 		$response[$i]['name'] = $response[$i]['assetName'];
 		$response[$i]['type'] = 'file';
-		$response[$i]['path'] = $response[$i]['objPath'];
+		
+		if ($response[$i]['objPath']!='')
+			$response[$i]['path'] = $response[$i]['objPath'];
+		else
+			$response[$i]['path'] = $response[$i]['fbxPath'];
 
-		// Find kb size
-		$ch = curl_init($response[$i]['objPath']);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_HEADER, TRUE);
-		curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-		$dataCurl = curl_exec($ch);
-		$size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-		curl_close($ch);
-		$response[$i]['size'] =$size;
+//		// Find kb size
+//		$ch = curl_init($response[$i]['objPath']);
+//		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+//		curl_setopt($ch, CURLOPT_HEADER, TRUE);
+//		curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+//		$dataCurl = curl_exec($ch);
+//		$size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+//		curl_close($ch);
+		$response[$i]['size'] = '';//$size;
 	}
 
 	$jsonResp =  json_encode(
@@ -451,7 +454,12 @@ function wpunity_fetch_game_assets_action_callback(){
 			"items" => $response
 		)
 	);
-
+	
+	
+	$ff = fopen("output_get_assets.json","w");
+	fwrite($ff, print_r($jsonResp,true));
+	fclose($ff);
+	
 	echo $jsonResp;
 	wp_die();
 }
@@ -501,6 +509,10 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			// ALL DATA WE NEED
 			$objID = get_post_meta($asset_id, 'wpunity_asset3d_obj', true); // OBJ ID
 			$objPath = $objID ? wp_get_attachment_url( $objID ) : '';                   // OBJ PATH
+			
+			$fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx', true); // FBX ID
+			$fbxPath = $fbxID ? wp_get_attachment_url( $fbxID ) : '';                   // FBX PATH
+		
 
 			$mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
 			$mtlPath = $mtlID ? wp_get_attachment_url( $mtlID ) : '';                   // MTL PATH
@@ -534,6 +546,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 				'categoryID'=>$categoryAsset[0]->term_id,
 				'objID'=>$objID,
 				'objPath'=>$objPath,
+				'fbxID'=>$fbxID,
+				'fbxPath'=>$fbxPath,
 				'mtlID'=>$mtlID,
 				'diffImageIDs'=>$difImageIDs,
 				'diffImages'=>$difImagePaths,
