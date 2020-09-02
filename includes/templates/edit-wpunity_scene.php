@@ -47,6 +47,9 @@ function load_custom_functions_vreditor(){
     wp_enqueue_script('wpunity_LoaderMulti');
     wp_enqueue_script('wpunity_movePointerLocker');
     wp_enqueue_script('wpunity_addRemoveOne');
+    wp_enqueue_script('wpunity_vr_editor_buttons');
+    wp_enqueue_script('wpunity_vr_editor_analytics');
+    
 }
 add_action('wp_enqueue_scripts', 'load_custom_functions_vreditor' );
 
@@ -691,253 +694,36 @@ get_header(); ?>
 
     </div>
 
-
     <script type="text/javascript">
 
         var mdc = window.mdc;
+        var MDCSelect = mdc.select.MDCSelect;
+        
         mdc.autoInit();
 
-        var optionsDialog = document.querySelector('#options-dialog');
-        if (optionsDialog) {
-            optionsDialog = new mdc.dialog.MDCDialog(optionsDialog);
-            jQuery( "#optionsPopupBtn" ).click(function() {
-                optionsDialog.show();
-            });
-        }
+        loadButtonActions();
+        
+        // Delete scene dialogue
+        var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
+        deleteDialog.focusTrap_.deactivate();
+        
+        // Compile dialogue
+        var compileDialog = new mdc.dialog.MDCDialog(document.querySelector('#compile-dialog'));
+        compileDialog.focusTrap_.deactivate();
 
-        var deleteDialog = document.querySelector('#delete-dialog');
-        if (deleteDialog) {
-            deleteDialog = new mdc.dialog.MDCDialog(deleteDialog);
-            deleteDialog.focusTrap_.deactivate();
-        }
-
-        var compileDialog = document.querySelector('#compile-dialog');
-        if (compileDialog) {
-
-            compileDialog = new mdc.dialog.MDCDialog(compileDialog);
-            compileDialog.focusTrap_.deactivate();
-
-
-            jQuery( "#compileGameBtn" ).click(function() {
-                compileDialog.show();
-
-                // Pause Rendering
-                isPaused = true;
-                jQuery("#pauseRendering").get(0).childNodes[1].innerText = "play_arrow";
-            });
-        }
-
-
-        jQuery(".mdc-dialog__backdrop").click(function(e){
-            jQuery( "#compileCancelBtn" ).click();
-        });
-
-
-        jQuery( "#compileCancelBtn" ).click(function(e) {
-
-            //Start Rendering
-            isPaused = false;
-            jQuery("#pauseRendering").get(0).childNodes[1].innerText = "pause";
-            animate();
-
-            // Get Pid of compile process
-            var pid = jQuery( "#compileCancelBtn" ).attr("data-unity-pid");
-
-            console.log(pid);
-
-            if (pid) {
-                wpunity_killtask_compile(pid);
-            }
-        });
-
-        jQuery( "#compileProceedBtn" ).click(function() {
-
-            jQuery( "#platform-select" ).addClass( "mdc-select--disabled" ).attr( "aria-disabled","true" );
-            jQuery( "#compileProgressSlider" ).show();
-            jQuery( "#compileProgressTitle" ).show();
-
-            jQuery( "#compileProceedBtn" ).addClass( "LinkDisabled" );
-            jQuery( "#compileCancelBtn" ).addClass( "LinkDisabled" );
-
-            jQuery( "#wpunity-ziplink" ).hide();
-            jQuery( "#wpunity-weblink" ).hide();
-
-            jQuery( "#compilationProgressText" ).html("");
-
-            jQuery('#unityTaskMemValue').html("0");
-
-            wpunity_assepileAjax();
-        });
-
-        var MDCSelect = mdc.select.MDCSelect;
-        var platformDropdown = document.getElementById('platform-select');
-
-        if (platformDropdown) {
-
-            var platformSelect = MDCSelect.attachTo(platformDropdown);
-
-            platformDropdown.addEventListener('MDCSelect:change', function() {
-                jQuery( "#platformInput" ).attr( "value", platformSelect.selectedOptions[0].getAttribute("id") );
-                jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
-            });
-
-        }
-
+        // Project Analytics
         var project_id = <?php echo $project_id; ?>;
-
         var project_keys = [];
         project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id, $project_scope)); ?>;
         var scene_id = <?php echo $current_scene_id; ?>;
         var game_type = "<?php echo strtolower($project_type_obj->string);?>";
         var user_email = "<?php echo $user_email; ?>";
+        var current_user_id = "<?php echo get_current_user_id();?>";
+        var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
+        loadAnalyticsTab(project_id, scene_id, project_keys, game_type, user_email, current_user_id, energy_stats);
+        
 
-        // Convert scene to json and put the json in the wordpress field wpunity_scene_json_input
-        jQuery('#save-expid-button').click(function() {
-            wpunity_saveExpIDAjax();
-        });
-
-        if (project_keys.gioID && game_type === "chemistry") {
-            ddaIframe(user_email, project_keys.extraPass, project_keys.gioID);
-        }
-
-        if (document.getElementById('regional-checkbox-component')) {
-            var regionalCheckbox = mdc.checkbox.MDCCheckbox.attachTo(document.getElementById('regional-checkbox-component'));
-
-            jQuery('#regional-checkbox-component').click(function () {
-                jQuery('#regional-scene-checkbox').prop('checked', regionalCheckbox.checked);
-            });
-        }
-
-        if (game_type === "energy" || game_type === "chemistry") {
-            var game_master_id = "<?php echo get_current_user_id();?>";
-
-            var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
-
-            loadAnalyticsIframe(game_type);
-
-            loadAtRiskIframe(project_keys.expID);
-
-            function loadAnalyticsIframe(game_type) {
-
-                jQuery('#analyticsIframeFallback').hide();
-                jQuery('#analyticsIframeContainer').show();
-
-                var type = game_type === 'chemistry' ? game_type : 'energy3d' ;
-
-                var url = "https://analytics.envisage-h2020.eu/?" +
-                    "wpunity_game=" + project_id +
-                    "&wpunity_scene=" + scene_id +
-                    "&scene_type=scene" +
-                    "&lab=" + type +
-                    /*"&version=" + version +
-                    "&location=" + location +*/
-                    "&gamemaster_id=" + game_master_id;
-
-                var iframe = jQuery('#analyticsIframeContent');
-
-                if (iframe.length) {
-                    iframe.attr('src', url);
-                    return false;
-                }
-
-                // In Firefox iframe causes the 3D not to display textures and the analytics charts are not showing
-                // The following patch
-                // Firefox iframe bug: https://stackoverflow.com/questions/3253362/iframe-src-caching-issue-on-firefox
-                // makes 3D editor to work, however Analytics charts still not render
-                jQuery(parent.document).find("analyticsIframeContent").each(function () {
-                    if (this.contentDocument == window.document) {
-                        // if the href of the iframe is not same as
-                        // the value of src attribute then reload it
-                        if (this.src != url) {
-                            this.src = this.src;
-                        }
-                    }
-                });
-                return true;
-            }
-
-            function loadAtRiskIframe(exp_id) {
-
-                if (exp_id) {
-
-                    var url = "https://envisage.goedle.io/at-risk/index.htm?" +
-                        "exp_id=" + exp_id;
-
-                    var iframe = jQuery('#atRiskIframeContent');
-                    if (iframe.length) {
-                        iframe.attr('src', url);
-                        return false;
-                    }
-
-                    jQuery(parent.document).find("atRiskIframeContent").each(function () {
-                        if (this.contentDocument == window.document) {
-                            // if the href of the iframe is not same as
-                            // the value of src attribute then reload it
-                            if (this.src != url) {
-                                this.src = this.src;
-                            }
-                        }
-                    });
-                    return true;
-
-                }
-            }
-        }
-
-        //var dynamicTabBar = window.dynamicTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#dynamic-tab-bar'));
-        var dots = document.querySelector('.dots');
-        var panels = document.querySelector('.panels');
-
-        //dynamicTabBar.preventDefaultOnClick = true;
-
-        // dynamicTabBar.listen('MDCTabBar:change', function (t) {
-        //     var dynamicTabBar = t.detail;
-        //     var nthChildIndex = dynamicTabBar.activeTabIndex;
-        //
-        //     if (nthChildIndex === 1) {
-        //         loadAnalyticsIframe(game_type);
-        //     }
-        //
-        //     updatePanel(nthChildIndex);
-        // });
-
-        function ddaIframe(email, pwd, app_key) {
-
-            var url = "https://envisage.goedle.io/dda/index.htm?" +
-                "email=" + email +
-                "&pwd=" + pwd +
-                "&app_key=" + app_key;
-
-            var iframe = jQuery('#ddaIframeContent');
-            if (iframe.length) {
-                iframe.attr('src', url);
-                return false;
-            }
-
-            jQuery(parent.document).find("ddaIframeContent").each(function () {
-                if (this.contentDocument == window.document) {
-                    // if the href of the iframe is not same as
-                    // the value of src attribute then reload it
-                    if (this.src != url) {
-                        this.src = this.src;
-                    }
-                }
-            });
-            return true;
-        }
-
-        function updatePanel(index) {
-            var activePanel = panels.querySelector('.panel.active');
-            if (activePanel) {
-                activePanel.classList.remove('active');
-            }
-            var newActivePanel = panels.querySelector('.panel:nth-child(' + (index + 1) + ')');
-            if (newActivePanel) {
-                newActivePanel.classList.add('active');
-            }
-        }
-
-
+        // REM: HERE: SCREENSHOT OF SCENE
         function readURL(input) {
 
             if (input.files && input.files[0]) {
@@ -954,7 +740,6 @@ get_header(); ?>
 
         jQuery("#wpunity_scene_sshot_manual_select").change(function() {
             readURL(this);
-
         });
 
         jQuery("#clear-image-button").click(function() {
@@ -962,6 +747,8 @@ get_header(); ?>
             is_scene_icon_manually_selected = false;
         });
 
+        
+        // DELETE SCENE DIALOGUE
         jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
             jQuery('#delete-scene-dialog-progress-bar').show();
             jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );

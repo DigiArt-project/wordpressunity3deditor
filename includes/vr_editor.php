@@ -241,7 +241,7 @@ echo '</script>';
     
         <!-- Numerical input for Move rotate scale -->
         <div id="row4" class="row-right-panel">
-            <div id="gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
+            <div id="numerical_gui-container" class="VrGuiContainerStyle mdc-typography mdc-elevation--z1"></div>
         </div>
     
         <!--  Axes resize -->
@@ -547,13 +547,13 @@ echo '</script>';
 <!--    Start 3D with Javascript   -->
 <script>
     // all 3d dom
-    var container_3D_all = document.getElementById( 'vr_editor_main_div' );
+    let container_3D_all = document.getElementById( 'vr_editor_main_div' );
 
     // Selected object name
     var selected_object_name = '';
 
     // Add gui to gui container_3D_all
-    var guiContainer = document.getElementById('gui-container');
+    let guiContainer = document.getElementById('numerical_gui-container');
     guiContainer.appendChild(controlInterface.translate.domElement);
     guiContainer.appendChild(controlInterface.rotate.domElement);
     guiContainer.appendChild(controlInterface.scale.domElement);
@@ -566,67 +566,22 @@ echo '</script>';
     var transform_controls = new THREE.TransformControls( envir.renderer.domElement );
     transform_controls.name = 'myTransformControls';
 
-    // Hierarchy close button
-    jQuery("#hierarchy-toggle-btn").click(function() {
-
-        if (jQuery("#hierarchy-toggle-btn").hasClass("HierarchyToggleOn")) {
-
-            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOff").removeClass("HierarchyToggleOn");
-        } else {
-            jQuery("#hierarchy-toggle-btn").addClass("HierarchyToggleOn").removeClass("HierarchyToggleOff");
-        }
-
-        jQuery("#right-elements-panel").toggle("slow");
-    });
-
-    //------------- File Browser Toolbar close button -------------
-
-    jQuery("#bt_close_file_toolbar").click(function() {
-
-        if (jQuery("#bt_close_file_toolbar").hasClass("AssetsToggleOn")) {
-
-            jQuery("#bt_close_file_toolbar").addClass("AssetsToggleOff").removeClass("AssetsToggleOn");
-        } else {
-
-            jQuery("#bt_close_file_toolbar").addClass("AssetsToggleOn").removeClass("AssetsToggleOff");
-        }
-
-        jQuery("#assetBrowserToolbar").toggle("slow");
-        jQuery("#filemanager").toggle("slow");
-        
-    });
-
-    // Scenes List Toolbar close button
-    jQuery("#scenesList-toggle-btn").click(function() {
-
-        if (jQuery("#scenesList-toggle-btn").hasClass("scenesListToggleOn")) {
-            jQuery("#scenesList-toggle-btn").addClass("scenesListToggleOff").removeClass("scenesListToggleOn");
-        } else {
-            jQuery("#scenesList-toggle-btn").addClass("scenesListToggleOn").removeClass("scenesListToggleOff");
-        }
-
-        jQuery("#scenesInsideVREditor").toggle("slow");
-    });
-
     // 3D Widgets change mode (Translation-Rotation-Scale)
     jQuery("#object-manipulation-toggle").click(function() {
 
-        var value = jQuery("input[name='object-manipulation-switch']:checked").val();
-        
-        
+        let mode = jQuery("input[name='object-manipulation-switch']:checked").val();
+
         // Sun and Target spot can not change control manipulation mode
         if (transform_controls.object.categoryName.includes("lightTargetSpot") ||
             transform_controls.object.categoryName.includes("lightSun") ||
             transform_controls.object.categoryName.includes("lightLamp") ||
             transform_controls.object.categoryName.includes("lightSpot")){
             
-            if (value === 'rotate')
+            if (mode === 'rotate')
                 return;
         }
-        
-        
-        transform_controls.setMode(value);
-        showObjectPropertiesPanel(value);
+        transform_controls.setMode(mode);
+        showObjectPropertiesPanel(mode);
     });
 
     jQuery("#removeAssetBtn").click(function(){
@@ -641,6 +596,7 @@ echo '</script>';
         transform_controls.setSize( Math.max(transform_controls.size * 0.9, 0.1 ) );
     });
 
+    // Toggle 2D vs 3D button
     jQuery("#dim-change-btn").click(function() {
 
         jQuery("#translate-switch").click();
@@ -816,7 +772,7 @@ echo '</script>';
 
     var resources3D  = [];// This holds all the resources to load. Generated in Parse JSON
 
-    //====================== Load Manager =======================================================
+    // Load Manager
     // Make progress bar visible
     jQuery("#progress").get(0).style.display = "block";
 
@@ -1141,8 +1097,7 @@ echo '</script>';
     }
     
     animate();
-    
-    
+
 </script>
 
 <?php
