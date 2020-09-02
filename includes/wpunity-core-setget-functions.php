@@ -426,8 +426,6 @@ function wpunity_fetch_game_assets_action_callback(){
 	header('Content-type: application/json');
 
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug'], $_POST['gameProjectID']);
-
-
 	
 	for ($i=0; $i<count($response); $i++){
 		$response[$i]['name'] = $response[$i]['assetName'];
@@ -438,7 +436,7 @@ function wpunity_fetch_game_assets_action_callback(){
 		else
 			$response[$i]['path'] = $response[$i]['fbxPath'];
 
-//		// Find kb size
+//		// Find kb size: Too expensive
 //		$ch = curl_init($response[$i]['objPath']);
 //		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 //		curl_setopt($ch, CURLOPT_HEADER, TRUE);
@@ -456,9 +454,9 @@ function wpunity_fetch_game_assets_action_callback(){
 	);
 	
 	
-	$ff = fopen("output_get_assets.json","w");
-	fwrite($ff, print_r($jsonResp,true));
-	fclose($ff);
+//	$ff = fopen("output_get_assets.json","w");
+//	fwrite($ff, print_r($jsonResp,true));
+//	fclose($ff);
 	
 	echo $jsonResp;
 	wp_die();
@@ -667,7 +665,7 @@ function wpunity_getAllscenes_unityfiles_byGame($gameID){
 
 }
 
-//==========================================================================================================================================
+//  Get all Exams
 
 function wpunity_getAllexams_byGame($project_id, $addMenu){
 
@@ -718,5 +716,30 @@ function wpunity_getAllexams_byGame($project_id, $addMenu){
 
 	return $allExamScenes;
 }
+
+function getProjectScenes($allScenePGameID){
+	
+	
+	$custom_query_args = array(
+		'post_type' => 'wpunity_scene',
+		'posts_per_page' => -1,
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'wpunity_scene_pgame',
+				'field'    => 'term_id',
+				'terms'    => $allScenePGameID,
+			),
+		),
+		'orderby' => 'ID',
+		'order' => 'DESC',
+		/*'paged' => $paged,*/
+	);
+	
+	$custom_query = new WP_Query( $custom_query_args );
+
+	return $custom_query;
+}
+
+
 
 ?>

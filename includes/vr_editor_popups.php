@@ -307,16 +307,16 @@
 
 
 
-<!--<!-- POI IT @ Archaeology: Popup menu to for Reward item checkbox, from  -->-->
+<!-- POI IT @ Archaeology: Popup menu to for Reward item checkbox, from  -->
 <!--<div id="popUpPoiImageTextPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">-->
 <!---->
-<!--    <!-- The close button-->-->
+<!--     The close button-->
 <!--    <a style="float: right;" type="button" class="mdc-theme--primary"-->
 <!--       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_image_text_reward_checkbox"); return false;'>-->
 <!--        <i class="material-icons" style="cursor: pointer; float: right;">close</i>-->
 <!--    </a>-->
 <!---->
-<!--    <!-- The checkbox-->-->
+<!--    The checkbox-->
 <!--    <input type="checkbox" title="Select if it is a reward item"  id="poi_image_text_reward_checkbox" name="poi_image_text_reward_checkbox"-->
 <!--           class="mdc-textfield__input mdc-theme--text-primary-on-light" style="width: 100px !important; float: right; margin-left: 80px; margin-top: 20px;">-->
 <!--    <label for="poi_image_text_reward_checkbox" class="mdc-textfield__label"-->
@@ -324,16 +324,18 @@
 <!---->
 <!--</div>-->
 <!---->
-<!--<!-- POI Video @ Archaeology: Popup menu to for Reward item checkbox, from -->-->
+
+<!-- POI Video @ Archaeology: Popup menu to for Reward item checkbox, from -->
 <!--<div id="popUpPoiVideoPropertiesDiv" class="EditorObjOverlapSelectStyle mdc-theme--background mdc-elevation--z2" style="min-width: 200px;display:none">-->
 <!---->
-<!--    <!-- The close button-->-->
+<!--    The close button-->
 <!--    <a style="float: right;" type="button" class="mdc-theme--primary"-->
 <!--       onclick='this.parentNode.style.display = "none"; clearAndUnbindCheckBoxProperties("poi_video_reward_checkbox"); return false;'>-->
 <!--        <i class="material-icons" style="cursor: pointer; float: right;">close</i>-->
 <!--    </a>-->
 <!---->
-<!--    <!-- The checkbox-->-->
+
+<!--    The checkbox-->
 <!---->
 <!--    <input type="checkbox" title="Select if it is a reward item"  id="poi_video_reward_checkbox" name="poi_image_text_reward_checkbox"-->
 <!--           class="mdc-textfield__input mdc-theme--text-primary-on-light"-->

@@ -142,7 +142,7 @@ wp_localize_script( 'ajax-script_savegio', 'my_ajax_object_savegio',
 );
 
 // Asset Browser
-wp_enqueue_script( 'ajax-script_filebrowse', $pluginpath.'/js_libs/scriptFileBrowserToolbarWPway.js', array('jquery') );
+wp_enqueue_script( 'ajax-script_filebrowse', $pluginpath.'/js_libs/assetBrowserToolbar.js', array('jquery') );
 wp_localize_script( 'ajax-script_filebrowse', 'my_ajax_object_fbrowse', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
 // Save scene

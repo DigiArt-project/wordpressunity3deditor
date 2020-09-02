@@ -29,7 +29,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
  */
 function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
-    var filemanager = jQuery('#fileBrowserToolbar'),
+    var filemanager = jQuery('#assetBrowserToolbar'),
         // breadcrumbs = jQuery('.breadcrumbs'),
         fileList = filemanager.find('.data');
         // closeButton = jQuery('#bt_close_file_toolbar');

@@ -70,7 +70,7 @@ function wpunity_register_scripts() {
 		array('wpunity_content_interlinking_request', $pluginDirJS.'content_interlinking_commands/content_interlinking.js'),
 		array('wpunity_segmentation_request', $pluginDirJS.'semantics_commands/segmentation.js'),
 		array('wpunity_classification_request', $pluginDirJS.'semantics_commands/classification.js'),
-		array('wpunity_fetch_asset_scenes_request', $pluginDirJS.'scriptFileBrowserToolbarWPway.js'),
+		array('wpunity_fetch_asset_scenes_request', $pluginDirJS.'assetBrowserToolbar.js'),
 		array('wpunity_qrcode_generator', $pluginDirJS.'qrcode.js'),
 		array('wpunity_inflate', $pluginDirJS.'inflate.min.js'),
 		array('wpunity_materialize_jslib', $pluginDirJS.'materialize.js'),
