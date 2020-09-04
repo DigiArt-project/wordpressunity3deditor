@@ -185,10 +185,12 @@ $path_url = wp_upload_dir()['baseurl'].'/Models/';
 $goBackToLink = '';
 
 // If coming from scene then go to scene editor
-if($scene_id!=0)
-    $goBackToLink = get_permalink($edit_scene_page_id).$parameter_Scenepass.$scene_data['id'].'&wpunity_game='.$project_id.'&scene_type='.
-        $scene_data['type'];
-else {
+if($scene_id != 0 ) {
+    
+    $goBackToLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . $_GET['scene_type'];
+    
+    
+}else {
 
     if (!isset($_GET['singleproject']))
         $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private

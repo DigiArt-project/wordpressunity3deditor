@@ -1,4 +1,4 @@
-function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, dataDrag, translation){
+function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, dataDrag, translation, pluginPath){
 
     // Add javascript variables for viewing the object correctly
     let selected_object_trs = {
@@ -396,7 +396,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         extraResource[nameModel] = resources3D[nameModel];
 
         var loaderMulti = new LoaderMulti();
-        loaderMulti.load(manager, extraResource);
+        loaderMulti.load(manager, extraResource, pluginPath);
     }
 }
 

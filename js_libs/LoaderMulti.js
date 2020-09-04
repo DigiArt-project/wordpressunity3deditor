@@ -6,7 +6,7 @@ class LoaderMulti {
 
     constructor(){ };
 
-    load(manager, resources3D) {
+    load(manager, resources3D, pluginPath) {
 
          for (var n in resources3D) {
             (function (name) {
@@ -19,18 +19,18 @@ class LoaderMulti {
 
                 // Load Steve
                 if (name == 'avatarYawObject') {
-                    //mtlLoader.setPath(PLUGIN_PATH_VR+"/assets/Steve/");
+                    //mtlLoader.setPath(pluginPath+"/assets/Steve/");
                     // STEVE is the CAMERA MESH
 
                     // Steve Final is the camera 3D model
-                    mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinal.mtl", function (materials) {
+                    mtlLoader.load(pluginPath + "/assets/Steve/SteveFinal.mtl", function (materials) {
 
                         materials.preload();
 
                         var objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(PLUGIN_PATH_VR + '/assets/Steve/SteveFinal.obj', 'after',
+                        objloader.load(pluginPath + '/assets/Steve/SteveFinal.obj', 'after',
                             function (object) {
 
                                 // object.traverse(function (node) {
@@ -83,14 +83,14 @@ class LoaderMulti {
                     // STEVE OLD IS THE HUMAN MESH
 
                     // Steve Final old is the Steve 3D model
-                    mtlLoader.load(PLUGIN_PATH_VR + "/assets/Steve/SteveFinalOld.mtl", function (materials) {
+                    mtlLoader.load(pluginPath + "/assets/Steve/SteveFinalOld.mtl", function (materials) {
 
                         materials.preload();
 
                         var objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(PLUGIN_PATH_VR + '/assets/Steve/SteveFinalOld.obj', 'after',
+                        objloader.load(pluginPath + '/assets/Steve/SteveFinalOld.obj', 'after',
                             function (object) {
 
                                 object.name = "SteveOld";

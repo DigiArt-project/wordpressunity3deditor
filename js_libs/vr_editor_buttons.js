@@ -1,6 +1,6 @@
 function loadButtonActions() {
 
-
+    // Compile Project button
     jQuery( "#compileGameBtn" ).click(function() {
         compileDialog.show();
 
@@ -107,4 +107,99 @@ function loadButtonActions() {
         wpunity_saveExpIDAjax();
     });
 
+
+    // Take SCREENSHOT OF SCENE
+    jQuery("#takeScreenshotBtn").click(function() {
+        takeScreenshot();
+        is_scene_icon_manually_selected = false;
+    });
+
+    // Select image as Scene icon
+    jQuery("#wpunity_scene_sshot_manual_select").change(function() {
+        readLocalImageAsSceneIcon(this);
+    });
+
+    function readLocalImageAsSceneIcon(input) {
+
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
+                is_scene_icon_manually_selected = true;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    // DELETE SCENE DIALOGUE
+    jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
+        jQuery('#delete-scene-dialog-progress-bar').show();
+        jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
+        jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
+        wpunity_deleteSceneAjax(deleteDialog.id, url_scene_redirect);
+    });
+
+    jQuery("#deleteSceneDialogCancelBtn").click( function (e) {
+        jQuery('#delete-scene-dialog-progress-bar').hide();
+        deleteDialog.close();
+    });
+
+    function deleteScene(id) {
+
+        var dialogTitle = document.getElementById("delete-dialog-title");
+        var dialogDescription = document.getElementById("delete-dialog-description");
+        var sceneTitle = document.getElementById(id+"-title").textContent.trim();
+
+        dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
+        dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
+        deleteDialog.id = id;
+        deleteDialog.show();
+    }
+
+
+    // Hide compile progress slider
+    function hideCompileProgressSlider() {
+        jQuery( "#compileProgressSlider" ).hide();
+        jQuery( "#compileProgressTitle" ).hide();
+        jQuery( "#compileProgressDeterminate" ).hide();
+        jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+
+        jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
+        jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
+    }
+
+
+
+    // // Toggle UIs to clear out vision
+    // jQuery('#toggleViewSceneContentBtn').click(function() {
+    //     var btn = jQuery('#toggleViewSceneContentBtn');
+    //     var icon = jQuery('#toggleViewSceneContentBtn i');
+    //
+    //     if (btn.data('toggle') === 'on') {
+    //
+    //         // Hide
+    //         btn.addClass('mdc-theme--text-hint-on-light');
+    //         btn.removeClass('mdc-theme--secondary');
+    //         icon.html('<i class="material-icons" style="background: none; opacity:1; font-size:11pt">visibility_off</i>');
+    //         btn.data('toggle', 'off');
+    //
+    //         jQuery("#sceneContent").hide();  // Lights bar
+    //
+    //     } else {
+    //         // Show
+    //         btn.removeClass('mdc-theme--text-hint-on-light');
+    //         btn.addClass('mdc-theme--secondary');
+    //         icon.html('<i class="material-icons" style="background: none; opacity:1; font-size:11pt">visibility</i>');
+    //         btn.data('toggle', 'on');
+    //
+    //         jQuery("#sceneContent").show(); // Lights bar
+    //
+    //     }
+    // });
+
 }
+
+

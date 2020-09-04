@@ -645,11 +645,11 @@ add_filter('login_redirect', 'wpunity_default_page');
 
 
 //Function to get ALL necessary keys about GIO Analytics
-function wpunity_getProjectKeys($project_id, $project_scope) {
+function wpunity_getProjectKeys($project_id, $project_type) {
 
 	$mykeys = array();
 
-	if ($project_scope === 1) {
+	if ($project_type === 'Energy' || $project_type === 'Chemistry' || $project_type === 1) {
 		$myGioID = get_post_meta( $project_id, 'wpunity_project_gioApKey', true);
 		$myExpID = get_post_meta( $project_id, 'wpunity_project_expID', true);
 		$extraPass = get_the_author_meta( 'extra_pass', get_current_user_id() );

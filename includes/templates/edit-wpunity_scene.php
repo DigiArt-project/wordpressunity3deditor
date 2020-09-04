@@ -52,31 +52,67 @@ function load_custom_functions_vreditor(){
     
 }
 add_action('wp_enqueue_scripts', 'load_custom_functions_vreditor' );
+?>
+
+<script type="text/javascript">
+    // keep track for the undo-redo function
+    post_revision_no = 1;
+
+    // is rendering paused
+    isPaused = false;
+
+    // Use lighting or basic materials (basic does not employ light, no shadows)
+    window.isAnyLight = true;
+</script>
 
 
-$project_id    = sanitize_text_field( intval( $_GET['wpunity_game'] ) );
-$project_post     = get_post($project_id);
-$projectSlug = $project_post->post_name;
-$project_type_obj = wpunity_return_project_type($project_id);
+<?php
+// Define current path of plugin
+$pluginpath = str_replace('\\','/', dirname(plugin_dir_url( __DIR__  )) );
 
+// wpcontent/uploads/
+$upload_url = wp_upload_dir()['baseurl'];
+$upload_dir = str_replace('\\','/',wp_upload_dir()['basedir']);
+
+// Scene
 $current_scene_id = sanitize_text_field( intval( $_GET['wpunity_scene'] ));
-$scene_post = get_post($current_scene_id);
-$sceneTitle = $scene_post->post_name;
 
-// For analytics
-$project_saved_keys = wpunity_getProjectKeys($project_id, $project_scope);
+// Project
+$project_id    = sanitize_text_field( intval( $_GET['wpunity_game'] ) );
+$project_post  = get_post($project_id);
+$projectSlug   = $project_post->post_name;
 
-// if Virtual Lab
-if($project_scope === 1) {
-    if (!array_key_exists('gioID', $project_saved_keys)) {
-        echo "<script type='text/javascript'>alert(\"APP KEY not found." .
-            " Please make sure that your user account has been registered correctly, " .
-            "and you have loaded the correct page\");</script>";
-    }
+// Get if project is : 'Archaeology' or 'Energy' or 'Chemistry'
+$project_type = wpunity_return_project_type($project_id)->string;
+
+// Get project type icon
+$project_type_icon = wpunity_return_project_type($project_id)->icon;
+
+// Get Joker project id
+$joker_project_id = get_page_by_path( strtolower($project_type).'-joker', OBJECT, 'wpunity_game' )->ID;
+
+// Wind Energy Only
+if ($project_type === 'Energy') {
+    $scenesNonRegional = wpunity_getNonRegionalScenes($_REQUEST['wpunity_game']);
+    $scenesMarkerAllInfo = wpunity_get_all_scenesMarker_of_project_fastversion($project_id);
 }
 
-$user_data = get_userdata( get_current_user_id() );
-$user_email = $user_data->user_email;
+// Archaeology only
+if ($project_type === 'Archaeology') {
+    $doorsAllInfo = wpunity_get_all_doors_of_project_fastversion($project_id);
+}
+
+// Get scene content from post
+$scene_post = get_post($current_scene_id);
+
+// If empty load default scenes if no content. Do not put esc_attr, crashes the universe in 3D.
+$sceneToLoad = $scene_post->post_content ? $scene_post->post_content :
+                        wpunity_getDefaultJSONscene(strtolower($project_type));
+
+$sceneTitle = $scene_post->post_name;
+
+// Front End or Back end
+$isAdmin = is_admin() ? 'back' : 'front';
 
 
 $allProjectsPage = wpunity_getEditpage('allgames');
@@ -86,20 +122,72 @@ $editscene2DPage = wpunity_getEditpage('scene2D');
 $editsceneExamPage = wpunity_getEditpage('sceneExam');
 
 // for vr_editor
-$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .$current_scene_id . '&wpunity_asset=' );
+$urlforAssetEdit = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id .
+                                '&wpunity_scene=' .$current_scene_id . '&wpunity_asset=' );
+
+// User data
+$user_data = get_userdata( get_current_user_id() );
+$user_email = $user_data->user_email;
+
+
+// Shift vars to Javascript side
+echo '<script>';
+echo 'let pluginPath="'.$pluginpath.'";';
+echo 'let uploadDir="'.wp_upload_dir()['baseurl'].'";';
+echo 'let projectId="'.$project_id.'";';
+echo 'let projectSlug="'.$projectSlug.'";';
+echo 'var isAdmin="'.$isAdmin.'";';
+echo 'let isUserAdmin="'.current_user_can('administrator').'";';
+echo 'let urlforAssetEdit="'.$urlforAssetEdit.'";';
+echo 'let scene_id ="'.$current_scene_id.'";';
+echo 'let game_type ="'.strtolower($project_type).'";';
+echo 'let project_keys ="'.json_encode(wpunity_getProjectKeys($project_id, $project_type)).'";';
+echo 'user_email = "'.$user_email.'";';
+echo 'current_user_id = "'.get_current_user_id().'";';
+echo 'energy_stats = '.json_encode(wpunity_windEnergy_scene_stats($current_scene_id)).';';
+
+
+if ($project_type === 'Archaeology') {
+    echo "var doorsAll=" . json_encode($doorsAllInfo) . ";";
+}
+if ($project_type === 'Energy') {
+    echo "var scenesMarkerAll=" . json_encode($scenesMarkerAllInfo) . ";";
+    echo "var scenesNonRegional=".json_encode($scenesNonRegional).";";
+}
+
+if ($project_type === 'Chemistry') {
+    echo "var scenesTargetChemistry=" . json_encode(wpunity_getAllexams_byGame($joker_project_id, true)) . ";";
+}
+echo '</script>';
+
+
+// For analytics
+$project_saved_keys = wpunity_getProjectKeys($project_id, $project_type);
+
+// if Virtual Lab
+if($project_type === 'Energy' || $project_type === 'Chemistry') {
+    if (!array_key_exists('gioID', $project_saved_keys)) {
+        echo "<script type='text/javascript'>alert(\"APP KEY not found." .
+            " Please make sure that your user account has been registered correctly, " .
+            "and you have loaded the correct page\");</script>";
+    }
+}
 
 // Get 'parent-game' taxonomy with the same slug as Game (in order to show scenes that belong here)
 $allScenePGame = get_term_by('slug', $projectSlug, 'wpunity_scene_pgame');
+
+//$ff = fopen('output_merger.txt',"w");
+//fwrite($ff, "1:".print_r($project_post)         .chr(13));
+//fwrite($ff, "2:".print_r($projectSlug,true));
+//fclose($ff);
+
 $allScenePGameID = $allScenePGame->term_id;
 
-if ($project_type_obj->string === "Chemistry") {
+if ($project_type === "Chemistry") {
     $analytics_molecule_checklist = wpunity_derive_molecules_checklist();
 }
 
-$upload_dir = str_replace('\\','/',wp_upload_dir()['basedir']);
-
 // Ajax for fetching game's assets within asset browser widget at vr_editor // user must be logged in to work, otherwise ajax has no privileges
-$pluginpath = str_replace('\\','/', dirname(plugin_dir_url( __DIR__  )) );
 
 // COMPILE Ajax
 if(wpunity_getUnity_local_or_remote() != 'remote') {
@@ -164,10 +252,10 @@ wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 wp_enqueue_media($scene_post->ID);
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
-if ($project_scope == 0) {
+if ($project_type === 'Archaeology') {
 	$single_lowercase = "tour";
 	$single_first = "Tour";
-} else if ($project_scope == 1){
+} else if ($project_type === 'Energy' || $project_type === 'Chemistry'){
 	$single_lowercase = "lab";
 	$single_first = "Lab";
 } else {
@@ -175,11 +263,12 @@ if ($project_scope == 0) {
 	$single_first = "Project";
 }
 
+// For Chemistry only
 if(isset($_POST['submitted2']) && isset($_POST['post_nonce_field2']) && wp_verify_nonce($_POST['post_nonce_field2'], 'post_nonce')) {
 	$expID = $_POST['exp-id'];
 	update_post_meta( $project_id, 'wpunity_project_expID', $expID);
 
-	$loadMainSceneLink = get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $scene_id . '&wpunity_game=' . $project_id . '&scene_type=' . 'scene';
+	$loadMainSceneLink = get_permalink($editscenePage[0]->ID) . $parameter_Scenepass . $current_scene_id . '&wpunity_game=' . $project_id . '&scene_type=scene';
 	wp_redirect( $loadMainSceneLink );
 	exit;
 }
@@ -309,7 +398,7 @@ get_header(); ?>
     <div class="EditPageHeader">
         
         <!-- ADD NEW ASSET FROM JOKER PROJECT -->
-        <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id); ?>">
+        <a id="addNewAssetBtn" style="visibility: hidden;" class="HeaderButtonStyle mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple" href="<?php echo esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $project_id . '&wpunity_scene=' .  $current_scene_id.'&scene_type=scene' ); ?>">
             Add a new 3D asset
         </a>
         
@@ -336,14 +425,8 @@ get_header(); ?>
     
                         <i class="material-icons mdc-theme--text-icon-on-dark"
                            style="font-size: 16px; vertical-align: middle;margin-bottom:3px;"
-                           title="<?php echo $project_type_obj->string; ?>"><?php echo $project_type_obj->icon; ?> </i>&nbsp;<?php
-        
-                        //        if ($project_type_obj->string === "Archaeology")
-                        //            echo "Museum";
-                        //        else
-                            echo $project_type_obj->string;
-                        //echo $project_type_obj->string;
-                        ?>
+                           title="<?php echo $project_type; ?>"><?php echo $project_type_icon; ?> </i>&nbsp;
+                           <?php echo $project_type; ?>
                         <i class="material-icons mdc-theme--text-icon-on-dark" title="" style="font-size:20px;vertical-align:middle">chevron_right</i>&nbsp;
                         <?php
                             echo $project_post->post_title;
@@ -367,7 +450,7 @@ get_header(); ?>
 <!--                <div class="mdc-toolbar__section" style="display:block;float:left">-->
 <!--                    <nav id="dynamic-tab-bar" class="mdc-tab-bar--indicator-secondary" style="text-transform: uppercase" role="tablist">-->
 <!--                        <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-tab-active mdc-tab--active" href="#panel-1" >Editor</a>-->
-<!--                        --><?php //if ( $project_type_obj->string === "Energy" || $project_type_obj->string === "Chemistry" ) { ?>
+<!--                        --><?php //if ( $project_type === "Energy" || $project_type === "Chemistry" ) { ?>
 <!---->
 <!--                            <a role="tab" aria-controls="panel-2" class="mdc-tab" href="#panel-2" onclick="">Analytics</a>-->
 <!--        -->
@@ -376,7 +459,7 @@ get_header(); ?>
 <!--                            --><?php //} ?>
 <!--        -->
 <!--        -->
-<!--                            --><?php //if($project_type_obj->string === "Chemistry"){ ?>
+<!--                            --><?php //if($project_type === "Chemistry"){ ?>
 <!--                                <a role="tab" aria-controls="panel-4" class="mdc-tab" href="#panel-4">Content adaptation</a>-->
 <!--                            --><?php //} ?>
 <!--    -->
@@ -398,6 +481,17 @@ get_header(); ?>
                <a id="undo-scene-button" title="Undo last change"><i class="material-icons">undo</i></a>
                <a id="save-scene-button" title="Save all changes you made to the current scene">All changes saved</a>
                <a id="redo-scene-button" title="Redo last change"><i class="material-icons">redo</i></a>
+
+
+                <!-- Close all 2D UIs-->
+                <a id="toggleViewSceneContentBtn" data-toggle='off' type="button"
+                   class="ToggleUIButtonStyle mdc-theme--secondary mdc-theme--text-hint-on-light"
+                   title="View json of scene"
+                    style="padding-top:5px;width:70px;left: calc(50% + 112px);">
+                    json:
+                    <i class="material-icons" style="background: none; opacity:1; font-size:11pt">visibility_off</i>
+                </a>
+                
             </div>
             
             
@@ -418,130 +512,27 @@ get_header(); ?>
     <div class="panels">
         <div class="panel active" id="panel-1" role="tabpanel" aria-hidden="false">
 
-            <div class="mdc-layout-grid" style="padding:0px;">
-                <div class="mdc-layout-grid__inner">
-                    <div class="mdc-layout-grid__cell--span-12">
-                        <div id="scene-vr-editor">
-							<?php
+		<?php
+	    	// vr_editor loads the $sceneToLoad
+    		require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' );
 
-							// vr_editor loads the $sceneToLoad
-							require( plugin_dir_path( __DIR__ ) .  '/vr_editor.php' );
-//                            require( plugin_dir_path( __DIR__ ) .  '/vr_editor_scenes_wrapper.php' );
-							?>
-                        </div>
-                    </div>
-
-                    
-                    
-                    <!-- Scene Options Dialog-->
-                    <aside id="options-dialog"
-                           class="mdc-dialog"
-                           role="alertdialog"
-                           style="z-index: 1000;"
-                           aria-labelledby="Scene options dialog"
-                           aria-describedby="Set the settings of the scene" data-mdc-auto-init="MDCDialog">
-                        <div class="mdc-dialog__surface">
-                            <header class="mdc-dialog__header">
-                                <h2 id="options-dialog-title" class="mdc-dialog__header__title">
-                                    Scene options
-                                </h2>
-                            </header>
-                            <section id="options-dialog-description" class="mdc-dialog__body">
-
-                                <div class="mdc-layout-grid">
-                                    <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell--span-6">
-
-                                            <h2 class="mdc-typography--title">Description</h2>
-
-                                            <div class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield" style="border: 1px solid rgba(0, 0, 0, 0.3);">
-                                            <textarea id="sceneCaptionInput" name="sceneCaptionInput" class="mdc-textfield__input"
-                                                      rows="10" cols="40" style="box-shadow: none; "
-                                                      type="text" form="3dAssetForm"><?php echo get_post_meta($current_scene_id, 'wpunity_scene_caption', true); ?></textarea>
-                                                <label for="sceneCaptionInput" class="mdc-textfield__label" style="background: none;">Add a description</label>
-
-                                            </div>
-                            
-                                        </div>
-
-                                        <div class="mdc-layout-grid__cell--span-6">
-
-                                            <h2 class="mdc-typography--title">Screenshot</h2>
-                                            <br>
-                                            <div class="CenterContents">
-
-												<?php $screenshotImgUrl = get_the_post_thumbnail_url( $current_scene_id );
-
-												if($screenshotImgUrl=='') {
-													echo '<script type="application/javascript">is_scene_icon_manually_selected=false</script>';
-												}else{
-													echo '<script type="application/javascript">is_scene_icon_manually_selected=true</script>';
-												}
-
-												if ($screenshotImgUrl) {
-
-													$dataScreenshot = file_get_contents($screenshotImgUrl);
-													$dataScreenshotbase64 = 'data:image/jpeg;base64,' . base64_encode($dataScreenshot);
-													?>
-
-                                                    <div id="featureImgContainer" class="ImageContainer">
-                                                        <img id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo $dataScreenshotbase64;?>">
-                                                    </div>
-
-												<?php } else { ?>
-                                                    <div id="featureImgContainer">
-                                                        <img style="width: 160px;" id="wpunity_scene_sshot" name="wpunity_scene_sshot" src="<?php echo plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ); ?>">
-                                                    </div>
-												<?php } ?>
+    		// Options dialogue
+            require( plugin_dir_path( __DIR__ ) .  '/templates/edit-wpunity_sceneOptionsDialogue.php' );
+        ?>
 
 
-                                                <input type="file"
-                                                       style="margin: auto;"
-                                                       name="wpunity_scene_sshot_manual_select"
-                                                       title="Featured image"
-                                                       value=""
-                                                       id="wpunity_scene_sshot_manual_select"
-                                                       accept="image/x-png,image/gif,image/jpeg" >
-
-                                                <div class="CenterContents">
-
-                                                    <p class="mdc-typography--subheading1"> <b>or</b> </p>
-                                                    <!-- Clear selected image and take screenshot from 3D canvas-->
-                                                    <a title="Capture screenshot from 3D editor"
-                                                       id="clear-image-button" class="mdc-button mdc-button--primary mdc-button--raised">Take a screenshot</a>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="mdc-layout-grid">
-                                    <div class="mdc-layout-grid__inner">
-
-                                    </div>
-                                </div>
-
-                            </section>
-
-                            <footer class="mdc-dialog__footer">
-                                <a class=" mdc-button mdc-button--primary mdc-dialog__footer__button mdc-dialog__footer__button--accept mdc-button--raised" id="sceneDialogOKBtn">OK</a>
-                            </footer>
-                        </div>
-                        <div class="mdc-dialog__backdrop"></div>
-                    </aside>
-
-                </div>
-            </div>
-
-            <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input" style="visibility:hidden; width:0; height:0; display: none;"
-                      name="wpunity_scene_json_input"> <?php echo get_post_meta( $current_scene_id, 'wpunity_scene_json_input', true ); ?></textarea>
+      <div id="sceneContent" style="z-index:100000;position:absolute; top:20px; left:100px; display:none">
+          <textarea title="wpunity_scene_json_input" id="wpunity_scene_json_input"
+                    style="z-index:100000;width:800px;height:500px;position:absolute"  rows="50" cols = "100"
+                          name="wpunity_scene_json_input">
+                    <?php echo $sceneToLoad ?>
+          </textarea>
+     </div>
 
 
-            <!--Add information for Wind Energy games-->
-			<?php if($project_type_obj->string === "Energy") { ?>
+
+     <!--Add information for Wind Energy games-->
+			<?php if($project_type === "Energy") { ?>
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner mdc-theme--text-primary-on-light">
 
@@ -571,7 +562,7 @@ get_header(); ?>
 			<?php } ?>
 
 
-		<?php if ( $project_type_obj->string === "Energy" || $project_type_obj->string === "Chemistry" ) {  ?>
+		<?php if ( $project_type === "Energy" || $project_type === "Chemistry" ) {  ?>
 
             <div class="panel" id="panel-2" role="tabpanel" aria-hidden="true">
 
@@ -594,7 +585,7 @@ get_header(); ?>
 
 			<?php } ?>
 
-			<?php if($project_type_obj->string === "Chemistry"){ ?>
+			<?php if($project_type === "Chemistry"){ ?>
                 <div class="panel" id="panel-4" role="tabpanel" aria-hidden="true">
                     <div style="position: relative; overflow: hidden; padding-top: 100%;">
                         <iframe id="ddaIframeContent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
@@ -605,92 +596,10 @@ get_header(); ?>
 		<?php } ?>
 
 
-        <!--Compile Dialog-->
-        <aside id="compile-dialog"
-               class="mdc-dialog"
-               role="alertdialog"
-               style="z-index: 1000;"
-               data-game-slug="<?php echo $projectSlug; ?>"
-               data-project-id="<?php echo $project_id; ?>"
-               aria-labelledby="my-mdc-dialog-label"
-               aria-describedby="my-mdc-dialog-description" data-mdc-auto-init="MDCDialog">
-            <div class="mdc-dialog__surface">
-
-                <header class="mdc-dialog__header">
-                    <h2 class="mdc-dialog__header__title">
-                        Compile <?php echo $single_lowercase; ?>
-                    </h2>
-                </header>
-
-                <section class="mdc-dialog__body">
-
-                    <h3 class="mdc-typography--subheading2"> Platform </h3>
-
-                    <div id="platform-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 40%;">
-                        <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">Select a platform</span>
-                        <div class="mdc-simple-menu mdc-select__menu" style="position: initial; max-height: none; ">
-                            <ul class="mdc-list mdc-simple-menu__items">
-                                <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" id="platforms" aria-disabled="true" style="pointer-events: none;" tabindex="-1">
-                                    Select a platform
-                                </li>
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-windows" tabindex="0">
-                                    Windows
-                                </li>
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-linux" tabindex="0">
-                                    Linux
-                                </li>
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-mac" tabindex="0">
-                                    Mac OS
-                                </li>
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-web" tabindex="0">
-                                    Web
-                                </li>
-                                <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" id="platform-android" tabindex="0">
-                                    Android
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <input id="platformInput" type="hidden">
-
-
-                    <div class="mdc-typography--caption mdc-theme--text-primary-on-background" style="float: right;"> <i title="Memory Usage" class="material-icons AlignIconToBottom">memory</i> <span  id="unityTaskMemValue">0</span> KB </div>
-
-                    <hr class="WhiteSpaceSeparator">
-
-                    <h2 id="compileProgressTitle" style="display: none" class="CenterContents mdc-typography--headline">
-                        Step: 1/4
-                    </h2>
-
-                    <div class="progressSlider" id="compileProgressDeterminate" style="display: none;">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLineDeterminate" id="progressSliderSubLineDeterminateValue"></div>
-                    </div>
-
-                    <div class="progressSlider" id="compileProgressSlider" style="display: none;">
-                        <div class="progressSliderLine"></div>
-                        <div class="progressSliderSubLine progressIncrease"></div>
-                        <div class="progressSliderSubLine progressDecrease"></div>
-                    </div>
-
-
-                    <div id="compilationProgressText" class="CenterContents mdc-typography--title"></div>
-
-                    <div class="CenterContents">
-                        <a class="mdc-typography--title" href="" id="wpunity-ziplink" style="display:none;"> <i style="vertical-align: text-bottom" class="material-icons">file_download</i> Download Zip</a>
-                        <a class="mdc-typography--title" href="" id="wpunity-weblink" style="display:none;margin-left:30px" target="_blank">Web link</a>
-                    </div>
-
-                </section>
-
-                <footer class="mdc-dialog__footer">
-                    <a id="compileCancelBtn" class="mdc-button mdc-dialog__footer__button--cancel mdc-dialog__footer__button">Cancel</a>
-                    <a id="compileProceedBtn" type="button" class="mdc-button mdc-button--primary mdc-dialog__footer__button mdc-button--raised LinkDisabled">Proceed</a>
-                </footer>
-            </div>
-            <div class="mdc-dialog__backdrop"></div>
-        </aside>
+    <?php
+        // Compile Dialogue
+        require( plugin_dir_path( __DIR__ ) .  '/templates/edit-wpunity_sceneCompileDialogue.php' );
+    ?>
 
     </div>
 
@@ -701,6 +610,7 @@ get_header(); ?>
         
         mdc.autoInit();
 
+        // All button actions saved here
         loadButtonActions();
         
         // Delete scene dialogue
@@ -712,77 +622,20 @@ get_header(); ?>
         compileDialog.focusTrap_.deactivate();
 
         // Project Analytics
-        var project_id = <?php echo $project_id; ?>;
-        var project_keys = [];
-        project_keys = <?php echo json_encode(wpunity_getProjectKeys($project_id, $project_scope)); ?>;
-        var scene_id = <?php echo $current_scene_id; ?>;
-        var game_type = "<?php echo strtolower($project_type_obj->string);?>";
-        var user_email = "<?php echo $user_email; ?>";
-        var current_user_id = "<?php echo get_current_user_id();?>";
-        var energy_stats = <?php echo json_encode(wpunity_windEnergy_scene_stats($current_scene_id)); ?>;
-        loadAnalyticsTab(project_id, scene_id, project_keys, game_type, user_email, current_user_id, energy_stats);
+        loadAnalyticsTab(projectId, scene_id, project_keys, game_type, user_email, current_user_id, energy_stats);
+
+        // Less top margin if not Admin
+        if (!isUserAdmin)
+            document.getElementById("vr_editor_main_div").style.top = "28px";
+
+        // load asset browser with data
+        jQuery(document).ready(function(){
+            wpunity_fetchSceneAssetsAjax(isAdmin, projectSlug, urlforAssetEdit, projectId);
+
+            // make asset browser draggable
+            jQuery('#assetBrowserToolbar').draggable({cancel : 'ul'});
+        });
         
-
-        // REM: HERE: SCREENSHOT OF SCENE
-        function readURL(input) {
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    jQuery('#wpunity_scene_sshot').attr('src', e.target.result);
-                    is_scene_icon_manually_selected = true;
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        jQuery("#wpunity_scene_sshot_manual_select").change(function() {
-            readURL(this);
-        });
-
-        jQuery("#clear-image-button").click(function() {
-            takeScreenshot();
-            is_scene_icon_manually_selected = false;
-        });
-
-        
-        // DELETE SCENE DIALOGUE
-        jQuery("#deleteSceneDialogDeleteBtn").click(function (e) {
-            jQuery('#delete-scene-dialog-progress-bar').show();
-            jQuery( "#deleteSceneDialogDeleteBtn" ).addClass( "LinkDisabled" );
-            jQuery( "#deleteSceneDialogCancelBtn" ).addClass( "LinkDisabled" );
-            wpunity_deleteSceneAjax(deleteDialog.id, url_scene_redirect);
-        });
-
-        jQuery("#deleteSceneDialogCancelBtn").click(function (e) {
-
-            jQuery('#delete-scene-dialog-progress-bar').hide();
-            deleteDialog.close();
-        });
-
-        function deleteScene(id) {
-
-            var dialogTitle = document.getElementById("delete-dialog-title");
-            var dialogDescription = document.getElementById("delete-dialog-description");
-            var sceneTitle = document.getElementById(id+"-title").textContent.trim();
-
-            dialogTitle.innerHTML = "<b>Delete " + sceneTitle+"?</b>";
-            dialogDescription.innerHTML = "Are you sure you want to delete your scene '" +sceneTitle + "'? There is no Undo functionality once you delete it.";
-            deleteDialog.id = id;
-            deleteDialog.show();
-        }
-
-        function hideCompileProgressSlider() {
-            jQuery( "#compileProgressSlider" ).hide();
-            jQuery( "#compileProgressTitle" ).hide();
-            jQuery( "#compileProgressDeterminate" ).hide();
-            jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
-
-            jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
-            jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
-        }
     </script>
 
 <?php } ?>
