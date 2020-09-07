@@ -1480,20 +1480,7 @@ video {
 }
 
 
-#vr_editor_right_panel_title{
-    height:65px;
-    vertical-align: bottom;
-    bottom:0;
-    display:table-cell;
-    padding-left:5px;
-}
 
-.cardNewSceneInput{
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    box-shadow: none;
-    border-radius: 0;
-}
 
 
 

@@ -283,3 +283,14 @@ function wpunity_killtask_compile(pid) {
         }
     });
 }
+
+// Hide compile progress slider
+function hideCompileProgressSlider() {
+    jQuery( "#compileProgressSlider" ).hide();
+    jQuery( "#compileProgressTitle" ).hide();
+    jQuery( "#compileProgressDeterminate" ).hide();
+    jQuery( "#platform-select" ).removeClass( "mdc-select--disabled" ).attr( "aria-disabled","false" );
+
+    jQuery( "#compileProceedBtn" ).removeClass( "LinkDisabled" );
+    jQuery( "#compileCancelBtn" ).removeClass( "LinkDisabled" );
+}

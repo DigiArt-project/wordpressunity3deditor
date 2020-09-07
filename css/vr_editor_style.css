@@ -1,3 +1,5 @@
+
+
 /* Three js */
 #vr_editor_main_div {
     position:fixed;
@@ -771,4 +773,121 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     -ms-border-bottom-right-radius: 10px;
     -moz-border-bottom-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+.navigation-top {display:none;}
+.mdc-tab { min-width: 0; }
+.custom-header { display:none; }
+.main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
+.site-branding {display:none;}
+#content {padding:0px;}
+
+
+#vr_editor_right_panel_title{
+    height:65px;
+    vertical-align: bottom;
+    bottom:0;
+    display:table-cell;
+    padding-left:5px;
+}
+
+.cardNewSceneInput{
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.scene_editor_upper_toolbar{
+    display:block;
+    position:fixed;
+    z-index:1000;
+}
+
+#sceneInfoBreadcrump{
+    height:30px;
+    margin:0;
+    font-size: 14px;
+    vertical-align: middle;
+    display:block
+}
+
+#projectNameBreadcrump{
+    float:left;
+    max-width:50%;
+    line-height:1.8em;
+}
+
+.sceneArrowBack{
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.sceneProjectTypeLabel{
+    font-size: 16px;
+    vertical-align: middle;
+    margin-bottom:3px;
+    padding-right:5px;
+}
+
+.chevronRight{
+    font-size:20px;
+    vertical-align:middle;
+    padding-right:5px;
+}
+
+#sceneTitleInput{
+    display:block;
+    float:left;
+    width:15%;
+    margin-left:0px;
+    padding:0px;
+    border: none;
+    font-size:14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.titleLengthSuggest{
+    height:25px;
+    max-width:10%;
+    display:block;
+    float:left;
+    position:absolute;
+}
+
+#sceneJsonContent {
+    z-index:100000;
+    position:absolute;
+    top:20px;
+    left:100px;
+    display:none
+}
+
+#wpunity_scene_json_input {
+    z-index: 100000;
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    top:50px;
+    height: 25em;
+}
+
+#analyticsIframeContainer{
+    position: relative;
+    overflow: hidden;
+    padding-top: 150%;
+    display: none;
+}
+
+#analyticsIframeContent{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
