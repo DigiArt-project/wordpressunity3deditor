@@ -103,6 +103,7 @@ function panelsAnalytics($project_type, $project_saved_keys){
 ?>
 <?php
 
+// For Wind Energy show scenes info in edit-scene
 function sceneDetailsInfo($project_type){
 
       if($project_type === "Energy") { ?>

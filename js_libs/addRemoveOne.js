@@ -299,7 +299,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
 
         var manager = new THREE.LoadingManager();
 
-        jQuery("#infophp").get(0).style.visibility = "visible";
+        jQuery("#progressWrapper").get(0).style.visibility = "visible";
         document.getElementById("result_download").innerHTML = "Loading";
 
         manager.onProgress = function (item, loaded, total) {
@@ -311,7 +311,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         // When all are finished loading
         manager.onLoad = function () {
 
-            jQuery("#infophp").get(0).style.visibility = "hidden";
+            jQuery("#progressWrapper").get(0).style.visibility = "hidden";
 
             var insertedObject = envir.scene.getObjectByName(nameModel);
 

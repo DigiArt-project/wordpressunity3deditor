@@ -856,6 +856,7 @@ button, html [type="button"], [type="reset"], [type="submit"] {
     max-width:10%;
     display:block;
     float:left;
+    left:300px !important;
     position:absolute;
 }
 

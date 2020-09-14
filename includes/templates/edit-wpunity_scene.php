@@ -440,11 +440,6 @@ get_header(); ?>
 
             
             
-            
-            
-            
-            
-            
             <!-- 3D editor  -->
             <div id="vr_editor_main_div">
 
@@ -590,7 +585,7 @@ get_header(); ?>
 
 
                 <!--  Make form to submit user changes -->
-                <div id="infophp" class="VrInfoPhpStyle" style="visibility: visible">
+                <div id="progressWrapper" class="VrInfoPhpStyle" style="visibility: visible">
                     <div id="progress" class="ProgressContainerStyle mdc-theme--text-primary-on-light mdc-typography--subheading1">
                     </div>
 
@@ -637,7 +632,7 @@ get_header(); ?>
                 </div>
         
                 <?php
-                require( plugin_dir_path( __DIR__ ).'vr_editor_popups.php');
+                    require( plugin_dir_path( __DIR__ ).'/templates/edit-wpunity_scenePopups.php');
                  ?>
                 
 
@@ -719,18 +714,18 @@ get_header(); ?>
                              <?php } ?>
                          </span>
 
-                                        <!-- Delete button for non-default scenes -->
-                                        <?php if (!$default_scene) { ?>
-                                            <a id="deleteSceneBtn"
-                                               data-mdc-auto-init="MDCRipple"
-                                               title="Delete scene"
-                                               data-sceneid = "<?php echo $scene_id; ?>"
-                                               class="cardDeleteIcon mdc-button mdc-button--compact mdc-card__action">
-                                                <i class="material-icons deleteIconMaterial">
-                                                    delete_forever
-                                                </i>
-                                            </a>
-                                        <?php } ?>
+                            <!-- Delete button for non-default scenes -->
+                            <?php if (!$default_scene) { ?>
+                                <a id="deleteSceneBtn"
+                                   data-mdc-auto-init="MDCRipple"
+                                   title="Delete scene"
+                                   data-sceneid = "<?php echo $scene_id; ?>"
+                                   class="cardDeleteIcon mdc-button mdc-button--compact mdc-card__action">
+                                    <i class="material-icons deleteIconMaterial">
+                                        delete_forever
+                                    </i>
+                                </a>
+                            <?php } ?>
 
                                     </section>
                                 </div>
@@ -742,7 +737,7 @@ get_header(); ?>
 
                     <!-- Analytics key input card -->
                     <?php
-                    require( plugin_dir_path( __DIR__ ) .  'vr_editor_analytics.php' );
+                    require( plugin_dir_path( __DIR__ ) . '/templates/edit-wpunity_sceneAnalytics.php' );
                     ?>
 
                     <!--ADD NEW SCENE card for all but Energy project that has fixed scenes-->
@@ -867,40 +862,20 @@ get_header(); ?>
 
 
 
-
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             <?php
-            $sceneType = get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment");
-            if (count($sceneType)>0) {
-                echo '<script>';
-                echo 'envir.sceneType="' . $sceneType[0] . '";';
-                echo '</script>';
-            }
-            ?>
-
-
-
-            <?php
-               // Options dialogue
-               require( plugin_dir_path( __DIR__ ) .  '/templates/edit-wpunity_sceneOptionsDialogue.php' );
+                // Add sceneType variable in js envir
+                $sceneType = get_post_meta($_GET['wpunity_scene'], "wpunity_scene_environment");
+                if (count($sceneType)>0) {
+                    echo '<script>';
+                    echo 'envir.sceneType="' . $sceneType[0] . '";';
+                    echo '</script>';
+                }
     
-               // Information for Wind Energy scenes
-               sceneDetailsInfo($project_type);
+                // Options dialogue
+                require( plugin_dir_path( __DIR__ ) .  '/templates/edit-wpunity_sceneOptionsDialogue.php' );
+        
+                // Information for Wind Energy scenes
+                sceneDetailsInfo($project_type);
            ?>
       </div>
 
@@ -921,8 +896,6 @@ get_header(); ?>
         var MDCSelect = mdc.select.MDCSelect;
         
         mdc.autoInit();
-    
-    
         
         // Delete scene dialogue
         var deleteDialog = new mdc.dialog.MDCDialog(document.querySelector('#delete-dialog'));
@@ -950,7 +923,7 @@ get_header(); ?>
     </script>
 
 
-    <!--    Start 3D with Javascript   -->
+    <!--  Part 3: Start 3D with Javascript   -->
     <script>
         // all 3d dom
         let container_3D_all = document.getElementById( 'vr_editor_main_div' );
@@ -958,13 +931,13 @@ get_header(); ?>
         // Selected object name
         var selected_object_name = '';
 
-        // Add gui to gui container_3D_all
+        // Add 3D gui widgets to gui container_3D_all
         let guiContainer = document.getElementById('numerical_gui-container');
         guiContainer.appendChild(controlInterface.translate.domElement);
         guiContainer.appendChild(controlInterface.rotate.domElement);
         guiContainer.appendChild(controlInterface.scale.domElement);
 
-        // camera, scene, renderer, lights, stats, floor, browse_controls are all children of CaveEnvironmentals instance
+        // camera, scene, renderer, lights, stats, floor, browse_controls are all children of Environmentals instance
         var envir = new vr_editor_environmentals(container_3D_all);
         envir.is2d = true;
 
@@ -972,18 +945,17 @@ get_header(); ?>
         var transform_controls = new THREE.TransformControls( envir.renderer.domElement );
         transform_controls.name = 'myTransformControls';
 
-
         //var firstPersonBlocker = document.getElementById('firstPersonBlocker');
         var firstPersonBlockerBtn = document.getElementById('firstPersonBlockerBtn');
 
-        // Hide right click panel
+        // Hide (right click) panel
         hideObjectPropertiesPanels();
 
         // When Dat.Gui changes update php, javascript vars and transform_controls
         controllerDatGuiOnChange();
 
         // Load all 3D including Steve
-        var loaderMulti;
+        let loaderMulti;
 
         // id of animation frame is used for canceling animation when dat-gui changes
         var id_animation_frame;
@@ -994,7 +966,7 @@ get_header(); ?>
         // Make progress bar visible
         jQuery("#progress").get(0).style.display = "block";
 
-        var manager = new THREE.LoadingManager();
+        let manager = new THREE.LoadingManager();
 
         manager.onProgress = function ( item, loaded, total ) {
             //console.log(item, loaded, total);
@@ -1005,40 +977,30 @@ get_header(); ?>
         // When all are finished loading place them in the correct position
         manager.onLoad = function () {
 
-            jQuery("#infophp").get(0).style.visibility= "hidden";
-
-            var objItem;
-            var trs_tmp;
-            var name;
-
+            jQuery("#progressWrapper").get(0).style.visibility= "hidden";
 
             // Get the last inserted object
-            for ( name in resources3D  ) {
-                trs_tmp = resources3D[name]['trs'];
-                objItem = envir.scene.getObjectByName(name);
-            }
+            let name = Object.keys(resources3D).pop();
+            let trs_tmp = resources3D[name]['trs'];
+            let objItem = envir.scene.getObjectByName(name);
 
             // In the case the last asset is missing then put controls on the camera
             if (typeof objItem === "undefined"){
                 name = 'avatarYawObject';
                 trs_tmp = resources3D[name]['trs'];
                 objItem = envir.scene.getObjectByName(name);
-            }
-
-
-            // place controls to last inserted obj
-            if (typeof objItem !== "undefined") {
-
+            } else {
+                
                 transform_controls.attach(objItem);
-
                 // highlight
                 envir.outlinePass.selectedObjects = [objItem];
-
                 envir.scene.add(transform_controls);
 
                 if (selected_object_name != 'avatarYawObject') {
-                    transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1], trs_tmp['translation'][2]);
-                    transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1], trs_tmp['rotation'][2]);
+                    transform_controls.object.position.set(trs_tmp['translation'][0], trs_tmp['translation'][1],
+                                                                        trs_tmp['translation'][2]);
+                    transform_controls.object.rotation.set(trs_tmp['rotation'][0], trs_tmp['rotation'][1],
+                                                                trs_tmp['rotation'][2]);
                     transform_controls.object.scale.set(trs_tmp['scale'], trs_tmp['scale'], trs_tmp['scale']);
                 }
 
@@ -1050,11 +1012,15 @@ get_header(); ?>
                 selected_object_name = name;
 
                 transform_controls.setMode("rottrans");
-
+                
+                let sizeT = 1;
+                // Resize controls based on object size
                 if (selected_object_name != 'avatarYawObject') {
-                    var dims = findDimensions(transform_controls.object);
-                    var sizeT = Math.max(...dims);
+                    let dims = findDimensions(transform_controls.object);
+                    sizeT = Math.max(...dims);
                     jQuery("#removeAssetBtn").show();
+                    
+                    // 6 is rotation
                     transform_controls.children[6].handleGizmos.XZY[0][0].visible = true;
 
                     if (selected_object_name.includes("lightSun") || selected_object_name.includes("lightLamp") ||
@@ -1062,13 +1028,10 @@ get_header(); ?>
                         // ROTATE GIZMO: Sun and lamp can not be rotated
                         transform_controls.children[6].children[0].children[1].visible = false;
                     }
-
                 } else {
-                    var sizeT = 1;
                     transform_controls.children[6].handleGizmos.XZY[0][0].visible = false;
                     jQuery("#removeAssetBtn").hide();
                 }
-
                 transform_controls.setSize( sizeT > 1 ? sizeT : 1 );
             }
 
@@ -1078,33 +1041,31 @@ get_header(); ?>
 
             envir.setHierarchyViewer();
 
-
             // Set Target light for Spots
-            for (var n in resources3D) {
+            for (let n in resources3D) {
                 (function (name) {
                     if (resources3D[name]['categoryName'] === 'lightSpot') {
-                        var lightSpot = envir.scene.getObjectByName(name);
+                        let lightSpot = envir.scene.getObjectByName(name);
                         lightSpot.target = envir.scene.getObjectByName(resources3D[name]['lighttargetobjectname']);
                     }
                 })(n);
             }
 
-        };
+        }; // End of manager
     </script>
 
 
-
     <!-- Load Scene - javascript var resources3D[] -->
-    <?php require( plugin_dir_path( __DIR__ ) .  '/vr_editor_ParseJSON.php' );
-    /* Initial load as php*/
-    $formRes = new ParseJSON($upload_url);
-    $formRes->init($sceneToLoad);
+    <?php
+        require( plugin_dir_path( __DIR__ ) .  '/vr_editor_ParseJSON.php' );
+        /* Initial load as php */
+        $formRes = new ParseJSON($upload_url);
+        $formRes->init($sceneToLoad);
     ?>
 
 
 
     <script>
-
         loaderMulti = new LoaderMulti();
 
         loaderMulti.load(manager, resources3D, pluginPath);

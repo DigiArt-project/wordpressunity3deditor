@@ -244,7 +244,7 @@ class LoaderMulti {
                                 envir.scene.add(object);
 
 
-                                //jQuery("#infophp").get(0).style.visibility= "hidden";
+                                //jQuery("#progressWrapper").get(0).style.visibility= "hidden";
 
 
                             },
