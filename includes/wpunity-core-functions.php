@@ -2351,8 +2351,7 @@ function wpunity_save_scene_async_action_callback()
 		             $_POST['scene_screenshot'],
             'scene_'.$_POST['scene_id'].'_featimg',
 			          $_POST['scene_id'],
-                     get_post($_POST['scene_id'])->post_name,
-            'jpg' );
+            'jpg', true);
 
 	// Set thumbnail of post
 	set_post_thumbnail( $_POST['scene_id'], $attachment_id );
@@ -2424,17 +2423,18 @@ function wpunity_undo_scene_async_action_callback()
 // Redo button for scenes
 function wpunity_redo_scene_async_action_callback()
 {
-    $mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',$_POST['available_molecules']);
+    $mole = update_post_meta( $_POST['scene_id'], 'wpunity_available_molecules',
+                                                        $_POST['available_molecules']);
     
-    if (isset($_POST['scene_screenshot']))
+    if (isset($_POST['scene_screenshot'])){
         $attachment_id = wpunity_upload_Assetimg64(
             $_POST['scene_screenshot'],
             'scene_'.$_POST['scene_id'].'_featimg',
             $_POST['scene_id'],
-            get_post($_POST['scene_id'])->post_name,
-            'jpg' );
+            'jpg' , true);
     
-    set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+        set_post_thumbnail( $_POST['scene_id'], $attachment_id );
+    }
     
     $scene_new_info = array(
         'ID' => $_POST['scene_id'],

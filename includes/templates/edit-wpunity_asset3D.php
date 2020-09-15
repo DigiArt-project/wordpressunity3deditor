@@ -336,8 +336,7 @@ if($asset_id != null) {
     
     
     if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
-        
-        
+
         // Get texture attachments of post
         $args = array(
             'posts_per_page' => 100,
@@ -346,8 +345,7 @@ if($asset_id != null) {
             'post_parent'    => $asset_id,
             'post_type'      => 'attachment'
         );
-    
-        
+
         $attachments_array =  get_children( $args,OBJECT );  //returns Array ( [$image_ID].
         
         // Add texture urls to a string separated by |
@@ -364,7 +362,6 @@ if($asset_id != null) {
     
         // remove the last separator
         $textures_fbx_string_connected = trim($textures_fbx_string_connected, "|");
-        
         
         $fbxpost = get_post($assetpostMeta['wpunity_asset3d_fbx'][0]);
         $fbx_file_name = basename($fbxpost->guid);

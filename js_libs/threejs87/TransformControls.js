@@ -30,9 +30,9 @@
     var labelInfo = new THREE.CSS2DObject(textInfo);
 
     // lines denoting angle for rotation mode
-    var angle_line_geometryX = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
-    var angle_line_geometryY = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,0,1.1], 3 ) );
-    var angle_line_geometryZ = new THREE.BufferGeometry().addAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
+    var angle_line_geometryX = new THREE.BufferGeometry().setAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
+    var angle_line_geometryY = new THREE.BufferGeometry().setAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,0,1.1], 3 ) );
+    var angle_line_geometryZ = new THREE.BufferGeometry().setAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0,0,1.1,0], 3 ) );
 
     var GizmoMaterial = function ( parameters ) {
 
@@ -194,7 +194,7 @@
                     child.updateMatrix();
 
                     var tempGeometry = child.geometry.clone();
-                    tempGeometry.applyMatrix( child.matrix );
+                    tempGeometry.applyMatrix4( child.matrix );
                     child.geometry = tempGeometry;
 
                     child.position.set( 0, 0, 0 );
@@ -425,7 +425,7 @@
                 }
             }
 
-            geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
             return geometry;
         };
 

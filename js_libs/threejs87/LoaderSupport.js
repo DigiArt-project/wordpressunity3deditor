@@ -468,7 +468,7 @@ THREE.LoaderSupport.MeshBuilder = (function () {
 		var meshName = meshPayload.params.meshName;
 
 		var bufferGeometry = new THREE.BufferGeometry();
-		bufferGeometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.vertices ), 3 ) );
+		bufferGeometry.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.vertices ), 3 ) );
 		if ( Validator.isValid( meshPayload.buffers.indices ) ) {
 
 			bufferGeometry.setIndex( new THREE.BufferAttribute( new Uint32Array( meshPayload.buffers.indices ), 1 ));
@@ -477,12 +477,12 @@ THREE.LoaderSupport.MeshBuilder = (function () {
 		var haveVertexColors = Validator.isValid( meshPayload.buffers.colors );
 		if ( haveVertexColors ) {
 
-			bufferGeometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.colors ), 3 ) );
+			bufferGeometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.colors ), 3 ) );
 
 		}
 		if ( Validator.isValid( meshPayload.buffers.normals ) ) {
 
-			bufferGeometry.addAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.normals ), 3 ) );
+			bufferGeometry.setAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.normals ), 3 ) );
 
 		} else {
 
@@ -491,7 +491,7 @@ THREE.LoaderSupport.MeshBuilder = (function () {
 		}
 		if ( Validator.isValid( meshPayload.buffers.uvs ) ) {
 
-			bufferGeometry.addAttribute( 'uv', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.uvs ), 2 ) );
+			bufferGeometry.setAttribute( 'uv', new THREE.BufferAttribute( new Float32Array( meshPayload.buffers.uvs ), 2 ) );
 
 		}
 

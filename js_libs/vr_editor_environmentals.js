@@ -372,7 +372,7 @@ class vr_editor_environmentals {
     }
 
     setSteveToAvatarControls(){
-        var Steve = envir.scene.getObjectByName("Steve");
+        var Steve = envir.scene.getObjectByName("Camera3Dmodel");
         Steve.rotation.set(0, Math.PI/2, 0);
         this.avatarControls.getObject().add(Steve );
     }
@@ -420,11 +420,11 @@ class vr_editor_environmentals {
         this.gridHelper.visible = false;
 
         // // Add Axes helper
-        this.axisHelper = new THREE.AxisHelper( 100 );
-        this.axisHelper.name = "myAxisHelper";
-        this.scene.add(this.axisHelper);
+        this.axesHelper = new THREE.AxesHelper( 100 );
+        this.axesHelper.name = "myAxisHelper";
+        this.scene.add(this.axesHelper);
         this.setAxisText();
-        this.axisHelper.visible = false;
+        this.axesHelper.visible = false;
     }
 
     /*
@@ -476,7 +476,7 @@ class vr_editor_environmentals {
                     text.scale.z = 0.001;
                     text.name = "myAxisText" + letterAx;
 
-                    window.envir.axisHelper.add(text);
+                    window.envir.axesHelper.add(text);
                 }
             }
     }

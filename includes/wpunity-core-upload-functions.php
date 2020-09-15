@@ -210,13 +210,31 @@ function wpunity_insert_attachment_post($file_return, $parent_post_id ){
 
 
 // Immitation of $_FILE through $_POST . This works only for jpgs and pngs
-function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $parentGameSlug, $type) {
+function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $type, $isSceneThumbnail) {
     
     $DS = DIRECTORY_SEPARATOR;
-
-    // Generate a hashed filename in order to avoid overwrites for the same names
-    $hashed_filename = md5($imgTitle . microtime()) . '_' . $imgTitle . '.' . $type;
     
+    // DELETE EXISTING FILE: See  if has already a thumbnail and delete the file in the filesystem
+    $thumbnails_ids = get_post_meta($parent_post_id,'_thumbnail_id');
+    
+    if (count($thumbnails_ids) > 0) {
+    
+        // Remove previous file from file system
+        $prevfMeta = get_post_meta($thumbnails_ids[0], '_wp_attachment_metadata', false);
+        
+        if (file_exists($prevfMeta[0]['file'])) {
+            unlink($prevfMeta[0]['file']);
+        }
+    }
+
+    // UPLOAD NEW FILE:
+    
+    // Generate a hashed filename in order to avoid overwrites for the same names
+    // unless it is for scene thumbnail which is ok to overwrite
+    $hashed_filename = $imgTitle . '.' . $type;
+    if (!$isSceneThumbnail)
+       $hashed_filename = md5($imgTitle . microtime()) . '_' . $imgTitle . '.' . $type;
+
     // Remove all sizes of thumbnails creation procedure
     add_filter('intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2);
     
@@ -224,13 +242,12 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     require_once(ABSPATH . 'wp-admin/includes/admin.php');
 
     // Get upload directory and do some sanitization
-    $upload_dir = wp_upload_dir();
-    $upload_path = str_replace('/', $DS, $upload_dir['path']) . $DS;
+    $upload_path = str_replace('/', $DS, wp_upload_dir()['path']) . $DS;
     
     // Write file string to a file in server
     $image_upload = file_put_contents($upload_path . $hashed_filename,
         base64_decode(substr($imagefile, strpos($imagefile, ",") + 1)));
-
+    
     // HANDLE UPLOADED FILE
     if (!function_exists('wp_handle_sideload')) {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -260,36 +277,30 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
     remove_filter('upload_dir', 'wpunity_upload_filter');
     
     $new_filename = $file_return['file'];
-    
+    $new_filename = str_replace("\\","/", $new_filename);
     //--- End of upload ---
 
-    // See  if has already a thumbnail
-    $thumbnails_ids = get_post_meta($parent_post_id,'_thumbnail_id');
     
+
+    // If post meta already exists
     if (count($thumbnails_ids) > 0){
     
         $thumbnail_post_id = $thumbnails_ids[0];
 
-        // Remove previous file from file system
-        $prevfile = get_post_meta($thumbnail_post_id, '_wp_attached_file', true);
-        
-        if (file_exists($prevfile))
-            unlink($prevfile);
-
         // Update the thumbnail post title into the database
         $my_post = array(
             'ID' => $thumbnail_post_id,
-            'post_title'   => $hashed_filename
+            'post_title' => $new_filename
         );
         wp_update_post( $my_post );
-
+        
         // Update thumbnail meta _wp_attached_file
         update_post_meta($thumbnail_post_id, '_wp_attached_file', $new_filename);
         
         // update also _attachment_meta
         $data = wp_get_attachment_metadata( $thumbnail_post_id);
-        
-        $data['file'] = '/Models/'.basename($new_filename);
+
+        $data['file'] = $new_filename;
         
         wp_update_attachment_metadata( $thumbnail_post_id, $data );
         
@@ -304,7 +315,7 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
         );
 
         // Attach to
-        $attachment_id = wp_insert_attachment($attachment, $file_return['url'], $parent_post_id);
+        $attachment_id = wp_insert_attachment($attachment, $new_filename, $parent_post_id);
         
         require_once(ABSPATH . 'wp-admin/includes/image.php');
         
@@ -312,14 +323,14 @@ function wpunity_upload_Assetimg64($imagefile, $imgTitle, $parent_post_id, $pare
         
         wp_update_attachment_metadata($attachment_id, $attachment_data);
         
-        remove_filter('intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2);
+        remove_filter('intermediate_image_sizes_advanced',
+            'wpunity_remove_allthumbs_sizes', 10);
         
         if (0 < intval($attachment_id, 10)) {
             return $attachment_id;
         }
         
     }
-    //fclose($fp);
     return false;
 }
 

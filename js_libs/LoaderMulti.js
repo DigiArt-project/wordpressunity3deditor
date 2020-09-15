@@ -2,57 +2,56 @@
  * Created by DIMITRIOS on 7/3/2016.
  */
 "use strict";
+
+
+
 class LoaderMulti {
 
     constructor(){ };
 
+
+
     load(manager, resources3D, pluginPath) {
 
-         for (var n in resources3D) {
+         for (let n in resources3D) {
             (function (name) {
 
                 // Lights are in a different loop
                 if (resources3D[name]['categoryName'].startsWith("light"))
                     return;
 
-                var mtlLoader = new THREE.MTLLoader();
+                let mtlLoader = new THREE.MTLLoader();
 
                 // Load Steve
                 if (name == 'avatarYawObject') {
                     //mtlLoader.setPath(pluginPath+"/assets/Steve/");
                     // STEVE is the CAMERA MESH
 
-                    // Steve Final is the camera 3D model
-                    mtlLoader.load(pluginPath + "/assets/Steve/SteveFinal.mtl", function (materials) {
+                    // Load camera 3D model
+                    mtlLoader.load(pluginPath + "/assets/Steve/camera.mtl", function (materials) {
 
                         materials.preload();
 
-                        var objloader = new THREE.OBJLoader(manager);
+                        let objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(pluginPath + '/assets/Steve/SteveFinal.obj', 'after',
+                        objloader.load(pluginPath + '/assets/Steve/camera.obj', 'after',
                             function (object) {
 
-                                // object.traverse(function (node) {
-                                //     if (node.material)
-                                //         node.material.side = THREE.DoubleSide;
-                                // });
-
-                                object.name = "Steve";
-
-                                object.children[0].name = "SteveMesh";
+                                object.name = "Camera3Dmodel";
+                                object.children[0].name = "Camera3DmodelMesh";
 
                                 // Make a shield around Steve
-                                var geometry = new THREE.BoxGeometry(4.2, 4.2, 4.2);
+                                let geometry = new THREE.BoxGeometry(4.2, 4.2, 4.2);
                                 geometry.name = "SteveShieldGeometry";
-                                var material = new THREE.MeshBasicMaterial({
+                                let material = new THREE.MeshBasicMaterial({
                                     color: 0xaaaaaa,
                                     transparent: true,
                                     opacity: 0.2,
                                     visible: false
                                 });
 
-                                var steveShieldMesh = new THREE.Mesh(geometry, material);
+                                let steveShieldMesh = new THREE.Mesh(geometry, material);
                                 steveShieldMesh.name = 'SteveShieldMesh';
                                 //--------------------------
 
@@ -62,19 +61,12 @@ class LoaderMulti {
 
                                 envir.scene.add(object);
                                 envir.setSteveToAvatarControls();
-                                envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
-                                    resources3D[name]['trs']['translation'][1],
-                                    resources3D[name]['trs']['translation'][2],
-                                    resources3D[name]['trs']['rotation'][0],
-                                    resources3D[name]['trs']['rotation'][1]
-                                );
-
-                                // if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                // }
-
-
+                                // envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
+                                //     resources3D[name]['trs']['translation'][1],
+                                //     resources3D[name]['trs']['translation'][2],
+                                //     resources3D[name]['trs']['rotation'][0],
+                                //     resources3D[name]['trs']['rotation'][1]
+                                // );
                             }
                         );
                     });
@@ -83,14 +75,14 @@ class LoaderMulti {
                     // STEVE OLD IS THE HUMAN MESH
 
                     // Steve Final old is the Steve 3D model
-                    mtlLoader.load(pluginPath + "/assets/Steve/SteveFinalOld.mtl", function (materials) {
+                    mtlLoader.load(pluginPath + "/assets/Steve/Steve.mtl", function (materials) {
 
                         materials.preload();
 
-                        var objloader = new THREE.OBJLoader(manager);
+                        let objloader = new THREE.OBJLoader(manager);
                         objloader.setMaterials(materials);
 
-                        objloader.load(pluginPath + '/assets/Steve/SteveFinalOld.obj', 'after',
+                        objloader.load(pluginPath + '/assets/Steve/Steve.obj', 'after',
                             function (object) {
 
                                 object.name = "SteveOld";
@@ -99,9 +91,7 @@ class LoaderMulti {
                                 object.visible = false;
 
                                 envir.scene.add(object);
-
                                 envir.setSteveOldToAvatarControls();
-
 
                                 envir.setSteveWorldPosition(resources3D[name]['trs']['translation'][0],
                                     resources3D[name]['trs']['translation'][1],
@@ -109,13 +99,6 @@ class LoaderMulti {
                                     resources3D[name]['trs']['rotation'][0],
                                     resources3D[name]['trs']['rotation'][1]
                                 );
-
-                                // if (Object.keys(resources3D).length == 1){ // empty scene (only Steve is there)
-                                //     jQuery("#scene_loading_message").get(0).innerHTML = "Loading completed";
-                                //     jQuery("#scene_loading_bar").get(0).style.width = 0 + "px";
-                                // }
-
-
                             }
                         );
                     });
@@ -131,9 +114,7 @@ class LoaderMulti {
                         var objLoader = new THREE.OBJLoader(manager);
                         objLoader.setMaterials(materials);
                         objLoader.setPath( resources3D[name]['path']);
-
                         objLoader.load(resources3D[name]['obj'], 'after',
-
 
                             // OnObjLoad
                             function (object) {
@@ -144,117 +125,33 @@ class LoaderMulti {
                                         if (node.material.name){
                                             if (node.material.name.includes("Transparent")) {
                                                 node.material.transparent = true;
-                                                node.material.alphaTest = 0.5; // This is very important to make transparency behind transparency to work
+                                                // to make transparency behind transparency to work
+                                                node.material.alphaTest = 0.5;
                                             }
                                         }
                                     }
 
-
-
                                     if (node instanceof THREE.Mesh) {
                                         node.isDigiArt3DMesh = true;
-
                                         node.castShadow = true;
                                         node.receiveShadow = true;
-
                                         if (node.name.includes("renderOrder")) {
-
-                                            var iR = node.name.indexOf("renderOrder");
-
+                                            let iR = node.name.indexOf("renderOrder");
                                             node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
                                         }
-
                                     }
                                 });
 
 
-
-                                object.isDigiArt3DModel = true;
-                                object.isLight = resources3D[name]['isLight'];
-                                object.name = name;
-                                object.assetid = resources3D[name]['assetid'];
-
-                                object.fnPath = resources3D[name]['path'];
-
-                                // avoid revealing the full path. Use the relative in the saving format.
-                                object.fnPath = object.fnPath.substring( object.fnPath.indexOf('uploads/') + 7);
-
-                                object.fnObj = resources3D[name]['obj'];
-                                object.fnObjID = resources3D[name]['objID'];
-                                object.fnMtl = resources3D[name]['mtl'];
-                                object.fnMtlID = resources3D[name]['mtlID'];
-
-
-                                object.categoryID = resources3D[name]['categoryID'];
-                                object.categoryName = resources3D[name]['categoryName'];
-
-
-                                // REM: HERE NO SHADOWS ?????
-                                // if (object.categoryName === "Site"){
-                                //     object.receiveShadow = true;
-                                // }
-                                //
-                                // if (object.categoryName === "Artifact"){
-                                //     object.receiveShadow = true;
-                                //     object.castShadow = true;
-                                //}
-
-
-//                                console.log(object.name, object.receiveShadow, object.castShadow);
-
-
-
-
-                                object.diffImages = resources3D[name]['diffImages'];
-                                object.diffImageIDs = resources3D[name]['diffImageIDs'];
-
-                                object.image1id = resources3D[name]['image1id'];
-
-
-                                object.doorName_source = resources3D[name]['doorName_source'];
-                                object.doorName_target = resources3D[name]['doorName_target'];
-                                object.sceneName_target = resources3D[name]['sceneName_target'];
-                                object.sceneID_target = resources3D[name]['sceneID_target'];
-
-                                object.archaeology_penalty = resources3D[name]['archaeology_penalty'];
-                                object.hv_penalty = resources3D[name]['hv_penalty'];
-                                object.natural_penalty = resources3D[name]['natural_penalty'];
-
-                                object.isreward = resources3D[name]['isreward'];
-                                object.isCloned = resources3D[name]['isCloned'];
-
-                                //object.type_behavior = resources3D[name]['type_behavior'];
-
-                                // REM HERE
-                                object.position.set(
-                                    resources3D[name]['trs']['translation'][0],
-                                    resources3D[name]['trs']['translation'][1],
-                                    resources3D[name]['trs']['translation'][2] );
-
-                                object.rotation.set(
-                                    resources3D[name]['trs']['rotation'][0],
-                                    resources3D[name]['trs']['rotation'][1],
-                                    resources3D[name]['trs']['rotation'][2] );
-
-                                object.scale.set( resources3D[name]['trs']['scale'],
-                                                   resources3D[name]['trs']['scale'],
-                                                   resources3D[name]['trs']['scale']);
-
-
+                                object = setObjectProperties(object, name, resources3D);
                                 envir.scene.add(object);
-
-
-                                //jQuery("#progressWrapper").get(0).style.visibility= "hidden";
-
-
                             },
 
                             //onObjProgressLoad
                             function (xhr) {
-
-                                    var downloadedBytes = name.substring(0,name.length-11) + " downloaded " + Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
-
-                                    document.getElementById("result_download2").innerHTML = downloadedBytes;
+                                var downloadedBytes = name.substring(0,name.length-11) + " downloaded " +
+                                                            Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
+                                document.getElementById("result_download2").innerHTML = downloadedBytes;
                             },
 
                             //onObjErrorLoad
@@ -266,10 +163,6 @@ class LoaderMulti {
                 }
             })(n);
         }
-
-
-
-
 
 
         // Lights loop
@@ -296,9 +189,6 @@ class LoaderMulti {
                  lightSun.shadow.mapSize.height = 2048; // default
                  lightSun.shadow.camera.near = 0.5;    // default
                  lightSun.shadow.camera.far = 500;     // default
-
-
-
 
                 // REM HERE
                 lightSun.position.set(
@@ -360,8 +250,6 @@ class LoaderMulti {
                 lightSun.target.updateMatrixWorld();
                 lightSunHelper.update();
 
-
-
                 // REM LOAD ALSO THE SPOT HELPER AND EXPORT IMPORT IT : SEE FROM ADD REMOVE ONE !!!!
                 // Target spot: Where Sun points
                 var lightTargetSpot = new THREE.Object3D();
@@ -383,10 +271,10 @@ class LoaderMulti {
                 lightTargetSpot.parentLight = lightSun;
                 lightTargetSpot.parentLightHelper = lightSunHelper;
 
-                lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y, lightTargetSpot.position.z) ;
+                lightSun.target.position.set(lightTargetSpot.position.x, lightTargetSpot.position.y,
+                                                lightTargetSpot.position.z) ;
 
                 envir.scene.add(lightTargetSpot);
-
 
                  //Create a helper for the shadow camera (optional)
                  var lightSunShadowhelper = new THREE.CameraHelper( lightSun.shadow.camera );
@@ -500,7 +388,7 @@ class LoaderMulti {
 
             //// Add Spot Cone
             var spotSphere = new THREE.Mesh(
-                new THREE.SphereBufferGeometry( 1, 16, 8 ), //new THREE.ConeBufferGeometry(0.5, 1, 16, 8),
+                new THREE.SphereBufferGeometry( 1, 16, 8 ),
                 new THREE.MeshBasicMaterial({color: colora})
             );
             spotSphere.isDigiArt3DMesh = true;
@@ -520,34 +408,63 @@ class LoaderMulti {
 
             lightSpotHelper.update();
 
-            // var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xff0055 } );
-            // var mesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), planeMaterial );
-            // mesh.position.x = 0;
-            // mesh.position.y = 2;
-            // mesh.position.z = 0;
-            // mesh.castShadow = true;
-            // mesh.receiveShadow = true;
-            // envir.scene.add( mesh );
-            //
-            //
-            //      var planeMaterial2 = new THREE.MeshPhongMaterial( { color: 0x00ff55 } );
-            //      var mesh2 = new THREE.Mesh( new THREE.BoxGeometry( 4, 0.1, 4 ), planeMaterial2 );
-            //      mesh2.position.x = 0;
-            //      mesh2.position.y = 0.5;
-            //      mesh2.position.z = 0;
-            //      mesh2.castShadow = true;
-            //      mesh2.receiveShadow = true;
-            //      envir.scene.add( mesh2 );
-
-
-
         }
         })(n);
         }
-
-
     }
 }
 
 
+function setObjectProperties(object, name, resources3D) {
+    object.isDigiArt3DModel = true;
+    object.isLight = resources3D[name]['isLight'];
+    object.name = name;
+    object.assetid = resources3D[name]['assetid'];
+    object.fnPath = resources3D[name]['path'];
 
+    // avoid revealing the full path. Use the relative in the saving format.
+    object.fnPath = object.fnPath.substring( object.fnPath.indexOf('uploads/') + 7);
+
+    object.fnObj = resources3D[name]['obj'];
+    object.fnObjID = resources3D[name]['objID'];
+    object.fnMtl = resources3D[name]['mtl'];
+    object.fnMtlID = resources3D[name]['mtlID'];
+
+    object.categoryID = resources3D[name]['categoryID'];
+    object.categoryName = resources3D[name]['categoryName'];
+
+    object.diffImages = resources3D[name]['diffImages'];
+    object.diffImageIDs = resources3D[name]['diffImageIDs'];
+
+    object.image1id = resources3D[name]['image1id'];
+
+    object.doorName_source = resources3D[name]['doorName_source'];
+    object.doorName_target = resources3D[name]['doorName_target'];
+    object.sceneName_target = resources3D[name]['sceneName_target'];
+    object.sceneID_target = resources3D[name]['sceneID_target'];
+
+    object.archaeology_penalty = resources3D[name]['archaeology_penalty'];
+    object.hv_penalty = resources3D[name]['hv_penalty'];
+    object.natural_penalty = resources3D[name]['natural_penalty'];
+
+    object.isreward = resources3D[name]['isreward'];
+    object.isCloned = resources3D[name]['isCloned'];
+
+    //object.type_behavior = resources3D[name]['type_behavior'];
+
+    object.position.set(
+        resources3D[name]['trs']['translation'][0],
+        resources3D[name]['trs']['translation'][1],
+        resources3D[name]['trs']['translation'][2] );
+
+    object.rotation.set(
+        resources3D[name]['trs']['rotation'][0],
+        resources3D[name]['trs']['rotation'][1],
+        resources3D[name]['trs']['rotation'][2] );
+
+    object.scale.set( resources3D[name]['trs']['scale'],
+        resources3D[name]['trs']['scale'],
+        resources3D[name]['trs']['scale']);
+
+    return object;
+}

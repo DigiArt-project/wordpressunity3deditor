@@ -37,7 +37,7 @@ function dragDropVerticalRayCasting (event){
     let raycasterPick = raycasterSetter(event);
 
     // All 3D meshes that can be clicked
-    let activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Steve"),
+    let activMesh = getActiveMeshes(); //.concat([transform_controls.getObjectByName('trs_modeChanger')]); //envir.avatarControls, //envir.scene.getObjectByName("Camera3Dmodel"),
 
     if (activMesh.length == 0)
         return [0,0,0];
@@ -133,7 +133,7 @@ function onMouseSelect( event ) {
 
     // All 3D meshes that can be clicked
     let activMesh = getActiveMeshes();
-    //.concat([envir.scene.getObjectByName("Steve")]); //, , envir.avatarControls //envir.scene.getObjectByName("Steve"),
+    //.concat([envir.scene.getObjectByName("Camera3Dmodel")]); //, , envir.avatarControls //envir.scene.getObjectByName("Camera3Dmodel"),
    //transform_controls.getObjectByName('trs_modeChanger')
 
     // Find the intersections (it can be more than one)
@@ -356,7 +356,7 @@ function displayBoxProperties(event, nameBoxSource){
 // Right click raycast operations
 function activeOverides(event, object){
 
-    if (object.name === "Steve")
+    if (object.name === "Camera3Dmodel")
         alert("Do not right click the camera or its front part");
 
     //var objectParent  = inters.object.parent;

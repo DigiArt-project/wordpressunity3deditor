@@ -63,7 +63,7 @@ THREE.SceneExporter.prototype = {
                     node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
                     node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
                     node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
-                    node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot'
+                    node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot' || node.name =='Camera3Dmodel' || node.name =='Camera3DmodelMesh'
                 )
                 continue;
 
@@ -112,7 +112,8 @@ THREE.SceneExporter.prototype = {
                         // What remains here is the (Groups) = 3d models obj to load
                         // and Object3D avatarYawObject
 
-                    if (node.name === "bbox" || node.name === "xline" || node.name === "yline" || node.name === "zline" || node.name == 'SteveOld' )
+                    if (node.name === "bbox" || node.name === "xline" || node.name === "yline" ||
+                        node.name === "zline" || node.name == 'SteveOld' )
                         continue;
 
                     linesArray.push(ObjectString(node, pad));
@@ -301,8 +302,6 @@ THREE.SceneExporter.prototype = {
 
         function ObjectString( o, n ) {
 
-
-
             if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') &&
                 !o.categoryName.includes('lightTargetSpot') && !o.categoryName.includes('lightLamp')
                 && !o.categoryName.includes('lightSpot')
@@ -424,7 +423,7 @@ THREE.SceneExporter.prototype = {
                 var eulerR_light = new THREE.Euler(o.rotation._x, -o.rotation.y, -o.rotation._z, 'XYZ'); // (Math.PI - o.rotation.y)%(2*Math.PI)
                 quatR_light.setFromEuler(eulerR_light);
 
-                
+
                 // REM HERE Check with trailing comma
                 var output = [
                     '\t\t' + LabelString(getObjectName(o)) + ' : {',

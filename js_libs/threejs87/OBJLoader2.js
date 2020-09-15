@@ -907,13 +907,13 @@ THREE.OBJLoader2 = (function () {
 
             var bufferGeometry = new THREE.BufferGeometry();
             var vertexBA = new THREE.BufferAttribute( new Float32Array( absoluteVertexCount ), 3 );
-            bufferGeometry.addAttribute( 'position', vertexBA );
+            bufferGeometry.setAttribute( 'position', vertexBA );
 
             var colorBA;
             if ( absoluteColorCount > 0 ) {
 
                 colorBA = new THREE.BufferAttribute( new Float32Array( absoluteColorCount ), 3 );
-                bufferGeometry.addAttribute( 'color', colorBA );
+                bufferGeometry.setAttribute( 'color', colorBA );
 
             }
 
@@ -921,14 +921,14 @@ THREE.OBJLoader2 = (function () {
             if ( absoluteNormalCount > 0 ) {
 
                 normalBA = new THREE.BufferAttribute( new Float32Array( absoluteNormalCount ), 3 );
-                bufferGeometry.addAttribute( 'normal', normalBA );
+                bufferGeometry.setAttribute( 'normal', normalBA );
 
             }
             var uvBA;
             if ( absoluteUvCount > 0 ) {
 
                 uvBA = new THREE.BufferAttribute( new Float32Array( absoluteUvCount ), 2 );
-                bufferGeometry.addAttribute( 'uv', uvBA );
+                bufferGeometry.setAttribute( 'uv', uvBA );
 
             }
 

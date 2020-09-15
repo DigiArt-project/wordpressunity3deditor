@@ -321,7 +321,7 @@ class WU_webw_3d_view {
                 orientation.lookAt( start, end, new THREE.Vector3(0,1,0));//look at destination
                 offsetRotation.makeRotationX(HALF_PI);//rotate 90 degs on X
                 orientation.multiply(offsetRotation);//combine orientation with rotation transformations
-                cylinder.applyMatrix(orientation);
+                cylinder.applyMatrix4(orientation);
 
                 var object = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial(0xffffff));
 

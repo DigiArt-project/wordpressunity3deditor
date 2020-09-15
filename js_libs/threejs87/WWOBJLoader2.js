@@ -428,16 +428,16 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 var meshName = payload.meshName;
 
                 var bufferGeometry = new THREE.BufferGeometry();
-                bufferGeometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( payload.vertices ), 3 ) );
+                bufferGeometry.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array( payload.vertices ), 3 ) );
                 var haveVertexColors = Validator.isValid( payload.colors );
                 if ( haveVertexColors ) {
 
-                    bufferGeometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( payload.colors ), 3 ) );
+                    bufferGeometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( payload.colors ), 3 ) );
 
                 }
                 if ( Validator.isValid( payload.normals ) ) {
 
-                    bufferGeometry.addAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( payload.normals ), 3 ) );
+                    bufferGeometry.setAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( payload.normals ), 3 ) );
 
                 } else {
 
@@ -446,7 +446,7 @@ THREE.OBJLoader2.WWOBJLoader2 = ( function () {
                 }
                 if ( Validator.isValid( payload.uvs ) ) {
 
-                    bufferGeometry.addAttribute( 'uv', new THREE.BufferAttribute( new Float32Array( payload.uvs ), 2 ) );
+                    bufferGeometry.setAttribute( 'uv', new THREE.BufferAttribute( new Float32Array( payload.uvs ), 2 ) );
 
                 }
 

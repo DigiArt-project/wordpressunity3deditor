@@ -886,9 +886,6 @@ get_header(); ?>
     </div>
     
     
-    
-    
-    
     <!-- Scripts part 1: The GUIs -->
     <script type="text/javascript">
     
@@ -1063,8 +1060,6 @@ get_header(); ?>
         $formRes->init($sceneToLoad);
     ?>
 
-
-
     <script>
         loaderMulti = new LoaderMulti();
 
@@ -1076,32 +1071,17 @@ get_header(); ?>
             resources3D = parseJSON_javascript(scene_json, uploadDir);
 
             // CLEAR SCENE
-            //var keepNames = ['myAxisHelper', 'myGridHelper', 'orbitCamera', 'avatarYawObject', 'myTransformControls'];
+            let preserveElements = ['myAxisHelper', 'myGridHelper', 'avatarYawObject', 'myTransformControls'];
 
-            var mAh = envir.scene.getObjectByName('myAxisHelper');
-            var mGH = envir.scene.getObjectByName('myGridHelper');
-            var oc = envir.scene.getObjectByName('orbitCamera');
-            var aYO = envir.scene.getObjectByName('avatarYawObject');
-            var mTC = envir.scene.getObjectByName('myTransformControls');
-
-
-            while(envir.scene.children.length > 0){
-                envir.scene.remove(envir.scene.children[0]);
+            for (let i = envir.scene.children.length - 1; i >=0 ; i--){
+                if (!preserveElements.includes(envir.scene.children[i].name))
+                    envir.scene.remove(envir.scene.children[i]);
             }
-
-            envir.scene.add(mAh);
-            envir.scene.add(mGH);
-            envir.scene.add(oc);
-            envir.scene.add(aYO);
-            envir.scene.add(mTC);
 
             envir.setHierarchyViewer();
 
             transform_controls = envir.scene.getObjectByName('myTransformControls');
-
             transform_controls.attach(envir.scene.getObjectByName("avatarYawObject"));
-
-            //console.log(transform_controls.children[4].handleGizmos); //.XZY[0][0].visible = false;
 
             jQuery("#removeAssetBtn").hide();
 
@@ -1109,8 +1089,6 @@ get_header(); ?>
             loaderMulti.load(manager, resources3D);
         }
 
-
-        //=================== End of loading ============================================
         //--- initiate PointerLockControls ---------------
         initPointerLock();
 
@@ -1123,11 +1101,12 @@ get_header(); ?>
             id_animation_frame = requestAnimationFrame( animate );
 
             // Select the proper camera (orbit, or avatar, or thirdPersonView)
-            var curr_camera = avatarControlsEnabled ? (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
+            let curr_camera = avatarControlsEnabled ?
+                (envir.thirdPersonView ? envir.cameraThirdPerson : envir.cameraAvatar) : envir.cameraOrbit;
 
             // Render it
             envir.renderer.render( envir.scene, curr_camera);
-
+            
             envir.labelRenderer.render( envir.scene, curr_camera);
 
             if (envir.isComposerOn)
@@ -1140,8 +1119,6 @@ get_header(); ?>
         // UPDATE
         function update()
         {
-            var i;
-
             envir.orbitControls.update();
 
             updatePointerLockControls();
@@ -1152,32 +1129,29 @@ get_header(); ?>
             // Now update the translation and rotation input texts
             if (transform_controls.object) {
 
-                for (i in controlInterface.translate.__controllers)
+                for (let i in controlInterface.translate.__controllers)
                     controlInterface.translate.__controllers[i].updateDisplay();
 
-                for (i in controlInterface.rotate.__controllers)
+                for (let i in controlInterface.rotate.__controllers)
                     controlInterface.rotate.__controllers[i].updateDisplay();
 
-                for (i in controlInterface.scale.__controllers)
+                for (let i in controlInterface.scale.__controllers)
                     controlInterface.scale.__controllers[i].updateDisplay();
 
                 updatePositionsPhpAndJavsFromControlsAxes();
             }
         }
 
+        // For autosave after each action
         var mapActions = {}; // You could also use an array
 
         animate();
-    </script>
-    
-  
-    <script>
-        // All button actions saved here
+
+        // Set all buttons actions
         loadButtonActions();
     </script>
-    
-    
 <?php } ?>
+
 <?php get_footer(); ?>
 
 

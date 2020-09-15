@@ -313,7 +313,7 @@ function loadButtonActions() {
 
         envir.thirdPersonView = true;
         envir.scene.getObjectByName("SteveOld").visible = true;
-        envir.scene.getObjectByName("Steve").visible = false;
+        envir.scene.getObjectByName("Camera3Dmodel").visible = false;
 
         jQuery('#firstPersonBlockerBtn')[0].click();
         jQuery("#firstPersonBlockerBtn").toggleClass('mdc-theme--secondary-bg');
@@ -404,7 +404,7 @@ function loadButtonActions() {
             //3d
             envir.orbitControls.enableRotate = true;
             envir.gridHelper.visible = true;
-            envir.axisHelper.visible = true;
+            envir.axesHelper.visible = true;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "";
             jQuery("#dim-change-btn").text("3D").attr("title", "3D mode");
@@ -429,7 +429,7 @@ function loadButtonActions() {
 
             envir.orbitControls.enableRotate = false;
             envir.gridHelper.visible = false;
-            envir.axisHelper.visible = false;
+            envir.axesHelper.visible = false;
 
             jQuery("#object-manipulation-toggle")[0].style.display = "none";
             jQuery("#dim-change-btn").text("2D").attr("title", "2D mode");
@@ -438,7 +438,7 @@ function loadButtonActions() {
             transform_controls.setMode("rottrans");
 
             envir.scene.getObjectByName("SteveOld").visible = false;
-            envir.scene.getObjectByName("Steve").visible = true;
+            envir.scene.getObjectByName("Camera3Dmodel").visible = true;
         }
 
         findSceneDimensions();
@@ -515,8 +515,6 @@ function showObjectPropertiesPanel(type) {
 function takeScreenshot(){
 
     //envir.cameraAvatarHelper.visible = false;
-    //envir.axisHelper.visible = false;
-    //envir.gridHelper.visible = false;
     if (envir.scene.getObjectByName("myTransformControls"))
         envir.scene.getObjectByName("myTransformControls").visible=false;
 

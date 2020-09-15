@@ -1,6 +1,6 @@
 # Blender v2.77 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib SteveFinal.mtl
+mtllib camera.mtl
 g Steve
 v 0.490654 1.800000 -0.169328
 v 2.809494 1.800000 -1.488257

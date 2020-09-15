@@ -54,7 +54,7 @@ function initPointerLock() {
         //         envir.thirdPersonView = false;
         //
         //         envir.scene.getObjectByName("SteveOld").visible = false;
-        //         envir.scene.getObjectByName("Steve").visible = true;
+        //         envir.scene.getObjectByName("Camera3Dmodel").visible = true;
         //
         //         isComposerOn = true;
         //         transform_controls.visible  = true;
@@ -129,7 +129,7 @@ function firstPersonViewWithoutLock(){
         envir.thirdPersonView = false;
 
         envir.scene.getObjectByName("SteveOld").visible = false;
-        envir.scene.getObjectByName("Steve").visible = true;
+        envir.scene.getObjectByName("Camera3Dmodel").visible = true;
 
 
         envir.composer = [];

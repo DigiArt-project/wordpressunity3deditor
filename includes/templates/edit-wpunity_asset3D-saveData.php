@@ -53,9 +53,8 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
                 $content_texture[$textureNamesIn[$i]], // content of file
                 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm, // new filename
                 $asset_newID, // asset id
-                $gameSlug,    // game slug
-                $extension_texture_file[$textureNamesIn[$i]]  // extension
-            );
+                $extension_texture_file[$textureNamesIn[$i]],  // extension
+            false);
             
             // Get filename in the server
             $textureFile_filename = basename(get_attached_file($textureFile_id));
@@ -195,7 +194,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
             
             $screenShotFile_id =
                 wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID,
-                    $gameSlug, 'jpg');
+                    'jpg', false);
             
             update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
         }
