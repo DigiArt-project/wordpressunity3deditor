@@ -231,25 +231,34 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 
 	// NEW Asset: submit info to backend
 	if($asset_id == null){
+	    echo "CREATE ASSET";
+	    
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}else {
+     
+	    echo "UPDATE ASSET";
 	 	// Edit an existing asset: Return true if updated, false if failed
    		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}
 
 	// Upload 3D files
 	if($asset_id != 0 || $asset_updatedConf == 1) {
-		if ($_POST['asset_sourceID']=='') {
+		
+	    if ($_POST['asset_sourceID']=='') {
+    
             // NoCloning: Upload files from POST but check first
             // if any 3D files have been selected for upload
-		    if (count($_FILES['multipleFilesInput']['name']) > 0 &&
-                $_FILES['multipleFilesInput']['error'][0] != 4 ){
+		    if (count($_FILES['multipleFilesInput']['name']) > 0 && $_FILES['multipleFilesInput']['error'][0] != 4 ){
                 wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm,
                     $gameSlug);
             }
+
+		    
+		    
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
+			
 		}else {
 			// Cloning
 			wpunity_copy_3Dfiles($asset_id, $_POST['asset_sourceID']);
@@ -257,8 +266,18 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'true');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', "false");
 		}
+	
 	}
+    
 
+    // SCREENSHOT: upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
+    if ($_POST['sshotFileInput']!=null) {
+        if (strlen($_POST['sshotFileInput'])>0) {
+            wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $assetTitleForm,$asset_id);
+        }
+    }
+	
+	
 	// Save parameters
 	if($assetCatTerm->slug == 'consumer') {
 		wpunity_create_asset_consumerExtra_frontend($asset_id);
@@ -1480,8 +1499,14 @@ if($asset_id != null) {
             loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null);
 
         // 3 FBX
-        if (typeof path_url_fbx != "undefined")
+        
+        
+        
+        if (typeof path_url_fbx != "undefined") {
+
+            console.log( path_url_fbx, fbx_file_name);
             loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name);
+        }
         
         
         // Responsive Layout (text panel vs 3D model panel

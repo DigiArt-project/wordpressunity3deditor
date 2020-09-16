@@ -1,15 +1,91 @@
 <?php
 
-function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
-                                                    $assetTitleForm, $gameSlug){
+function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
-//    $ff = fopen("output_3D_files.txt","w");
-//    fwrite($ff, "1");
-//    fwrite($ff, chr(13));
-//    fwrite($ff, print_r($_FILES, true));
+
+
+    $ff = fopen("output_3D_files.txt","w");
+    //fwrite($ff, "1");
+    //fwrite($ff, chr(13));
+    //fwrite($ff, print_r($_FILES, true));
+
+
+    // Clear out all previous
+    
+    // 1. DELETE ATTACHMENTS OF PARENT POST (ASSET POST)
+    $attachments = get_children( array('post_parent' => $asset_newID, 'post_type' => 'attachment') );
+    
+    foreach ($attachments as $attachment){
+        
+        
+        // Delete attachment post (apart from screenshot)
+        if (!strpos($attachment->post_title, 'screenshot')) {
+    
+            fwrite($ff, chr(13)."DELETING ATTACHMENT POST WITH TITLE:".
+                                                        $attachment->post_title);
+    
+            // Delete all metas of the attachment post
+            $attachment_metas = get_post_meta($attachment->ID);
+    
+            fwrite($ff, chr(13)."ALL METAs OF ATTACHMENT".
+                print_r($attachment_metas,true) );
+            
+            fwrite($ff,chr(13).chr(13));
+            fwrite($ff,chr(13).chr(13));
     
     
-    //--------------- Upload textures and get final filenames as uploaded on server ------------------------------------
+            $file_name = get_post_meta($attachment->ID, '_wp_attached_file',
+                                        true);
+    
+            fwrite($ff,chr(13).print_r($file_name,true));
+            
+            //unlink($file_name);
+            
+            foreach(array_keys($attachment_metas) as $attachment_meta_key) {
+                
+                fwrite($ff, chr(13)."DELETE META OF ATTACHMENT".
+                                    print_r($attachment_meta_key,true) );
+                
+                
+                
+                
+                delete_post_meta($attachment->ID, $attachment_meta_key);
+                
+            }
+            
+            // Delete attchment post
+            wp_delete_post($attachment->ID, true);
+        }
+    
+
+//        $asset3d_fbx_ids = get_post_meta( $asset_newID,'wpunity_asset3d_fbx',false);
+//
+//        fwrite($ff, chr(13) . print_r( $asset3d_fbx_ids, true) );
+//
+//        if (count($asset3d_fbx_ids) > 0) {
+//            // Remove previous file from file system
+//            $prevfMeta = get_post_meta($asset3d_fbx_ids[0], '_wp_attached_file', true);
+//
+//            fwrite($ff, chr(13).$prevfMeta);
+//
+//            if (file_exists($prevfMeta)) {
+//                unlink($prevfMeta);
+//            }
+//        }
+
+    }
+    
+    
+    
+    
+    fclose($ff);
+    
+    // 1. Check if already exists
+    // 3. Upload and update DB
+    
+    
+    
+    //----- Upload textures and get final filenames as uploaded on server ----------------------
     $textureNamesIn  = [];
     
     $content_texture = [];
@@ -49,12 +125,12 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
         for ($i = 0; $i < count($content_texture); $i++) {
             
             // Upload texture content
-            $textureFile_id = wpunity_upload_Assetimg64(
+            $textureFile_id = wpunity_upload_asset_texture(
                 $content_texture[$textureNamesIn[$i]], // content of file
                 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm, // new filename
                 $asset_newID, // asset id
-                $extension_texture_file[$textureNamesIn[$i]],  // extension
-            false);
+                $extension_texture_file[$textureNamesIn[$i]]  // extension
+            );
             
             // Get filename in the server
             $textureFile_filename = basename(get_attached_file($textureFile_id));
@@ -187,19 +263,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID,
             update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
         }
     }
-    
-    // SCREENSHOT upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
-    if ($_POST['sshotFileInput']!=null) {
-        if (strlen($_POST['sshotFileInput'])>0) {
-            
-            $screenShotFile_id =
-                wpunity_upload_Assetimg64($_POST['sshotFileInput'], $assetTitleForm, $asset_newID,
-                    'jpg', false);
-            
-            update_post_meta($asset_newID, 'wpunity_asset3d_screenimage', $screenShotFile_id);
-        }
-    }
-    
 }
 
 

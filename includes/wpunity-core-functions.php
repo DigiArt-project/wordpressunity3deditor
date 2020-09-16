@@ -1237,6 +1237,7 @@ function wpunity_registrationhook_createAssets($user_id,$username,$game_id){
 }
 
 function wpunity_registrationhook_uploadAssets_noTexture($assetTitleForm,$asset_newID,$gameSlug,$assetTypeNumber){
+ 
 	$has_image = false; $has_video = false;
 	if($assetTypeNumber == 'artifact'){
 		$mtl_content = file_get_contents(WP_PLUGIN_DIR . "/wordpressunity3deditor/includes/files/samples/artifact/star.mtl");
@@ -2347,7 +2348,7 @@ function wpunity_save_scene_async_action_callback()
 
 	// Save screenshot
 	if (isset($_POST['scene_screenshot']))
-		$attachment_id = wpunity_upload_Assetimg64(
+		$attachment_id = wpunity_upload_scene_screenshot(
 		             $_POST['scene_screenshot'],
             'scene_'.$_POST['scene_id'].'_featimg',
 			          $_POST['scene_id'],
@@ -2427,7 +2428,7 @@ function wpunity_redo_scene_async_action_callback()
                                                         $_POST['available_molecules']);
     
     if (isset($_POST['scene_screenshot'])){
-        $attachment_id = wpunity_upload_Assetimg64(
+        $attachment_id = wpunity_upload_scene_screenshot(
             $_POST['scene_screenshot'],
             'scene_'.$_POST['scene_id'].'_featimg',
             $_POST['scene_id'],
@@ -2448,20 +2449,6 @@ function wpunity_redo_scene_async_action_callback()
     echo $res!=0 ? 'true' : 'false';
     wp_die();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

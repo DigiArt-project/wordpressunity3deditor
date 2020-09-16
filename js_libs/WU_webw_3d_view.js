@@ -220,10 +220,11 @@ class WU_webw_3d_view {
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
-        setTimeout(function(){
-            jQuery("#button_qrcode").click(); // close qr code
-            jQuery("#createModelScreenshotBtn").click();
-        },1000);
+
+        // setTimeout(function(){
+        //     jQuery("#button_qrcode").click(); // close qr code
+        //     jQuery("#createModelScreenshotBtn").click();
+        // },1000);
 
 
     }
@@ -519,11 +520,11 @@ class WU_webw_3d_view {
 
             scope.zoomer();
 
-            // Auto create screenshot;
-            setTimeout(function(){
-                jQuery("#button_qrcode").click(); // close qr code
-                jQuery("#createModelScreenshotBtn").click();
-            },1000);
+            // // Auto create screenshot;
+            // setTimeout(function(){
+            //     jQuery("#button_qrcode").click(); // close qr code
+            //     jQuery("#createModelScreenshotBtn").click();
+            // },1000);
 
         };
 
