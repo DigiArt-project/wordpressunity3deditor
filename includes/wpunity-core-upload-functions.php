@@ -347,21 +347,6 @@ function wpunity_upload_asset_texture($imagefile, $imgTitle, $parent_post_id, $t
     
     $DS = DIRECTORY_SEPARATOR;
     
-    // DELETE EXISTING FILE: See  if has already a thumbnail and delete the file in the filesystem
-    $diff_images_ids = get_post_meta($parent_post_id,'wpunity_asset3d_diffimage');
-    
-    if (count($diff_images_ids) > 0) {
-        
-        // Remove previous file from file system
-        $prevfMeta = get_post_meta($diff_images_ids[0], '_wp_attachment_metadata', false);
-        
-        if (count($prevfMeta)>0) {
-            if (file_exists($prevfMeta[0]['file'])) {
-                unlink($prevfMeta[0]['file']);
-            }
-        }
-    }
-    
     // UPLOAD NEW FILE:
     $hashed_filename = $parent_post_id.'_'.$imgTitle . '.' . $type;
 
@@ -375,92 +360,43 @@ function wpunity_upload_asset_texture($imagefile, $imgTitle, $parent_post_id, $t
     $upload_path = str_replace('/', $DS, wp_upload_dir()['basedir']) . $DS .'Models'.$DS;
     
     // Write file string to a file in server
-    $image_upload = file_put_contents($upload_path . $hashed_filename,
+    file_put_contents($upload_path . $hashed_filename,
         base64_decode(substr($imagefile, strpos($imagefile, ",") + 1)));
     
-    // HANDLE UPLOADED FILE
-    if (!function_exists('wp_handle_sideload')) {
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-    }
-    
-    // Without that I'm getting a debug error!?
-    if (!function_exists('wp_get_current_user')) {
-        require_once(ABSPATH . 'wp-includes/pluggable.php');
-    }
-    
-    $file = array(
-        'name' => $hashed_filename,
-        'type' => 'image/'.($type==='png'?'png':'jpeg'),
-        'tmp_name' => $upload_path . $hashed_filename,
-        'error' => 0,
-        'size' => filesize($upload_path . $hashed_filename),
+    $new_filename_path = str_replace("\\","/", $upload_path . $hashed_filename);
+
+    //--- End of upload ---
+   
+
+    // Add post of texture (type: attachment)
+    $attachment = array(
+        'post_mime_type' => 'image/'.($type==='png'?'png':'jpeg'),
+        'post_title' => preg_replace('/\.[^.]+$/', '', $hashed_filename),
+        'post_content' => '',
+        'post_status' => 'inherit',
+        'guid' => wp_upload_dir()['baseurl'].'/Models/'.$hashed_filename
     );
     
-    // Change directory to models
-    add_filter('upload_dir', 'wpunity_upload_filter');
+    // Attach to
+    $attachment_id = wp_insert_attachment($attachment, $new_filename_path, $parent_post_id);
     
-    // upload file to server
-    // @new use $file instead of $image_upload
-    $file_return = wp_handle_sideload($file, array('test_form' => false));
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
     
-    // Remove filter for /Models folder upload
-    remove_filter('upload_dir', 'wpunity_upload_filter');
+    $attachment_data = wp_generate_attachment_metadata($attachment_id, $new_filename_path);
     
-    $new_filename = $file_return['file'];
-    $new_filename = str_replace("\\","/", $new_filename);
-    //--- End of upload ---
+    wp_update_attachment_metadata($attachment_id, $attachment_data);
     
+    // store each texture in a post meta that receives multiple files
+    add_post_meta($parent_post_id, 'wpunity_asset3d_diffimage', $attachment_id);
     
+    remove_filter('intermediate_image_sizes_advanced',
+        'wpunity_remove_allthumbs_sizes', 10);
     
-    // If post meta already exists
-    if (count($diff_images_ids) > 0){
-    
-        $post_diff_image_id = $diff_images_ids[0];
-        
-        // Update the thumbnail post title into the database
-        $my_post = array(
-            'ID' => $post_diff_image_id,
-            'post_title' => $new_filename
-        );
-        wp_update_post( $my_post );
-        
-        // Update thumbnail meta _wp_attached_file
-        update_post_meta($post_diff_image_id, '_wp_attached_file', $new_filename);
-        
-        // update also _attachment_meta
-        $data = wp_get_attachment_metadata( $post_diff_image_id);
-        
-        $data['file'] = $new_filename;
-        
-        wp_update_attachment_metadata( $post_diff_image_id, $data );
-        
-    } else {
-        
-        $attachment = array(
-            'post_mime_type' => $file_return['type'],
-            'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_filename)),
-            'post_content' => '',
-            'post_status' => 'inherit',
-            'guid' => $file_return['url']
-        );
-        
-        // Attach to
-        $attachment_id = wp_insert_attachment($attachment, $new_filename, $parent_post_id);
-        
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
-        
-        $attachment_data = wp_generate_attachment_metadata($attachment_id, $new_filename);
-        
-        wp_update_attachment_metadata($attachment_id, $attachment_data);
-        
-        remove_filter('intermediate_image_sizes_advanced',
-            'wpunity_remove_allthumbs_sizes', 10);
-        
-        if (0 < intval($attachment_id, 10)) {
-            return $attachment_id;
-        }
-        
+    if (0 < intval($attachment_id, 10)) {
+        return $attachment_id;
     }
+    
+
     return false;
 }
 
@@ -510,46 +446,17 @@ function wpunity_upload_asset_screenshot($imagefile, $imgTitle, $parent_post_id)
     // Remove all sizes of thumbnails creation procedure
     add_filter('intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2);
     
-    // Get admin power
-    require_once(ABSPATH . 'wp-admin/includes/admin.php');
+//    // Get admin power
+//    require_once(ABSPATH . 'wp-admin/includes/admin.php');
     
     // Get upload directory and do some sanitization
     $upload_path = str_replace('/', $DS, wp_upload_dir()['basedir']) . $DS .'Models'.$DS;
     
     // Write file string to a file in server
-    $image_upload = file_put_contents($upload_path . $hashed_filename,
+    file_put_contents($upload_path . $hashed_filename,
         base64_decode(substr($imagefile, strpos($imagefile, ",") + 1)));
     
-    // HANDLE UPLOADED FILE
-    if (!function_exists('wp_handle_sideload')) {
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-    }
-    
-    // Without that I'm getting a debug error!?
-    if (!function_exists('wp_get_current_user')) {
-        require_once(ABSPATH . 'wp-includes/pluggable.php');
-    }
-    
-    $file = array(
-        'name' => $hashed_filename,
-        'type' => 'image/png',
-        'tmp_name' => $upload_path . $hashed_filename,
-        'error' => 0,
-        'size' => filesize($upload_path . $hashed_filename),
-    );
-    
-    // Change directory to models
-    add_filter('upload_dir', 'wpunity_upload_filter');
-    
-    // upload file to server
-    // @new use $file instead of $image_upload
-    $file_return = wp_handle_sideload($file, array('test_form' => false));
-    
-    // Remove filter for /Models folder upload
-    remove_filter('upload_dir', 'wpunity_upload_filter');
-    
-    $new_filename = $file_return['file'];
-    $new_filename = str_replace("\\","/", $new_filename);
+    $new_filename = str_replace("\\","/", $upload_path .$hashed_filename);
     
     //--- End of upload ---
     
@@ -578,11 +485,11 @@ function wpunity_upload_asset_screenshot($imagefile, $imgTitle, $parent_post_id)
     } else {
         
         $attachment = array(
-            'post_mime_type' => $file_return['type'],
+            'post_mime_type' => 'image/png', //$file_return['type'],
             'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_filename)),
             'post_content' => '',
             'post_status' => 'inherit',
-            'guid' => $file_return['url']
+            'guid' => wp_upload_dir()['baseurl'].'/Models/'.$hashed_filename
         );
         
         // Attach to
@@ -623,15 +530,9 @@ function wpunity_upload_asset_screenshot($imagefile, $imgTitle, $parent_post_id)
 // Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $TheFiles, $index_file) {
     
-    
-    
     $DS = DIRECTORY_SEPARATOR;
     
-    $fp = fopen("output_fbx_upload.txt","w");
-    
-    
-    
-    
+    //$fp = fopen("output_fbx_upload.txt","w");
     
     // --------------  1. Upload file ---------------
     // ?? Filters the image sizes automatically generated when uploading an image.
@@ -640,16 +541,12 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     require_once( ABSPATH . 'wp-admin/includes/admin.php' );
     
     $upload_dir = wp_upload_dir();
-    
-    fwrite($fp, "1".print_r($upload_dir, true));
-    
+
     $upload_path = str_replace('/',$DS,$upload_dir['basedir']) . $DS .'Models'.$DS;
     
     //$hashed_filename = md5( $textTitle . microtime() ) . '_' . $textTitle.'.txt';
     
     $hashed_filename = $parent_post_id . '_' . $textTitle.'.txt';
-    
-    
 
     if ($textContent) {
         file_put_contents($upload_path . $hashed_filename, $textContent);
@@ -677,9 +574,7 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     // ----------------- 3. Add Attachment metadata to SQL --------------------------
     $attachment_data = wp_generate_attachment_metadata( $attachment_id,
                             $upload_path . $hashed_filename );
-    
-    fwrite($fp, chr(13)."ATT_META:".print_r($attachment_data, true));
-    
+   
     wp_update_attachment_metadata( $attachment_id, $attachment_data );
     
     $fbxpath = str_replace('\\','/', $upload_path . $hashed_filename);
@@ -688,7 +583,6 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     
     remove_filter( 'intermediate_image_sizes_advanced', 'wpunity_remove_allthumbs_sizes', 10, 2 );
    
-    fclose($fp);
     if( 0 < intval( $attachment_id, 10 ) ) {
         return $attachment_id;
     }

@@ -228,16 +228,21 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     
     // IPR Term id cat
     $assetCatIPRTerm = get_term_by('id', $assetCatIPRID, 'wpunity_asset3d_ipr_cat');
-
+    
+    // show an icon while waiting
+    
+    
 	// NEW Asset: submit info to backend
 	if($asset_id == null){
-	    echo "CREATE ASSET";
+        
+        echo "<div style='position:absolute;top:50%;left:50%;'>Creating asset...</div>";
 	    
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}else {
-     
-	    echo "UPDATE ASSET";
+        
+        echo "<div style='position:absolute;top:50%;left:50%;'>Updating asset...</div>";
+        
 	 	// Edit an existing asset: Return true if updated, false if failed
    		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}
@@ -292,12 +297,15 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         wpunity_create_asset_addAudio_frontend($asset_id);
         wpunity_create_asset_addVideo_frontend($asset_id);
     }
-    if($scene_id == 0) {
-        echo '<script>alert("Asset created or edited successfully");</script>';
-        
+    
+	if($scene_id == 0) {
+        //echo '<script>alert("Asset created or edited successfully");</script>';
+
         // Redirect to central otherwise the form is not loaded with the new data
         echo '<script>window.location.href = "'.$_SERVER['HTTP_REFERER'].'&wpunity_asset='.$asset_id.'#English'.'";</script>';
     }
+	// Avoid loading the old page
+	return;
 }
 //---------------------------- End of handle Submit  -------------------------
 
@@ -1309,7 +1317,7 @@ if($asset_id != null) {
             <?php
             // Virtual Labs widgets
             if ($project_scope == 1)
-                require(plugin_dir_path(__DIR__) . '/wp-content/plugins/wordpressunity3deditor/includes/templates/virtual_labs_asset_editor_widgets.php');
+                require(plugin_dir_path( __DIR__ ).'/templates/edit-wpunity_asset3D_vlabsWidgets.php');
             ?>
             
             <hr class="WhiteSpaceSeparator">
@@ -1319,9 +1327,6 @@ if($asset_id != null) {
             <?php
                 $cat_ipr_terms = get_terms('wpunity_asset3d_ipr_cat', array('get' => 'all'));
                 $saved_ipr_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_ipr_cat');
-                
-                
-                
             ?>
     
             <!-- CATEGORY IPR -->
@@ -1499,9 +1504,6 @@ if($asset_id != null) {
             loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null);
 
         // 3 FBX
-        
-        
-        
         if (typeof path_url_fbx != "undefined") {
 
             console.log( path_url_fbx, fbx_file_name);

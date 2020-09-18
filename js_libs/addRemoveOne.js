@@ -14,12 +14,11 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         "objID": dataDrag.objID,
         "mtl": mtlFname,
         "mtlID": dataDrag.mtlID,
+        "fbxID": dataDrag.fbxID,
         "categoryName": dataDrag.categoryName,
         "categoryDescription": dataDrag.categoryDescription,
         "categoryIcon": dataDrag.categoryIcon,
         "categoryID": dataDrag.categoryID,
-        "diffImages": dataDrag.diffImages,
-        "diffImageIDs": dataDrag.diffImageIDs,
         "image1id": dataDrag.image1id,
         "doorName_source":dataDrag.doorName_source,
         "doorName_target":dataDrag.doorName_target,
@@ -395,8 +394,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         var extraResource = {};
         extraResource[nameModel] = resources3D[nameModel];
 
-        var loaderMulti = new LoaderMulti();
-        loaderMulti.load(manager, extraResource, pluginPath);
+        wpunity_fetchAndLoadAssetAjax(dataDrag.assetid, manager, extraResource, pluginPath);
     }
 }
 

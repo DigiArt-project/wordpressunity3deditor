@@ -2,8 +2,6 @@
 
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
-
-
     $ff = fopen("output_3D_files.txt","w");
     //fwrite($ff, "1");
     //fwrite($ff, chr(13));
@@ -103,7 +101,31 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
     // Texture
     if ($_POST['textureFileInput']!=null) {
+    
+        // DELETE EXISTING TEXTURE POST, FILE, and its META:
+        $diff_images_ids = get_post_meta($asset_newID,'wpunity_asset3d_diffimage');
+    
+        if (count($diff_images_ids) > 0) {
+      
+            for ( $i=0 ; $i < count($diff_images_ids); $i++ ) {
+                // Remove previous file from file system
+                $prevfMeta = get_post_meta($diff_images_ids[$i],
+                                            '_wp_attachment_metadata', false);
+    
+                if (count($prevfMeta) > 0) {
+                    if (file_exists($prevfMeta[$i]['file'])) {
+                        unlink($prevfMeta[$i]['file']);
+                    }
+                }
+    
+                // Delete texture post. Automatically its meta should be deleted as well.
+                wp_delete_post($diff_images_ids[$i]);
+            }
+        }
         
+        
+        
+        // Make an array of textures
         foreach (array_keys($_POST['textureFileInput']) as $texture) {
             
             // Get the basename of texture
@@ -116,7 +138,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             $extension_texture_file[$basename_texture] = pathinfo($texture, PATHINFO_EXTENSION);
  
             // Store basenames to an array
-            $textureNamesIn[]    = $basename_texture;
+            $textureNamesIn[] = $basename_texture;
         }
         
         // Processed basenames
@@ -125,7 +147,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
         for ($i = 0; $i < count($content_texture); $i++) {
             
             // Upload texture content
-            $textureFile_id = wpunity_upload_asset_texture(
+            $texturePost_id = wpunity_upload_asset_texture(
                 $content_texture[$textureNamesIn[$i]], // content of file
                 'texture_' . $textureNamesIn[$i] . '_' . $assetTitleForm, // new filename
                 $asset_newID, // asset id
@@ -133,15 +155,10 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
             );
             
             // Get filename in the server
-            $textureFile_filename = basename(get_attached_file($textureFile_id));
+            $textureFile_filename = basename(get_attached_file($texturePost_id));
             
             // Store filenames
             $textureNamesOut[] = $textureFile_filename;
-            
-            // store each texture in a post meta that receives multiple files
-            add_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
-            
-            //update_post_meta($asset_newID, 'wpunity_asset3d_diffimage', $textureFile_id);
         }
     }
     

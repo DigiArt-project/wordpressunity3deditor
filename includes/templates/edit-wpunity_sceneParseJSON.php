@@ -14,8 +14,8 @@ class ParseJSON {
         $assetid ='';
         $objID = '';
         $mtlID = '';
-        $diffImage = '';
-        $diffImageID = '';
+        $fbxID = '';
+        
     
         $categoryID = '';
         $image1id = '';
@@ -161,8 +161,6 @@ class ParseJSON {
                 $objID = $value->fnObjID;
                 $mtl = $value->fnMtl;
                 $mtlID = $value->fnMtlID;
-                $diffImage = $value->diffImage;
-                $diffImageID = $value->diffImageID;
                 $categoryName = $value->categoryName;
                 $categoryID = $value->categoryID;
                 $image1id = $value->image1id;
@@ -210,8 +208,7 @@ class ParseJSON {
                                             '","objID":"'.$objID.
                                             '","mtl":"'.$mtl.
                                             '","mtlID":"'.$mtlID.
-                                            '","diffImage":"'.$diffImage.
-                                            '","diffImageID":"'.$diffImageID.
+                                            '","fbxID":"'.$fbxID.
                                             '","categoryName":"'.$categoryName.
                                             '","categoryID":"'.$categoryID.
                                             '","image1id":"'.$image1id.

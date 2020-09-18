@@ -536,6 +536,34 @@ function wpunity_delete_asset3d_frontend_callback(){
     wp_die();
 }
 
+//DELETE Asset with files
+function wpunity_fetch_asset3d_frontend_callback(){
+    
+    $asset_id = $_POST['asset_id'];
+    
+    $fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx');
+    $fbxURL= get_the_guid($fbxID[0]);
+    
+    $texturesIDs = get_post_meta($asset_id, 'wpunity_asset3d_diffimage');
+    $texturesURLs = [];
+    
+    foreach ($texturesIDs as $textureID){
+        $texturesURLs[]= get_the_guid($textureID);
+    }
+
+    $output = new StdClass();
+    $output->texturesIDs = $texturesIDs;
+    $output->fbxIDs = $fbxID;
+    $output->fbxURL = $fbxURL;
+    $output->texturesURLs = $texturesURLs;
+    
+    print_r(json_encode($output, JSON_UNESCAPED_SLASHES));
+    wp_die();
+}
+
+
+
+
 function wpunity_delete_asset3d_noscenes_frontend($asset_id){
     //No need to delete assets from scenes, cause scene will be deleted at the same event
     

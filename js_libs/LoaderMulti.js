@@ -2,16 +2,11 @@
  * Created by DIMITRIOS on 7/3/2016.
  */
 "use strict";
-
-
-
 class LoaderMulti {
 
     constructor(){ };
 
-
-
-    load(manager, resources3D, pluginPath) {
+    load(manager, resources3D, pluginPath, resourcesFBX) {
 
          for (let n in resources3D) {
             (function (name) {
@@ -106,60 +101,82 @@ class LoaderMulti {
 
                 }else {
 
-                    mtlLoader.setPath(resources3D[name]['path']);
-                    mtlLoader.load(resources3D[name]['mtl'], function (materials) {
+                    if (resources3D[name]['mtl'] != '') {
+                        mtlLoader.setPath(resources3D[name]['path']);
+                        mtlLoader.load(resources3D[name]['mtl'], function (materials) {
 
-                        materials.preload();
+                            materials.preload();
 
-                        var objLoader = new THREE.OBJLoader(manager);
-                        objLoader.setMaterials(materials);
-                        objLoader.setPath( resources3D[name]['path']);
-                        objLoader.load(resources3D[name]['obj'], 'after',
+                            var objLoader = new THREE.OBJLoader(manager);
+                            objLoader.setMaterials(materials);
+                            objLoader.setPath(resources3D[name]['path']);
+                            objLoader.load(resources3D[name]['obj'], 'after',
 
-                            // OnObjLoad
-                            function (object) {
+                                // OnObjLoad
+                                function (object) {
 
-                                object.traverse(function (node) {
+                                    object.traverse(function (node) {
 
-                                    if (node.material) {
-                                        if (node.material.name){
-                                            if (node.material.name.includes("Transparent")) {
-                                                node.material.transparent = true;
-                                                // to make transparency behind transparency to work
-                                                node.material.alphaTest = 0.5;
+                                        if (node.material) {
+                                            if (node.material.name) {
+                                                if (node.material.name.includes("Transparent")) {
+                                                    node.material.transparent = true;
+                                                    // to make transparency behind transparency to work
+                                                    node.material.alphaTest = 0.5;
+                                                }
                                             }
                                         }
-                                    }
 
-                                    if (node instanceof THREE.Mesh) {
-                                        node.isDigiArt3DMesh = true;
-                                        node.castShadow = true;
-                                        node.receiveShadow = true;
-                                        if (node.name.includes("renderOrder")) {
-                                            let iR = node.name.indexOf("renderOrder");
-                                            node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
+                                        if (node instanceof THREE.Mesh) {
+                                            node.isDigiArt3DMesh = true;
+                                            node.castShadow = true;
+                                            node.receiveShadow = true;
+                                            if (node.name.includes("renderOrder")) {
+                                                let iR = node.name.indexOf("renderOrder");
+                                                node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
 
-                                object = setObjectProperties(object, name, resources3D);
-                                envir.scene.add(object);
-                            },
+                                    object = setObjectProperties(object, name, resources3D);
+                                    envir.scene.add(object);
+                                },
 
-                            //onObjProgressLoad
-                            function (xhr) {
-                                var downloadedBytes = name.substring(0,name.length-11) + " downloaded " +
-                                                            Math.floor(xhr.loaded / 104857.6)/10 + ' Mb';
-                                document.getElementById("result_download2").innerHTML = downloadedBytes;
-                            },
+                                //onObjProgressLoad
+                                function (xhr) {
+                                    var downloadedBytes = name.substring(0, name.length - 11) + " downloaded " +
+                                        Math.floor(xhr.loaded / 104857.6) / 10 + ' Mb';
+                                    document.getElementById("result_download2").innerHTML = downloadedBytes;
+                                },
 
-                            //onObjErrorLoad
-                            function (xhr) {
-                            }
-                        );
+                                //onObjErrorLoad
+                                function (xhr) {
+                                }
+                            );
 
-                    });
+                        });
+                    } else {
+                        // FBX Loading
+
+
+                        let textureFilesURLs = resourcesFBX['texturesURLs'];
+                        let fbxURL = resourcesFBX['fbxURL'];
+
+
+
+                        // How to load FBX from these
+                        console.log(textureFilesURLs, fbxURL);
+
+
+
+
+
+
+
+
+
+                    }
                 }
             })(n);
         }
@@ -429,6 +446,8 @@ function setObjectProperties(object, name, resources3D) {
     object.fnObjID = resources3D[name]['objID'];
     object.fnMtl = resources3D[name]['mtl'];
     object.fnMtlID = resources3D[name]['mtlID'];
+
+    object.fnFbxID = resources3D[name]['fbxID'];
 
     object.categoryID = resources3D[name]['categoryID'];
     object.categoryName = resources3D[name]['categoryName'];

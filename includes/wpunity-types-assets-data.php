@@ -1252,6 +1252,9 @@ add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_
 // AJAX for delete asset
 add_action('wp_ajax_wpunity_delete_asset_action', 'wpunity_delete_asset3d_frontend_callback');
 
+// AJAX for fetch asset
+add_action('wp_ajax_wpunity_fetch_asset_action', 'wpunity_fetch_asset3d_frontend_callback');
+
 
 //==========================================================================================================================================
 

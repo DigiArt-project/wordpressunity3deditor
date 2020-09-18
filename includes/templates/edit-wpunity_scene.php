@@ -244,10 +244,19 @@ wp_localize_script( 'ajax-script_savescene', 'my_ajax_object_savescene',
 );
 
 // Delete Asset
-wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
+wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.
+    '/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );
 wp_localize_script( 'ajax-script_deleteasset', 'my_ajax_object_deleteasset',
 	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
 );
+
+// Fetch Asset
+wp_enqueue_script( 'ajax-script_fetchasset', $pluginpath.
+    '/js_libs/fetch_ajaxes/fetch_asset.js', array('jquery') );
+wp_localize_script( 'ajax-script_fetchasset', 'my_ajax_object_fetchasset',
+    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+);
+
 
 
 wp_enqueue_media($scene_post->ID);
@@ -1051,10 +1060,9 @@ get_header(); ?>
         }; // End of manager
     </script>
 
-
     <!-- Load Scene - javascript var resources3D[] -->
     <?php
-        require( plugin_dir_path( __DIR__ ) .  '/vr_editor_ParseJSON.php' );
+        require( plugin_dir_path( __DIR__ ).'/templates/edit-wpunity_sceneParseJSON.php' );
         /* Initial load as php */
         $formRes = new ParseJSON($upload_url);
         $formRes->init($sceneToLoad);

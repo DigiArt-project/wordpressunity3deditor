@@ -57,7 +57,8 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
                 "objID":'',
                 "mtl":'',
                 "mtlID":'',
-                "diffImage":'',"diffImageID":'',"categoryName":'',"categoryID":'',
+                "fbxID":'',
+                "categoryName":'',"categoryID":'',
                 "image1id":'',"doorName_source":'',"doorName_target":'',
                 "sceneName_target":'',"sceneID_target":'',"archaeology_penalty":'',
                 "hv_penalty":'',"natural_penalty":'',"isreward":0,"isCloned":0,
@@ -74,8 +75,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
             var objID = value['fnObjID'];
             var mtl = value['fnMtl'];
             var mtlID = value['fnMtlID'];
-            var diffImage = value['diffImage'];
-            var diffImageID = value['diffImageID'];
+            var fbxID = value['fbxID'];
             var categoryName = value['categoryName'];
             var categoryID = value['categoryID'];
             var image1id = value['image1id'];
@@ -111,7 +111,8 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
                 "objID":objID,
                 "mtl":mtl,
                 "mtlID":mtlID,
-                "diffImage":diffImage,"diffImageID":diffImageID,"categoryName":categoryName,"categoryID":categoryID,
+                "fbxID":fbxID,
+                "categoryName":categoryName,"categoryID":categoryID,
                 "image1id":image1id,"doorName_source":doorName_source,"doorName_target":doorName_target,
                 "sceneName_target":sceneName_target,"sceneID_target":sceneID_target,"archaeology_penalty":archaeology_penalty,
                 "hv_penalty":hv_penalty,"natural_penalty":natural_penalty,"isreward":isreward,"isCloned":isCloned,

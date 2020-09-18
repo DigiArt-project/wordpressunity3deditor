@@ -205,7 +205,6 @@ function loadButtonActions() {
     document.getElementById('vr_editor_main_div').ondrop =
         function (ev) {
 
-            console.log(jQuery('#vr_editor_main_div'));
 
             let dataDrag = JSON.parse(ev.dataTransfer.getData("text"));
 
@@ -220,6 +219,8 @@ function loadButtonActions() {
 
                 var path = objFname = mtlFname = '';
                 dataDrag.objID = dataDrag.mtlID = dataDrag.assetid = dataDrag.categoryIcon = '';
+
+                dataDrag.fbxID = '';
 
                 dataDrag.categoryID = dataDrag.diffImages = dataDrag.diffImageIDs = dataDrag.image1id = dataDrag.doorName_source = '';
                 dataDrag.doorName_target = dataDrag.sceneName_target = dataDrag.sceneID_target = dataDrag.archaeology_penalty = '';
@@ -257,7 +258,6 @@ function loadButtonActions() {
     document.getElementById('vr_editor_main_div').ondragover =
         function(ev){
             ev.preventDefault();
-            console.log("preventD");
         };
 
 

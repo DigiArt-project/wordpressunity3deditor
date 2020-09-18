@@ -115,8 +115,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 "objID": e.target.attributes.getNamedItem("data-objID").value,
                 "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,
                 "mtlID": e.target.attributes.getNamedItem("data-mtlID").value,
-                "diffImages": e.target.attributes.getNamedItem("data-diffImages").value,
-                "diffImageIDs": e.target.attributes.getNamedItem("data-diffImageIDs").value,
+                "fbxID": e.target.attributes.getNamedItem("data-fbxID").value,
                 "categoryID": e.target.attributes.getNamedItem("data-categoryID").value,
                 "categoryName": e.target.attributes.getNamedItem("data-categoryName").value,
                 "categoryDescription": e.target.attributes.getNamedItem("data-categoryDescription").value,
@@ -247,8 +246,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '" data-fbxID="'+ f.fbxID +
                     '" data-mtlPath="'+ f.mtlPath +
                     '" data-mtlID="'+ f.mtlID +
-                    '" data-diffImages="'+ f.diffImages +
-                    '" data-diffImageIDs="'+ f.diffImageIDs +
+                    '" data-fbxID="'+ f.fbxID +
                     '" data-categoryID="'+ f.categoryID +
                     '" data-categoryName="'+ f.categoryName +
                     '" data-categoryDescription="'+ f.categoryDescription +
