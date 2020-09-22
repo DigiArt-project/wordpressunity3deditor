@@ -220,6 +220,7 @@ class WU_webw_3d_view {
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
+        jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
         // setTimeout(function(){
         //     jQuery("#button_qrcode").click(); // close qr code

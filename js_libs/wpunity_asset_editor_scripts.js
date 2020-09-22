@@ -236,6 +236,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
             console.log("Ignite reading fbx");
             wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
+
         }
 
     }

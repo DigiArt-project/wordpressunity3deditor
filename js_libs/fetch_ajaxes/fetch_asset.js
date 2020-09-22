@@ -17,6 +17,7 @@ function wpunity_fetchAndLoadAssetAjax(asset_id, manager, extraResource, pluginP
         },
         success: function (res) {
 
+
             let resourcesFBX = JSON.parse(res);
 
             let loaderMulti = new LoaderMulti();
