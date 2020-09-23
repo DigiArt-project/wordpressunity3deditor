@@ -921,14 +921,22 @@ if($asset_id != null) {
                     $attachment_post = get_post( $audioID );
                     $attachment_file = $attachment_post->guid;
                     ?>
-        
+
+                    <audio loop preload="auto" id ='audioFile' autoplay>
                     <?php if(strpos($attachment_file, "mp3" )!==false || strpos($attachment_file, "wav" )!==false){?>
-                        <?php echo $attachment_file; ?>
-                        <audio loop preload="auto" id ='audioFile' autoplay>
+                        
+                        
                             <source src="<?php echo $attachment_file;?>" type="audio/mp3">
                             <source src="<?php echo $attachment_file;?>" type="audio/wav">
-                         </audio>
+                         
+                    <?php } else { ?>
+
+                        <audio loop preload="auto" id ='audioFile' autoplay>
+                            <source src="<?php echo plugins_url();?>/wordpressunity3deditor/sounds/silence.mp3" type="audio/mp3">
+                        </audio>
+                        
                     <?php } ?>
+                    </audio>
                 </div>
                 
                 
@@ -1449,6 +1457,11 @@ if($asset_id != null) {
         
         let audio_file = document.getElementById( 'audioFile' );
         
+        console.log("audio_file", audio_file);
+        
+        if (audio_file==null){
+        
+        }
         
         // Initial slide to show (carousel top)
         showSlides(0);

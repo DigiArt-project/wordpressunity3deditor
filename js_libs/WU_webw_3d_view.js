@@ -431,8 +431,9 @@ class WU_webw_3d_view {
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
 
         // Add audio listener to the camera
-
+console.log("this.audioElement", this.audioElement);
         if (this.audioElement!=null) {
+            console.log("B");
             this.listener = new THREE.AudioListener();
             this.camera.add(this.listener);
 
@@ -444,6 +445,8 @@ class WU_webw_3d_view {
 
             // // - PDB, FBX Specific -
             this.root.add(this.positionalAudio);
+        } else {
+            console.log("C");
         }
         this.scene.add(this.root);
 
