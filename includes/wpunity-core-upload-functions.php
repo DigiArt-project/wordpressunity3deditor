@@ -334,14 +334,6 @@ function wpunity_upload_scene_screenshot($imagefile, $imgTitle, $parent_post_id,
 
 
 
-
-
-
-
-
-
-
-
 // Asset: Used to save textures
 function wpunity_upload_asset_texture($imagefile, $imgTitle, $parent_post_id, $type) {
     
@@ -399,24 +391,6 @@ function wpunity_upload_asset_texture($imagefile, $imgTitle, $parent_post_id, $t
 
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Asset: Used to save screenshot

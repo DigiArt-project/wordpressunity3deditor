@@ -1248,7 +1248,8 @@ if($asset_id != null) {
                                        style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                        multiple
                                        accept=".obj,.mtl,.jpg,.png,.fbx"
-                                       onchange="javascript:updateList()"
+                                       onclick="javascript:clearList()"
+                                       
                                        />
 
                                 <p>Selected files:</p>
@@ -1725,7 +1726,7 @@ if($asset_id != null) {
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
 
-        // // UNIT TEST: Select artifact, Remove
+        // // // UNIT TEST: Select artifact, Remove
         // setTimeout( function(){
         //
         //     jQuery("#category-select").click(); // Expand category

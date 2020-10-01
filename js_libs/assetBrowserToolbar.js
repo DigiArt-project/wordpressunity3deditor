@@ -232,7 +232,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
 
                 img = '<span class="mdc-list-item__start-detail CenterContents">'+
-                            '<img class="assetImg" draggable="false" src=' + f.screenImagePath + '>'+
+                            '<img class="assetImg" draggable="false" src=' + encodeURI(f.screenImagePath) + '>'+
                             // '<span class="megabytesAsset mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize + '</span>'+
                       '</span>';
 
@@ -274,7 +274,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                                 '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=true'  +
                                 '\'" class="editAssetbutton mdc-button mdc-button--dense">Edit</a>')
                             :
-                            ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
+                            ('<a draggable="false" ondragstart="return false;" title="View asset" id="editAssetBtn-'+ f.assetid +
                                 '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&editable=false' +
                                 '\'" class="deleteAssetbutton mdc-button mdc-button--dense">View</a>')
                     )+

@@ -111,6 +111,17 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
     // PREVIEW Handler (not uploaded yet): Load from selected files
     let _handleFileSelect = function ( event ) {
 
+
+
+        let input = document.getElementById('fileUploadInput');
+        let output = document.getElementById('fileList3D');
+        let children = "";
+        for (let i = 0; i < input.files.length; ++i) {
+            children += '<li>' + input.files.item(i).name + '</li>';
+        }
+        output.innerHTML = '<ul>'+children+'</ul>';
+
+
         // For cloning
         document.getElementById('asset_sourceID').value ="";
 
@@ -127,6 +138,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
+
             if (files[i].name.includes('jpg')){
                 nJpg ++;
             } else if (files[i].name.includes('png')){
@@ -135,6 +147,7 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
                 nGif ++;
             }
         }
+
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
@@ -158,6 +171,9 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
     let objFileContent = document.getElementById('objFileInput').value;
     let mtlFileContent = document.getElementById('mtlFileInput').value;
+
+    console.log("AAAAAAAA", objFileContent !== '', nObj);
+    console.log("BBBBBBBB", mtlFileContent !== '', nMtl);
 
 
     if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') ){
@@ -193,6 +209,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                         // Else check if textures have been loaded
                         let nTexturesLength = jQuery("input[id='textureFileInput']").length;
 
+                        console.log("CCCCCCCC", nTexturesLength, nJpg);
 
                         if ((nPng>0 && nPng === nTexturesLength)
                             || ( nJpg>0 && nJpg === nTexturesLength) ) {
@@ -215,6 +232,8 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
                             // Start with textures
                             console.log("start textures");
+
+
                             wu_webw_3d_view_local.loadObjStream(objectDefinition);
                         }
                     }
@@ -541,14 +560,8 @@ function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
     jQuery("#chemistryBoxOptionsPanel").hide();
 }
 
-function updateList() {
-    var input = document.getElementById('fileUploadInput');
-    var output = document.getElementById('fileList3D');
-    var children = "";
-    for (var i = 0; i < input.files.length; ++i) {
-        children += '<li>' + input.files.item(i).name + '</li>';
-    }
-    output.innerHTML = '<ul>'+children+'</ul>';
+function clearList() {
+    wpunity_reset_panels(wu_webw_3d_view, "me");
 }
 
 
