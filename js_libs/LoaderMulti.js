@@ -1,7 +1,9 @@
 /**
  * Created by DIMITRIOS on 7/3/2016.
  */
+
 "use strict";
+
 class LoaderMulti {
 
     constructor(){ };
@@ -110,6 +112,7 @@ class LoaderMulti {
                             var objLoader = new THREE.OBJLoader(manager);
                             objLoader.setMaterials(materials);
                             objLoader.setPath(resources3D[name]['path']);
+
                             objLoader.load(resources3D[name]['obj'], 'after',
 
                                 // OnObjLoad
@@ -166,8 +169,42 @@ class LoaderMulti {
 
 
                         // How to load FBX from these
-                        console.log(textureFilesURLs, fbxURL);
+                        //console.log(textureFilesURLs, fbxURL);
 
+
+
+                        // let baseUrlPath = fbxURL.substring(0, fbxURL.lastIndexOf("/")+1);
+                        //
+                        // let fbxFileName =  fbxURL.replace(/^.*[\\\/]/, '');
+                        //
+                        // console.log(fbxFileName, baseUrlPath);
+
+
+                        let loader = new THREE.FBXLoader();
+
+
+
+                        loader.load(fbxURL, function ( object ) {
+
+                            let mixer = new THREE.AnimationMixer( object );
+
+                            let action = mixer.clipAction( object.animations[ 0 ] );
+                            action.play();
+
+                            object.traverse( function ( child ) {
+
+                                if ( child.isMesh ) {
+
+                                    child.castShadow = true;
+                                    child.receiveShadow = true;
+
+                                }
+
+                            } );
+
+                            envir.scene.add( object );
+
+                        }, null, null, textureFilesURLs,  resources3D[name]['assetid']);
 
 
 

@@ -240,6 +240,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     ' title="Drag the card into the plane, (Size: '+ fileSize + ')"' +
                     ' data-assetslug="'+ f.assetSlug +
                     '" data-assetid="'+ f.assetid +
+                    '" data-name="'+ name +
                     '" data-objPath="'+ f.objPath +
                     '" data-objID="'+ f.objID +
                     '" data-fbxPath="'+ f.fbxPath +

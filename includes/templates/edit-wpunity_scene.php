@@ -17,6 +17,8 @@ function load_vreditor_scripts()
     wp_enqueue_script('wpunity_load'.$vthreejs.'_RenderPass');
     wp_enqueue_script('wpunity_load'.$vthreejs.'_OutlinePass');
     wp_enqueue_script('wpunity_load'.$vthreejs.'_ShaderPass');
+    wp_enqueue_script('wpunity_load'.$vthreejs.'_FBXloader');
+    wp_enqueue_script('wpunity_inflate');
     
     // Fixed at 87 (forked of original 87)
     wp_enqueue_script('wpunity_load87_datgui');

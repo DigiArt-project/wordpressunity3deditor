@@ -21,6 +21,9 @@ THREE.FBXLoader = ( function () {
     var fbxTree;
     var connections;
     var sceneGraph;
+    var fbxFileName;
+    var tUrls;
+    var assetId;
 
     function FBXLoader( manager ) {
 
@@ -32,9 +35,13 @@ THREE.FBXLoader = ( function () {
 
         constructor: FBXLoader,
 
-        load: function ( url, onLoad, onProgress, onError ) {
+        load: function ( url, onLoad, onProgress, onError, texturesUrlsArray, assetId_in ) {
 
             var scope = this;
+
+            fbxFileName = url;
+            tUrls = texturesUrlsArray;
+            assetId = assetId_in;
 
             var path = ( scope.path === '' ) ? THREE.LoaderUtils.extractUrlBase( url ) : scope.path;
 
@@ -380,6 +387,11 @@ THREE.FBXLoader = ( function () {
 
         },
 
+
+        getPosition: function(string, subString, index) {
+            return string.split(subString, index).join(subString).length;
+        },
+
         // Parse nodes in FBXTree.Objects.Texture
         // These contain details such as UV scaling, cropping, rotation etc and are connected
         // to images in FBXTree.Objects.Video
@@ -390,17 +402,65 @@ THREE.FBXLoader = ( function () {
             if ( 'Texture' in fbxTree.Objects ) {
 
                 var textureNodes = fbxTree.Objects.Texture;
-                for ( var nodeID in textureNodes ) {
 
-                    var texture = this.parseTexture( textureNodes[ nodeID ], images );
-                    textureMap.set( parseInt( nodeID ), texture );
+                var relateMap = Array(tUrls.length);
+
+                let assetName = document.getElementById("asset-"+assetId).getAttribute("data-name");
+
+                for (let i=0; i<tUrls.length; i++){
+                    // Names without path
+
+                    // Remove path from urls in Models folder
+                    let fileName = tUrls[i].replace(/^.*[\\\/]/, '');
+
+                    let indexSecondUnderscore = this.getPosition(fileName,'_',2) + 1;
+
+                    let fullstop = fileName.lastIndexOf('.');
+                    let extension = fileName.substring(fullstop, fileName.length);
+
+                    //Remove id_texture and .jpg
+                    relateMap[i] = fileName.substring(indexSecondUnderscore, fullstop);
+
+                    // This removes the AssetName from the end of the name
+                    relateMap[i] = relateMap[i].substring(0, relateMap[i].lastIndexOf(assetName)-1);
+
+                    // Add the extension
+                    relateMap[i] += extension;
 
                 }
 
+                for (let i=0; i<relateMap.length; i++) {
+                    for (let imkey in images) {
+                        console.log(images[imkey], relateMap[i]);
+                        if (images[imkey] === relateMap[i]) {
+                            images[imkey] = tUrls[i].replace(/^.*[\\\/]/, '');
+                        }
+                    }
+                }
+
+
+                for ( let nodeID in textureNodes ) {
+
+                    for (let i=0; i<tUrls.length; i++){
+                        if (textureNodes[nodeID].Media == relateMap[i] ){
+                            textureNodes[nodeID].FileName = tUrls[i] ;
+                            textureNodes[nodeID].RelativeFilename = tUrls[i] ;
+                            // Without path
+                            textureNodes[nodeID].Media = tUrls[i].replace(/^.*[\\\/]/, '');
+                        }
+                    }
+
+
+
+                    console.log( textureNodes[nodeID], images );
+
+
+
+                    let texture = this.parseTexture( textureNodes[ nodeID ], images );
+                    textureMap.set( parseInt( nodeID ), texture );
+                }
             }
-
             return textureMap;
-
         },
 
         parseTexturesStream: function ( images ) {
@@ -419,7 +479,7 @@ THREE.FBXLoader = ( function () {
                     // The name of the texture file from fbx
                     let fname = baseName(textureNodes[nodeID].FileName);
 
-                    // Search for the loaded imamges for the same name
+                    // Search for the loaded images for the same name
                     for (let i=0; i< this.texturesStreams.length; i ++ ) {
 
                         if (this.texturesStreams[i].name === ('textureFileInput[' +
@@ -515,6 +575,11 @@ THREE.FBXLoader = ( function () {
 
         // load a texture specified as a blob or data URI, or via an external URL using THREE.TextureLoader
         loadTexture: function ( textureNode, images ) {
+
+
+
+
+
 
             var fileName;
 

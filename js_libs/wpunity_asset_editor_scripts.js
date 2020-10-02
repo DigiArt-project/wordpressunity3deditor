@@ -172,9 +172,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
     let objFileContent = document.getElementById('objFileInput').value;
     let mtlFileContent = document.getElementById('mtlFileInput').value;
 
-    console.log("AAAAAAAA", objFileContent !== '', nObj);
-    console.log("BBBBBBBB", mtlFileContent !== '', nMtl);
-
 
     if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') ){
 
@@ -208,8 +205,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
                     } else {
                         // Else check if textures have been loaded
                         let nTexturesLength = jQuery("input[id='textureFileInput']").length;
-
-                        console.log("CCCCCCCC", nTexturesLength, nJpg);
 
                         if ((nPng>0 && nPng === nTexturesLength)
                             || ( nJpg>0 && nJpg === nTexturesLength) ) {

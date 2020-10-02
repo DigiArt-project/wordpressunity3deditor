@@ -1,11 +1,6 @@
-/**
- * Delete Scene
- *
- * Parameters from javascript
- * scene_id : the scene to delete
- * wpunity_deleteSceneAjax()
- *
- */
+
+
+
 function wpunity_fetchAndLoadAssetAjax(asset_id, manager, extraResource, pluginPath) {
 
     jQuery.ajax({
@@ -32,3 +27,8 @@ function wpunity_fetchAndLoadAssetAjax(asset_id, manager, extraResource, pluginP
         }
     });
 }
+
+
+
+
+
