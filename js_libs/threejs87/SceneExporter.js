@@ -54,18 +54,23 @@ THREE.SceneExporter.prototype = {
          */
         function createObjectsList( object, pad, whocalls ) {
 
+
             for ( var i = 0; i < object.children.length; i ++ ) {
 
                 var node = object.children[ i ];
 
+//                console.log(node.name, node.categoryName);
+
+
+                // node.name == 'rayLine' || node.name == 'rayLine' || node.name == 'mylightAvatar' ||
+                // node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
+                // node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
+                // node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
+                // node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot' || node.name =='Camera3Dmodel' || node.name =='Camera3DmodelMesh' ||
+
                 // Not necessary to save
-                if (node.name == 'rayLine' || node.name == 'rayLine' || node.name == 'mylightAvatar' ||
-                    node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
-                    node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
-                    node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
-                    node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot' || node.name =='Camera3Dmodel' || node.name =='Camera3DmodelMesh'
-                )
-                continue;
+                if (typeof node.categoryName === 'undefined')
+                    continue;
 
                 if (node instanceof THREE.Mesh)
                     continue;
@@ -301,6 +306,8 @@ THREE.SceneExporter.prototype = {
         }
 
         function ObjectString( o, n ) {
+
+
 
             if (o.name != 'avatarYawObject' && !o.categoryName.includes('lightSun') &&
                 !o.categoryName.includes('lightTargetSpot') && !o.categoryName.includes('lightLamp')

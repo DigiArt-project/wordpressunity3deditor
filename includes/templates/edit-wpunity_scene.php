@@ -1071,9 +1071,10 @@ get_header(); ?>
     ?>
 
     <script>
-        loaderMulti = new LoaderMulti();
+        //loaderMulti = new LoaderMulti();
 
-        loaderMulti.load(manager, resources3D, pluginPath);
+        //loaderMulti.load(manager, resources3D, pluginPath);
+        wpunity_fetchAndLoadAssetAjax(null, manager, resources3D, pluginPath);
 
         // Only in Undo redo as javascript not php!
         function parseJSON_LoadScene(scene_json){
@@ -1117,17 +1118,30 @@ get_header(); ?>
             // Render it
             envir.renderer.render( envir.scene, curr_camera);
             
+            // Label is for setting labels to objects
             envir.labelRenderer.render( envir.scene, curr_camera);
+
+            
+
+            
+            if (envir.flagPlayAnimation) {
+                if (envir.animationMixers.length > 0) {
+                    for (let i = 0; i < envir.animationMixers.length; i++) {
+                        envir.animationMixers[i].update(envir.clock.getDelta());
+                    }
+                }
+            }
 
             if (envir.isComposerOn)
                 envir.composer.render();
-
+            
+            
             // Update it
-            update();
+            updatePositionsAndControls();
         }
 
         // UPDATE
-        function update()
+        function updatePositionsAndControls()
         {
             envir.orbitControls.update();
 
@@ -1151,6 +1165,9 @@ get_header(); ?>
                 updatePositionsPhpAndJavsFromControlsAxes();
             }
         }
+        
+        
+        
 
         // For autosave after each action
         var mapActions = {}; // You could also use an array

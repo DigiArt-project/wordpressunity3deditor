@@ -3,7 +3,15 @@ class vr_editor_environmentals {
 
     constructor(container_3D_all){
 
+        // Composer is for the green outline effect when selecting objects
         this.isComposerOn = true;
+
+        // animation
+        this.animationMixers = [];
+        this.clock = new THREE.Clock();
+        this.flagPlayAnimation = true;
+
+
         this.is2d = true;
         this.isDebug = false; // Debug mode
 
@@ -476,7 +484,7 @@ class vr_editor_environmentals {
                     text.scale.z = 0.001;
                     text.name = "myAxisText" + letterAx;
 
-                    window.envir.axesHelper.add(text);
+                    //window.envir.axesHelper.add(text);
                 }
             }
     }
@@ -527,7 +535,9 @@ class vr_editor_environmentals {
     setComposer(){
 
         // Get current camera
-        var curr_camera_input = avatarControlsEnabled ? (this.thirdPersonView ? this.cameraThirdPerson : this.cameraAvatar) : this.cameraOrbit;
+        var curr_camera_input = avatarControlsEnabled ?
+                    (this.thirdPersonView ? this.cameraThirdPerson : this.cameraAvatar) : this.cameraOrbit;
+
         this.composer = new THREE.EffectComposer( this.renderer );
 
         // Render Pass
@@ -539,6 +549,15 @@ class vr_editor_environmentals {
             new THREE.Vector2(this.SCREEN_WIDTH, this.SCREEN_HEIGHT), this.scene, curr_camera_input);
 
         this.outlinePass.visibleEdgeColor = new THREE.Color( 0x00aa00 );
+
+        this.outlinePass.depthMaterial.morphTargets = true;
+        this.outlinePass.prepareMaskMaterial.morphTargets = true;
+
+        this.outlinePass.depthMaterial.skinning = true;
+        this.outlinePass.prepareMaskMaterial.skinning = true;
+
+        // outlinePass.depthMaterial.skinning = true;
+        // outlinePass.prepareMaskMaterial.skinning = true;
 
         this.outlinePass.edgeGlow = 5;
         this.outlinePass.edgeStrength = 5;

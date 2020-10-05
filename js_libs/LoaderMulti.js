@@ -103,6 +103,7 @@ class LoaderMulti {
 
                 }else {
 
+                    //------------------- OBJ Loading --------------------------
                     if (resources3D[name]['mtl'] != '') {
                         mtlLoader.setPath(resources3D[name]['path']);
                         mtlLoader.load(resources3D[name]['mtl'], function (materials) {
@@ -155,12 +156,14 @@ class LoaderMulti {
 
                                 //onObjErrorLoad
                                 function (xhr) {
+                                    console.log("Error in loading OBJ: Error code 1512");
                                 }
                             );
 
                         });
                     } else {
-                        // FBX Loading
+
+                        // ------------------ FBX Loading ---------------------------------
 
 
                         let textureFilesURLs = resourcesFBX['texturesURLs'];
@@ -180,31 +183,69 @@ class LoaderMulti {
                         // console.log(fbxFileName, baseUrlPath);
 
 
-                        let loader = new THREE.FBXLoader();
-
-
+                        let loader = new THREE.FBXLoader(manager);
 
                         loader.load(fbxURL, function ( object ) {
 
-                            let mixer = new THREE.AnimationMixer( object );
+                            // Animation set
+                            object.mixer = new THREE.AnimationMixer( object );
+                            envir.animationMixers.push(object.mixer);
+                            if (object.animations.length >0 ){
+                                let action = object.mixer.clipAction( object.animations[ 0 ] );
+                                action.play();
+                            } else {
+                                console.log("Your FBX does not have animation");
+                            }
 
-                            let action = mixer.clipAction( object.animations[ 0 ] );
-                            action.play();
+                            //
+                            object.traverse(function (node) {
 
-                            object.traverse( function ( child ) {
-
-                                if ( child.isMesh ) {
-
-                                    child.castShadow = true;
-                                    child.receiveShadow = true;
-
+                                if (node.material) {
+                                    if (node.material.name) {
+                                        if (node.material.name.includes("Transparent")) {
+                                            node.material.transparent = true;
+                                            // to make transparency behind transparency to work
+                                            node.material.alphaTest = 0.5;
+                                        }
+                                    }
                                 }
 
-                            } );
+                                if (node instanceof THREE.Mesh) {
+                                    node.isDigiArt3DMesh = true;
+                                    node.castShadow = true;
+                                    node.receiveShadow = true;
+                                    if (node.name.includes("renderOrder")) {
+                                        let iR = node.name.indexOf("renderOrder");
+                                        node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
+                                    }
+                                }
+                            });
+
+
+                            object = setObjectProperties(object, name, resources3D);
 
                             envir.scene.add( object );
 
-                        }, null, null, textureFilesURLs,  resources3D[name]['assetid']);
+                        },
+
+
+                            //onFBXProgressLoad
+
+
+                            function (xhr) {
+                                var downloadedBytes = name.substring(0, name.length - 11) + " downloaded " +
+                                    Math.floor(xhr.loaded / 104857.6) / 10 + ' Mb';
+
+                                document.getElementById("result_download2").innerHTML = downloadedBytes;
+
+
+                        }, function (xhr) {
+                            console.log("Error in loading FBX: Error code 1513");
+                            }
+                            ,
+
+
+                            textureFilesURLs,  resources3D[name]['assetid']);
 
 
 

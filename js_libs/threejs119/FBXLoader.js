@@ -431,7 +431,7 @@ THREE.FBXLoader = ( function () {
 
                 for (let i=0; i<relateMap.length; i++) {
                     for (let imkey in images) {
-                        console.log(images[imkey], relateMap[i]);
+                        //console.log(images[imkey], relateMap[i]);
                         if (images[imkey] === relateMap[i]) {
                             images[imkey] = tUrls[i].replace(/^.*[\\\/]/, '');
                         }
@@ -452,7 +452,7 @@ THREE.FBXLoader = ( function () {
 
 
 
-                    console.log( textureNodes[nodeID], images );
+                    //console.log( textureNodes[nodeID], images );
 
 
 
