@@ -10,6 +10,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
     resources3D[nameModel] = {
         "path": path,
         "assetid": dataDrag.assetid,
+        "assetname":dataDrag.assetname,
         "obj": objFname,
         "objID": dataDrag.objID,
         "mtl": mtlFname,
@@ -394,7 +395,8 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         var extraResource = {};
         extraResource[nameModel] = resources3D[nameModel];
 
-        wpunity_fetchAndLoadAssetAjax(dataDrag.assetid, manager, extraResource, pluginPath);
+        let loaderMulti = new LoaderMulti();
+        loaderMulti.load(manager, extraResource, pluginPath);
     }
 }
 

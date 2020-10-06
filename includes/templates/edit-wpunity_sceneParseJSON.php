@@ -12,6 +12,7 @@ class ParseJSON {
 //        fclose($fp);
     
         $assetid ='';
+        $assetname = '';
         $objID = '';
         $mtlID = '';
         $fbxID = '';
@@ -157,6 +158,7 @@ class ParseJSON {
             } else {
                 $path = $this->relativepath . $value->fnPath;
                 $assetid= $value->assetid;
+                $assetname= $value->assetname;
                 $obj = $value->fnObj;
                 $objID = $value->fnObjID;
                 $mtl = $value->fnMtl;
@@ -204,6 +206,7 @@ class ParseJSON {
             echo 'resources3D["'.$name.'"]= {'.
                                             '"path":"'.$path.
                                             '","assetid":"'.$assetid.
+                                            '","assetname":"'.$assetname.
                                             '","obj":"'.$obj.
                                             '","objID":"'.$objID.
                                             '","mtl":"'.$mtl.

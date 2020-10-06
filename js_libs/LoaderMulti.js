@@ -8,7 +8,7 @@ class LoaderMulti {
 
     constructor(){ };
 
-    load(manager, resources3D, pluginPath, resourcesFBX) {
+    load(manager, resources3D, pluginPath) {
 
          for (let n in resources3D) {
             (function (name) {
@@ -165,92 +165,107 @@ class LoaderMulti {
 
                         // ------------------ FBX Loading ---------------------------------
 
+                        jQuery.ajax({
+                            url: my_ajax_object_fetchasset.ajax_url,
+                            type: 'POST',
+                            data: {
+                                'action': 'wpunity_fetch_asset_action',
+                                'asset_id': resources3D[name]['assetid']
+                            },
+                            success: function (res) {
 
-                        let textureFilesURLs = resourcesFBX['texturesURLs'];
-                        let fbxURL = resourcesFBX['fbxURL'];
+                                let resourcesFBX = JSON.parse(res);
+
+                                let textureFilesURLs = resourcesFBX['texturesURLs'];
+                                let fbxURL = resourcesFBX['fbxURL'];
+
+                                // How to load FBX from these
+                                // console.log("textureFilesURLs",textureFilesURLs);
+                                // console.log("fbxURL", fbxURL);
+
+                                // let baseUrlPath = fbxURL.substring(0, fbxURL.lastIndexOf("/")+1);
+                                //
+                                // let fbxFileName =  fbxURL.replace(/^.*[\\\/]/, '');
+                                //
+                                // console.log(fbxFileName, baseUrlPath);
 
 
+                                let loader = new THREE.FBXLoader(manager);
 
-                        // How to load FBX from these
-                        //console.log(textureFilesURLs, fbxURL);
+                                loader.load(fbxURL, function ( object ) {
 
+                                    // Animation set
+                                    object.mixer = new THREE.AnimationMixer( object );
+                                    envir.animationMixers.push(object.mixer);
 
-
-                        // let baseUrlPath = fbxURL.substring(0, fbxURL.lastIndexOf("/")+1);
-                        //
-                        // let fbxFileName =  fbxURL.replace(/^.*[\\\/]/, '');
-                        //
-                        // console.log(fbxFileName, baseUrlPath);
-
-
-                        let loader = new THREE.FBXLoader(manager);
-
-                        loader.load(fbxURL, function ( object ) {
-
-                            // Animation set
-                            object.mixer = new THREE.AnimationMixer( object );
-                            envir.animationMixers.push(object.mixer);
-                            if (object.animations.length >0 ){
-                                let action = object.mixer.clipAction( object.animations[ 0 ] );
-                                action.play();
-                            } else {
-                                console.log("Your FBX does not have animation");
-                            }
-
-                            //
-                            object.traverse(function (node) {
-
-                                if (node.material) {
-                                    if (node.material.name) {
-                                        if (node.material.name.includes("Transparent")) {
-                                            node.material.transparent = true;
-                                            // to make transparency behind transparency to work
-                                            node.material.alphaTest = 0.5;
-                                        }
+                                    if (object.animations.length >0 ){
+                                        let action = object.mixer.clipAction( object.animations[ 0 ] );
+                                        action.play();
+                                    } else {
+                                        console.log("Your FBX does not have animation");
                                     }
-                                }
-
-                                if (node instanceof THREE.Mesh) {
-                                    node.isDigiArt3DMesh = true;
-                                    node.castShadow = true;
-                                    node.receiveShadow = true;
-                                    if (node.name.includes("renderOrder")) {
-                                        let iR = node.name.indexOf("renderOrder");
-                                        node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
-                                    }
-                                }
-                            });
 
 
-                            object = setObjectProperties(object, name, resources3D);
+                                    object.traverse(function (node) {
 
-                            envir.scene.add( object );
+                                            if (node.material) {
+                                                if (node.material.name) {
+                                                    if (node.material.name.includes("Transparent")) {
+                                                        node.material.transparent = true;
+                                                        // to make transparency behind transparency to work
+                                                        node.material.alphaTest = 0.5;
+                                                    }
+                                                }
+                                            }
 
-                        },
+                                            if (node instanceof THREE.Mesh) {
+                                                node.isDigiArt3DMesh = true;
+                                                node.castShadow = true;
+                                                node.receiveShadow = true;
+                                                if (node.name.includes("renderOrder")) {
+                                                    let iR = node.name.indexOf("renderOrder");
+                                                    node.renderOrder = parseInt(node.name.substring(iR + 12, iR + 15));
+                                                }
+                                            }
+                                        });
 
 
-                            //onFBXProgressLoad
+
+                                        object = setObjectProperties(object, name, resources3D);
+
+                                        envir.scene.add( object );
+
+                                    },
 
 
-                            function (xhr) {
-                                var downloadedBytes = name.substring(0, name.length - 11) + " downloaded " +
-                                    Math.floor(xhr.loaded / 104857.6) / 10 + ' Mb';
+                                    //onFBXProgressLoad
+                                    function (xhr) {
+                                        var downloadedBytes = name.substring(0, name.length - 11) + " downloaded " +
+                                            Math.floor(xhr.loaded / 104857.6) / 10 + ' Mb';
 
-                                document.getElementById("result_download2").innerHTML = downloadedBytes;
+                                        document.getElementById("result_download2").innerHTML = downloadedBytes;
 
 
-                        }, function (xhr) {
-                            console.log("Error in loading FBX: Error code 1513");
+                                    },
+                                    // XHR error
+                                    function (xhr) {
+                                        console.log("Error in loading FBX: Error code 1513", xhr);
+                                    },
+
+                                    textureFilesURLs, resources3D[name]['assetname']
+
+                                    );
+
+
+                            },
+                            // Ajax error
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                                alert("Could not fetch asset. Probably deleted ?");
+
+                                console.log("Ajax Fetch Asset: ERROR: 179" + thrownError);
                             }
-                            ,
-
-
-                            textureFilesURLs,  resources3D[name]['assetid']);
-
-
-
-
-
+                        });
 
 
 
@@ -514,6 +529,7 @@ function setObjectProperties(object, name, resources3D) {
     object.isDigiArt3DModel = true;
     object.isLight = resources3D[name]['isLight'];
     object.name = name;
+    object.assetname = resources3D[name]['assetname'];
     object.assetid = resources3D[name]['assetid'];
     object.fnPath = resources3D[name]['path'];
 

@@ -111,6 +111,7 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
             var dragData = {
                 "title": e.target.attributes.getNamedItem("data-assetslug").value + "_" + Math.floor(Date.now() / 1000),
                 "assetid": e.target.attributes.getNamedItem("data-assetid").value,
+                "assetname": e.target.attributes.getNamedItem("data-name").value,
                 "obj": e.target.attributes.getNamedItem("data-objPath").value,
                 "objID": e.target.attributes.getNamedItem("data-objID").value,
                 "mtl": e.target.attributes.getNamedItem("data-mtlPath").value,

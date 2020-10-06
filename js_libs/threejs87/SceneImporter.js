@@ -70,7 +70,9 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
         } else {
             var path = UPLOAD_DIR + value['fnPath'];
 
+
             var assetid = value['assetid'];
+            var assetname = value['assetname'];
             var obj = value['fnObj'];
             var objID = value['fnObjID'];
             var mtl = value['fnMtl'];
@@ -107,6 +109,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
 
             resources3D_local[name]= {"path":path,
                 "assetid":assetid,
+                "assetname":assetname,
                 "obj":obj,
                 "objID":objID,
                 "mtl":mtl,

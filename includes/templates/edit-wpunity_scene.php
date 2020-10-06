@@ -1071,10 +1071,10 @@ get_header(); ?>
     ?>
 
     <script>
-        //loaderMulti = new LoaderMulti();
+        loaderMulti = new LoaderMulti();
 
-        //loaderMulti.load(manager, resources3D, pluginPath);
-        wpunity_fetchAndLoadAssetAjax(null, manager, resources3D, pluginPath);
+        loaderMulti.load(manager, resources3D, pluginPath);
+        //wpunity_fetchAndLoadMultipleAssetsAjax(manager, resources3D, pluginPath);
 
         // Only in Undo redo as javascript not php!
         function parseJSON_LoadScene(scene_json){
@@ -1180,6 +1180,3 @@ get_header(); ?>
 <?php } ?>
 
 <?php get_footer(); ?>
-
-
-

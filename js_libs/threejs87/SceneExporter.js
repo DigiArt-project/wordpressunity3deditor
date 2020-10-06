@@ -321,7 +321,7 @@ THREE.SceneExporter.prototype = {
                 quatR.setFromEuler(eulerR);
 
                 // console.log("ROTATION:", eulerR);
-                // console.log("Quaternion:", quatR);
+                console.log("Quaternion:", o);
 
                 // ================ Ververidis Main =============: All objs
                 var output = [
@@ -340,6 +340,7 @@ THREE.SceneExporter.prototype = {
                     '	"scale"	   : ' + Vector3String(o.scale) + ',',
                     '	"fnPath" : ' + '"' + o.fnPath  + '"' + ',',
                     '	"assetid" : ' + '"' + o.assetid  + '"' + ',',
+                    '	"assetname" : ' + '"' + o.assetname  + '"' + ',',
                     '	"fnObj" : ' + '"' + o.fnObj  + '"' + ',',
                     '	"fnObjID" : ' + '"' + o.fnObjID  + '"' + ',',
                     '	"categoryName" : ' + '"' + o.categoryName  + '"' + ',',

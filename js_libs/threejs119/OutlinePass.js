@@ -51,10 +51,12 @@ THREE.OutlinePass = function ( resolution, scene, camera, selectedObjects ) {
     this.depthMaterial.side = THREE.DoubleSide;
     this.depthMaterial.depthPacking = THREE.RGBADepthPacking;
     this.depthMaterial.blending = THREE.NoBlending;
+    this.depthMaterial.skinning = true;
 
     this.prepareMaskMaterial = this.getPrepareMaskMaterial();
     this.prepareMaskMaterial.side = THREE.DoubleSide;
     this.prepareMaskMaterial.fragmentShader = replaceDepthToViewZ( this.prepareMaskMaterial.fragmentShader, this.renderCamera );
+    this.prepareMaskMaterial.skinning = true;
 
     this.renderTargetDepthBuffer = new THREE.WebGLRenderTarget( this.resolution.x, this.resolution.y, pars );
     this.renderTargetDepthBuffer.texture.name = "OutlinePass.depth";

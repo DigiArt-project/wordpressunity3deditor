@@ -23,7 +23,7 @@ THREE.FBXLoader = ( function () {
     var sceneGraph;
     var fbxFileName;
     var tUrls;
-    var assetId;
+    var assetName;
 
     function FBXLoader( manager ) {
 
@@ -35,13 +35,13 @@ THREE.FBXLoader = ( function () {
 
         constructor: FBXLoader,
 
-        load: function ( url, onLoad, onProgress, onError, texturesUrlsArray, assetId_in ) {
+        load: function ( url, onLoad, onProgress, onError, texturesUrlsArray, assetName_in ) {
 
             var scope = this;
 
             fbxFileName = url;
             tUrls = texturesUrlsArray;
-            assetId = assetId_in;
+            assetName = assetName_in;
 
             var path = ( scope.path === '' ) ? THREE.LoaderUtils.extractUrlBase( url ) : scope.path;
 
@@ -405,7 +405,7 @@ THREE.FBXLoader = ( function () {
 
                 var relateMap = Array(tUrls.length);
 
-                let assetName = document.getElementById("asset-"+assetId).getAttribute("data-name");
+
 
                 for (let i=0; i<tUrls.length; i++){
                     // Names without path
