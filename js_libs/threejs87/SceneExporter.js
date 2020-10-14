@@ -62,15 +62,12 @@ THREE.SceneExporter.prototype = {
 //                console.log(node.name, node.categoryName);
 
 
-                // node.name == 'rayLine' || node.name == 'rayLine' || node.name == 'mylightAvatar' ||
-                // node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
-                // node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
-                // node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
-                // node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot' || node.name =='Camera3Dmodel' || node.name =='Camera3DmodelMesh' ||
-
-                // Not necessary to save
-                if (typeof node.categoryName === 'undefined')
-                    continue;
+                if (node.name == 'rayLine' || node.name == 'rayLine' || node.name == 'mylightAvatar' ||
+                node.name == 'mylightOrbit' || node.name == 'SteveShieldMesh' || node.name =='Steve' ||
+                node.name =='SteveMesh' || node.name =='avatarCamera' || node.name =='avatarPitchObject' ||
+                node.name =='orbitCamera' || node.name =='myAxisHelper' || node.name =='myAxisHelper' ||
+                node.name =='myGridHelper' || node.name =='myTransformControls' || node.categoryName =='lightHelper' || node.categoryName =='lightTargetSpot' || node.name =='Camera3Dmodel' || node.name =='Camera3DmodelMesh' || typeof node.categoryName === 'undefined')
+                           continue;
 
                 if (node instanceof THREE.Mesh)
                     continue;
@@ -321,7 +318,7 @@ THREE.SceneExporter.prototype = {
                 quatR.setFromEuler(eulerR);
 
                 // console.log("ROTATION:", eulerR);
-                console.log("Quaternion:", o);
+//                console.log("Quaternion:", o);
 
                 // ================ Ververidis Main =============: All objs
                 var output = [

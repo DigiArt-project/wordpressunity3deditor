@@ -1121,20 +1121,18 @@ get_header(); ?>
             // Label is for setting labels to objects
             envir.labelRenderer.render( envir.scene, curr_camera);
 
-            
-
-            
+            // Animation
             if (envir.flagPlayAnimation) {
                 if (envir.animationMixers.length > 0) {
+                    let new_time = envir.clock.getDelta();
                     for (let i = 0; i < envir.animationMixers.length; i++) {
-                        envir.animationMixers[i].update(envir.clock.getDelta());
+                        envir.animationMixers[i].update(new_time);
                     }
                 }
             }
 
             if (envir.isComposerOn)
                 envir.composer.render();
-            
             
             // Update it
             updatePositionsAndControls();
@@ -1165,9 +1163,6 @@ get_header(); ?>
                 updatePositionsPhpAndJavsFromControlsAxes();
             }
         }
-        
-        
-        
 
         // For autosave after each action
         var mapActions = {}; // You could also use an array

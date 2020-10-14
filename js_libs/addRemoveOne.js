@@ -330,8 +330,19 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
             transform_controls.attach(insertedObject);
 
             // highlight
+//
+
+            envir.composer = [];
+            envir.setComposer();
+
             envir.outlinePass.selectedObjects = [insertedObject];
             envir.renderer.setClearColor(0xeeeeee, 1);
+
+
+
+
+
+
             //envir.scene.add(transform_controls);
 
             // Position
@@ -387,7 +398,6 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
             // Add in scene
             envir.addInHierarchyViewer(insertedObject);
 
-
             // Auto-save
             triggerAutoSave();
         };
@@ -433,6 +443,15 @@ function deleterFomScene(nameToRemove){
 
     // Remove from scene and add to recycle bin
     var objectSelected = envir.scene.getObjectByName(nameToRemove);
+
+    // remove animations
+    isPaused = true;
+    let filtered = envir.animationMixers.filter(function (el) {
+        return el._root.name !== nameToRemove;
+    });
+    envir.animationMixers = filtered;
+    isPaused = false;
+
 
     // If deleting light then remove also its LightHelper and lightTargetSpot
     if (objectSelected.isLight){
