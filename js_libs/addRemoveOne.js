@@ -88,6 +88,9 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         lightSun.target.updateMatrixWorld();
         lightSunHelper.update();
 
+        var lightSunShadowhelper = new THREE.CameraHelper( lightSun.shadow.camera );
+        envir.scene.add( lightSunShadowhelper );
+
         // Add transform controls
         var insertedObject = envir.scene.getObjectByName(nameModel);
         var trs_tmp = resources3D[nameModel]['trs'];
@@ -330,18 +333,11 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
             transform_controls.attach(insertedObject);
 
             // highlight
-//
-
             envir.composer = [];
             envir.setComposer();
 
             envir.outlinePass.selectedObjects = [insertedObject];
             envir.renderer.setClearColor(0xeeeeee, 1);
-
-
-
-
-
 
             //envir.scene.add(transform_controls);
 
@@ -354,6 +350,10 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
 
             // Dimensions
             var dims = findDimensions(transform_controls.object);
+
+            console.log(dims);
+
+
             var sizeT = Math.max(...dims);
             transform_controls.setSize(sizeT > 1 ? sizeT : 1);
 
@@ -398,8 +398,12 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
             // Add in scene
             envir.addInHierarchyViewer(insertedObject);
 
+
+
             // Auto-save
             triggerAutoSave();
+
+
         };
 
         var extraResource = {};
@@ -407,6 +411,11 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
 
         let loaderMulti = new LoaderMulti();
         loaderMulti.load(manager, extraResource, pluginPath);
+
+
+        envir.composer = [];
+        envir.setComposer();
+
     }
 }
 
@@ -455,35 +464,22 @@ function deleterFomScene(nameToRemove){
 
     // If deleting light then remove also its LightHelper and lightTargetSpot
     if (objectSelected.isLight){
-
         for (var i=0; i< envir.scene.children.length; i++){
-
-
             // Light Helper check
             if (envir.scene.children[i].parentLightName === nameToRemove){
                 envir.scene.remove(envir.scene.children[i]);
             }
-
             // Target spot check
             if (typeof envir.scene.children[i].parentLight !== 'undefined')
             {
                 if (envir.scene.children[i].parentLight.name === nameToRemove) {
                     envir.scene.remove(envir.scene.children[i]);
-
                     console.log("nameToRemove", nameToRemove);
-
                     // remove from hierarchy also
                     jQuery('#hierarchy-viewer').find('#' + "lightTargetSpot_" + nameToRemove).remove();
-
-
-                    // REM: Add interface to change the intensity of the sun
                 }
             }
-
-
         }
-
-      //
     }
 
     transform_controls.detach(objectSelected);
@@ -496,8 +492,7 @@ function deleterFomScene(nameToRemove){
     jQuery('#hierarchy-viewer').find('#' + nameToRemove).remove();
 
 
-
-    transform_controls.detach();
+    //transform_controls.detach();
 
 
     triggerAutoSave();
@@ -505,6 +500,24 @@ function deleterFomScene(nameToRemove){
     // Only Player exists then hide delete button (single one)
     if(envir.scene.children.length==5)
         jQuery("#removeAssetBtn").hide();
+    else {
+
+
+        let lastObject = envir.scene.children[envir.scene.children.length - 2];
+
+        // place controls to last inserted obj
+        transform_controls.attach(lastObject);
+
+
+
+        envir.outlinePass.selectedObjects = [lastObject];
+        envir.renderer.setClearColor(0xeeeeee, 1);
+
+
+        // highlight
+        envir.composer = [];
+        envir.setComposer();
+    }
 }
 
 

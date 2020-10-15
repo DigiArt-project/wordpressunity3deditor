@@ -185,6 +185,9 @@ class vr_editor_environmentals {
             if (curr_obj.categoryName === 'lightSpot')
                 curr_obj.children[0].visible = statusVisibility;
 
+            if (curr_obj.type === 'CameraHelper') // This is the shadow camera of sun
+                curr_obj.visible = statusVisibility;
+
         }
     }
 

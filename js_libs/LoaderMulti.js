@@ -143,6 +143,8 @@ class LoaderMulti {
                                     });
 
 
+
+
                                     object = setObjectProperties(object, name, resources3D);
                                     envir.scene.add(object);
                                 },
@@ -161,6 +163,9 @@ class LoaderMulti {
                             );
 
                         });
+
+
+
                     } else {
 
                         // ------------------ FBX Loading ---------------------------------
@@ -352,9 +357,9 @@ class LoaderMulti {
                 lightSunHelper.name = 'lightHelper_' + lightSun.name;
                 lightSunHelper.categoryName = 'lightHelper';
                 lightSunHelper.parentLightName = name;
+                envir.scene.add(lightSunHelper);
 
                 // end of sphere
-                envir.scene.add(lightSunHelper);
                 envir.scene.add(lightSun);
 
                 lightSun.target.updateMatrixWorld();
