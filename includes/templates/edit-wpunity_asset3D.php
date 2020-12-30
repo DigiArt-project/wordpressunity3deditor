@@ -1189,10 +1189,7 @@ if($asset_id != null) {
         
                     </ul>
                 </div>
-        
-                
-                
-                
+
                 
                 <div class="">
                     <div class="">
@@ -1208,11 +1205,12 @@ if($asset_id != null) {
                                     $mtlID = get_post_meta($myAssetID, 'wpunity_asset3d_mtl', true);
                                     $objID = get_post_meta($myAssetID, 'wpunity_asset3d_obj', true);
                                     $fbxID = get_post_meta($myAssetID, 'wpunity_asset3d_fbx', true);
+                                    $audioID = get_post_meta($myAssetID, 'wpunity_asset3d_audio', true);
+    
                                     $pdbID = get_post_meta($myAssetID, 'wpunity_asset3d_pdb', true);
                                     $screenimgID = get_post_meta($myAssetID, 'wpunity_asset3d_screenimage', true);
                                     $diffimgID = get_post_meta($myAssetID, 'wpunity_asset3d_diffimage', true);
                                     $screenimgURL = wp_get_attachment_url($screenimgID) ? wp_get_attachment_url($screenimgID) : plugins_url( '../images/thumb-no-asset.png', dirname(__FILE__) );
-        
         
                                     $pdb_sample_file_contents = $pdbID ? file_get_contents(wp_get_attachment_url( $pdbID )) : '';
         

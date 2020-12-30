@@ -405,8 +405,6 @@ THREE.FBXLoader = ( function () {
 
                 var relateMap = Array(tUrls.length);
 
-
-
                 for (let i=0; i<tUrls.length; i++){
                     // Names without path
 

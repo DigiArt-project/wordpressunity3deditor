@@ -16,6 +16,7 @@ class ParseJSON {
         $objID = '';
         $mtlID = '';
         $fbxID = '';
+        $audioID = '';
         
     
         $categoryID = '';
@@ -212,6 +213,7 @@ class ParseJSON {
                                             '","mtl":"'.$mtl.
                                             '","mtlID":"'.$mtlID.
                                             '","fbxID":"'.$fbxID.
+                                            '","audioID":"'.$audioID.
                                             '","categoryName":"'.$categoryName.
                                             '","categoryID":"'.$categoryID.
                                             '","image1id":"'.$image1id.

@@ -354,6 +354,10 @@ class vr_editor_environmentals {
         this.cameraAvatar.name = "avatarCamera";
         this.cameraAvatar.rotation.y = Math.PI;
 
+        this.audiolistener = new THREE.AudioListener();
+        this.cameraAvatar.add(this.audiolistener);
+
+
         this.scene.add(this.cameraAvatar);
 
         this.avatarControls = new THREE.PointerLockControls( this.cameraAvatar, this.renderer.domElement );

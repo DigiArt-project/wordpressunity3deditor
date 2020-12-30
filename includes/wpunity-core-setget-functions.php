@@ -510,7 +510,9 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 			
 			$fbxID = get_post_meta($asset_id, 'wpunity_asset3d_fbx', true); // FBX ID
 			$fbxPath = $fbxID ? wp_get_attachment_url( $fbxID ) : '';                   // FBX PATH
-		
+			
+			$audioID = get_post_meta($asset_id, 'wpunity_asset3d_audio', true); // audio ID
+			$audioPath = $audioID ? wp_get_attachment_url( $audioID ) : '';      // audio PATH
 
 			$mtlID = get_post_meta($asset_id, 'wpunity_asset3d_mtl', true); // MTL ID
 			$mtlPath = $mtlID ? wp_get_attachment_url( $mtlID ) : '';                   // MTL PATH
@@ -546,6 +548,8 @@ function wpunity_getAllassets_byGameProject($gameProjectSlug, $gameProjectID){
 				'objPath'=>$objPath,
 				'fbxID'=>$fbxID,
 				'fbxPath'=>$fbxPath,
+				'audioID'=>$audioID,
+				'audioPath'=>$audioPath,
 				'mtlID'=>$mtlID,
 				'diffImageIDs'=>$difImageIDs,
 				'diffImages'=>$difImagePaths,

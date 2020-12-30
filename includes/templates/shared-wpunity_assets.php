@@ -180,13 +180,7 @@ if ($single_project_asset_list)
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="" >
             <div class="asset-shared-thumbnail mdc-card mdc-theme--background"
                  style="min-height:100px;height:100%;min-height:120px;position:relative;background:<?php echo $single_project_asset_list? 'lightgreen': 'orangered';?>">
-                
-                
-                
                 <a href="<?php echo $link_to_add; ?>">
-
-                
-                
                 <i class="addAssetCardIcon material-icons" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>">add_circle</i>
                 <span class="addAssetCardWords" style="<?php if(!$isUserloggedIn){?> filter:invert(30%) <?php }?>"><?php echo $single_project_asset_list? 'Private Asset': 'Shared Asset';?></span>
                 </a>

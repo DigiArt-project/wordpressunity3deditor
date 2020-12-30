@@ -221,6 +221,7 @@ function loadButtonActions() {
                 dataDrag.objID = dataDrag.mtlID = dataDrag.assetid = dataDrag.categoryIcon = '';
 
                 dataDrag.fbxID = '';
+                dataDrag.audioID = '';
 
                 dataDrag.categoryID = dataDrag.diffImages = dataDrag.diffImageIDs = dataDrag.image1id = dataDrag.doorName_source = '';
                 dataDrag.doorName_target = dataDrag.sceneName_target = dataDrag.sceneID_target = dataDrag.archaeology_penalty = '';
@@ -495,6 +496,16 @@ function pauseClickFun(){
     }else {
         document.getElementById('pauseRendering').style.background = 'red';
     }
+
+    envir.scene.traverse( function ( node ) {
+        if ( node instanceof THREE.PositionalAudio  ) {
+            if(isPaused)
+                node.pause();
+            else
+                node.play();
+        }
+    } );
+
 }
 
 

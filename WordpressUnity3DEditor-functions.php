@@ -61,24 +61,23 @@ function wpunity_register_scripts() {
 	$scriptsA = array(
 		array('wpunity_asset_editor_scripts', $pluginDirJS.'wpunity_asset_editor_scripts.js'),
 		array('wpunity_scripts', $pluginDirJS.'wpunity_scripts.js'),
-		array('wpunity_lightslider', $pluginDirJS.'lightslider.min.js'),
-		array('wpunity_jscolorpick', $pluginDirJS.'jscolor.js'),
-		array('wpunity_jsfontselect', $pluginDirJS.'jquery.fontselect.js'),
-		array('wpunity_html2canvas', $pluginDirJS.'html2canvas.min.js'),
+		array('wpunity_lightslider', $pluginDirJS.'standalone_js_libraries/lightslider.min.js'),
+		array('wpunity_jscolorpick', $pluginDirJS.'standalone_js_libraries/jscolor.js'),
+		array('wpunity_jsfontselect', $pluginDirJS.'standalone_js_libraries/jquery.fontselect.js'),
+		array('wpunity_html2canvas', $pluginDirJS.'standalone_js_libraries/html2canvas.min.js'),
 		array('wpunity_assepile_request', $pluginDirJS.'assemble_compile_commands/request_game_assepile.js'),
 		array('wpunity_savescene_request', $pluginDirJS.'save_scene_ajax/wpunity_save_scene_ajax.js'),
 		array('wpunity_content_interlinking_request', $pluginDirJS.'content_interlinking_commands/content_interlinking.js'),
 		array('wpunity_segmentation_request', $pluginDirJS.'semantics_commands/segmentation.js'),
 		array('wpunity_classification_request', $pluginDirJS.'semantics_commands/classification.js'),
 		array('wpunity_fetch_asset_scenes_request', $pluginDirJS.'assetBrowserToolbar.js'),
-		array('wpunity_qrcode_generator', $pluginDirJS.'qrcode.js'),
-		array('wpunity_inflate', $pluginDirJS.'inflate.min.js'),
-		array('wpunity_materialize_jslib', $pluginDirJS.'materialize.js'),
+		array('wpunity_qrcode_generator', $pluginDirJS.'standalone_js_libraries/qrcode.js'),
+		array('wpunity_inflate', $pluginDirJS.'standalone_js_libraries/inflate.min.js'),
+		array('wpunity_materialize_jslib', $pluginDirJS.'standalone_js_libraries/materialize.js'),
 		array('WU_webw_3d_view', $pluginDirJS.'WU_webw_3d_view.js'),
 		array('wpunity_vr_editor_buttons', $pluginDirJS.'vr_editor_buttons.js'),
 		array('wpunity_vr_editor_analytics', $pluginDirJS.'vr_editor_analytics.js'),
 	);
-	
 	
 	for ( $i = 0 ; $i < count($scriptsA); $i ++){
 		wp_register_script($scriptsA[$i][0] , $scriptsA[$i][1], null, null, false );
@@ -153,7 +152,7 @@ function wpunity_register_scripts() {
 	
 	$scriptsD = array(
 			array( 'wpunity_vr_editor_environmentals', $pluginDirJS.'vr_editor_environmentals.js'),
-			array( 'wpunity_keyButtons', $pluginDirJS.'keyButtons.js'),
+			array( 'wpunity_keyButtons', $pluginDirJS.'standalone_js_libraries/keyButtons.js'),
 			array( 'wpunity_rayCasters', $pluginDirJS.'rayCasters.js'),
 			array( 'wpunity_auxControlers', $pluginDirJS.'auxControlers.js'),
 			array( 'wpunity_LoaderMulti', $pluginDirJS.'LoaderMulti.js'),

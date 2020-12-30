@@ -1,4 +1,4 @@
-function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, dataDrag, translation, pluginPath){
+function addAssetToCanvas(nameModel, path, objFname, mtlFname, categoryName, dataDrag, translation, pluginPath){
 
     // Add javascript variables for viewing the object correctly
     let selected_object_trs = {
@@ -16,6 +16,7 @@ function addAssetToCanvas(nameModel, path, objFname,  mtlFname, categoryName, da
         "mtl": mtlFname,
         "mtlID": dataDrag.mtlID,
         "fbxID": dataDrag.fbxID,
+        "audioID": dataDrag.audioID,
         "categoryName": dataDrag.categoryName,
         "categoryDescription": dataDrag.categoryDescription,
         "categoryIcon": dataDrag.categoryIcon,

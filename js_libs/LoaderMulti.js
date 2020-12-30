@@ -184,6 +184,8 @@ class LoaderMulti {
                                 let textureFilesURLs = resourcesFBX['texturesURLs'];
                                 let fbxURL = resourcesFBX['fbxURL'];
 
+
+
                                 // How to load FBX from these
                                 // console.log("textureFilesURLs",textureFilesURLs);
                                 // console.log("fbxURL", fbxURL);
@@ -237,6 +239,27 @@ class LoaderMulti {
 
 
                                         object = setObjectProperties(object, name, resources3D);
+
+
+                                        // -------- Sound --------------
+                                        // create the PositionalAudio object (passing in the listener)
+                                        let audioOf3DObject = new THREE.PositionalAudio( envir.audiolistener );
+
+
+                                        // load a sound and set it as the PositionalAudio object's buffer
+                                        const audioLoader = new THREE.AudioLoader();
+                                        audioLoader.load( resourcesFBX['audioURL'], function( buffer ) {
+                                            audioOf3DObject.setBuffer( buffer );
+                                            audioOf3DObject.setRefDistance( 2000 );
+                                            audioOf3DObject.setDirectionalCone(330, 230, 0.01);
+                                            audioOf3DObject.setLoop(true);
+                                            audioOf3DObject.play();
+
+                                        });
+
+                                        object.add(audioOf3DObject);
+
+                                        //------------------------------
 
                                         envir.scene.add( object );
 
@@ -547,6 +570,8 @@ function setObjectProperties(object, name, resources3D) {
     object.fnMtlID = resources3D[name]['mtlID'];
 
     object.fnFbxID = resources3D[name]['fbxID'];
+
+    object.audioID = resources3D[name]['audioID'];
 
     object.categoryID = resources3D[name]['categoryID'];
     object.categoryName = resources3D[name]['categoryName'];

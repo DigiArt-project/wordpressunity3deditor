@@ -1106,8 +1106,10 @@ get_header(); ?>
         // ANIMATE
         function animate()
         {
-            if(isPaused)
+            if(isPaused) {
+                
                 return;
+            } else  {}
 
             id_animation_frame = requestAnimationFrame( animate );
 

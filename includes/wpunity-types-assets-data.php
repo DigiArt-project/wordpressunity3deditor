@@ -7,42 +7,42 @@ function loadTypesAssetsDataScripts() {
     
     
     // load css/wpunity_backend.css
-	wp_enqueue_style('wpunity_backend');
+    wp_enqueue_style('wpunity_backend');
 
 // load script from js_libs
-	wp_enqueue_script( 'wpunity_content_interlinking_request');
+    wp_enqueue_script( 'wpunity_content_interlinking_request');
 
 // load script from js_libs
-	wp_enqueue_script( 'wpunity_classification_request');
-
-	wp_enqueue_script('wpunity_segmentation_request');
+    wp_enqueue_script( 'wpunity_classification_request');
+    
+    wp_enqueue_script('wpunity_segmentation_request');
 
 // Three js : for simple rendering
-	wp_enqueue_script('wpunity_load_threejs');
-	wp_enqueue_script('wpunity_load_objloader');
-	wp_enqueue_script('wpunity_load_mtlloader');
-	wp_enqueue_script('wpunity_load_orbitcontrols');
-
-
-	// Some parameters to pass in the content_interlinking.js  ajax
-	wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
-		array('lang' => 'en',
-		      'externalSource' => 'Wikipedia',
-		      'titles' => 'Scladina'  //'Albert%20Einstein'
-		)
-	);
+    wp_enqueue_script('wpunity_load_threejs');
+    wp_enqueue_script('wpunity_load_objloader');
+    wp_enqueue_script('wpunity_load_mtlloader');
+    wp_enqueue_script('wpunity_load_orbitcontrols');
+    
+    
+    // Some parameters to pass in the content_interlinking.js  ajax
+    wp_localize_script('wpunity_content_interlinking_request', 'phpvars',
+        array('lang' => 'en',
+            'externalSource' => 'Wikipedia',
+            'titles' => 'Scladina'  //'Albert%20Einstein'
+        )
+    );
 
 // Some parameters to pass in the segmentation.js  ajax
-	if( isset($_GET['post']) ){
-		wp_localize_script('wpunity_segmentation_request', 'phpvars',
-			array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
-			      'obj'  => get_post_meta($_GET['post'], 'wpunity_asset3d_obj', true)
-			)
-		);
+    if( isset($_GET['post']) ){
+        wp_localize_script('wpunity_segmentation_request', 'phpvars',
+            array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
+                'obj'  => get_post_meta($_GET['post'], 'wpunity_asset3d_obj', true)
+            )
+        );
+        
+    }
 
-	}
 
- 
 // Some parameters to pass in the classification.js  ajax
 //	wp_localize_script('wpunity_classification_request', 'phpvars',
 //		array('path' => get_post_meta($_GET['post'], 'wpunity_asset3d_pathData', true).'/',
@@ -57,9 +57,9 @@ add_action('wp_enqueue_scripts', 'loadTypesAssetsDataScripts' );
 add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
 function wpunity_assets_create_right_metaboxes() {
-	
-    // These function should be passed to front-end
     
+    // These function should be passed to front-end
+
 //    add_meta_box( 'autofnc-wpunity_asset3d_fetch_description','Fetch description','wpunity_assets_fetch_description_box_content', 'wpunity_asset3d', 'side' , 'low');
 //	add_meta_box( 'autofnc-wpunity_asset3d_fetch_image','Fetch image','wpunity_assets_fetch_image_box_content', 'wpunity_asset3d', 'side' , 'low');
 //	add_meta_box( 'autofnc-wpunity_asset3d_fetch_video','Fetch video','wpunity_assets_fetch_video_box_content', 'wpunity_asset3d', 'side' , 'low');
@@ -68,12 +68,12 @@ function wpunity_assets_create_right_metaboxes() {
 }
 
 function wpunity_assets_fetch_description_box_content($post){
-
-
-
-	echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton"
+    
+    
+    
+    echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton"
      onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
-	?>
+    ?>
 
     <br /><br />
 
@@ -102,15 +102,15 @@ function wpunity_assets_fetch_description_box_content($post){
     <br />
 
     Full text:<input type="checkbox" name="wpunity_fulltext_chkbox" id="wpunity_fulltext_chkbox" value="">
-
-
-	<?php
+    
+    
+    <?php
 }
 
 function wpunity_assets_fetch_image_box_content($post){
-
-	echo '<div id="wpunity_fetchImage_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchImageAjax()">Fetch Image</div>';
-	?>
+    
+    echo '<div id="wpunity_fetchImage_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchImageAjax()">Fetch Image</div>';
+    ?>
 
     <br /><br />
 
@@ -141,27 +141,27 @@ function wpunity_assets_fetch_image_box_content($post){
 
 
     <div id="image_find_results">
-		<?php
-
-		echo '<div id="display_img_res" class="imageresbin" style="display:none">';
-		for ($i=0;$i<10;$i++) {
-			echo '<img id = "image_res_'.$i.'" class="image_fetch_img" />';
-			echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" style="margin-bottom:5px"></div >';
-			echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" style="margin-bottom:10px"></a >';
-		}
-
-		echo '</div>';
-		?>
+        <?php
+        
+        echo '<div id="display_img_res" class="imageresbin" style="display:none">';
+        for ($i=0;$i<10;$i++) {
+            echo '<img id = "image_res_'.$i.'" class="image_fetch_img" />';
+            echo '<div id = "image_res_'.$i.'_url" class="image_fetch_div_url" style="margin-bottom:5px"></div >';
+            echo '<a href="" id = "image_res_'.$i.'_title" class="img_res_title_f" target = "_blank" style="margin-bottom:10px"></a >';
+        }
+        
+        echo '</div>';
+        ?>
     </div>
-
-
-	<?php
+    
+    
+    <?php
 }
 
 function wpunity_assets_fetch_video_box_content($post){
-
-	echo '<div id="wpunity_fetchVideo_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchVideoAjax()">Fetch Video</div>';
-	?>
+    
+    echo '<div id="wpunity_fetchVideo_bt" class="wpunity_fetchContentButton" onclick="wpunity_fetchVideoAjax()">Fetch Video</div>';
+    ?>
 
     <br /><br />
 
@@ -200,13 +200,13 @@ function wpunity_assets_fetch_video_box_content($post){
         <div id="video_res_1_title" class="video_res_title_f"></div><br />
 
     </div>
-
-	<?php
+    
+    <?php
 }
 
 function wpunity_assets_segment_obj_box_content($post){
-
-	?>
+    
+    ?>
 
     <div id="wpunity_segmentButton" class="wpunity_fetchContentButton"
          onclick="wpunity_segmentObjAjax(document.getElementById('wpunity_titles_segment_obj_iter').value,
@@ -246,15 +246,15 @@ function wpunity_assets_segment_obj_box_content($post){
 
     <br />
     <div id="wpunity-segmentation-log" name="wpunity-segmentation-log">Log file</div>
-
-	<?php
+    
+    <?php
 }
 
 function wpunity_assets_classify_obj_box_content($post){
-
-	echo '<div id="wpunity_classifyObj_bt" class="wpunity_fetchContentButton"
+    
+    echo '<div id="wpunity_classifyObj_bt" class="wpunity_fetchContentButton"
                                 onclick="wpunity_classifyObjAjax()">Classify obj</div>';
-	?>
+    ?>
 
     <br />
     Results<br />
@@ -296,8 +296,8 @@ function wpunity_assets_classify_obj_box_content($post){
     <div id="wpunity-classification-report" name="wpunity-classification-report">Status</div><br />
     <div id="wpunity-classification-status" name="wpunity-classification-status">Report</div><br />
     <div id="wpunity-segmentation-log" name="wpunity-segmentation-log">Log file</div>
-
-	<?php
+    
+    <?php
 }
 
 //==========================================================================================================================================
@@ -307,24 +307,24 @@ $wpunity_prefix = 'wpunity_asset3d_';
 
 //All information about our meta box
 $wpunity_databox1 = array(
-	'id' => 'wpunity-assets-databox',
-	'page' => 'wpunity_asset3d',
-	'context' => 'normal',
-	'priority' => 'high',
-	'fields' => array(
-		array('name' => 'MTL File',
-			'desc' => 'MTL File',
-			'id' => $wpunity_prefix . 'mtl',
-			'type' => 'text',
-			'std' => ''
-		),
-		array(
-			'name' => 'Obj File',
-			'desc' => 'Obj File',
-			'id' => $wpunity_prefix . 'obj',
-			'type' => 'text',
-			'std' => ''
-		),
+    'id' => 'wpunity-assets-databox',
+    'page' => 'wpunity_asset3d',
+    'context' => 'normal',
+    'priority' => 'high',
+    'fields' => array(
+        array('name' => 'MTL File',
+            'desc' => 'MTL File',
+            'id' => $wpunity_prefix . 'mtl',
+            'type' => 'text',
+            'std' => ''
+        ),
+        array(
+            'name' => 'Obj File',
+            'desc' => 'Obj File',
+            'id' => $wpunity_prefix . 'obj',
+            'type' => 'text',
+            'std' => ''
+        ),
         array(
             'name' => 'Fbx File',
             'desc' => 'Fbx File',
@@ -334,37 +334,37 @@ $wpunity_databox1 = array(
         ),
         array(
             'name' => 'Audio File',
-            'desc' => 'Audio File for the fbx',
+            'desc' => 'Audio File for the 3D model',
             'id' => $wpunity_prefix . 'audio',
             'type' => 'text',
             'std' => ''
         ),
-		array(
-			'name' => 'Diffusion Image',
-			'desc' => 'Diffusion Image',
-			'id' => $wpunity_prefix . 'diffimage',
-			'type' => 'text',
-			'std' => ''
-		),
-		array(
-			'name' => 'Screenshot Image',
-			'desc' => 'Screenshot Image',
-			'id' => $wpunity_prefix . 'screenimage',
-			'type' => 'text',
-			'std' => ''
-		),array(
-			'name' => 'Next Scene (Only for Doors)',
-			'desc' => 'Next Scene',
-			'id' => $wpunity_prefix . 'next_scene',
-			'type' => 'text',
-			'std' => ''
-
+        array(
+            'name' => 'Diffusion Image',
+            'desc' => 'Diffusion Image',
+            'id' => $wpunity_prefix . 'diffimage',
+            'type' => 'text',
+            'std' => ''
+        ),
+        array(
+            'name' => 'Screenshot Image',
+            'desc' => 'Screenshot Image',
+            'id' => $wpunity_prefix . 'screenimage',
+            'type' => 'text',
+            'std' => ''
         ),array(
-			'name' => 'Video',
-			'desc' => 'Video',
-			'id' => $wpunity_prefix . 'video',
-			'type' => 'text',
-			'std' => ''
+            'name' => 'Next Scene (Only for Doors)',
+            'desc' => 'Next Scene',
+            'id' => $wpunity_prefix . 'next_scene',
+            'type' => 'text',
+            'std' => ''
+        
+        ),array(
+            'name' => 'Video',
+            'desc' => 'Video',
+            'id' => $wpunity_prefix . 'video',
+            'type' => 'text',
+            'std' => ''
         ),array(
             'name' => 'isreward',
             'desc' => 'isreward',
@@ -372,11 +372,11 @@ $wpunity_databox1 = array(
             'type' => 'text',
             'std' => '0'
         ),array(
-			'name' => 'Image 1',
-			'desc' => 'Image 1',
-			'id' => $wpunity_prefix . 'image1',
-			'type' => 'text',
-			'std' => ''
+            'name' => 'Image 1',
+            'desc' => 'Image 1',
+            'id' => $wpunity_prefix . 'image1',
+            'type' => 'text',
+            'std' => ''
         ),array(
             'name' => 'Image 2',
             'desc' => 'Image 2',
@@ -395,7 +395,7 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'image4',
             'type' => 'text',
             'std' => ''
-		),array(
+        ),array(
             'name' => 'isCloned',
             'desc' => 'isCloned',
             'id' => $wpunity_prefix . 'isCloned',
@@ -407,8 +407,8 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'isJoker',
             'type' => 'text',
             'std' => 'false'
-            
-            
+        
+        
         ),array(
             'name' => 'KidsDescription',
             'desc' => 'Description in English for kids',
@@ -427,8 +427,8 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'description_perception',
             'type' => 'text',
             'std' => ''
-            
-            
+        
+        
         ),array(
             'name' => 'GreekTitle',
             'desc' => 'Title in Greek',
@@ -465,8 +465,8 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'title_spanish',
             'type' => 'text',
             'std' => ''
-            
-            
+        
+        
         ),array(
             'name' => 'Spanish',
             'desc' => 'Description in Spanish',
@@ -491,7 +491,7 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'description_spanish_perception',
             'type' => 'text',
             'std' => ''
-            
+        
         ),array(
             'name' => 'FrenchTitle',
             'desc' => 'Title in French',
@@ -584,7 +584,7 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'description_russian_perception',
             'type' => 'text',
             'std' => ''
-            
+        
         
         ),array(
             'name' => 'fonts',
@@ -600,22 +600,22 @@ $wpunity_databox1 = array(
             'std' => "rgb(221, 185, 155)"
         
         )
-	)
+    )
 );
 
 //==========================================================================================================================================
 
 // Add and Show the metabox with Custom Field for Game ($wpunity_databox1)
 function wpunity_assets_databox_add() {
-	global $wpunity_databox1;
-	add_meta_box('wpunity-assets-infobox', 'Description Tips for Image-Text', 'wpunity_assets_infobox_show', 'wpunity_asset3d','normal','high' );
-	add_meta_box($wpunity_databox1['id'], 'Asset Data', 'wpunity_assets_databox_show', $wpunity_databox1['page'], $wpunity_databox1['context'], $wpunity_databox1['priority']);
+    global $wpunity_databox1;
+    add_meta_box('wpunity-assets-infobox', 'Description Tips for Image-Text', 'wpunity_assets_infobox_show', 'wpunity_asset3d','normal','high' );
+    add_meta_box($wpunity_databox1['id'], 'Asset Data', 'wpunity_assets_databox_show', $wpunity_databox1['page'], $wpunity_databox1['context'], $wpunity_databox1['priority']);
 }
 
 add_action('admin_menu', 'wpunity_assets_databox_add');
 
 function wpunity_assets_infobox_show(){
-	?>
+    ?>
     <style>#wpunity-assets-infobox{display:none;}</style>
 
     &lt;b&gt;&lt;size=40&gt;MyTitle&lt;/size&gt;&lt;/b&gt; <br/>
@@ -628,38 +628,38 @@ function wpunity_assets_infobox_show(){
     &lt;i&gt;Renders the text in italics.&lt;/i&gt;<br/>
     &lt;size=20&gt;Sets the size of the text according to the parameter value, given in pixels.&lt;/size&gt;<br/>
     &lt;color=blue&gt;Sets the color of the text according to the parameter value.&lt;/color&gt;<br/>
-
-	<?php
+    
+    <?php
 }
 
 function wpunity_assets_databox_show(){
-	global $wpunity_databox1, $post;
-
-	$post_title = $post->post_title;
-	if($post->post_status == 'publish'){$hideshow = 'none';}else{$hideshow = 'block';}
-	?>
+    global $wpunity_databox1, $post;
+    
+    $post_title = $post->post_title;
+    if($post->post_status == 'publish'){$hideshow = 'none';}else{$hideshow = 'block';}
+    ?>
     <div id="wpunity_assets_box_wrapper" style="display:<?php echo $hideshow; ?>;">
         <span class="dashicons dashicons-lock">You must create the Asset in order to fill data</span>
     </div>
     <input type="hidden" name="wpunity_assets_databox_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>" />
     <table class="form-table" id="wpunity-custom-fields-table">
         <tbody>
-
-		<?php
-		//Hide-Show custom fields purpose
-		$categoryAsset = wp_get_post_terms($post->ID, 'wpunity_asset3d_cat');
-		$categoryAssetSlug = $categoryAsset[0]->name;
-		$doorhideshow = 'none';$mediahideshow = 'none';
-		if ($categoryAssetSlug == 'Doors') {$doorhideshow = 'block';$mediahideshow = 'none';}
-		if ($categoryAssetSlug != 'Doors') {$doorhideshow = 'none';$mediahideshow = 'block';}
-
-		foreach ($wpunity_databox1['fields'] as $field) {
-			if ($field['id']=='wpunity_asset3d_mtl'){
-				?>
+        
+        <?php
+        //Hide-Show custom fields purpose
+        $categoryAsset = wp_get_post_terms($post->ID, 'wpunity_asset3d_cat');
+        $categoryAssetSlug = $categoryAsset[0]->name;
+        $doorhideshow = 'none';$mediahideshow = 'none';
+        if ($categoryAssetSlug == 'Doors') {$doorhideshow = 'block';$mediahideshow = 'none';}
+        if ($categoryAssetSlug != 'Doors') {$doorhideshow = 'none';$mediahideshow = 'block';}
+        
+        foreach ($wpunity_databox1['fields'] as $field) {
+            if ($field['id']=='wpunity_asset3d_mtl'){
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php $meta_mtl_id = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php $meta_mtl_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>"
                                id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_mtl_id ? $meta_mtl_id : $field['std']); ?>" size="30" style="width:65%"/>
@@ -671,13 +671,13 @@ function wpunity_assets_databox_show(){
                         Pathfile: <?php echo wp_get_attachment_url($meta_mtl_id); ?><br />
                         Preview mtl:<br />
                         <textarea id="wpunity_asset3d_mtl_preview" readonly style="width:100%;height:200px;"><?php
-
-							if(!$meta_mtl_id){
-								echo "mtl is not defined";
-							}else{
-								readfile(wp_get_attachment_url($meta_mtl_id));
-							}
-							?>
+                            
+                            if(!$meta_mtl_id){
+                                echo "mtl is not defined";
+                            }else{
+                                readfile(wp_get_attachment_url($meta_mtl_id));
+                            }
+                            ?>
                             </textarea>
                     </td>
                 </tr>
@@ -685,22 +685,22 @@ function wpunity_assets_databox_show(){
                 
                 
                 
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_obj') {
-
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_obj') {
+                
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php
-						$valMaxUpload = intval(ini_get('upload_max_filesize'));
-						if ($valMaxUpload < 100){
-							echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
-							echo "Add to .htaccess the following two lines<br/>";
-							echo "php_value upload_max_filesize 256M <br />";
-							echo "php_value post_max_size 512M";
-						}
-						$meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php
+                        $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                        if ($valMaxUpload < 100){
+                            echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                            echo "Add to .htaccess the following two lines<br/>";
+                            echo "php_value upload_max_filesize 256M <br />";
+                            echo "php_value post_max_size 512M";
+                        }
+                        $meta_obj_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
                                value="<?php echo esc_attr($meta_obj_id ? $meta_obj_id : $field['std']); ?>" size="30" style="width:65%"/>
@@ -711,13 +711,13 @@ function wpunity_assets_databox_show(){
                         Pathfile: <?php echo wp_get_attachment_url($meta_obj_id); ?><br />
                         Preview obj:<br />
                         <textarea id="wpunity_asset3d_obj_preview" readonly style="width:100%;height:200px;"><?php
-							if(!$meta_obj_id){
-								echo "obj is not defined";
-							}else{
-								echo "obj text is too big to state here.";
-								//readfile(wp_get_attachment_url($meta_obj_id), "100");
-							}
-							?>
+                            if(!$meta_obj_id){
+                                echo "obj is not defined";
+                            }else{
+                                echo "obj text is too big to state here.";
+                                //readfile(wp_get_attachment_url($meta_obj_id), "100");
+                            }
+                            ?>
                             </textarea>
                     </td>
                 </tr>
@@ -757,20 +757,57 @@ function wpunity_assets_databox_show(){
                             </textarea>
                     </td>
                 </tr>
+
                 
-                
-                
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_diffimage') {
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_audio') {?>
+
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php $meta_diff_id = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php
+                        $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                        if ($valMaxUpload < 100){
+                            echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                            echo "Add to .htaccess the following two lines<br/>";
+                            echo "php_value upload_max_filesize 256M <br />";
+                            echo "php_value post_max_size 512M";
+                        }
+                        $meta_audio_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                        <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                               value="<?php echo esc_attr($meta_audio_id ? $meta_audio_id : $field['std']); ?>" size="30" style="width:65%"/>
+
+                        <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+
+                        <br /><br />
+                        Pathfile: <?php echo wp_get_attachment_url($meta_audio_id); ?><br />
+                        Preview Audio:<br />
+                        <textarea id="wpunity_asset3d_audio_preview" readonly style="width:100%;height:200px;"><?php
+                            if(!$meta_audio_id){
+                                echo "Audio is not defined";
+                            }else{
+                                echo "Audio text is too big to state here.";
+                                //readfile(wp_get_attachment_url($meta_audio_id), "100");
+                            }
+                            ?>
+                            </textarea>
+                    </td>
+                </tr>
+                
+                
+                
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_diffimage') {
+                ?>
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td>
+                        <?php $meta_diff_id = get_post_meta($post->ID, $field['id'], true); ?>
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
                                value="<?php
-						       echo esc_attr($meta_diff_id ? $meta_diff_id : $field['std']);
-						       ?>" size="30" style="width:65%"/>
+                               echo esc_attr($meta_diff_id ? $meta_diff_id : $field['std']);
+                               ?>" size="30" style="width:65%"/>
 
                         <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
                         <br />
@@ -778,13 +815,13 @@ function wpunity_assets_databox_show(){
                         <img id="wpunity_asset3d_diffimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_diff_id); ?>"/>
                     </td>
                 </tr>
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_screenimage') {
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_screenimage') {
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php $meta_scr_id = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php $meta_scr_id = get_post_meta($post->ID, $field['id'], true); ?>
 
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
                                value="<?php echo esc_attr($meta_scr_id ? $meta_scr_id : $field['std']); ?>" size="30" style="width:65%"/>
@@ -795,23 +832,23 @@ function wpunity_assets_databox_show(){
                         <img id="wpunity_asset3d_screenimage_preview" style="width:50%;height:auto" src="<?php echo wp_get_attachment_url($meta_scr_id); ?>"/>
                     </td>
                 </tr>
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_next_scene') {
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_next_scene') {
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td id="wpunity_asset3d_next_scene_field" style="display:<?php echo $doorhideshow; ?>;margin-bottom:0;">
-						<?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%"/>
                     </td>
                 </tr>
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_image1') {
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_image1') {
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php $meta_image1_id = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php $meta_image1_id = get_post_meta($post->ID, $field['id'], true); ?>
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta_image1_id ? $meta_image1_id : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
                         <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>" style="display:<?php echo $mediahideshow; ?>;" />
 
@@ -820,34 +857,34 @@ function wpunity_assets_databox_show(){
                              src="<?php echo wp_get_attachment_url($meta_image1_id); ?>"/>
                     </td>
                 </tr>
-				<?php
-			}elseif ($field['id'] == 'wpunity_asset3d_video') {
-				?>
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_video') {
+                ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td>
-						<?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
+                        <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
                         <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>" value="<?php echo esc_attr($meta ? $meta : $field['std']); ?>" size="30" style="width:65%;float:left;display:<?php echo $mediahideshow; ?>;"/>
                         <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"  style="display:<?php echo $mediahideshow; ?>;" />
-						<?php //TODO preview of the video ?>
+                        <?php //TODO preview of the video ?>
                     </td>
                 </tr>
                 <?php
             }elseif (in_array($field['id'],[
                 'wpunity_asset3d_description_kids','wpunity_asset3d_description_experts','wpunity_asset3d_description_perception',  // English
-'wpunity_asset3d_title_greek','wpunity_asset3d_description_greek','wpunity_asset3d_description_greek_kids','wpunity_asset3d_description_greek_experts', 'wpunity_asset3d_description_greek_perception',   // Greek
-'wpunity_asset3d_title_spanish','wpunity_asset3d_description_spanish','wpunity_asset3d_description_spanish_kids','wpunity_asset3d_description_spanish_experts','wpunity_asset3d_description_spanish_perception', // Spanish
-'wpunity_asset3d_title_french','wpunity_asset3d_description_french','wpunity_asset3d_description_french_kids','wpunity_asset3d_description_french_experts','wpunity_asset3d_description_french_perception', // French
-'wpunity_asset3d_title_german', 'wpunity_asset3d_description_german','wpunity_asset3d_description_german_kids','wpunity_asset3d_description_german_experts','wpunity_asset3d_description_german_perception', // German
-'wpunity_asset3d_title_russian','wpunity_asset3d_description_russian','wpunity_asset3d_description_russian_kids','wpunity_asset3d_description_russian_experts','wpunity_asset3d_description_russian_perception' // Russion
-                ]  )) {
+                'wpunity_asset3d_title_greek','wpunity_asset3d_description_greek','wpunity_asset3d_description_greek_kids','wpunity_asset3d_description_greek_experts', 'wpunity_asset3d_description_greek_perception',   // Greek
+                'wpunity_asset3d_title_spanish','wpunity_asset3d_description_spanish','wpunity_asset3d_description_spanish_kids','wpunity_asset3d_description_spanish_experts','wpunity_asset3d_description_spanish_perception', // Spanish
+                'wpunity_asset3d_title_french','wpunity_asset3d_description_french','wpunity_asset3d_description_french_kids','wpunity_asset3d_description_french_experts','wpunity_asset3d_description_french_perception', // French
+                'wpunity_asset3d_title_german', 'wpunity_asset3d_description_german','wpunity_asset3d_description_german_kids','wpunity_asset3d_description_german_experts','wpunity_asset3d_description_german_perception', // German
+                'wpunity_asset3d_title_russian','wpunity_asset3d_description_russian','wpunity_asset3d_description_russian_kids','wpunity_asset3d_description_russian_experts','wpunity_asset3d_description_russian_perception' // Russion
+            ]  )) {
                 ?>
                 <tr>
                     <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
                     <td id="<?php echo $field['id'] ?>" style="margin-bottom:0;">
                         <?php $meta = get_post_meta($post->ID, $field['id'], true); ?>
                         <textarea name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
-                               value="" style="width:100%;height:auto"><?php echo esc_attr($meta ? $meta : $field['std']); ?></textarea>
+                                  value="" style="width:100%;height:auto"><?php echo esc_attr($meta ? $meta : $field['std']); ?></textarea>
                     </td>
                 </tr>
                 <?php
@@ -872,8 +909,8 @@ function wpunity_assets_databox_show(){
                 </tr>
                 <?php
             }
-		}
-		?>
+        }
+        ?>
         </tbody>
     </table>
 
@@ -934,9 +971,9 @@ function wpunity_assets_databox_show(){
 
         jQuery(document).ready(function ($) {
 
-            
-            
-            
+
+
+
             // Uploading files
             var file_frame;
             var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
@@ -1030,7 +1067,7 @@ function wpunity_assets_databox_show(){
 
                     // Do something with attachment.id and/or attachment.url here
                     jQuery('#wpunity_asset3d_fbx').val(attachment.id);
-                    
+
 
                     // Restore the main post ID
                     wp.media.model.settings.post.id = wp_media_post_id;
@@ -1039,8 +1076,8 @@ function wpunity_assets_databox_show(){
                 // Finally, open the modal
                 file_frame.open();
             });
-            
-            
+
+
             jQuery('#wpunity_asset3d_diffimage_btn').on('click', function( event ){
 
                 event.preventDefault();
@@ -1182,45 +1219,45 @@ function wpunity_assets_databox_show(){
 
         });
     </script>
-	<?php
+    <?php
 }
 
 //==========================================================================================================================================
 
 // Save data from this metabox with Custom Field for Asset3D ($wpunity_databox)
 function wpunity_assets_databox_save($post_id) {
-	global $wpunity_databox1;
+    global $wpunity_databox1;
     
     if (!isset($_POST['wpunity_assets_databox_nonce']))
         return;
-
-	// verify nonce
-	if (!wp_verify_nonce($_POST['wpunity_assets_databox_nonce'], basename(__FILE__))) {
-		return $post_id;
-	}
-	// check autosave
-	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-		return $post_id;
-	}
-	// check permissions
-	if ('page' == $_POST['post_type']) {
-		if (!current_user_can('edit_page', $post_id)) {
-			return $post_id;
-		}
-	} elseif (!current_user_can('edit_post', $post_id)) {
-		return $post_id;
-	}
-
-	foreach ($wpunity_databox1['fields'] as $field) {
-		$old = get_post_meta($post_id, $field['id'], true);
-		$new = $_POST[$field['id']];
-		update_post_meta($post_id, $field['id'], $new);
-		if ($new && $new != $old) {
-			update_post_meta($post_id, $field['id'], $new);
-		} elseif ('' == $new && $old) {
-			delete_post_meta($post_id, $field['id'], $old);
-		}
-	}
+    
+    // verify nonce
+    if (!wp_verify_nonce($_POST['wpunity_assets_databox_nonce'], basename(__FILE__))) {
+        return $post_id;
+    }
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return $post_id;
+    }
+    // check permissions
+    if ('page' == $_POST['post_type']) {
+        if (!current_user_can('edit_page', $post_id)) {
+            return $post_id;
+        }
+    } elseif (!current_user_can('edit_post', $post_id)) {
+        return $post_id;
+    }
+    
+    foreach ($wpunity_databox1['fields'] as $field) {
+        $old = get_post_meta($post_id, $field['id'], true);
+        $new = $_POST[$field['id']];
+        update_post_meta($post_id, $field['id'], $new);
+        if ($new && $new != $old) {
+            update_post_meta($post_id, $field['id'], $new);
+        } elseif ('' == $new && $old) {
+            delete_post_meta($post_id, $field['id'], $old);
+        }
+    }
 }
 
 // Save data from infobox

@@ -58,6 +58,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
                 "mtl":'',
                 "mtlID":'',
                 "fbxID":'',
+                "audioID":'',
                 "categoryName":'',"categoryID":'',
                 "image1id":'',"doorName_source":'',"doorName_target":'',
                 "sceneName_target":'',"sceneID_target":'',"archaeology_penalty":'',
@@ -78,6 +79,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
             var mtl = value['fnMtl'];
             var mtlID = value['fnMtlID'];
             var fbxID = value['fbxID'];
+            var audioID = value['audioID'];
             var categoryName = value['categoryName'];
             var categoryID = value['categoryID'];
             var image1id = value['image1id'];
@@ -115,6 +117,7 @@ function parseJSON_javascript(scene_json, UPLOAD_DIR){
                 "mtl":mtl,
                 "mtlID":mtlID,
                 "fbxID":fbxID,
+                "audioID":audioID,
                 "categoryName":categoryName,"categoryID":categoryID,
                 "image1id":image1id,"doorName_source":doorName_source,"doorName_target":doorName_target,
                 "sceneName_target":sceneName_target,"sceneID_target":sceneID_target,"archaeology_penalty":archaeology_penalty,
