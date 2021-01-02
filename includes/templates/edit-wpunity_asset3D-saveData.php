@@ -43,10 +43,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
                 
                 fwrite($ff, chr(13)."DELETE META OF ATTACHMENT".
                                     print_r($attachment_meta_key,true) );
-                
-                
-                
-                
+ 
                 delete_post_meta($attachment->ID, $attachment_meta_key);
                 
             }
@@ -100,6 +97,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 //    fclose($fp);
     
     // Texture
+    if (isset($_POST['textureFileInput']))
     if ($_POST['textureFileInput']!=null) {
     
         // DELETE EXISTING TEXTURE POST, FILE, and its META:

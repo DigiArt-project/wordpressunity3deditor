@@ -17,6 +17,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     document.getElementById("mtlFileInput").value = "";
     document.getElementById("objFileInput").value = "";
     document.getElementById("pdbFileInput").value = "";
+    document.getElementById("glbFileInput").value = "";
     FbxBuffer = '';
 
     // Clear add texture hidden fields
@@ -44,6 +45,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nPng = 0;
     nPdb = 0;
     nGif = 0;
+    nGlb = 0;
 }
 
 
@@ -60,6 +62,7 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
         case 'mtl': nMtl = 1; reader.readAsText(file);        break;
         case 'obj': nObj = 1; reader.readAsArrayBuffer(file); break;
         case 'fbx': nFbx = 1; reader.readAsArrayBuffer(file); break;
+        case 'glb': nGlb = 1; reader.readAsArrayBuffer(file); break;
         case 'jpg': reader.readAsDataURL(file);     break;
         case 'png': reader.readAsDataURL(file);     break;
         case 'gif': reader.readAsDataURL(file);     break;
@@ -83,6 +86,10 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                     document.getElementById('fbxFileInput').value = dec.decode(fileContent);
                     FbxBuffer =  fileContent;
                     break;
+                case 'glb':
+                    document.getElementById('glbFileInput').value = dec.decode(fileContent);
+                    GlbBuffer =  fileContent;
+                    break;
                 case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                 case 'jpg':
                 case 'png':
@@ -93,13 +100,11 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                     break;
             }
 
-
-
             // Check if everything is loaded
-            if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif') {
+            if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif' || type==='glb') {
                 checkerCompleteReading( wu_webw_3d_view_local, type );
             }else if ( type==='pdb') {
-                wu_webw_3d_view_local.loadMolecule(content);
+                wu_webw_3d_view_local.loadMolecule(fileContent, "file_reader_cortex");
             }
         };
     })(reader);
@@ -173,7 +178,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
     let mtlFileContent = document.getElementById('mtlFileInput').value;
 
 
-    if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') ){
+    if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') || (nGlb === 1 && GlbBuffer !== '') ){
 
         // Show progress slider
         jQuery('#previewProgressSlider').show();
@@ -251,6 +256,12 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
             console.log("Ignite reading fbx");
             wu_webw_3d_view_local.loadFbxStream(FbxBuffer, texturesStreams);
 
+        } else if (nGlb === 1){
+            console.log("Ignite reading glb");
+
+            console.log("GlbBuffer", GlbBuffer);
+            wu_webw_3d_view_local.loadGlbStream(GlbBuffer);
+
         }
 
     }
@@ -262,7 +273,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
  * @param mtlFilename
  * @param objFilename
  */
-function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename) {
+function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename, glbFilename) {
 
 
     jQuery('#previewProgressSlider')[0].style.visibility = "visible";
@@ -275,9 +286,27 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
     }
 
     if (pdbFileContent) {
-        wu_webw_3d_view_local.loadMolecule(pdbFileContent);
+        wu_webw_3d_view_local.loadMolecule(pdbFileContent, "loader_asset_exists");
         return;
     }
+
+
+    if (glbFilename){
+        const loader = new THREE.GLTFLoader();
+
+        loader.load(glbFilename, gltf => {
+
+                console.log(gltf);
+
+            }, undefined,
+
+            error => {
+                console.log(error);
+            }
+      );
+
+    }
+
 
     //--------------- load all from url (in edit asset) --------------
     if (pathUrl) {
@@ -530,6 +559,9 @@ function loadFileInputLabel(objectType) {
         } else if (objectType === 'fbx') {
             inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file (gif, jpg, png)';
             input.accept = ".fbx,.jpg,.png,.gif";
+        } else if (objectType === 'glb') {
+            inputLabel.innerHTML = 'Or select a glb file';
+            input.accept = ".glb";
         }
 }
 

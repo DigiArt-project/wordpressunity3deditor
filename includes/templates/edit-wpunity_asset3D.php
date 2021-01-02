@@ -49,7 +49,7 @@ function loadAsset3DManagerScripts() {
     wp_enqueue_script('wpunity_load87_MTLloader');
 
     // 5. Pdb loader for molecules
-    //wp_enqueue_script('wpunity_load119_pdbloader');
+    wp_enqueue_script('wpunity_load87_PDBloader');
 
     // 6. Fbx loader
     wp_enqueue_script('wpunity_load119_FBXloader');
@@ -57,11 +57,20 @@ function loadAsset3DManagerScripts() {
     // 7. Trackball controls
     wp_enqueue_script('wpunity_load119_TrackballControls');
 
- 
-	// For the PDB files to annotate molecules in 3D
+    // 8. GLTF Loader
+    wp_enqueue_script('wpunity_load119_GLTFLoader');
+    wp_enqueue_script('wpunity_load119_DRACOLoader');
+    wp_enqueue_script('wpunity_load119_DDSLoader');
+    wp_enqueue_script('wpunity_load119_KTXLoader');
+    
+    // For the PDB files to annotate molecules in 3D
 	wp_enqueue_script('wpunity_load119_CSS2DRenderer');
+	
+	// Load single asset
 	wp_enqueue_script('WU_webw_3d_view');
-	wp_enqueue_script('wu_3d_view_pdb');
+	
+	
+	// Load scripts for asset editor
 	wp_enqueue_script('wpunity_asset_editor_scripts');
 
 	// scroll for images thumnbnails (in clone)
@@ -361,6 +370,15 @@ if($asset_id != null) {
         echo '</script>';
     }
     
+    if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
+        $glbpost = get_post($assetpostMeta['wpunity_asset3d_glb'][0]);
+        $glb_file_name = $glbpost->guid;
+        
+        echo '<script>';
+        echo 'var glb_file_name="'.$glb_file_name.'";';
+        echo '</script>';
+    }
+    
     
     if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
 
@@ -560,86 +578,84 @@ if($asset_id != null) {
     <!-- Form to submit data -->
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
-        
-        
         <!-- CATEGORY -->
-        <div class="" style="display:<?php echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?>">
+<!--        <div class="" style="display:--><?php //echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?><!--">-->
+        <div class="" style="display:none">
+            <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
+
+            <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+            
+                <?php
+            
+                $myGameType = 0;
+                $all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
+                $game_type_slug = $all_game_types[0]->slug;
+            
+                switch ($game_type_slug) {
+                    case 'archaeology_games':
+                        $myGameType=1;
+                        break;
+                    case 'energy_games':
+                        $myGameType=2;
+                        break;
+                    case 'chemistry_games':
+                        $myGameType=3;
+                        break;
+                }
+            
+                $args = array(
+                    'hide_empty' => false,
+                    'meta_query' => array(
+                        array(
+                            'key'       => 'wpunity_assetcat_gamecat',
+                            'value'     => $myGameType,
+                            'compare'   => '='
+                        )
+                    ),
+                    'orderby' => 'name',
+                    'order' => 'DESC',
+                );
+            
+                $cat_terms = get_terms('wpunity_asset3d_cat', $args);
+                $saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
+                ?>
+            
+                <?php if($asset_id == null) { ?>
+                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
+                <?php } else { ?>
+                    <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
+                <?php } ?>
+
+
+                <div class="mdc-simple-menu mdc-select__menu">
+                    <ul class="mdc-list mdc-simple-menu__items">
+
+                        <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
+                            No category selected
+                        </li>
                     
-                    <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
+                        <?php foreach ( $cat_terms as $term ) { ?>
+                        
+                            <?php
+                            if (  strpos($term->name, "Points") !== false )
+                                continue;
+                            ?>
+
+
+                            <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+                                <?php echo $term->name; ?>
+                            </li>
                     
-                    <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                        <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+                        <?php } ?>
 
-						<?php
-      
-						$myGameType = 0;
-						$all_game_types = get_the_terms( $project_id, 'wpunity_game_type' );
-						$game_type_slug = $all_game_types[0]->slug;
+                    </ul>
+                </div>
+            </div>
 
-						switch ($game_type_slug) {
-							case 'archaeology_games':
-								$myGameType=1;
-								break;
-							case 'energy_games':
-								$myGameType=2;
-								break;
-							case 'chemistry_games':
-								$myGameType=3;
-								break;
-						}
+            <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
 
-						$args = array(
-							'hide_empty' => false,
-							'meta_query' => array(
-								array(
-									'key'       => 'wpunity_assetcat_gamecat',
-									'value'     => $myGameType,
-									'compare'   => '='
-								)
-							),
-							'orderby' => 'name',
-							'order' => 'DESC',
-						);
-
-						$cat_terms = get_terms('wpunity_asset3d_cat', $args);
-						$saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
-						?>
-
-						<?php if($asset_id == null) { ?>
-                            <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
-						<?php } else { ?>
-                            <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
-						<?php } ?>
-
-
-                        <div class="mdc-simple-menu mdc-select__menu">
-                            <ul class="mdc-list mdc-simple-menu__items">
-
-                                <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
-                                    No category selected
-                                </li>
-
-								<?php foreach ( $cat_terms as $term ) { ?>
-
-                                    <?php
-                                    if (  strpos($term->name, "Points") !== false )
-                                        continue;
-                                    ?>
-                                    
-                                    
-                                    <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
-										<?php echo $term->name; ?>
-                                    </li>
-
-								<?php } ?>
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
-                
-                <input id="termIdInput" type="hidden" name="term_id" value="">
+            <input id="termIdInput" type="hidden" name="term_id" value="">
         </div>
 
         
@@ -1176,7 +1192,7 @@ if($asset_id != null) {
                             <label id="mtlRadio-label" for="mtlRadio" style="margin-bottom: 0;">MTL & OBJ files</label>
                         </li>
                         
-                        <li class="mdc-form-field" style="display: none;" id="pdbRadioListItem" onclick="loadFileInputLabel('pdb')">
+                        <li class="mdc-form-field" id="pdbRadioListItem" onclick="loadFileInputLabel('pdb')">
                             <div class="mdc-radio">
                                 <input class="mdc-radio__native-control" type="radio" id="pdbRadio" name="objectTypeRadio" value="pdb">
                                 <div class="mdc-radio__background">
@@ -1184,8 +1200,20 @@ if($asset_id != null) {
                                     <div class="mdc-radio__inner-circle"></div>
                                 </div>
                             </div>
-                            <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank file</label>
+                            <label id="pdbRadio-label" for="pdbRadio" style="margin-bottom: 0;">Protein Data Bank (PDB) file</label>
                         </li>
+
+                        <li class="mdc-form-field" id="glbRadioListItem" onclick="loadFileInputLabel('glb')">
+                            <div class="mdc-radio">
+                                <input class="mdc-radio__native-control" type="radio" id="glbRadio" name="objectTypeRadio" value="glb">
+                                <div class="mdc-radio__background">
+                                    <div class="mdc-radio__outer-circle"></div>
+                                    <div class="mdc-radio__inner-circle"></div>
+                                </div>
+                            </div>
+                            <label id="glbRadio-label" for="glbRadio" style="margin-bottom: 0;">Khronos Graphics Language Transmission binary format (glb) file</label>
+                        </li>
+                        
         
                     </ul>
                 </div>
@@ -1208,18 +1236,21 @@ if($asset_id != null) {
                                     $audioID = get_post_meta($myAssetID, 'wpunity_asset3d_audio', true);
     
                                     $pdbID = get_post_meta($myAssetID, 'wpunity_asset3d_pdb', true);
+                                    $glbID = get_post_meta($myAssetID, 'wpunity_asset3d_glb', true);
+                                    
                                     $screenimgID = get_post_meta($myAssetID, 'wpunity_asset3d_screenimage', true);
                                     $diffimgID = get_post_meta($myAssetID, 'wpunity_asset3d_diffimage', true);
                                     $screenimgURL = wp_get_attachment_url($screenimgID) ? wp_get_attachment_url($screenimgID) : plugins_url( '../images/thumb-no-asset.png', dirname(__FILE__) );
         
-                                    $pdb_sample_file_contents = $pdbID ? file_get_contents(wp_get_attachment_url( $pdbID )) : '';
+                                    //$pdb_sample_file_contents = $pdbID ? file_get_contents(wp_get_attachment_url( $pdbID )) : '';
         
                                     echo '<li data-thumb="'. $screenimgURL . '">';
                                     echo '<img class="asset-image-tile-style" src="'. $screenimgURL .'"'.
                                          ' data-asset-id="'. $myAssetID .'"'.
                                          ' data-mtl-file="'. basename( get_attached_file( $mtlID ) ) .'"'.
                                          ' data-obj-file="'. basename( get_attached_file( $objID ) ) .'"'.
-                                         ' data-pdb-content="'. $pdb_sample_file_contents  .'"'.
+                                         // ' data-glb-file="'. basename( get_attached_file( $glbID ) ) .'"'.
+                                         //' data-pdb-content="'. $pdb_sample_file_contents  .'"'.
                                          ' data-path-url="'. $path_url .'/"'. // pathinfo(wp_get_attachment_url($mtlID))['dirname']
                                          ' onclick="loader_asset_exists(this.dataset.pathUrl, this.dataset.mtlFile, this.dataset.objFile, this.dataset.pdbContent);'.
                                          'document.getElementById(\'asset_sourceID\').value = this.dataset.assetId;'.
@@ -1245,7 +1276,7 @@ if($asset_id != null) {
                                        value=""
                                        style="display: <?php echo $isUserloggedIn?'':'none';?>"
                                        multiple
-                                       accept=".obj,.mtl,.jpg,.png,.fbx"
+                                       accept=".obj,.mtl,.jpg,.png,.fbx,.pdb,.glb"
                                        onclick="javascript:clearList()"
                                        
                                        />
@@ -1271,8 +1302,8 @@ if($asset_id != null) {
                             <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
                             <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
                             <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+                            <input type="hidden" name="glbFileInput" value="" id="glbFileInput" />
 
-<!--                            <input type="file" name="fbxFileInputbinary" value="" id="fbxFileInputbinary" accept="application/octet-stream">-->
 
                         
                         </div>
@@ -1434,11 +1465,13 @@ if($asset_id != null) {
         var nPng = 0;
         var nPdb = 0;
         var nGif = 0;
+        var nGlb = 0;
 
         
         
         
         var FbxBuffer = '';
+        var GlbBuffer = '';
         
         var mdc = window.mdc;
         mdc.autoInit();
@@ -1509,17 +1542,22 @@ if($asset_id != null) {
         // For existing 3D models
         // 1 OBJ
         if (typeof path_url != "undefined")
-            loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null);
+            loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null, null);
 
         // 2 PDB
         if (typeof pdb_file_name != "undefined")
-            loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null);
+            loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null, null);
 
         // 3 FBX
         if (typeof path_url_fbx != "undefined") {
 
             console.log( path_url_fbx, fbx_file_name);
-            loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name);
+            loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name, null);
+        }
+
+        // 4 GLB
+        if (typeof pdb_file_name != "undefined") {
+            loader_asset_exists(wu_webw_3d_view, null, null, null, null, null, glb_file_name);
         }
         
         
@@ -1654,23 +1692,27 @@ if($asset_id != null) {
                     jQuery("#termIdInput").attr( "value", selectedCatId );
                 }
 
-                if (cat === 'molecule') {
-                    jQuery("#mtlRadio").prop("checked", false);
-                    jQuery('#mtlRadioListItem').hide();
-                    jQuery("#pdbRadio").prop("checked", true);
-                    jQuery("#pdbRadioListItem").show();
-                } else {
+                // if (cat === 'molecule') {
+                //     jQuery("#mtlRadio").prop("checked", false);
+                //     jQuery('#mtlRadioListItem').hide();
+                //      jQuery("#pdbRadio").prop("checked", true);
+                //      jQuery("#pdbRadioListItem").show();
+                // } else {
 
-                    // jQuery("#fbxRadio").prop("checked", true);
+                     jQuery("#fbxRadio").prop("checked", false);
                     // jQuery("#fbxRadioListItem").show();
-                    
-                    jQuery("#mtlRadio").prop("checked", true);
-                    jQuery("#mtlRadioListItem").show();
-                    
-                    
+
+                    jQuery("#mtlRadio").prop("checked", false);
+                    //jQuery("#mtlRadioListItem").show();
+
+
                     jQuery("#pdbRadio").prop("checked", false);
-                    jQuery("#pdbRadioListItem").hide();
-                }
+                    //jQuery("#pdbRadioListItem").hide();
+
+                jQuery("#glbRadio").prop("checked", true);
+                //jQuery("#glbRadioListItem").show();
+                
+                //}
 
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
 
@@ -1725,15 +1767,17 @@ if($asset_id != null) {
         jQuery(".js no-svg").css("margin-top:0px");
 
         // // // UNIT TEST: Select artifact, Remove
-        // setTimeout( function(){
-        //
-        //     jQuery("#category-select").click(); // Expand category
-        //     jQuery("#78").click(); // Select Artifact category
-        //     jQuery('#assetTitle')[0].value = 'a12'; // Set title
-        //     //jQuery("#fbxRadio-label").click(); // Set fbx type
-        //     jQuery("#fileUploadInput").click(); // Click browse files
-        //
-        // },500);
+        setTimeout( function(){
+
+            jQuery("#category-select").click(); // Expand category
+            jQuery("#78").click(); // Select Artifact category
+            
+            
+            //jQuery('#assetTitle')[0].value = 'a12'; // Set title
+            jQuery("#glbRadio-label").click(); // Set fbx type
+            //jQuery("#fileUploadInput").click(); // Click browse files
+
+        },500);
 
     </script>
 

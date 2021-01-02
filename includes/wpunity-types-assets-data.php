@@ -69,8 +69,6 @@ function wpunity_assets_create_right_metaboxes() {
 
 function wpunity_assets_fetch_description_box_content($post){
     
-    
-    
     echo '<div id="wpunity_fetchDescription_bt" class="wpunity_fetchContentButton"
      onclick="wpunity_fetchDescriptionAjax()">Fetch Description</div>';
     ?>
@@ -333,6 +331,20 @@ $wpunity_databox1 = array(
             'std' => ''
         ),
         array(
+            'name' => 'PDB File',
+            'desc' => 'PDB File',
+            'id' => $wpunity_prefix . 'pdb',
+            'type' => 'text',
+            'std' => ''
+        ),
+        array(
+            'name' => 'GLB File',
+            'desc' => 'GLB File',
+            'id' => $wpunity_prefix . 'glb',
+            'type' => 'text',
+            'std' => ''
+        ),
+        array(
             'name' => 'Audio File',
             'desc' => 'Audio File for the 3D model',
             'id' => $wpunity_prefix . 'audio',
@@ -407,8 +419,6 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'isJoker',
             'type' => 'text',
             'std' => 'false'
-        
-        
         ),array(
             'name' => 'KidsDescription',
             'desc' => 'Description in English for kids',
@@ -427,8 +437,6 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'description_perception',
             'type' => 'text',
             'std' => ''
-        
-        
         ),array(
             'name' => 'GreekTitle',
             'desc' => 'Title in Greek',
@@ -465,8 +473,6 @@ $wpunity_databox1 = array(
             'id' => $wpunity_prefix . 'title_spanish',
             'type' => 'text',
             'std' => ''
-        
-        
         ),array(
             'name' => 'Spanish',
             'desc' => 'Description in Spanish',
@@ -759,6 +765,80 @@ function wpunity_assets_databox_show(){
                 </tr>
 
                 
+                <?php
+                }elseif ($field['id'] == 'wpunity_asset3d_pdb') {?>
+    
+                    <tr>
+                        <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                        <td>
+                            <?php
+                            $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                            if ($valMaxUpload < 100){
+                                echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                                echo "Add to .htaccess the following two lines<br/>";
+                                echo "php_value upload_max_filesize 256M <br />";
+                                echo "php_value post_max_size 512M";
+                            }
+                            $meta_pdb_id = get_post_meta($post->ID, $field['id'], true); ?>
+    
+                            <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                                   value="<?php echo esc_attr($meta_pdb_id ? $meta_pdb_id : $field['std']); ?>" size="30" style="width:65%"/>
+    
+                            <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+    
+                            <br /><br />
+                            Pathfile: <?php echo wp_get_attachment_url($meta_pdb_id); ?><br />
+                            Preview Pdb:<br />
+                            <textarea id="wpunity_asset3d_pdb_preview" readonly style="width:100%;height:200px;"><?php
+                                if(!$meta_pdb_id){
+                                    echo "pdb is not defined";
+                                }else{
+                                    echo "pdb text is too big to state here.";
+                                    //readfile(wp_get_attachment_url($meta_fbx_id), "100");
+                                }
+                                ?>
+                                </textarea>
+                        </td>
+                    </tr>
+    
+    
+                <?php
+            }elseif ($field['id'] == 'wpunity_asset3d_glb') {?>
+
+                <tr>
+                    <th style="width:20%"><label for="<?php echo esc_attr($field['id']); ?>"> <?php echo esc_html($field['name']); ?> </label></th>
+                    <td>
+                        <?php
+                        $valMaxUpload = intval(ini_get('upload_max_filesize'));
+                        if ($valMaxUpload < 100){
+                            echo "Files bigger than ".$valMaxUpload. " MB can not be uploaded <br />";
+                            echo "Add to .htaccess the following two lines<br/>";
+                            echo "php_value upload_max_filesize 256M <br />";
+                            echo "php_value post_max_size 512M";
+                        }
+                        $meta_glb_id = get_post_meta($post->ID, $field['id'], true); ?>
+
+                        <input type="text" name="<?php echo esc_attr($field['id']); ?>" id="<?php echo esc_attr($field['id']); ?>"
+                               value="<?php echo esc_attr($meta_glb_id ? $meta_glb_id : $field['std']); ?>" size="30" style="width:65%"/>
+
+                        <input id="<?php echo esc_attr($field['id']); ?>_btn" type="button" value="Upload <?php echo esc_html($field['name']); ?>"/>
+
+                        <br /><br />
+                        Pathfile: <?php echo wp_get_attachment_url($meta_glb_id); ?><br />
+                        Preview glb:<br />
+                        <textarea id="wpunity_asset3d_glb_preview" readonly style="width:100%;height:200px;"><?php
+                            if(!$meta_glb_id){
+                                echo "glb is not defined";
+                            }else{
+                                echo "glb text is too big to state here.";
+                                //readfile(wp_get_attachment_url($meta_fbx_id), "100");
+                            }
+                            ?>
+                                </textarea>
+                    </td>
+                </tr>
+    
+    
                 <?php
             }elseif ($field['id'] == 'wpunity_asset3d_audio') {?>
 

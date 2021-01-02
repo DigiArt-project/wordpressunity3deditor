@@ -93,6 +93,7 @@ THREE.PDBLoader.prototype = {
 
             // atoms
 
+
             for ( i = 0, l = atoms.length; i < l; i ++ ) {
 
                 var atom = atoms[ i ];
@@ -111,18 +112,31 @@ THREE.PDBLoader.prototype = {
 
             }
 
-            // bonds
 
+
+            // bonds
+            //console.log("bonds", bonds);
+            let colorStart = [];
+            let colorEnd = [];
             for ( i = 0, l = bonds.length; i < l; i ++ ) {
 
                 var bond = bonds[ i ];
 
+
                 var start = bond[ 0 ];
                 var end = bond[ 1 ];
+
 
                 verticesBonds.push( verticesAtoms[ ( start * 3 ) + 0 ] );
                 verticesBonds.push( verticesAtoms[ ( start * 3 ) + 1 ] );
                 verticesBonds.push( verticesAtoms[ ( start * 3 ) + 2 ] );
+
+
+
+                colorStart[i] = [atoms[start][3][0]/255, atoms[start][3][1]/255, atoms[start][3][2] / 255];
+                colorEnd[i]   = [atoms[end][3][0]/255  , atoms[end][3][1]/255  , atoms[end][3][2]   / 255];
+
+
 
                 verticesBonds.push( verticesAtoms[ ( end * 3 ) + 0 ] );
                 verticesBonds.push( verticesAtoms[ ( end * 3 ) + 1 ] );
@@ -130,11 +144,16 @@ THREE.PDBLoader.prototype = {
 
             }
             // build geometry
+            //console.log("verticesAtoms", verticesAtoms);
+            geometryAtoms.setAttribute( 'position', new THREE.Float32BufferAttribute( verticesAtoms, verticesAtoms.length) );
 
-            geometryAtoms.setAttribute( 'position', new THREE.Float32BufferAttribute( verticesAtoms, 3 ) );
-            geometryAtoms.setAttribute( 'color', new THREE.Float32BufferAttribute( colorsAtoms, 3 ) );
+            geometryAtoms.setAttribute( 'color', new THREE.Float32BufferAttribute( colorsAtoms, colorsAtoms.length ) );
+            geometryBonds.setAttribute( 'position', new THREE.Float32BufferAttribute(verticesBonds),
+                                                                                            verticesBonds.length );
+            geometryBonds.setAttribute( 'colorStart', colorStart);
+            geometryBonds.setAttribute( 'colorEnd', colorEnd);
 
-            geometryBonds.setAttribute( 'position', new THREE.Float32BufferAttribute( verticesBonds, 3 ) );
+            //console.log("build", build.geometryAtoms.getAttribute('position').array);
 
             return build;
         }

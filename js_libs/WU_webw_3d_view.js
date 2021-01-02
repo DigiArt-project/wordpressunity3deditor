@@ -226,13 +226,50 @@ class WU_webw_3d_view {
         //     jQuery("#button_qrcode").click(); // close qr code
         //     jQuery("#createModelScreenshotBtn").click();
         // },1000);
+    }
+
+    /* FBX loader */
+    loadGlbStream(GlbBuffer) {
+
+        // Clear Previous
+        this.clearAllAssets();
+
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function( item, loaded, total ) {
+            console.log( item, loaded, total );
+        };
+
+        let Glbloader = new THREE.GLTFLoader( manager );
+
+        console.log("WU webw GlbBuffer", GlbBuffer);
 
 
+        // let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
+        //
+        // fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
+        // this.mixers.push( fbxobject.mixer );
+        //
+        // if (fbxobject.animations.length>0) {
+        //     let action = fbxobject.mixer.clipAction(fbxobject.animations[0]);
+        //     action.play();
+        // } else {
+        //     console.log("Your FBX does not have animation");
+        // }
+        //
+        // let scope = this;
+        // scope.root.add(fbxobject);
+        // scope.render();
+        // jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
+        // setTimeout(function(){
+        //     jQuery("#button_qrcode").click(); // close qr code
+        //     jQuery("#createModelScreenshotBtn").click();
+        // },1000);
     }
 
 
     /* Molecule loader */
-    loadMolecule(url_or_text_pdb) {
+    loadMolecule(url_or_text_pdb, calledFromWhere) {
 
         // Clear Previous
         this.clearAllAssets();
@@ -244,34 +281,36 @@ class WU_webw_3d_view {
         // Load new
         loader.load(url_or_text_pdb, function (pdb) {
 
-            var geometryAtoms = pdb.geometryAtoms;
-            var geometryBonds = pdb.geometryBonds;
-            var json = pdb.json;
+            let geometryAtoms = pdb.geometryAtoms;
 
+            var positions = geometryAtoms.getAttribute('position').array;
+            var colors = geometryAtoms.getAttribute('color').array;
+            let geometryBonds = pdb.geometryBonds;
+            let json = pdb.json;
 
-            var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
+            var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 4);
 
-            var offset = geometryAtoms.center();
-            geometryBonds.translate(offset.x, offset.y, offset.z);
-
-            var positions = geometryAtoms.getAttribute('position');
-            var colors = geometryAtoms.getAttribute('color');
+            //var offset = geometryAtoms.center();
+            //geometryBonds.translate(offset.x, offset.y, offset.z);
 
             var position = new THREE.Vector3();
             var color = new THREE.Color();
+            var colorArchive = [];
 
-            for (var i = 0; i < positions.count; i++) {
+            for (let i = 0; i < positions.length ; i += 3) {
 
                 // Make the atoms
-                position.x = positions.getX(i);
-                position.y = positions.getY(i);
-                position.z = positions.getZ(i);
+                position.x = positions[i];
+                position.y = positions[i + 1];
+                position.z = positions[i + 2];
 
-                color.r = colors.getX(i);
-                color.g = colors.getY(i);
-                color.b = colors.getZ(i);
+                color.r = colors[ i ] ;
+                color.g = colors[ i + 1 ];
+                color.b = colors[ i + 2 ];
 
-                var material = new THREE.MeshPhongMaterial({color: color});
+                colorArchive.push( color );
+
+                var material = new THREE.MeshPhongMaterial({color: color, flatShading: false});
 
                 var object = new THREE.Mesh(sphereGeometry, material);
                 object.position.copy(position);
@@ -280,34 +319,45 @@ class WU_webw_3d_view {
                 scope.root.add(object);
 
                 // Make the label of the atom
-                var atom = json.atoms[i];
+                var atom = json.atoms[i/3];
+
 
                 var text = document.createElement('div');
                 text.className = 'label';
-                text.style.color = 'rgb(' + atom[3][0] + ',' + atom[3][1] + ',' + atom[3][2] + ')';
+                text.style.color = 'rgb(' + color.r* 255 + ',' + color.g* 255+ ',' + color.b * 255 + ')';
                 text.textContent = atom[4];
 
                 var label = new THREE.CSS2DObject(text);
                 label.position.copy(object.position);
-
+                // const axesHelper = new THREE.AxesHelper( 55 );
+                // scope.root.add( axesHelper );
                 scope.root.add(label);
             }
 
             // Make the bonds
             positions = geometryBonds.getAttribute('position');
 
+
+
+            positions.count = positions.array.length;
+
             var start = new THREE.Vector3();
             var end = new THREE.Vector3();
 
-            for (var i = 0; i < positions.count; i += 2) {
+            let colorsStart = geometryBonds.getAttribute('colorStart');
+            let colorsEnd = geometryBonds.getAttribute('colorEnd');
 
-                start.x = positions.getX(i);
-                start.y = positions.getY(i);
-                start.z = positions.getZ(i);
 
-                end.x = positions.getX(i + 1);
-                end.y = positions.getY(i + 1);
-                end.z = positions.getZ(i + 1);
+
+            for (let i = 0; i < positions.count; i += 6) {
+
+                start.x = positions.array[i];
+                start.y = positions.array[i+1];
+                start.z = positions.array[i+2];
+
+                end.x = positions.array[i+3];
+                end.y = positions.array[i+4];
+                end.z = positions.array[i+5];
 
                 start.multiplyScalar(75);
                 end.multiplyScalar(75);
@@ -315,22 +365,40 @@ class WU_webw_3d_view {
                 var HALF_PI = + Math.PI * .5;
                 var distance = start.distanceTo(end);
 
-                var cylinder = new THREE.CylinderGeometry(10, 10, distance, 10, 10, false);
+
+                var cylinder = new THREE.CylinderGeometry(16, 16, distance/2, 20, 5, false);
 
                 var orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
                 var offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
                 var offsetPosition = new THREE.Matrix4();//a matrix to fix pivot position
+
                 orientation.lookAt( start, end, new THREE.Vector3(0,1,0));//look at destination
                 offsetRotation.makeRotationX(HALF_PI);//rotate 90 degs on X
                 orientation.multiply(offsetRotation);//combine orientation with rotation transformations
                 cylinder.applyMatrix4(orientation);
 
-                var object = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial(0xffffff));
 
-                object.position.copy(start);
-                object.position.lerp(end, 0.5);
 
-                scope.root.add(object);
+                var object1 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
+                    color: new THREE.Color(colorsStart[i/6][0], colorsStart[i/6][1], colorsStart[i/6][2]),
+                    flatShading: false,
+                }));
+
+                object1.position.copy(start);
+                object1.position.lerp(end, 0.25);
+
+                scope.root.add(object1);
+
+
+                var object2 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
+                    color: new THREE.Color(colorsEnd[i/6][0], colorsEnd[i/6][1], colorsEnd[i/6][2]),
+                    flatShading: false,
+                }));
+
+                object2.position.copy(start);
+                object2.position.lerp(end, 0.75);
+
+                scope.root.add(object2);
             }
 
             scope.render();
@@ -462,7 +530,7 @@ class WU_webw_3d_view {
         this.controls.dynamicDampingFactor = 0.3;
 
         // Light
-        var ambientLight = new THREE.AmbientLight(0x404040,5);
+        var ambientLight = new THREE.AmbientLight(0x404040,2);
         var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
         var directionalLight2 = new THREE.DirectionalLight(0x909050);
         var directionalLight3 = new THREE.DirectionalLight(0xA0A050);

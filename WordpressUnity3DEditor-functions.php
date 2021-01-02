@@ -122,6 +122,10 @@ function wpunity_register_scripts() {
 		
 		array( 'wpunity_load119_FBXloader', $pluginDirJS.'threejs119/FBXLoader.js'),
 //		array( 'wpunity_load119_pdbloader', $pluginDirJS.'threejs119/PDBLoader.js'),
+		array( 'wpunity_load119_GLTFLoader', $pluginDirJS.'threejs119/GLTFLoader.js'),
+		array( 'wpunity_load119_DRACOLoader', $pluginDirJS.'threejs119/DRACOLoader.js'),
+		array( 'wpunity_load119_DDSLoader', $pluginDirJS.'threejs119/DDSLoader.js'),
+		array( 'wpunity_load119_KTXLoader', $pluginDirJS.'threejs119/KTXLoader.js'),
 		
 		array( 'wpunity_load119_OrbitControls', $pluginDirJS.'threejs119/OrbitControls.js'),
 		array( 'wpunity_load119_TransformControls', $pluginDirJS.'threejs119/TransformControls.js'),
@@ -303,6 +307,7 @@ function my_myme_types($mime_types){
 	$mime_types['pdb'] = 'text/plain';
 //	$mime_types['fbx'] = 'text/plain';
 	$mime_types['fbx'] = 'application/octet-stream';
+	$mime_types['glb'] = 'application/octet-stream';
 	return $mime_types;
 }
 
