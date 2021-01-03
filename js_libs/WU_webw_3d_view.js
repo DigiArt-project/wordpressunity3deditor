@@ -138,6 +138,7 @@ class WU_webw_3d_view {
         this.labelRenderer.render(this.scene, this.camera);
 
         if ( this.mixers.length > 0 ) {
+
             for ( let i = 0; i < this.mixers.length; i ++ ) {
                 this.mixers[ i ].update( this.clock.getDelta() );
             }
@@ -190,6 +191,7 @@ class WU_webw_3d_view {
         scope.scene.remove(scope.pivot);
         scope.pivot.traverse(remover);
         scope.createPivot();
+
     }
 
     /* FBX loader */
@@ -220,6 +222,7 @@ class WU_webw_3d_view {
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
+
         jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
         // setTimeout(function(){
@@ -230,7 +233,7 @@ class WU_webw_3d_view {
 
     /* FBX loader */
     loadGlbStream(GlbBuffer) {
-
+        let scope = this;
         // Clear Previous
         this.clearAllAssets();
 
@@ -239,27 +242,46 @@ class WU_webw_3d_view {
             console.log( item, loaded, total );
         };
 
-        let Glbloader = new THREE.GLTFLoader( manager );
+        let glbloader = new THREE.GLTFLoader( manager );
 
         console.log("WU webw GlbBuffer", GlbBuffer);
 
+        // Load a glTF resource
+        glbloader.load(
+            GlbBuffer,
+            // called when the resource is loaded
+            function ( gltf ) {
 
-        // let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
-        //
-        // fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
-        // this.mixers.push( fbxobject.mixer );
-        //
-        // if (fbxobject.animations.length>0) {
-        //     let action = fbxobject.mixer.clipAction(fbxobject.animations[0]);
-        //     action.play();
-        // } else {
-        //     console.log("Your FBX does not have animation");
-        // }
-        //
-        // let scope = this;
-        // scope.root.add(fbxobject);
-        // scope.render();
-        // jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                //scene.add( gltf.scene );
+
+                // gltf.animations; // Array<THREE.AnimationClip>
+                // gltf.scene; // THREE.Group
+                // gltf.scenes; // Array<THREE.Group>
+                // gltf.cameras; // Array<THREE.Camera>
+                // gltf.asset; // Object
+                if (gltf.animations.length>0) {
+                    let glbmixer = new THREE.AnimationMixer( gltf.scene );
+                    scope.mixers.push( glbmixer );
+                    let action = glbmixer.clipAction(gltf.animations[0]);
+                    action.play();
+                }
+
+                scope.root.add(gltf.scene);
+
+                scope.render();
+                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                scope.zoomer(gltf.scene);
+            },
+            '',
+            // called when loading has errors
+            function ( error ) {
+
+                console.log( 'An error happened' );
+
+            }
+        );
+
+
 
         // setTimeout(function(){
         //     jQuery("#button_qrcode").click(); // close qr code
@@ -402,6 +424,29 @@ class WU_webw_3d_view {
             }
 
             scope.render();
+
+
+            // ------------ Find bounding sphere ----
+            var sphere = wu_webw_3d_view_local.computeSceneBoundingSphereAll(scope.root);
+
+            // translate object to the center
+            scope.root.traverse(function (object) {
+                if (object instanceof THREE.Mesh) {
+                    object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                }
+            });
+
+            // Add to pivot
+            wu_webw_3d_view_local.pivot.add(scope.root);
+
+            // Find new zoom
+            var totalradius = sphere[1];
+            wu_webw_3d_view_local.controls.minDistance = 0.001 * totalradius;
+            wu_webw_3d_view_local.controls.maxDistance = 13 * totalradius;
+
+            //---------------------------------------
+
+
         });
     }
 
@@ -449,22 +494,28 @@ class WU_webw_3d_view {
     }
 
     /* Zoom to object */
-    zoomer(){
+    zoomer(towhatObj){ // FBX obj
 
-        var sphere = this.computeSceneBoundingSphereAll( this.scene.children[5] );
+        if(towhatObj == null) {
+            towhatObj = this.scene.children[5]; // Obj is loaded at 5
+        }
+
+        console.log(towhatObj);
+
+        var sphere = this.computeSceneBoundingSphereAll( towhatObj );
 
         // translate object to the center
-        this.scene.children[5].traverse( function (object) {
+        towhatObj.traverse( function (object) {
             if (object instanceof THREE.Mesh) {
                 object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
             }
         });
 
-        // child 5 is the added object
+
         var totalradius = sphere[1];
 
         this.controls.minDistance = 0.001*totalradius;
-        this.controls.maxDistance = 3*totalradius;
+        this.controls.maxDistance = 13*totalradius;
     }
 
     // Initialize

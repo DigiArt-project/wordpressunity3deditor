@@ -15,7 +15,6 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
     foreach ($attachments as $attachment){
         
-        
         // Delete attachment post (apart from screenshot)
         if (!strpos($attachment->post_title, 'screenshot')) {
     
@@ -70,16 +69,11 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 
     }
     
-    
-    
-    
     fclose($ff);
     
     // 1. Check if already exists
-    // 3. Upload and update DB
-    
-    
-    
+    // 2. Upload and update DB
+
     //----- Upload textures and get final filenames as uploaded on server ----------------------
     $textureNamesIn  = [];
     
@@ -240,18 +234,22 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     $nFiles = count($_FILES['multipleFilesInput']['name']);
     
     $index_file_fbx = -1;
+    $index_file_glb = -1;
+    
     for ( $i = 0 ; $i < $nFiles; $i ++){
        if ( strpos($_FILES['multipleFilesInput']['name'][$i],'.fbx')>0 ){
            $index_file_fbx = $i;
+        }
+    
+        if ( strpos($_FILES['multipleFilesInput']['name'][$i],'.glb')>0 ){
+            $index_file_glb = $i;
         }
     }
     
     if (strlen($fbx_content) > 50 ) { // Text   // 20 is the Kaydara header for fbx binary. 50 to be sure.
     
         // 1. Upload FBX file as TEXT
-        $fbxFile_id = wpunity_upload_AssetText($fbx_content, // content
-            'fbx'.$assetTitleForm, // asset title
-            $asset_newID,
+        $fbxFile_id = wpunity_upload_AssetText($fbx_content, 'fbx'.$assetTitleForm, $asset_newID,
             null, null);
     
         // 2. Set value of attachment IDs at custom fields
@@ -261,9 +259,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
         if ($index_file_fbx!=-1) {
             // 1. Upload FBX file as BINARY
-            $fbxFile_id = wpunity_upload_AssetText(null, // content
-                'fbx' . $assetTitleForm, // asset title
-                $asset_newID,
+            $fbxFile_id = wpunity_upload_AssetText(null, 'fbx' . $assetTitleForm, $asset_newID,
                 $_FILES, $index_file_fbx);
     
             // 2. Set value of attachment IDs at custom fields
@@ -274,8 +270,18 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     // PDB upload and add id of uploaded file to postmeta wpunity_asset3d_pdb of asset
     if ($_POST['pdbFileInput']!=null){
         if (strlen($_POST['pdbFileInput'])>0) {
-            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'material' . $assetTitleForm, $asset_newID, null, null);
+            $pdbFile_id = wpunity_upload_AssetText($_POST['pdbFileInput'], 'pdb' . $assetTitleForm, $asset_newID, null, null);
             update_post_meta($asset_newID, 'wpunity_asset3d_pdb', $pdbFile_id);
+        }
+    }
+    
+    
+    // GLB upload and add id of uploaded file to postmeta wpunity_asset3d_glb of asset
+    if ($_POST['glbFileInput']!=null){
+        if (strlen($_POST['glbFileInput'])>0) {
+            $glbFile_id = wpunity_upload_AssetText(null, 'glb' . $assetTitleForm, $asset_newID,
+                $_FILES, $index_file_glb); // $_POST['glbFileInput']
+            update_post_meta($asset_newID, 'wpunity_asset3d_glb', $glbFile_id);
         }
     }
 }

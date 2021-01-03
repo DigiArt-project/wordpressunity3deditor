@@ -292,18 +292,68 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
 
 
     if (glbFilename){
+        console.log("glbFilename", glbFilename);
+
+        // Instantiate a loader
         const loader = new THREE.GLTFLoader();
 
-        loader.load(glbFilename, gltf => {
+        // Load a glTF resource
+        loader.load(
+            // resource URL
+            glbFilename,
+            // called when the resource is loaded
+            function ( gltf ) {
 
-                console.log(gltf);
+                if (gltf.animations.length>0) {
+                    let glbmixer = new THREE.AnimationMixer(gltf.scene);
+                    wu_webw_3d_view_local.mixers.push(glbmixer);
+                    let action = glbmixer.clipAction(gltf.animations[0]);
+                    action.play();
+                }
 
-            }, undefined,
+                // ------------ Find bounding sphere ----
+                var sphere = wu_webw_3d_view_local.computeSceneBoundingSphereAll(gltf.scene);
 
-            error => {
-                console.log(error);
+                // translate object to the center
+                gltf.scene.traverse(function (object) {
+                    if (object instanceof THREE.Mesh) {
+                        object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                    }
+                });
+
+                // Add to pivot
+                wu_webw_3d_view_local.pivot.add(gltf.scene);
+
+                // Find new zoom
+                var totalradius = sphere[1];
+                wu_webw_3d_view_local.controls.minDistance = 0.001 * totalradius;
+                wu_webw_3d_view_local.controls.maxDistance = 13 * totalradius;
+
+                //---------------------------------------
+
+
+
+                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
+            },
+            // called while loading is progressing
+            function ( xhr ) {
+
+                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+            },
+            // called when loading has errors
+            function ( error ) {
+
+                console.log( 'An error happened', error );
+
             }
-      );
+        );
+
+
+
+
+
 
     }
 

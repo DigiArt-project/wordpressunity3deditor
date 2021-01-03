@@ -57,120 +57,87 @@ THREE.GLTFLoader = ( function () {
 
             var scope = this;
 
-            var resourcePath;
+            if (url.constructor !== ArrayBuffer) {
 
-            if ( this.resourcePath !== '' ) {
+                var resourcePath;
 
-                resourcePath = this.resourcePath;
+                if (this.resourcePath !== '') {
 
-            } else if ( this.path !== '' ) {
+                    resourcePath = this.resourcePath;
 
-                resourcePath = this.path;
+                } else if (this.path !== '') {
 
+                    resourcePath = this.path;
+
+                } else {
+
+                    resourcePath = THREE.LoaderUtils.extractUrlBase(url);
+
+                }
+
+                // Tells the LoadingManager to track an extra item, which resolves after
+                // the model is fully loaded. This means the count of items loaded will
+                // be incorrect, but ensures manager.onLoad() does not fire early.
+                this.manager.itemStart(url);
+
+                var _onError = function (e) {
+
+                    if (onError) {
+
+                        onError(e);
+
+                    } else {
+
+                        console.error(e);
+
+                    }
+
+                    scope.manager.itemError(url);
+                    scope.manager.itemEnd(url);
+
+                };
+
+                var loader = new THREE.FileLoader(this.manager);
+
+                loader.setPath(this.path);
+                loader.setResponseType('arraybuffer');
+                loader.setRequestHeader(this.requestHeader);
+                loader.setWithCredentials(this.withCredentials);
+
+                loader.load(url, function (data) {
+
+                    try {
+
+                        scope.parse(data, resourcePath, function (gltf) {
+
+                            onLoad(gltf);
+
+                            scope.manager.itemEnd(url);
+
+                        }, _onError);
+
+                    } catch (e) {
+
+                        _onError(e);
+
+                    }
+
+                }, onProgress, _onError);
             } else {
 
-                resourcePath = THREE.LoaderUtils.extractUrlBase( url );
+                // url is  ArrayBuffer
+                scope.parse(url, '', function (gltf) {
+
+                    onLoad(gltf);
+
+                    //scope.manager.itemEnd(url);
+
+                }, '');
+
+
 
             }
-
-            // Tells the LoadingManager to track an extra item, which resolves after
-            // the model is fully loaded. This means the count of items loaded will
-            // be incorrect, but ensures manager.onLoad() does not fire early.
-            this.manager.itemStart( url );
-
-            var _onError = function ( e ) {
-
-                if ( onError ) {
-
-                    onError( e );
-
-                } else {
-
-                    console.error( e );
-
-                }
-
-                scope.manager.itemError( url );
-                scope.manager.itemEnd( url );
-
-            };
-
-            var loader = new THREE.FileLoader( this.manager );
-
-            loader.setPath( this.path );
-            loader.setResponseType( 'arraybuffer' );
-            loader.setRequestHeader( this.requestHeader );
-            loader.setWithCredentials( this.withCredentials );
-
-            loader.load( url, function ( data ) {
-
-                try {
-
-                    scope.parse( data, resourcePath, function ( gltf ) {
-
-                        onLoad( gltf );
-
-                        scope.manager.itemEnd( url );
-
-                    }, _onError );
-
-                } catch ( e ) {
-
-                    _onError( e );
-
-                }
-
-            }, onProgress, _onError );
-
         },
-
-        loadStreamGLB: function ( data, onLoad, onProgress, onError ) {
-
-            var scope = this;
-
-            var _onError = function ( e ) {
-
-                if ( onError ) {
-
-                    onError( e );
-
-                } else {
-
-                    console.error( e );
-
-                }
-
-            };
-
-            var loader = new THREE.FileLoader( this.manager );
-
-            loader.setPath( this.path );
-            loader.setResponseType( 'arraybuffer' );
-            loader.setRequestHeader( this.requestHeader );
-            loader.setWithCredentials( this.withCredentials );
-
-            loader.load( url, function ( data ) {
-
-                try {
-
-                    scope.parse( data, resourcePath, function ( gltf ) {
-
-                        onLoad( gltf );
-
-                        scope.manager.itemEnd( url );
-
-                    }, _onError );
-
-                } catch ( e ) {
-
-                    _onError( e );
-
-                }
-
-            }, onProgress, _onError );
-
-        },
-
 
 
         setDRACOLoader: function ( dracoLoader ) {
@@ -929,6 +896,8 @@ THREE.GLTFLoader = ( function () {
         this.name = EXTENSIONS.KHR_BINARY_GLTF;
         this.content = null;
         this.body = null;
+
+        console.log(data);
 
         var headerView = new DataView( data, 0, BINARY_EXTENSION_HEADER_LENGTH );
 

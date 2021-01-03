@@ -1556,7 +1556,7 @@ if($asset_id != null) {
         }
 
         // 4 GLB
-        if (typeof pdb_file_name != "undefined") {
+        if (typeof glb_file_name != "undefined") {
             loader_asset_exists(wu_webw_3d_view, null, null, null, null, null, glb_file_name);
         }
         

@@ -293,7 +293,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
         if ( ! scope.noZoom || ! scope.noPan ) {
 
-            if ( _eye.lengthSq() > scope.maxDistance * scope.maxDistance ) {
+            if ( _eye.lengthSq() >   scope.maxDistance * scope.maxDistance ) {
 
                 scope.object.position.addVectors( scope.target, _eye.setLength( scope.maxDistance ) );
                 _zoomStart.copy( _zoomEnd );
