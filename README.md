@@ -1,18 +1,28 @@
 # README #
 
-WordpressUnity3DEditor 
+WPUnity 
 
-A Wordpress plugin for making Unity3D games through a web interface. 
+A Wordpress plugin for uploading 3D assets and assembling sceneces through a web interface. 
+
+
+
+
 
 ### What is this repository for? ###
 
 * This code helps someone to build a Unity3D game remotely without writting any code. It exploits the pros of Wordpress to allow drag'n'drop actions to make a scene and play it. 
 
+
+v2.0 Latest version 1_1_2020
+
+Lights have been added (Spot, Directional, Sphere)
+
+
 v1.0 Production 9_2018
 
 ### Do you have a demo?
 
-Yes it is : http://digiart.mklab.iti.gr
+Yes it is : https://heliosvr.mklab.iti.gr
 
 You will need the Firefox Web browser to access the tool. At least 2GBs of RAM should be available in your machine otherwise the models can not be loaded. 
 

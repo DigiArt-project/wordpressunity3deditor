@@ -124,6 +124,55 @@ THREE.GLTFLoader = ( function () {
 
         },
 
+        loadStreamGLB: function ( data, onLoad, onProgress, onError ) {
+
+            var scope = this;
+
+            var _onError = function ( e ) {
+
+                if ( onError ) {
+
+                    onError( e );
+
+                } else {
+
+                    console.error( e );
+
+                }
+
+            };
+
+            var loader = new THREE.FileLoader( this.manager );
+
+            loader.setPath( this.path );
+            loader.setResponseType( 'arraybuffer' );
+            loader.setRequestHeader( this.requestHeader );
+            loader.setWithCredentials( this.withCredentials );
+
+            loader.load( url, function ( data ) {
+
+                try {
+
+                    scope.parse( data, resourcePath, function ( gltf ) {
+
+                        onLoad( gltf );
+
+                        scope.manager.itemEnd( url );
+
+                    }, _onError );
+
+                } catch ( e ) {
+
+                    _onError( e );
+
+                }
+
+            }, onProgress, _onError );
+
+        },
+
+
+
         setDRACOLoader: function ( dracoLoader ) {
 
             this.dracoLoader = dracoLoader;
