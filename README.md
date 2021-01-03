@@ -1,8 +1,6 @@
-# README #
+wpUnity 
 
-WPUnity 
-
-A Wordpress plugin for uploading 3D assets and assembling sceneces through a web interface. 
+A Wordpress plugin for uploading 3D assets and assembling scenes through a web interface. 
 
 ##Basic Interfaces
 
