@@ -500,7 +500,6 @@ class WU_webw_3d_view {
             towhatObj = this.scene.children[5]; // Obj is loaded at 5
         }
 
-        console.log(towhatObj);
 
         var sphere = this.computeSceneBoundingSphereAll( towhatObj );
 
@@ -550,7 +549,7 @@ class WU_webw_3d_view {
             this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
 
         // Add audio listener to the camera
-        console.log("this.audioElement", this.audioElement);
+        //console.log("this.audioElement", this.audioElement);
 
         if (this.audioElement!=null) {
             console.log("B");

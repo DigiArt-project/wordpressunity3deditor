@@ -1110,7 +1110,7 @@ if($asset_id != null) {
 
                         var titLang = eval('asset_title_'+currLanguage.toLowerCase()+'_saved');
 
-                        console.log(titLang);
+                        //console.log(titLang);
 
                         if (titLang == '')
                             titLang = eval('asset_title_english_saved');
@@ -1489,7 +1489,7 @@ if($asset_id != null) {
         
         let audio_file = document.getElementById( 'audioFile' );
         
-        console.log("audio_file", audio_file);
+        //console.log("audio_file", audio_file);
         
         if (audio_file==null){
         
@@ -1551,7 +1551,7 @@ if($asset_id != null) {
         // 3 FBX
         if (typeof path_url_fbx != "undefined") {
 
-            console.log( path_url_fbx, fbx_file_name);
+            //console.log( path_url_fbx, fbx_file_name);
             loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name, null);
         }
 

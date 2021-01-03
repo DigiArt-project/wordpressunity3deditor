@@ -292,7 +292,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
 
 
     if (glbFilename){
-        console.log("glbFilename", glbFilename);
+        //console.log("glbFilename", glbFilename);
 
         // Instantiate a loader
         const loader = new THREE.GLTFLoader();
