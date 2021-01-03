@@ -18,8 +18,11 @@ Scene synthesis
 
 v2.0 Latest version 1_1_2020
 
-Lights have been added (Spot, Directional, Sphere)
-
+- Lights have been added (Spot, Directional, Sphere)
+- FBX format is added.
+- Animation is supported
+- PDB format is added
+- GLB format is on the go
 
 v1.0 Production 9_2018
 
