@@ -4,8 +4,13 @@ WPUnity
 
 A Wordpress plugin for uploading 3D assets and assembling sceneces through a web interface. 
 
+##Basic Interfaces
 
+Asset Uploader and Previewer
+![Example Asset](AssetExample.jpg)
 
+Scene synthesis
+![Example Scene](SceneExample.jpg)
 
 
 ### What is this repository for? ###
