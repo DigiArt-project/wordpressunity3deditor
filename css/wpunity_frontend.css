@@ -1492,3 +1492,16 @@ video {
     margin-right: -50%;
     transform: translate(-50%, -50%);
 }
+
+.center-message {
+    position:absolute;
+    top:50%;
+    left:50%;
+}
+
+#informationPanel {
+    display: none;
+    padding-top:0px;
+}
+
+.assetDescSt {border: 1px solid rgba(0, 0, 0, 0.3);width:100%;}

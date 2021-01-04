@@ -200,12 +200,15 @@ if($scene_id != 0 ) {
     
     
 }else {
-
-    if (!isset($_GET['singleproject']))
-        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
-    else
-        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
     
+    $goBackToLink = home_url()."/wpunity-list-shared-assets/?".
+        (!isset($_GET['singleproject'])?"wpunity_game=":"wpunity_project_id=").$project_id;
+    
+//    if (!isset($_GET['singleproject']))
+//        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
+//    else
+//        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
+
 }
 
 // ============================================
@@ -217,8 +220,8 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     fwrite($fp, print_r($_FILES, true));
     fclose($fp);
     
-    
-    include 'edit-wpunity_asset3D_languages_support1.php';
+    $asset_language_pack = wpunity_asset3D_languages_support1($_POST);
+    //include 'edit-wpunity_asset3D_languages_support1.php';
     
     // Fonts Selected
     $assetFonts = esc_attr(strip_tags($_POST['assetFonts']));
@@ -244,13 +247,13 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 	// NEW Asset: submit info to backend
 	if($asset_id == null){
         
-        echo "<div style='position:absolute;top:50%;left:50%;'>Creating asset...</div>";
+        echo "<div class='center-message'>Creating asset...</div>";
 	    
 		//It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
 		$asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
 	}else {
         
-        echo "<div style='position:absolute;top:50%;left:50%;'>Updating asset...</div>";
+        echo "<div class='center-message'>Updating asset...</div>";
         
 	 	// Edit an existing asset: Return true if updated, false if failed
    		$asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
@@ -264,12 +267,10 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
             // NoCloning: Upload files from POST but check first
             // if any 3D files have been selected for upload
 		    if (count($_FILES['multipleFilesInput']['name']) > 0 && $_FILES['multipleFilesInput']['error'][0] != 4 ){
-                wpunity_create_asset_3DFilesExtra_frontend($asset_id, $assetTitleForm,
+                wpunity_create_asset_3DFilesExtra_frontend($asset_id, $asset_language_pack['assetTitleForm'],
                     $gameSlug);
             }
 
-		    
-		    
 			update_post_meta($asset_id, 'wpunity_asset3d_isCloned', 'false');
 			update_post_meta($asset_id, 'wpunity_asset3d_isJoker', $isJoker);
 			
@@ -282,12 +283,11 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 		}
 	
 	}
-    
 
     // SCREENSHOT: upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
     if ($_POST['sshotFileInput']!=null) {
         if (strlen($_POST['sshotFileInput'])>0) {
-            wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $assetTitleForm,$asset_id);
+            wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $asset_language_pack['assetTitleForm'],$asset_id);
         }
     }
 	
@@ -319,12 +319,14 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
 //---------------------------- End of handle Submit  -------------------------
 
 
-if ($project_scope == 0) {
-	$single_first = "Tour";
-} else if ($project_scope == 1){
-	$single_first = "Lab";
-} else {
-	$single_first = "Project";
+if (!empty($project_scope)) {
+    if ($project_scope == 0) {
+        $single_first = "Tour";
+    } else if ($project_scope == 1){
+        $single_first = "Lab";
+    } else {
+        $single_first = "Project";
+    }
 }
 
 $back_3d_color = 'rgb(0,0,0)';
@@ -399,8 +401,9 @@ if($asset_id != null) {
             $url = $k->guid;
             
             // ignore screenshot attachment
-            if (!strpos($url, 'texture'))
+            if (!strpos($url, 'texture')) {
                 continue;
+            }
             
             $textures_fbx_string_connected .= $url.'|';
         }
@@ -429,7 +432,18 @@ get_header();
 $dropdownHeading = ($asset_id == null ? "Select a category" : "Category");
 
 // Languages fields show
-include 'edit-wpunity_asset3D_languages_support2.php';
+//include 'edit-wpunity_asset3D_languages_support2.php';
+$assetLangPack2 = wpunity_asset3D_languages_support2($asset_id);
+
+echo '<script>';
+echo 'var asset_title_english_saved="'.$assetLangPack2['asset_title_saved'].'";';
+echo 'var asset_title_greek_saved="'.$assetLangPack2['asset_title_greek_saved'].'";';
+echo 'var asset_title_spanish_saved="'.$assetLangPack2['asset_title_spanish_saved'].'";';
+echo 'var asset_title_french_saved="'.$assetLangPack2['asset_title_french_saved'].'";';
+echo 'var asset_title_german_saved="'.$assetLangPack2['asset_title_german_saved'].'";';
+echo 'var asset_title_russian_saved="'.$assetLangPack2['asset_title_russian_saved'].'";';
+echo '</script>';
+
 
 // Retrieve Fonts saved
 $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_fonts', true));
@@ -446,7 +460,7 @@ if($asset_id != null) {
 	if($saved_term[0]->slug == 'terrain'){
 	
 	    // Wind Energy Terrain
-        include 'edit-wpunity_asset3D-WindEnergy1.php.php';
+        include 'edit-wpunity_asset3D-WindEnergy1.php';
 		
 	}elseif (in_array($saved_term[0]->slug , ['artifact'])) {
 	 
@@ -458,7 +472,7 @@ if($asset_id != null) {
 		// Image 1,2,3,4
         for ($i=1; $i <= 4; $i++){
             $image_id = get_post_meta($asset_id, "wpunity_asset3d_image".$i);
-            if (count($image_id)>0) {
+            if (!empty($image_id)) {
                 $images_urls[$i] = wp_get_attachment_metadata($image_id[0]);
                 $images_urls[$i] = $images_urls[$i]['file'] == '' ? null :
                     wp_get_upload_dir()['baseurl'] . "/" . $images_urls[$i]['file'];
@@ -478,10 +492,10 @@ if($asset_id != null) {
         .custom-header { display:none; }
         .main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
         .site-branding {display:none;}
-        #content {padding:0px;}
+        #content {padding:0;}
         .site-content-contain{margin:0;overflow:hidden;}
-        html { margin-top: 0px !important; }
-        * html body { margin-top: 0px !important; }
+        html { margin-top: 0 !important; }
+        * html body { margin-top: 0 !important; }
     </style>
 
     <div id="wrapper_3d_inner" class="asset_editor_3dpanel">
@@ -663,7 +677,7 @@ if($asset_id != null) {
         
         <!--   TITLE , DESCRIPTION , 3D files  -->
         
-        <div class="" id="informationPanel" style="display: none;padding-top:0px;">
+        <div class="" id="informationPanel">
 
             <!-- TITLE , DESCRIPTION -->
             <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
@@ -672,8 +686,8 @@ if($asset_id != null) {
                     <input id="assetTitle" type="text" class="changablefont mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="3" maxlength="40"
                            style="border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em; font-family: <?php echo $curr_font?>; "
-                           value="<?php echo trim($asset_title_saved); ?>">
-                    <label for="assetTitle" class="mdc-textfield__label"><?php echo $asset_title_label; ?> </label>
+                           value="<?php echo trim($assetLangPack2['asset_title_saved']); ?>">
+                    <label for="assetTitle" class="mdc-textfield__label"><?php echo $assetLangPack2['asset_title_label']; ?> </label>
                     <div class="mdc-textfield__bottom-line"></div>
                 </div>
                 
@@ -693,7 +707,12 @@ if($asset_id != null) {
                 </ul>
 
 
-                <?php include 'edit-wpunity_asset3D_languages_support3.php'; ?>
+                <?php
+                
+                //include 'edit-wpunity_asset3D_languages_support3.php';
+                wpunity_asset3D_languages_support3($curr_font, $assetLangPack2);
+                
+                ?>
 
                 <!-- Select fonts -->
                 <div id="assetFontsDiv" style="width:100%;margin-bottom:15px;">
@@ -861,7 +880,7 @@ if($asset_id != null) {
             
                 <!-- Show Data (for preview mode) -->
                 
-                <div id="assetTitleView" style="font-size:24pt; width:-moz-fit-content;margin:auto; "><?php echo trim($asset_title_saved); ?></div>
+                <div id="assetTitleView" style="font-size:24pt; width:-moz-fit-content;margin:auto; "><?php echo $assetLangPack2['asset_title_saved']; ?></div>
 
                 <hr />
                 
@@ -1015,47 +1034,47 @@ if($asset_id != null) {
                 <div class="wrapper_lang">
                     
                     <div id="English" class="tabcontent2 active" style="font-family:<?php echo $curr_font?>">
-                        <?php echo trim($asset_desc_saved);?>
+                        <?php echo trim($assetLangPack2['asset_desc_saved']);?>
                     </div>
 
                     <div id="EnglishKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                        <?php echo trim($asset_desc_kids_saved);?>
+                        <?php echo trim($assetLangPack2['asset_desc_kids_saved']);?>
                     </div>
 
                     <div id="EnglishExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                        <?php echo trim($asset_desc_experts_saved);?>
+                        <?php echo trim($assetLangPack2['asset_desc_experts_saved']);?>
                     </div>
 
                     <div id="EnglishPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                        <?php echo trim($asset_desc_perception_saved);?>
+                        <?php echo trim($assetLangPack2['asset_desc_perception_saved']);?>
                     </div>
 
 
-                    <div id="Greek" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($asset_desc_greek_saved); ?></div>
-                    <div id="GreekKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($asset_desc_greek_kids_saved); ?></div>
-                    <div id="GreekExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($asset_desc_greek_experts_saved); ?></div>
-                    <div id="GreekPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($asset_desc_greek_perception_saved); ?></div>
+                    <div id="Greek" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_saved']); ?></div>
+                    <div id="GreekKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_kids_saved']); ?></div>
+                    <div id="GreekExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_experts_saved']); ?></div>
+                    <div id="GreekPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_perception_saved']); ?></div>
                     
-                    <div id="Spanish" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_spanish_saved); ?></div>
-                    <div id="SpanishKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_spanish_kids_saved); ?></div>
-                    <div id="SpanishExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_spanish_experts_saved); ?></div>
-                    <div id="SpanishPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_spanish_perception_saved); ?></div>
+                    <div id="Spanish" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_saved']); ?></div>
+                    <div id="SpanishKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_kids_saved']); ?></div>
+                    <div id="SpanishExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_experts_saved']); ?></div>
+                    <div id="SpanishPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_perception_saved']); ?></div>
                     
                     
-                    <div id="French" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_french_saved); ?></div>
-                    <div id="FrenchKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_french_kids_saved); ?></div>
-                    <div id="FrenchExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_french_experts_saved); ?></div>
-                    <div id="FrenchPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_french_perception_saved); ?></div>
+                    <div id="French" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_saved']); ?></div>
+                    <div id="FrenchKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_kids_saved']); ?></div>
+                    <div id="FrenchExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_experts_saved']); ?></div>
+                    <div id="FrenchPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_perception_saved']); ?></div>
 
-                    <div id="German" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_german_saved); ?></div>
-                    <div id="GermanKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_german_kids_saved); ?></div>
-                    <div id="GermanExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_german_experts_saved); ?></div>
-                    <div id="GermanPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_german_perception_saved); ?></div>
+                    <div id="German" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_saved']); ?></div>
+                    <div id="GermanKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_kids_saved']); ?></div>
+                    <div id="GermanExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_experts_saved']); ?></div>
+                    <div id="GermanPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_perception_saved']); ?></div>
 
-                    <div id="Russian" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_saved); ?></div>
-                    <div id="RussianKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_kids_saved); ?></div>
-                    <div id="RussianExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_experts_saved); ?></div>
-                    <div id="RussianPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($asset_desc_russian_perception_saved); ?></div>
+                    <div id="Russian" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_saved']); ?></div>
+                    <div id="RussianKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_kids_saved']); ?></div>
+                    <div id="RussianExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_experts_saved']); ?></div>
+                    <div id="RussianPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_perception_saved']); ?></div>
 
 
                 </div>
@@ -1144,7 +1163,7 @@ if($asset_id != null) {
                         jQuery("#confwindow")[0].style.display="";
                         jQuery("#confwindow_helper")[0].style.display="none";
 
-                        document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $asset_title_saved; ?>";
+                        document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $assetLangPack2['asset_title_saved']; ?>";
 
                         wpunity_notify_confpeers();
                     }

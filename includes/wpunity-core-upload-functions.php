@@ -490,17 +490,6 @@ function wpunity_upload_asset_screenshot($imagefile, $imgTitle, $parent_post_id)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Immitation of $_FILE through $_POST . This is for objs, fbx and mtls
 function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $TheFiles, $index_file) {
     
@@ -562,4 +551,173 @@ function wpunity_upload_AssetText($textContent, $textTitle, $parent_post_id, $Th
     }
    
     return false;
+}
+
+function escstr($in, $what){
+    return esc_attr(strip_tags($in, $what));
+}
+
+function wpunity_asset3D_languages_support1($allPOSTval){
+    
+    $output = [];
+    
+    $titLang = ['', 'Greek', 'Spanish', 'French', 'German', 'Russian'];
+    $access = ['','Kids','Experts','Perception'];
+    
+    foreach ($titLang as $tl){
+        
+        $output['assetTitleForm'.$tl] = escstr($allPOSTval['assetTit'.($tl === ''? 'le' : $tl)],"<b><i>");
+        
+        foreach ($access as $a){
+            $output['assetDescForm'.$tl.$a] = escstr($allPOSTval['assetDesc'.$tl.$a],"<b><i>");
+        }
+        
+    }
+    
+    // Auto Translation by Google
+//    if($assetDescFormGreek=='' && $assetDescForm !='' && $hasTranslator){
+//        $translate = new TranslateClient();
+//        $result = $translate->translate($assetDescForm, ['target' => 'el']);
+//        $assetDescFormGreek = $result[text];
+//    }
+    
+    return $output;
+}
+
+function wpunity_asset3D_languages_support2($asset_id){
+    
+    $a = ($asset_id == null);
+    
+    $output = [];
+    $output['asset_title_saved'] = ($a ? "" : get_the_title( $asset_id ));
+    $output['asset_title_label'] = ($a ? "Enter a title for the asset in English" : "Edit the title of the asset in English");
+    
+    $output['asset_desc_label'] = ($a ? "Add a description for the asset" : "Edit the description of the asset");
+    $output['asset_desc_saved'] = ($a ? "" : get_post_field('post_content', $asset_id));
+    $output['asset_desc_kids_label'] = ($a ? "Add a description of the asset for kids" : "Edit the description of the asset for kids");
+    $output['asset_desc_kids_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_kids', true));
+    $output['asset_desc_experts_label'] = ($a ? "Add a description of the asset for experts in archaeology" : "Edit the description of the asset for experts in archaeology");
+    $output['asset_desc_experts_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_experts', true));
+    $output['asset_desc_perception_label'] = ($a ? "Add a description of the asset for people with perception problems" : "Edit the description of the asset for people with perception problems");
+    $output['asset_desc_perception_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_perception', true));
+    
+    $lang = ['greek','spanish','french','german','russian'];
+    
+    foreach ($lang as $l){
+        $output['asset_title_'.$l.'_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_title_'.$l, true));
+        $output['asset_desc_'.$l.'_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_'.$l, true));
+        $output['asset_desc_'.$l.'_kids_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_'.$l.'_kids', true));
+        $output['asset_desc_'.$l.'_experts_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_'.$l.'_experts', true));
+        $output['asset_desc_'.$l.'_perception_saved'] = ($a ? "" : get_post_meta($asset_id,'wpunity_asset3d_description_'.$l.'_perception', true));
+    }
+    
+    $l = 'greek';
+    
+    $output['asset_title_'.$l.'_label'] = ($a ? "Ο τίτλος του αντικειμένου" : "Τροποποίηση τίτλου αντικειμένου");
+    $output['asset_desc_'.$l.'_label'] = ($a ? "Πρόσθεσε μια περιγραφή για το αντικείμενο" : "Τροποποίηση περιγραφής αντικειμένου");
+    $output['asset_desc_'.$l.'_kids_label'] = ($a ? "Η περιγραφή του αντικειμένου για παιδιά" : "Τροποποίηση περιγραφής του αντικειμένου για παιδιά");
+    $output['asset_desc_'.$l.'_experts_label'] = ($a ? "Η περιγραφή του αντικειμένου για ειδικούς στην αρχαιολογία" : "Τροποποίηση περιγραφής του αντικειμένου για ειδικούς στην αρχαιολογία");
+    $output['asset_desc_'.$l.'_perception_label'] = ($a ? "Η περιγραφή του αντικειμένου για άτομα με προβλήματατα αντίληψης" : "Τροποποίηση περιγραφής του αντικειμένου για άτομα με προβλήματατα αντίληψης");
+
+    
+    $l = 'spanish';
+    
+    $output['asset_title_'.$l.'_label'] = ($a ? "Ingrese un título para su activo" : "Edite el título del activo");
+    $output['asset_desc_'.$l.'_label'] = ($a ? "Agregue una pequeña descripción para su activo" : "Edite la descripción de su activo");
+    $output['asset_desc_'.$l.'_kids_label']  = ($a ? "Agregue una descripción de su activo para niños" : "Editar la descripción del activo para niños");
+    $output['asset_desc_'.$l.'_experts_label'] = ($a ? "Agregar una descripción del activo para expertos en arqueología" : "Edite la descripción del activo para expertos en arqueología.");
+    $output['asset_desc_'.$l.'_perception_label'] = ($a ? "Agregue una descripción del activo para personas con problemas de percepción" : "Edite la descripción del activo para personas con problemas de percepción");
+    
+    $l = 'french';
+    
+    $output['asset_title_'.$l.'_label'] = ($a ? "Entrez un titre pour votre bien" : "Modifier le titre de l'actif");
+    $output['asset_desc_'.$l.'_label'] = ($a ? "Ajouter une description de votre actif" : "Modifier la description de votre bien");
+    $output['asset_desc_'.$l.'_kids_label'] = ($a ? "Ajouter une description pour votre bien pour enfants" : "Modifier la description de l'actif pour les enfants");
+    $output['asset_desc_'.$l.'_experts_label'] = ($a ? "Ajouter une description de l'actif pour les experts en archéologie" : "Modifier la description de l'actif pour les experts en archéologie");
+    $output['asset_desc_'.$l.'_perception_label'] = ($a ? "Ajouter une description de l'actif pour les personnes ayant des problèmes de perception" : "Modifier la description de l'actif pour les personnes ayant des problèmes de perception");
+    
+    $l = 'german';
+    
+    $output['asset_title_'.$l.'_label']  = ($a ? "Geben Sie einen Titel für Ihr Asset ein" : "Bearbeiten Sie den Titel des Assets");
+    $output['asset_desc_'.$l.'_label'] = ($a ? "Geben Sie eine Beschriebung" : "Ändern Sie die Beschreibung");
+    $output['asset_desc_'.$l.'_kids_label'] = ($a ? "Fügen Sie eine Beschreibung für Ihr Asset auf Englisch für Kinder hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Kinder");
+    $output['asset_desc_'.$l.'_experts_label'] = ($a ? "Fügen Sie eine Beschreibung des Objekts für Experten der Archäologie hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Experten in Archäologie");
+    $output['asset_desc_'.$l.'_perception_label'] = ($a ? "Fügen Sie eine Beschreibung des Assets für Personen mit Wahrnehmungsproblemen hinzu" : "Bearbeiten Sie die Beschreibung des Assets für Personen mit Wahrnehmungsproblemen");
+    
+    $l = 'russian';
+    
+    $output['asset_title_'.$l.'_label'] = ($a ? "Введите название для вашего актива" : "Изменить заголовок актива");
+    $output['asset_desc_'.$l.'_label'] = ($a ? "Дать описание" : "Изменить описание");
+    $output['asset_desc_'.$l.'_kids_label'] = ($a ? "Добавить описание для вашего имущества для детей" : "Редактировать описание актива для детей");
+    $output['asset_desc_'.$l.'_experts_label']= ($a ? "Добавить описание актива для специалистов по археологии" : "Редактировать описание актива для специалистов по археологии");
+    $output['asset_desc_'.$l.'_perception_label'] = ($a ? "Добавить описание актива для людей с проблемами восприятия" : "Изменить описание актива для людей с проблемами восприятия");
+    
+    return $output;
+
+}
+
+function   wpunity_asset3D_languages_support3($curr_font, $assetLangPack2){
+ 
+   echo '<div class="wrapper_lang">';
+    
+    // English EDIT
+    echo '<div id="EnglishEdit" class="tab-container_lang" style="position:relative;">';
+    
+    echo '<div id="assetDescription" class="changablefont mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+    echo '<textarea id="assetDesc" class="mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family:'.$curr_font.';" name="assetDesc" form="3dAssetForm">'.trim($assetLangPack2['asset_desc_saved']).'</textarea>';
+    echo '<label for="assetDesc" class="mdc-textfield__label" style="background: none;">'.$assetLangPack2['asset_desc_label'].'</label>';
+    echo '</div>';
+    
+    echo '<div id="assetDescriptionKids" class="mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+    echo '<textarea id="assetDescKids" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family:'.$curr_font.'" name="assetDescKids" form="3dAssetForm">'.trim($assetLangPack2['asset_desc_kids_saved']).'</textarea>';
+    echo '<label for="assetDescKids" class="mdc-textfield__label" style="background: none;">'.$assetLangPack2['asset_desc_kids_label'].'</label>';
+    echo '</div>';
+    
+    echo '<div id="assetDescriptionExperts" class="mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+    echo '<textarea id="assetDescExperts" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family:'.$curr_font.'" name="assetDescExperts" form="3dAssetForm">'.trim($assetLangPack2['asset_desc_experts_saved']).'</textarea>';
+    echo '<label for="assetDescExperts" class="mdc-textfield__label" style="background: none;">'.$assetLangPack2['asset_desc_experts_label'].'></label>';
+    echo '</div>';
+    
+    echo '<div id="assetDescriptionPerception" class="mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+    echo '<textarea id="assetDescPerception" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; resize:vertical;font-family:'.$curr_font.'" name="assetDescPerception" form="3dAssetForm">'.trim($assetLangPack2['asset_desc_perception_saved']).'</textarea>';
+    echo '<label for="assetDescPerception" class="mdc-textfield__label" style="background: none;">'.$assetLangPack2['asset_desc_perception_label'].'</label>';
+    echo '</div>';
+    
+    echo '</div>';
+    
+    $langs = ['Greek', 'Spanish', 'French', 'German', 'Russian'];
+    $acces = ['', 'Kids', 'Experts', 'Perception'];
+
+    // GREEK EDIT
+    foreach ($langs as $l) {
+    
+        $llow = strtolower($l);
+        
+        // Title per language
+        echo '<div id="' . $l . 'Edit" class="tab-container_lang" style="position:relative">';
+        
+        echo '<div id="assetTitle' . $l . '" class="mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+        echo '<textarea id="assetTit' . $l . '" class="changablefont mdc-textfield__input" rows="1" cols="40" style="box-shadow: none; font-size:24px; padding-bottom:0;font-family:' . $curr_font . '" name="assetTit' . $l . '" form="3dAssetForm">' . trim($assetLangPack2['asset_title_' . $llow . '_saved']) . '</textarea>';
+        echo '<label for="assetTit' . $l . '" class="mdc-textfield__label" style="background: none;">' . $assetLangPack2['asset_title_' . $llow . '_label'] . '</label>';
+        echo '</div>';
+
+        // Description per lang per acces level
+        foreach ($acces as $a) {
+    
+            $aLow = strtolower($a);
+            
+            if ($aLow!=''){
+                $aLow = '_'.$aLow;
+            }
+            
+            echo '<div id="assetDescription' . $l . $a . '" class="mdc-textfield mdc-textfield--textarea assetDescSt" data-mdc-auto-init="MDCTextfield">';
+            echo '<textarea id="assetDesc' . $l . $a . '" class="changablefont mdc-textfield__input" rows="3" cols="40" style="box-shadow: none; font-family:' . $curr_font . '" name="assetDesc' . $l . $a . '" form="3dAssetForm">' . trim($assetLangPack2['asset_desc_' . strtolower($l) . $aLow.'_saved']) . '</textarea>';
+            echo '<label for="assetDesc' . $l .$a. '" class="mdc-textfield__label" style="background: none;">' . $assetLangPack2['asset_desc_' . strtolower($l).$aLow. '_label'] . '</label>';
+            echo '</div>';
+        }
+    
+        echo '</div>';
+    }
+    
+    echo '</div>';
 }
