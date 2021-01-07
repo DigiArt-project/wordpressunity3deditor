@@ -223,7 +223,7 @@ class WU_webw_3d_view {
         scope.root.add(fbxobject);
         scope.render();
 
-        jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+        //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
         // setTimeout(function(){
         //     jQuery("#button_qrcode").click(); // close qr code
@@ -269,7 +269,7 @@ class WU_webw_3d_view {
                 scope.root.add(gltf.scene);
 
                 scope.render();
-                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                 scope.zoomer(gltf.scene);
             },
             '',
@@ -335,22 +335,28 @@ class WU_webw_3d_view {
                 var material = new THREE.MeshPhongMaterial({color: color, flatShading: false});
 
                 var object = new THREE.Mesh(sphereGeometry, material);
+
+                // Name of the atom
+                var atom = json.atoms[i/3];
+
+                object.name = "AtomBall:" + atom[4];
                 object.position.copy(position);
                 object.position.multiplyScalar(75);
                 object.scale.multiplyScalar(25);
                 scope.root.add(object);
 
-                // Make the label of the atom
-                var atom = json.atoms[i/3];
 
-
+                // Make the Atom Text CSS2D label
                 var text = document.createElement('div');
                 text.className = 'label';
                 text.style.color = 'rgb(' + color.r* 255 + ',' + color.g* 255+ ',' + color.b * 255 + ')';
-                text.textContent = atom[4];
+                text.textContent =  atom[4];
 
                 var label = new THREE.CSS2DObject(text);
+                label.name = "Label:" + text.textContent;
                 label.position.copy(object.position);
+
+                // console.log("label",label);
                 // const axesHelper = new THREE.AxesHelper( 55 );
                 // scope.root.add( axesHelper );
                 scope.root.add(label);
@@ -406,6 +412,9 @@ class WU_webw_3d_view {
                     flatShading: false,
                 }));
 
+
+                object1.name = "Bond:" + i;
+
                 object1.position.copy(start);
                 object1.position.lerp(end, 0.25);
 
@@ -417,32 +426,71 @@ class WU_webw_3d_view {
                     flatShading: false,
                 }));
 
+                object2.name = "Bond:" + (i+1);
+
                 object2.position.copy(start);
                 object2.position.lerp(end, 0.75);
 
                 scope.root.add(object2);
             }
 
+
+
             scope.render();
 
 
             // ------------ Find bounding sphere ----
-            var sphere = wu_webw_3d_view_local.computeSceneBoundingSphereAll(scope.root);
+            let sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
+
+            console.log("sphere", sphere[1]);
+
+            // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
+            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+            // sphereBall.position.copy(sphere[0]);
+            // sphereBall.name = "Center Ball"
+            // scope.root.add( sphereBall );
 
             // translate object to the center
             scope.root.traverse(function (object) {
-                if (object instanceof THREE.Mesh) {
-                    object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                //object.position.x = object.position.y = object.position.z = 0;
+
+                if (object instanceof THREE.Mesh || object instanceof THREE.Object3D ) {
+
+
+                    if (object.name==='')
+                        return;
+
+                   object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
+
+                    // if(object.geometry) {
+                    //     object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                    // }
                 }
             });
 
             // Add to pivot
-            wu_webw_3d_view_local.pivot.add(scope.root);
+            wu_webw_3d_view.pivot.add(scope.root);
+            //
+            // let axHelp = new THREE.AxesHelper(35);
+            // wu_webw_3d_view.pivot.add(axHelp);
+
+
+            // console.log("====================================");
+            //
+            // console.log("pivot", wu_webw_3d_view.pivot);
+            // console.log("scope.root", scope.root);
+            // console.log("sphere", sphere);
+            // console.log("sphereBall", sphereBall.position);
+
+            console.log("====================================");
+
 
             // Find new zoom
-            var totalradius = sphere[1];
-            wu_webw_3d_view_local.controls.minDistance = 0.001 * totalradius;
-            wu_webw_3d_view_local.controls.maxDistance = 13 * totalradius;
+            let totalRadius = sphere[1];
+            console.log(totalRadius);
+            wu_webw_3d_view.controls.minDistance = 0.001 * totalRadius;
+            wu_webw_3d_view.controls.maxDistance = 35 * totalRadius;
 
             //---------------------------------------
 
@@ -453,8 +501,22 @@ class WU_webw_3d_view {
     /*  Auto zoom on obj with multiple meshes */
     computeSceneBoundingSphereAll(myGroupObj)
     {
-        var sceneBSCenter = new THREE.Vector3(0,0,0);
-        var sceneBSRadius = 0;
+        let sceneBSCenter = new THREE.Vector3(0,0,0);
+        let sceneBSRadius = 0;
+        let nObjects = 0;
+
+        myGroupObj.traverse( function (object)
+        {
+            if (object instanceof THREE.Mesh)
+            {
+                //console.log(object.position);
+                sceneBSCenter.add(object.position);
+                nObjects ++;
+            }
+        } );
+
+        //console.log(nObjects, sceneBSCenter);
+        sceneBSCenter.divideScalar(nObjects);
 
         myGroupObj.traverse( function (object)
         {
@@ -463,32 +525,16 @@ class WU_webw_3d_view {
                 object.geometry.computeBoundingSphere();
 
                 // Object radius
-                var radius = object.geometry.boundingSphere.radius;
+                let radius = object.geometry.boundingSphere.radius;
 
                 if (radius) {
-
-                    // Object center in world space
-                    // var objectCenterLocal = object.position.clone();
-                    // var objectCenterWorld = object.localToWorld(objectCenterLocal);
-
-                    var objectCenterWorld = object.geometry.boundingSphere.center;
-
-                    // // New center in world space
-                    var newCenter = new THREE.Vector3();
-
-                    newCenter.addVectors(sceneBSCenter, objectCenterWorld);
-                    newCenter.divideScalar(2.0);
-
-                    // New radius in world space
-                    var dCenter = newCenter.distanceTo(sceneBSCenter);
-
-                    var newRadius = Math.max(dCenter + radius, dCenter + sceneBSRadius);
-                    //sceneBSCenter = dCenter;
-                    sceneBSCenter = newCenter.multiplyScalar(2);
-                    sceneBSRadius = newRadius;
+                     sceneBSRadius = Math.max(sceneBSRadius, radius + object.position.length());
                 }
             }
         } );
+
+        console.log("sceneBSCenter", sceneBSCenter);
+        console.log("sceneBSRadius",sceneBSRadius);
 
         return [sceneBSCenter, sceneBSRadius];
     }
@@ -500,21 +546,33 @@ class WU_webw_3d_view {
             towhatObj = this.scene.children[5]; // Obj is loaded at 5
         }
 
-
-        var sphere = this.computeSceneBoundingSphereAll( towhatObj );
+        let sphere = this.computeSceneBoundingSphereAll( towhatObj );
 
         // translate object to the center
         towhatObj.traverse( function (object) {
+
+            console.log("object", object);
             if (object instanceof THREE.Mesh) {
+                //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
                 object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
             }
         });
 
-
         var totalradius = sphere[1];
 
+        let axHelp = new THREE.AxesHelper(35);
+        wu_webw_3d_view.pivot.add(axHelp);
+
+        // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
+        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+        // sphereBall.position.copy(sphere[0]);
+        // sphereBall.name = "Center Ball"
+        // wu_webw_3d_view.pivot.add(sphereBall);
+
+
         this.controls.minDistance = 0.001*totalradius;
-        this.controls.maxDistance = 13*totalradius;
+        this.controls.maxDistance = 35*totalradius;
     }
 
     // Initialize
@@ -540,7 +598,7 @@ class WU_webw_3d_view {
         this.labelRenderer.domElement.style.pointerEvents = 'none';
 
         // add label renderer
-        document.getElementById("previewCanvasDiv").appendChild(this.labelRenderer.domElement);
+        document.getElementById("previewCanvasLabels").appendChild(this.labelRenderer.domElement);
 
         // - End of PDB specific -
 
@@ -552,7 +610,6 @@ class WU_webw_3d_view {
         //console.log("this.audioElement", this.audioElement);
 
         if (this.audioElement!=null) {
-            console.log("B");
             this.listener = new THREE.AudioListener();
             this.camera.add(this.listener);
 
@@ -566,7 +623,7 @@ class WU_webw_3d_view {
             // This adds the audio element to loaded 3D object
             this.root.add(this.positionalAudio);
         } else {
-            console.log("C");
+
         }
         this.scene.add(this.root);
 
@@ -637,7 +694,7 @@ class WU_webw_3d_view {
         var completedLoading = function () {
             console.log('Loading complete!');
 
-            jQuery('#previewProgressSlider').hide();
+            //jQuery('#previewProgressSlider').hide();
 
             document.getElementById('previewProgressSliderLine').style.width = 0;
             document.getElementById('previewProgressLabel').innerHTML = "";

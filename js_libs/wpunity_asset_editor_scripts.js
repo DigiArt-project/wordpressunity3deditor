@@ -126,10 +126,6 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
         }
         output.innerHTML = '<ul>'+children+'</ul>';
 
-
-        // For cloning
-        document.getElementById('asset_sourceID').value ="";
-
         // Reset Screenshot
         document.getElementById("sshotPreviewImg").src = sshotPreviewDefaultImg;
         document.getElementById("sshotFileInput").value = "";
@@ -181,7 +177,7 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
     if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') || (nGlb === 1 && GlbBuffer !== '') ){
 
         // Show progress slider
-        jQuery('#previewProgressSlider').show();
+        //jQuery('#previewProgressSlider').show();
 
         // Make the definition with the obj
         if (nObj === 1){
@@ -276,9 +272,9 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename, glbFilename) {
 
 
-    jQuery('#previewProgressSlider')[0].style.visibility = "visible";
+    //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
 
-    jQuery('#previewProgressSlider').show();// = "visible";
+    //jQuery('#previewProgressSlider').show();// = "visible";
 
     if (wu_webw_3d_view_local.scene != null) {
         if (wu_webw_3d_view_local.renderer)
@@ -333,7 +329,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
 
 
 
-                jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
             },
             // called while loading is progressing
@@ -398,7 +394,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
                         wu_webw_3d_view_local.controls.minDistance = 0.001 * totalradius;
                         wu_webw_3d_view_local.controls.maxDistance = 3 * totalradius;
 
-                        jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                        //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                     },
                     //onObjProgressLoad
                     function (xhr) {
@@ -604,13 +600,13 @@ function loadFileInputLabel(objectType) {
             inputLabel.innerHTML = 'Select a pdb file';
             input.accept = ".pdb";
         } else if (objectType === 'obj') {
-            inputLabel.innerHTML = 'Or select an a) obj, b) mtl, & c) optional texture files (jpgs or pngs)';
+            inputLabel.innerHTML = 'Select an a) obj, b) mtl, & c) optional texture files (jpgs or pngs)';
             input.accept = ".obj,.mtl,.jpg,.png";
         } else if (objectType === 'fbx') {
-            inputLabel.innerHTML = 'Or select an a) fbx & b) optional texture file (gif, jpg, png)';
+            inputLabel.innerHTML = 'Select an a) fbx & b) optional texture file (gif, jpg, png)';
             input.accept = ".fbx,.jpg,.png,.gif";
         } else if (objectType === 'glb') {
-            inputLabel.innerHTML = 'Or select a glb file';
+            inputLabel.innerHTML = 'Select a glb file';
             input.accept = ".glb";
         }
 }

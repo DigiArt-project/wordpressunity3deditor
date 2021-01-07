@@ -1,0 +1,57 @@
+.panel { display: none; }
+.panel.active { display: block; }
+.navigation-top {display:none;}
+.mdc-tab { min-width: 0; }
+.custom-header { display:none; }
+.main-navigation a { padding: 0.2em 1em; font-size:9pt !important;}
+/*.site-branding {display:none;}*/
+/*#content {padding:0;}*/
+/*.site-content-contain{margin:0;overflow:hidden;}*/
+/*html { margin-top: 0 !important; }*/
+/** html body { margin-top: 0 !important; }*/
+
+
+#previewCanvas {height:100%; width:100%;position: relative}
+
+#previewProgressSlider { position: absolute; z-index:2;width:100%;top:0}
+
+#previewCanvasLabels {height:100%; width:100%; position: absolute}
+
+#sshotFileInputContainer{width:100%; padding:5px;}
+
+#assetback3dcolordiv{border: 0px solid rgba(0, 0, 0, 0.3);width:100%; margin-top:0px;}
+
+#assetTitle {border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.3); box-shadow: none; border-radius: 0; font-size:24px; padding: 0em;}
+
+#assetback3dcolor {box-shadow: none; display:none;}
+
+/* just for demo */
+.langul  {
+    list-style: none;
+    margin:0;
+}
+
+.langli  {
+    display: inline-block;
+    padding:0 12px !important;
+}
+
+#sshotPreviewImg{
+    width: auto; height: 100px;
+}
+
+#audioDetailsPanel {
+    padding:5px; margin-top:10px; width:100%
+}
+
+#edit-asset-header{
+    margin-top:15px;
+}
+
+.whiteSpaceSeparatorAssetEditor {
+    margin-top:30px;
+    margin-bottom: 30px;
+    border:0px;
+    color:white;
+    display:table;
+}

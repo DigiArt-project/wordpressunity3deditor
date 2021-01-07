@@ -569,15 +569,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 .tab-container_lang:target { display: block}
 .tab-container_lang:not(:target) { display: none !important }
 
-/* just for demo */
-.langul  {
-    list-style: none;
-}
 
-.langli  {
-    display: inline-block;
-    padding:0 12px !important;
-}
 
 
 
@@ -1475,7 +1467,7 @@ video {
     right:0;
     position:absolute;
     z-index:15;
-    padding:0px;
+    padding:0;
     padding-left:3px;
     padding-right:5px;
     margin-bottom:5px;
@@ -1485,7 +1477,7 @@ video {
 
 
 
-#centerMessageAssetSubmit {
+.centerMessageAssetSubmit {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1493,15 +1485,12 @@ video {
     transform: translate(-50%, -50%);
 }
 
-.center-message {
-    position:absolute;
-    top:50%;
-    left:50%;
-}
-
 #informationPanel {
-    display: none;
-    padding-top:0px;
+    padding-top:15px;
 }
 
 .assetDescSt {border: 1px solid rgba(0, 0, 0, 0.3);width:100%;}
+
+#previewProgressLabel{
+    position: absolute; left:0; right: 0; top: 26px;color:white !important; mix-blend-mode: difference;
+}

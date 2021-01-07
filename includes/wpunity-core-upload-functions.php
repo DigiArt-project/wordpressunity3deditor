@@ -590,7 +590,7 @@ function wpunity_asset3D_languages_support2($asset_id){
     
     $output = [];
     $output['asset_title_saved'] = ($a ? "" : get_the_title( $asset_id ));
-    $output['asset_title_label'] = ($a ? "Enter a title for the asset in English" : "Edit the title of the asset in English");
+    $output['asset_title_label'] = ($a ? "Title for the asset in English" : "Title of the asset in English");
     
     $output['asset_desc_label'] = ($a ? "Add a description for the asset" : "Edit the description of the asset");
     $output['asset_desc_saved'] = ($a ? "" : get_post_field('post_content', $asset_id));

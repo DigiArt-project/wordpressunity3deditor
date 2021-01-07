@@ -188,11 +188,14 @@ function wpunity_register_styles() {
 	wp_register_script( 'wpunity_material_scripts', plugin_dir_url( __FILE__ ).'node_modules/material-components-web/dist/material-components-web.js');
 	
 	wp_register_style( 'wpunity_frontend_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpunity_frontend.css' );
+	
+	
 	wp_register_style( 'wpunity_lightslider_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/lightslider.min.css' );
     
     wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.css' );
-    
-    
+	
+	wp_register_style( 'wpheliosvr_asseteditor_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpheliosvr_asseteditor.css' );
+ 
 	
 	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
 	// Material & Frontend CSS & Scripts
@@ -201,6 +204,7 @@ function wpunity_register_styles() {
 	wp_enqueue_style( 'wpunity_material_icons', plugin_dir_url( __FILE__ ) . 'css/material-icons/material-icons.css' );
 //    wp_enqueue_style( 'wpunity_glyphter_icons', plugin_dir_url( __FILE__ ) . 'css/glyphter-font/Glyphter.css' );
 	wp_enqueue_style('wpunity_frontend_stylesheet');
+	
 	wp_enqueue_style( 'wpunity_lightslider_stylesheet');
 }
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
