@@ -459,7 +459,6 @@ $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_
 
 // Retrieve Background Color saved
 $asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
-$asset_back_3d_color_label = "3D viewer background color";
 
 
 //Check if its new/saved and get data for artifact and Terrain
@@ -569,12 +568,8 @@ if($asset_id != null) {
         <span class="mdc-typography--headline mdc-theme--text-primary-on-light">
             <span>
                 <?php
-                if($isEditable && !$isPreviewMode)
-                    $promptAction = ($asset_id == null ? "Create a new asset" : "Edit an existing asset");
-                else
-                    $promptAction = "";
-
-                echo $promptAction;
+                $promptString = $asset_id == null ? "Create a new asset" : "Edit an existing asset";
+                echo ($isEditable && !$isPreviewMode) ? $promptString:"";
                 ?>
             </span>
         </span>
@@ -585,11 +580,12 @@ if($asset_id != null) {
 
         <!-- CATEGORY -->
         <!--        <div class="" style="display:--><?php //echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?><!--">-->
+        <!-- Hide category selection for simplicity. Use artifact for all. -->
         <div class="" style="display:none">
             <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
 
             <div id="category-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
-                <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
+                <em class="material-icons mdc-theme--text-hint-on-light">label</em>&nbsp;
                 
                 <?php
                 
@@ -598,6 +594,7 @@ if($asset_id != null) {
                 $game_type_slug = $all_game_types[0]->slug;
                 
                 switch ($game_type_slug) {
+                    default:
                     case 'archaeology_games':
                         $myGameType=1;
                         break;
@@ -640,13 +637,11 @@ if($asset_id != null) {
                             No category selected
                         </li>
                         
-                        <?php foreach ( $cat_terms as $term ) { ?>
+                        <?php foreach ( $cat_terms as $term ) {
                             
-                            <?php
-                            if (  strpos($term->name, "Points") !== false )
+                            if (  strpos($term->name, "Points") !== false ) {
                                 continue;
-                            ?>
-
+                            } ?>
 
                             <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
                                 <?php echo $term->name; ?>
@@ -693,14 +688,14 @@ if($asset_id != null) {
                 <div id="object3DPropertiesPanel"">
      
                     <h3 class="mdc-typography--title">3D Model of the Asset</h3>
-                    <img src="<?php echo plugins_url( '../images/cube.png', dirname(__FILE__)  );?>">
+                    <img alt="3D model section" src="<?php echo plugins_url( '../images/cube.png', dirname(__FILE__)  );?>">
                     <label id="fileUploadInputLabel" for="multipleFilesInput"> Select files </label>
         
                     <input id="fileUploadInput"
                            class="FullWidth" type="file"
                            name="multipleFilesInput[]"
                            value="" multiple accept=".obj,.mtl,.jpg,.png,.fbx,.pdb,.glb"
-                           onclick="javascript:clearList()"/>
+                           onclick="clearList()"/>
 
                     <!-- For currently selected -->
                     <div id="fileList3D" style="margin-left:5px"></div>
@@ -778,27 +773,22 @@ if($asset_id != null) {
                         <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
                     
-            
-            
-            
-            
-            
                     <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield">
-                        <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" style="width:40%;margin-left:60%;" value="000000">
+                        <label for="jscolorpick" style="display:none">Color pick</label>
+                        <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="000000">
         
-                        <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="3" cols="40"
+                        <input type="text" id="assetback3dcolor" class="mdc-textfield__input"
                                name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
                         <label for="assetback3dcolor" class="mdc-textfield__label"
-                               style="background: none;"><?php echo $asset_back_3d_color_label; ?></label>
+                               style="background: none;">3D viewer background color</label>
                     </div>
 
 
                     <!-- Audio -->
-    
                     <div id="audioDetailsPanel">
     
                         <h4 class="mdc-typography--title">3D audio file</h4>
-                        <img  src="<?php echo plugins_url( '../images/audio.png', dirname(__FILE__)  );?>">
+                        <img alt="Audio Section" src="<?php echo plugins_url( '../images/audio.png', dirname(__FILE__)  );?>">
                         <div id="audioFileInputContainer">
                             <?php
                             $audioID = get_post_meta($asset_id, 'wpunity_asset3d_audio', true);
@@ -823,44 +813,26 @@ if($asset_id != null) {
                     </div>
             
                 </div>
-        
-    
                 <!-- End of 3D -->
 
                 <!-- Languages -->
                 <h3 class="mdc-typography--title">Description</h3>
-        
-                <ul class="langul">
-                    <li class="langli"><a href="#EnglishEdit">English</a></li>
-                    <li class="langli"><a href="#GreekEdit" >Ελληνικά</a></li>
-                    <li class="langli"><a href="#SpanishEdit" >Español</a></li>
-                    <li class="langli"><a href="#FrenchEdit" >Français</a></li>
-                    <li class="langli"><a href="#GermanEdit" >Deutsch</a></li>
-                    <li class="langli"><a href="#RussianEdit" >Pусский</a></li>
-                </ul>
-                
-                <?php
-                
-                //include 'edit-wpunity_asset3D_languages_support3.php';
-                wpunity_asset3D_languages_support3($curr_font, $assetLangPack2);
-                
-                ?>
 
-                <!-- Select fonts -->
-                <div id="assetFontsDiv" style="width:100%;margin-bottom:15px;">
-                    <span for="assetFonts" class="mdc-textfield" style="width:40%; height:40px; ">Fonts</span>
-                    <input id="assetFonts" type="hidden" class="mdc-textfield__input" style="bottom:5px; width:40%;margin-left:10%;"
+                <img alt="Languages section" class="sectionIcon"
+                     src="<?php echo plugins_url( '../images/language_icon.jpg', dirname(__FILE__)  );?>">
+        
+                <!-- All language fields are in the following -->
+                <?php wpunity_asset3D_languages_support3($curr_font, $assetLangPack2);?>
+
+                <!--  Select font for text -->
+                <div id="assetFontsDiv">
+                    <span id="assetFontsLabel" for="assetFonts" class="mdc-textfield" >Fonts</span>
+                    <input id="assetFonts" type="hidden" class="mdc-textfield__input"
                            name="assetFonts" form="3dAssetForm" value="<?php echo trim($asset_fonts_saved); ?>">
                     <script>
-                        jQuery('#assetFonts')
-                            .fontselect()
-                            .on('change', function() {
-                                applyFont(this.value);
-                            });
+                        jQuery('#assetFonts').fontselect().on('change', function() { applyFont(this.value); });
                     </script>
                 </div>
-
-
 
                 <!-- WIKIPEDIA button -->
                 <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
@@ -878,14 +850,17 @@ if($asset_id != null) {
                 
 
                 <h3 class="mdc-typography--title">Multimedia</h3>
+
+                    <img alt="Images section" class="sectionIcon"
+                        src="<?php echo plugins_url( '../images/ic_images_section.png', dirname(__FILE__)  );?>">
         
                 <?php
                 
-                if (count($saved_term) > 0)
-                    $showImageFields = in_array($saved_term[0]->slug, ['artifact']) ?'':'none';
-                else
+                if (!empty($saved_term)) {
+                    $showImageFields = in_array($saved_term[0]->slug, ['artifact']) ? '' : 'none';
+                } else {
                     $showImageFields = 'none';
-                
+                }
                 $defaultImage = plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  );
                 ?>
 
@@ -916,33 +891,20 @@ if($asset_id != null) {
                     }
                 </script>
 
+                <hr class="WhiteSpaceSeparator">
+
                 <!-- End of Images -->
-
-
-
      
 
                 <!-- Video -->
-                <hr class="WhiteSpaceSeparator">
+               <div id="videoDetailsPanel">
 
-                <!-- Show only if the asset is artifact  -->
-                <?php
-                
-                if(count($saved_term)>0) {
-                    // Edit Asset
-                    $showVid = in_array($saved_term[0]->slug, ['artifact']) ? '' : 'none';
-                }else {
-                    // New Asset
-                    $showVid = ($asset_id == null) ? 'none' : '';
-                }
-                
-                ?>
-
-                <div id="videoDetailsPanel" style =
-                "display:<?php echo $showVid;?>;background:lightgrey; padding:5px; width:100%">
-
+                 
+                   
                     <h3 class="mdc-typography--title">Video</h3>
 
+                   <img alt="Video section"
+                        src="<?php echo plugins_url( '../images/ic_video_section.png', dirname(__FILE__)  );?>">
                     <div id="videoFileInputContainer" class="">
                         <?php
                         $videoID = get_post_meta($asset_id, 'wpunity_asset3d_video', true);
@@ -1274,26 +1236,18 @@ if($asset_id != null) {
                     ?>
                 
                 <?php } ?>
-            
-            
-            
-            
-            
-            
                 <!--  End of Edit or Show  -->
 
                 <!-- MOLECULES  only-->
                 <?php include 'edit-wpunity_asset3D_ChemistrySupport1.php'; ?>
 
-      
-            
             <?php
             // Virtual Labs widgets
             if ($project_scope == 1)
                 require(plugin_dir_path( __DIR__ ).'/templates/edit-wpunity_asset3D_vlabsWidgets.php');
             ?>
 
-            <hr class="WhiteSpaceSeparator">
+            <hr class="WhiteSpaceSeparator" />
 
 
             <!--       IPR category              -->
@@ -1303,7 +1257,7 @@ if($asset_id != null) {
             ?>
 
             <!-- CATEGORY IPR -->
-            <div class="" id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
+            <div id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
 
                 <h3 class="mdc-typography--title">Select an IPR plan</h3>
                 <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">

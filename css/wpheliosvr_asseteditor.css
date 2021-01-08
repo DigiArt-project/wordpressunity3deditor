@@ -55,3 +55,45 @@
     color:white;
     display:table;
 }
+
+#jscolorpick {
+    width:40%;margin-left:60%;
+}
+
+#assetFontsLabel{
+    width:40%; height:40px;
+}
+
+#assetFonts {
+    bottom: 5px;
+    width: 40%;
+    margin-left: 10%;
+}
+
+#assetFontsDiv {
+    width:100%;margin-bottom:15px;
+}
+
+#videoDetailsPanel{
+    width:100%;
+    display: inline-block;
+
+    margin-bottom: 10px;
+    /*margin-left:0%;*/
+}
+
+.sectionIcon{
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+#videoDetailsPanel_preview{
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 10px;
+    /*margin-left:0%;*/
+}
+
+#ipr-div{
+    margin-bottom:20px;
+}

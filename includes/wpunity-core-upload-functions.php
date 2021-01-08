@@ -657,7 +657,17 @@ function wpunity_asset3D_languages_support2($asset_id){
 }
 
 function   wpunity_asset3D_languages_support3($curr_font, $assetLangPack2){
- 
+    
+    echo '<ul class="langul">'.
+                    '<li class="langli"><a href="#EnglishEdit">English</a></li>'.
+                    '<li class="langli"><a href="#GreekEdit" >Ελληνικά</a></li>'.
+                    '<li class="langli"><a href="#SpanishEdit" >Español</a></li>'.
+                    '<li class="langli"><a href="#FrenchEdit" >Français</a></li>'.
+                    '<li class="langli"><a href="#GermanEdit" >Deutsch</a></li>'.
+                    '<li class="langli"><a href="#RussianEdit" >Pусский</a></li>'.
+                '</ul>';
+    
+    
    echo '<div class="wrapper_lang">';
     
     // English EDIT
