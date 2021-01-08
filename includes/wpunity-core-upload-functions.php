@@ -730,4 +730,14 @@ function   wpunity_asset3D_languages_support3($curr_font, $assetLangPack2){
     }
     
     echo '</div>';
+    
+    // <!-- WIKIPEDIA button -->
+//    echo '<button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"'
+//             .' onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value, jQuery('#assetDesc')[0])">'.
+//                'Fetch description from Wikipedia</button>';
+//
+//
+//                <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
+//                            onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value, jQuery('#assetDesc')[0])"
+//                            style="margin-top:30px" >Fetch description from Europeana</button>
 }

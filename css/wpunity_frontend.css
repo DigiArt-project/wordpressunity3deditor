@@ -697,24 +697,7 @@ select[multiple].mdc-multi-select.mdc-list, select[size].mdc-multi-select.mdc-li
 }
 
 
-#assetTitleView{
-    width:100%;
-    display:flex;
 
-    color: orangered;
-    text-shadow: 2px 2px 2px aliceblue;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-family: Roboto, sans-serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    line-height: 32px;
-    text-decoration: inherit;
-    text-transform: inherit;
-}
 
 
 

@@ -145,6 +145,9 @@ $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
 $isPreviewMode = isset($_GET['preview']);
 
+// Default image to show when there are no images for the asset
+$defaultImage = plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  );
+
 
 echo '<script>';
 echo 'var isPreviewMode="'.$isPreviewMode.'";';
@@ -460,6 +463,8 @@ $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_
 // Retrieve Background Color saved
 $asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
 
+// 5 asset images
+$images_urls = [null, null, null, null, null];
 
 //Check if its new/saved and get data for artifact and Terrain
 if($asset_id != null) {
@@ -472,7 +477,7 @@ if($asset_id != null) {
         
     }elseif (in_array($saved_term[0]->slug , ['artifact'])) {
         
-        $images_urls = [null, null, null, null, null];
+        
         
         // Image 1 : Featured image
         $images_urls[0] = get_the_post_thumbnail_url($asset_id);
@@ -834,52 +839,31 @@ if($asset_id != null) {
                     </script>
                 </div>
 
-                <!-- WIKIPEDIA button -->
-                <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
-                        onclick="wpunity_fetchDescriptionAjaxFrontEnd('Wikipedia', assetTitle.value, jQuery('#assetDesc')[0])">
-                    Fetch description from Wikipedia</button>
-
-                <!-- EUROPEANA (shown only in DigiArt)-->
-                <?php if ($project_scope === 0){ ?>
-                    <button type="button" class="FullWidth mdc-button mdc-button--raised mdc-button--primary" data-mdc-auto-init="MDCRipple"
-                            onclick="wpunity_fetchDescriptionAjaxFrontEnd('Europeana', assetTitle.value, jQuery('#assetDesc')[0])"
-                            style="margin-top:30px" >Fetch description from Europeana</button>
-                <?php } ?>
-
+                
                 <hr class="whiteSpaceSeparatorAssetEditor" />
                 
-
+                <!--   MULTIMEDIA -->
                 <h3 class="mdc-typography--title">Multimedia</h3>
 
                     <img alt="Images section" class="sectionIcon"
                         src="<?php echo plugins_url( '../images/ic_images_section.png', dirname(__FILE__)  );?>">
-        
-                <?php
                 
-                if (!empty($saved_term)) {
-                    $showImageFields = in_array($saved_term[0]->slug, ['artifact']) ? '' : 'none';
-                } else {
-                    $showImageFields = 'none';
-                }
-                $defaultImage = plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  );
-                ?>
-
                 <!-- Images Input Fields-->
-                <div id="imgDetailsPanel" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
+                <div id="imgDetailsPanel">
                     <?php
                     for ($i=0; $i<=4; $i++){
-                        echo '<h3 class="mdc-typography--title">Image '. $i .'</h3>';
-                        if($asset_id == null){
-                            echo '<img id="img'.$i.'Preview" src="'.$defaultImage.'">';
-                        }else {
-                            echo '<img id="img'.$i.'Preview" src="'.$images_urls[$i].'">';
-                        }
-                        echo '<input type="file" name="image'.$i.'Input" title="Image '.$i.
-                            '" value="" id="img'.$i.'Input" accept="image/x-png,image/gif,image/jpeg">';
-                        echo '<br />';
-                        echo '<span  class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended </span>';
-                    }
-                    ?>
+                        ?>
+                        <h3 class="mdc-typography--title">Image <?php echo $i;?></h3>
+                        
+                        <img alt="Image placeholder" id="img<?php echo $i; ?>Preview"
+                             src="<?php echo ($asset_id == null || $images_urls[$i] == null) ? $defaultImage : $images_urls[$i] ; ?>">
+                        
+                        <input type="file" name="img<?php echo $i;?>Input" title="Image <?php echo $i;?>" value=""
+                               id="img<?php echo $i;?>Input" accept="image/x-png,image/gif,image/jpeg">
+                        
+                        <br />
+                        <span  class="mdc-typography--subheading1 mdc-theme--text-secondary-on-background">jpg is recommended</span>
+                    <?php }?>
                 </div>
 
                 <script>
@@ -898,9 +882,6 @@ if($asset_id != null) {
 
                 <!-- Video -->
                <div id="videoDetailsPanel">
-
-                 
-                   
                     <h3 class="mdc-typography--title">Video</h3>
 
                    <img alt="Video section"
@@ -930,18 +911,10 @@ if($asset_id != null) {
                     </div>
                 </div>
 
-                <hr />
                 
-                <?php } else { ?>
+      <?php } else { ?>  <!-- PREVIEW READ ONLY DATA -->
 
-                    
-                
-                
-                
-                
-                    <!-- PREVIEW READ ONLY DATA -->
-
-                    <div id="assetTitleView" style="font-size:24pt; width:-moz-fit-content;margin:auto; "><?php echo $assetLangPack2['asset_title_saved']; ?></div>
+                    <div id="assetTitleView"><?php echo $assetLangPack2['asset_title_saved'];?></div>
 
                     <hr />
 
