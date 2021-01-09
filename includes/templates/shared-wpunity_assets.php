@@ -126,11 +126,11 @@ $assets = get_games_assets($user_games_slugs);
 if (!$isUserloggedIn)
     $link_to_add = wp_login_url();
 else if ($isUserloggedIn && $single_project_asset_list)
-    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $current_game_project_id .'&singleproject=true&#EnglishEdit');
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $current_game_project_id .'&singleproject=true&preview=0&#EnglishEdit');
 else if ($isUserAdmin && !$single_project_asset_list)
-    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'&preview=0#EnglishEdit');
 else if ($isUserloggedIn)
-    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'#EnglishEdit');
+    $link_to_add = esc_url( get_permalink($newAssetPage[0]->ID) . $parameter_pass . $joker_project_id .'&preview=0#EnglishEdit');
 
 
 $link_to_edit = home_url().'/wpunity-3d-asset-creator/?';
@@ -197,7 +197,7 @@ if ($single_project_asset_list)
                         <?php $pGameId= get_page_by_path($asset['assetParentGameSlug'], OBJECT, 'wpunity_game')->ID; ?>
                         
                         <!-- Edit url -->
-                        <a class="editasseturl" href="<?php echo $link_to_edit.'wpunity_game='.$pGameId.'&wpunity_asset='.$asset['assetid'].'#English'; ?>">
+                        <a class="editasseturl" href="<?php echo $link_to_edit.'wpunity_game='.$pGameId.'&wpunity_asset='.$asset['assetid'].'&preview='.(!$isUserAdmin && ($user_id != $asset['author_id'])).'#English'; ?>">
                             <?php if ($asset['screenImagePath']){ ?>
                                 <img src="<?php echo $asset['screenImagePath']; ?>" class="asset-shared-thumbnail">
                             <?php } else { ?>

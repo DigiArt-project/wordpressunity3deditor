@@ -143,15 +143,12 @@ $isUserloggedIn = is_user_logged_in();
 $current_user = wp_get_current_user();
 $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
-$isPreviewMode = isset($_GET['preview']);
+
+$isEditMode = $_GET['preview'] == '1' ? FALSE : TRUE;
 
 // Default image to show when there are no images for the asset
 $defaultImage = plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  );
 
-
-echo '<script>';
-echo 'var isPreviewMode="'.$isPreviewMode.'";';
-echo '</script>';
 
 $curr_font = "Arial";
 $isOwner = $current_user->ID == get_post_field ('post_author', $asset_id);
@@ -297,7 +294,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     
     // SCREENSHOT: upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
     if (isset($_POST['sshotFileInput'])) {
-        wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $asset_language_pack['assetTitleForm'],$asset_id);
+        wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $asset_language_pack['assetTitleForm'], $asset_id);
     }
     
     
@@ -476,16 +473,17 @@ if($asset_id != null) {
         include 'edit-wpunity_asset3D-WindEnergy1.php';
         
     }elseif (in_array($saved_term[0]->slug , ['artifact'])) {
-        
-        
-        
         // Image 1 : Featured image
         $images_urls[0] = get_the_post_thumbnail_url($asset_id);
         
+        
+        
         // Image 1,2,3,4
         for ($i=1; $i <= 4; $i++){
+            
             $image_id = get_post_meta($asset_id, "wpunity_asset3d_image".$i);
-            if (!empty($image_id)) {
+    
+            if(!empty($image_id[0])) {
                 $images_urls[$i] = wp_get_attachment_metadata($image_id[0]);
                 $images_urls[$i] = $images_urls[$i]['file'] == '' ? null :
                     wp_get_upload_dir()['baseurl'] . "/" . $images_urls[$i]['file'];
@@ -521,7 +519,7 @@ if($asset_id != null) {
 <div id="text-asset-sidebar" class="asset_editor_textpanel">
     
     <?php
-    if ($isUserloggedIn && !$isPreviewMode) {
+    if ($isUserloggedIn && $isEditMode) {
         
         echo '<a title="Back" style="color:#1e90ff; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
                    class="hideAtLocked mdc-button" href="' .$goBackToLink.'">
@@ -530,55 +528,58 @@ if($asset_id != null) {
                 </a>';
     }
     
-    // Preview button
-    if($isUserloggedIn && !$isPreviewMode && $asset_id != null ){
-        $previewLink = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ) .
-            $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    // UPPER BUTTONS
+    if($isUserloggedIn && $asset_id != null ){
         
-        // FROM NEW ASSET ONLY
-        if ( !strpos($_SERVER['REQUEST_URI'],"wpunity_asset")) {
-            $previewLink = $previewLink . '&wpunity_asset=' . $asset_id;
-        }
-        
-        // IF from single project
-        if (isset($_GET['singleproject'])) {
-            $previewLink = $previewLink . '&singleproject=true';
-        }
-        
-        
-        $previewLink = $previewLink . '&preview=1#English';
-        ?>
-
-        <a class="mdc-button mdc-button--primary mdc-theme--primary"
-           href="<?php echo $previewLink; ?>"
-           data-mdc-auto-init="MDCRipple">Preview</a>
-    <?php } ?>
-    
-    <?php
-    if ($isPreviewMode){
-        
-        $curr_uri = $_SERVER['REQUEST_URI'];
-        $targetparams = str_replace("preview=1","",$curr_uri);
-        $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).
-            $_SERVER['HTTP_HOST'].$targetparams.'#English';
-        ?>
-
-        <a class="mdc-button mdc-button--primary mdc-theme--primary"
-           href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
-    
-    <?php } ?>
-
-    <!-- Prompt 'Edit' or 'Create asset' -->
-    <div id="edit-asset-header">
-        <span class="mdc-typography--headline mdc-theme--text-primary-on-light">
-            <span>
-                <?php
-                $promptString = $asset_id == null ? "Create a new asset" : "Edit an existing asset";
-                echo ($isEditable && !$isPreviewMode) ? $promptString:"";
+        if ( $isEditMode) {
+                $previewLink = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ) .
+                                                      $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                
+                // FROM NEW ASSET ONLY
+                if ( !strpos($_SERVER['REQUEST_URI'],"wpunity_asset")) {
+                    $previewLink = $previewLink . '&wpunity_asset=' . $asset_id;
+                }
+                
+                // IF from single project
+                if (isset($_GET['singleproject'])) {
+                    $previewLink = $previewLink . '&singleproject=true';
+                }
+             
+                $previewLink = $previewLink . '&preview=1#English';
                 ?>
-            </span>
-        </span>
-    </div>
+
+                <a class="mdc-button mdc-button--primary mdc-theme--primary"
+                   href="<?php echo $previewLink; ?>"
+                   data-mdc-auto-init="MDCRipple">Preview</a>
+        <?php }  else {
+        
+            // Display EDIT BUTTON
+            
+            $curr_uri = $_SERVER['REQUEST_URI'];
+            $targetparams = str_replace("preview=1","",$curr_uri);
+            $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).
+                $_SERVER['HTTP_HOST'].$targetparams.'#English';
+            ?>
+    
+            <a class="mdc-button mdc-button--primary mdc-theme--primary"
+               href="<?php echo $editLink2; ?>" data-mdc-auto-init="MDCRipple">EDIT Asset</a>
+        
+        
+            <!-- Prompt 'Edit' or 'Create asset' -->
+            <div id="edit-asset-header">
+                <span class="mdc-typography--headline mdc-theme--text-primary-on-light">
+                    <span>
+                        <?php
+                        $promptString = $asset_id == null ? "Create a new asset" : "Edit an existing asset";
+                        echo ($isEditable && $isEditMode) ? $promptString:"";
+                        ?>
+                    </span>
+                </span>
+            </div>
+    
+    
+        <?php } }?>
+
 
     <!-- Form to submit data -->
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
@@ -670,7 +671,7 @@ if($asset_id != null) {
 
             <!-- TITLE , DESCRIPTION -->
             <!-- EDIT MODE -->
-            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
+            <?php if(($isOwner || $isUserAdmin) && $isEditMode) { ?>
 
                 <!-- Title -->
                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield" >
@@ -774,7 +775,10 @@ if($asset_id != null) {
                             echo '<img id = "sshotPreviewImg" src="'.$scrnImageURL.'">';
                         }
                         ?>
-                        <input class="FullWidth" type="hidden" name="sshotFileInput" value="" id="sshotFileInput" accept="image/jpeg"/>
+                        
+                        <input class="FullWidth" type="hidden" name="sshotFileInput" value=""
+                               id="sshotFileInput" accept="image/png"/>
+                        
                         <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
                     </div>
                     
@@ -858,7 +862,7 @@ if($asset_id != null) {
                         <img alt="Image placeholder" id="img<?php echo $i; ?>Preview"
                              src="<?php echo ($asset_id == null || $images_urls[$i] == null) ? $defaultImage : $images_urls[$i] ; ?>">
                         
-                        <input type="file" name="img<?php echo $i;?>Input" title="Image <?php echo $i;?>" value=""
+                        <input type="file" name="image<?php echo $i;?>Input" title="Image <?php echo $i;?>" value=""
                                id="img<?php echo $i;?>Input" accept="image/x-png,image/gif,image/jpeg">
                         
                         <br />
@@ -944,7 +948,7 @@ if($asset_id != null) {
                                         ?>
                                         
                                         <?php if( strpos($attachment_file, "mp4" )!==false || strpos($attachment_file, "ogg" )!==false){?>
-                                            <video style="width:3840px; height:auto" controls>
+                                            <video style="height:auto" controls>
                                                 <source src="<?php echo $attachment_file;?>" type="video/mp4">
                                                 <source src="<?php echo $attachment_file;?>" type="video/ogg">
                                                 Your browser does not support the video tag.
@@ -965,7 +969,9 @@ if($asset_id != null) {
                                 <div class="mySlides fade">
                                     <div id="imgDetailsPanel_preview" style="display: <?php echo ($asset_id == null)?'none':$showImageFields; ?>">
                                         <?php if($asset_id != null){ ?>
-                                            <img id="img<?php echo $i;?>Preview" style="width:100%" src="<?php echo $images_urls[$i]; ?>">
+                                            <img alt="Related images"
+                                                 id="img<?php echo $i;?>Preview"
+                                                 style="width:100%" src="<?php echo $images_urls[$i]; ?>">
                                         <?php } ?>
                                     </div>
                                     <div class="text"></div>
@@ -1001,7 +1007,9 @@ if($asset_id != null) {
                             <?php } else { ?>
 
                                 <audio loop preload="auto" id ='audioFile' autoplay>
-                                    <source src="<?php echo plugins_url();?>/wordpressunity3deditor/sounds/silence.mp3" type="audio/mp3">
+                                    <source
+                              src="<?php echo plugins_url( '../sounds/silence.mp3', dirname(__FILE__)  );?>"
+                                             type="audio/mp3">`
                                 </audio>
                             
                             <?php } ?>
@@ -1011,20 +1019,21 @@ if($asset_id != null) {
 
                     <!-- Languages -->
                     <ul class="langul" style="margin:5px;text-align:center;display:inline-block;width:100%">
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'English')" style="padding:0px 1% !important;">English</button>
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Greek')" style="padding:0px 1% !important;">ΕΛΛΗΝΙΚΑ</button>
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Spanish')" style="padding:0px 1% !important;">Español</button>
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'French')" style="padding:0px 1% !important;">Français</button>
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'German')" style="padding:0px 1% !important;">Deutsch</button>
-                        <button class="tablinks2 mdc-button"  type='button' onclick="openLanguage(event, 'Russian')" style="padding:0px 1% !important;">Pусский</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('English')">English</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('Greek')" >ΕΛΛΗΝΙΚΑ</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('Spanish')">Español</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('French')">Français</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('German')">Deutsch</button>
+                        <button class="tablinks2 mdc-button" type='button' onclick="openLanguage('Russian')">Pусский</button>
                     </ul>
 
                     <!-- Accessibility -->
                     <div style="display:inline-block; margin-left:10px; width:100%; margin-top:10px; margin-bottom:10px" >
 
                         <!-- Background color -->
-                        <input type="text" id="assetback3dcolor" class="mdc-textfield__input" rows="10" cols="40" style="box-shadow: none; display:none; "
-                               name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
+                        <input type="text" id="assetback3dcolor" class="mdc-textfield__input"
+                               name="assetback3dcolor" form="3dAssetForm"
+                               value="<?php echo trim($asset_back_3d_color_saved); ?>" />
 
                         <button id="jscolorpick"
                                 class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
@@ -1033,32 +1042,28 @@ if($asset_id != null) {
 
                         <!-- Font size -->
                         <div id="font-size-selector" style="display:inline-block; right: 10%;font-size: 1.5em;">
-                            <div id="plustext" alt="Increase text size"  onclick="resizeText(1,event)" style="margin-left:10px;display:inline-block;font-size:18pt;">A+</div>
-                            <div id="minustext" alt="Decrease text size" onclick="resizeText(-1,event)" style="margin-left:10px;display:inline-block;font-size:14pt;">A-</div>
+                            <div id="plustext" title="Increase text size"  onclick="resizeText(1)">A+</div>
+                            <div id="minustext" title="Decrease text size" onclick="resizeText(-1)">A-</div>
                         </div>
                         
                         <?php $images_accesicons_path = plugins_url( '../images/accessibility_icons/', dirname(__FILE__)  );?>
 
                         <!-- Different texts buttons -->
                         <div style="display:inline-block; float:right; right:0;">
-                            <button type='button' class="mdc-button" onclick="openAccess(event, '')"
-                                    style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <button type='button' class="mdc-button accessButton" onclick="openAccess('')"
+                                     >
                                 <img src="<?php echo $images_accesicons_path.'/general_population_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                             </button>
 
-                            <button type='button' class="mdc-button" onclick="openAccess(event, 'Experts')"
-                                    style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Experts')" >
                                 <img src="<?php echo $images_accesicons_path.'/graduation_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                             </button>
 
-                            <button type='button' class="mdc-button" onclick="openAccess(event, 'Perception')"
-                                    style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Perception')">
                                 <img src="<?php echo $images_accesicons_path.'/heart_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                             </button>
 
-                            <button type='button' class="mdc-button"
-                                    onclick="openAccess(event, 'Kids')"
-                                    style="background-color:white; padding:0px; vertical-align:bottom; float:right" >
+                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Kids')">
                                 <img src="<?php echo $images_accesicons_path.'/children_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
                             </button>
                         </div>
@@ -1123,7 +1128,7 @@ if($asset_id != null) {
 
                         jQuery("#"+langcurr + ".tabcontent2")[0].style.display = "block";
 
-                        function openAccess(evt, accessLevel) {
+                        function openAccess(accessLevel) {
 
                             var i, tabcontent, tablinks;
 
@@ -1141,11 +1146,11 @@ if($asset_id != null) {
 
                             document.getElementById(currLanguage + accessLevel).style.display = "block";
 
-                            evt.currentTarget.className += " active";
+                            window.event.currentTarget.className += " active";
                         }
 
 
-                        function openLanguage(evt, lang) {
+                        function openLanguage(lang) {
                             var i, tabcontent, tablinks;
                             tabcontent = document.getElementsByClassName("tabcontent2");
                             for (i = 0; i < tabcontent.length; i++) {
@@ -1164,12 +1169,12 @@ if($asset_id != null) {
 
                             //console.log(titLang);
 
-                            if (titLang == '')
+                            if (titLang === '')
                                 titLang = eval('asset_title_english_saved');
 
                             document.getElementById("assetTitleView").innerHTML = titLang;
 
-                            evt.currentTarget.className += " active";
+                            window.event.currentTarget.className += " active";
                         }
 
                     </script>
@@ -1230,7 +1235,7 @@ if($asset_id != null) {
             ?>
 
             <!-- CATEGORY IPR -->
-            <div id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && !$isPreviewMode)?'':'none';?>">
+            <div id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && $isEditMode)?'':'none';?>">
 
                 <h3 class="mdc-typography--title">Select an IPR plan</h3>
                 <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
@@ -1276,7 +1281,7 @@ if($asset_id != null) {
             
             <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
             
-            <?php if(($isOwner || $isUserAdmin) && !$isPreviewMode) { ?>
+            <?php if(($isOwner || $isUserAdmin) && $isEditMode) { ?>
                 <input type="hidden" name="submitted" id="submitted" value="true"
                 />
                 
@@ -1355,15 +1360,20 @@ if($asset_id != null) {
         // Main 3D canvas handler
         var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
 
+
         
-        // REM HERE : Reset Panels ? Should be
-        if (!isPreviewMode) {
+
+        let isEditMode = 0;
+        isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
+        
+        
+        
+        // Reset if not preview
+        if (isEditMode === 1) {
             wpunity_reset_panels(wu_webw_3d_view, "initial script");
         }
 
-
         var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
 
         // ----------- Canvas Renderer ------------------------
         // handler to resize canvas window
@@ -1430,16 +1440,20 @@ if($asset_id != null) {
             });
         }
 
-        // Screenshot
-        var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
-        var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
+        // Screenshot handler
+        if (document.getElementById("sshotPreviewImg")) {
+            var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
+            var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
 
-        createScreenshotBtn.click(function() {
-            wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(wu_webw_3d_view);
-        });
-
-        (function() {
+            createScreenshotBtn.click(function () {
+                wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
+                wpunity_create_model_sshot(wu_webw_3d_view);
+            });
+        }
+        
+        // Select category handler
+        if( isEditMode === 1){
+            (function() {
             var MDCSelect = mdc.select.MDCSelect;
 
             // Category of asset change
@@ -1486,11 +1500,12 @@ if($asset_id != null) {
             // boxKnownGroupDropdown.addEventListener('MDCSelect:change', function() {
             //     jQuery("#boxKnownGroupInput").attr( "value", boxKnownGroupSelect.selectedOptions[0].getAttribute("id") );
             // });
-
+            
 
             // This fires on start
             jQuery( document ).ready(function() {
-
+                
+                
                 // No asset category selected
                 if (jQuery('#currently-selected').attr("data-cat-id")) {
                     jQuery('#'+ selectedCatId).attr("aria-selected", true);
@@ -1513,16 +1528,7 @@ if($asset_id != null) {
                 }, 0);
             };
 
-            <!-- Select carousel options for images cloning -->
-            var lightSliderOpts = {
-                item: 4, loop: false, slideMove: 1, easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
-                speed: 600, responsive : [{breakpoint:800, settings: {item:3, slideMove:1,slideMargin:6}
-                },
-                    {
-                        breakpoint:480, settings: {item:2, slideMove:1}
-                    }
-                ]
-            };
+           
 
             // Function to initialize layout
             // paramter denotes if new asset or edit asset
@@ -1538,7 +1544,7 @@ if($asset_id != null) {
 
                 var cat;
                 var descText = document.getElementById('categoryDescription');
-
+                
                 if(createAsset) {
                     descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
                     cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
@@ -1571,6 +1577,8 @@ if($asset_id != null) {
 
                 //}
 
+           
+                
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
 
                 // Hide some panels but decide based on category as below what to show
@@ -1579,8 +1587,6 @@ if($asset_id != null) {
                 jQuery("#moleculeOptionsPanel").hide();
                 jQuery("#moleculeFluidPanel").hide();
 
-                // Thumbnail images carousel for cloning
-                jQuery('#lightSlider').lightSlider(lightSliderOpts);
 
                 // Category
                 switch(cat) {
@@ -1617,25 +1623,28 @@ if($asset_id != null) {
                 }
             }
 
-        })();
+            })();
+        }
 
         // Hide admin bar of wordpress
         jQuery("#wpadminbar").hide();
         jQuery(".js no-svg").css("margin-top:0px");
 
         // // // UNIT TEST: Select artifact, Remove
-        setTimeout( function(){
+        if (isEditMode === 1) {
+            setTimeout(function () {
 
-            jQuery("#category-select").click(); // Expand category
-            jQuery("#78").click(); // Select Artifact category
+                jQuery("#category-select").click(); // Expand category
+                jQuery("#78").click(); // Select Artifact category
 
 
-            //jQuery('#assetTitle')[0].value = 'a12'; // Set title
-            jQuery("#objRadio-label").click(); // Set fbx type
-            //jQuery("#fileUploadInput").click(); // Click browse files
+                //jQuery('#assetTitle')[0].value = 'a12'; // Set title
+                jQuery("#objRadio-label").click(); // Set fbx type
+                //jQuery("#fileUploadInput").click(); // Click browse files
 
-            loadFileInputLabel('glb');
+                loadFileInputLabel('glb');
 
-        },500);
+            }, 500);
+        }
 
     </script>

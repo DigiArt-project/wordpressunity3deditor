@@ -520,17 +520,18 @@ function applyFont(font) {
 
 
 
-function resizeText(multiplier,e) {
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
+function resizeText(multiplier) {
+    window.event.preventDefault();
+    window.event.stopPropagation();
+    window.event.stopImmediatePropagation();
     if (document.body.style.fontSize == "") {
         document.body.style.fontSize = "1.0em";
     }
     document.body.style.fontSize = parseFloat(document.body.style.fontSize) + (multiplier * 0.2) + "em";
 
-    document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop =
-        (parseFloat(document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop)+multiplier*10)+"px";
+
+    // document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop =
+    //     (parseFloat(document.getElementsByClassName("asset3d_desc_view")[0].style.marginTop)+multiplier*10)+"px";
 
     return false;
 }
@@ -572,7 +573,7 @@ function wpunity_create_model_sshot(wu_webw_3d_view_local) {
     html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
 
         wu_webw_3d_view_local.render();
-        document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/jpeg");
+        document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/png");
 
         //------------ Resize ------------
         var resizedCanvas = document.createElement("canvas");
