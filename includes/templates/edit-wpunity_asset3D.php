@@ -214,18 +214,15 @@ $goBackToLink = '';
 
 // If coming from scene then go to scene editor
 if($scene_id != 0 ) {
+    
     $goBackToLink = get_permalink($edit_scene_page_id) . $parameter_Scenepass . $scene_id . '&wpunity_game=' .
         $project_id . '&scene_type=' . $_GET['scene_type'];
     
 }else {
+    
     // Goto shared assets
     $goBackToLink = home_url()."/wpunity-list-shared-assets/?".
         (!isset($_GET['singleproject'])?"wpunity_game=":"wpunity_project_id=").$project_id;
-
-//    if (!isset($_GET['singleproject']))
-//        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_game=".$project_id; // Shared and all private
-//    else
-//        $goBackToLink = home_url()."/wpunity-list-shared-assets/?wpunity_project_id=".$project_id; // Single project private
 }
 
 // ============================================
@@ -556,7 +553,7 @@ if($asset_id != null) {
             // Display EDIT BUTTON
             
             $curr_uri = $_SERVER['REQUEST_URI'];
-            $targetparams = str_replace("preview=1","",$curr_uri);
+            $targetparams = str_replace("preview=1","preview=0",$curr_uri);
             $editLink2 = ( empty( $_SERVER['HTTPS'] ) ? 'http://' : 'https://' ).
                 $_SERVER['HTTP_HOST'].$targetparams.'#English';
             ?>

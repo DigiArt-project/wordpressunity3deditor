@@ -274,11 +274,11 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
 
                     (f.isJoker==='false'?
                             ('<a draggable="false" ondragstart="return false;" title="Edit asset" id="editAssetBtn-'+ f.assetid +
-                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&preview=0&editable=true'  +
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&scene_type=scene&preview=0&editable=true'  +
                                 '\'" class="editAssetbutton mdc-button mdc-button--dense">Edit</a>')
                             :
                             ('<a draggable="false" ondragstart="return false;" title="View asset" id="editAssetBtn-'+ f.assetid +
-                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&preview=1&editable=false' +
+                                '" onclick="window.location.href=\''+urlforAssetEdit + f.assetid + '&scene_type=scene&preview=1&editable=false' +
                                 '\'" class="deleteAssetbutton mdc-button mdc-button--dense">View</a>')
                     )+
 
