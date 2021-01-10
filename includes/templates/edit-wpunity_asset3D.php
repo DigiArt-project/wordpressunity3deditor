@@ -21,9 +21,13 @@ $hasTranslator = false;
 
 // Is on back or front end ?
 $isAdmin = is_admin() ? 'back' : 'front';
-echo '<script>';
-echo 'var isAdmin="'.$isAdmin.'";';
-echo '</script>';
+?>
+
+<script>
+     var isAdmin="<?php echo $isAdmin; ?>";
+</script>
+
+<?php
 
 // Remove margin-top from page
 function remove_admin_login_header() {
@@ -38,9 +42,11 @@ function loadAsset3DManagerScriptsAndStyles() {
     // Stylesheet
     wp_enqueue_style('wpheliosvr_asseteditor_stylesheet');
     
+    // QR code generator
+    wp_enqueue_script('wpunity_qrcode_generator');
+    
     // Three js : for simple rendering
     wp_enqueue_script('wpunity_scripts');
-    wp_enqueue_script('wpunity_qrcode_generator');
     
     // For fbx binary
     wp_enqueue_script('wpunity_inflate'); // for binary fbx
@@ -108,11 +114,6 @@ function loadAsset3DManagerScriptsAndStyles() {
 add_action('wp_enqueue_scripts', 'loadAsset3DManagerScriptsAndStyles' );
 
 // End Of Scripts Loading
-
-// Variables of vr labs
-
-
-
 
 $perma_structure = get_option('permalink_structure') ? true : false;
 if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else{$parameter_Scenepass = '&wpunity_scene=';}
@@ -228,7 +229,8 @@ if($scene_id != 0 ) {
 // ============================================
 // Submit Handler
 //=============================================
-if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')) {
+if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'],
+        'post_nonce')) {
     
     $fp = fopen("output_check_files.txt","w");
     fwrite($fp, print_r($_FILES, true));
@@ -265,14 +267,16 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         <?php
         
         //It's a new Asset, let's create it (returns newly created ID, or 0 if nothing happened)
-        $asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
+        $asset_id = wpunity_create_asset_frontend($assetPGameID,$assetCatID, $gameSlug, $assetCatIPRID,
+                                                  $asset_language_pack, $assetFonts, $assetback3dcolor);
     }else {
         ?>
         <div class='centerMessageAssetSubmit'>Updating asset...</div>
         <?php
         
         // Edit an existing asset: Return true if updated, false if failed
-        $asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID, $asset_language_pack, $assetFonts, $assetback3dcolor);
+        $asset_updatedConf = wpunity_update_asset_frontend($assetPGameID, $assetCatID, $asset_id, $assetCatIPRID,
+            $asset_language_pack, $assetFonts, $assetback3dcolor);
     }
     
     // Upload 3D files
@@ -290,7 +294,12 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
     }
     
     // SCREENSHOT: upload and add id of uploaded file to postmeta wpunity_asset3d_screenimage of asset
-    if (isset($_POST['sshotFileInput'])) {
+    $f = fopen("output_fscr.txt","w");
+    fwrite($f, $_POST['sshotFileInput']);
+    fclose($f);
+    
+    
+    if (isset($_POST['sshotFileInput']) && !empty($_POST['sshotFileInput']) ) {
         wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $asset_language_pack['assetTitleForm'], $asset_id);
     }
     
@@ -361,30 +370,37 @@ if($asset_id != null) {
         $mtl_file_name = basename($mtlpost->guid);
         $obj_file_name = basename($objpost->guid);
         $path_url = pathinfo($mtlpost->guid)['dirname'];
-        
-        echo '<script>';
-        echo 'var mtl_file_name="'.$mtl_file_name.'";';
-        echo 'var obj_file_name="'.$obj_file_name.'";';
-        echo 'var path_url="'.$path_url . '/'    .'";';
-        echo '</script>';
+        ?>
+            <script>
+                var mtl_file_name="<?php echo $mtl_file_name; ?>";
+                var obj_file_name="<?php echo $obj_file_name; ?>";
+                var path_url="<?php echo $path_url.'/'; ?>";
+            </script>
+        <?php
     }
     
     if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
         $pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
         $pdb_file_name = $pdbpost->guid;
+        ?>
         
-        echo '<script>';
-        echo 'var pdb_file_name="'.$pdb_file_name.'";';
-        echo '</script>';
+        <script>
+            var pdb_file_name="<?php echo $pdb_file_name; ?>";
+        </script>
+        
+        <?php
     }
     
     if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
         $glbpost = get_post($assetpostMeta['wpunity_asset3d_glb'][0]);
         $glb_file_name = $glbpost->guid;
+        ?>
         
-        echo '<script>';
-        echo 'var glb_file_name="'.$glb_file_name.'";';
-        echo '</script>';
+        <script>
+            var glb_file_name="<?php echo $glb_file_name;?>";
+        </script>
+        
+        <?php
     }
     
     
@@ -421,11 +437,13 @@ if($asset_id != null) {
         $fbx_file_name = basename($fbxpost->guid);
         $path_url_fbx = pathinfo($fbxpost->guid)['dirname'];
         
-        echo '<script>';
-        echo 'var fbx_file_name="'.$fbx_file_name.'";';
-        echo 'var path_url_fbx="'.$path_url_fbx . '/'    .'";';
-        echo 'var textures_fbx_string_connected="'.$textures_fbx_string_connected.'";';
-        echo '</script>';
+        ?>
+            <script>
+                var fbx_file_name="<?php echo $fbx_file_name;    ?>";
+                var path_url_fbx ="<?php echo $path_url_fbx.'/';  ?>";
+                var textures_fbx_string_connected="<?php echo $textures_fbx_string_connected; ?>";
+            </script>
+        <?php
     }
     
     
@@ -455,7 +473,8 @@ echo '</script>';
 $asset_fonts_saved = ($asset_id == null ? "" : get_post_meta($asset_id,'wpunity_asset3d_fonts', true));
 
 // Retrieve Background Color saved
-$asset_back_3d_color_saved = ($asset_id == null ? "#000000" : get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
+$asset_back_3d_color_saved = ($asset_id == null ? "#000000" :
+                        get_post_meta($asset_id,'wpunity_asset3d_back_3d_color', true));
 
 // 5 asset images
 $images_urls = [null, null, null, null, null];
@@ -495,7 +514,8 @@ if($asset_id != null) {
 <div id="wrapper_3d_inner" class="asset_editor_3dpanel">
     <!--   Progress bar -->
     <div id="previewProgressSlider"  class="CenterContents">
-        <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">Preview of 3D Model</h6>
+        <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">
+            Preview of 3D Model</h6>
         <div class="progressSlider">
             <div id="previewProgressSliderLine" class="progressSliderSubLine" style="width: 0;">...</div>
         </div>
@@ -517,12 +537,11 @@ if($asset_id != null) {
     
     <?php
     if ($isUserloggedIn && $isEditMode) {
+        ?>
         
-        echo '<a title="Back" style="color:#1e90ff; overflow: hidden;  text-overflow: ellipsis;  white-space: nowrap;"
-                   class="hideAtLocked mdc-button" href="' .$goBackToLink.'">
-                    <i class="material-icons" style="font-size: 24px; vertical-align: middle">arrow_back</i>
-                    Assets Manager
-                </a>';
+        <a title="Back" class="wpheliosvr-back-button hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
+            <em class="material-icons arrowback" >arrow_back</em>Assets Manager</a>
+        <?php
     }
     
     // UPPER BUTTONS
@@ -575,14 +594,15 @@ if($asset_id != null) {
             </div>
     
     
-        <?php } }?>
+        <?php }
+    }?>
 
 
     <!-- Form to submit data -->
     <form name="3dAssetForm" id="3dAssetForm" method="POST" enctype="multipart/form-data">
 
         <!-- CATEGORY -->
-        <!--        <div class="" style="display:--><?php //echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?><!--">-->
+        <!-- <div class="" style="display:--><?php //echo ((!$isUserAdmin && !$isOwner) || $isPreviewMode) ? "none":""; ?><!--">-->
         <!-- Hide category selection for simplicity. Use artifact for all. -->
         <div class="" style="display:none">
             <h3 class="mdc-typography--title" style="margin-top:30px;"><?php echo $dropdownHeading; ?></h3>
@@ -627,16 +647,23 @@ if($asset_id != null) {
                 ?>
                 
                 <?php if($asset_id == null) { ?>
-                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">No category selected</span>
+                    <span id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">
+                        No category selected
+                    </span>
                 <?php } else { ?>
-                    <span data-cat-desc="<?php echo $saved_term[0]->description; ?>" data-cat-slug="<?php echo $saved_term[0]->slug; ?>" data-cat-id="<?php echo $saved_term[0]->term_id; ?>" id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2"><?php echo $saved_term[0]->name; ?></span>
+                    <span data-cat-desc="<?php echo $saved_term[0]->description; ?>"
+                          data-cat-slug="<?php echo $saved_term[0]->slug; ?>"
+                          data-cat-id="<?php echo $saved_term[0]->term_id; ?>"
+                          id="currently-selected" class="mdc-select__selected-text mdc-typography--subheading2">
+                        <?php echo $saved_term[0]->name; ?>
+                    </span>
                 <?php } ?>
-
 
                 <div class="mdc-simple-menu mdc-select__menu">
                     <ul class="mdc-list mdc-simple-menu__items">
 
-                        <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
+                        <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true"
+                            tabindex="-1" style="pointer-events: none;">
                             No category selected
                         </li>
                         
@@ -646,7 +673,11 @@ if($asset_id != null) {
                                 continue;
                             } ?>
 
-                            <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option" data-cat-desc="<?php echo $term->description; ?>" data-cat-slug="<?php echo $term->slug; ?>" id="<?php echo $term->term_id?>" tabindex="0">
+                            <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option"
+                                data-cat-desc="<?php echo $term->description; ?>"
+                                data-cat-slug="<?php echo $term->slug; ?>"
+                                id="<?php echo $term->term_id?>"
+                                tabindex="0">
                                 <?php echo $term->name; ?>
                             </li>
                         
@@ -656,7 +687,10 @@ if($asset_id != null) {
                 </div>
             </div>
 
-            <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryDescription"> </span>
+            <span style="font-style: italic;"
+                  class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light"
+                  id="categoryDescription">
+            </span>
 
             <input id="termIdInput" type="hidden" name="term_id" value="">
         </div>
@@ -672,12 +706,16 @@ if($asset_id != null) {
 
                 <!-- Title -->
                <div class="mdc-textfield FullWidth mdc-form-field" data-mdc-auto-init="MDCTextfield" >
-                    <input id="assetTitle" type="text" class="changablefont mdc-textfield__input mdc-theme--text-primary-on-light" name="assetTitle"
+                    <input id="assetTitle" type="text"
+                           class="changablefont mdc-textfield__input mdc-theme--text-primary-on-light"
+                           name="assetTitle"
                            aria-controls="title-validation-msg" required minlength="3" maxlength="40"
                            style="font-family: <?php echo $curr_font?>;"
                            value="<?php echo trim($assetLangPack2['asset_title_saved']); ?>">
                     
-                   <label for="assetTitle" class="mdc-textfield__label"><?php echo $assetLangPack2['asset_title_label']; ?> </label>
+                   <label for="assetTitle" class="mdc-textfield__label">
+                       <?php echo $assetLangPack2['asset_title_label']; ?>
+                   </label>
                    
                    <div class="mdc-textfield__bottom-line"></div>
                 </div>
@@ -691,7 +729,8 @@ if($asset_id != null) {
                 <div id="object3DPropertiesPanel"">
      
                     <h3 class="mdc-typography--title">3D Model of the Asset</h3>
-                    <img alt="3D model section" src="<?php echo plugins_url( '../images/cube.png', dirname(__FILE__)  );?>">
+                    <img alt="3D model section"
+                         src="<?php echo plugins_url( '../images/cube.png', dirname(__FILE__)  );?>">
                     <label id="fileUploadInputLabel" for="multipleFilesInput"> Select files </label>
         
                     <input id="fileUploadInput"
@@ -710,7 +749,8 @@ if($asset_id != null) {
                     <ul class="RadioButtonList">
                         <li class="mdc-form-field" id="glbRadioListItem" onclick="loadFileInputLabel('glb')">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="glbRadio" name="objectTypeRadio" value="glb">
+                                <input class="mdc-radio__native-control" type="radio" id="glbRadio"
+                                       name="objectTypeRadio" value="glb">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -721,7 +761,8 @@ if($asset_id != null) {
                         
                         <li class="mdc-form-field" id="fbxRadioListItem" onclick="loadFileInputLabel('fbx')">
                             <div class="mdc-radio" >
-                                <input class="mdc-radio__native-control" type="radio" id="fbxRadio"  name="objectTypeRadio" value="fbx">
+                                <input class="mdc-radio__native-control" type="radio" id="fbxRadio"
+                                       name="objectTypeRadio" value="fbx">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -732,7 +773,8 @@ if($asset_id != null) {
 
                         <li class="mdc-form-field" id="pdbRadioListItem" onclick="loadFileInputLabel('pdb')">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="pdbRadio" name="objectTypeRadio" value="pdb">
+                                <input class="mdc-radio__native-control" type="radio" id="pdbRadio"
+                                       name="objectTypeRadio" value="pdb">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -743,7 +785,8 @@ if($asset_id != null) {
                         
                         <li class="mdc-form-field" id="mtlRadioListItem" onclick="loadFileInputLabel('obj')">
                             <div class="mdc-radio">
-                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio" name="objectTypeRadio" value="mtl">
+                                <input class="mdc-radio__native-control" type="radio" id="mtlRadio"
+                                       name="objectTypeRadio" value="mtl">
                                 <div class="mdc-radio__background">
                                     <div class="mdc-radio__outer-circle"></div>
                                     <div class="mdc-radio__inner-circle"></div>
@@ -762,13 +805,19 @@ if($asset_id != null) {
                     <div id="sshotFileInputContainer">
                         <h4 class="mdc-typography--title">Screenshot</h4>
                         <?php
+            
                         if($asset_id==null) {
+                            
                             // If asset is not created load a predefault image
                             echo '<img id = "sshotPreviewImg" src="'.
                                 plugins_url( '../images/ic_sshot.png', dirname(__FILE__)  ).'">';
+                        
                         } else {
+                            
                             // if asset is edited load the existing screenshot url
-                            $scrnImageURL = wp_get_attachment_url( get_post_meta($asset_id, "wpunity_asset3d_screenimage",true) );
+                            $scrnImageURL = wp_get_attachment_url(
+                                    get_post_meta($asset_id, "wpunity_asset3d_screenimage",true) );
+                            
                             echo '<img id = "sshotPreviewImg" src="'.$scrnImageURL.'">';
                         }
                         ?>
@@ -776,10 +825,15 @@ if($asset_id != null) {
                         <input class="FullWidth" type="hidden" name="sshotFileInput" value=""
                                id="sshotFileInput" accept="image/png"/>
                         
-                        <a id="createModelScreenshotBtn" type="button" class="mdc-button mdc-button--primary mdc-theme--primary" data-mdc-auto-init="MDCRipple">Create screenshot</a>
+                        <a id="createModelScreenshotBtn" type="button"
+                           class="mdc-button mdc-button--primary mdc-theme--primary"
+                           data-mdc-auto-init="MDCRipple">
+                            Create screenshot
+                        </a>
                     </div>
                     
-                    <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea" data-mdc-auto-init="MDCTextfield">
+                    <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea"
+                         data-mdc-auto-init="MDCTextfield">
                         <label for="jscolorpick" style="display:none">Color pick</label>
                         <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="000000">
         
@@ -1043,171 +1097,69 @@ if($asset_id != null) {
                             <div id="minustext" title="Decrease text size" onclick="resizeText(-1)">A-</div>
                         </div>
                         
-                        <?php $images_accesicons_path = plugins_url( '../images/accessibility_icons/', dirname(__FILE__)  );?>
+                        <?php $images_accessIcons_path = plugins_url( '../images/accessibility_icons/', dirname(__FILE__)  );?>
 
                         <!-- Different texts buttons -->
-                        <div style="display:inline-block; float:right; right:0;">
-                            <button type='button' class="mdc-button accessButton" onclick="openAccess('')"
-                                     >
-                                <img src="<?php echo $images_accesicons_path.'/general_population_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
-                            </button>
+                        <div class="accessBtDiv">
+                            <a type='button' class="mdc-button accessButton" onclick="openAccess('')">
+                                <img alt="General" src="<?php echo $images_accessIcons_path.'/general_population_icon.png';?>"
+                                class="accessIcons"/>
+                            </a>
 
-                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Experts')" >
-                                <img src="<?php echo $images_accesicons_path.'/graduation_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
-                            </button>
+                            <a type='button' class="mdc-button accessButton" onclick="openAccess('Experts')" >
+                                <img alt="Experts" src="<?php echo $images_accessIcons_path.'/graduation_icon.png';?>"
+                                     class="accessIcons"/>
+                            </a>
 
-                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Perception')">
-                                <img src="<?php echo $images_accesicons_path.'/heart_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
-                            </button>
+                            <a type='button' class="mdc-button accessButton" onclick="openAccess('Perception')">
+                                <img alt="Perception disabilities" src="<?php echo $images_accessIcons_path.'/heart_icon.png';?>"
+                                     class="accessIcons"/>
+                            </a>
 
-                            <button type='button' class="mdc-button accessButton" onclick="openAccess('Kids')">
-                                <img src="<?php echo $images_accesicons_path.'/children_icon.png';?>" width="40px" height="40px" style="background-color:white"/>
-                            </button>
+                            <a type='button' class="mdc-button accessButton" onclick="openAccess('Kids')">
+                                <img alt="Children" src="<?php echo $images_accessIcons_path.'/children_icon.png';?>"
+                                     class="accessIcons"/>
+                            </a>
                         </div>
                     </div>
 
                     <div class="wrapper_lang">
-
-                        <div id="English" class="tabcontent2 active" style="font-family:<?php echo $curr_font?>">
-                            <?php echo trim($assetLangPack2['asset_desc_saved']);?>
-                        </div>
-
-                        <div id="EnglishKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                            <?php echo trim($assetLangPack2['asset_desc_kids_saved']);?>
-                        </div>
-
-                        <div id="EnglishExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                            <?php echo trim($assetLangPack2['asset_desc_experts_saved']);?>
-                        </div>
-
-                        <div id="EnglishPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>">
-                            <?php echo trim($assetLangPack2['asset_desc_perception_saved']);?>
-                        </div>
-
-
-                        <div id="Greek" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_saved']); ?></div>
-                        <div id="GreekKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_kids_saved']); ?></div>
-                        <div id="GreekExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_experts_saved']); ?></div>
-                        <div id="GreekPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"> <?php echo trim($assetLangPack2['asset_desc_greek_perception_saved']); ?></div>
-
-                        <div id="Spanish" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_saved']); ?></div>
-                        <div id="SpanishKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_kids_saved']); ?></div>
-                        <div id="SpanishExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_experts_saved']); ?></div>
-                        <div id="SpanishPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_spanish_perception_saved']); ?></div>
-
-
-                        <div id="French" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_saved']); ?></div>
-                        <div id="FrenchKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_kids_saved']); ?></div>
-                        <div id="FrenchExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_experts_saved']); ?></div>
-                        <div id="FrenchPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_french_perception_saved']); ?></div>
-
-                        <div id="German" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_saved']); ?></div>
-                        <div id="GermanKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_kids_saved']); ?></div>
-                        <div id="GermanExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_experts_saved']); ?></div>
-                        <div id="GermanPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_german_perception_saved']); ?></div>
-
-                        <div id="Russian" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_saved']); ?></div>
-                        <div id="RussianKids" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_kids_saved']); ?></div>
-                        <div id="RussianExperts" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_experts_saved']); ?></div>
-                        <div id="RussianPerception" class="tabcontent2" style="font-family:<?php echo $curr_font?>"><?php echo trim($assetLangPack2['asset_desc_russian_perception_saved']); ?></div>
-
-
+                        <?php
+                          // Presentation of textual descriptions per language and accessibility level
+                          $languages = ["English","Greek","Spanish","French","German","Russian"];
+                          $accessLevel = ["","Kids","Experts","Perception"];
+                        
+                          foreach ($languages as $l){
+                              foreach ($accessLevel as $a){
+    
+                                  $l2 = ($l === 'English') ? '' : '_'.strtolower($l);
+                                  $a2 = ($a === '')? '' : '_'.strtolower($a);
+                                  
+                                 echo '<div id="'.$l.$a.'" class="tabcontent2 active" style="font-family:'.$curr_font.'">'.
+                                      trim($assetLangPack2['asset_desc'.$l2.$a2.'_saved']).'</div>';
+                             }
+                           }
+                          ?>
                     </div>
-
-                    <script>
-                        tabcontent = document.getElementsByClassName("tabcontent2");
-                        for (i = 0; i < tabcontent.length; i++) {
-                            tabcontent[i].style.display = "none";
-                        }
-
-                        var url = window.location.href;
-                        var langcurr= url.substring(url.indexOf("#")+1);
-
-                        jQuery("#"+langcurr + ".tabcontent2")[0].style.display = "block";
-
-                        function openAccess(accessLevel) {
-
-                            var i, tabcontent, tablinks;
-
-                            // The description
-                            tabcontent = document.getElementsByClassName("tabcontent2");
-
-                            for (i = 0; i < tabcontent.length; i++) {
-                                tabcontent[i].style.display = "none";
-                            }
-
-                            // tablinks = document.getElementsByClassName("tablinks2");
-                            // for (i = 0; i < tablinks.length; i++) {
-                            //     tablinks[i].className = tablinks[i].className.replace(" active", "");
-                            // }
-
-                            document.getElementById(currLanguage + accessLevel).style.display = "block";
-
-                            window.event.currentTarget.className += " active";
-                        }
-
-
-                        function openLanguage(lang) {
-                            var i, tabcontent, tablinks;
-                            tabcontent = document.getElementsByClassName("tabcontent2");
-                            for (i = 0; i < tabcontent.length; i++) {
-                                tabcontent[i].style.display = "none";
-                            }
-                            tablinks = document.getElementsByClassName("tablinks2");
-                            for (i = 0; i < tablinks.length; i++) {
-                                tablinks[i].className = tablinks[i].className.replace(" active", "");
-                            }
-
-                            currLanguage = lang;
-
-                            document.getElementById(lang).style.display = "block";
-
-                            var titLang = eval('asset_title_'+currLanguage.toLowerCase()+'_saved');
-
-                            //console.log(titLang);
-
-                            if (titLang === '')
-                                titLang = eval('asset_title_english_saved');
-
-                            document.getElementById("assetTitleView").innerHTML = titLang;
-
-                            window.event.currentTarget.className += " active";
-                        }
-
-                    </script>
-
-                    <hr />
-
 
                     <!-- Peer calls -->
-                    <div id="confwindow" style="align-items: center; justify-content: center; border 0px; display:none" >
-                        <iframe id="iframeConf" width="100%" height="350px" style="margin-bottom:0;" frameBorder=0 src=""
+                    <div id="confwindow" >
+                        <iframe id="iframeConf" width="100%" height="350px" src=""
                                 allow="camera;microphone"></iframe>
-
                     </div>
 
-                    <div id="confwindow_helper" style="padding-top: 20px;text-align: center;width: 200px;margin: 0 auto;">
+                    <div id="confwindow_helper">
                         <h1><img src="<?php echo plugins_url( '../peer-calls/src/res/', dirname(__FILE__)  ).'/peer-calls.svg';?>" alt="Peer Calls" ></h1>
                         <p>Video-conference with the museum expert!</p>
                         <button type="button" onclick="startConf()">Call</button>
                     </div>
 
-
-                    <script>
-                        function startConf(){
-                            jQuery("#confwindow")[0].style.display="";
-                            jQuery("#confwindow_helper")[0].style.display="none";
-
-                            document.getElementById('iframeConf').src = "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $assetLangPack2['asset_title_saved']; ?>";
-
-                            wpunity_notify_confpeers();
-                        }
-                    </script>
                     
                     <?php
                     // Peer calls: audiovisual conferencing, answer to calls directly (for museum operators)
-                    if(isset($_GET['directcall']))
-                        echo '<script>startConf()</script>';
+                      if (isset($_GET['directcall'])) {
+                          echo '<script>startConf()</script>';
+                      }
                     ?>
                 
                 <?php } ?>
@@ -1217,48 +1169,57 @@ if($asset_id != null) {
                 <?php include 'edit-wpunity_asset3D_ChemistrySupport1.php'; ?>
 
             <?php
-            // Virtual Labs widgets
-            if ($project_scope == 1)
-                require(plugin_dir_path( __DIR__ ).'/templates/edit-wpunity_asset3D_vlabsWidgets.php');
+            // Obsolete virtual labs code
+            //  if ($project_scope == 1) {
+            //        require(plugin_dir_path(__DIR__) . '/templates/edit-wpunity_asset3D_vlabsWidgets.php');
+            //  }
             ?>
 
             <hr class="WhiteSpaceSeparator" />
-
-
-            <!--       IPR category              -->
-            <?php
-            $cat_ipr_terms = get_terms('wpunity_asset3d_ipr_cat', array('get' => 'all'));
-            $saved_ipr_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_ipr_cat');
-            ?>
 
             <!-- CATEGORY IPR -->
             <div id="ipr-div" style="display:<?php echo (($isOwner || $isUserAdmin) && $isEditMode)?'':'none';?>">
 
                 <h3 class="mdc-typography--title">Select an IPR plan</h3>
-                <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0" style="min-width: 100%;">
+                <div id="category-ipr-select" class="mdc-select" role="listbox" tabindex="0">
                     <i class="material-icons mdc-theme--text-hint-on-light">label</i>&nbsp;
                     
-                    <?php if($asset_id == null || count($saved_ipr_term)===0 ) { ?>
-                        <span id="currently-ipr-selected" class="mdc-select__selected-text mdc-typography--subheading2">No IPR category selected</span>
+                    <?php
+                        $saved_ipr_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_ipr_cat');
+                        
+                        if($asset_id == null || empty($saved_ipr_term) ) { ?>
+                            <!-- Empty IPR -->
+                            <span id="currently-ipr-selected"
+                              class="mdc-select__selected-text mdc-typography--subheading2">
+                            No IPR category selected
+                            </span>
                     <?php } else { ?>
-                        <span
+                             <!-- Saved IPR -->
+                             <span
                                 data-cat-ipr-desc="<?php echo $saved_ipr_term[0]->description; ?>"
                                 data-cat-ipr-slug="<?php echo $saved_ipr_term[0]->slug; ?>"
                                 data-cat-ipr-id="<?php echo $saved_ipr_term[0]->term_ipr_id; ?>"
                                 id="currently-ipr-selected"
                                 class="mdc-select__selected-text mdc-typography--subheading2">
-                            <?php echo $saved_ipr_term[0]->name; ?></span>
+                                <?php echo $saved_ipr_term[0]->name; ?>
+                             </span>
                     <?php } ?>
 
 
                     <div class="mdc-simple-menu mdc-select__menu">
                         <ul class="mdc-list mdc-simple-menu__items">
-
-                            <li class="mdc-list-item mdc-theme--text-hint-on-light" role="option" aria-disabled="true" tabindex="-1" style="pointer-events: none;">
+                            <!-- First option is none -->
+                            <li class="mdc-list-item mdc-theme--text-hint-on-light"
+                                role="option" aria-disabled="true" tabindex="-1"
+                                style="pointer-events: none;">
                                 No IPR category selected
                             </li>
-                            
-                            <?php foreach ( $cat_ipr_terms as $term_ipr ) { ?>
+
+                            <!-- Add other options -->
+                            <?php
+                            $cat_ipr_terms = get_terms('wpunity_asset3d_ipr_cat', array('get' => 'all'));
+
+                            foreach ( $cat_ipr_terms as $term_ipr ) { ?>
                                 <li class="mdc-list-item mdc-theme--text-primary-on-background" role="option"
                                     title="<?php echo $term_ipr->description; ?>"
                                     data-cat-ipr-desc="<?php echo $term_ipr->description; ?>"
@@ -1271,37 +1232,49 @@ if($asset_id != null) {
                     </div>
                 </div>
 
-                <span style="font-style: italic;" class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryIPRDescription"> </span>
+                <span class="mdc-typography--subheading2 mdc-theme--text-secondary-on-light" id="categoryIPRDescription">
+                </span>
 
                 <input id="termIdInputIPR" type="hidden" name="term_id_ipr" value="">
             </div>
             
-            <?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
-            
-            <?php if(($isOwner || $isUserAdmin) && $isEditMode) { ?>
-                <input type="hidden" name="submitted" id="submitted" value="true"
-                />
+            <!-- Submit Button -->
+            <?php if(($isOwner || $isUserAdmin) && $isEditMode) {
                 
-                <?php $buttonTitleText = ($asset_id == null ? "Create asset" : "Update asset"); ?>
-
+                wp_nonce_field('post_nonce', 'post_nonce_field');
+                ?>
+                
+                <input type="hidden" name="submitted" id="submitted" value="true"/>
+                
                 <button id="formSubmitBtn" style="display: none;"
                         class="ButtonFullWidth mdc-button mdc-elevation--z2 mdc-button--raised mdc-button--primary"
                         data-mdc-auto-init="MDCRipple" type="submit" <?php echo $isEditable?'':' disabled' ?> >
-                    <?php echo $buttonTitleText; ?>
+                    <?php echo $asset_id == null ? "Create asset" : "Update asset"; ?>
                 </button>
+            
             <?php } ?>
         </div>
 
 
         <!-- Author -->
-        <table id="wpunity-asset-author" class="mdc-typography--caption"
-               style="display:inline-block;text-align:left;float:right;right:0;margin-top:0px;width:auto">
-            <tr><td>Author</td></tr>
+        <table id="wpunity-asset-author" description="Author details" class="mdc-typography--caption">
+            <caption>Author</caption>
             <tr>
-
-                <th rowspan="2"><img style="width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;" src="<?php echo get_avatar_url($author_id);?>"></th>
-                <td style="padding: 0px;"><a href="<?php echo home_url().'/user/'.$author_username; ?>" style="color:black"><?php  echo $author_displayname;?></a></td>
+                
+                <th id="authorImageRow" rowspan="2">
+                    <img alt="Author image" id="wpheliosvr-authorImg"
+                         src="<?php echo get_avatar_url($author_id);?>">
+                </th>
+                
+                <td style="padding: 0;">
+                    <a href="<?php echo home_url().'/user/'.$author_username; ?>"
+                       style="color:black">
+                        <?php  echo $author_displayname;?>
+                    </a>
+                </td>
+            
             </tr>
+            
             <tr>
                 <td><span style=""><?php echo $author_country;?></span></td>
             </tr>
@@ -1310,199 +1283,105 @@ if($asset_id != null) {
 
     </form>
 
-    <!--                     Javascript                             -->
-    <script type="text/javascript">
-        'use strict';
+<!--                     Javascript                             -->
+<script type="text/javascript">
+    'use strict';
 
-        var nObj = 0;
-        var nFbx = 0;
-        var nMtl = 0;
-        var nJpg = 0;
-        var nPng = 0;
-        var nPdb = 0;
-        var nGif = 0;
-        var nGlb = 0;
+    var mdc = window.mdc;
+    mdc.autoInit();
 
+    let back_3d_color = "<?php echo $back_3d_color; ?>";
 
+    document.getElementById("jscolorpick").value = back_3d_color;
 
+    generateQRcode();
+    
+    
+    // Current  Slide index (carousel top)
+    let audio_file = document.getElementById( 'audioFile' );
 
-        var FbxBuffer = '';
-        var GlbBuffer = '';
+    // Main 3D canvas handler
+    var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
 
-        var mdc = window.mdc;
-        mdc.autoInit();
+    let isEditMode = 0;
+    isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
 
-        var currLanguage = "English";
+    // Reset if not preview
+    if (isEditMode === 1) {
+        wpunity_reset_panels(wu_webw_3d_view, "initial script");
+    
+        // Get the Default Screenshot image for reference;
+        var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
+    }
 
-        var game_type_slug = "<?php echo $game_type_slug; ?>";
+    var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
-        var back_3d_color = "<?php echo $back_3d_color; ?>";
-
-        document.getElementById("jscolorpick").value = back_3d_color;
-
-        // Current  Slide index (carousel top)
-        var slideIndex = 0;
-
-        let audio_file = document.getElementById( 'audioFile' );
-
-        //console.log("audio_file", audio_file);
-
-        if (audio_file==null){
-
-        }
-
-        // Initial slide to show (carousel top)
-        showSlides(0);
-
-        // Main 3D canvas handler
-        var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
-
-
-        
-
-        let isEditMode = 0;
-        isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
-        
-        
-        
-        // Reset if not preview
-        if (isEditMode === 1) {
-            wpunity_reset_panels(wu_webw_3d_view, "initial script");
-        }
-
-        var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
-        // ----------- Canvas Renderer ------------------------
-        // handler to resize canvas window
-        var resizeWindow = function () {
-            wu_webw_3d_view.resizeDisplayGL();
-        };
-
-        // Add window resize handler
-        window.addEventListener( 'resize', resizeWindow, false );
-
-        // render handler
-        var render = function () {
-            requestAnimationFrame( render );
-            wu_webw_3d_view.render();
-
-        };
-
-        // Initialize
-        wu_webw_3d_view.initGL();
-
-        // Resize for first time just to be sure
+    // ----------- Canvas Renderer ------------------------
+    // Add window resize handler
+    window.addEventListener( 'resize', function () {
         wu_webw_3d_view.resizeDisplayGL();
+    }, false );
 
-        // After
-        wu_webw_3d_view.initPostGL();
+    // render handler
+    let render = function () {
+        requestAnimationFrame( render );
+        wu_webw_3d_view.render();
+    };
 
-        // kick render loop
-        render();
-        //---------
+    // Initialize
+    wu_webw_3d_view.initGL(back_3d_color);
 
-        addHandlerFor3Dfiles(wu_webw_3d_view, multipleFilesInputElem);
+    // Resize for first time just to be sure
+    wu_webw_3d_view.resizeDisplayGL();
 
-        // For existing 3D models
-        // 1 OBJ
-        if (typeof path_url != "undefined")
-            loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null, null);
+    // After
+    wu_webw_3d_view.initPostGL();
 
-        // 2 PDB
-        if (typeof pdb_file_name != "undefined")
-            loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null, null);
+    // kick render loop
+    render();
 
-        // 3 FBX
-        if (typeof path_url_fbx != "undefined") {
+    set3DwindowSize();
 
-            //console.log( path_url_fbx, fbx_file_name);
-            loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name, null);
-        }
+    // For loading files
+    addHandlerFor3Dfiles(wu_webw_3d_view, multipleFilesInputElem);
 
-        // 4 GLB
-        if (typeof glb_file_name != "undefined") {
-            loader_asset_exists(wu_webw_3d_view, null, null, null, null, null, glb_file_name);
-        }
-
-
-        // Responsive Layout (text panel vs 3D model panel
-        if (window.innerWidth<window.innerHeight) {
-            const initCH = document.getElementById('text-asset-sidebar').clientHeight;
-            const initCH2 = document.getElementById('wrapper_3d_inner').clientHeight;
-
-            document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
-                document.getElementById("text-asset-sidebar").style.height = initCH + this.scrollTop / 2 + 5;
-                document.getElementById("wrapper_3d_inner").style.height   = initCH2 - this.scrollTop / 2 + 5;
-                wu_webw_3d_view.resizeDisplayGL();
-            });
-        }
-
-        // Screenshot handler
-        if (document.getElementById("sshotPreviewImg")) {
-            var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
-            var createScreenshotBtn = jQuery("#createModelScreenshotBtn");
-
-            createScreenshotBtn.click(function () {
-                wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
-                wpunity_create_model_sshot(wu_webw_3d_view);
-            });
-        }
+    // Load existing 3D models
+    loadExisting3DModels();
+    
+    // Set the functionality of the screenshot button;
+    screenshotHandlerSet();
+    
+    // Select category handler
+    if( isEditMode === 1){
+        (function() {
         
-        // Select category handler
-        if( isEditMode === 1){
-            (function() {
-            var MDCSelect = mdc.select.MDCSelect;
+            let MDCSelect = mdc.select.MDCSelect;
 
             // Category of asset change
-            var categoryDropdown = document.getElementById('category-select');
-            var categorySelect = MDCSelect.attachTo(categoryDropdown);
-            var selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
+            let categoryDropdown = document.getElementById('category-select');
+            let categorySelect = MDCSelect.attachTo(categoryDropdown);
+            let selectedCatId = jQuery('#currently-selected').attr("data-cat-id");
+            
             categoryDropdown.addEventListener('MDCSelect:change', function() {
                 loadLayout(true);
             });
 
             // IPR category change
-            var categoryIPRDropdown = document.getElementById('category-ipr-select');
-            var categoryIPRSelect = MDCSelect.attachTo(categoryIPRDropdown);
-            var selectedCatIPRId = jQuery('#currently-ipr-selected').attr("data-cat-ipr-id");
+            let categoryIPRDropdown = document.getElementById('category-ipr-select');
+            let categoryIPRSelect = MDCSelect.attachTo(categoryIPRDropdown);
+            let selectedCatIPRId = jQuery('#currently-ipr-selected').attr("data-cat-ipr-id");
 
             categoryIPRDropdown.addEventListener('MDCSelect:change', function() {
-
-                //var descTextIPR = document.getElementById('categoryIPRDescription');
-                //descTextIPR.innerHTML = jQuery("#currently-ipr-selected").attr("data-cat-ipr-desc");
-
                 // Change the description of the popup
                 jQuery("#categoryIPRDescription")[0].innerHTML =  categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-desc");
-
-                // descTextIPR.innerHTML = categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-desc");
-                // catIPR = categoryIPRSelect.selectedOptions[0].getAttribute("data-cat-ipr-slug");
-                // jQuery("#termIdInputIPR").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
 
                 // Change the value of termIdInputIPR
                 jQuery("#termIdInputIPR").attr( "value", categoryIPRSelect.selectedOptions[0].getAttribute("id") );
             });
 
-
-            var moleculeFunctionalGroupDropdown = document.getElementById('moleculeFunctionalGroupSelect');
-            var moleculeFunctionalGroupSelect = MDCSelect.attachTo(moleculeFunctionalGroupDropdown);
-
-            moleculeFunctionalGroupDropdown.addEventListener('MDCSelect:change', function() {
-                jQuery("#moleculeFunctionalGroupInput").attr( "value", moleculeFunctionalGroupSelect.selectedOptions[0].getAttribute("id") );
-            });
-
-
-            // Chemistry extra category
-            // var boxKnownGroupDropdown = document.getElementById('boxKnownGroupSelect');
-            // var boxKnownGroupSelect = MDCSelect.attachTo(boxKnownGroupDropdown);
-            // boxKnownGroupDropdown.addEventListener('MDCSelect:change', function() {
-            //     jQuery("#boxKnownGroupInput").attr( "value", boxKnownGroupSelect.selectedOptions[0].getAttribute("id") );
-            // });
-            
-
-            // This fires on start
+            // This fires on start to clear layout if no category is selected
             jQuery( document ).ready(function() {
-                
-                
+
                 // No asset category selected
                 if (jQuery('#currently-selected').attr("data-cat-id")) {
                     jQuery('#'+ selectedCatId).attr("aria-selected", true);
@@ -1518,130 +1397,67 @@ if($asset_id != null) {
 
             });
 
-            // Scroll to top because with # focuses to language description
-            window.onload = function () {
-                setTimeout(function () {
-                    document.getElementById("text-asset-sidebar").scrollTo(0,0)
-                }, 0);
-            };
-
-           
-
             // Function to initialize layout
             // paramter denotes if new asset or edit asset
-            function loadLayout(createAsset) {
-
-                jQuery("#informationPanel").show();
-                jQuery("#formSubmitBtn").show();
-                jQuery("#pdbRadioListItem").show();
+            function loadLayout(hasCategory) {
 
                 wu_webw_3d_view.resizeDisplayGL();
 
                 //wpunity_reset_panels(wu_webw_3d_view, "loadlayout");
 
-                var cat;
-                var descText = document.getElementById('categoryDescription');
-                
-                if(createAsset) {
+                let cat = '';
+                let descText = document.getElementById('categoryDescription');
+
+                if(hasCategory) {
                     descText.innerHTML = categorySelect.selectedOptions[0].getAttribute("data-cat-desc");
                     cat = categorySelect.selectedOptions[0].getAttribute("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", categorySelect.selectedOptions[0].getAttribute("id") );
                 } else {
-                    descText.innerHTML = jQuery("#currently-selected").attr("data-cat-desc");
-                    cat = jQuery("#currently-selected").attr("data-cat-slug");
+                    let jq = jQuery("#currently-selected");
+                    descText.innerHTML = jq.attr("data-cat-desc");
+                    cat = jq.attr("data-cat-slug");
                     jQuery("#termIdInput").attr( "value", selectedCatId );
                 }
 
-                // if (cat === 'molecule') {
-                //     jQuery("#mtlRadio").prop("checked", false);
-                //     jQuery('#mtlRadioListItem').hide();
-                //      jQuery("#pdbRadio").prop("checked", true);
-                //      jQuery("#pdbRadioListItem").show();
-                // } else {
-
-                jQuery("#fbxRadio").prop("checked", false);
-                // jQuery("#fbxRadioListItem").show();
-
-                jQuery("#mtlRadio").prop("checked", false);
-                //jQuery("#mtlRadioListItem").show();
-
-
-                jQuery("#pdbRadio").prop("checked", false);
-                //jQuery("#pdbRadioListItem").hide();
-
-                jQuery("#glbRadio").prop("checked", true);
-                //jQuery("#glbRadioListItem").show();
-
-                //}
-
-           
-                
                 mdc.radio.MDCRadio.attachTo(document.querySelector('.mdc-radio'));
-
-                // Hide some panels but decide based on category as below what to show
-                jQuery("#imgDetailsPanel").hide();
-                jQuery("#videoDetailsPanel").hide();
-                jQuery("#moleculeOptionsPanel").hide();
-                jQuery("#moleculeFluidPanel").hide();
-
-
-                // Category
-                switch(cat) {
-                    // Archaeology cases
-                    case 'doors':
-                        jQuery("#doorDetailsPanel").show();
-                        break;
-                    case 'dynamic3dmodels':
-                        break;
-                    case 'artifact':
-                        jQuery("#imgDetailsPanel").show();
-                        jQuery("#videoDetailsPanel").show();
-                        jQuery("#audioDetailsPanel").show();
-                        break;
-                    // Energy cases
-                    case 'terrain':
-                        jQuery("#terrainPanel").show();
-                        break;
-                    case 'consumer':
-                        jQuery("#consumerPanel").show();
-                        break;
-                    case 'producer':
-                        jQuery("#producerPanel").show();
-                        break;
-                    // Chemistry cases
-                    case 'molecule':
-                        jQuery("#moleculeOptionsPanel").show();
-                        //jQuery("#moleculeFluidPanel").show();
-                        break;
-                    case 'box':
-                        jQuery("#chemistryBoxOptionsPanel").show();
-                        break;
-                    default:
-                }
             }
 
-            })();
-        }
+        })();
+      
+        // Select artifact, Remove category menu
+        setTimeout(function () {
 
-        // Hide admin bar of wordpress
-        jQuery("#wpadminbar").hide();
-        jQuery(".js no-svg").css("margin-top:0px");
-
-        // // // UNIT TEST: Select artifact, Remove
-        if (isEditMode === 1) {
-            setTimeout(function () {
-
-                jQuery("#category-select").click(); // Expand category
-                jQuery("#78").click(); // Select Artifact category
+            jQuery("#category-select").click(); // Expand category
+            jQuery("#78").click(); // Select Artifact category
 
 
-                //jQuery('#assetTitle')[0].value = 'a12'; // Set title
-                jQuery("#objRadio-label").click(); // Set fbx type
-                //jQuery("#fileUploadInput").click(); // Click browse files
+            //jQuery('#assetTitle')[0].value = 'a12'; // Set title
+            jQuery("#objRadio-label").click(); // Set fbx type
+            //jQuery("#fileUploadInput").click(); // Click browse files
 
-                loadFileInputLabel('glb');
+            loadFileInputLabel('glb');
 
-            }, 500);
-        }
+        }, 500);
 
-    </script>
+        jQuery("#glbRadio").prop("checked", true);
+        jQuery("#formSubmitBtn").show();
+        
+    } else {
+    
+        // Show only the description mentioned in anchor #
+        let url = window.location.href;
+        let langcurr = url.substring(url.indexOf("#") + 1);
+        jQuery("#" + langcurr + ".tabcontent2")[0].style.display = "block";
+
+        // Show slide 0 of images sequence
+        showSlides(slideIndex);
+    }
+
+    
+    // Scroll to top
+    window.onload = function () {
+        setTimeout(function () {
+            document.getElementById("text-asset-sidebar").scrollTo(0,0)
+        }, 0);
+    };
+</script>

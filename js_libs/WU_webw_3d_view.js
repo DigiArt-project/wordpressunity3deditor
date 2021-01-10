@@ -576,7 +576,7 @@ class WU_webw_3d_view {
     }
 
     // Initialize
-    initGL() {
+    initGL(back_3d_color_local) {
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
@@ -585,7 +585,7 @@ class WU_webw_3d_view {
 
         this.scene = new THREE.Scene();
 
-        this.scene.background = new THREE.Color(back_3d_color);
+        this.scene.background = new THREE.Color(back_3d_color_local);
 
 
 

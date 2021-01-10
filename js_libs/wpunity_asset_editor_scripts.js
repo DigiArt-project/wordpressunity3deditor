@@ -6,6 +6,52 @@
  */
 'use strict';
 
+
+var nObj = 0;
+var nFbx = 0;
+var nMtl = 0;
+var nJpg = 0;
+var nPng = 0;
+var nPdb = 0;
+var nGif = 0;
+var nGlb = 0;
+
+var FbxBuffer = '';
+var GlbBuffer = '';
+
+var currLanguage = "English";
+
+// Initial slide to show (carousel top)
+var slideIndex = 0;
+
+
+// Hide admin bar of wordpress
+jQuery("#wpadminbar").hide();
+jQuery(".js no-svg").css("margin-top:0px");
+
+function loadExisting3DModels(){
+
+    // 1. Obj
+    if (typeof path_url != "undefined") {
+
+        loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null, null);
+
+        // 2 PDB
+    } else if (typeof pdb_file_name != "undefined") {
+
+        loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null, null);
+
+        // 3 FBX
+    } else if (typeof path_url_fbx != "undefined") {
+        loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name, null);
+        // 4 GLB
+    } else if (typeof glb_file_name != "undefined") {
+
+        loader_asset_exists(wu_webw_3d_view, null, null, null, null, null, glb_file_name);
+    }
+
+}
+
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
     if (wu_webw_3d_view.renderer) {
@@ -115,8 +161,6 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
     // PREVIEW Handler (not uploaded yet): Load from selected files
     let _handleFileSelect = function ( event ) {
-
-
 
         let input = document.getElementById('fileUploadInput');
         let output = document.getElementById('fileList3D');
@@ -636,6 +680,112 @@ function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
 
 function clearList() {
     wpunity_reset_panels(wu_webw_3d_view, "me");
+}
+
+
+
+
+function openAccess(accessLevel) {
+
+    var i, tabcontent, tablinks;
+
+    // The description
+    tabcontent = document.getElementsByClassName("tabcontent2");
+
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // tablinks = document.getElementsByClassName("tablinks2");
+    // for (i = 0; i < tablinks.length; i++) {
+    //     tablinks[i].className = tablinks[i].className.replace(" active", "");
+    // }
+
+    document.getElementById(currLanguage + accessLevel).style.display = "block";
+
+    window.event.currentTarget.className += " active";
+}
+
+
+function openLanguage(lang) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent2");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks2");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    currLanguage = lang;
+
+    document.getElementById(lang).style.display = "block";
+
+    var titLang = eval('asset_title_'+currLanguage.toLowerCase()+'_saved');
+
+    //console.log(titLang);
+
+    if (titLang === '')
+        titLang = eval('asset_title_english_saved');
+
+    document.getElementById("assetTitleView").innerHTML = titLang;
+
+    window.event.currentTarget.className += " active";
+}
+
+// Start P2P conference
+function startConf(){
+    jQuery("#confwindow")[0].style.display="";
+    jQuery("#confwindow_helper")[0].style.display="none";
+
+    document.getElementById('iframeConf').src =
+        "https://heliosvr.mklab.iti.gr:3000/call/<?php echo $assetLangPack2['asset_title_saved']; ?>";
+
+    wpunity_notify_confpeers();
+}
+
+function set3DwindowSize(){
+
+    // Responsive Layout (text panel vs 3D model panel
+    if (window.innerWidth < window.innerHeight) {
+        const initCH = document.getElementById('text-asset-sidebar').clientHeight;
+        const initCH2 = document.getElementById('wrapper_3d_inner').clientHeight;
+
+        document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
+            document.getElementById("text-asset-sidebar").style.height = (initCH + this.scrollTop / 2 + 5).toString();
+            document.getElementById("wrapper_3d_inner").style.height = (initCH2 - this.scrollTop / 2 + 5).toString();
+            wu_webw_3d_view.resizeDisplayGL();
+        });
+    }
+
+}
+
+function generateQRcode(){
+
+    // Generate QR Code
+    const qrcode = new QRCode(
+        document.getElementById("qrcode_img"), {
+            text: window.location.href.replace('#','&qrcode=none#'),
+            width: 128,
+            height: 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+}
+
+function screenshotHandlerSet(){
+
+    // Screenshot handler
+    if (document.getElementById("sshotPreviewImg")) {
+        jQuery("#createModelScreenshotBtn").click(function () {
+            wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(wu_webw_3d_view);
+        });
+    }
+
 }
 
 

@@ -36,13 +36,3 @@
 <?php } ?>
 
 
-<script type="text/javascript">
-    const qrcode = new QRCode(document.getElementById("qrcode_img"), {
-        text: window.location.href.replace('#','&qrcode=none#'),
-        width: 128,
-        height: 128,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-    });
-</script>
