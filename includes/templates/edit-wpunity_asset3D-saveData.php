@@ -3,9 +3,9 @@
 function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleForm, $gameSlug){
 
     $ff = fopen("output_3D_files.txt","w");
-    //fwrite($ff, "1");
-    //fwrite($ff, chr(13));
-    //fwrite($ff, print_r($_FILES, true));
+    fwrite($ff, "1");
+    fwrite($ff, chr(13));
+    fwrite($ff, print_r($_FILES, true));
 
 
     // Clear out all previous
@@ -23,26 +23,25 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
     
             // Delete all metas of the attachment post
             $attachment_metas = get_post_meta($attachment->ID);
+//
+//            fwrite($ff, chr(13)."ALL METAs OF ATTACHMENT".
+//                print_r($attachment_metas,true) );
+
+//            fwrite($ff,chr(13).chr(13));
+//            fwrite($ff,chr(13).chr(13));
+//
     
-            fwrite($ff, chr(13)."ALL METAs OF ATTACHMENT".
-                print_r($attachment_metas,true) );
-            
-            fwrite($ff,chr(13).chr(13));
-            fwrite($ff,chr(13).chr(13));
+            $file_name = get_post_meta($attachment->ID, '_wp_attached_file', true);
     
-    
-            $file_name = get_post_meta($attachment->ID, '_wp_attached_file',
-                                        true);
-    
-            fwrite($ff,chr(13).print_r($file_name,true));
-            
+//            fwrite($ff,chr(13).print_r($file_name,true));
+//
             //unlink($file_name);
             
             foreach(array_keys($attachment_metas) as $attachment_meta_key) {
-                
-                fwrite($ff, chr(13)."DELETE META OF ATTACHMENT".
-                                    print_r($attachment_meta_key,true) );
- 
+            
+//                fwrite($ff, chr(13)."DELETE META OF ATTACHMENT".
+//                                    print_r($attachment_meta_key,true) );
+//
                 delete_post_meta($attachment->ID, $attachment_meta_key);
                 
             }
@@ -69,7 +68,7 @@ function wpunity_create_asset_3DFilesExtra_frontend($asset_newID, $assetTitleFor
 
     }
     
-    fclose($ff);
+    //fclose($ff);
     
     // 1. Check if already exists
     // 2. Upload and update DB
@@ -367,6 +366,8 @@ function wpunity_create_asset_addAudio_frontend($asset_newID){
     $attachment_audio_id = wpunity_upload_img_vid_aud( $asset_audioForm, $asset_newID);
     update_post_meta( $asset_newID, 'wpunity_asset3d_audio', $attachment_audio_id );
 }
+
+
 
 function wpunity_create_asset_addVideo_frontend($asset_newID){
     $asset_videoForm = $_FILES['videoFileInput'];

@@ -556,6 +556,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 
         }
 
+
+
         scope.dispatchEvent( startEvent );
         scope.dispatchEvent( endEvent );
 

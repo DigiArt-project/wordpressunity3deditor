@@ -25,6 +25,7 @@ function wpunity_upload_dir_forScenesOrAssets( $args ) {
 
 add_filter( 'upload_dir', 'wpunity_upload_dir_forScenesOrAssets' );
 
+
 // Disable all auto created thumbnails for Assets3D
 function wpunity_disable_imgthumbs_assets( $image_sizes ){
     
@@ -40,6 +41,7 @@ function wpunity_disable_imgthumbs_assets( $image_sizes ){
 }
 
 add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
 
 // Overwrite attachments
 function wpunity_overwrite_uploads( $name ){
@@ -92,6 +94,7 @@ function wpunity_upload_img_vid_aud_directory( $dir ) {
                 'subdir' => '/Models',
                 ) + $dir;
 }
+
 
 // Change general upload directory to Models
 function wpunity_upload_filter( $args  ) {

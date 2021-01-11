@@ -363,6 +363,7 @@ if($asset_id != null) {
     
     $curr_font = str_replace("+", " ", $fonts);
     
+    //OBJ
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
         
         $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
@@ -377,9 +378,8 @@ if($asset_id != null) {
                 var path_url="<?php echo $path_url.'/'; ?>";
             </script>
         <?php
-    }
-    
-    if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
+        // PDB
+    } else if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
         $pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
         $pdb_file_name = $pdbpost->guid;
         ?>
@@ -389,9 +389,9 @@ if($asset_id != null) {
         </script>
         
         <?php
-    }
-    
-    if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
+        
+        // GLB
+    } else if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
         $glbpost = get_post($assetpostMeta['wpunity_asset3d_glb'][0]);
         $glb_file_name = $glbpost->guid;
         ?>
@@ -401,10 +401,8 @@ if($asset_id != null) {
         </script>
         
         <?php
-    }
-    
-    
-    if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
+        // FBX
+    } else if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
         
         // Get texture attachments of post
         $args = array(
@@ -1287,6 +1285,8 @@ if($asset_id != null) {
 <script type="text/javascript">
     'use strict';
 
+    hideAdminBar();
+    
     var mdc = window.mdc;
     mdc.autoInit();
 
@@ -1294,7 +1294,7 @@ if($asset_id != null) {
 
     document.getElementById("jscolorpick").value = back_3d_color;
 
-    generateQRcode();
+    //generateQRcode();
     
     
     // Current  Slide index (carousel top)
@@ -1346,7 +1346,10 @@ if($asset_id != null) {
     addHandlerFor3Dfiles(wu_webw_3d_view, multipleFilesInputElem);
 
     // Load existing 3D models
-    loadExisting3DModels();
+    //loadExisting3DModels();
+    loader_asset_exists(wu_webw_3d_view, path_url,
+                        mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name, glb_file_name);
+    
     
     // Set the functionality of the screenshot button;
     screenshotHandlerSet();
@@ -1460,4 +1463,6 @@ if($asset_id != null) {
             document.getElementById("text-asset-sidebar").scrollTo(0,0)
         }, 0);
     };
+
+    
 </script>

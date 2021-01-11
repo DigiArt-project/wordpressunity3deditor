@@ -269,7 +269,9 @@ class WU_webw_3d_view {
                 scope.root.add(gltf.scene);
 
                 scope.render();
+
                 //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
                 scope.zoomer(gltf.scene);
             },
             '',
@@ -551,7 +553,7 @@ class WU_webw_3d_view {
         // translate object to the center
         towhatObj.traverse( function (object) {
 
-            console.log("object", object);
+
             if (object instanceof THREE.Mesh) {
                 //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
                 object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
@@ -560,8 +562,8 @@ class WU_webw_3d_view {
 
         var totalradius = sphere[1];
 
-        let axHelp = new THREE.AxesHelper(35);
-        wu_webw_3d_view.pivot.add(axHelp);
+        // let axHelp = new THREE.AxesHelper(35);
+        // wu_webw_3d_view.pivot.add(axHelp);
 
         // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
         // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );

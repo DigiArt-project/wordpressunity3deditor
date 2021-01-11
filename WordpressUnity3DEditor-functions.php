@@ -104,7 +104,6 @@ function wpunity_register_scripts() {
 			array( 'wpunity_load87_OutlinePass', $pluginDirJS.'threejs87/OutlinePass.js'),
 			array( 'wpunity_load87_ShaderPass', $pluginDirJS.'threejs87/ShaderPass.js'),
 			array( 'wpunity_load87_PDBloader', $pluginDirJS.'threejs87/PDBLoader.js'),
-			array( 'wpunity_load87_TrackballControls', $pluginDirJS.'threejs87/TrackballControls.js'),
 			array( 'wpunity_load87_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
 			array( 'wpunity_load87_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
 			array( 'wpunity_load87_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),

@@ -19,38 +19,14 @@ var nGlb = 0;
 var FbxBuffer = '';
 var GlbBuffer = '';
 
+
 var currLanguage = "English";
+
+var path_url, mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name, glb_file_name;
 
 // Initial slide to show (carousel top)
 var slideIndex = 0;
 
-
-// Hide admin bar of wordpress
-jQuery("#wpadminbar").hide();
-jQuery(".js no-svg").css("margin-top:0px");
-
-function loadExisting3DModels(){
-
-    // 1. Obj
-    if (typeof path_url != "undefined") {
-
-        loader_asset_exists(wu_webw_3d_view, path_url, mtl_file_name, obj_file_name, null, null, null);
-
-        // 2 PDB
-    } else if (typeof pdb_file_name != "undefined") {
-
-        loader_asset_exists(wu_webw_3d_view, null, null, null, pdb_file_name, null, null);
-
-        // 3 FBX
-    } else if (typeof path_url_fbx != "undefined") {
-        loader_asset_exists(wu_webw_3d_view, path_url_fbx, null, null, null, fbx_file_name, null);
-        // 4 GLB
-    } else if (typeof glb_file_name != "undefined") {
-
-        loader_asset_exists(wu_webw_3d_view, null, null, null, null, null, glb_file_name);
-    }
-
-}
 
 function wpunity_clear_asset_files(wu_webw_3d_view) {
 
@@ -92,6 +68,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
     nPdb = 0;
     nGif = 0;
     nGlb = 0;
+
 }
 
 
@@ -154,8 +131,8 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
             }
         };
     })(reader);
-
 }
+
 
 function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
@@ -196,6 +173,8 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
+
+            console.log(files[i]);
             file_reader_cortex(files[i], wu_webw_3d_view_local);
         }
     };
@@ -299,7 +278,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
         } else if (nGlb === 1){
             console.log("Ignite reading glb");
 
-            console.log("GlbBuffer", GlbBuffer);
             wu_webw_3d_view_local.loadGlbStream(GlbBuffer);
 
         }
@@ -307,31 +285,23 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
     }
 }
 //-------------------- loading from saved data --------------------------------------
-/**
- * Reading from url in server side
- * @param pathUrl
- * @param mtlFilename
- * @param objFilename
- */
-function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFilename, pdbFileContent, fbxFilename, glbFilename) {
+function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename = null,
+                             objFilename= null, pdbFileContent = null,
+                             fbxFilename = null, glbFilename = null) {
 
-
-    //jQuery('#previewProgressSlider')[0].style.visibility = "visible";
-
-    //jQuery('#previewProgressSlider').show();// = "visible";
 
     if (wu_webw_3d_view_local.scene != null) {
         if (wu_webw_3d_view_local.renderer)
             wu_webw_3d_view_local.clearAllAssets();
     }
 
+    // PDB
     if (pdbFileContent) {
         wu_webw_3d_view_local.loadMolecule(pdbFileContent, "loader_asset_exists");
         return;
-    }
 
-
-    if (glbFilename){
+        // GLB
+    } else if (glbFilename){
         //console.log("glbFilename", glbFilename);
 
         // Instantiate a loader
@@ -390,16 +360,8 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
             }
         );
 
-
-
-
-
-
-    }
-
-
-    //--------------- load all from url (in edit asset) --------------
-    if (pathUrl) {
+        // OBJ load
+    } else if (pathUrl) {
 
         let manager = new THREE.LoadingManager();
 
@@ -477,7 +439,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
                 let xhr = new XMLHttpRequest();
                 let basename = '';
 
-                let url = url_files[i].replace('http:', 'https:');
+                let url = url_files[i];//.replace('http:', 'https:');
 
 
                 if( url.includes(".txt") ) {
@@ -508,7 +470,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl, mtlFilename, objFil
                 }
 
                 xhr.onload = function (e) {
-                    if (this.status == 200) {
+                    if (this.status === 200) {
                         let file = new File([this.response], basename);
                         file_reader_cortex(file, wu_webw_3d_view_local);
                     }
@@ -788,6 +750,11 @@ function screenshotHandlerSet(){
 
 }
 
+function hideAdminBar(){
+    // Hide admin bar of wordpress
+    jQuery("#wpadminbar").hide();
+    jQuery(".js no-svg").css("margin-top:0px");
+}
 
 // // for the Energy Turbines
 // function wpunity_create_slider_component(elemId, range, options) {
