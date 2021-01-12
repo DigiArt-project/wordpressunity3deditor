@@ -123,6 +123,10 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                     break;
             }
 
+
+            // console.log("type", type);
+            // console.log("fileContent", fileContent);
+
             // Check if everything is loaded
             if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif' || type==='glb') {
                 checkerCompleteReading( wu_webw_3d_view_local, type );
@@ -173,8 +177,6 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
-
-            console.log(files[i]);
             file_reader_cortex(files[i], wu_webw_3d_view_local);
         }
     };

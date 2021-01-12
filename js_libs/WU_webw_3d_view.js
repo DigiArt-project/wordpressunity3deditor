@@ -227,9 +227,26 @@ class WU_webw_3d_view {
             console.log("Your FBX does not have animation");
         }
 
+
+
         let scope = this;
         scope.root.add(fbxobject);
         scope.render();
+
+
+
+        let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
+        console.log("Estimated center", centerRadius[0]);
+        console.log("Estimated radius", centerRadius[1]);
+
+        const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+        const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+        const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+        sphereBall.position.copy( centerRadius[0] );
+        sphereBall.name = "Center Ball"
+        scope.root.add( sphereBall );
+
+        scope.zoomer(scope.root);
 
         //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
@@ -251,8 +268,6 @@ class WU_webw_3d_view {
         };
 
         let glbloader = new THREE.GLTFLoader( manager );
-
-        console.log("WU webw GlbBuffer", GlbBuffer);
 
         // Load a glTF resource
         glbloader.load(
@@ -288,7 +303,20 @@ class WU_webw_3d_view {
 
                 //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
-                scope.zoomer(gltf.scene);
+
+                let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
+                console.log("Estimated center", centerRadius[0]);
+                console.log("Estimated radius", centerRadius[1]);
+
+                const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+                const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+                const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+                sphereBall.position.copy( centerRadius[0] );
+                sphereBall.name = "Center Ball"
+                scope.root.add( sphereBall );
+
+
+                scope.zoomer(scope.root);
             },
             '',
             // called when loading has errors
@@ -462,46 +490,33 @@ class WU_webw_3d_view {
 
             console.log("sphere", sphere[1]);
 
-            // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
-            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-            // sphereBall.position.copy(sphere[0]);
-            // sphereBall.name = "Center Ball"
-            // scope.root.add( sphereBall );
+            const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
+            const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+            const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+            sphereBall.position.copy(sphere[0]);
+            sphereBall.name = "Center Ball"
+            scope.root.add( sphereBall );
 
             // translate object to the center
-            scope.root.traverse(function (object) {
-                //object.position.x = object.position.y = object.position.z = 0;
-
-                if (object instanceof THREE.Mesh || object instanceof THREE.Object3D ) {
-
-
-                    if (object.name==='')
-                        return;
-
-                   object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-
-                    // if(object.geometry) {
-                    //     object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
-                    // }
-                }
-            });
+            // scope.root.traverse(function (object) {
+            //     //object.position.x = object.position.y = object.position.z = 0;
+            //
+            //     if (object instanceof THREE.Mesh || object instanceof THREE.Object3D ) {
+            //
+            //
+            //         if (object.name==='')
+            //             return;
+            //
+            //        object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
+            //
+            //         // if(object.geometry) {
+            //         //     object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+            //         // }
+            //     }
+            // });
 
             // Add to pivot
             wu_webw_3d_view.pivot.add(scope.root);
-            //
-            // let axHelp = new THREE.AxesHelper(35);
-            // wu_webw_3d_view.pivot.add(axHelp);
-
-
-            // console.log("====================================");
-            //
-            // console.log("pivot", wu_webw_3d_view.pivot);
-            // console.log("scope.root", scope.root);
-            // console.log("sphere", sphere);
-            // console.log("sphereBall", sphereBall.position);
-
-            console.log("====================================");
 
 
             // Find new zoom
@@ -527,13 +542,14 @@ class WU_webw_3d_view {
         {
             if (object instanceof THREE.Mesh)
             {
+
                 //console.log(object.position);
-                sceneBSCenter.add(object.position);
+                sceneBSCenter.add( object.position );
                 nObjects ++;
             }
         } );
 
-        //console.log(nObjects, sceneBSCenter);
+        // console.log(nObjects, sceneBSCenter);
         sceneBSCenter.divideScalar(nObjects);
 
         myGroupObj.traverse( function (object)
@@ -545,20 +561,23 @@ class WU_webw_3d_view {
                 // Object radius
                 let radius = object.geometry.boundingSphere.radius;
 
+                console.log(object.name + " " + radius, object.position);
+
+
                 if (radius) {
                      sceneBSRadius = Math.max(sceneBSRadius, radius + object.position.length());
                 }
             }
         } );
 
-        console.log("sceneBSCenter", sceneBSCenter);
-        console.log("sceneBSRadius",sceneBSRadius);
+        // console.log("sceneBSCenter", sceneBSCenter);
+        // console.log("sceneBSRadius",sceneBSRadius);
 
         return [sceneBSCenter, sceneBSRadius];
     }
 
     /* Zoom to object */
-    zoomer(towhatObj){ // FBX obj
+    zoomer(towhatObj){ // FBX or OBJ
 
         if(towhatObj == null) {
             towhatObj = this.scene.children[5]; // Obj is loaded at 5
@@ -572,7 +591,7 @@ class WU_webw_3d_view {
 
             if (object instanceof THREE.Mesh) {
                 //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-                object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
+                //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
             }
         });
 
