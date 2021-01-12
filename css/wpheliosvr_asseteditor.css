@@ -201,3 +201,78 @@
 .arrowback{
   font-size: 24px; vertical-align: middle;
 }
+
+
+a.animationButton{
+    display:inline-block;
+    position:absolute;
+    left:50%;
+    bottom:0;
+    z-index: 10000;
+    padding:0.35em 1.2em;
+    border:0.1em solid white;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+    transform: translate(-50%, -50%);
+    display:none;
+
+}
+.animationButton:hover{
+    color:#000000;
+    background-color:#FFFFFF;
+}
+@media all and (max-width:30em){
+      a.animationButton{
+        display:block;
+        margin:0.4em auto;
+        }
+}
+
+
+
+.qrcode_div {
+    width:180px;
+    position:absolute;
+    bottom:0;
+    right:0;
+    text-align:center;
+    height:200px;
+}
+
+.qrcode_img_div {
+    width:180px;
+    height:170px;
+    position:absolute;
+    bottom:15px;
+    right:0;
+    padding:5px;
+    text-align:center
+}
+
+.qrcode_img{
+    width: 128px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.qrcode_button {
+    bottom:170px;
+    right:0;
+    position:absolute;
+    z-index:15;
+    padding:0;
+    padding-left:3px;
+    padding-right:5px;
+    margin-bottom:5px;
+    font-family: Arial, sans-serif;
+}

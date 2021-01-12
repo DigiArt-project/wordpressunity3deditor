@@ -3,6 +3,7 @@
  */
 class WU_webw_3d_view {
 
+
     // wu_webw_3d_view.scene.children :
         // 0: is for pdb
         // 1: Directional light 1
@@ -210,12 +211,20 @@ class WU_webw_3d_view {
         let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
 
         fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
-        this.mixers.push( fbxobject.mixer );
 
-        if (fbxobject.animations.length>0) {
-            let action = fbxobject.mixer.clipAction(fbxobject.animations[0]);
-            action.play();
+        this.mixers.push( fbxobject.mixer );
+        this.objectsLoaded = fbxobject;
+
+
+        if ( fbxobject.animations.length>0 ) {
+            this.action = fbxobject.mixer.clipAction( fbxobject.animations[0] );
+
+            document.getElementById("animButton1").style.display = "inline-block";
+
+            //action.play();
         } else {
+
+            document.getElementById("animButton1").style.display = "none";
             console.log("Your FBX does not have animation");
         }
 
@@ -615,7 +624,6 @@ class WU_webw_3d_view {
             this.listener = new THREE.AudioListener();
             this.camera.add(this.listener);
 
-            this.audioElement.play();
             this.positionalAudio = new THREE.PositionalAudio(this.listener);
             this.positionalAudio.setMediaElementSource(this.audioElement);
             this.positionalAudio.setRefDistance(200);
@@ -723,7 +731,18 @@ class WU_webw_3d_view {
         return true;
     }
 
+    playStopAnimation(){
 
+        if (!this.action.isRunning()) {
+            document.getElementById("audioFile").play();
+            this.action.paused = false;
+            this.action.play();
+
+        } else {
+            document.getElementById("audioFile").pause();
+            this.action.paused = true;
+        }
+    }
 
     // alterShading() {
     //

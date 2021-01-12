@@ -297,11 +297,14 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
     // PDB
     if (pdbFileContent) {
+        console.log("Loading","PDB");
+
         wu_webw_3d_view_local.loadMolecule(pdbFileContent, "loader_asset_exists");
         return;
 
         // GLB
     } else if (glbFilename){
+        console.log("Loading","GLB");
         //console.log("glbFilename", glbFilename);
 
         // Instantiate a loader
@@ -363,6 +366,8 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
         // OBJ load
     } else if (pathUrl) {
 
+        console.log("Loading","OBJ");
+
         let manager = new THREE.LoadingManager();
 
         if (objFilename) { // this means that 3D model exists for this asset
@@ -420,6 +425,8 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
         } else if (fbxFilename){
 
+            console.log("START", "FBX");
+
             // split texture string into each texture
             let url_files = textures_fbx_string_connected.split('|');
 
@@ -432,7 +439,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
             }
 
             // Add the fbx also
-            url_files.push(pathUrl+fbxFilename);
+            url_files.push(pathUrl + fbxFilename);
 
             for (let i=0; i < url_files.length; i++) {
 
@@ -478,6 +485,9 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
                 xhr.send();
             }
+
+        } else {
+            console.log("WARNING", "UNKNOWN 155");
         }
     }
 

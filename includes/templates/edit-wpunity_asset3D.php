@@ -417,6 +417,7 @@ if($asset_id != null) {
         
         // Add texture urls to a string separated by |
         $textures_fbx_string_connected = '';
+        
         foreach ($attachments_array as $k){
             $url = $k->guid;
             
@@ -433,13 +434,13 @@ if($asset_id != null) {
         
         $fbxpost = get_post($assetpostMeta['wpunity_asset3d_fbx'][0]);
         $fbx_file_name = basename($fbxpost->guid);
-        $path_url_fbx = pathinfo($fbxpost->guid)['dirname'];
+        $path_url = pathinfo($fbxpost->guid)['dirname'];
         
         ?>
             <script>
                 var fbx_file_name="<?php echo $fbx_file_name;    ?>";
-                var path_url_fbx ="<?php echo $path_url_fbx.'/';  ?>";
-                var textures_fbx_string_connected="<?php echo $textures_fbx_string_connected; ?>";
+                var path_url ="<?php echo $path_url.'/';  ?>";
+                var textures_fbx_string_connected = "<?php echo $textures_fbx_string_connected; ?>";
             </script>
         <?php
     }
@@ -525,6 +526,8 @@ if($asset_id != null) {
     <!-- 3D Canvas -->
     <canvas id="previewCanvas" >3D canvas</canvas>
 
+    <a href="#" class="animationButton" id="animButton1" onclick="wu_webw_3d_view.playStopAnimation();">Animation 1</a>
+    
     <!-- QR code -->
     <?php include 'edit-wpunity_asset3D_QRCodeGenerator.php'; ?>
 
@@ -1046,21 +1049,12 @@ if($asset_id != null) {
                         $attachment_file = $attachment_post->guid;
                         ?>
 
-                        <audio loop preload="auto" id ='audioFile' autoplay>
+                        <audio loop preload="auto" id ='audioFile'>
                             <?php if(strpos($attachment_file, "mp3" )!==false || strpos($attachment_file, "wav" )!==false){?>
-
-
                                 <source src="<?php echo $attachment_file;?>" type="audio/mp3">
                                 <source src="<?php echo $attachment_file;?>" type="audio/wav">
                             
-                            <?php } else { ?>
 
-                                <audio loop preload="auto" id ='audioFile' autoplay>
-                                    <source
-                              src="<?php echo plugins_url( '../sounds/silence.mp3', dirname(__FILE__)  );?>"
-                                             type="audio/mp3">`
-                                </audio>
-                            
                             <?php } ?>
                         </audio>
                     </div>
