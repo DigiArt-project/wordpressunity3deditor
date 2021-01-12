@@ -321,7 +321,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
                     let glbmixer = new THREE.AnimationMixer(gltf.scene);
                     wu_webw_3d_view_local.mixers.push(glbmixer);
-                    let action = glbmixer.clipAction(gltf.animations[0]);
+                    wu_webw_3d_view_local.action = glbmixer.clipAction(gltf.animations[0]);
 
                     // Display button to start animation inside the Asset 3D previewer
                     document.getElementById("animButton1").style.display = "inline-block";
