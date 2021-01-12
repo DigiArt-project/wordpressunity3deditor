@@ -219,9 +219,8 @@ class WU_webw_3d_view {
         if ( fbxobject.animations.length>0 ) {
             this.action = fbxobject.mixer.clipAction( fbxobject.animations[0] );
 
+            // Display button to start animation inside the Asset 3D previewer
             document.getElementById("animButton1").style.display = "inline-block";
-
-            //action.play();
         } else {
 
             document.getElementById("animButton1").style.display = "none";
@@ -271,8 +270,16 @@ class WU_webw_3d_view {
                 if (gltf.animations.length>0) {
                     let glbmixer = new THREE.AnimationMixer( gltf.scene );
                     scope.mixers.push( glbmixer );
-                    let action = glbmixer.clipAction(gltf.animations[0]);
-                    action.play();
+                    scope.action = glbmixer.clipAction(gltf.animations[0]);
+
+                    // Display button to start animation inside the Asset 3D previewer
+                    document.getElementById("animButton1").style.display = "inline-block";
+
+                } else {
+
+                    // Display button to start animation inside the Asset 3D previewer
+                    document.getElementById("animButton1").style.display = "none";
+
                 }
 
                 scope.root.add(gltf.scene);
@@ -734,12 +741,20 @@ class WU_webw_3d_view {
     playStopAnimation(){
 
         if (!this.action.isRunning()) {
-            document.getElementById("audioFile").play();
+
+            // Play the audio
+            if (document.getElementById("audioFile")) {
+                document.getElementById("audioFile").play();
+            }
+
+            // Play the animation
             this.action.paused = false;
             this.action.play();
 
         } else {
-            document.getElementById("audioFile").pause();
+            if (document.getElementById("audioFile")) {
+                document.getElementById("audioFile").pause();
+            }
             this.action.paused = true;
         }
     }

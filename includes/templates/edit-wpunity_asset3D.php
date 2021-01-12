@@ -1288,7 +1288,7 @@ if($asset_id != null) {
 
     document.getElementById("jscolorpick").value = back_3d_color;
 
-    //generateQRcode();
+    generateQRcode();
     
     
     // Current  Slide index (carousel top)

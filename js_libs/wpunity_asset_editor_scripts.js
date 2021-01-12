@@ -297,14 +297,14 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
     // PDB
     if (pdbFileContent) {
-        console.log("Loading","PDB");
+        console.log("Loading from existing resource","PDB");
 
         wu_webw_3d_view_local.loadMolecule(pdbFileContent, "loader_asset_exists");
         return;
 
         // GLB
     } else if (glbFilename){
-        console.log("Loading","GLB");
+        console.log("Loading from existing resource","GLB");
         //console.log("glbFilename", glbFilename);
 
         // Instantiate a loader
@@ -318,10 +318,19 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
             function ( gltf ) {
 
                 if (gltf.animations.length>0) {
+
                     let glbmixer = new THREE.AnimationMixer(gltf.scene);
                     wu_webw_3d_view_local.mixers.push(glbmixer);
                     let action = glbmixer.clipAction(gltf.animations[0]);
-                    action.play();
+
+                    // Display button to start animation inside the Asset 3D previewer
+                    document.getElementById("animButton1").style.display = "inline-block";
+
+                } else {
+
+                    // Display button to start animation inside the Asset 3D previewer
+                    document.getElementById("animButton1").style.display = "none";
+
                 }
 
                 // ------------ Find bounding sphere ----
@@ -366,7 +375,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
         // OBJ load
     } else if (pathUrl) {
 
-        console.log("Loading","OBJ");
+        console.log("Loading from existing resource","OBJ");
 
         let manager = new THREE.LoadingManager();
 
@@ -425,7 +434,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
 
         } else if (fbxFilename){
 
-            console.log("START", "FBX");
+            console.log("Loading from existing resource","FBX");
 
             // split texture string into each texture
             let url_files = textures_fbx_string_connected.split('|');
