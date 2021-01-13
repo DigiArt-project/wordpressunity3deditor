@@ -1,14 +1,12 @@
-/*
-     3D viewer for all types of files
- */
+/* 3D viewer for all types of files in assetEditor */
 class WU_webw_3d_view {
 
     // wu_webw_3d_view.scene.children :
         // 0: root (pdb, audio, fbx, GLB, OBJ)
-        // 1: Directional light 1
-        // 2: Directional light 2
-        // 3: Directional light 3
-        // 4: Ambient light
+        // 1,2,3,4: Directional light 1,2,3, 4: Ambient light
+
+    // PDB is the same loader for url and client side
+    // OBJ, FBX, and GLB call first an xhr loader in editor_scripts.js and then the streaming version here
 
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 

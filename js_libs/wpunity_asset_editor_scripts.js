@@ -374,6 +374,8 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
             }
         );
 
+        return;
+
         // OBJ load
     } else if (pathUrl) {
 
@@ -434,6 +436,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
                 );
             });
 
+            return;
         } else if (fbxFilename){
 
             console.log("Loading from existing resource","FBX");
@@ -497,6 +500,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
                 xhr.send();
             }
 
+            return;
         } else {
             console.log("WARNING", "UNKNOWN 155");
         }
