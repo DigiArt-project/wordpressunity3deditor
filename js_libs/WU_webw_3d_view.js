@@ -43,6 +43,8 @@ class WU_webw_3d_view {
 
         // Trackball controls
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+
+
         this.controls.zoomSpeed = 1.02;
         this.controls.dynamicDampingFactor = 0.3;
 
@@ -155,7 +157,7 @@ class WU_webw_3d_view {
             document.getElementById('previewProgressSliderLine').style.width = '0';
             document.getElementById('previewProgressLabel').innerHTML = "";
 
-            scope.zoomer();
+            scope.zoomer(scope.scene.getChildByName('root'));
 
             // // Auto create screenshot;
             // setTimeout(function(){
@@ -358,6 +360,8 @@ class WU_webw_3d_view {
 
 
                 scope.zoomer(scope.scene.getChildByName('root'));
+
+                //scope.controls.target(scope.scene.getChildByName('root'));
             },
             '',
             // called when loading has errors
@@ -384,15 +388,15 @@ class WU_webw_3d_view {
         loader.load(url_or_text_pdb, function (pdb) {
 
             let geometryAtoms = pdb.geometryAtoms;
-
-            let positions = geometryAtoms.getAttribute('position').array;
-            let colors = geometryAtoms.getAttribute('color').array;
             let geometryBonds = pdb.geometryBonds;
+            let positionsBonds = geometryBonds.getAttribute('position');
+
+            let positions = geometryAtoms.attributes.position.array;
+            let colors = geometryAtoms.getAttribute('color').array;
+
             let json = pdb.json;
 
-            let sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 4);
-
-            let colorArchive = [];
+            let sphereGeometry = new THREE.IcosahedronBufferGeometry(0.4, 4);
 
             for (let i = 0; i < positions.length ; i += 3) {
 
@@ -400,10 +404,7 @@ class WU_webw_3d_view {
                 let atomPosition = new THREE.Vector3(positions[i], positions[i + 1], positions[ i + 2 ]);
                 let atomColor    = new THREE.Color  (   colors[i], colors   [i + 1], colors   [ i + 2 ]);
 
-                colorArchive.push( atomColor );
-
                 let material = new THREE.MeshPhongMaterial({color: atomColor, flatShading: false});
-
                 let atomObject = new THREE.Mesh(sphereGeometry, material);
 
                 let atomName = json.atoms[i/3][4];
@@ -435,29 +436,22 @@ class WU_webw_3d_view {
 
             // Make the bonds
 
-
-            let positionsBonds = geometryBonds.getAttribute('position');
-
-            positionsBonds.count = positions.array.length;
-
-
-
+            positionsBonds.count = positionsBonds.array.length;
 
             let colorsStart = geometryBonds.getAttribute('colorStart');
             let colorsEnd = geometryBonds.getAttribute('colorEnd');
 
             for (let i = 0; i < positionsBonds.count; i += 6) {
 
+                setTimeout(function(){
+
                 let start = new THREE.Vector3( positionsBonds.array[i], positionsBonds.array[i+1], positionsBonds.array[i+2]);
                 let end   = new THREE.Vector3( positionsBonds.array[i+3],positionsBonds.array[i+4],positionsBonds.array[i+5]);
-
-                // start.multiplyScalar(75);
-                // end.multiplyScalar(75);
 
                 let HALF_PI = + Math.PI * .5;
                 let distance = start.distanceTo(end);
 
-                let cylinder = new THREE.CylinderGeometry(16, 16, distance/2, 20, 5, false);
+                let cylinder = new THREE.CylinderGeometry(0.2, 0.2, distance/2, 10, 4, false);
 
                 let orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
                 let offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
@@ -491,6 +485,8 @@ class WU_webw_3d_view {
                 bond2.position.copy(start);
                 bond2.position.lerp(end, 0.75);
                 scope.scene.getChildByName('root').add(bond2);
+
+                },100 + i * 4000/positionsBonds.count);
             }
 
             scope.render();
@@ -500,7 +496,6 @@ class WU_webw_3d_view {
             let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
             // Find new zoom
             let totalRadius = sphere[1];
-            console.log(totalRadius);
             scope.controls.minDistance = 0.001 * totalRadius;
             scope.controls.maxDistance = 35 * totalRadius;
 
@@ -576,9 +571,6 @@ class WU_webw_3d_view {
             }
         } );
 
-        // console.log("sceneBSCenter", sceneBSCenter);
-        // console.log("sceneBSRadius",sceneBSRadius);
-
         return [sceneBSCenter, sceneBSRadius];
     }
 
@@ -604,9 +596,7 @@ class WU_webw_3d_view {
         this.controls.maxDistance = 35*totalRadius;
     }
 
-
     // ----------------- Auxiliary ---------------------------
-
     // Start Renderer amd label Renderer
     render() {
         if (!this.renderer.autoClear)
