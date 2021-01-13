@@ -192,41 +192,6 @@ class WU_webw_3d_view {
 
         // Clear any GLB, FBX, PDB or OBJ
         this.scene.getObjectByName('root').clear(); // remove all children of root
-
-        // OBJ specific
-        //this.scene.getChildByName('Pivot').clear();
-
-        // OBJ Specific
-        // var remover = function (object3d) {
-        //
-        //     if (object3d === scope.pivot) {
-        //         return;
-        //     }
-        //     console.log('Removing: ' + object3d.name);
-        //     scope.scene.remove(object3d);
-        //
-        //     if (object3d.hasOwnProperty('geometry')) {
-        //         object3d.geometry.dispose();
-        //     }
-        //     if (object3d.hasOwnProperty('material')) {
-        //
-        //         var mat = object3d.material;
-        //         if (mat.hasOwnProperty('materials')) {
-        //             var materials = mat.materials;
-        //             for (var name in materials) {
-        //                 if (materials.hasOwnProperty(name)) materials[name].dispose();
-        //             }
-        //         }
-        //     }
-        //     if (object3d.hasOwnProperty('texture')) {
-        //         object3d.texture.dispose();
-        //     }
-        // };
-
-        //scope.scene.remove(scope.pivot);
-        //scope.pivot.traverse(remover);
-        //scope.createPivot();
-
     }
 
     /* OBJ Loader */
