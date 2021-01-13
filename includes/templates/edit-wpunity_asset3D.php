@@ -1302,6 +1302,7 @@ if($asset_id != null) {
 
     // Reset if not preview
     if (isEditMode === 1) {
+        // clear canvas and divs for fields
         wpunity_reset_panels(wu_webw_3d_view, "initial script");
     
         // Get the Default Screenshot image for reference;

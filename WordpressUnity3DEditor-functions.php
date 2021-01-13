@@ -117,7 +117,8 @@ function wpunity_register_scripts() {
 	//=========================== THREE js 119 scripts ============================================
 	
 	$scriptsC = array(
-		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
+		//array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
+		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs124/three.js'),
 		
 		array( 'wpunity_load119_FBXloader', $pluginDirJS.'threejs119/FBXLoader.js'),
 //		array( 'wpunity_load119_pdbloader', $pluginDirJS.'threejs119/PDBLoader.js'),

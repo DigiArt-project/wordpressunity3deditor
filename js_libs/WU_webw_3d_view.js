@@ -10,13 +10,19 @@ class WU_webw_3d_view {
 
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 
-        this.scene = null;
-        this.renderer = null;
+        this.canvas = canvasToBindTo;
+        this.scene = new THREE.Scene();
+
+        this.renderer = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true,
+            logarithmicDepthBuffer: true
+        });
         this.camera = null;
         this.listener = null;
 
         this.audioElement = audioElement;
-        this.canvas = canvasToBindTo;
+
 
         this.aspectRatio = 1;
         this.recalcAspectRatio();
@@ -29,23 +35,25 @@ class WU_webw_3d_view {
             fov: 45
         };
 
+        // Set up camera
+        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
+            this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+
         this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
-        // For rotating object
-        this.controls = null;
+        // Trackball controls
+        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls.zoomSpeed = 1.02;
+        this.controls.dynamicDampingFactor = 0.3;
 
-        this.flatShading = false;
 
         // For the animation
         this.clock = new THREE.Clock();
         this.mixers = [];
 
-        // - PDB and FBX specific -
-        // Here all chemistry 3D and 2D labels items are stored
+        // Scene.children[0] is root: Here all chemistry 3D and 2D labels items are stored
         let root = new THREE.Group();
         root.name = "root";
-
-        // 1 scene.children[0] is root
         this.scene.add( root );
 
 
@@ -60,19 +68,6 @@ class WU_webw_3d_view {
 
     // Initialize Scene
     initGL(back_3d_color_local) {
-
-        // Set up camera
-        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
-            this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
-
-
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
-            antialias: true,
-            logarithmicDepthBuffer: true
-        });
-
-        this.scene = new THREE.Scene();
 
         this.scene.background = new THREE.Color(back_3d_color_local);
 
@@ -109,10 +104,7 @@ class WU_webw_3d_view {
 
         this.resetCamera();
 
-        // Trackball controls
-        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-        this.controls.zoomSpeed = 1.02;
-        this.controls.dynamicDampingFactor = 0.3;
+
 
         // Light
         var ambientLight = new THREE.AmbientLight(0x404040,2);
@@ -193,13 +185,11 @@ class WU_webw_3d_view {
         // Hide animation button
         document.getElementById("animButton1").style.display = "none";
 
-        //var scope = this;
-
         // Clear animations
         this.mixers = [];
 
-        // PDB and FBX Specific
-        this.scene.getChildByName('root').clear(); // remove all children of root
+        // Clear any GLB, FBX, PDB or OBJ
+        this.scene.getObjectByName('root').clear(); // remove all children of root
 
         // OBJ specific
         //this.scene.getChildByName('Pivot').clear();
@@ -289,7 +279,7 @@ class WU_webw_3d_view {
         this.scene.getChildByName("root").add(fbxObject);
         this.render();
 
-        let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+        let centerRadius = this.computeSceneBoundingSphereAll(this.scene.getChildByName('root'));
 
         const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
         const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
@@ -355,7 +345,7 @@ class WU_webw_3d_view {
                 scope.render();
 
 
-                let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+                let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
                 console.log("Estimated center", centerRadius[0]);
                 console.log("Estimated radius", centerRadius[1]);
 
@@ -400,7 +390,7 @@ class WU_webw_3d_view {
             let geometryBonds = pdb.geometryBonds;
             let json = pdb.json;
 
-            var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 4);
+            let sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 4);
 
             let colorArchive = [];
 
@@ -444,6 +434,8 @@ class WU_webw_3d_view {
             }
 
             // Make the bonds
+
+
             let positionsBonds = geometryBonds.getAttribute('position');
 
             positionsBonds.count = positions.array.length;
@@ -505,12 +497,12 @@ class WU_webw_3d_view {
 
 
             // ------------ Find bounding sphere and zoom ----
-            let sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+            let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
             // Find new zoom
             let totalRadius = sphere[1];
             console.log(totalRadius);
-            wu_webw_3d_view.controls.minDistance = 0.001 * totalRadius;
-            wu_webw_3d_view.controls.maxDistance = 35 * totalRadius;
+            scope.controls.minDistance = 0.001 * totalRadius;
+            scope.controls.maxDistance = 35 * totalRadius;
 
             // console.log("sphere", sphere[1]);
             //
@@ -575,7 +567,7 @@ class WU_webw_3d_view {
                 // Object radius
                 let radius = object.geometry.boundingSphere.radius;
 
-                console.log(object.name + " " + radius, object.position);
+//                console.log(object.name + " " + radius, object.position);
 
 
                 if (radius) {
