@@ -3,28 +3,26 @@
  */
 class WU_webw_3d_view {
 
-
     // wu_webw_3d_view.scene.children :
-        // 0: is for pdb
+        // 0: root (pdb, audio, fbx, GLB, OBJ)
         // 1: Directional light 1
         // 2: Directional light 2
         // 3: Directional light 3
         // 4: Ambient light
-        // 5: OBJ 3D model
-
-    recalcAspectRatio() {
-        this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
-    };
 
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 
+        this.scene = null;
         this.renderer = null;
+        this.camera = null;
+        this.listener = null;
+
         this.audioElement = audioElement;
         this.canvas = canvasToBindTo;
+
         this.aspectRatio = 1;
         this.recalcAspectRatio();
 
-        this.scene = null;
         this.cameraDefaults = {
             posCamera: new THREE.Vector3(0.0, 175.0, 500.0),
             posCameraTarget: new THREE.Vector3(0, 0, 0),
@@ -32,168 +30,231 @@ class WU_webw_3d_view {
             far: 10000,
             fov: 45
         };
-        this.camera = null;
-        this.listener = null;
+
         this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
+        // For rotating object
         this.controls = null;
 
         this.flatShading = false;
 
+        // For the animation
         this.clock = new THREE.Clock();
-
-        // Make a pivot to ensure that the object is centered correctly
-        this.pivot = null;
+        this.mixers = [];
 
         // - PDB and FBX specific -
         // Here all chemistry 3D and 2D labels items are stored
-        this.root = new THREE.Group();
+        let root = new THREE.Group();
+        root.name = "root";
+
+        // 1 scene.children[0] is root
+        this.scene.add( root );
+
 
         // - OBJ Specific - Setup loader
         try {
             this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
             this.wwObjLoader2.setCrossOrigin('anonymous');
         } catch (e) {
-
+            console.log("ERROR WW15", "Web Workers for OBJ not found")
         }
+    }
+
+    // Initialize Scene
+    initGL(back_3d_color_local) {
+
+        // Set up camera
+        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
+            this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
 
 
+        this.renderer = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true,
+            logarithmicDepthBuffer: true
+        });
 
-        // Check for the various File API support.
-        this.fileApiAvailable = true;
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-            console.log('File API is supported! Enabling all features.');
+        this.scene = new THREE.Scene();
+
+        this.scene.background = new THREE.Color(back_3d_color_local);
+
+        // - Label renderer -
+        this.labelRenderer = new THREE.CSS2DRenderer();
+        this.labelRenderer.domElement.style.position = 'absolute';
+        this.labelRenderer.domElement.style.top = '0';
+        this.labelRenderer.domElement.style.fontSize = "25pt";
+        this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
+        this.labelRenderer.domElement.style.pointerEvents = 'none';
+
+        // add label renderer
+        document.getElementById("previewCanvasLabels").appendChild(this.labelRenderer.domElement);
+
+        // Add audio listener to the camera
+        if (this.audioElement!=null) {
+            this.listener = new THREE.AudioListener();
+            this.camera.add(this.listener);
+
+            this.positionalAudio.name = "audio1";
+            this.positionalAudio = new THREE.PositionalAudio(this.listener);
+            this.positionalAudio.setMediaElementSource(this.audioElement);
+            this.positionalAudio.setRefDistance(200);
+            this.positionalAudio.setDirectionalCone(330, 230, 0.01);
+
+            // This adds the audio element to loaded 3D object
+            this.scene.getChildByName('root').add(this.positionalAudio);
+
         } else {
-            this.fileApiAvailable = false;
-            console.warn('File API is not supported! Disabling file loading.');
+            console.log("ERROR Audio 111", "No Audio Element is found");
         }
-        // - End of OBJ specific -
 
 
-        this.mixers = [];
+
+        this.resetCamera();
+
+        // Trackball controls
+        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls.zoomSpeed = 1.02;
+        this.controls.dynamicDampingFactor = 0.3;
+
+        // Light
+        var ambientLight = new THREE.AmbientLight(0x404040,2);
+        var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
+        var directionalLight2 = new THREE.DirectionalLight(0x909050);
+        var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
+
+        directionalLight1.position.set(-1000,  -550,  1000);
+        directionalLight2.position.set( 1000,   550, -1000);
+        directionalLight3.position.set(    0,   550,     0);
+
+        // Scene.children[1],[2],[3],[4] are lights
+        this.scene.add(directionalLight1);
+        this.scene.add(directionalLight2);
+        this.scene.add(directionalLight3);
+        this.scene.add(ambientLight);
+
+        // Grid
+        //var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
+        //this.scene.add( helper );
+
+        // scene.children[5] is Pivot
+        //this.createPivot();
     }
 
+    // Initialize Post GL only for OBJ async loading
+    initPostGL() {
 
-    // Create Pivot for 3D objects to rotate around (to avoid non-centered 3D model problems)
-    createPivot() {
-        this.pivot = new THREE.Object3D();
-        this.pivot.name = 'Pivot';
-        this.scene.add(this.pivot);
-    }
+        let scope = this;
 
-    _reportProgress(text) {
-        console.log('Progress: ' + text);
-    }
-
-
-
-    // Start loader
-    loadObjStream(objDef) {
-
-        let prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
-            objDef.name,
-            objDef.objAsArrayBuffer,
-            objDef.pathTexture,  // if it is already uploaded this is a url. If it is on client side, this is an array of raw images
-            objDef.mtlAsString
-        );
-
-        prepData.setSceneGraphBaseNode(this.pivot);
-        prepData.setStreamMeshes(true);
-        this.wwObjLoader2.prepareRun(prepData);
-        this.wwObjLoader2.run();
-    }
-
-    // Resize Renderer and Label Renderer
-    resizeDisplayGL() {
-        this.controls.handleResize();
-
-        this.recalcAspectRatio();
-        this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
-        this.labelRenderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
-
-        this.updateCamera();
-    };
-
-
-    // Reset Camera
-    resetCamera() {
-        this.camera.position.copy(this.cameraDefaults.posCamera);
-        this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
-        this.updateCamera();
-    }
-
-    // Update camera aspect
-    updateCamera() {
-        this.camera.aspect = this.aspectRatio;
-        this.camera.lookAt(this.cameraTarget);
-        this.camera.updateProjectionMatrix();
-    }
-
-    // Start Renderer amd label Renderer
-    render() {
-        if (!this.renderer.autoClear)
-            this.renderer.clear();
-
-        this.controls.update();
-        this.renderer.render(this.scene, this.camera);
-        this.labelRenderer.render(this.scene, this.camera);
-
-        if ( this.mixers.length > 0 ) {
-
-            for ( let i = 0; i < this.mixers.length; i ++ ) {
-                this.mixers[ i ].update( this.clock.getDelta() );
+        // Function for OBJ: Function to load materials
+        let materialsLoaded = function (materials) {
+            for (let k in materials) {
+                if(materials.hasOwnProperty(k)) {
+                    materials[k].transparent = true;
+                    materials[k].alphaTest = 0.1;
+                }
             }
+        };
+
+        // Function for OBJ: Report for meshes
+        let meshLoaded = function (name, bufferGeometry, material) {};
+
+        // Function on Completed Loading
+        let completedLoading = function () {
+            console.log('Loading complete!');
+
+            document.getElementById('previewProgressSliderLine').style.width = '0';
+            document.getElementById('previewProgressLabel').innerHTML = "";
+
+            scope.zoomer();
+
+            // // Auto create screenshot;
+            // setTimeout(function(){
+            //     jQuery("#button_qrcode").click(); // close qr code
+            //     jQuery("#createModelScreenshotBtn").click();
+            // },1000);
+        };
+
+        try {
+            this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
+            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
+            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
+            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+        } catch (e){
+            console.log("Can load OBJ", "ERROR O151");
         }
+
+        return true;
     }
 
 
     // Clear Previous model
     clearAllAssets() {
-        var scope = this;
 
         console.log("CLEARING");
+
+        // Hide animation button
+        document.getElementById("animButton1").style.display = "none";
+
+        //var scope = this;
 
         // Clear animations
         this.mixers = [];
 
         // PDB and FBX Specific
-        while (scope.root.children.length > 0) {
-            var object = scope.root.children[0];
-            object.parent.remove(object);
-        }
+        this.scene.getChildByName('root').clear(); // remove all children of root
+
+        // OBJ specific
+        //this.scene.getChildByName('Pivot').clear();
 
         // OBJ Specific
-        var remover = function (object3d) {
+        // var remover = function (object3d) {
+        //
+        //     if (object3d === scope.pivot) {
+        //         return;
+        //     }
+        //     console.log('Removing: ' + object3d.name);
+        //     scope.scene.remove(object3d);
+        //
+        //     if (object3d.hasOwnProperty('geometry')) {
+        //         object3d.geometry.dispose();
+        //     }
+        //     if (object3d.hasOwnProperty('material')) {
+        //
+        //         var mat = object3d.material;
+        //         if (mat.hasOwnProperty('materials')) {
+        //             var materials = mat.materials;
+        //             for (var name in materials) {
+        //                 if (materials.hasOwnProperty(name)) materials[name].dispose();
+        //             }
+        //         }
+        //     }
+        //     if (object3d.hasOwnProperty('texture')) {
+        //         object3d.texture.dispose();
+        //     }
+        // };
 
-            if (object3d === scope.pivot) {
-                return;
-            }
-            console.log('Removing: ' + object3d.name);
-            scope.scene.remove(object3d);
-
-            if (object3d.hasOwnProperty('geometry')) {
-                object3d.geometry.dispose();
-            }
-            if (object3d.hasOwnProperty('material')) {
-
-                var mat = object3d.material;
-                if (mat.hasOwnProperty('materials')) {
-                    var materials = mat.materials;
-                    for (var name in materials) {
-                        if (materials.hasOwnProperty(name)) materials[name].dispose();
-                    }
-                }
-            }
-            if (object3d.hasOwnProperty('texture')) {
-                object3d.texture.dispose();
-            }
-        };
-
-        scope.scene.remove(scope.pivot);
-        scope.pivot.traverse(remover);
-        scope.createPivot();
+        //scope.scene.remove(scope.pivot);
+        //scope.pivot.traverse(remover);
+        //scope.createPivot();
 
     }
+
+    /* OBJ Loader */
+    loadObjStream(objDef) {
+
+        let prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
+            objDef.name,
+            objDef.objAsArrayBuffer,
+            objDef.pathTexture,  // URL if already uploaded or array of raw images if in preview (client side)
+            objDef.mtlAsString
+        );
+
+        prepData.setSceneGraphBaseNode(this.scene.getChildByName('root'));
+        prepData.setStreamMeshes(true);
+        this.wwObjLoader2.prepareRun(prepData);
+        this.wwObjLoader2.run();
+    }
+
 
     /* FBX loader */
     loadFbxStream(fbxBuffer, texturesStreams) {
@@ -201,23 +262,22 @@ class WU_webw_3d_view {
         // Clear Previous
         this.clearAllAssets();
 
-        var manager = new THREE.LoadingManager();
+        let manager = new THREE.LoadingManager();
         manager.onProgress = function( item, loaded, total ) {
             console.log( item, loaded, total );
         };
 
-        let fbxloader = new THREE.FBXLoader( manager );
+        let fbxLoader = new THREE.FBXLoader( manager );
 
-        let fbxobject = fbxloader.parseStream(fbxBuffer, texturesStreams);
+        let fbxObject = fbxLoader.parseStream(fbxBuffer, texturesStreams);
 
-        fbxobject.mixer = new THREE.AnimationMixer( fbxobject );
+        if ( fbxObject.animations.length > 0 ) {
 
-        this.mixers.push( fbxobject.mixer );
-        this.objectsLoaded = fbxobject;
+            fbxObject.mixer = new THREE.AnimationMixer( fbxObject );
 
+            this.mixers.push( fbxObject.mixer );
 
-        if ( fbxobject.animations.length>0 ) {
-            this.action = fbxobject.mixer.clipAction( fbxobject.animations[0] );
+            this.action = fbxObject.mixer.clipAction( fbxObject.animations[0] );
 
             // Display button to start animation inside the Asset 3D previewer
             document.getElementById("animButton1").style.display = "inline-block";
@@ -227,26 +287,20 @@ class WU_webw_3d_view {
             console.log("Your FBX does not have animation");
         }
 
+        // FBX is added to root
+        this.scene.getChildByName("root").add(fbxObject);
+        this.render();
 
-
-        let scope = this;
-        scope.root.add(fbxobject);
-        scope.render();
-
-
-
-        let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
-        console.log("Estimated center", centerRadius[0]);
-        console.log("Estimated radius", centerRadius[1]);
+        let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
 
         const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
         const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
         const sphereBall = new THREE.Mesh( geometryBall, materialBall );
         sphereBall.position.copy( centerRadius[0] );
         sphereBall.name = "Center Ball"
-        scope.root.add( sphereBall );
+        this.scene.getChildByName('root').add( sphereBall );
 
-        scope.zoomer(scope.root);
+        this.zoomer(this.scene.getChildByName('root'));
 
         //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
@@ -256,21 +310,20 @@ class WU_webw_3d_view {
         // },1000);
     }
 
-    /* FBX loader */
+    /* GLB loader */
     loadGlbStream(GlbBuffer) {
         let scope = this;
+
         // Clear Previous
         this.clearAllAssets();
 
-        var manager = new THREE.LoadingManager();
-        manager.onProgress = function( item, loaded, total ) {
-            console.log( item, loaded, total );
-        };
+        let manager = new THREE.LoadingManager();
+        manager.onProgress = function( item, loaded, total ) {};
 
-        let glbloader = new THREE.GLTFLoader( manager );
+        let glbLoader = new THREE.GLTFLoader( manager );
 
         // Load a glTF resource
-        glbloader.load(
+        glbLoader.load(
             GlbBuffer,
             // called when the resource is loaded
             function ( gltf ) {
@@ -282,10 +335,12 @@ class WU_webw_3d_view {
                 // gltf.scenes; // Array<THREE.Group>
                 // gltf.cameras; // Array<THREE.Camera>
                 // gltf.asset; // Object
-                if (gltf.animations.length>0) {
-                    let glbmixer = new THREE.AnimationMixer( gltf.scene );
-                    scope.mixers.push( glbmixer );
-                    scope.action = glbmixer.clipAction(gltf.animations[0]);
+
+                if ( gltf.animations.length > 0) {
+
+                    let glbMixer = new THREE.AnimationMixer( gltf.scene );
+                    scope.mixers.push( glbMixer );
+                    scope.action = glbMixer.clipAction( gltf.animations[0] );
 
                     // Display button to start animation inside the Asset 3D previewer
                     document.getElementById("animButton1").style.display = "inline-block";
@@ -297,14 +352,12 @@ class WU_webw_3d_view {
 
                 }
 
-                scope.root.add(gltf.scene);
+                scope.scene.getChildByName('root').add( gltf.scene );
 
                 scope.render();
 
-                //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
-
-                let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
+                let centerRadius = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
                 console.log("Estimated center", centerRadius[0]);
                 console.log("Estimated radius", centerRadius[1]);
 
@@ -313,10 +366,10 @@ class WU_webw_3d_view {
                 const sphereBall = new THREE.Mesh( geometryBall, materialBall );
                 sphereBall.position.copy( centerRadius[0] );
                 sphereBall.name = "Center Ball"
-                scope.root.add( sphereBall );
+                scope.scene.getChildByName('root').add( sphereBall );
 
 
-                scope.zoomer(scope.root);
+                scope.zoomer(scope.scene.getChildByName('root'));
             },
             '',
             // called when loading has errors
@@ -327,14 +380,7 @@ class WU_webw_3d_view {
             }
         );
 
-
-
-        // setTimeout(function(){
-        //     jQuery("#button_qrcode").click(); // close qr code
-        //     jQuery("#createModelScreenshotBtn").click();
-        // },1000);
     }
-
 
     /* Molecule loader */
     loadMolecule(url_or_text_pdb, calledFromWhere) {
@@ -342,109 +388,90 @@ class WU_webw_3d_view {
         // Clear Previous
         this.clearAllAssets();
 
-        var loader = new THREE.PDBLoader();
+        let loader = new THREE.PDBLoader();
 
-        var scope = this;
+        let scope = this;
 
         // Load new
         loader.load(url_or_text_pdb, function (pdb) {
 
             let geometryAtoms = pdb.geometryAtoms;
 
-            var positions = geometryAtoms.getAttribute('position').array;
-            var colors = geometryAtoms.getAttribute('color').array;
+            let positions = geometryAtoms.getAttribute('position').array;
+            let colors = geometryAtoms.getAttribute('color').array;
             let geometryBonds = pdb.geometryBonds;
             let json = pdb.json;
 
             var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 4);
 
-            //var offset = geometryAtoms.center();
-            //geometryBonds.translate(offset.x, offset.y, offset.z);
-
-            var position = new THREE.Vector3();
-            var color = new THREE.Color();
-            var colorArchive = [];
+            let colorArchive = [];
 
             for (let i = 0; i < positions.length ; i += 3) {
 
-                // Make the atoms
-                position.x = positions[i];
-                position.y = positions[i + 1];
-                position.z = positions[i + 2];
+                // Atom position and color
+                let atomPosition = new THREE.Vector3(positions[i], positions[i + 1], positions[ i + 2 ]);
+                let atomColor    = new THREE.Color  (   colors[i], colors   [i + 1], colors   [ i + 2 ]);
 
-                color.r = colors[ i ] ;
-                color.g = colors[ i + 1 ];
-                color.b = colors[ i + 2 ];
+                colorArchive.push( atomColor );
 
-                colorArchive.push( color );
+                let material = new THREE.MeshPhongMaterial({color: atomColor, flatShading: false});
 
-                var material = new THREE.MeshPhongMaterial({color: color, flatShading: false});
+                let atomObject = new THREE.Mesh(sphereGeometry, material);
 
-                var object = new THREE.Mesh(sphereGeometry, material);
+                let atomName = json.atoms[i/3][4];
 
-                // Name of the atom
-                var atom = json.atoms[i/3];
+                atomObject.name = "AtomBall:" + atomName;
+                atomObject.position.copy(atomPosition);
 
-                object.name = "AtomBall:" + atom[4];
-                object.position.copy(position);
-                object.position.multiplyScalar(75);
-                object.scale.multiplyScalar(25);
-                scope.root.add(object);
+                // atomObject.position.multiplyScalar(75);
+                // atomObject.scale.multiplyScalar(25);
+
+                scope.scene.getChildByName('root').add(atomObject);
 
 
                 // Make the Atom Text CSS2D label
-                var text = document.createElement('div');
-                text.className = 'label';
-                text.style.color = 'rgb(' + color.r* 255 + ',' + color.g* 255+ ',' + color.b * 255 + ')';
-                text.textContent =  atom[4];
+                let atomLabelCSS = document.createElement('div');
+                atomLabelCSS.className = 'label';
+                atomLabelCSS.style.color = 'rgb(' + atomColor.r* 255 + ',' + atomColor.g* 255+ ',' + atomColor.b * 255 + ')';
+                atomLabelCSS.textContent =  atomName;
 
-                var label = new THREE.CSS2DObject(text);
-                label.name = "Label:" + text.textContent;
-                label.position.copy(object.position);
+                let atomlabelObj = new THREE.CSS2DObject(atomLabelCSS);
+                atomlabelObj.name = "Label:" + atomLabelCSS.textContent;
+                atomlabelObj.position.copy( atomObject.position );
 
                 // console.log("label",label);
                 // const axesHelper = new THREE.AxesHelper( 55 );
-                // scope.root.add( axesHelper );
-                scope.root.add(label);
+                // scope.scene.getChildByName('root').add( axesHelper );
+                scope.scene.getChildByName('root').add(atomlabelObj);
             }
 
             // Make the bonds
-            positions = geometryBonds.getAttribute('position');
+            let positionsBonds = geometryBonds.getAttribute('position');
+
+            positionsBonds.count = positions.array.length;
 
 
 
-            positions.count = positions.array.length;
-
-            var start = new THREE.Vector3();
-            var end = new THREE.Vector3();
 
             let colorsStart = geometryBonds.getAttribute('colorStart');
             let colorsEnd = geometryBonds.getAttribute('colorEnd');
 
+            for (let i = 0; i < positionsBonds.count; i += 6) {
 
+                let start = new THREE.Vector3( positionsBonds.array[i], positionsBonds.array[i+1], positionsBonds.array[i+2]);
+                let end   = new THREE.Vector3( positionsBonds.array[i+3],positionsBonds.array[i+4],positionsBonds.array[i+5]);
 
-            for (let i = 0; i < positions.count; i += 6) {
+                // start.multiplyScalar(75);
+                // end.multiplyScalar(75);
 
-                start.x = positions.array[i];
-                start.y = positions.array[i+1];
-                start.z = positions.array[i+2];
+                let HALF_PI = + Math.PI * .5;
+                let distance = start.distanceTo(end);
 
-                end.x = positions.array[i+3];
-                end.y = positions.array[i+4];
-                end.z = positions.array[i+5];
+                let cylinder = new THREE.CylinderGeometry(16, 16, distance/2, 20, 5, false);
 
-                start.multiplyScalar(75);
-                end.multiplyScalar(75);
-
-                var HALF_PI = + Math.PI * .5;
-                var distance = start.distanceTo(end);
-
-
-                var cylinder = new THREE.CylinderGeometry(16, 16, distance/2, 20, 5, false);
-
-                var orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
-                var offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
-                var offsetPosition = new THREE.Matrix4();//a matrix to fix pivot position
+                let orientation = new THREE.Matrix4();//a new orientation matrix to offset pivot
+                let offsetRotation = new THREE.Matrix4();//a matrix to fix pivot rotation
+                let offsetPosition = new THREE.Matrix4();//a matrix to fix pivot position
 
                 orientation.lookAt( start, end, new THREE.Vector3(0,1,0));//look at destination
                 offsetRotation.makeRotationX(HALF_PI);//rotate 90 degs on X
@@ -453,52 +480,51 @@ class WU_webw_3d_view {
 
 
 
-                var object1 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
+                let bond1 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
                     color: new THREE.Color(colorsStart[i/6][0], colorsStart[i/6][1], colorsStart[i/6][2]),
                     flatShading: false,
                 }));
 
+                bond1.name = "Bond:" + i;
+                bond1.position.copy(start);
+                bond1.position.lerp(end, 0.25);
 
-                object1.name = "Bond:" + i;
-
-                object1.position.copy(start);
-                object1.position.lerp(end, 0.25);
-
-                scope.root.add(object1);
+                scope.scene.getChildByName('root').add(bond1);
 
 
-                var object2 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
+                let bond2 = new THREE.Mesh(cylinder, new THREE.MeshPhongMaterial({
                     color: new THREE.Color(colorsEnd[i/6][0], colorsEnd[i/6][1], colorsEnd[i/6][2]),
                     flatShading: false,
                 }));
 
-                object2.name = "Bond:" + (i+1);
-
-                object2.position.copy(start);
-                object2.position.lerp(end, 0.75);
-
-                scope.root.add(object2);
+                bond2.name = "Bond:" + (i+1);
+                bond2.position.copy(start);
+                bond2.position.lerp(end, 0.75);
+                scope.scene.getChildByName('root').add(bond2);
             }
-
-
 
             scope.render();
 
 
-            // ------------ Find bounding sphere ----
-            let sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.root);
+            // ------------ Find bounding sphere and zoom ----
+            let sphere = wu_webw_3d_view.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+            // Find new zoom
+            let totalRadius = sphere[1];
+            console.log(totalRadius);
+            wu_webw_3d_view.controls.minDistance = 0.001 * totalRadius;
+            wu_webw_3d_view.controls.maxDistance = 35 * totalRadius;
 
-            console.log("sphere", sphere[1]);
-
-            const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
-            const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-            const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-            sphereBall.position.copy(sphere[0]);
-            sphereBall.name = "Center Ball"
-            scope.root.add( sphereBall );
+            // console.log("sphere", sphere[1]);
+            //
+            // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
+            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+            // sphereBall.position.copy(sphere[0]);
+            // sphereBall.name = "Center Ball"
+            // scope.scene.getChildByName('root').add( sphereBall );
 
             // translate object to the center
-            // scope.root.traverse(function (object) {
+            // scope.scene.getChildByName('root').traverse(function (object) {
             //     //object.position.x = object.position.y = object.position.z = 0;
             //
             //     if (object instanceof THREE.Mesh || object instanceof THREE.Object3D ) {
@@ -515,17 +541,7 @@ class WU_webw_3d_view {
             //     }
             // });
 
-            // Add to pivot
-            wu_webw_3d_view.pivot.add(scope.root);
-
-
-            // Find new zoom
-            let totalRadius = sphere[1];
-            console.log(totalRadius);
-            wu_webw_3d_view.controls.minDistance = 0.001 * totalRadius;
-            wu_webw_3d_view.controls.maxDistance = 35 * totalRadius;
-
-            //---------------------------------------
+             //---------------------------------------
 
 
         });
@@ -586,177 +602,83 @@ class WU_webw_3d_view {
         let sphere = this.computeSceneBoundingSphereAll( towhatObj );
 
         // translate object to the center
-        towhatObj.traverse( function (object) {
+        // towhatObj.traverse( function (object) {
+        //     if (object instanceof THREE.Mesh) {
+        //         //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
+        //         //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
+        //     }
+        // });
 
-
-            if (object instanceof THREE.Mesh) {
-                //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-                //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
-            }
-        });
-
-        var totalradius = sphere[1];
-
-        // let axHelp = new THREE.AxesHelper(35);
-        // wu_webw_3d_view.pivot.add(axHelp);
-
-        // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
-        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-        // sphereBall.position.copy(sphere[0]);
-        // sphereBall.name = "Center Ball"
-        // wu_webw_3d_view.pivot.add(sphereBall);
-
-
-        this.controls.minDistance = 0.001*totalradius;
-        this.controls.maxDistance = 35*totalradius;
+        let totalRadius = sphere[1];
+        this.controls.minDistance = 0.001*totalRadius;
+        this.controls.maxDistance = 35*totalRadius;
     }
 
-    // Initialize
-    initGL(back_3d_color_local) {
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
-            antialias: true,
-            logarithmicDepthBuffer: true
-        });
 
-        this.scene = new THREE.Scene();
+    // ----------------- Auxiliary ---------------------------
 
-        this.scene.background = new THREE.Color(back_3d_color_local);
+    // Start Renderer amd label Renderer
+    render() {
+        if (!this.renderer.autoClear)
+            this.renderer.clear();
 
+        this.controls.update();
+        this.renderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene, this.camera);
 
-
-        // - Label renderer -
-        this.labelRenderer = new THREE.CSS2DRenderer();
-        this.labelRenderer.domElement.style.position = 'absolute';
-        this.labelRenderer.domElement.style.top = '0';
-        this.labelRenderer.domElement.style.fontSize = "25pt";
-        this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
-        this.labelRenderer.domElement.style.pointerEvents = 'none';
-
-        // add label renderer
-        document.getElementById("previewCanvasLabels").appendChild(this.labelRenderer.domElement);
-
-        // - End of PDB specific -
-
-        // Set up camera
-        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov,
-            this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
-
-        // Add audio listener to the camera
-        //console.log("this.audioElement", this.audioElement);
-
-        if (this.audioElement!=null) {
-            this.listener = new THREE.AudioListener();
-            this.camera.add(this.listener);
-
-            this.positionalAudio = new THREE.PositionalAudio(this.listener);
-            this.positionalAudio.setMediaElementSource(this.audioElement);
-            this.positionalAudio.setRefDistance(200);
-            this.positionalAudio.setDirectionalCone(330, 230, 0.01);
-
-            // // - PDB, FBX Specific -
-            // This adds the audio element to loaded 3D object
-            this.root.add(this.positionalAudio);
-        } else {
-
+        // Animation
+        if ( this.mixers.length > 0 ) {
+            //for ( let i = 0; i < this.mixers.length; i ++ ) {
+            this.mixers[ 0 ].update( this.clock.getDelta() );
+            //}
         }
-        this.scene.add(this.root);
-
-
-        this.resetCamera();
-
-        // Trackball controls
-        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-        this.controls.zoomSpeed = 1.02;
-
-        this.controls.dynamicDampingFactor = 0.3;
-
-        // Light
-        var ambientLight = new THREE.AmbientLight(0x404040,2);
-        var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
-        var directionalLight2 = new THREE.DirectionalLight(0x909050);
-        var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
-
-        directionalLight1.position.set(-1000,  -550,  1000);
-        directionalLight2.position.set( 1000,   550, -1000);
-        directionalLight3.position.set(    0,   550,     0);
-
-        // Add to scene
-        this.scene.add(directionalLight1);
-        this.scene.add(directionalLight2);
-        this.scene.add(directionalLight3);
-        this.scene.add(ambientLight);
-
-        // Grid
-        //var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
-        //this.scene.add( helper );
-
-        // Create new pivot point to remedy non centered objects
-        this.createPivot();
     }
 
+    // Resize Renderer and Label Renderer
+    resizeDisplayGL() {
+        this.controls.handleResize();
 
+        this.recalcAspectRatio();
+        this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+        this.labelRenderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
 
-    // Initialize Post GL
-    initPostGL() {
-
-        var scope = this;
-
-        // Function for OBJ: Function to load materials
-        var materialsLoaded = function (materials) {
-            for (var key in materials) {
-                //console.log( materials[key]);
-                materials[key].transparent = true;
-                materials[key].alphaTest = 0.1;
-            }
-        };
-
-        // Function for OBJ: Report for meshes
-        var meshLoaded = function (name, bufferGeometry, material) {
-
-            console.log("----- Report of mesh loaded -------");
-            console.log('Loaded mesh: ' + name);
-
-            // for (var i = 0; i < material.length; i++) {
-            //     console.log('Material ', i, material[i]);
-            // }
-
-            console.log("----------------------------------");
-
-        };
-
-        // Function on Completed Loading
-        var completedLoading = function () {
-            console.log('Loading complete!');
-
-            //jQuery('#previewProgressSlider').hide();
-
-            document.getElementById('previewProgressSliderLine').style.width = 0;
-            document.getElementById('previewProgressLabel').innerHTML = "";
-
-            scope.zoomer();
-
-            // // Auto create screenshot;
-            // setTimeout(function(){
-            //     jQuery("#button_qrcode").click(); // close qr code
-            //     jQuery("#createModelScreenshotBtn").click();
-            // },1000);
-
-        };
-
-        try {
-            this.wwObjLoader2.registerCallbackProgress(this._reportProgress);
-            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
-            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
-            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
-        } catch (e){
-
-        }
-
-        return true;
+        this.updateCamera();
     }
 
+    // Recalculate canvas aspect ratio
+    recalcAspectRatio() {
+        this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+    }
+
+    // Create Pivot for 3D objects to rotate around (to avoid non-centered 3D model problems)
+    // createPivot() {
+    //     let pivot = new THREE.Object3D();
+    //     pivot.name = 'Pivot';
+    //
+    //     // scene.children[5] is the pivot
+    //     this.scene.add( pivot );
+    // }
+
+    // Reset Camera
+    resetCamera() {
+        this.camera.position.copy(this.cameraDefaults.posCamera);
+        this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
+        this.updateCamera();
+    }
+
+    // Update camera aspect
+    updateCamera() {
+        this.camera.aspect = this.aspectRatio;
+        this.camera.lookAt(this.cameraTarget);
+        this.camera.updateProjectionMatrix();
+    }
+
+    // Report in console
+    _reportProgress(text) {
+        console.log('Progress: ' + text);
+    }
+
+    // Play or Stop animation
     playStopAnimation(){
 
         if (!this.action.isRunning()) {
@@ -777,6 +699,15 @@ class WU_webw_3d_view {
             this.action.paused = true;
         }
     }
+
+
+    //function autoScreenshot() {
+        // setTimeout(function(){
+        //     jQuery("#button_qrcode").click(); // close qr code
+        //     jQuery("#createModelScreenshotBtn").click();
+        // },1000);
+    //}
+
 
     // alterShading() {
     //
