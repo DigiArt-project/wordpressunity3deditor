@@ -1,3 +1,11 @@
+<!--<script type="module" src="/wordpress/wp-content/plugins/wordpressunity3deditor/js_libs/threejs124/stats.module.js">-->
+<!--    import Stats from "./stats,module.js";-->
+<!--    var stats = new Stats();-->
+<!--    console.log("stats", stats);-->
+<!--    console.log("aaaa");-->
+<!--</script>-->
+
+
 <?php
 //Create asset interfaces
 
@@ -701,6 +709,13 @@ if($asset_id != null) {
 
         <div id="informationPanel">
 
+            <!-- Hidden fields for 3D models -->
+            <input type="hidden" name="objFileInput" value="" id="objFileInput" />
+            <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
+            <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
+            <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
+            <input type="hidden" name="glbFileInput" value="" id="glbFileInput" />
+            
             <!-- TITLE , DESCRIPTION -->
             <!-- EDIT MODE -->
             <?php if(($isOwner || $isUserAdmin) && $isEditMode) { ?>
@@ -797,11 +812,7 @@ if($asset_id != null) {
                         </li>
                     </ul>
 
-                    <input type="hidden" name="objFileInput" value="" id="objFileInput" />
-                    <input type="hidden" name="mtlFileInput" value="" id="mtlFileInput" />
-                    <input type="hidden" name="pdbFileInput" value="" id="pdbFileInput" />
-                    <input type="hidden" name="fbxFileInput" value="" id="fbxFileInput" />
-                    <input type="hidden" name="glbFileInput" value="" id="glbFileInput" />
+                    
 
                     <div id="sshotFileInputContainer">
                         <h4 class="mdc-typography--title">Screenshot</h4>

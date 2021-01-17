@@ -7,6 +7,7 @@
 'use strict';
 
 
+
 var nObj = 0;
 var nFbx = 0;
 var nMtl = 0;
@@ -195,8 +196,6 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
     //console.log("checkerCompleteReading by", whocalls)
 
-    let objFileContent = document.getElementById('objFileInput').value;
-    let mtlFileContent = document.getElementById('mtlFileInput').value;
 
 
     if ((nObj === 1 && objFileContent !== '') || (nFbx === 1 && FbxBuffer !== '') || (nGlb === 1 && GlbBuffer !== '') ){
@@ -206,6 +205,11 @@ function checkerCompleteReading(wu_webw_3d_view_local, whocalls ){
 
         // Make the definition with the obj
         if (nObj === 1){
+
+            let objFileContent = document.getElementById('objFileInput').value;
+            let mtlFileContent = document.getElementById('mtlFileInput').value;
+
+
             let encoder = new TextEncoder();
             let uint8Array = encoder.encode(objFileContent);
 
@@ -346,7 +350,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
                 });
 
                 // Add to pivot
-                wu_webw_3d_view_local.pivot.add(gltf.scene);
+                wu_webw_3d_view_local.scene.getChildByName('root').add(gltf.scene);
 
                 // Find new zoom
                 var totalradius = sphere[1];
@@ -411,7 +415,7 @@ function loader_asset_exists(wu_webw_3d_view_local, pathUrl = null, mtlFilename 
                         });
 
                         // Add to pivot
-                        wu_webw_3d_view_local.pivot.add(object);
+                        wu_webw_3d_view_local.scene.getChildByName('root').add(object);
 
                         // Find new zoom
                         var totalradius = sphere[1];

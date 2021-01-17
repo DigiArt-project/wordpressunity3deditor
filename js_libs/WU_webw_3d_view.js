@@ -13,11 +13,16 @@ class WU_webw_3d_view {
         this.canvas = canvasToBindTo;
         this.scene = new THREE.Scene();
 
+        //  this.stats = new Stats();
+        //document.getElementById( 'wrapper_3d_inner' ).appendChild( this.stats.dom );
+
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
             logarithmicDepthBuffer: true
         });
+
+
         this.camera = null;
         this.listener = null;
 
@@ -43,7 +48,8 @@ class WU_webw_3d_view {
 
         // Trackball controls
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-
+        //this.controls.addEventListener('change', this.render);
+        //window.addEventListener('change', this.render);
 
         this.controls.zoomSpeed = 1.02;
         this.controls.dynamicDampingFactor = 0.3;
@@ -84,13 +90,14 @@ class WU_webw_3d_view {
         // add label renderer
         document.getElementById("previewCanvasLabels").appendChild(this.labelRenderer.domElement);
 
+
         // Add audio listener to the camera
         if (this.audioElement!=null) {
             this.listener = new THREE.AudioListener();
             this.camera.add(this.listener);
+            this.positionalAudio = new THREE.PositionalAudio(this.listener);
 
             this.positionalAudio.name = "audio1";
-            this.positionalAudio = new THREE.PositionalAudio(this.listener);
             this.positionalAudio.setMediaElementSource(this.audioElement);
             this.positionalAudio.setRefDistance(200);
             this.positionalAudio.setDirectionalCone(330, 230, 0.01);
@@ -568,6 +575,7 @@ class WU_webw_3d_view {
             this.renderer.clear();
 
         this.controls.update();
+        //this.stats.update();
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
 
