@@ -234,6 +234,15 @@ if($scene_id != 0 ) {
         (!isset($_GET['singleproject'])?"wpunity_game=":"wpunity_project_id=").$project_id;
 }
 
+
+?>
+
+<script>
+    var path_url = mtl_file_name = obj_file_name = pdb_file_name = glb_file_name = fbx_file_name = textures_fbx_string_connected = null;
+</script>
+
+<?php
+
 // ============================================
 // Submit Handler
 //=============================================
@@ -354,6 +363,9 @@ if (!empty($project_scope)) {
     }
 }
 
+
+
+
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_id != null) {
     
@@ -370,6 +382,8 @@ if($asset_id != null) {
     $fonts = $assetpostMeta['wpunity_asset3d_fonts'][0];
     
     $curr_font = str_replace("+", " ", $fonts);
+    
+ 
     
     //OBJ
     if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
@@ -1328,22 +1342,26 @@ if($asset_id != null) {
         wu_webw_3d_view.resizeDisplayGL();
     }, false );
 
-    // render handler
-    let render = function () {
-        requestAnimationFrame( render );
-        wu_webw_3d_view.render();
-    };
+    
 
     // Initialize
     wu_webw_3d_view.initGL(back_3d_color);
 
     // Resize for first time just to be sure
     wu_webw_3d_view.resizeDisplayGL();
-
+    
     // After
     wu_webw_3d_view.initPostGL();
 
+
     // kick render loop
+    // render handler
+    let render = function () {
+       requestAnimationFrame(render);
+       wu_webw_3d_view.render();
+    };
+    
+   
     render();
 
     set3DwindowSize();
@@ -1353,7 +1371,7 @@ if($asset_id != null) {
 
     // Load existing 3D models
     //loadExisting3DModels();
-    loader_asset_exists(wu_webw_3d_view, path_url,
+    wu_webw_3d_view.loader_asset_exists(path_url,
                         mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name, glb_file_name);
     
     

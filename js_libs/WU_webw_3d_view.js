@@ -8,7 +8,29 @@ class WU_webw_3d_view {
     // PDB is the same loader for url and client side
     // OBJ, FBX, and GLB call first an xhr loader in editor_scripts.js and then the streaming version here
 
+
+    // noinspection DuplicatedCode
+    setZeroVars(){
+        this.nObj = 0;
+        this.nFbx = 0;
+        this.nMtl = 0;
+        this.nJpg = 0;
+        this.nPng = 0;
+        this.nPdb = 0;
+        this.nGif = 0;
+        this.nGlb = 0;
+        this.FbxBuffer = '';
+    }
+
     constructor(canvasToBindTo, back_3d_color, audioElement) {
+
+        this.setZeroVars();
+
+        this.FbxBuffer = '';
+        this.GlbBuffer = '';
+
+        this.path_url = null;
+        this.mtl_file_name = this.obj_file_name = this.pdb_file_name = this.fbx_file_name = this.glb_file_name;
 
         this.canvas = canvasToBindTo;
         this.scene = new THREE.Scene();
@@ -49,7 +71,7 @@ class WU_webw_3d_view {
         // Trackball controls
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
         //this.controls.addEventListener('change', this.render);
-        //window.addEventListener('change', this.render);
+        //document.getElementById( 'wrapper_3d_inner' ).addEventListener('change', this.render);
 
         this.controls.zoomSpeed = 1.02;
         this.controls.dynamicDampingFactor = 0.3;
@@ -73,6 +95,110 @@ class WU_webw_3d_view {
             console.log("ERROR WW15", "Web Workers for OBJ not found")
         }
     }
+
+    /**
+     * Reading from text files on client side
+     * @param wu_webw_3d_view_local
+     */
+    checkerCompleteReading( whocalls ){
+
+        console.log("checkerCompleteReading by", whocalls)
+
+        if ((this.nObj === 1 && this.objFileContent !== '') ||
+            (this.nFbx === 1 && this.FbxBuffer !== '') || (this.nGlb === 1 && this.GlbBuffer !== '') ){
+
+            // Show progress slider
+            //jQuery('#previewProgressSlider').show();
+
+            // Make the definition with the obj
+            if (this.nObj === 1){
+
+                let objFileContent = document.getElementById('objFileInput').value;
+                let mtlFileContent = document.getElementById('mtlFileInput').value;
+
+
+                let encoder = new TextEncoder();
+                let uint8Array = encoder.encode(objFileContent);
+
+                let objectDefinition = {
+                    name: this.nObj === 1 ? 'userObj':'userFbx',
+                    objAsArrayBuffer: uint8Array,
+                    pathTexture: "",
+                    mtlAsString: null
+                };
+
+                if (this.nMtl === 0) {
+                    // Start without MTL
+                    this.loadObjStream(objectDefinition);
+                } else {
+                    if (mtlFileContent!==''){
+
+                        objectDefinition.mtlAsString = mtlFileContent;
+
+                        if (this.nJpg===0 && this.nPng===0 ){
+                            // Start without Textures
+                            this.loadObjStream(objectDefinition);
+
+                        } else {
+                            // Else check if textures have been loaded
+                            let nTexturesLength = jQuery("input[id='textureFileInput']").length;
+
+                            if ((this.nPng>0 && this.nPng === nTexturesLength)
+                                || ( this.nJpg>0 && this.nJpg === nTexturesLength) ) {
+
+                                // Get textureFileInput array with jQuery
+                                let textFil = jQuery("input[id='textureFileInput']");
+
+                                // Store here the raw image textures
+                                objectDefinition.pathTexture = [];
+
+                                for (let k = 0; k < textFil.length; k++){
+                                    let myname = textFil[k].name;
+
+                                    // do some text processing on the names to remove textureFileInput[ and ] from name
+                                    myname = myname.replace('textureFileInput[','');
+                                    myname = myname.replace(']','');
+
+                                    objectDefinition.pathTexture[myname] = textFil[k].value;
+                                }
+
+                                // Start with textures
+                                console.log("start textures");
+
+
+                                this.loadObjStream(objectDefinition);
+                            }
+                        }
+                    }
+                }
+            } else if (this.nFbx === 1){
+
+                // Get all fields
+                let texturesStreams = jQuery("input[id='textureFileInput']");
+                let nTexturesLoaded = texturesStreams.length;
+
+                if ( nTexturesLoaded < this.nJpg || nTexturesLoaded < this.nPng || nTexturesLoaded < this.nGif){
+                    console.log("Not all textures loaded yet");
+                    return;
+                }
+
+                if ( nTexturesLoaded === 0 )
+                    texturesStreams = '';
+
+                console.log("Ignite reading fbx");
+                this.loadFbxStream(this.FbxBuffer, texturesStreams);
+
+            } else if (this.nGlb === 1){
+                console.log("Ignite reading glb");
+
+                this.loadGlbStream(this.GlbBuffer);
+
+            }
+
+        }
+    }
+
+
 
     // Initialize Scene
     initGL(back_3d_color_local) {
@@ -166,6 +292,8 @@ class WU_webw_3d_view {
 
             scope.zoomer(scope.scene.getChildByName('root'));
 
+            //scope.controls.target(scope.scene.getChildByName('root'));
+
             // // Auto create screenshot;
             // setTimeout(function(){
             //     jQuery("#button_qrcode").click(); // close qr code
@@ -186,10 +314,14 @@ class WU_webw_3d_view {
     }
 
 
+
+
     // Clear Previous model
     clearAllAssets() {
 
         console.log("CLEARING");
+
+        this.setZeroVars();
 
         // Hide animation button
         document.getElementById("animButton1").style.display = "none";
@@ -223,6 +355,8 @@ class WU_webw_3d_view {
 
         // Clear Previous
         this.clearAllAssets();
+
+        let scope = this;
 
         let manager = new THREE.LoadingManager();
         manager.onProgress = function( item, loaded, total ) {
@@ -263,6 +397,8 @@ class WU_webw_3d_view {
         this.scene.getChildByName('root').add( sphereBall );
 
         this.zoomer(this.scene.getChildByName('root'));
+
+        //scope.controls.target = scope.scene.getChildByName('root');
 
         //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
@@ -316,6 +452,7 @@ class WU_webw_3d_view {
 
                 scope.scene.getChildByName('root').add( gltf.scene );
 
+
                 scope.render();
 
 
@@ -333,7 +470,7 @@ class WU_webw_3d_view {
 
                 scope.zoomer(scope.scene.getChildByName('root'));
 
-                //scope.controls.target(scope.scene.getChildByName('root'));
+
             },
             '',
             // called when loading has errors
@@ -461,15 +598,16 @@ class WU_webw_3d_view {
                 },100 + i * 4000/positionsBonds.count);
             }
 
+            // render molecule
             scope.render();
-
+            scope.zoomer(scope.scene.getChildByName('root'));
 
             // ------------ Find bounding sphere and zoom ----
-            let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-            // Find new zoom
-            let totalRadius = sphere[1];
-            scope.controls.minDistance = 0.001 * totalRadius;
-            scope.controls.maxDistance = 35 * totalRadius;
+            // let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+            // // Find new zoom
+            // let totalRadius = sphere[1];
+            // scope.controls.minDistance = 0.001 * totalRadius;
+            // scope.controls.maxDistance = 35 * totalRadius;
 
             // console.log("sphere", sphere[1]);
             //
@@ -546,12 +684,243 @@ class WU_webw_3d_view {
         return [sceneBSCenter, sceneBSRadius];
     }
 
+
+    //-------------------- loading from saved data --------------------------------------
+    loader_asset_exists( pathUrl = null, mtlFilename = null,
+                                 objFilename= null, pdbFileContent = null,
+                                 fbxFilename = null, glbFilename = null) {
+
+
+        if (this.scene != null) {
+            if (this.renderer)
+                this.clearAllAssets();
+        }
+
+        // PDB
+        if (pdbFileContent) {
+            console.log("Loading from existing resource","PDB");
+
+            this.loadMolecule(pdbFileContent, "loader_asset_exists");
+
+            // GLB
+        } else if (glbFilename){
+            console.log("Loading from existing resource","GLB");
+            //console.log("glbFilename", glbFilename);
+
+            // Instantiate a loader
+            const loader = new THREE.GLTFLoader();
+
+            let scope = this;
+
+            // Load a glTF resource
+            loader.load(
+                // resource URL
+                glbFilename,
+                // called when the resource is loaded
+                function ( gltf ) {
+
+                    if (gltf.animations.length>0) {
+
+                        let glbmixer = new THREE.AnimationMixer(gltf.scene);
+                        scope.mixers.push(glbmixer);
+                        scope.action = glbmixer.clipAction(gltf.animations[0]);
+
+                        // Display button to start animation inside the Asset 3D previewer
+                        document.getElementById("animButton1").style.display = "inline-block";
+
+                    } else {
+
+                        // Display button to start animation inside the Asset 3D previewer
+                        document.getElementById("animButton1").style.display = "none";
+
+                    }
+
+                    // ------------ Find bounding sphere ----
+                    var sphere = scope.computeSceneBoundingSphereAll(gltf.scene);
+
+                    // translate object to the center
+                    gltf.scene.traverse(function (object) {
+                        if (object instanceof THREE.Mesh) {
+                            object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                        }
+                    });
+
+                    // Add to pivot
+                    scope.scene.getChildByName('root').add(gltf.scene);
+
+                    // Find new zoom
+                    var totalradius = sphere[1];
+                    scope.controls.minDistance = 0.001 * totalradius;
+                    scope.controls.maxDistance = 13 * totalradius;
+
+                    //---------------------------------------
+
+
+
+                    //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
+                },
+                // called while loading is progressing
+                function ( xhr ) {
+
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+                },
+                // called when loading has errors
+                function ( error ) {
+
+                    console.log( 'An error happened', error );
+
+                }
+            );
+
+
+            // OBJ load
+        } else if (pathUrl) {
+
+            console.log("Loading from existing resource","OBJ");
+
+            let scope = this;
+
+            let manager = new THREE.LoadingManager();
+
+            if (objFilename) { // this means that 3D model exists for this asset
+
+                var mtlLoader = new THREE.MTLLoader();
+
+                mtlLoader.setPath(pathUrl);
+
+                mtlLoader.load(mtlFilename, function (materials) {
+                    materials.preload();
+
+                    var objLoader = new THREE.OBJLoader(manager);
+                    objLoader.setMaterials(materials);
+                    objLoader.setPath(pathUrl);
+
+                    objLoader.load(objFilename, 'after',
+                        // OnObjLoad
+                        function (object) {
+
+                            // Find bounding sphere
+                            var sphere = scope.computeSceneBoundingSphereAll(object);
+
+                            // translate object to the center
+                            object.traverse(function (object) {
+                                if (object instanceof THREE.Mesh) {
+                                    object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
+                                }
+                            });
+
+                            // Add to pivot
+                            scope.scene.getChildByName('root').add(object);
+
+                            // Find new zoom
+                            var totalradius = sphere[1];
+                            scope.controls.minDistance = 0.001 * totalradius;
+                            scope.controls.maxDistance = 3 * totalradius;
+
+                            //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+                        },
+                        //onObjProgressLoad
+                        function (xhr) {
+
+                            //console.log(xhr);
+                            document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
+                            // if (xhr.lengthComputable) {
+                            //
+                            // }
+                        },
+                        //onObjErrorLoad
+                        function (xhr) {
+                            console.log("Error 351");
+                        }
+                    );
+                });
+
+
+            } else if (fbxFilename){
+
+                console.log("Loading from existing resource","FBX");
+
+                // split texture string into each texture
+                let url_files = textures_fbx_string_connected.split('|');
+
+                if (url_files[0].includes('.jpg')){
+                    this.nJpg = url_files.length;
+                } else if (url_files[0].includes('.png')){
+                    this.nJpg = url_files.length;
+                } else if (url_files[0].includes('.gif')){
+                    this.nJpg = url_files.length;
+                }
+
+                // Add the fbx also
+                url_files.push(pathUrl + fbxFilename);
+
+                for (let i=0; i < url_files.length; i++) {
+
+                    let xhr = new XMLHttpRequest();
+                    let basename = '';
+
+                    let url = url_files[i];//.replace('http:', 'https:');
+
+
+                    if( url.includes(".txt") ) {
+
+                        // We want the basename and the extension for naming the file object
+                        basename = url.replace('.txt', '.fbx');
+                        basename = new String(basename).substring(basename.lastIndexOf('/') + 1);
+
+                        // Set xhr to get the url as text
+                        xhr.open('GET', url, true);
+                        //xhr.responseType = 'text';
+                        xhr.responseType = 'arraybuffer';
+
+                    } else if (url.includes("texture") ) {
+
+                        basename = new String(url).substring(url.lastIndexOf('/') + 1);
+
+                        let file_extension = basename.split('.').pop();
+
+                        let i_first_underscore = basename.indexOf('_');
+                        let i_last_underscore = basename.lastIndexOf('_');
+                        basename = basename.substring(i_first_underscore+1, i_last_underscore);
+                        basename = basename.replace('texture_','');
+
+                        basename = basename  + "." + file_extension;
+                        xhr.open('GET', url, true);
+                        xhr.responseType = 'blob';
+                    }
+
+                    let scope = this;
+
+                    xhr.onload = function (e) {
+                        if (this.status === 200) {
+                            let file = new File([this.response], basename);
+                            file_reader_cortex(file, scope);
+                        }
+                    };
+
+                    xhr.send();
+                }
+
+            } else {
+                console.log("WARNING", "UNKNOWN 155");
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+    // ----------------- Auxiliary ---------------------------
+
     /* Zoom to object */
     zoomer(towhatObj){ // FBX or OBJ
 
-        if(towhatObj == null) {
-            towhatObj = this.scene.children[5]; // Obj is loaded at 5
-        }
 
         let sphere = this.computeSceneBoundingSphereAll( towhatObj );
 
@@ -565,12 +934,13 @@ class WU_webw_3d_view {
 
         let totalRadius = sphere[1];
         this.controls.minDistance = 0.001*totalRadius;
-        this.controls.maxDistance = 35*totalRadius;
+        this.controls.maxDistance = 13*totalRadius;
     }
 
-    // ----------------- Auxiliary ---------------------------
+
     // Start Renderer amd label Renderer
     render() {
+        console.log("RR", 1);
         if (!this.renderer.autoClear)
             this.renderer.clear();
 
@@ -585,6 +955,8 @@ class WU_webw_3d_view {
             this.mixers[ 0 ].update( this.clock.getDelta() );
             //}
         }
+
+        //requestAnimationFrame( this.render );
     }
 
     // Resize Renderer and Label Renderer
