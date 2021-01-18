@@ -49,14 +49,19 @@ class WU_webw_3d_view {
         let scope = this;
         // kick render loop
         // render handler
-        let renderLooper = function () {
-            requestAnimationFrame(renderLooper);
+        function render2() {
             scope.render();
-        };
+            requestAnimationFrame(render2);
+        }
 
-        renderLooper();
+        //scope.render();
+        render2();
+        //requestAnimationFrame(render2);
 
-        //this.controls.addEventListener('change', scope.render);
+        //this.controls.addEventListener('change', render2);
+        // this.controls.addEventListener('change', function render2() {
+        //     requestAnimationFrame();
+        // });
 
         //document.getElementById( 'wrapper_3d_inner' ).addEventListener('change', this.render);
     }
@@ -113,8 +118,9 @@ class WU_webw_3d_view {
 
 
         this.controls.zoomSpeed = 1.02;
-        this.controls.dynamicDampingFactor = 0.3;
-
+        //this.controls.dynamicDampingFactor = 0.3;
+        //this.controls.dynamicDampingFactor = 0;
+        //this.controls.staticMoving = true;
 
         // For the animation
         this.clock = new THREE.Clock();

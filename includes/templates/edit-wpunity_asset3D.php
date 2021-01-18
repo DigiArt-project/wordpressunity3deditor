@@ -80,7 +80,8 @@ function loadAsset3DManagerScriptsAndStyles() {
     wp_enqueue_script('wpunity_load119_FBXloader');
     
     // 7. Trackball controls
-    wp_enqueue_script('wpunity_load119_TrackballControls');
+    wp_enqueue_script('wpunity_load124_TrackballControls');
+    wp_enqueue_script('wpunity_load119_OrbitControls');
     
     // 8. GLTF Loader
     wp_enqueue_script('wpunity_load119_GLTFLoader');
