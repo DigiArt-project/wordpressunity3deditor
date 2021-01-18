@@ -1354,15 +1354,7 @@ if($asset_id != null) {
     wu_webw_3d_view.initPostGL();
 
 
-    // kick render loop
-    // render handler
-    let render = function () {
-       requestAnimationFrame(render);
-       wu_webw_3d_view.render();
-    };
-    
-   
-    render();
+    wu_webw_3d_view.kickRenderer();
 
     set3DwindowSize();
 

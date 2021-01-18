@@ -22,6 +22,45 @@ class WU_webw_3d_view {
         this.FbxBuffer = '';
     }
 
+
+
+    // Start Renderer amd label Renderer
+    render() {
+
+        if (!this.renderer.autoClear)
+            this.renderer.clear();
+
+        this.controls.update();
+        //this.stats.update();
+        this.renderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene, this.camera);
+
+        // Animation
+        if ( this.mixers.length > 0 ) {
+            //for ( let i = 0; i < this.mixers.length; i ++ ) {
+            this.mixers[ 0 ].update( this.clock.getDelta() );
+            //}
+        }
+
+    }
+
+    kickRenderer() {
+
+        let scope = this;
+        // kick render loop
+        // render handler
+        let renderLooper = function () {
+            requestAnimationFrame(renderLooper);
+            scope.render();
+        };
+
+        renderLooper();
+
+        //this.controls.addEventListener('change', scope.render);
+
+        //document.getElementById( 'wrapper_3d_inner' ).addEventListener('change', this.render);
+    }
+
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 
         this.setZeroVars();
@@ -70,8 +109,7 @@ class WU_webw_3d_view {
 
         // Trackball controls
         this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-        //this.controls.addEventListener('change', this.render);
-        //document.getElementById( 'wrapper_3d_inner' ).addEventListener('change', this.render);
+
 
         this.controls.zoomSpeed = 1.02;
         this.controls.dynamicDampingFactor = 0.3;
@@ -938,26 +976,7 @@ class WU_webw_3d_view {
     }
 
 
-    // Start Renderer amd label Renderer
-    render() {
-        console.log("RR", 1);
-        if (!this.renderer.autoClear)
-            this.renderer.clear();
 
-        this.controls.update();
-        //this.stats.update();
-        this.renderer.render(this.scene, this.camera);
-        this.labelRenderer.render(this.scene, this.camera);
-
-        // Animation
-        if ( this.mixers.length > 0 ) {
-            //for ( let i = 0; i < this.mixers.length; i ++ ) {
-            this.mixers[ 0 ].update( this.clock.getDelta() );
-            //}
-        }
-
-        //requestAnimationFrame( this.render );
-    }
 
     // Resize Renderer and Label Renderer
     resizeDisplayGL() {
@@ -1077,6 +1096,7 @@ class WU_webw_3d_view {
     //         this.traversalFunction(object3d.material);
     //     }
     // }
+
 }
 
 
