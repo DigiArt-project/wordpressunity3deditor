@@ -31,7 +31,7 @@ class WU_webw_3d_view {
             this.renderer.clear();
 
         this.controls.update();
-        //this.stats.update();
+        this.stats.update();
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
 
@@ -74,8 +74,9 @@ class WU_webw_3d_view {
         this.canvas = canvasToBindTo;
         this.scene = new THREE.Scene();
 
-        //  this.stats = new Stats();
-        //document.getElementById( 'wrapper_3d_inner' ).appendChild( this.stats.dom );
+        this.stats = new Stats();
+        document.getElementById( 'wrapper_3d_inner' ).appendChild( this.stats.dom );
+        this.stats.dom.style.removeProperty("left");
 
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,

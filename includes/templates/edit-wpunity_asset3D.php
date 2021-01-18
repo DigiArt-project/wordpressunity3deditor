@@ -60,7 +60,8 @@ function loadAsset3DManagerScriptsAndStyles() {
     wp_enqueue_script('wpunity_inflate'); // for binary fbx
     
     // 1. Three js library
-    wp_enqueue_script('wpunity_load119_threejs');
+    wp_enqueue_script('wpunity_load124_threejs');
+    wp_enqueue_script('wpunity_load124_statjs');
     
     // 2. Obj loader simple; For loading an uploaded obj
     wp_enqueue_script('wpunity_load87_OBJloader');
@@ -239,6 +240,7 @@ if($scene_id != 0 ) {
 
 <script>
     var path_url = mtl_file_name = obj_file_name = pdb_file_name = glb_file_name = fbx_file_name = textures_fbx_string_connected = null;
+  
 </script>
 
 <?php
