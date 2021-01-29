@@ -1357,7 +1357,7 @@ if($asset_id != null) {
     wu_webw_3d_view.initPostGL();
 
 
-    wu_webw_3d_view.kickRenderer();
+    
 
     set3DwindowSize();
 

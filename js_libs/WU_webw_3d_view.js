@@ -23,49 +23,6 @@ class WU_webw_3d_view {
     }
 
 
-
-    // Start Renderer amd label Renderer
-    render() {
-
-        if (!this.renderer.autoClear)
-            this.renderer.clear();
-
-        this.controls.update();
-        this.stats.update();
-        this.renderer.render(this.scene, this.camera);
-        this.labelRenderer.render(this.scene, this.camera);
-
-        // Animation
-        if ( this.mixers.length > 0 ) {
-            //for ( let i = 0; i < this.mixers.length; i ++ ) {
-            this.mixers[ 0 ].update( this.clock.getDelta() );
-            //}
-        }
-
-    }
-
-    kickRenderer() {
-
-        let scope = this;
-        // kick render loop
-        // render handler
-        function render2() {
-            scope.render();
-            requestAnimationFrame(render2);
-        }
-
-        //scope.render();
-        render2();
-        //requestAnimationFrame(render2);
-
-        //this.controls.addEventListener('change', render2);
-        // this.controls.addEventListener('change', function render2() {
-        //     requestAnimationFrame();
-        // });
-
-        //document.getElementById( 'wrapper_3d_inner' ).addEventListener('change', this.render);
-    }
-
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 
         this.setZeroVars();
@@ -114,7 +71,7 @@ class WU_webw_3d_view {
         this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
         // Trackball controls
-        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
 
         this.controls.zoomSpeed = 1.02;
@@ -139,11 +96,63 @@ class WU_webw_3d_view {
         } catch (e) {
             console.log("ERROR WW15", "Web Workers for OBJ not found")
         }
+
+        this.boundRender = this.render.bind( this );
     }
 
+
+    // Start Renderer amd label Renderer
+    render() {
+
+        if (!this.renderer.autoClear)
+            this.renderer.clear();
+
+
+        this.stats.update();
+        this.renderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene, this.camera);
+
+
+        // Animation
+        if ( this.mixers.length > 0 ) {
+            //for ( let i = 0; i < this.mixers.length; i ++ ) {
+            this.mixers[ 0 ].update( this.clock.getDelta() );
+            //}
+        }
+
+    }
+
+    // Render only when OrbitControls change of window is resized
+    kickRendererOnDemand() {
+
+        console.log("kickRendererOnDemand");
+
+        this.render();
+
+        if (this.mixers.length === 0) {
+
+
+            this.controls.addEventListener('change', this.boundRender);
+
+            window.addEventListener('resize', this.boundRender);
+
+        } else {
+
+            let scope = this;
+
+            let looprender = function(){
+                requestAnimationFrame(looprender);
+                scope.boundRender();
+            }
+
+            looprender();
+
+        }
+    }
+
+
     /**
-     * Reading from text files on client side
-     * @param wu_webw_3d_view_local
+     * Reading from  files on client side for OBJ, FBX, and GLB
      */
     checkerCompleteReading( whocalls ){
 
@@ -175,6 +184,7 @@ class WU_webw_3d_view {
                 if (this.nMtl === 0) {
                     // Start without MTL
                     this.loadObjStream(objectDefinition);
+
                 } else {
                     if (mtlFileContent!==''){
 
@@ -330,12 +340,15 @@ class WU_webw_3d_view {
 
         // Function on Completed Loading
         let completedLoading = function () {
-            console.log('Loading complete!');
+            console.log('Loading complete for OBJ WW!');
 
             document.getElementById('previewProgressSliderLine').style.width = '0';
             document.getElementById('previewProgressLabel').innerHTML = "";
 
             scope.zoomer(scope.scene.getChildByName('root'));
+
+            console.log("THE SCOPE:", scope);
+            scope.kickRendererOnDemand();
 
             //scope.controls.target(scope.scene.getChildByName('root'));
 
@@ -430,7 +443,7 @@ class WU_webw_3d_view {
 
         // FBX is added to root
         this.scene.getChildByName("root").add(fbxObject);
-        this.render();
+
 
         let centerRadius = this.computeSceneBoundingSphereAll(this.scene.getChildByName('root'));
 
@@ -442,6 +455,8 @@ class WU_webw_3d_view {
         this.scene.getChildByName('root').add( sphereBall );
 
         this.zoomer(this.scene.getChildByName('root'));
+
+        this.kickRendererOnDemand();
 
         //scope.controls.target = scope.scene.getChildByName('root');
 
@@ -498,7 +513,8 @@ class WU_webw_3d_view {
                 scope.scene.getChildByName('root').add( gltf.scene );
 
 
-                scope.render();
+
+
 
 
                 let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
@@ -514,6 +530,8 @@ class WU_webw_3d_view {
 
 
                 scope.zoomer(scope.scene.getChildByName('root'));
+
+                scope.kickRendererOnDemand();
 
 
             },
@@ -644,8 +662,11 @@ class WU_webw_3d_view {
             }
 
             // render molecule
-            scope.render();
+
+
             scope.zoomer(scope.scene.getChildByName('root'));
+            scope.kickRendererOnDemand();
+
 
             // ------------ Find bounding sphere and zoom ----
             // let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
@@ -800,7 +821,7 @@ class WU_webw_3d_view {
 
                     //---------------------------------------
 
-
+                    scope.kickRendererOnDemand();
 
                     //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
 
@@ -864,6 +885,7 @@ class WU_webw_3d_view {
                             scope.controls.minDistance = 0.001 * totalradius;
                             scope.controls.maxDistance = 3 * totalradius;
 
+                            scope.kickRendererOnDemand();
                             //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                         },
                         //onObjProgressLoad
@@ -982,12 +1004,11 @@ class WU_webw_3d_view {
         this.controls.maxDistance = 13*totalRadius;
     }
 
-
-
-
     // Resize Renderer and Label Renderer
     resizeDisplayGL() {
-        this.controls.handleResize();
+
+        // This is needed for TrackballControls
+        //this.controls.handleResize();
 
         this.recalcAspectRatio();
         this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
@@ -1044,10 +1065,12 @@ class WU_webw_3d_view {
             this.action.play();
 
         } else {
+
             if (document.getElementById("audioFile")) {
                 document.getElementById("audioFile").pause();
             }
             this.action.paused = true;
+
         }
     }
 
