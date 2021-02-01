@@ -74,7 +74,7 @@ function wpunity_register_scripts() {
 		array('wpunity_qrcode_generator', $pluginDirJS.'standalone_js_libraries/qrcode.js'),
 		array('wpunity_inflate', $pluginDirJS.'standalone_js_libraries/inflate.min.js'),
 		array('wpunity_materialize_jslib', $pluginDirJS.'standalone_js_libraries/materialize.js'),
-		array('WU_webw_3d_view', $pluginDirJS.'WU_webw_3d_view.js'),
+		array('Asset_viewer_3d_kernel', $pluginDirJS.'Asset_viewer_3d_kernel.js'),
 		array('wpunity_vr_editor_buttons', $pluginDirJS.'vr_editor_buttons.js'),
 		array('wpunity_vr_editor_analytics', $pluginDirJS.'vr_editor_analytics.js'),
 	);

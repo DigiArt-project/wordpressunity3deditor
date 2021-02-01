@@ -1,7 +1,7 @@
 /* 3D viewer for all types of files in assetEditor */
-class WU_webw_3d_view {
+class Asset_viewer_3d_kernel {
 
-    // wu_webw_3d_view.scene.children :
+    // asset_viewer_3d_kernel.scene.children :
         // 0: root (pdb, audio, fbx, GLB, OBJ)
         // 1,2,3,4: Directional light 1,2,3, 4: Ambient light
 
@@ -100,6 +100,53 @@ class WU_webw_3d_view {
         this.boundRender = this.render.bind( this );
     }
 
+    // Add OrbitControl listeners to render on demand
+    addControlEventListeners(){
+
+        this.controls.addEventListener('change', this.boundRender);
+
+        window.addEventListener('resize', this.boundRender);
+    }
+
+    // Remove OrbitControl listeners to render on demand. (this is useful for continuous animation)
+    removeControlEventListeners(){
+
+        this.controls.removeEventListener('change', this.boundRender);
+
+        window.removeEventListener('resize', this.boundRender);
+    }
+
+
+
+    // Play or Stop animation
+    playStopAnimation(){
+
+        if (!this.action.isRunning()) {
+
+            this.removeControlEventListeners();
+            this.startAutoLoopRendering();
+
+            // Play the audio
+            if (document.getElementById("audioFile")) {
+                document.getElementById("audioFile").play();
+            }
+
+            // Play the animation
+            this.action.paused = false;
+            this.action.play();
+
+        } else {
+
+            this.stopAutoLoopRendering();
+            this.addControlEventListeners();
+
+            if (document.getElementById("audioFile")) {
+                document.getElementById("audioFile").pause();
+            }
+            this.action.paused = true;
+
+        }
+    }
 
     // Start Renderer amd label Renderer
     render() {
@@ -107,49 +154,40 @@ class WU_webw_3d_view {
         if (!this.renderer.autoClear)
             this.renderer.clear();
 
-
         this.stats.update();
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
 
-
         // Animation
         if ( this.mixers.length > 0 ) {
-            //for ( let i = 0; i < this.mixers.length; i ++ ) {
             this.mixers[ 0 ].update( this.clock.getDelta() );
-            //}
         }
 
     }
 
     // Render only when OrbitControls change of window is resized
     kickRendererOnDemand() {
-
-        console.log("kickRendererOnDemand");
-
-        this.render();
-
-        if (this.mixers.length === 0) {
-
-
-            this.controls.addEventListener('change', this.boundRender);
-
-            window.addEventListener('resize', this.boundRender);
-
-        } else {
-
-            let scope = this;
-
-            let looprender = function(){
-                requestAnimationFrame(looprender);
-                scope.boundRender();
-            }
-
-            looprender();
-
-        }
+       this.render();
+       this.addControlEventListeners();
     }
 
+    // Start auto loop (when animation)
+    startAutoLoopRendering(){
+        // continuous rendering
+        let scope = this;
+
+        let looprender = function(){
+            scope.idRequestFrame = requestAnimationFrame(looprender);
+            scope.boundRender();
+        }
+
+        looprender();
+    }
+
+    // Stop auto loop rendering (when animation)
+    stopAutoLoopRendering(){
+        cancelAnimationFrame(this.idRequestFrame);
+    }
 
     /**
      * Reading from  files on client side for OBJ, FBX, and GLB
@@ -252,7 +290,6 @@ class WU_webw_3d_view {
 
         }
     }
-
 
 
     // Initialize Scene
@@ -414,17 +451,11 @@ class WU_webw_3d_view {
         // Clear Previous
         this.clearAllAssets();
 
-        let scope = this;
-
-        let manager = new THREE.LoadingManager();
-        manager.onProgress = function( item, loaded, total ) {
-            console.log( item, loaded, total );
-        };
-
-        let fbxLoader = new THREE.FBXLoader( manager );
+        let fbxLoader = new THREE.FBXLoader();
 
         let fbxObject = fbxLoader.parseStream(fbxBuffer, texturesStreams);
 
+        // With animation
         if ( fbxObject.animations.length > 0 ) {
 
             fbxObject.mixer = new THREE.AnimationMixer( fbxObject );
@@ -435,28 +466,30 @@ class WU_webw_3d_view {
 
             // Display button to start animation inside the Asset 3D previewer
             document.getElementById("animButton1").style.display = "inline-block";
-        } else {
 
+            // No-animation
+        } else {
             document.getElementById("animButton1").style.display = "none";
-            console.log("Your FBX does not have animation");
         }
 
         // FBX is added to root
         this.scene.getChildByName("root").add(fbxObject);
 
-
-        let centerRadius = this.computeSceneBoundingSphereAll(this.scene.getChildByName('root'));
-
-        const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-        const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-        const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-        sphereBall.position.copy( centerRadius[0] );
-        sphereBall.name = "Center Ball"
-        this.scene.getChildByName('root').add( sphereBall );
+        // let centerRadius = this.computeSceneBoundingSphereAll(this.scene.getChildByName('root'));
+        //
+        // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+        // sphereBall.position.copy( centerRadius[0] );
+        // sphereBall.name = "Center Ball"
+        // this.scene.getChildByName('root').add( sphereBall );
+        //
 
         this.zoomer(this.scene.getChildByName('root'));
 
-        this.kickRendererOnDemand();
+        let scope = this;
+        setTimeout(function(){scope.kickRendererOnDemand();} , 1);
+
 
         //scope.controls.target = scope.scene.getChildByName('root');
 
@@ -531,7 +564,7 @@ class WU_webw_3d_view {
 
                 scope.zoomer(scope.scene.getChildByName('root'));
 
-                scope.kickRendererOnDemand();
+                setTimeout(function(){scope.kickRendererOnDemand();} , 1);
 
 
             },
@@ -1050,29 +1083,7 @@ class WU_webw_3d_view {
         console.log('Progress: ' + text);
     }
 
-    // Play or Stop animation
-    playStopAnimation(){
 
-        if (!this.action.isRunning()) {
-
-            // Play the audio
-            if (document.getElementById("audioFile")) {
-                document.getElementById("audioFile").play();
-            }
-
-            // Play the animation
-            this.action.paused = false;
-            this.action.play();
-
-        } else {
-
-            if (document.getElementById("audioFile")) {
-                document.getElementById("audioFile").pause();
-            }
-            this.action.paused = true;
-
-        }
-    }
 
 
     //function autoScreenshot() {

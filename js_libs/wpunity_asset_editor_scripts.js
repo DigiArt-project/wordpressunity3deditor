@@ -14,10 +14,10 @@ var currLanguage = "English";
 var slideIndex = 0;
 
 
-function wpunity_clear_asset_files(wu_webw_3d_view) {
+function wpunity_clear_asset_files(asset_viewer_3d_kernel) {
 
-    if (wu_webw_3d_view.renderer) {
-        wu_webw_3d_view.clearAllAssets();
+    if (asset_viewer_3d_kernel.renderer) {
+        asset_viewer_3d_kernel.clearAllAssets();
     }
 
     // Clear inputs
@@ -49,7 +49,7 @@ function wpunity_clear_asset_files(wu_webw_3d_view) {
 
 
 // File reader cortex
-function file_reader_cortex(file, wu_webw_3d_view_local){
+function file_reader_cortex(file, asset_viewer_3d_kernel_local){
 
     // Get the extension
     let type = file.name.split('.').pop();
@@ -58,11 +58,11 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
     let reader = new FileReader();
 
     switch (type) {
-        case 'pdb': wu_webw_3d_view_local.nPdb = 1; reader.readAsText(file);        break;
-        case 'mtl': wu_webw_3d_view_local.nMtl = 1; reader.readAsText(file);        break;
-        case 'obj': wu_webw_3d_view_local.nObj = 1; reader.readAsArrayBuffer(file); break;
-        case 'fbx': wu_webw_3d_view_local.nFbx = 1; reader.readAsArrayBuffer(file); break;
-        case 'glb': wu_webw_3d_view_local.nGlb = 1; reader.readAsArrayBuffer(file); break;
+        case 'pdb': asset_viewer_3d_kernel_local.nPdb = 1; reader.readAsText(file);        break;
+        case 'mtl': asset_viewer_3d_kernel_local.nMtl = 1; reader.readAsText(file);        break;
+        case 'obj': asset_viewer_3d_kernel_local.nObj = 1; reader.readAsArrayBuffer(file); break;
+        case 'fbx': asset_viewer_3d_kernel_local.nFbx = 1; reader.readAsArrayBuffer(file); break;
+        case 'glb': asset_viewer_3d_kernel_local.nGlb = 1; reader.readAsArrayBuffer(file); break;
         case 'jpg': reader.readAsDataURL(file);     break;
         case 'png': reader.readAsDataURL(file);     break;
         case 'gif': reader.readAsDataURL(file);     break;
@@ -86,11 +86,11 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
                 case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
                 case 'fbx':
                     document.getElementById('fbxFileInput').value = dec.decode(fileContent);
-                    wu_webw_3d_view_local.FbxBuffer =  fileContent;
+                    asset_viewer_3d_kernel_local.FbxBuffer =  fileContent;
                     break;
                 case 'glb':
                     document.getElementById('glbFileInput').value = dec.decode(fileContent);
-                    wu_webw_3d_view_local.GlbBuffer =  fileContent;
+                    asset_viewer_3d_kernel_local.GlbBuffer =  fileContent;
                     break;
                 case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
                 case 'jpg':
@@ -110,16 +110,16 @@ function file_reader_cortex(file, wu_webw_3d_view_local){
             if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif' || type==='glb') {
 
 
-                wu_webw_3d_view_local.checkerCompleteReading( type );
+                asset_viewer_3d_kernel_local.checkerCompleteReading( type );
             }else if ( type==='pdb') {
-                wu_webw_3d_view_local.loadMolecule(fileContent, "file_reader_cortex");
+                asset_viewer_3d_kernel_local.loadMolecule(fileContent, "file_reader_cortex");
             }
         };
     })(reader);
 }
 
 
-function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
+function addHandlerFor3Dfiles(asset_viewer_3d_kernel_local, multipleFilesInputElem) {
 
     // PREVIEW Handler (not uploaded yet): Load from selected files
     let _handleFileSelect = function ( event ) {
@@ -141,24 +141,24 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
         let files = {... event.target.files};
 
         // Clear the previously loaded and the files fields, so do not put be before files =
-        //wpunity_clear_asset_files(wu_webw_3d_view_local);
+        //wpunity_clear_asset_files(asset_viewer_3d_kernel_local);
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
 
             if (files[i].name.includes('jpg')){
-                wu_webw_3d_view_local.nJpg ++;
+                asset_viewer_3d_kernel_local.nJpg ++;
             } else if (files[i].name.includes('png')){
-                wu_webw_3d_view_local.nPng ++;
+                asset_viewer_3d_kernel_local.nPng ++;
             } else if (files[i].name.includes('gif')){
-                wu_webw_3d_view_local.nGif ++;
+                asset_viewer_3d_kernel_local.nGif ++;
             }
         }
 
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
-            file_reader_cortex(files[i], wu_webw_3d_view_local);
+            file_reader_cortex(files[i], asset_viewer_3d_kernel_local);
         }
     };
     // End of event handler
@@ -176,11 +176,11 @@ function addHandlerFor3Dfiles(wu_webw_3d_view_local, multipleFilesInputElem) {
 //--------------------- Auxiliary (Easy stuff) -------------------------------------------------------------
 
 
-function updateColorPicker(picker){
+function updateColorPicker(picker, asset_viewer_3d_kernel_local){
     document.getElementById('assetback3dcolor').value = picker.toRGBString();
-    wu_webw_3d_view.scene.background.r = picker.rgb[0]/255;
-    wu_webw_3d_view.scene.background.g = picker.rgb[1]/255;
-    wu_webw_3d_view.scene.background.b = picker.rgb[2]/255;
+    asset_viewer_3d_kernel_local.scene.background.r = picker.rgb[0]/255;
+    asset_viewer_3d_kernel_local.scene.background.g = picker.rgb[1]/255;
+    asset_viewer_3d_kernel_local.scene.background.b = picker.rgb[2]/255;
 
     // Change top border line color for portrait mode
     document.getElementById('text-asset-sidebar').style.borderTop="5px solid " +
@@ -258,14 +258,14 @@ function plusSlides(i) {
 }
 
 // Create model screenshot
-function wpunity_create_model_sshot(wu_webw_3d_view_local) {
+function wpunity_create_model_sshot(asset_viewer_3d_kernel_local) {
 
-    wu_webw_3d_view_local.render();
+    asset_viewer_3d_kernel_local.render();
 
     // I used html2canvas because there is no toDataURL in labelRenderer so there were no labels
     html2canvas(document.querySelector("#wrapper_3d_inner")).then(canvas => {
 
-        wu_webw_3d_view_local.render();
+        asset_viewer_3d_kernel_local.render();
         document.getElementById("sshotPreviewImg").src = canvas.toDataURL("image/png");
 
         //------------ Resize ------------
@@ -305,10 +305,10 @@ function loadFileInputLabel(objectType) {
         }
 }
 
-function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
+function wpunity_reset_panels(asset_viewer_3d_kernel, whocalls) {
 
     // Clear all
-    wpunity_clear_asset_files(wu_webw_3d_view);
+    wpunity_clear_asset_files(asset_viewer_3d_kernel);
 
     if (jQuery("ProducerPlotTooltip")) {
         jQuery("div.ProducerPlotTooltip").remove();
@@ -328,7 +328,7 @@ function wpunity_reset_panels(wu_webw_3d_view, whocalls) {
 }
 
 function clearList() {
-    wpunity_reset_panels(wu_webw_3d_view, "me");
+    wpunity_reset_panels(asset_viewer_3d_kernel, "me");
 }
 
 
@@ -404,7 +404,7 @@ function set3DwindowSize(){
         document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
             document.getElementById("text-asset-sidebar").style.height = (initCH + this.scrollTop / 2 + 5).toString();
             document.getElementById("wrapper_3d_inner").style.height = (initCH2 - this.scrollTop / 2 + 5).toString();
-            wu_webw_3d_view.resizeDisplayGL();
+            asset_viewer_3d_kernel.resizeDisplayGL();
         });
     }
 
@@ -430,8 +430,8 @@ function screenshotHandlerSet(){
     // Screenshot handler
     if (document.getElementById("sshotPreviewImg")) {
         jQuery("#createModelScreenshotBtn").click(function () {
-            wu_webw_3d_view.renderer.preserveDrawingBuffer = true;
-            wpunity_create_model_sshot(wu_webw_3d_view);
+            asset_viewer_3d_kernel.renderer.preserveDrawingBuffer = true;
+            wpunity_create_model_sshot(asset_viewer_3d_kernel);
         });
     }
 

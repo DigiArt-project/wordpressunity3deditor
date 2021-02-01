@@ -138,7 +138,7 @@ THREE.FBXLoader = ( function () {
 
 
 
-            var textureLoader = new THREE.TextureLoader( this.manager ); //.setPath( this.resourcePath || path ).setCrossOrigin( this.crossOrigin );
+            let textureLoader = new THREE.TextureLoader( this.manager ); //.setPath( this.resourcePath || path ).setCrossOrigin( this.crossOrigin );
 
 
             return new FBXTreeParser( textureLoader, this.manager, texturesStreams ).parseStream( fbxTree );
@@ -156,7 +156,7 @@ THREE.FBXLoader = ( function () {
     function FBXTreeParser( textureLoader, manager, texturesStreams=null ) {
 
         this.textureLoader = textureLoader;
-        this.texturesStreams = texturesStreams
+        this.texturesStreams = texturesStreams;
         this.manager = manager;
 
     }
@@ -203,14 +203,7 @@ THREE.FBXLoader = ( function () {
                         'data:application/octet-stream;',
                         'data:image/' + type + ';');
             }
-
-
-
             var textures = this.parseTexturesStream( images );
-
-
-
-
             var materials = this.parseMaterials( textures );
             var deformers = this.parseDeformers();
             var geometryMap = new GeometryParser().parse( deformers );

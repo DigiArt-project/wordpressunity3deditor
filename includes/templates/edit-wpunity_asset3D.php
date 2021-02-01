@@ -93,7 +93,7 @@ function loadAsset3DManagerScriptsAndStyles() {
     wp_enqueue_script('wpunity_load119_CSS2DRenderer');
     
     // Load single asset
-    wp_enqueue_script('WU_webw_3d_view');
+    wp_enqueue_script('Asset_viewer_3d_kernel');
     
     
     // Load scripts for asset editor
@@ -551,7 +551,7 @@ if($asset_id != null) {
     <!-- 3D Canvas -->
     <canvas id="previewCanvas" >3D canvas</canvas>
 
-    <a href="#" class="animationButton" id="animButton1" onclick="wu_webw_3d_view.playStopAnimation();">Animation 1</a>
+    <a href="#" class="animationButton" id="animButton1" onclick="asset_viewer_3d_kernel.playStopAnimation();">Animation 1</a>
     
     <!-- QR code -->
     <?php include 'edit-wpunity_asset3D_QRCodeGenerator.php'; ?>
@@ -864,7 +864,8 @@ if($asset_id != null) {
                     <div id="assetback3dcolordiv" class="mdc-textfield mdc-textfield--textarea"
                          data-mdc-auto-init="MDCTextfield">
                         <label for="jscolorpick" style="display:none">Color pick</label>
-                        <input id="jscolorpick" class="jscolor {onFineChange:'updateColorPicker(this)'}" value="000000">
+                        <input id="jscolorpick"
+                               class="jscolor {onFineChange:'updateColorPicker(this, asset_viewer_3d_kernel)'}" value="000000">
         
                         <input type="text" id="assetback3dcolor" class="mdc-textfield__input"
                                name="assetback3dcolor" form="3dAssetForm" value="<?php echo trim($asset_back_3d_color_saved); ?>" />
@@ -1107,7 +1108,7 @@ if($asset_id != null) {
                                value="<?php echo trim($asset_back_3d_color_saved); ?>" />
 
                         <button id="jscolorpick"
-                                class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this)'}" value="cccccc"
+                                class="jscolor {valueElement:null,value:'<?php echo $back_3d_color; ?>',onFineChange:'updateColorPicker(this, asset_viewer_3d_kernel)'}" value="cccccc"
                                 style="padding:10px;width:20px;height:40px;max-height:40px;min-height:40px;left:0;display:inline-block;vertical-align:bottom">
                         </button>
 
@@ -1323,7 +1324,7 @@ if($asset_id != null) {
     let audio_file = document.getElementById( 'audioFile' );
 
     // Main 3D canvas handler
-    var wu_webw_3d_view = new WU_webw_3d_view( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
+    var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
 
     let isEditMode = 0;
     isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
@@ -1331,7 +1332,7 @@ if($asset_id != null) {
     // Reset if not preview
     if (isEditMode === 1) {
         // clear canvas and divs for fields
-        wpunity_reset_panels(wu_webw_3d_view, "initial script");
+        wpunity_reset_panels(asset_viewer_3d_kernel, "initial script");
     
         // Get the Default Screenshot image for reference;
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
@@ -1342,19 +1343,19 @@ if($asset_id != null) {
     // ----------- Canvas Renderer ------------------------
     // Add window resize handler
     window.addEventListener( 'resize', function () {
-        wu_webw_3d_view.resizeDisplayGL();
+        asset_viewer_3d_kernel.resizeDisplayGL();
     }, false );
 
     
 
     // Initialize
-    wu_webw_3d_view.initGL(back_3d_color);
+    asset_viewer_3d_kernel.initGL(back_3d_color);
 
     // Resize for first time just to be sure
-    wu_webw_3d_view.resizeDisplayGL();
+    asset_viewer_3d_kernel.resizeDisplayGL();
     
     // After
-    wu_webw_3d_view.initPostGL();
+    asset_viewer_3d_kernel.initPostGL();
 
 
     
@@ -1362,11 +1363,11 @@ if($asset_id != null) {
     set3DwindowSize();
 
     // For loading files
-    addHandlerFor3Dfiles(wu_webw_3d_view, multipleFilesInputElem);
+    addHandlerFor3Dfiles(asset_viewer_3d_kernel, multipleFilesInputElem);
 
     // Load existing 3D models
     //loadExisting3DModels();
-    wu_webw_3d_view.loader_asset_exists(path_url,
+    asset_viewer_3d_kernel.loader_asset_exists(path_url,
                         mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name, glb_file_name);
     
     
@@ -1423,9 +1424,9 @@ if($asset_id != null) {
             // paramter denotes if new asset or edit asset
             function loadLayout(hasCategory) {
 
-                wu_webw_3d_view.resizeDisplayGL();
+                asset_viewer_3d_kernel.resizeDisplayGL();
 
-                //wpunity_reset_panels(wu_webw_3d_view, "loadlayout");
+                //wpunity_reset_panels(asset_viewer_3d_kernel, "loadlayout");
 
                 let cat = '';
                 let descText = document.getElementById('categoryDescription');
