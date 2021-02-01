@@ -550,16 +550,16 @@ class Asset_viewer_3d_kernel {
 
 
 
-                let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-                console.log("Estimated center", centerRadius[0]);
-                console.log("Estimated radius", centerRadius[1]);
+                //let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+                // console.log("Estimated center", centerRadius[0]);
+                // console.log("Estimated radius", centerRadius[1]);
 
-                const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-                const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-                const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-                sphereBall.position.copy( centerRadius[0] );
-                sphereBall.name = "Center Ball"
-                scope.scene.getChildByName('root').add( sphereBall );
+                // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+                // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+                // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+                // sphereBall.position.copy( centerRadius[0] );
+                // sphereBall.name = "Center Ball"
+                // scope.scene.getChildByName('root').add( sphereBall );
 
 
                 scope.zoomer(scope.scene.getChildByName('root'));
