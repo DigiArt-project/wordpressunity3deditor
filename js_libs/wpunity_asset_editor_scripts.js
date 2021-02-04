@@ -6,8 +6,6 @@
  */
 'use strict';
 
-
-
 var currLanguage = "English";
 
 // Initial slide to show (carousel top)
@@ -68,8 +66,6 @@ function file_reader_cortex(file, asset_viewer_3d_kernel_local){
         case 'gif': reader.readAsDataURL(file);     break;
     }
 
-
-
     // --- Read it ------------------------
     reader.onload = (function(reader) {
         return function() {
@@ -102,14 +98,8 @@ function file_reader_cortex(file, asset_viewer_3d_kernel_local){
                     break;
             }
 
-
-            // console.log("type", type);
-            // console.log("fileContent", fileContent);
-
             // Check if everything is loaded
             if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif' || type==='glb') {
-
-
                 asset_viewer_3d_kernel_local.checkerCompleteReading( type );
             }else if ( type==='pdb') {
                 asset_viewer_3d_kernel_local.loadMolecule(fileContent, "file_reader_cortex");
@@ -127,6 +117,7 @@ function addHandlerFor3Dfiles(asset_viewer_3d_kernel_local, multipleFilesInputEl
         let input = document.getElementById('fileUploadInput');
         let output = document.getElementById('fileList3D');
         let children = "";
+
         for (let i = 0; i < input.files.length; ++i) {
             children += '<li>' + input.files.item(i).name + '</li>';
         }
@@ -140,12 +131,8 @@ function addHandlerFor3Dfiles(asset_viewer_3d_kernel_local, multipleFilesInputEl
         // Files are blobs
         let files = {... event.target.files};
 
-        // Clear the previously loaded and the files fields, so do not put be before files =
-        //wpunity_clear_asset_files(asset_viewer_3d_kernel_local);
-
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
-
             if (files[i].name.includes('jpg')){
                 asset_viewer_3d_kernel_local.nJpg ++;
             } else if (files[i].name.includes('png')){
@@ -154,7 +141,6 @@ function addHandlerFor3Dfiles(asset_viewer_3d_kernel_local, multipleFilesInputEl
                 asset_viewer_3d_kernel_local.nGif ++;
             }
         }
-
 
         //  Read each file and put the string content in an input dom
         for ( let i = 0; i < Object.keys(files).length; i++) {
@@ -169,12 +155,7 @@ function addHandlerFor3Dfiles(asset_viewer_3d_kernel_local, multipleFilesInputEl
 }
 
 
-
-
-
-
 //--------------------- Auxiliary (Easy stuff) -------------------------------------------------------------
-
 
 function updateColorPicker(picker, asset_viewer_3d_kernel_local){
     document.getElementById('assetback3dcolor').value = picker.toRGBString();
@@ -209,9 +190,6 @@ function applyFont(font) {
     // Set selected font on paragraphs
     jQuery('.changablefont').css({fontFamily:"'"+fontFamily+"'", fontWeight:fontWeight});
 }
-
-
-
 
 function resizeText(multiplier) {
     window.event.preventDefault();
@@ -394,21 +372,22 @@ function startConf(){
     wpunity_notify_confpeers();
 }
 
-function set3DwindowSize(){
-
-    // Responsive Layout (text panel vs 3D model panel
-    if (window.innerWidth < window.innerHeight) {
-        const initCH = document.getElementById('text-asset-sidebar').clientHeight;
-        const initCH2 = document.getElementById('wrapper_3d_inner').clientHeight;
-
-        document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
-            document.getElementById("text-asset-sidebar").style.height = (initCH + this.scrollTop / 2 + 5).toString();
-            document.getElementById("wrapper_3d_inner").style.height = (initCH2 - this.scrollTop / 2 + 5).toString();
-            asset_viewer_3d_kernel.resizeDisplayGL();
-        });
-    }
-
-}
+// function setCanvasDivSize(){
+//
+//     // Responsive Layout (text panel vs 3D model panel
+//     if (window.innerWidth < window.innerHeight) {
+//
+//         const initCH = document.getElementById('text-asset-sidebar').clientHeight;
+//         const initCH2 = document.getElementById('wrapper_3d_inner').clientHeight;
+//
+//         document.getElementById('text-asset-sidebar').addEventListener('scroll', function () {
+//             document.getElementById("text-asset-sidebar").style.height = (initCH + this.scrollTop / 2 + 5).toString();
+//             document.getElementById("wrapper_3d_inner").style.height = (initCH2 - this.scrollTop / 2 + 5).toString();
+//             asset_viewer_3d_kernel.resizeDisplayGL();
+//         });
+//     }
+//
+// }
 
 function generateQRcode(){
 
@@ -442,93 +421,3 @@ function hideAdminBar(){
     jQuery("#wpadminbar").hide();
     jQuery(".js no-svg").css("margin-top:0px");
 }
-
-// // for the Energy Turbines
-// function wpunity_create_slider_component(elemId, range, options) {
-//
-//     if (range) {
-//
-//         jQuery( elemId ).slider({
-//             range: range,
-//             min: options.min,
-//             max: options.max,
-//             values: [ options.values[0], options.values[1] ],
-//             create: function() {
-//                 jQuery( options.valIds[0] ).val(options.values[0]);
-//                 jQuery( options.valIds[1] ).val(options.values[1]);
-//             },
-//             slide: function( event, ui ) {
-//                 jQuery( elemId+"-label" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " " +options.units);
-//
-//             },
-//             stop: function( event, ui ) {
-//                 jQuery( options.valIds[0] ).val(ui.values[ 0 ]);
-//                 jQuery( options.valIds[1] ).val(ui.values[ 1 ]);
-//             }
-//
-//         });
-//         jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "values", 0 ) +
-//             " - " + jQuery( elemId ).slider( "values", 1 ) + " " + options.units );
-//
-//     } else {
-//
-//         if (options.inputText) {
-//
-//             jQuery( elemId ).slider({
-//                 min: options.min,
-//                 max: options.max,
-//                 value: options.value,
-//                 create: function() {
-//                     jQuery( options.valId ).val(options.value);
-//                 },
-//                 slide: function( event, ui ) {
-//                     jQuery( elemId+"-label" ).val( ui.value );
-//
-//                 },
-//                 stop: function( event, ui ) {
-//                     jQuery( options.valId ).val(ui.value);
-//                 }
-//             });
-//             jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ));
-//
-//
-//             jQuery(elemId+"-label").change(function () {
-//                 var value = this.value;
-//                 jQuery( elemId ).slider("value", parseInt(value));
-//
-//             });
-//
-//             jQuery(elemId+"-label").on('input', function() {
-//                 var value = this.value;
-//                 jQuery( elemId ).slider("value", parseInt(value));
-//             });
-//
-//
-//         } else {
-//
-//             jQuery( elemId ).slider({
-//                 min: options.min,
-//                 max: options.max,
-//                 value: options.value,
-//                 create: function() {
-//                     jQuery( options.valId ).val(options.value);
-//                 },
-//                 slide: function( event, ui ) {
-//
-//                     jQuery( elemId+"-label" ).val( ui.value + " " +options.units);
-//                 },
-//                 stop: function( event, ui ) {
-//                     jQuery( options.valId ).val(ui.value);
-//                 }
-//             });
-//             jQuery( elemId+"-label" ).val( jQuery( elemId ).slider( "option", "value" ) + " " + options.units );
-//
-//         }
-//     }
-//
-//     if (options.step) {
-//         jQuery( elemId ).slider({step: options.step});
-//     }
-//
-//     return jQuery( elemId ).slider;
-// }

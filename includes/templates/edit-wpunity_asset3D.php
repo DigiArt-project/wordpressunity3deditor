@@ -1323,9 +1323,22 @@ if($asset_id != null) {
     // Current  Slide index (carousel top)
     let audio_file = document.getElementById( 'audioFile' );
 
-    // Main 3D canvas handler
+
+    let multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
+    
+    // ------- Class to load 3D model ---------
     var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
 
+    // Load existing 3D models
+    asset_viewer_3d_kernel.loader_asset_exists(path_url, mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name,
+                                                         glb_file_name);
+
+    //------------------------------------------
+    //setCanvasDivSize();
+
+    // For selecting files
+    addHandlerFor3Dfiles(asset_viewer_3d_kernel, multipleFilesInputElem);
+    
     let isEditMode = 0;
     isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
 
@@ -1338,38 +1351,6 @@ if($asset_id != null) {
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
     }
 
-    var multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-
-    // ----------- Canvas Renderer ------------------------
-    // Add window resize handler
-    window.addEventListener( 'resize', function () {
-        asset_viewer_3d_kernel.resizeDisplayGL();
-    }, false );
-
-    
-
-    // Initialize
-    asset_viewer_3d_kernel.initGL(back_3d_color);
-
-    // Resize for first time just to be sure
-    asset_viewer_3d_kernel.resizeDisplayGL();
-    
-    // After
-    asset_viewer_3d_kernel.initPostGL();
-
-
-    
-
-    set3DwindowSize();
-
-    // For loading files
-    addHandlerFor3Dfiles(asset_viewer_3d_kernel, multipleFilesInputElem);
-
-    // Load existing 3D models
-    //loadExisting3DModels();
-    asset_viewer_3d_kernel.loader_asset_exists(path_url,
-                        mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name, glb_file_name);
-    
     
     // Set the functionality of the screenshot button;
     screenshotHandlerSet();

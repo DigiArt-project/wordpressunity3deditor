@@ -25,7 +25,8 @@ class Asset_viewer_3d_kernel {
 
     constructor(canvasToBindTo, back_3d_color, audioElement) {
 
-        this.setZeroVars();
+        this.setZeroVars()
+        this.back_3d_color = back_3d_color;
 
         this.FbxBuffer = '';
         this.GlbBuffer = '';
@@ -98,6 +99,7 @@ class Asset_viewer_3d_kernel {
         }
 
         this.boundRender = this.render.bind( this );
+        this.initGL();
     }
 
     // Add OrbitControl listeners to render on demand
@@ -106,8 +108,6 @@ class Asset_viewer_3d_kernel {
         this.controls.addEventListener('change', this.boundRender);
 
         // this.controls.dispatchEvent( { type: 'change' } );
-
-
         window.addEventListener('resize', this.boundRender);
     }
 
@@ -154,6 +154,7 @@ class Asset_viewer_3d_kernel {
     // Start Renderer amd label Renderer
     render() {
 
+        this.resizeDisplayGL();
         if (!this.renderer.autoClear)
             this.renderer.clear();
 
@@ -166,12 +167,13 @@ class Asset_viewer_3d_kernel {
             this.mixers[ 0 ].update( this.clock.getDelta() );
         }
 
+
     }
 
     // Render only when OrbitControls change of window is resized
     kickRendererOnDemand() {
-       this.render();
-       this.addControlEventListeners();
+        this.render();
+        this.addControlEventListeners();
     }
 
     // Start auto loop (when animation)
@@ -261,7 +263,6 @@ class Asset_viewer_3d_kernel {
                                 // Start with textures
                                 console.log("start textures");
 
-
                                 this.loadObjStream(objectDefinition);
                             }
                         }
@@ -282,6 +283,9 @@ class Asset_viewer_3d_kernel {
                     texturesStreams = '';
 
                 console.log("Ignite reading fbx");
+
+                console.log("texturesStreams", texturesStreams);
+
                 this.loadFbxStream(this.FbxBuffer, texturesStreams);
 
             } else if (this.nGlb === 1){
@@ -294,11 +298,10 @@ class Asset_viewer_3d_kernel {
         }
     }
 
-
     // Initialize Scene
-    initGL(back_3d_color_local) {
+    initGL() {
 
-        this.scene.background = new THREE.Color(back_3d_color_local);
+        this.scene.background = new THREE.Color(this.back_3d_color);
 
         // - Label renderer -
         this.labelRenderer = new THREE.CSS2DRenderer();
@@ -330,17 +333,13 @@ class Asset_viewer_3d_kernel {
             console.log("ERROR Audio 111", "No Audio Element is found");
         }
 
-
-
         this.resetCamera();
 
-
-
         // Light
-        var ambientLight = new THREE.AmbientLight(0x404040,2);
-        var directionalLight1 = new THREE.DirectionalLight(0xA0A050);
-        var directionalLight2 = new THREE.DirectionalLight(0x909050);
-        var directionalLight3 = new THREE.DirectionalLight(0xA0A050);
+        let ambientLight = new THREE.AmbientLight(0x404040,2);
+        let directionalLight1 = new THREE.DirectionalLight(0xA0A050);
+        let directionalLight2 = new THREE.DirectionalLight(0x909050);
+        let directionalLight3 = new THREE.DirectionalLight(0xA0A050);
 
         directionalLight1.position.set(-1000,  -550,  1000);
         directionalLight2.position.set( 1000,   550, -1000);
@@ -352,16 +351,7 @@ class Asset_viewer_3d_kernel {
         this.scene.add(directionalLight3);
         this.scene.add(ambientLight);
 
-        // Grid
-        //var helper = new THREE.GridHelper( 1200, 60, 0xFF4444, 0xcca58b );
-        //this.scene.add( helper );
-
-        // scene.children[5] is Pivot
-        //this.createPivot();
-    }
-
-    // Initialize Post GL only for OBJ async loading
-    initPostGL() {
+        // ---- OBJ asynch loader ---------
 
         let scope = this;
 
@@ -410,9 +400,6 @@ class Asset_viewer_3d_kernel {
 
         return true;
     }
-
-
-
 
     // Clear Previous model
     clearAllAssets() {
@@ -637,7 +624,7 @@ class Asset_viewer_3d_kernel {
 
             for (let i = 0; i < positionsBonds.count; i += 6) {
 
-                setTimeout(function(){
+
 
                 let start = new THREE.Vector3( positionsBonds.array[i], positionsBonds.array[i+1], positionsBonds.array[i+2]);
                 let end   = new THREE.Vector3( positionsBonds.array[i+3],positionsBonds.array[i+4],positionsBonds.array[i+5]);
@@ -680,53 +667,14 @@ class Asset_viewer_3d_kernel {
                 bond2.position.lerp(end, 0.75);
                 scope.scene.getChildByName('root').add(bond2);
 
-                },100 + i * 4000/positionsBonds.count);
+
             }
 
-            // render molecule
-
-
+            // zoom to molecule
             scope.zoomer(scope.scene.getChildByName('root'));
+
+            // kick renderer
             scope.kickRendererOnDemand();
-
-
-            // ------------ Find bounding sphere and zoom ----
-            // let sphere = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-            // // Find new zoom
-            // let totalRadius = sphere[1];
-            // scope.controls.minDistance = 0.001 * totalRadius;
-            // scope.controls.maxDistance = 35 * totalRadius;
-
-            // console.log("sphere", sphere[1]);
-            //
-            // const geometryBall = new THREE.SphereGeometry( sphere[1], 32, 32 );
-            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-            // sphereBall.position.copy(sphere[0]);
-            // sphereBall.name = "Center Ball"
-            // scope.scene.getChildByName('root').add( sphereBall );
-
-            // translate object to the center
-            // scope.scene.getChildByName('root').traverse(function (object) {
-            //     //object.position.x = object.position.y = object.position.z = 0;
-            //
-            //     if (object instanceof THREE.Mesh || object instanceof THREE.Object3D ) {
-            //
-            //
-            //         if (object.name==='')
-            //             return;
-            //
-            //        object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-            //
-            //         // if(object.geometry) {
-            //         //     object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
-            //         // }
-            //     }
-            // });
-
-             //---------------------------------------
-
-
         });
     }
 
@@ -778,7 +726,6 @@ class Asset_viewer_3d_kernel {
                                  objFilename= null, pdbFileContent = null,
                                  fbxFilename = null, glbFilename = null) {
 
-
         if (this.scene != null) {
             if (this.renderer)
                 this.clearAllAssets();
@@ -823,26 +770,9 @@ class Asset_viewer_3d_kernel {
 
                     }
 
-                    // ------------ Find bounding sphere ----
-                    var sphere = scope.computeSceneBoundingSphereAll(gltf.scene);
-
-                    // translate object to the center
-                    gltf.scene.traverse(function (object) {
-                        if (object instanceof THREE.Mesh) {
-                            object.geometry.translate(-sphere[0].x, -sphere[0].y, -sphere[0].z);
-                        }
-                    });
-
-                    // Add to pivot
+                    // Add to root
                     scope.scene.getChildByName('root').add(gltf.scene);
-
-                    // Find new zoom
-                    var totalradius = sphere[1];
-                    scope.controls.minDistance = 0.001 * totalradius;
-                    scope.controls.maxDistance = 13 * totalradius;
-
-                    //---------------------------------------
-
+                    scope.zoomer(scope.scene.getChildByName('root'));
                     scope.kickRendererOnDemand();
 
                     //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
@@ -861,7 +791,6 @@ class Asset_viewer_3d_kernel {
 
                 }
             );
-
 
             // OBJ load
         } else if (pathUrl) {
@@ -907,6 +836,7 @@ class Asset_viewer_3d_kernel {
                             scope.controls.minDistance = 0.001 * totalradius;
                             scope.controls.maxDistance = 3 * totalradius;
 
+                            scope.zoomer(scope.scene.getChildByName('root'));
                             scope.kickRendererOnDemand();
                             //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
                         },
@@ -1001,10 +931,6 @@ class Asset_viewer_3d_kernel {
 
 
 
-
-
-
-
     // ----------------- Auxiliary ---------------------------
 
     /* Zoom to object */
@@ -1037,6 +963,7 @@ class Asset_viewer_3d_kernel {
         let totalRadius = sphere[1];
         this.controls.minDistance = 0.001*totalRadius;
         this.controls.maxDistance = 13*totalRadius;
+        this.resizeDisplayGL();
         this.controls.update();
     }
 
@@ -1058,15 +985,6 @@ class Asset_viewer_3d_kernel {
         this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
     }
 
-    // Create Pivot for 3D objects to rotate around (to avoid non-centered 3D model problems)
-    // createPivot() {
-    //     let pivot = new THREE.Object3D();
-    //     pivot.name = 'Pivot';
-    //
-    //     // scene.children[5] is the pivot
-    //     this.scene.add( pivot );
-    // }
-
     // Reset Camera
     resetCamera() {
         this.camera.position.copy(this.cameraDefaults.posCamera);
@@ -1085,9 +1003,6 @@ class Asset_viewer_3d_kernel {
     _reportProgress(text) {
         console.log('Progress: ' + text);
     }
-
-
-
 
     //function autoScreenshot() {
         // setTimeout(function(){
