@@ -105,6 +105,9 @@ class Asset_viewer_3d_kernel {
 
         this.controls.addEventListener('change', this.boundRender);
 
+        // this.controls.dispatchEvent( { type: 'change' } );
+
+
         window.addEventListener('resize', this.boundRender);
     }
 
@@ -546,20 +549,6 @@ class Asset_viewer_3d_kernel {
                 scope.scene.getChildByName('root').add( gltf.scene );
 
 
-
-
-
-
-                //let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-                // console.log("Estimated center", centerRadius[0]);
-                // console.log("Estimated radius", centerRadius[1]);
-
-                // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-                // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-                // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-                // sphereBall.position.copy( centerRadius[0] );
-                // sphereBall.name = "Center Ball"
-                // scope.scene.getChildByName('root').add( sphereBall );
 
 
                 scope.zoomer(scope.scene.getChildByName('root'));
@@ -1032,9 +1021,23 @@ class Asset_viewer_3d_kernel {
         //     }
         // });
 
+        // let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+        // console.log("Estimated center", centerRadius[0]);
+        // console.log("Estimated radius", centerRadius[1]);
+        //
+        // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+        // sphereBall.position.copy( centerRadius[0] );
+        // sphereBall.name = "Center Ball"
+        // scope.scene.getChildByName('root').add( sphereBall );
+
+
+
         let totalRadius = sphere[1];
         this.controls.minDistance = 0.001*totalRadius;
         this.controls.maxDistance = 13*totalRadius;
+        this.controls.update();
     }
 
     // Resize Renderer and Label Renderer
