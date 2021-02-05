@@ -23,7 +23,11 @@ class Asset_viewer_3d_kernel {
     }
 
 
-    constructor(canvasToBindTo, back_3d_color, audioElement) {
+    constructor(canvasToBindTo, back_3d_color, audioElement,
+                pathUrl = null, mtlFilename = null,
+                objFilename= null, pdbFileContent = null,
+                fbxFilename = null, glbFilename = null,
+                textures_fbx_string_connected = null) {
 
         this.setZeroVars()
         this.back_3d_color = back_3d_color;
@@ -47,12 +51,10 @@ class Asset_viewer_3d_kernel {
             logarithmicDepthBuffer: true
         });
 
-
         this.camera = null;
         this.listener = null;
 
         this.audioElement = audioElement;
-
 
         this.aspectRatio = 1;
         this.recalcAspectRatio();
@@ -71,7 +73,7 @@ class Asset_viewer_3d_kernel {
 
         this.cameraTarget = this.cameraDefaults.posCameraTarget;
 
-        // Trackball controls
+        // Trackball or OrbitControls controls
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
 
@@ -100,6 +102,13 @@ class Asset_viewer_3d_kernel {
 
         this.boundRender = this.render.bind( this );
         this.initGL();
+
+
+        this.loader_asset_exists( pathUrl, mtlFilename,
+            objFilename, pdbFileContent,
+            fbxFilename, glbFilename,
+            textures_fbx_string_connected);
+
     }
 
     // Add OrbitControl listeners to render on demand
@@ -118,8 +127,6 @@ class Asset_viewer_3d_kernel {
 
         window.removeEventListener('resize', this.boundRender);
     }
-
-
 
     // Play or Stop animation
     playStopAnimation(){
@@ -154,7 +161,6 @@ class Asset_viewer_3d_kernel {
     // Start Renderer amd label Renderer
     render() {
 
-        this.resizeDisplayGL();
         if (!this.renderer.autoClear)
             this.renderer.clear();
 
@@ -166,14 +172,15 @@ class Asset_viewer_3d_kernel {
         if ( this.mixers.length > 0 ) {
             this.mixers[ 0 ].update( this.clock.getDelta() );
         }
-
-
     }
 
     // Render only when OrbitControls change of window is resized
     kickRendererOnDemand() {
         this.render();
         this.addControlEventListeners();
+        this.resizeDisplayGL();
+        this.render();
+        document.getElementById('previewProgressLabel').style.visibility = "hidden";
     }
 
     // Start auto loop (when animation)
@@ -377,7 +384,6 @@ class Asset_viewer_3d_kernel {
 
             scope.zoomer(scope.scene.getChildByName('root'));
 
-            console.log("THE SCOPE:", scope);
             scope.kickRendererOnDemand();
 
             //scope.controls.target(scope.scene.getChildByName('root'));
@@ -402,9 +408,9 @@ class Asset_viewer_3d_kernel {
     }
 
     // Clear Previous model
-    clearAllAssets() {
+    clearAllAssets(whocalls) {
 
-        console.log("CLEARING");
+        console.log("CLEARING", whocalls);
 
         this.setZeroVars();
 
@@ -439,7 +445,7 @@ class Asset_viewer_3d_kernel {
     loadFbxStream(fbxBuffer, texturesStreams) {
 
         // Clear Previous
-        this.clearAllAssets();
+        this.clearAllAssets("loadFbxStream");
 
         let fbxLoader = new THREE.FBXLoader();
 
@@ -465,30 +471,12 @@ class Asset_viewer_3d_kernel {
         // FBX is added to root
         this.scene.getChildByName("root").add(fbxObject);
 
-        // let centerRadius = this.computeSceneBoundingSphereAll(this.scene.getChildByName('root'));
-        //
-        // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-        // sphereBall.position.copy( centerRadius[0] );
-        // sphereBall.name = "Center Ball"
-        // this.scene.getChildByName('root').add( sphereBall );
-        //
-
+        // zoom
         this.zoomer(this.scene.getChildByName('root'));
 
+        // Kick renderer
         let scope = this;
-        setTimeout(function(){scope.kickRendererOnDemand();} , 1);
-
-
-        //scope.controls.target = scope.scene.getChildByName('root');
-
-        //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
-
-        // setTimeout(function(){
-        //     jQuery("#button_qrcode").click(); // close qr code
-        //     jQuery("#createModelScreenshotBtn").click();
-        // },1000);
+        setTimeout(function(){scope.kickRendererOnDemand();} , 500);
     }
 
     /* GLB loader */
@@ -496,7 +484,7 @@ class Asset_viewer_3d_kernel {
         let scope = this;
 
         // Clear Previous
-        this.clearAllAssets();
+        this.clearAllAssets("loadGlbStream");
 
         let manager = new THREE.LoadingManager();
         manager.onProgress = function( item, loaded, total ) {};
@@ -559,7 +547,7 @@ class Asset_viewer_3d_kernel {
     loadMolecule(url_or_text_pdb, calledFromWhere) {
 
         // Clear Previous
-        this.clearAllAssets();
+        this.clearAllAssets("loadMolecule");
 
         let loader = new THREE.PDBLoader();
 
@@ -724,11 +712,12 @@ class Asset_viewer_3d_kernel {
     //-------------------- loading from saved data --------------------------------------
     loader_asset_exists( pathUrl = null, mtlFilename = null,
                                  objFilename= null, pdbFileContent = null,
-                                 fbxFilename = null, glbFilename = null) {
+                                 fbxFilename = null, glbFilename = null,
+                                 textures_fbx_string_connected = null) {
 
         if (this.scene != null) {
             if (this.renderer)
-                this.clearAllAssets();
+                this.clearAllAssets("loader_asset_exists");
         }
 
         // PDB
@@ -838,7 +827,9 @@ class Asset_viewer_3d_kernel {
 
                             scope.zoomer(scope.scene.getChildByName('root'));
                             scope.kickRendererOnDemand();
+
                             //jQuery('#previewProgressSlider')[0].style.visibility = "hidden";
+
                         },
                         //onObjProgressLoad
                         function (xhr) {
@@ -864,6 +855,8 @@ class Asset_viewer_3d_kernel {
                 // split texture string into each texture
                 let url_files = textures_fbx_string_connected.split('|');
 
+
+
                 if (url_files[0].includes('.jpg')){
                     this.nJpg = url_files.length;
                 } else if (url_files[0].includes('.png')){
@@ -871,6 +864,9 @@ class Asset_viewer_3d_kernel {
                 } else if (url_files[0].includes('.gif')){
                     this.nJpg = url_files.length;
                 }
+
+                console.log("this.nJpg", this.nJpg);
+
 
                 // Add the fbx also
                 url_files.push(pathUrl + fbxFilename);

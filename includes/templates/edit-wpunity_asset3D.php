@@ -240,7 +240,7 @@ if($scene_id != 0 ) {
 ?>
 
 <script>
-    var path_url = mtl_file_name = obj_file_name = pdb_file_name = glb_file_name = fbx_file_name = textures_fbx_string_connected = null;
+    let path_url = mtl_file_name = obj_file_name = pdb_file_name = glb_file_name = fbx_file_name = textures_fbx_string_connected = null;
   
 </script>
 
@@ -398,9 +398,9 @@ if($asset_id != null) {
         $path_url = pathinfo($mtlpost->guid)['dirname'];
         ?>
             <script>
-                var mtl_file_name="<?php echo $mtl_file_name; ?>";
-                var obj_file_name="<?php echo $obj_file_name; ?>";
-                var path_url="<?php echo $path_url.'/'; ?>";
+                mtl_file_name="<?php echo $mtl_file_name; ?>";
+                obj_file_name="<?php echo $obj_file_name; ?>";
+                path_url="<?php echo $path_url.'/'; ?>";
             </script>
         <?php
         // PDB
@@ -463,9 +463,9 @@ if($asset_id != null) {
         
         ?>
             <script>
-                var fbx_file_name="<?php echo $fbx_file_name;    ?>";
-                var path_url ="<?php echo $path_url.'/';  ?>";
-                var textures_fbx_string_connected = "<?php echo $textures_fbx_string_connected; ?>";
+                fbx_file_name="<?php echo $fbx_file_name;    ?>";
+                path_url ="<?php echo $path_url.'/';  ?>";
+                textures_fbx_string_connected = "<?php echo $textures_fbx_string_connected; ?>";
             </script>
         <?php
     }
@@ -618,7 +618,6 @@ if($asset_id != null) {
                     </span>
                 </span>
             </div>
-    
     
         <?php }
     }?>
@@ -1323,37 +1322,44 @@ if($asset_id != null) {
     // Current  Slide index (carousel top)
     let audio_file = document.getElementById( 'audioFile' );
 
-
-    let multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
-    
-    // ------- Class to load 3D model ---------
-    var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ), back_3d_color, audio_file );
-
-    // Load existing 3D models
-    asset_viewer_3d_kernel.loader_asset_exists(path_url, mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name,
-                                                         glb_file_name);
-
-    //------------------------------------------
-    //setCanvasDivSize();
-
-    // For selecting files
-    addHandlerFor3Dfiles(asset_viewer_3d_kernel, multipleFilesInputElem);
-    
     let isEditMode = 0;
     isEditMode= <?php echo $isEditMode == '' ? 0: 1  ; ?>;
 
-    // Reset if not preview
+    // Reset 3D canvas if not preview
     if (isEditMode === 1) {
         // clear canvas and divs for fields
-        wpunity_reset_panels(asset_viewer_3d_kernel, "initial script");
-    
+//        wpunity_reset_panels(asset_viewer_3d_kernel, "initial script");
+
         // Get the Default Screenshot image for reference;
         var sshotPreviewDefaultImg = document.getElementById("sshotPreviewImg").src;
     }
 
-    
     // Set the functionality of the screenshot button;
     screenshotHandlerSet();
+    
+    let multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
+
+    
+    // ------- Class to load 3D model ---------
+    var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ),
+                                                             back_3d_color,
+                                                             audio_file,
+                                                             path_url, // OBJ textures path
+                                                             mtl_file_name,
+                                                             obj_file_name,
+                                                             pdb_file_name,
+                                                             fbx_file_name,
+                                                             glb_file_name,
+                                                             textures_fbx_string_connected);
+
+    // Load existing 3D models
+    // asset_viewer_3d_kernel.loader_asset_exists( path_url, mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name,
+    //                                                      glb_file_name, textures_fbx_string_connected);
+
+    //------------------------------------------
+
+    // For selecting files
+    addHandlerFor3Dfiles(asset_viewer_3d_kernel, multipleFilesInputElem);
     
     // Select category handler
     if( isEditMode === 1){
