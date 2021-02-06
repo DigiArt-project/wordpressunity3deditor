@@ -211,6 +211,7 @@ function wpunity_register_styles() {
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 
 
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpheliosvr-widgets.php');
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
 
