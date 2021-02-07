@@ -748,6 +748,73 @@ function getProjectScenes($allScenePGameID){
 	return $custom_query;
 }
 
-
+function get_3D_model_files($assetpostMeta, $asset_id){
+	
+	$mtl_file_name = $obj_file_name = $pdb_file_name = $glb_file_name = $fbx_file_name =
+			$textures_fbx_string_connected = $path_url = null;
+	
+	//OBJ
+	if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
+		
+		$mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
+		
+		$mtl_file_name = basename($mtlpost->guid);
+		$obj_file_name = basename(get_post($assetpostMeta['wpunity_asset3d_obj'][0])->guid);
+		$path_url = pathinfo($mtlpost->guid)['dirname'];
+		
+		// PDB
+	} else if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
+		$pdb_file_name = get_post($assetpostMeta['wpunity_asset3d_pdb'][0])->guid;
+		
+		// GLB
+	} else if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
+		$glb_file_name = get_post($assetpostMeta['wpunity_asset3d_glb'][0])->guid;
+		
+		// FBX
+	} else if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
+		
+		// Get texture attachments of post
+		$args = array(
+			'posts_per_page' => 100,
+			'order'          => 'DESC',
+			'post_mime_type' => 'image',
+			'post_parent'    => $asset_id,
+			'post_type'      => 'attachment'
+		);
+		
+		$attachments_array =  get_children( $args,OBJECT );  //returns Array ( [$image_ID].
+		
+		// Add texture urls to a string separated by |
+		$textures_fbx_string_connected = '';
+		
+		foreach ($attachments_array as $k){
+			$url = $k->guid;
+			
+			// ignore screenshot attachment
+			if (!strpos($url, 'texture')) {
+				continue;
+			}
+			
+			$textures_fbx_string_connected .= $url.'|';
+		}
+		
+		// remove the last separator
+		$textures_fbx_string_connected = trim($textures_fbx_string_connected, "|");
+		
+		$fbxpost = get_post($assetpostMeta['wpunity_asset3d_fbx'][0]);
+		$fbx_file_name = basename($fbxpost->guid);
+		$path_url = pathinfo($fbxpost->guid)['dirname'];
+	}
+	
+	
+	
+	return array('mtl'=>$mtl_file_name,
+				'obj'=>$obj_file_name,
+				'pdb'=>$pdb_file_name,
+				'glb'=>$glb_file_name,
+				'fbx'=>$fbx_file_name,
+				'texturesFbx'=>$textures_fbx_string_connected,
+				'path'=>$path_url);
+}
 
 ?>

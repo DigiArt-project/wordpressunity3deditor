@@ -366,12 +366,9 @@ if (!empty($project_scope)) {
     }
 }
 
-
-
-
 // When asset was created in the past and now we want to edit it. We should get the attachments obj, mtl
 if($asset_id != null) {
-    
+
     // Get post
     $asset_post    = get_post($asset_id);
     
@@ -386,91 +383,20 @@ if($asset_id != null) {
     
     $curr_font = str_replace("+", " ", $fonts);
     
- 
-    
-    //OBJ
-    if (array_key_exists('wpunity_asset3d_obj', $assetpostMeta)) {
-        
-        $mtlpost = get_post($assetpostMeta['wpunity_asset3d_mtl'][0]);
-        $objpost = get_post($assetpostMeta['wpunity_asset3d_obj'][0]);
-        $mtl_file_name = basename($mtlpost->guid);
-        $obj_file_name = basename($objpost->guid);
-        $path_url = pathinfo($mtlpost->guid)['dirname'];
-        ?>
-            <script>
-                mtl_file_name="<?php echo $mtl_file_name; ?>";
-                obj_file_name="<?php echo $obj_file_name; ?>";
-                path_url="<?php echo $path_url.'/'; ?>";
-            </script>
-        <?php
-        // PDB
-    } else if (array_key_exists('wpunity_asset3d_pdb', $assetpostMeta)){
-        $pdbpost = get_post($assetpostMeta['wpunity_asset3d_pdb'][0]);
-        $pdb_file_name = $pdbpost->guid;
-        ?>
-        
-        <script>
-            var pdb_file_name="<?php echo $pdb_file_name; ?>";
-        </script>
-        
-        <?php
-        
-        // GLB
-    } else if (array_key_exists('wpunity_asset3d_glb', $assetpostMeta)){
-        $glbpost = get_post($assetpostMeta['wpunity_asset3d_glb'][0]);
-        $glb_file_name = $glbpost->guid;
-        ?>
-        
-        <script>
-            var glb_file_name="<?php echo $glb_file_name;?>";
-        </script>
-        
-        <?php
-        // FBX
-    } else if (array_key_exists('wpunity_asset3d_fbx', $assetpostMeta)) {
-        
-        // Get texture attachments of post
-        $args = array(
-            'posts_per_page' => 100,
-            'order'          => 'DESC',
-            'post_mime_type' => 'image',
-            'post_parent'    => $asset_id,
-            'post_type'      => 'attachment'
-        );
-        
-        $attachments_array =  get_children( $args,OBJECT );  //returns Array ( [$image_ID].
-        
-        // Add texture urls to a string separated by |
-        $textures_fbx_string_connected = '';
-        
-        foreach ($attachments_array as $k){
-            $url = $k->guid;
-            
-            // ignore screenshot attachment
-            if (!strpos($url, 'texture')) {
-                continue;
-            }
-            
-            $textures_fbx_string_connected .= $url.'|';
-        }
-        
-        // remove the last separator
-        $textures_fbx_string_connected = trim($textures_fbx_string_connected, "|");
-        
-        $fbxpost = get_post($assetpostMeta['wpunity_asset3d_fbx'][0]);
-        $fbx_file_name = basename($fbxpost->guid);
-        $path_url = pathinfo($fbxpost->guid)['dirname'];
-        
-        ?>
-            <script>
-                fbx_file_name="<?php echo $fbx_file_name;    ?>";
-                path_url ="<?php echo $path_url.'/';  ?>";
-                textures_fbx_string_connected = "<?php echo $textures_fbx_string_connected; ?>";
-            </script>
-        <?php
-    }
-    
-    
+    $asset_3d_files = get_3D_model_files($assetpostMeta, $asset_id);
+    ?>
+
+    <script>
+        path_url     = "<?php echo $asset_3d_files['path'].'/'; ?>";
+        mtl_file_name= "<?php echo $asset_3d_files['mtl']; ?>";
+        obj_file_name= "<?php echo $asset_3d_files['obj']; ?>";
+        pdb_file_name= "<?php echo $asset_3d_files['pdb']; ?>";
+        glb_file_name= "<?php echo $asset_3d_files['glb'];?>";
+        fbx_file_name= "<?php echo $asset_3d_files['fbx'];    ?>";
+        textures_fbx_string_connected = "<?php echo $asset_3d_files['texturesFbx']; ?>";
+    </script>
+
+    <?php
 }
 //--------------------------------------------------------
 get_header();
@@ -537,7 +463,7 @@ if($asset_id != null) {
 
 <div id="wrapper_3d_inner" class="asset_editor_3dpanel">
     <!--   Progress bar -->
-    <div id="previewProgressSlider"  class="CenterContents">
+    <div id="previewProgressSlider" class="CenterContents">
         <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">
             Preview of 3D Model</h6>
         <div class="progressSlider">
@@ -885,7 +811,7 @@ if($asset_id != null) {
                             $attachment_file = $attachment_post->guid;
                             
                             if(strpos($attachment_file, "mp3" )!==false || strpos($attachment_file, "wav" )!==false){
-                                echo $attachment_file; ?>
+                                ?>
                                 <audio controls loop preload="auto" id ='audioFile'>
                                     <source src="<?php echo $attachment_file;?>" type="audio/mp3">
                                     <source src="<?php echo $attachment_file;?>" type="audio/wav">
@@ -1319,7 +1245,7 @@ if($asset_id != null) {
     generateQRcode();
     
     
-    // Current  Slide index (carousel top)
+    
     let audio_file = document.getElementById( 'audioFile' );
 
     let isEditMode = 0;

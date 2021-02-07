@@ -1421,3 +1421,7 @@ video {
 #previewProgressLabel{
     position: absolute; left:0; right: 0; top: 26px;color:white !important; mix-blend-mode: difference;
 }
+
+#previewProgressLabelSingle{
+    left:0; right: 0; top: 26px;color:white !important; mix-blend-mode: difference;
+}

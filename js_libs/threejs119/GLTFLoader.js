@@ -897,8 +897,6 @@ THREE.GLTFLoader = ( function () {
         this.content = null;
         this.body = null;
 
-        console.log(data);
-
         var headerView = new DataView( data, 0, BINARY_EXTENSION_HEADER_LENGTH );
 
         this.header = {

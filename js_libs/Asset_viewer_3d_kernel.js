@@ -27,7 +27,9 @@ class Asset_viewer_3d_kernel {
                 pathUrl = null, mtlFilename = null,
                 objFilename= null, pdbFileContent = null,
                 fbxFilename = null, glbFilename = null,
-                textures_fbx_string_connected = null) {
+                textures_fbx_string_connected = null, statsSwitch = true) {
+
+        this.statsSwitch = statsSwitch;
 
         this.setZeroVars()
         this.back_3d_color = back_3d_color;
@@ -41,9 +43,11 @@ class Asset_viewer_3d_kernel {
         this.canvas = canvasToBindTo;
         this.scene = new THREE.Scene();
 
-        this.stats = new Stats();
-        document.getElementById( 'wrapper_3d_inner' ).appendChild( this.stats.dom );
-        this.stats.dom.style.removeProperty("left");
+        if (this.statsSwitch) {
+            this.stats = new Stats();
+            document.getElementById('wrapper_3d_inner').appendChild(this.stats.dom);
+            this.stats.dom.style.removeProperty("left");
+        }
 
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
@@ -164,7 +168,9 @@ class Asset_viewer_3d_kernel {
         if (!this.renderer.autoClear)
             this.renderer.clear();
 
-        this.stats.update();
+        if (this.statsSwitch) {
+            this.stats.update();
+        }
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
 
@@ -205,8 +211,6 @@ class Asset_viewer_3d_kernel {
      * Reading from  files on client side for OBJ, FBX, and GLB
      */
     checkerCompleteReading( whocalls ){
-
-        console.log("checkerCompleteReading by", whocalls)
 
         if ((this.nObj === 1 && this.objFileContent !== '') ||
             (this.nFbx === 1 && this.FbxBuffer !== '') || (this.nGlb === 1 && this.GlbBuffer !== '') ){
@@ -290,8 +294,6 @@ class Asset_viewer_3d_kernel {
                     texturesStreams = '';
 
                 console.log("Ignite reading fbx");
-
-                console.log("texturesStreams", texturesStreams);
 
                 this.loadFbxStream(this.FbxBuffer, texturesStreams);
 
@@ -654,8 +656,6 @@ class Asset_viewer_3d_kernel {
                 bond2.position.copy(start);
                 bond2.position.lerp(end, 0.75);
                 scope.scene.getChildByName('root').add(bond2);
-
-
             }
 
             // zoom to molecule
@@ -771,6 +771,8 @@ class Asset_viewer_3d_kernel {
                 function ( xhr ) {
 
                     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                    document.getElementById('previewProgressLabel').innerHTML =
+                        Math.round( xhr.loaded / xhr.total * 100 ) + '% loaded';
 
                 },
                 // called when loading has errors
@@ -834,11 +836,9 @@ class Asset_viewer_3d_kernel {
                         //onObjProgressLoad
                         function (xhr) {
 
-                            //console.log(xhr);
-                            document.getElementById('previewProgressLabel').innerHTML = Math.round(xhr.loaded / 1000) + "KB";
-                            // if (xhr.lengthComputable) {
-                            //
-                            // }
+                            document.getElementById('previewProgressLabel').innerHTML =
+                                Math.round( xhr.loaded / xhr.total * 100 ) + '% loaded';
+                                                  //Math.round(xhr.loaded / 1000) + "KB";
                         },
                         //onObjErrorLoad
                         function (xhr) {
