@@ -314,21 +314,25 @@ function wpunity_get_user_game_projects($user_id, $isUserAdmin){
     return array_unique ($games_slugs);
 }
 
-function get_games_assets($games_slugs){
-    
+function get_assets($games_slugs){
+	
+	
+	
     $allAssets = [];
     
     $queryargs = array(
         'post_type' => 'wpunity_asset3d',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'wpunity_asset3d_pgame',
-                'field' => 'slug',
-                'terms' => $games_slugs
-            )
-        )
+        'posts_per_page' => -1
     );
+    
+    if ($games_slugs){
+    	$queryargs['tax_query'] = array(
+			array(
+				'taxonomy' => 'wpunity_asset3d_pgame',
+				'field' => 'slug',
+				'terms' => $games_slugs
+			));
+	}
     
     $custom_query = new WP_Query( $queryargs );
     

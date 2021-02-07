@@ -93,7 +93,7 @@ get_header();
 // Display Login name at right
 if($isUserloggedIn){ ?>
     <span style="float:right; margin-right:5px; font-family: 'Comic Sans MS'; display:inline-table;margin-top:10px">Welcome,
-        <a href="https://heliosvr.mklab.iti.gr/account/" style="color:dodgerblue">
+        <a href="<?php echo home_url(); ?>/account/" style="color:dodgerblue">
               <?php echo $login_username;?>
         </a>
     </span>
@@ -121,7 +121,7 @@ if(isset($_GET['wpunity_project_id'])) {
     $user_games_slugs = wpunity_get_user_game_projects($user_id, $isUserAdmin);
 }
 
-$assets = get_games_assets($user_games_slugs);
+$assets = get_assets($user_games_slugs);
 
 if (!$isUserloggedIn)
     $link_to_add = wp_login_url();
