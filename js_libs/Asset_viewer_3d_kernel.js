@@ -357,6 +357,7 @@ class Asset_viewer_3d_kernel {
         this.labelRenderer.domElement.style.textShadow = "-1px -1px #000, 1px -1px #000, -1px 1px  #000, 1px 1px #000";
         this.labelRenderer.domElement.style.pointerEvents = 'none';
 
+
         // add label renderer
         this.canvasLabelsToBindTo.appendChild(this.labelRenderer.domElement);
 

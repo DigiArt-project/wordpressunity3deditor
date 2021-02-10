@@ -196,6 +196,8 @@ function wpunity_register_styles() {
     wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.css' );
 	
 	wp_register_style( 'wpheliosvr_asseteditor_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpheliosvr_asseteditor.css' );
+	
+	wp_register_style( 'wpvrodos_widgets_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpvrodos_widgets.css' );
  
 	
 	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.

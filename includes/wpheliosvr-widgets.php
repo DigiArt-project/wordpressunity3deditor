@@ -2,6 +2,10 @@
 
 // Load Scripts
 function loadAsset3Dfunctions() {
+    
+    // Stylesheet
+    wp_enqueue_style('wpvrodos_widgets_stylesheet');
+    
     // Load single asset kernel
     // Three js : for simple rendering
     wp_enqueue_script('wpunity_scripts');
@@ -68,23 +72,26 @@ class wpheliosvr_3d_widget extends WP_Widget {
     // Widget Backend
     public function form( $instance ) {
         
-        $title = isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : __( 'New title', 'wpheliosvr_3d_widget_domain');
+        $title = isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : '';
         $asset_id =  isset( $instance[ 'asset_id' ] ) ? $instance[ 'asset_id' ] : __( 'Insert asset id', 'wpheliosvr_3d_widget_domain' );
         $cameraPositionX = isset( $instance[ 'cameraPositionX' ] ) ?  $instance[ 'cameraPositionX' ] : 0;
         $cameraPositionY = isset( $instance[ 'cameraPositionY' ] ) ?  $instance[ 'cameraPositionY' ] : 0;
         $cameraPositionZ = isset( $instance[ 'cameraPositionZ' ] ) ?  $instance[ 'cameraPositionZ' ] : 0;
-        $canvasWidth = isset( $instance[ 'canvasWidth' ] )? $instance[ 'canvasWidth' ] : '300px';
-        $canvasHeight = isset( $instance[ 'canvasHeight' ] )? $instance[ 'canvasHeight' ] : '200px';
+        $canvasWidth = isset( $instance[ 'canvasWidth' ] )? $instance[ 'canvasWidth' ] : '100%';
+        $canvasHeight = isset( $instance[ 'canvasHeight' ] )? $instance[ 'canvasHeight' ] : '100%';
     
         $canvasBackgroundColor = isset( $instance[ 'canvasBackgroundColor' ] )? $instance[ 'canvasBackgroundColor' ] : 'transparent';
         
         $enableZoom = isset( $instance[ 'enableZoom' ] )? $instance[ 'enableZoom' ] : 'true';
     
         $enablePan = isset( $instance[ 'enableZoom' ] )? $instance[ 'enablePan' ] : 'false';
+    
+        $canvasPosition = isset( $instance[ 'canvasPosition' ] )? $instance[ 'canvasPosition' ] : 'relative';
         
-        
-        
-        
+        $canvasTop = isset( $instance[ 'canvasTop' ] )? $instance[ 'canvasTop' ] : '';
+        $canvasBottom = isset( $instance[ 'canvasBottom' ] )? $instance[ 'canvasBottom' ] : '';
+        $canvasLeft = isset( $instance[ 'canvasLeft' ] )? $instance[ 'canvasLeft' ] : '';
+        $canvasRight = isset( $instance[ 'canvasRight' ] )? $instance[ 'canvasRight' ] : '';
         
         // Widget admin form
         ?>
@@ -244,6 +251,72 @@ class wpheliosvr_3d_widget extends WP_Widget {
             />
         </p>
 
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'canvasPosition' ); ?>">
+                <?php _e( 'Canvas position (relative, absolute, etc.):' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'canvasPosition' ); ?>"
+                   name="<?php echo $this->get_field_name( 'canvasPosition' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $canvasPosition ); ?>"
+            />
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'canvasTop' ); ?>">
+                <?php _e( 'Canvas top, e.g. 5px:' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'canvasTop' ); ?>"
+                   name="<?php echo $this->get_field_name( 'canvasTop' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $canvasTop ); ?>"
+            />
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'canvasBottom' ); ?>">
+                <?php _e( 'Canvas bottom, e.g. 5px:' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'canvasBottom' ); ?>"
+                   name="<?php echo $this->get_field_name( 'canvasBottom' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $canvasBottom ); ?>"
+            />
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'canvasLeft' ); ?>">
+                <?php _e( 'Canvas left, e.g. 5px:' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'canvasLeft' ); ?>"
+                   name="<?php echo $this->get_field_name( 'canvasLeft' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $canvasLeft ); ?>"
+            />
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'canvasRight' ); ?>">
+                <?php _e( 'Canvas right, e.g. 5px:' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'canvasRight' ); ?>"
+                   name="<?php echo $this->get_field_name( 'canvasRight' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $canvasRight ); ?>"
+            />
+        </p>
+
         <?php
     }
     
@@ -263,7 +336,13 @@ class wpheliosvr_3d_widget extends WP_Widget {
         $canvasBackgroundColor = apply_filters( 'widget_canvasBackgroundColor', $instance['canvasBackgroundColor'] );
         $enablePan = apply_filters( 'widget_enablePan', $instance['enablePan'] );
         $enableZoom = apply_filters( 'widget_enableZoom', $instance['enableZoom'] );
-
+    
+        $canvasPosition = apply_filters( 'widget_canvasPosition', $instance['canvasPosition'] );
+    
+        $canvasTop = apply_filters( 'widget_canvasTop', $instance['canvasTop'] );
+        $canvasBottom = apply_filters( 'widget_canvasTop', $instance['canvasBottom'] );
+        $canvasLeft = apply_filters( 'widget_canvasTop', $instance['canvasLeft'] );
+        $canvasRight = apply_filters( 'widget_canvasTop', $instance['canvasRight'] );
         
         
         // before and after widget arguments are defined by themes
@@ -297,7 +376,15 @@ class wpheliosvr_3d_widget extends WP_Widget {
         $attachment_audio_file = get_post( $audioID )->guid;
         ?>
 
-        <div id="wrapper_3d_inner" class="">
+        <div id="" class=""
+             style="position:<?php
+             echo $canvasPosition;?>; width:<?php
+             echo $canvasWidth;?>; height:<?php
+             echo $canvasHeight;?>; top:<?php
+             echo $canvasTop;?>; bottom:<?php
+             echo $canvasBottom;?>; left:<?php
+             echo $canvasLeft;?>; right:<?php
+             echo $canvasRight;?>;">
 
             <!--   Progress bar -->
             <div id="previewProgressSliderDiv" class="CenterContents"
@@ -311,14 +398,15 @@ class wpheliosvr_3d_widget extends WP_Widget {
             </div>
             
             <!-- LabelRenderer of Canvas -->
-            <div id="divCanvasLabels" style=""></div>
+            <div id="divCanvasLabels" style="position:relative; width:100%;">
 
-            <!-- 3D Canvas -->
-            <canvas id="divCanvas"
-                    style="background: transparent; position: absolute; top:0; height: <?php echo $canvasHeight;?>; width:<?php echo $canvasWidth;?>;" >3D canvas</canvas>
+                <!-- 3D Canvas -->
+                <canvas id="divCanvas" style="background: <?php $canvasBackgroundColor; ?>; width:100%; position:relative"></canvas>
 
-            <a href="#" class="animationButtonDiv" id="animButtonDiv" onclick="asset_viewer_3d_kernel.playStopAnimation();">Animation 1</a>
+                <!--suppress HtmlUnknownAnchorTarget -->
+                <a href="#/" class="animationButton" id="animButtonDiv" onclick="asset_viewer_3d_kernel.playStopAnimation();">Animation 1</a>
 
+            </div>
 
         </div>
     
@@ -353,11 +441,8 @@ class wpheliosvr_3d_widget extends WP_Widget {
             textures_fbx_string_connected = "<?php echo $asset_3d_files['texturesFbx']; ?>";
             back_3d_color = "<?php echo $back_3d_color; ?>";
             let audio_file = document.getElementById( 'audioFile' );
-        
-            console.log("canvasBackgroundColor", canvasBackgroundColor);
-            console.log("enableZoom", enableZoom);
-            console.log("enablePan", enablePan);
-            
+
+
         
             var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel(
                 document.getElementById( 'divCanvas' ),
@@ -375,7 +460,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
                 glb_file_name,
                 textures_fbx_string_connected,
                 false,
-                canvasBackgroundColor === 'transparent' ? true : false,
+                canvasBackgroundColor === 'transparent',
                 !enablePan, // lock
                 enableZoom, // enableZoom
                 cameraPositionX,cameraPositionY,cameraPositionZ);
@@ -397,7 +482,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
     public function update( $new_instance, $old_instance ) {
         $instance = array();
         
-        $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'No title';
+        $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
         
         $instance['asset_id'] = ( ! empty( $new_instance['asset_id'] ) ) ? strip_tags( $new_instance['asset_id'] ) : '';
         
@@ -411,10 +496,10 @@ class wpheliosvr_3d_widget extends WP_Widget {
                                                strip_tags( $new_instance['cameraPositionZ'] ) : '0';
     
         $instance['canvasWidth'] = ( ! empty( $new_instance['canvasWidth'] ) ) ?
-            strip_tags( $new_instance['canvasWidth'] ) : '300px';
+            strip_tags( $new_instance['canvasWidth'] ) : '100%';
     
         $instance['canvasHeight'] = ( ! empty( $new_instance['canvasHeight'] ) ) ?
-            strip_tags( $new_instance['canvasHeight'] ) : '200px';
+            strip_tags( $new_instance['canvasHeight'] ) : '100%';
     
         $instance['canvasBackgroundColor'] = ( ! empty( $new_instance['canvasBackgroundColor'] ) ) ?
             strip_tags( $new_instance['canvasBackgroundColor'] ) : 'transparent';
@@ -424,8 +509,19 @@ class wpheliosvr_3d_widget extends WP_Widget {
     
         $instance['enablePan'] = ( ! empty( $new_instance['enablePan'] ) ) ?
             strip_tags( $new_instance['enablePan'] ) : 'false';
+    
+        $instance['canvasPosition'] = ( ! empty( $new_instance['canvasPosition'] ) ) ?
+            strip_tags( $new_instance['canvasPosition'] ) : 'relative';
+    
+    
         
         
+        $varNames = ['canvasTop','canvasBottom','canvasLeft','canvasRight'];
+
+        for ($i=0; $i<count($varNames); $i++){
+            $instance[$varNames[$i]] = ( ! empty( $new_instance[$varNames[$i]] ) ) ?
+                strip_tags( $new_instance[$varNames[$i]] ) : '0';
+        }
         
         
         return $instance;
