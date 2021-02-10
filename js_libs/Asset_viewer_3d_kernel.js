@@ -23,16 +23,42 @@ class Asset_viewer_3d_kernel {
     }
 
 
-    constructor(canvasToBindTo, back_3d_color, audioElement,
+    constructor(canvasToBindTo,
+                canvasLabelsToBindTo,
+                animationButton,
+                previewProgressLabel,
+                previewProgressLine,
+                back_3d_color, audioElement,
                 pathUrl = null, mtlFilename = null,
                 objFilename= null, pdbFileContent = null,
                 fbxFilename = null, glbFilename = null,
-                textures_fbx_string_connected = null, statsSwitch = true) {
+                textures_fbx_string_connected = null,
+                statsSwitch = true,
+                isBackGroundNull = false,
+                lockTranslation = false,
+                enableZoom = true,
+                cameraPosX = 0, cameraPosY = 0, cameraPosZ = -100) {
 
         this.statsSwitch = statsSwitch;
 
+
+        console.log("isBackGroundNull", isBackGroundNull);
+
+        console.log(previewProgressLabel);
+
+        this.canvasToBindTo= canvasToBindTo;
+        this.animationButton = animationButton;
+        this.canvasLabelsToBindTo = canvasLabelsToBindTo;
+        this.previewProgressLabel = previewProgressLabel;
+        this.previewProgressLine = previewProgressLine;
+
+
+
+
         this.setZeroVars()
         this.back_3d_color = back_3d_color;
+
+        this.isBackGroundNull = isBackGroundNull;
 
         this.FbxBuffer = '';
         this.GlbBuffer = '';
@@ -40,7 +66,7 @@ class Asset_viewer_3d_kernel {
         this.path_url = null;
         this.mtl_file_name = this.obj_file_name = this.pdb_file_name = this.fbx_file_name = this.glb_file_name;
 
-        this.canvas = canvasToBindTo;
+        this.canvas = this.canvasToBindTo;
         this.scene = new THREE.Scene();
 
         if (this.statsSwitch) {
@@ -52,8 +78,13 @@ class Asset_viewer_3d_kernel {
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
-            logarithmicDepthBuffer: true
+            logarithmicDepthBuffer: true,
+            alpha: true
         });
+
+        //this.renderer.setClearAlpha(1);
+        this.renderer.setClearColor(0x000000,0);
+
 
         this.camera = null;
         this.listener = null;
@@ -64,7 +95,7 @@ class Asset_viewer_3d_kernel {
         this.recalcAspectRatio();
 
         this.cameraDefaults = {
-            posCamera: new THREE.Vector3(0.0, 175.0, 500.0),
+            posCamera: new THREE.Vector3(cameraPosX, cameraPosY, cameraPosZ),
             posCameraTarget: new THREE.Vector3(0, 0, 0),
             near: 0.01,
             far: 10000,
@@ -80,11 +111,15 @@ class Asset_viewer_3d_kernel {
         // Trackball or OrbitControls controls
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
+        //this.scene.add(new THREE.AxisHelper(5,5,5));
 
         this.controls.zoomSpeed = 1.02;
         //this.controls.dynamicDampingFactor = 0.3;
         //this.controls.dynamicDampingFactor = 0;
         //this.controls.staticMoving = true;
+
+        this.controls.enablePan = !lockTranslation;
+        this.controls.enableZoom = enableZoom;
 
         // For the animation
         this.clock = new THREE.Clock();
@@ -186,7 +221,7 @@ class Asset_viewer_3d_kernel {
         this.addControlEventListeners();
         this.resizeDisplayGL();
         this.render();
-        document.getElementById('previewProgressLabel').style.visibility = "hidden";
+        this.previewProgressLabel.style.visibility = "hidden";
     }
 
     // Start auto loop (when animation)
@@ -308,9 +343,11 @@ class Asset_viewer_3d_kernel {
     }
 
     // Initialize Scene
-    initGL() {
+    initGL(){
 
-        this.scene.background = new THREE.Color(this.back_3d_color);
+
+        this.scene.background = this.isBackGroundNull ? null : new THREE.Color(this.back_3d_color);
+
 
         // - Label renderer -
         this.labelRenderer = new THREE.CSS2DRenderer();
@@ -321,7 +358,7 @@ class Asset_viewer_3d_kernel {
         this.labelRenderer.domElement.style.pointerEvents = 'none';
 
         // add label renderer
-        document.getElementById("previewCanvasLabels").appendChild(this.labelRenderer.domElement);
+        this.canvasLabelsToBindTo.appendChild(this.labelRenderer.domElement);
 
 
         // Add audio listener to the camera
@@ -381,8 +418,8 @@ class Asset_viewer_3d_kernel {
         let completedLoading = function () {
             console.log('Loading complete for OBJ WW!');
 
-            document.getElementById('previewProgressSliderLine').style.width = '0';
-            document.getElementById('previewProgressLabel').innerHTML = "";
+            this.previewProgressLine.style.width = '0';
+            this.previewProgressLabel.innerHTML = "";
 
             scope.zoomer(scope.scene.getChildByName('root'));
 
@@ -417,7 +454,7 @@ class Asset_viewer_3d_kernel {
         this.setZeroVars();
 
         // Hide animation button
-        document.getElementById("animButton1").style.display = "none";
+        this.animationButton.style.display = "none";
 
         // Clear animations
         this.mixers = [];
@@ -463,11 +500,11 @@ class Asset_viewer_3d_kernel {
             this.action = fbxObject.mixer.clipAction( fbxObject.animations[0] );
 
             // Display button to start animation inside the Asset 3D previewer
-            document.getElementById("animButton1").style.display = "inline-block";
+            this.animationButton.style.display = "inline-block";
 
             // No-animation
         } else {
-            document.getElementById("animButton1").style.display = "none";
+            this.animationButton.style.display = "none";
         }
 
         // FBX is added to root
@@ -514,12 +551,12 @@ class Asset_viewer_3d_kernel {
                     scope.action = glbMixer.clipAction( gltf.animations[0] );
 
                     // Display button to start animation inside the Asset 3D previewer
-                    document.getElementById("animButton1").style.display = "inline-block";
+                    scope.animationButton.style.display = "inline-block";
 
                 } else {
 
                     // Display button to start animation inside the Asset 3D previewer
-                    document.getElementById("animButton1").style.display = "none";
+                    scope.animationButton.style.display = "none";
 
                 }
 
@@ -750,12 +787,12 @@ class Asset_viewer_3d_kernel {
                         scope.action = glbmixer.clipAction(gltf.animations[0]);
 
                         // Display button to start animation inside the Asset 3D previewer
-                        document.getElementById("animButton1").style.display = "inline-block";
+                        scope.animationButton.style.display = "inline-block";
 
                     } else {
 
                         // Display button to start animation inside the Asset 3D previewer
-                        document.getElementById("animButton1").style.display = "none";
+                        scope.animationButton.style.display = "none";
 
                     }
 
@@ -770,8 +807,7 @@ class Asset_viewer_3d_kernel {
                 // called while loading is progressing
                 function ( xhr ) {
 
-                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-                    document.getElementById('previewProgressLabel').innerHTML =
+                    scope.previewProgressLabel.innerHTML =
                         Math.round( xhr.loaded / xhr.total * 100 ) + '% loaded';
 
                 },
@@ -836,7 +872,7 @@ class Asset_viewer_3d_kernel {
                         //onObjProgressLoad
                         function (xhr) {
 
-                            document.getElementById('previewProgressLabel').innerHTML =
+                            this.previewProgressLabel.innerHTML =
                                 Math.round( xhr.loaded / xhr.total * 100 ) + '% loaded';
                                                   //Math.round(xhr.loaded / 1000) + "KB";
                         },
@@ -933,34 +969,36 @@ class Asset_viewer_3d_kernel {
     zoomer(towhatObj){ // FBX or OBJ
 
 
-        let sphere = this.computeSceneBoundingSphereAll( towhatObj );
+        if (this.controls.enableZoom) {
 
-        // translate object to the center
-        // towhatObj.traverse( function (object) {
-        //     if (object instanceof THREE.Mesh) {
-        //         //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-        //         //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
-        //     }
-        // });
+            let sphere = this.computeSceneBoundingSphereAll(towhatObj);
 
-        // let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-        // console.log("Estimated center", centerRadius[0]);
-        // console.log("Estimated radius", centerRadius[1]);
-        //
-        // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-        // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-        // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-        // sphereBall.position.copy( centerRadius[0] );
-        // sphereBall.name = "Center Ball"
-        // scope.scene.getChildByName('root').add( sphereBall );
+            // translate object to the center
+            // towhatObj.traverse( function (object) {
+            //     if (object instanceof THREE.Mesh) {
+            //         //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
+            //         //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
+            //     }
+            // });
+
+            // let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
+            // console.log("Estimated center", centerRadius[0]);
+            // console.log("Estimated radius", centerRadius[1]);
+            //
+            // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
+            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
+            // sphereBall.position.copy( centerRadius[0] );
+            // sphereBall.name = "Center Ball"
+            // scope.scene.getChildByName('root').add( sphereBall );
 
 
-
-        let totalRadius = sphere[1];
-        this.controls.minDistance = 0.001*totalRadius;
-        this.controls.maxDistance = 13*totalRadius;
-        this.resizeDisplayGL();
-        this.controls.update();
+            let totalRadius = sphere[1];
+            this.controls.minDistance = 0.02 * totalRadius;
+            this.controls.maxDistance = 13 * totalRadius;
+            this.resizeDisplayGL();
+            this.controls.update();
+        }
     }
 
     // Resize Renderer and Label Renderer

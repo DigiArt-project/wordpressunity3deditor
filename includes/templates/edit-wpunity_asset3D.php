@@ -462,6 +462,7 @@ if($asset_id != null) {
 ?>
 
 <div id="wrapper_3d_inner" class="asset_editor_3dpanel">
+    
     <!--   Progress bar -->
     <div id="previewProgressSlider" class="CenterContents">
         <h6 id="previewProgressLabel" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">
@@ -1268,6 +1269,10 @@ if($asset_id != null) {
     
     // ------- Class to load 3D model ---------
     var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ),
+                                                             document.getElementById( 'previewCanvasLabels' ),
+                                                             document.getElementById('animButton1'),
+                                                             document.getElementById('previewProgressLabel'),
+                                                             document.getElementById('previewProgressSliderLine'),
                                                              back_3d_color,
                                                              audio_file,
                                                              path_url, // OBJ textures path
@@ -1276,7 +1281,11 @@ if($asset_id != null) {
                                                              pdb_file_name,
                                                              fbx_file_name,
                                                              glb_file_name,
-                                                             textures_fbx_string_connected);
+                                                             textures_fbx_string_connected,
+                                                             true,
+                                                             false,
+                                                             false,
+                                                                true);
 
     // Load existing 3D models
     // asset_viewer_3d_kernel.loader_asset_exists( path_url, mtl_file_name, obj_file_name, pdb_file_name, fbx_file_name,
