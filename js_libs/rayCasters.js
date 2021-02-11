@@ -12,6 +12,9 @@ function raycasterSetter(event){
     mouse.x =   ( (event.clientX - jQuery('#vr_editor_main_div').offset().left + jQuery(window).scrollLeft()) / envir.container_3D_all.clientWidth ) * 2 - 1;
     mouse.y = - ( (event.clientY - jQuery('#vr_editor_main_div').offset().top + jQuery(window).scrollTop()) / envir.container_3D_all.clientHeight ) * 2 + 1;
 
+
+
+
     // Main Raycast object
     let raycasterPick = new THREE.Raycaster();
 

@@ -23,6 +23,8 @@ class Asset_viewer_3d_kernel {
     }
 
 
+
+
     constructor(canvasToBindTo,
                 canvasLabelsToBindTo,
                 animationButton,
@@ -86,6 +88,34 @@ class Asset_viewer_3d_kernel {
         this.renderer.setClearColor(0x000000,0);
 
 
+        this.renderer.domElement.addEventListener("click", onclick, true);
+        let selectedObject;
+
+
+        let scope = this;
+        function onclick(event) {
+            let mouse = new THREE.Vector2();
+
+            mouse.x =   ( (event.clientX - jQuery('#divCanvas').offset().left + jQuery(window).scrollLeft()) /
+                scope.canvasToBindTo.clientWidth ) * 2 - 1;
+            mouse.y = - ( (event.clientY - jQuery('#divCanvas').offset().top + jQuery(window).scrollTop()) /
+                scope.canvasToBindTo.clientHeight ) * 2 + 1;
+
+            let raycaster = new THREE.Raycaster();
+
+            raycaster.setFromCamera(mouse, scope.camera);
+
+            let intersects = raycaster.intersectObjects(scope.scene.children[0].children); //array
+
+            //scope.raylineShow(raycaster);
+
+            // if (intersects.length > 0) {
+            //     selectedObject = intersects[0];
+            //     console.log(selectedObject);
+            // }
+        }
+
+
         this.camera = null;
         this.listener = null;
 
@@ -131,6 +161,13 @@ class Asset_viewer_3d_kernel {
         this.scene.add( root );
 
 
+        // const size = 10;
+        // const divisions = 10;
+        //
+        // const gridHelper = new THREE.GridHelper( size, divisions );
+        // this.scene.add( gridHelper );
+
+
         // - OBJ Specific - Setup loader
         try {
             this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
@@ -149,6 +186,41 @@ class Asset_viewer_3d_kernel {
             textures_fbx_string_connected);
 
     }
+
+
+    raylineShow(raycasterPick){
+
+        let geolinecast = new THREE.Geometry();
+
+
+        let c = 1000;
+        geolinecast.vertices.push(raycasterPick.ray.origin,
+            new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
+                              (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
+                              (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
+        );
+
+        let myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
+        myBulletLine.name = 'rayLine';
+
+        this.scene.add(myBulletLine);
+
+        // This will force scene to update and show the line
+        this.camera.position.x += 0.1;
+
+        let scope = this;
+        setTimeout(function () {
+             scope.camera.position.x -= 0.2;
+         }, 1500);
+
+        // Remove the line
+        // setTimeout(function () {
+        //     scope.scene.remove(scope.scene.getObjectByName('rayLine'));
+        // }, 3500);
+
+
+    }
+
 
     // Add OrbitControl listeners to render on demand
     addControlEventListeners(){
@@ -461,7 +533,8 @@ class Asset_viewer_3d_kernel {
         this.mixers = [];
 
         // Clear any GLB, FBX, PDB or OBJ
-        this.scene.getObjectByName('root').clear(); // remove all children of root
+        if (this.scene.getObjectByName('root').clear)
+            this.scene.getObjectByName('root').clear(); // remove all children of root
     }
 
     /* OBJ Loader */
@@ -995,8 +1068,8 @@ class Asset_viewer_3d_kernel {
 
 
             let totalRadius = sphere[1];
-            this.controls.minDistance = 0.02 * totalRadius;
-            this.controls.maxDistance = 13 * totalRadius;
+            //this.controls.minDistance = 0.02 * totalRadius;
+            //this.controls.maxDistance = 13 * totalRadius;
             this.resizeDisplayGL();
             this.controls.update();
         }
