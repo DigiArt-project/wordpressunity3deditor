@@ -20,6 +20,7 @@ class Asset_viewer_3d_kernel {
         this.nGif = 0;
         this.nGlb = 0;
         this.FbxBuffer = '';
+        this.texturesBuffer = [];
     }
 
 
@@ -496,9 +497,9 @@ class Asset_viewer_3d_kernel {
         let completedLoading = function () {
             console.log('Loading complete for OBJ WW!');
 
-            if (this.previewProgressLabel) {
-                this.previewProgressLine.style.width = '0';
-                this.previewProgressLabel.innerHTML = "";
+            if (scope.previewProgressLabel) {
+                scope.previewProgressLine.style.width = '0';
+                scope.previewProgressLabel.innerHTML = "";
             }
 
             scope.zoomer(scope.scene.getChildByName('root'));
@@ -966,6 +967,7 @@ class Asset_viewer_3d_kernel {
 
             } else if (fbxFilename){
 
+
                 console.log("Loading from existing resource","FBX");
 
                 // split texture string into each texture
@@ -1026,8 +1028,55 @@ class Asset_viewer_3d_kernel {
 
                     xhr.onload = function (e) {
                         if (this.status === 200) {
-                            let file = new File([this.response], basename);
-                            file_reader_cortex(file, scope);
+
+                             let file = new File([this.response], basename);
+                             scope.file_reader_cortex2(file);
+
+                            // let type = file.name.split('.').pop();
+                            //
+                            // // set the reader
+                            // let reader = new FileReader();
+                            //
+                            // switch (type) {
+                            //     case 'fbx': scope.nFbx = 1; reader.readAsArrayBuffer(file); break;
+                            //     case 'jpg': reader.readAsDataURL(file);     break;
+                            //     case 'png': reader.readAsDataURL(file);     break;
+                            //     case 'gif': reader.readAsDataURL(file);     break;
+                            // }
+                            //
+                            //
+                            // // --- Read it ------------------------
+                            // reader.onload = (function(reader) {
+                            //     return function() {
+                            //
+                            //         let fileContent = reader.result ? reader.result : '';
+                            //
+                            //         let dec = new TextDecoder();
+                            //
+                            //         switch (type) {
+                            //             case 'fbx':
+                            //                 scope.FbxBuffer =  fileContent;
+                            //                 break;
+                            //             case 'jpg':
+                            //             case 'png':
+                            //             case 'gif':
+                            //                 scope.texturesBuffer[file.name] =  fileContent;
+                            //                 break;
+                            //         }
+                            //
+                            //         // Check if everything is loaded
+                            //         if ( type==='jpg' || type==='png' || type==='fbx' || type==='gif' ) {
+                            //
+                            //             console.log("TYPE", type + " " + file);
+                            //             scope.checkerCompleteReading( type );
+                            //         }
+                            //     };
+                            // })(reader);
+
+
+
+
+
                         }
                     };
 
@@ -1039,6 +1088,86 @@ class Asset_viewer_3d_kernel {
             }
         }
 
+    }
+
+
+    // File reader cortex
+    file_reader_cortex2(file){
+
+        let scope = this;
+
+        // Get the extension
+        let type = file.name.split('.').pop();
+
+        // set the reader
+        let reader = new FileReader();
+
+        switch (type) {
+            case 'pdb': this.nPdb = 1; reader.readAsText(file);        break;
+            case 'mtl': this.nMtl = 1; reader.readAsText(file);        break;
+            case 'obj': this.nObj = 1; reader.readAsArrayBuffer(file); break;
+            case 'fbx': this.nFbx = 1; reader.readAsArrayBuffer(file); break;
+            case 'glb': this.nGlb = 1; reader.readAsArrayBuffer(file); break;
+            case 'jpg': reader.readAsDataURL(file);     break;
+            case 'png': reader.readAsDataURL(file);     break;
+            case 'gif': reader.readAsDataURL(file);     break;
+        }
+
+        // --- Read it ------------------------
+        reader.onload = (function(reader) {
+            return function() {
+
+                let fileContent = reader.result ? reader.result : '';
+
+                let dec = new TextDecoder();
+
+                switch (type) {
+                    case 'mtl':
+                        // Replace quotes because they create a bug in input form
+                        document.getElementById('mtlFileInput').value = fileContent.replace(/'/g, "");
+                        break;
+                    case 'obj': document.getElementById('objFileInput').value = dec.decode(fileContent); break;
+                    case 'fbx':
+
+                        let x = document.createElement("INPUT");
+                        x.setAttribute("type", "hidden");
+                        x.setAttribute("id", "fbxFileInput");
+                        document.body.appendChild(x);
+
+                        document.getElementById('fbxFileInput').value = dec.decode(fileContent);
+                        scope.FbxBuffer =  fileContent;
+                        break;
+                    case 'glb':
+                        document.getElementById('glbFileInput').value = dec.decode(fileContent);
+                        scope.GlbBuffer =  fileContent;
+                        break;
+                    case 'pdb': document.getElementById('pdbFileInput').value = fileContent; break;
+                    case 'jpg':
+                    case 'png':
+                    case 'gif':
+                        let y = document.createElement("INPUT");
+                        y.setAttribute("type", "hidden");
+                        y.setAttribute("id", "textureFileInput");
+                        y.setAttribute("value", fileContent);
+                        y.setAttribute("name", "textureFileInput["+ file.name + "]");
+                        document.body.appendChild(y);
+
+                        // jQuery('#3dAssetForm').append(
+                        //     '<input type="hidden" name="textureFileInput['+file.name+
+                        //     ']" id="textureFileInput" value="' + fileContent + '" />');
+                        break;
+                }
+
+                // Check if everything is loaded
+                if ( type === 'mtl' || type==='obj' || type==='jpg' || type==='png' || type==='fbx' || type==='gif' || type==='glb') {
+
+                    console.log("TYPE", type + " " + file);
+                    scope.checkerCompleteReading( type );
+                }else if ( type==='pdb') {
+                    scope.loadMolecule(fileContent, "file_reader_cortex");
+                }
+            };
+        })(reader);
     }
 
 
