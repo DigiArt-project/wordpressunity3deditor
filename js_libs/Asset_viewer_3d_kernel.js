@@ -68,7 +68,7 @@ class Asset_viewer_3d_kernel {
         this.path_url = null;
         this.mtl_file_name = this.obj_file_name = this.pdb_file_name = this.fbx_file_name = this.glb_file_name;
 
-        this.canvas = this.canvasToBindTo;
+
         this.scene = new THREE.Scene();
 
         if (this.statsSwitch) {
@@ -78,7 +78,7 @@ class Asset_viewer_3d_kernel {
         }
 
         this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
+            canvas: this.canvasToBindTo,
             antialias: true,
             logarithmicDepthBuffer: true,
             alpha: true
@@ -96,23 +96,26 @@ class Asset_viewer_3d_kernel {
         function onclick(event) {
             let mouse = new THREE.Vector2();
 
-            mouse.x =   ( (event.clientX - jQuery('#divCanvas').offset().left + jQuery(window).scrollLeft()) /
+            mouse.x =   ( (event.clientX - scope.canvasToBindTo.getBoundingClientRect().left) /
                 scope.canvasToBindTo.clientWidth ) * 2 - 1;
-            mouse.y = - ( (event.clientY - jQuery('#divCanvas').offset().top + jQuery(window).scrollTop()) /
+            mouse.y = - ( (event.clientY - scope.canvasToBindTo.getBoundingClientRect().top ) /
                 scope.canvasToBindTo.clientHeight ) * 2 + 1;
+
 
             let raycaster = new THREE.Raycaster();
 
             raycaster.setFromCamera(mouse, scope.camera);
 
-            let intersects = raycaster.intersectObjects(scope.scene.children[0].children); //array
+            let intersects = raycaster.intersectObjects(scope.scene.children[0].children, true); //array
 
             //scope.raylineShow(raycaster);
 
-            // if (intersects.length > 0) {
-            //     selectedObject = intersects[0];
-            //     console.log(selectedObject);
-            // }
+             if (intersects.length > 0) {
+                 selectedObject = intersects[0];
+                 if ( scope.mixers.length > 0 ) {
+                     scope.playStopAnimation();
+                 }
+             }
         }
 
 
@@ -190,15 +193,16 @@ class Asset_viewer_3d_kernel {
 
     raylineShow(raycasterPick){
 
-        let geolinecast = new THREE.Geometry();
-
+        let points = [];
 
         let c = 1000;
-        geolinecast.vertices.push(raycasterPick.ray.origin,
-            new THREE.Vector3((raycasterPick.ray.origin.x -c*raycasterPick.ray.direction.x),
-                              (raycasterPick.ray.origin.y -c*raycasterPick.ray.direction.y),
-                              (raycasterPick.ray.origin.z -c*raycasterPick.ray.direction.z))
+        points.push(raycasterPick.ray.origin);
+        points.push(new THREE.Vector3((raycasterPick.ray.origin.x + c*raycasterPick.ray.direction.x),
+                              (raycasterPick.ray.origin.y + c*raycasterPick.ray.direction.y),
+                              (raycasterPick.ray.origin.z + c*raycasterPick.ray.direction.z))
         );
+
+        let geolinecast = new THREE.BufferGeometry().setFromPoints( points );
 
         let myBulletLine = new THREE.Line( geolinecast, new THREE.LineBasicMaterial({color: 0x0000ff}));
         myBulletLine.name = 'rayLine';
@@ -206,12 +210,12 @@ class Asset_viewer_3d_kernel {
         this.scene.add(myBulletLine);
 
         // This will force scene to update and show the line
-        this.camera.position.x += 0.1;
+        //this.camera.position.x += 0.1;
 
-        let scope = this;
-        setTimeout(function () {
-             scope.camera.position.x -= 0.2;
-         }, 1500);
+        // let scope = this;
+        // setTimeout(function () {
+        //      scope.camera.position.x -= 0.2;
+        //  }, 1500);
 
         // Remove the line
         // setTimeout(function () {
@@ -293,7 +297,8 @@ class Asset_viewer_3d_kernel {
         this.addControlEventListeners();
         this.resizeDisplayGL();
         this.render();
-        this.previewProgressLabel.style.visibility = "hidden";
+        if (this.previewProgressLabel)
+            this.previewProgressLabel.style.visibility = "hidden";
     }
 
     // Start auto loop (when animation)
@@ -491,8 +496,10 @@ class Asset_viewer_3d_kernel {
         let completedLoading = function () {
             console.log('Loading complete for OBJ WW!');
 
-            this.previewProgressLine.style.width = '0';
-            this.previewProgressLabel.innerHTML = "";
+            if (this.previewProgressLabel) {
+                this.previewProgressLine.style.width = '0';
+                this.previewProgressLabel.innerHTML = "";
+            }
 
             scope.zoomer(scope.scene.getChildByName('root'));
 
@@ -710,9 +717,6 @@ class Asset_viewer_3d_kernel {
                 atomlabelObj.name = "Label:" + atomLabelCSS.textContent;
                 atomlabelObj.position.copy( atomObject.position );
 
-                // console.log("label",label);
-                // const axesHelper = new THREE.AxesHelper( 55 );
-                // scope.scene.getChildByName('root').add( axesHelper );
                 scope.scene.getChildByName('root').add(atomlabelObj);
             }
 
@@ -946,9 +950,11 @@ class Asset_viewer_3d_kernel {
                         //onObjProgressLoad
                         function (xhr) {
 
-                            this.previewProgressLabel.innerHTML =
-                                Math.round( xhr.loaded / xhr.total * 100 ) + '% loaded';
-                                                  //Math.round(xhr.loaded / 1000) + "KB";
+                            if (this.previewProgressLabel) {
+                                this.previewProgressLabel.innerHTML =
+                                    Math.round(xhr.loaded / xhr.total * 100) + '% loaded';
+                                //Math.round(xhr.loaded / 1000) + "KB";
+                            }
                         },
                         //onObjErrorLoad
                         function (xhr) {
@@ -1047,29 +1053,9 @@ class Asset_viewer_3d_kernel {
 
             let sphere = this.computeSceneBoundingSphereAll(towhatObj);
 
-            // translate object to the center
-            // towhatObj.traverse( function (object) {
-            //     if (object instanceof THREE.Mesh) {
-            //         //object.position.add(new THREE.Vector3(-sphere[0].x, -sphere[0].y, -sphere[0].z));
-            //         //object.geometry.translate( - sphere[0].x, - sphere[0].y, - sphere[0].z) ;
-            //     }
-            // });
-
-            // let centerRadius = scope.computeSceneBoundingSphereAll(scope.scene.getChildByName('root'));
-            // console.log("Estimated center", centerRadius[0]);
-            // console.log("Estimated radius", centerRadius[1]);
-            //
-            // const geometryBall = new THREE.SphereGeometry( centerRadius[1], 32, 32 );
-            // const materialBall = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
-            // const sphereBall = new THREE.Mesh( geometryBall, materialBall );
-            // sphereBall.position.copy( centerRadius[0] );
-            // sphereBall.name = "Center Ball"
-            // scope.scene.getChildByName('root').add( sphereBall );
-
-
             let totalRadius = sphere[1];
-            //this.controls.minDistance = 0.02 * totalRadius;
-            //this.controls.maxDistance = 13 * totalRadius;
+            this.controls.minDistance = 0.02 * totalRadius;
+            this.controls.maxDistance = 13 * totalRadius;
             this.resizeDisplayGL();
             this.controls.update();
         }
@@ -1082,15 +1068,16 @@ class Asset_viewer_3d_kernel {
         //this.controls.handleResize();
 
         this.recalcAspectRatio();
-        this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
-        this.labelRenderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+
+        this.renderer.setSize(this.canvasToBindTo.offsetWidth, this.canvasToBindTo.offsetHeight, false);
+        this.labelRenderer.setSize(this.canvasLabelsToBindTo.offsetWidth, this.canvasLabelsToBindTo.offsetHeight, false);
 
         this.updateCamera();
     }
 
     // Recalculate canvas aspect ratio
     recalcAspectRatio() {
-        this.aspectRatio = ( this.canvas.offsetHeight === 0 ) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+        this.aspectRatio = ( this.canvasToBindTo.offsetHeight === 0 ) ? 1 : this.canvasToBindTo.offsetWidth / this.canvasToBindTo.offsetHeight;
     }
 
     // Reset Camera
@@ -1111,59 +1098,6 @@ class Asset_viewer_3d_kernel {
     _reportProgress(text) {
         console.log('Progress: ' + text);
     }
-
-    //function autoScreenshot() {
-        // setTimeout(function(){
-        //     jQuery("#button_qrcode").click(); // close qr code
-        //     jQuery("#createModelScreenshotBtn").click();
-        // },1000);
-    //}
-
-
-    // alterShading() {
-    //
-    //     var scope = this;
-    //     scope.flatShading = !scope.flatShading;
-    //     console.log(scope.flatShading ? 'Enabling flat shading' : 'Enabling smooth shading');
-    //
-    //     scope.traversalFunction = function (material) {
-    //         material.flatShading = scope.flatShading;
-    //         material.needsUpdate = true;
-    //     };
-    //     var scopeTraverse = function (object3d) {
-    //         scope.traverseScene(object3d);
-    //     };
-    //     scope.pivot.traverse(scopeTraverse);
-    // }
-    //
-    // alterDouble() {
-    //
-    //     var scope = this;
-    //     scope.doubleSide = !scope.doubleSide;
-    //     console.log(scope.doubleSide ? 'Enabling DoubleSide materials' : 'Enabling FrontSide materials');
-    //
-    //     scope.traversalFunction = function (material) {
-    //         material.side = scope.doubleSide ? THREE.DoubleSide : THREE.FrontSide;
-    //     };
-    //
-    //     var scopeTraverse = function (object3d) {
-    //         scope.traverseScene(object3d);
-    //     };
-    //     scope.pivot.traverse(scopeTraverse);
-    // }
-
-
-    // traverseScene(object3d) {
-    //     if (object3d.material instanceof THREE.MultiMaterial) {
-    //         var materials = object3d.material.materials;
-    //         for (var name in materials) {
-    //             if (materials.hasOwnProperty(name)) this.traversalFunction(materials[name]);
-    //         }
-    //     } else if (object3d.material) {
-    //         this.traversalFunction(object3d.material);
-    //     }
-    // }
-
 }
 
 

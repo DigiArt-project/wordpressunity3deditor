@@ -590,7 +590,7 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 
         //THREE.Loader: Handlers.get() has been removed. Use LoadingManager.getHandler() instead.
-        if (parseInt(THREE.REVISION) >  119){
+        if (parseInt(THREE.REVISION) >=  119){
             var loader = this.manager.getHandler(url_or_text);
         } else {
             var loader = THREE.Loader.Handlers.get(url_or_text);

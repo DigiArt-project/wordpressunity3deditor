@@ -60,7 +60,7 @@ function loadAsset3DManagerScriptsAndStyles() {
     wp_enqueue_script('wpunity_inflate'); // for binary fbx
     
     // 1. Three js library
-    wp_enqueue_script('wpunity_load124_threejs');
+    wp_enqueue_script('wpunity_load119_threejs');
     wp_enqueue_script('wpunity_load124_statjs');
     
     // 2. Obj loader simple; For loading an uploaded obj
@@ -80,7 +80,7 @@ function loadAsset3DManagerScriptsAndStyles() {
     wp_enqueue_script('wpunity_load119_FBXloader');
     
     // 7. Trackball controls
-    wp_enqueue_script('wpunity_load124_TrackballControls');
+    //wp_enqueue_script('wpunity_load119_TrackballControls');
     wp_enqueue_script('wpunity_load119_OrbitControls');
     
     // 8. GLTF Loader
@@ -1266,6 +1266,7 @@ if($asset_id != null) {
     
     let multipleFilesInputElem = document.getElementById( 'fileUploadInput' );
 
+    
     
     // ------- Class to load 3D model ---------
     var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel( document.getElementById( 'previewCanvas' ),

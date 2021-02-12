@@ -14,7 +14,7 @@ function loadAsset3Dfunctions() {
     wp_enqueue_script('wpunity_inflate'); // for binary fbx
     
     // 1. Three js library
-    wp_enqueue_script('wpunity_load124_threejs');
+    wp_enqueue_script('wpunity_load119_threejs');
     wp_enqueue_script('wpunity_load124_statjs');
     
     // 2. Obj loader simple; For loading an uploaded obj
@@ -73,10 +73,12 @@ class wpheliosvr_3d_widget extends WP_Widget {
     public function form( $instance ) {
         
         $title = isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : '';
+        $titleShow = isset( $instance[ 'titleShow' ] ) ? $instance[ 'titleShow' ] : 'false';
+        
         $asset_id =  isset( $instance[ 'asset_id' ] ) ? $instance[ 'asset_id' ] : __( 'Insert asset id', 'wpheliosvr_3d_widget_domain' );
         $cameraPositionX = isset( $instance[ 'cameraPositionX' ] ) ?  $instance[ 'cameraPositionX' ] : 0;
         $cameraPositionY = isset( $instance[ 'cameraPositionY' ] ) ?  $instance[ 'cameraPositionY' ] : 0;
-        $cameraPositionZ = isset( $instance[ 'cameraPositionZ' ] ) ?  $instance[ 'cameraPositionZ' ] : 0;
+        $cameraPositionZ = isset( $instance[ 'cameraPositionZ' ] ) ?  $instance[ 'cameraPositionZ' ] : -1;
         $canvasWidth = isset( $instance[ 'canvasWidth' ] )? $instance[ 'canvasWidth' ] : '100%';
         $canvasHeight = isset( $instance[ 'canvasHeight' ] )? $instance[ 'canvasHeight' ] : '100%';
     
@@ -97,7 +99,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
         ?>
         <p>
             <label for="<?php echo $this->get_field_id( 'title' ); ?>">
-                <?php _e( 'Title:' ); ?>
+                <?php _e( 'Title (No Gaps):' ); ?>
             </label>
             
             <input class="widefat"
@@ -107,6 +109,20 @@ class wpheliosvr_3d_widget extends WP_Widget {
                    value="<?php echo esc_attr( $title ); ?>"
             />
         </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'titleShow' ); ?>">
+                <?php _e( 'Title Show ?' ); ?>
+            </label>
+
+            <input class="widefat"
+                   id="<?php echo $this->get_field_id( 'titleShow' ); ?>"
+                   name="<?php echo $this->get_field_name( 'titleShow' ); ?>"
+                   type="text"
+                   value="<?php echo esc_attr( $titleShow ); ?>"
+            />
+        </p>
+        
         
         <p>
             <label for="<?php echo $this->get_field_id( 'asset_id' ); ?>">
@@ -325,6 +341,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
     public function widget( $args, $instance ) {
 
         $title = apply_filters( 'widget_title', $instance['title'] );
+        $titleShow = apply_filters( 'widget_titleShow', $instance['titleShow'] );
         $asset_id = apply_filters( 'widget_asset_id', $instance['asset_id'] );
         $cameraPositionX = apply_filters( 'widget_cameraPositionX', $instance['cameraPositionX'] );
         $cameraPositionY = apply_filters( 'widget_cameraPositionY', $instance['cameraPositionY'] );
@@ -350,7 +367,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
         
         
         // The data
-        if ( ! empty( $title ) )
+        if ( ! empty( $title ) && $titleShow === 'true')
             echo $args['before_title'] . $title . $args['after_title'];
     
 //        echo $cameraPositionX.' '.$cameraPositionY.' '.$cameraPositionZ;
@@ -390,21 +407,21 @@ class wpheliosvr_3d_widget extends WP_Widget {
             <div id="previewProgressSliderDiv" class="CenterContents"
                  style="display: none; z-index:2; width:100%; top:0"
             >
-                <h6 id="previewProgressLabelDiv" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">
+                <h6 id="previewProgressLabelDiv<?php echo $title;?>" class="mdc-theme--text-primary-on-light mdc-typography--subheading1">
                     Preview of 3D Model</h6>
-                <div class="progressSliderDiv">
-                    <div id="previewProgressSliderLineDiv" class="progressSliderSubLineDiv" style="width: 0;">...</div>
+                <div class="progressSliderDiv<?php echo $title;?>">
+                    <div id="previewProgressSliderLineDiv<?php echo $title;?>" class="progressSliderSubLineDiv" style="width: 0;">...</div>
                 </div>
             </div>
             
             <!-- LabelRenderer of Canvas -->
-            <div id="divCanvasLabels" style="position:relative; width:100%;">
+            <div id="divCanvasLabels<?php echo $title;?>" style="position:absolute; width:100%;">
 
                 <!-- 3D Canvas -->
-                <canvas id="divCanvas" style="background: <?php $canvasBackgroundColor; ?>; width:100%; position:relative"></canvas>
+                <canvas id="divCanvas<?php echo $title;?>" style="background: <?php $canvasBackgroundColor; ?>; width:100%; position:relative; background: transparent"></canvas>
 
                 <!--suppress HtmlUnknownAnchorTarget -->
-                <a href="#/" class="animationButton" id="animButtonDiv" onclick="asset_viewer_3d_kernel.playStopAnimation();">Animation 1</a>
+                <a href="#/" class="animationButton" style="visibility:hidden" id="animButtonDiv<?php echo $title;?>" onclick="asset_viewer_3d_kernel<?php echo $title;?>.playStopAnimation();">Animation 1</a>
 
             </div>
 
@@ -423,47 +440,49 @@ class wpheliosvr_3d_widget extends WP_Widget {
         <?php } ?>
 
         <script>
-            path_url     = "<?php echo $asset_3d_files['path'].'/'; ?>";
-            mtl_file_name= "<?php echo $asset_3d_files['mtl']; ?>";
-            obj_file_name= "<?php echo $asset_3d_files['obj']; ?>";
-            pdb_file_name= "<?php echo $asset_3d_files['pdb']; ?>";
-            glb_file_name= "<?php echo $asset_3d_files['glb'];?>";
-            fbx_file_name= "<?php echo $asset_3d_files['fbx'];    ?>";
-            
-            cameraPositionX= "<?php echo $cameraPositionX; ?>";
-            cameraPositionY= "<?php echo $cameraPositionY; ?>";
-            cameraPositionZ= "<?php echo $cameraPositionZ; ?>";
-            
-            canvasBackgroundColor = "<?php echo $canvasBackgroundColor;?>";
-            enableZoom = "<?php echo $enableZoom?>" === 'true';
-            enablePan = "<?php echo $enablePan?>" === 'true';
-            
-            textures_fbx_string_connected = "<?php echo $asset_3d_files['texturesFbx']; ?>";
-            back_3d_color = "<?php echo $back_3d_color; ?>";
-            let audio_file = document.getElementById( 'audioFile' );
+            const path_url<?php echo $title;?> = "<?php echo $asset_3d_files['path'].'/'; ?>";
+            const mtl_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['mtl']; ?>";
+            const obj_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['obj']; ?>";
+            const pdb_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['pdb']; ?>";
+            const glb_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['glb'];?>";
+            const fbx_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['fbx'];    ?>";
+
+            const cameraPositionX<?php echo $title;?>= "<?php echo $cameraPositionX; ?>";
+            const cameraPositionY<?php echo $title;?>= "<?php echo $cameraPositionY; ?>";
+            const cameraPositionZ<?php echo $title;?>= "<?php echo $cameraPositionZ; ?>";
+
+            const canvasBackgroundColor<?php echo $title;?> = "<?php echo $canvasBackgroundColor;?>";
+            const enableZoom<?php echo $title;?> = "<?php echo $enableZoom?>" === 'true';
+            const enablePan<?php echo $title;?> = "<?php echo $enablePan?>" === 'true';
+
+            const textures_fbx_string_connected<?php echo $title;?> = "<?php echo $asset_3d_files['texturesFbx']; ?>";
+            const back_3d_color<?php echo $title;?> = "<?php echo $back_3d_color; ?>";
+            const audio_file<?php echo $title;?> = document.getElementById( 'audioFile' );
 
 
         
-            var asset_viewer_3d_kernel = new Asset_viewer_3d_kernel(
-                document.getElementById( 'divCanvas' ),
-                document.getElementById( 'divCanvasLabels' ),
-                document.getElementById( 'animButtonDiv' ),
-                document.getElementById('previewProgressLabelDiv'),
-                document.getElementById('previewProgressSliderLineDiv'),
-                canvasBackgroundColor,
-                audio_file,
-                path_url, // OBJ textures path
-                mtl_file_name,
-                obj_file_name,
-                pdb_file_name,
-                fbx_file_name,
-                glb_file_name,
-                textures_fbx_string_connected,
+            const asset_viewer_3d_kernel<?php echo $title;?> = new Asset_viewer_3d_kernel(
+                document.getElementById( 'divCanvas<?php echo $title;?>' ),
+                document.getElementById( 'divCanvasLabels<?php echo $title;?>' ),
+                document.getElementById( 'animButtonDiv<?php echo $title;?>' ),
+                document.getElementById('previewProgressLabelDiv<?php echo $title;?>'),
+                document.getElementById('previewProgressSliderLineDiv<?php echo $title;?>'),
+                canvasBackgroundColor<?php echo $title;?>,
+                audio_file<?php echo $title;?>,
+                path_url<?php echo $title;?>, // OBJ textures path
+                mtl_file_name<?php echo $title;?>,
+                obj_file_name<?php echo $title;?>,
+                pdb_file_name<?php echo $title;?>,
+                fbx_file_name<?php echo $title;?>,
+                glb_file_name<?php echo $title;?>,
+                textures_fbx_string_connected<?php echo $title;?>,
                 false,
-                canvasBackgroundColor === 'transparent',
-                !enablePan, // lock
-                enableZoom, // enableZoom
-                cameraPositionX,cameraPositionY,cameraPositionZ);
+                canvasBackgroundColor<?php echo $title;?> === 'transparent',
+                !enablePan<?php echo $title;?>, // lock
+                enableZoom<?php echo $title;?>, // enableZoom
+                cameraPositionX<?php echo $title;?>,
+                cameraPositionY<?php echo $title;?>,
+                cameraPositionZ<?php echo $title;?>);
         
         </script>
         
@@ -483,6 +502,8 @@ class wpheliosvr_3d_widget extends WP_Widget {
         $instance = array();
         
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+        $instance['titleShow'] = ( ! empty( $new_instance['titleShow'] ) ) ?
+                            strip_tags( $new_instance['titleShow'] ) : 'false';
         
         $instance['asset_id'] = ( ! empty( $new_instance['asset_id'] ) ) ? strip_tags( $new_instance['asset_id'] ) : '';
         

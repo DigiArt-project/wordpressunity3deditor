@@ -119,6 +119,7 @@ function wpunity_register_scripts() {
 	$scriptsC = array(
 		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
 		array( 'wpunity_load124_threejs', $pluginDirJS.'threejs124/three.js'),
+		array( 'wpunity_load125_threejs', $pluginDirJS.'threejs125/three.js'),
 		array( 'wpunity_load124_statjs', $pluginDirJS.'threejs124/stats.js'),
 		
 		array( 'wpunity_load119_FBXloader', $pluginDirJS.'threejs119/FBXLoader.js'),
@@ -129,10 +130,14 @@ function wpunity_register_scripts() {
 		array( 'wpunity_load119_KTXLoader', $pluginDirJS.'threejs119/KTXLoader.js'),
 		
 		array( 'wpunity_load119_OrbitControls', $pluginDirJS.'threejs119/OrbitControls.js'),
+		array( 'wpunity_load125_OrbitControls', $pluginDirJS.'threejs125/OrbitControls.js'),
 		array( 'wpunity_load119_TransformControls', $pluginDirJS.'threejs119/TransformControls.js'),
 		array( 'wpunity_load124_TrackballControls', $pluginDirJS.'threejs124/TrackballControls.js'),
 		array( 'wpunity_load119_PointerLockControls', $pluginDirJS.'threejs119/PointerLockControls.js'),
-//		array( 'wpunity_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
+		
+		array( 'wpunity_load125_TrackballControls', $pluginDirJS.'threejs125/TrackballControls.js'),
+		array( 'wpunity_load125_CSS2DRenderer', $pluginDirJS.'threejs125/CSS2DRenderer.js'),
+
 //		array( 'wpunity_load_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
 //		array( 'wpunity_load_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
 //		array( 'wpunity_load_sceneexporter', $pluginDirJS.'threejs87/SceneExporter.js'),
