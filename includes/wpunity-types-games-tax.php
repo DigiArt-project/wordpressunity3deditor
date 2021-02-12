@@ -63,7 +63,13 @@ function wpunity_games_taxtype_box_content($post){
         <?php
         // Use nonce for verification
         wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_game_type_noncename' );
+        
         $type_IDs = wp_get_object_terms( $post->ID, 'wpunity_game_type', array('fields' => 'ids') );
+        
+        $ff = fopen("output_p1.txt","w");
+        fwrite($ff, print_r($type_IDs, true));
+        fclose($ff);
+        //echo $type_IDs;
 
         $args = array(
             'show_option_none'   => 'Select Type',

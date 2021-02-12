@@ -1031,52 +1031,6 @@ class Asset_viewer_3d_kernel {
 
                              let file = new File([this.response], basename);
                              scope.file_reader_cortex2(file);
-
-                            // let type = file.name.split('.').pop();
-                            //
-                            // // set the reader
-                            // let reader = new FileReader();
-                            //
-                            // switch (type) {
-                            //     case 'fbx': scope.nFbx = 1; reader.readAsArrayBuffer(file); break;
-                            //     case 'jpg': reader.readAsDataURL(file);     break;
-                            //     case 'png': reader.readAsDataURL(file);     break;
-                            //     case 'gif': reader.readAsDataURL(file);     break;
-                            // }
-                            //
-                            //
-                            // // --- Read it ------------------------
-                            // reader.onload = (function(reader) {
-                            //     return function() {
-                            //
-                            //         let fileContent = reader.result ? reader.result : '';
-                            //
-                            //         let dec = new TextDecoder();
-                            //
-                            //         switch (type) {
-                            //             case 'fbx':
-                            //                 scope.FbxBuffer =  fileContent;
-                            //                 break;
-                            //             case 'jpg':
-                            //             case 'png':
-                            //             case 'gif':
-                            //                 scope.texturesBuffer[file.name] =  fileContent;
-                            //                 break;
-                            //         }
-                            //
-                            //         // Check if everything is loaded
-                            //         if ( type==='jpg' || type==='png' || type==='fbx' || type==='gif' ) {
-                            //
-                            //             console.log("TYPE", type + " " + file);
-                            //             scope.checkerCompleteReading( type );
-                            //         }
-                            //     };
-                            // })(reader);
-
-
-
-
-
                         }
                     };
 
