@@ -27,6 +27,12 @@ function wpunity_assets_taxcategory_box_content($post){
         // Use nonce for verification
         wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_asset3d_cat_noncename' );
         $type_IDs = wp_get_object_terms( $post->ID, 'wpunity_asset3d_cat', array('fields' => 'ids') );
+        
+        echo $post->ID;
+        
+        
+        print_r($type_IDs);
+        
 
         $args = array(
             'show_option_none'   => 'Select Category',

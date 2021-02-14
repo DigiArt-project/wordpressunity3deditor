@@ -96,7 +96,7 @@ function wpunity_assets_taxcategory_chemistry_fill(){
 // CREATE PROJECT SETTINGS with default values (CHEMISTRY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_games_taxtype_chemistry_fill' );
+add_action( 'init', 'wpunity_games_taxtype_chemistry_fill', 1 );
 
 function wpunity_games_taxtype_chemistry_fill(){
 

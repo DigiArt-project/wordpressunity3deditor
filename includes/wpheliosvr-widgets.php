@@ -432,7 +432,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
                strpos($attachment_audio_file, "wav" )!==false) {
             ?>
             
-            <audio controls loop preload="auto" id ='audioFile'>
+            <audio loop preload="auto" id ='audioFile'>
                 <source src="<?php echo $attachment_audio_file;?>" type="audio/mp3">
                 <source src="<?php echo $attachment_audio_file;?>" type="audio/wav">
                 Your browser does not support the audio tag.

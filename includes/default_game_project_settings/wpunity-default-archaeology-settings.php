@@ -150,7 +150,7 @@ function wpunity_assets_taxcategory_archaeology_fill(){
 // CREATE PROJECT SETTINGS with default values (ARCHAEOLOGY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_games_taxtype_archaeology_fill' );
+add_action('init', 'wpunity_games_taxtype_archaeology_fill', 1 );
 
 function wpunity_games_taxtype_archaeology_fill(){
 

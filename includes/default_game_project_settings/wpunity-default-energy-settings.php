@@ -74,7 +74,7 @@ function wpunity_assets_taxcategory_energy_fill(){
 // CREATE PROJECT SETTINGS with default values (ENERGY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_games_taxtype_energy_fill' );
+add_action( 'init', 'wpunity_games_taxtype_energy_fill', 1 );
 
 function wpunity_games_taxtype_energy_fill(){
 

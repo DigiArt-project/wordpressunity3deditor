@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WordpressUnity3DEditor
  * Plugin URI: http://yoursite.com
- * Description: functions for VR actions that are added to the main functions.php
+ * Description: Make your website a VR site
  * Author: Dimitrios Ververidis
  * Author URI: http://yoursite.com
  * Version: 0.1.5
@@ -74,7 +74,7 @@ function wpunity_register_scripts() {
 		array('wpunity_qrcode_generator', $pluginDirJS.'standalone_js_libraries/qrcode.js'),
 		array('wpunity_inflate', $pluginDirJS.'standalone_js_libraries/inflate.min.js'),
 		array('wpunity_materialize_jslib', $pluginDirJS.'standalone_js_libraries/materialize.js'),
-		array('WU_webw_3d_view', $pluginDirJS.'WU_webw_3d_view.js'),
+		array('Asset_viewer_3d_kernel', $pluginDirJS.'Asset_viewer_3d_kernel.js'),
 		array('wpunity_vr_editor_buttons', $pluginDirJS.'vr_editor_buttons.js'),
 		array('wpunity_vr_editor_analytics', $pluginDirJS.'vr_editor_analytics.js'),
 	);
@@ -104,7 +104,6 @@ function wpunity_register_scripts() {
 			array( 'wpunity_load87_OutlinePass', $pluginDirJS.'threejs87/OutlinePass.js'),
 			array( 'wpunity_load87_ShaderPass', $pluginDirJS.'threejs87/ShaderPass.js'),
 			array( 'wpunity_load87_PDBloader', $pluginDirJS.'threejs87/PDBLoader.js'),
-			array( 'wpunity_load87_TrackballControls', $pluginDirJS.'threejs87/TrackballControls.js'),
 			array( 'wpunity_load87_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
 			array( 'wpunity_load87_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
 			array( 'wpunity_load87_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
@@ -119,6 +118,9 @@ function wpunity_register_scripts() {
 	
 	$scriptsC = array(
 		array( 'wpunity_load119_threejs', $pluginDirJS.'threejs119/three.js'),
+		array( 'wpunity_load124_threejs', $pluginDirJS.'threejs124/three.js'),
+		array( 'wpunity_load125_threejs', $pluginDirJS.'threejs125/three.js'),
+		array( 'wpunity_load124_statjs', $pluginDirJS.'threejs124/stats.js'),
 		
 		array( 'wpunity_load119_FBXloader', $pluginDirJS.'threejs119/FBXLoader.js'),
 //		array( 'wpunity_load119_pdbloader', $pluginDirJS.'threejs119/PDBLoader.js'),
@@ -128,10 +130,14 @@ function wpunity_register_scripts() {
 		array( 'wpunity_load119_KTXLoader', $pluginDirJS.'threejs119/KTXLoader.js'),
 		
 		array( 'wpunity_load119_OrbitControls', $pluginDirJS.'threejs119/OrbitControls.js'),
+		array( 'wpunity_load125_OrbitControls', $pluginDirJS.'threejs125/OrbitControls.js'),
 		array( 'wpunity_load119_TransformControls', $pluginDirJS.'threejs119/TransformControls.js'),
-		array( 'wpunity_load119_TrackballControls', $pluginDirJS.'threejs119/TrackballControls.js'),
+		array( 'wpunity_load124_TrackballControls', $pluginDirJS.'threejs124/TrackballControls.js'),
 		array( 'wpunity_load119_PointerLockControls', $pluginDirJS.'threejs119/PointerLockControls.js'),
-//		array( 'wpunity_CSS2DRenderer', $pluginDirJS.'threejs87/CSS2DRenderer.js'),
+		
+		array( 'wpunity_load125_TrackballControls', $pluginDirJS.'threejs125/TrackballControls.js'),
+		array( 'wpunity_load125_CSS2DRenderer', $pluginDirJS.'threejs125/CSS2DRenderer.js'),
+
 //		array( 'wpunity_load_sceneexporterutils', $pluginDirJS.'threejs87/SceneExporterUtils.js'),
 //		array( 'wpunity_load_scene_importer_utils', $pluginDirJS.'threejs87/SceneImporter.js'),
 //		array( 'wpunity_load_sceneexporter', $pluginDirJS.'threejs87/SceneExporter.js'),
@@ -195,6 +201,8 @@ function wpunity_register_styles() {
     wp_register_style( 'wpunity_materialize_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/materialize.css' );
 	
 	wp_register_style( 'wpheliosvr_asseteditor_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpheliosvr_asseteditor.css' );
+	
+	wp_register_style( 'wpvrodos_widgets_stylesheet',  plugin_dir_url( __FILE__ ) . 'css/wpvrodos_widgets.css' );
  
 	
 	// TODO: When ready for production, ignore  node_modules folder and move the 2 material css & js files to another folder.
@@ -210,6 +218,7 @@ function wpunity_register_styles() {
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 
 
+require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpheliosvr-widgets.php');
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
 

@@ -431,7 +431,13 @@ $images_urls = [null, null, null, null, null];
 
 //Check if its new/saved and get data for artifact and Terrain
 if($asset_id != null) {
+    
     $saved_term = wp_get_post_terms( $asset_id, 'wpunity_asset3d_cat' );
+    
+    $fp = fopen("output_savedterm.txt","w");
+    fwrite($fp, print_r($saved_term, true));
+    fclose($fp);
+    
     
     if($saved_term[0]->slug == 'terrain'){
         
