@@ -73,7 +73,7 @@ class ImcSettingsPage {
 
         add_settings_field( 'wpunity_server_path', __('Remote Server path'), array( &$this, 'field_wpunity_server_path' ), $this->general_settings_key, 'section_general' );
     
-        add_settings_field( 'wpunity_google_application_credentials', __('GOOGLE_APPLICATION_CREDENTIALS'), array( &$this, 'field_wpunity_google_application_credentials' ), $this->general_settings_key, 'section_general' );
+        add_settings_field( 'wpunity_google_application_credentials', __('Google application credentials for auto translate '), array( &$this, 'field_wpunity_google_application_credentials' ), $this->general_settings_key, 'section_general' );
         
     }
 
@@ -173,11 +173,83 @@ class ImcSettingsPage {
                     submit_button();
                     ?>
                 </form>
+
+
+<!--                <textarea id="logHooksReport" name="logHooksReport" rows="54" cols="100" readonly>-->
+                    <?php $this->list_hooks(); ?>
+<!--                </textarea>-->
+            
+            
+            
+            
+            
             </div>
 
         <?php
     }
-
+    
+    
+    //LIST ALL HOOKS
+    
+    function dump_hook( $tag, $hook ) {
+        //ksort($hook);
+        
+        echo "<pre>>>>>>\t$tag<br>";
+        
+        
+        foreach( $hook as $priority => $functions ) {
+            
+            echo $priority;
+            
+            foreach( $functions as $function )
+                if( $function['function'] != 'list_hook_details' ) {
+                
+                    echo "\t";
+                    
+                    if (is_string($function['function']))
+                        echo $function['function'];
+                    elseif ($function['function'] instanceof Closure)
+                        print_r($function);
+                    elseif (is_string($function['function']))
+                            echo $function['function'][0] . ' -> ' . $function['function'][1];
+                    elseif (is_object($function['function'][0]))
+                        echo "(object) " . get_class($function['function'][0]) . ' -> ' . $function['function'][1];
+                    else
+                        print_r($function);
+                    echo ' (' . $function['accepted_args'] . ') <br>';
+                    
+                }
+        }
+        
+        echo '</pre>';
+    }
+    
+    function isClosure($suspected_closure) {
+        
+        if (!is_array($suspected_closure)) {
+            print_r($suspected_closure);
+    
+            $reflection = new ReflectionFunction($suspected_closure);
+        }
+        
+        return (bool) $reflection->isClosure();
+    }
+    
+    function list_hooks( $filter = false ){
+        global $wp_filter;
+        
+        $hooks = $wp_filter;
+        //print_r($hooks);
+        //ksort( $hooks );
+    
+        echo 'Priority ----- tag';
+        
+        foreach( $hooks as $tag => $hook )
+            if ( false === $filter || false !== strpos( $tag, $filter ) )
+                $this->dump_hook($tag, $hook);
+    }
+    
+    
 
     /*
      * Renders our tabs in the plugin options page,
@@ -188,7 +260,7 @@ class ImcSettingsPage {
     function render_tabs() {
         $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->general_settings_key;
 
-        screen_icon();
+        //screen_icon();
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($this->settings_tabs as $tab_key => $tab_caption ) {
             $active = $current_tab == $tab_key ? 'nav-tab-active' : '';

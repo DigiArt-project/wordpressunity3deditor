@@ -4,7 +4,7 @@
 function loadAsset3Dfunctions() {
     
     // Stylesheet
-    wp_enqueue_style('wpvrodos_widgets_stylesheet');
+    wp_enqueue_style('wpunity_widgets_stylesheet');
     
     // Load single asset kernel
     // Three js : for simple rendering
@@ -52,19 +52,19 @@ function loadAsset3Dfunctions() {
 add_action('wp_enqueue_scripts', 'loadAsset3Dfunctions' );
 
 // Creating the widget
-class wpheliosvr_3d_widget extends WP_Widget {
+class wpunity_3d_widget extends WP_Widget {
     
     function __construct() {
         parent::__construct(
 
             // Base ID of your widget
-            'wpheliosvr_3d_widget',
+            'wpunity_3d_widget',
 
             // Widget name will appear in UI
-            __('HeliosVR 3D Widget', 'wpheliosvr_3d_widget_domain'),
+            __('HeliosVR 3D Widget', 'wpunity_3d_widget_domain'),
 
             // Widget description
-            array( 'description' => __( 'A widget to place 3D models', 'wpheliosvr_widget_domain' ), )
+            array( 'description' => __( 'A widget to place 3D models', 'wpunity_widget_domain' ), )
         );
     }
     
@@ -75,7 +75,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
         $title = isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : '';
         $titleShow = isset( $instance[ 'titleShow' ] ) ? $instance[ 'titleShow' ] : 'false';
         
-        $asset_id =  isset( $instance[ 'asset_id' ] ) ? $instance[ 'asset_id' ] : __( 'Insert asset id', 'wpheliosvr_3d_widget_domain' );
+        $asset_id =  isset( $instance[ 'asset_id' ] ) ? $instance[ 'asset_id' ] : __( 'Insert asset id', 'wpunity_3d_widget_domain' );
         $cameraPositionX = isset( $instance[ 'cameraPositionX' ] ) ?  $instance[ 'cameraPositionX' ] : 0;
         $cameraPositionY = isset( $instance[ 'cameraPositionY' ] ) ?  $instance[ 'cameraPositionY' ] : 0;
         $cameraPositionZ = isset( $instance[ 'cameraPositionZ' ] ) ?  $instance[ 'cameraPositionZ' ] : -1;
@@ -491,7 +491,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
         
         
         // This is where you run the code and display the output
-        //echo __( 'HeliosVR 3D Widget', 'wpheliosvr_3d_widget_domain' );
+        
         echo $args['after_widget'];
     }
 
@@ -551,7 +551,7 @@ class wpheliosvr_3d_widget extends WP_Widget {
 
 
 // Register and load the widget
-function wpheliosvr_load_widget() {
-    register_widget( 'wpheliosvr_3d_widget' );
+function wpunity_load_widget() {
+    register_widget( 'wpunity_3d_widget' );
 }
-add_action( 'widgets_init', 'wpheliosvr_load_widget' );
+add_action( 'widgets_init', 'wpunity_load_widget' );

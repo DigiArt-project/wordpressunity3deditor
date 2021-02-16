@@ -189,11 +189,11 @@
     float:right;right:0;margin-top:0;width:auto;
 }
 
-#wpheliosvr-authorImg{
+#wpunity-authorImg{
     width:40px; min-width:40px; height:40px; min-height:40px; border-radius: 50%;
 }
 
-.wpheliosvr-back-button {
+.wpunity-back-button {
     color: #1e90ff;
     overflow: hidden;
     text-overflow: ellipsis;

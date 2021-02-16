@@ -48,7 +48,7 @@ add_action('get_header', 'remove_admin_login_header');
 function loadAsset3DManagerScriptsAndStyles() {
     
     // Stylesheet
-    wp_enqueue_style('wpheliosvr_asseteditor_stylesheet');
+    wp_enqueue_style('wpunity_asseteditor_stylesheet');
     
     // QR code generator
     wp_enqueue_script('wpunity_qrcode_generator');
@@ -498,7 +498,7 @@ if($asset_id != null) {
     if ($isUserloggedIn && $isEditMode) {
         ?>
         
-        <a title="Back" class="wpheliosvr-back-button hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
+        <a title="Back" class="wpunity-back-button hideAtLocked mdc-button" href="<?php echo $goBackToLink;?>">
             <em class="material-icons arrowback" >arrow_back</em>Assets Manager</a>
         <?php
     }
@@ -1215,7 +1215,7 @@ if($asset_id != null) {
             <tr>
                 
                 <th id="authorImageRow" rowspan="2">
-                    <img alt="Author image" id="wpheliosvr-authorImg"
+                    <img alt="Author image" id="wpunity-authorImg"
                          src="<?php echo get_avatar_url($author_id);?>">
                 </th>
                 
