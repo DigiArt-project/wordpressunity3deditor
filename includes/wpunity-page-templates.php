@@ -129,7 +129,7 @@ class wpUnityTemplate {
 }
 add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
 
-//==========================================================================================================================================
+//=================================================
 
 function wpunity_create_openGamePage() {
 
@@ -145,6 +145,7 @@ function wpunity_create_openGamePage() {
             'post_author' => get_user_by('id', 1)->user_id,
             'menu_order' => 0,
         ));
+        
         if ($new_page_id && !is_wp_error($new_page_id)) {
             update_post_meta($new_page_id, '_wp_page_template', '/templates/open-wpunity_game.php');
         }
@@ -153,7 +154,7 @@ function wpunity_create_openGamePage() {
     }
 }
 
-//==========================================================================================================================================
+//===================================
 
 function wpunity_create_editGamePage() {
 
@@ -249,8 +250,8 @@ function wpunity_create_editSceneExamPage() {
     }
 }
 
-//==========================================================================================================================================
 
+// --- Page to edit an Asset ----
 function wpunity_create_editAsset3D() {
 
     if (! wpunity_get_page_by_slug('wpunity-3d-asset-creator')) {
@@ -273,15 +274,11 @@ function wpunity_create_editAsset3D() {
     }
 }
 
-//==========================================================================================================================================
-
+// Get page by slug
 function wpunity_get_page_by_slug($slug) {
     if ($pages = get_pages())
         foreach ($pages as $page)
             if ($slug === $page->post_name) return $page;
     return false;
 }
-
-//==========================================================================================================================================
-
 ?>

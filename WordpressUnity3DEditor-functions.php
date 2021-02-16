@@ -259,7 +259,7 @@ add_action( 'manage_wpunity_game_posts_custom_column' , 'wpunity_set_custom_wpun
 add_action('admin_menu', 'wpunity_games_databox_add');
 add_action('save_post', 'wpunity_games_databox_save');
 
-//===================================== Scenes ============================================
+//---------------------- Scenes ----------------------------------------------------
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
 
@@ -284,13 +284,17 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
 
-//3.01 Create Initial Asset Categories
+//Create Initial Asset Categories
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-templates.php' );
 
+include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_asset3D-saveData.php' );
+
+
+// ---------  Create dedicated pages on plugin activation -------------------------
 register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
@@ -298,42 +302,42 @@ register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editSceneExamPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_asset3D-saveData.php' );
 
 
 
-
-
-// Make the games versions table on activating the plugin
+// -------------  Games versions table -------------------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-db-table-creations.php' );
 register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
 
-// Add helper functions file
+// ------------------- Add helper functions file ------------------------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-helper.php' );
 
+//------------------- For Compile ---------------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble-replace.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assemble-handler.php' );
 
+//-------------------- Energy related ----------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-compile.php' );
 
+//------------------- Archaeology related -----------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-yamls.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-settings.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-compile.php' );
 
+//-------------------- Chemistry related ------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
 //include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-compile.php' );
 
-
 include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
 
-// ===================== Obsolete ===================================
+// ===================== Other ===================================
 
 /**
- * Allow JSON file type to be uploaded.
+ * Allow various file types to be uploaded.
  *
  * @param $mime_types
  *
@@ -353,7 +357,6 @@ function my_mime_types($mime_types){
 	$mime_types['glb'] = 'application/octet-stream';
 	return $mime_types;
 }
-
 add_filter('upload_mimes', 'my_mime_types', 1, 1);
 
 
@@ -361,26 +364,14 @@ add_filter('upload_mimes', 'my_mime_types', 1, 1);
 //Scripts about Upload button in Metaboxes
 add_action('plugins_loaded', function() {
 	if($GLOBALS['pagenow']=='post.php') {
-		add_action('admin_print_scripts', 'my_admin_scripts');
-		add_action('admin_print_styles',  'my_admin_styles');
+		wp_enqueue_script('media-upload');
+		wp_enqueue_script('thickbox');
+		wp_enqueue_style('thickbox');
 	}
 });
 
-function my_admin_scripts() {
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('media-upload');
-	wp_enqueue_script('thickbox');
-}
-
-//wp_register_script('my-upload', WP_PLUGIN_URL.'/my-script.js', array('jquery','media-upload','thickbox'));
-//  wp_enqueue_script('my-upload');
-function my_admin_styles()  {
-	wp_enqueue_style('thickbox');
-
-}
-
 /**
- *   shorcode to show content inside page with [visitor] Some content for the people just browsing your site. [/visitor]
+ *   shortcode to show content inside page with [visitor] Some content for the people just browsing your site. [/visitor]
  */
 add_shortcode( 'visitor', 'visitor_check_shortcode' );
 
@@ -393,7 +384,7 @@ function visitor_check_shortcode( $atts, $content = null ) {
 /**
  * On reset password redirect to wpunity-main
  */
-function wpse_lost_password_redirect() {
+function wpunity_lost_password_redirect() {
     // Check if have submitted
     $confirm = ( isset($_GET['checkemail'] ) ? $_GET['checkemail'] : '' );
 
@@ -402,7 +393,7 @@ function wpse_lost_password_redirect() {
         exit;
     }
 }
-add_action('login_headerurl', 'wpse_lost_password_redirect');
+add_action('login_headerurl', 'wpunity_lost_password_redirect');
 
 
 //
@@ -479,7 +470,8 @@ add_action('wp_ajax_wpunity_fetch_list_projects_action','wpunity_fetch_list_proj
 //    return $access;
 //}
 
-// remove <p>  </p> from content
+
+// Remove <p>  </p> from content to be used for saving json scenes in description
 remove_filter ('the_content', 'wpautop');
 
 
@@ -522,7 +514,6 @@ function prefix_register_example_routes() {
 add_action( 'rest_api_init', 'prefix_register_example_routes' );
 
 
-
 // Back-end restrict by author filtering
 function rudr_filter_by_the_author() {
 	$params = array(
@@ -537,6 +528,7 @@ function rudr_filter_by_the_author() {
 }
 
 add_action('restrict_manage_posts', 'rudr_filter_by_the_author');
+
 
 // Back-end show author for games
 function my_cpt_support_author() {
