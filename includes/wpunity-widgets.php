@@ -554,4 +554,4 @@ class wpunity_3d_widget extends WP_Widget {
 function wpunity_load_widget() {
     register_widget( 'wpunity_3d_widget' );
 }
-add_action( 'widgets_init', 'wpunity_load_widget' );
+

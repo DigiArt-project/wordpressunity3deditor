@@ -179,10 +179,6 @@ add_action('wp_enqueue_scripts', 'wpunity_register_scripts' );
 
 
 
-
-
-
-
 function wpunity_register_styles() {
 	wp_register_style( 'wpunity_backend', plugin_dir_url( __FILE__ ) . 'css/wpunity_backend.css' );
 	wp_register_style( 'wpunity_vr_editor', plugin_dir_url( __FILE__ ) . 'css/vr_editor_style.css' );
@@ -214,22 +210,54 @@ function wpunity_register_styles() {
 	wp_enqueue_style('wpunity_frontend_stylesheet');
 	
 	wp_enqueue_style( 'wpunity_lightslider_stylesheet');
+	
+	wp_enqueue_style('wpunity_backend');
 }
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 
 
+//----------------------- WIDGETS ---------------------------------------------
+
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-widgets.php');
+
+add_action( 'widgets_init', 'wpunity_load_widget' );
+
+//----------------------- USER ROLES -------------------------------------------
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
 
-//===================================== Games ============================================
+add_action( 'init', 'wpunity_add_customroles');
+add_action( 'init', 'wpunity_add_capabilities_to_adv_game_master');
+add_action( 'init', 'wpunity_add_capabilities_to_admin');
 
+//---------------------- Game Projects -------------------------------------------------
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php');
 
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-tax.php');
+add_action('init', 'wpunity_games_construct'); //wpunity_game 'GAMES'
+add_action('init', 'wpunity_games_taxcategory'); //wpunity_game_cat 'GAME CATEGORIES'
+add_action('init', 'wpunity_games_taxtype'); //wpunity_game_type 'GAME TYPES'
 
-require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games-data.php');
+add_action('transition_post_status','wpunity_create_folder_game', 9 , 3);
 
+
+add_action( 'init', 'wpunity_games_taxcategory_fill' );
+
+add_filter( 'manage_wpunity_game_posts_columns', 'wpunity_set_custom_wpunity_game_columns' );
+
+//Create Game Category Box @ Game's backend
+add_action('add_meta_boxes','wpunity_games_taxcategory_box');
+
+/* Do something with the data entered */
+add_action( 'save_post', 'wpunity_games_taxcategory_box_content_save' );
+
+/* Do something with the data entered */
+add_action( 'save_post', 'wpunity_games_taxtype_box_content_save' );
+
+// Add the data to the custom columns for the game post type:
+add_action( 'manage_wpunity_game_posts_custom_column' , 'wpunity_set_custom_wpunity_game_columns_fill', 10, 2 );
+
+add_action('admin_menu', 'wpunity_games_databox_add');
+add_action('save_post', 'wpunity_games_databox_save');
 
 //===================================== Scenes ============================================
 
@@ -262,12 +290,14 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php'
 
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-templates.php' );
+
 register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
 register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editSceneExamPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_asset3D-saveData.php' );
 
 
@@ -309,7 +339,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
  *
  * @return mixed
  */
-function my_myme_types($mime_types){
+function my_mime_types($mime_types){
 	$mime_types['json'] = 'text/json';
 	$mime_types['obj'] = 'text/plain';
 	$mime_types['mp4'] = 'video/mp4';
@@ -324,7 +354,7 @@ function my_myme_types($mime_types){
 	return $mime_types;
 }
 
-add_filter('upload_mimes', 'my_myme_types', 1, 1);
+add_filter('upload_mimes', 'my_mime_types', 1, 1);
 
 
 
@@ -375,6 +405,9 @@ function wpse_lost_password_redirect() {
 add_action('login_headerurl', 'wpse_lost_password_redirect');
 
 
+//
+//                AJAXes   registration
+//
 
 // Ajax for fetching game's assets within asset browser widget at vr_editor
 add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
@@ -392,6 +425,33 @@ add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_actio
 
 // Ajax for deleting scene
 add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
+
+// the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
+// the ajax phps are on wpunity-core-functions.php
+add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
+add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
+add_action( 'wp_ajax_wpunity_killtask_compiling_action', 'wpunity_killtask_compiling_action_callback' );
+add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
+
+// Assemble php from ajax call
+add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
+// Add the assepile php
+add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback' );
+
+// Callback for Ajax for delete game
+add_action('wp_ajax_wpunity_delete_game_action','wpunity_delete_gameproject_frontend_callback');
+
+// Callback for add collaborators
+add_action('wp_ajax_wpunity_collaborate_project_action','wpunity_collaborate_project_frontend_callback');
+
+// Callback for fetching collaborators from db
+add_action('wp_ajax_wpunity_fetch_collaborators_action','wpunity_fetch_collaborators_frontend_callback');
+
+add_action('wp_ajax_wpunity_create_game_action','wpunity_create_gameproject_frontend_callback');
+
+add_action('wp_ajax_wpunity_fetch_list_projects_action','wpunity_fetch_list_projects_callback');
+
+
 
 //$fo = fopen("output_activation.txt","w");
 //fwrite($fo, dirname( __FILE__ ) . '/includes/wpunity-core-functions.php');

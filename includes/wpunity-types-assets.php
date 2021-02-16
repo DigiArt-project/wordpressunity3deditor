@@ -204,7 +204,6 @@ function allowAuthorEditing()
 
 add_action('init','allowAuthorEditing');
 
-
 add_filter( 'wp_dropdown_users_args', 'change_user_dropdown', 10, 2 );
 
 function change_user_dropdown( $query_args, $r ){

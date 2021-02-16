@@ -19,7 +19,7 @@ function wpunity_add_customroles() {
     
 }
 
-add_action( 'init', 'wpunity_add_customroles');
+
 
 
 function wpunity_add_capabilities_to_adv_game_master() {
@@ -76,7 +76,7 @@ function wpunity_add_capabilities_to_adv_game_master() {
 
 }
 
-add_action( 'init', 'wpunity_add_capabilities_to_adv_game_master');
+
 
 
 
@@ -134,6 +134,6 @@ function wpunity_add_capabilities_to_admin() {
 
 }
 
-add_action( 'init', 'wpunity_add_capabilities_to_admin');
+
 
 ?>
