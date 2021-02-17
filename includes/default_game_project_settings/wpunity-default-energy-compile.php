@@ -112,9 +112,9 @@ function wpunity_create_energy_selector_unity($gameID,$gameSlug,$game_path,$file
     $fields_id = wpunity_getRegionalscene_byGame($allScenePGameID,'fields');
     $sea_id = wpunity_getRegionalscene_byGame($allScenePGameID,'seashore');
 
-    $mount_json = get_post_meta($mount_id,'wpunity_scene_json_input',true);
-    $fields_json = get_post_meta($fields_id,'wpunity_scene_json_input',true);
-    $sea_json = get_post_meta($sea_id,'wpunity_scene_json_input',true);
+    $mount_json = get_post($mount_id)->post_content; //,'wpunity_scene_json_input',true);
+    $fields_json = get_post($fields_id)->post_content; //,'wpunity_scene_json_input',true);
+    $sea_json = get_post($sea_id)->content; //,'wpunity_scene_json_input',true);
 
     
     
@@ -244,7 +244,7 @@ function wpunity_create_energy_credentials_unity($scene_post,$scene_type_ID,$sce
 }
 
 function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$scene_id,$gameSlug,$game_path,$fileEditorBuildSettings,$handybuilder_file,$scenes_counter,$gameType){
-    
+
 //    $fg = fopen("output_edu_energy.txt","w");
 //
 //    fwrite($fg, "1");
@@ -275,7 +275,7 @@ function wpunity_create_energy_educational_unity($scene_post,$scene_type_ID,$sce
     $file_content7 = wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id); //empty energy scene with Avatar!
     
 //    fwrite($fg, "5");
-    
+
 //    fwrite($fg, "\n");
 //    fwrite($fg, $scene_id);
     
@@ -309,7 +309,7 @@ function wpunity_addAssets_educational_energy_unity($scene_id){
 
     
     
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content; //,'wpunity_scene_json_input',true);
     
     
     //fwrite($ff, print_r($scene_json));
@@ -564,7 +564,7 @@ function wpunity_replace_login_energy_unity($term_meta_s_login){
 
 function wpunity_replace_educational_energy_unity($term_meta_educational_energy,$scene_id){
 
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content;//,'wpunity_scene_json_input',true);
 
     $jsonScene = htmlspecialchars_decode ( $scene_json );
     $sceneJsonARR = json_decode($jsonScene, TRUE);

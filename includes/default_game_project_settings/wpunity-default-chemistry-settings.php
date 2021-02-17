@@ -50,7 +50,7 @@ function wpunity_getSceneYAML_chemistry($myscene_type){
 // CREATE ASSETS' TYPES with default values (CHEMISTRY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_assets_taxcategory_chemistry_fill' );
+
 
 function wpunity_assets_taxcategory_chemistry_fill(){
 
@@ -92,30 +92,12 @@ function wpunity_assets_taxcategory_chemistry_fill(){
 
 }
 
-/***************************************************************************************************************/
-// CREATE PROJECT SETTINGS with default values (CHEMISTRY GAMES)
-/***************************************************************************************************************/
-
-add_action( 'init', 'wpunity_games_taxtype_chemistry_fill', 1 );
-
-function wpunity_games_taxtype_chemistry_fill(){
-
-  wp_insert_term(
-      'Chemistry', // the term
-      'wpunity_game_type', // the taxonomy
-      array(
-          'description'=> 'Chemistry Games',
-          'slug' => 'chemistry_games',
-      )
-  );
-
-}
 
 /***************************************************************************************************************/
 // CREATE SCENE TYPES (CHEMISTRY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_scenes_types_chemistry_standard_cre' );
+
 
 function wpunity_scenes_types_chemistry_standard_cre(){
 

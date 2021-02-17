@@ -181,7 +181,7 @@ function wpunity_create_chemistry_lab_unity($scene_post,$scene_type_ID,$scene_id
 }
 
 function wpunity_addAssets_chemistry_lab_unity($scene_id){
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content;
 
     $jsonScene = htmlspecialchars_decode ( $scene_json );
     $sceneJsonARR = json_decode($jsonScene, TRUE);
@@ -335,7 +335,7 @@ function wpunity_replace_login_chem_unity($term_meta_s_login,$WanderAroundScene_
 
 function wpunity_replace_chemistry_lab_unity($term_meta_wander_around_chem,$scene_id){
 
-    $scene_json = get_post_meta($scene_id,'wpunity_scene_json_input',true);
+    $scene_json = get_post($scene_id)->post_content;
 
     $jsonScene = htmlspecialchars_decode ( $scene_json );
     $sceneJsonARR = json_decode($jsonScene, TRUE);

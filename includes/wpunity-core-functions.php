@@ -240,7 +240,7 @@ function wpunity_getFirstSceneID_byProjectID($project_id,$project_type){
 function wpunity_windEnergy_scene_stats($scene_id){
 
 	$turbinesInfoGathered = [];
-	$scene_json = get_post_meta($scene_id, 'wpunity_scene_json_input', true);
+	$scene_json = get_post($scene_id)->post_content; //, 'wpunity_scene_json_input', true);
 	$scene_env = get_post_meta($scene_id, 'wpunity_scene_environment', true);
 
 	$jsonScene = htmlspecialchars_decode($scene_json);
@@ -388,8 +388,7 @@ function wpunity_createJoker_activation() {
 }
 //add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
 
-// Set to the lowest priority in order to have game taxes available when joker games are created
-add_action( 'init', 'wpunity_createJoker_activation', 100, 2 );
+
 
 
 //==========================================================================================================================================
@@ -603,7 +602,7 @@ function wpunity_loginout_menu_link( $menu, $args ) {
     $menu .= $loginout;
     return $menu;
 }
-add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 5, 2 );
+
 
 
 
@@ -626,10 +625,9 @@ add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 5, 2 );
 //add_filter( 'wp_nav_menu_items', 'add_login_logout_register_menu', 199, 2 );
 
 
-// Remove Admin bar for non admins
-add_action('after_setup_theme', 'remove_admin_bar');
 
-function remove_admin_bar() {
+
+function wpunity_remove_admin_bar() {
     if (!current_user_can('administrator') && !is_admin()) {
         show_admin_bar(false);
     }
@@ -1163,14 +1161,10 @@ function wpunity_registrationhook_createGame( $user_id ) {
 
 	$archaeology_tax = get_term_by('slug', 'archaeology_games', 'wpunity_game_type');
 	$game_type_chosen_id = $archaeology_tax->term_id;
-	$realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
 
 	$game_taxonomies = array(
 		'wpunity_game_type' => array(
 			$game_type_chosen_id,
-		),
-		'wpunity_game_cat' => array(
-			$realplace_tax->term_id,
 		)
 	);
 

@@ -23,7 +23,7 @@ function wpunity_upload_dir_forScenesOrAssets( $args ) {
     return $args;
 }
 
-add_filter( 'upload_dir', 'wpunity_upload_dir_forScenesOrAssets' );
+
 
 
 // Disable all auto created thumbnails for Assets3D
@@ -40,7 +40,7 @@ function wpunity_disable_imgthumbs_assets( $image_sizes ){
     return $image_sizes;
 }
 
-add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
 
 
 // Overwrite attachments
@@ -78,7 +78,7 @@ function wpunity_overwrite_uploads( $name ){
     return $name;
 }
 
-add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
 
 
 function wpunity_remove_allthumbs_sizes( $sizes, $metadata ) {

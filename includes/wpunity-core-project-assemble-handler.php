@@ -64,14 +64,10 @@ function wpunity_create_gameproject_frontend_callback(){
         //$game_type_chosen_slug = 'chemistry_games';
     }
     
-    $realplace_tax = get_term_by('slug', 'real_place', 'wpunity_game_cat');
-   
+  
     $game_taxonomies = array(
         'wpunity_game_type' => array(
             $game_type_chosen_id,
-        ),
-        'wpunity_game_cat' => array(
-            $realplace_tax->term_id,
         )
     );
     

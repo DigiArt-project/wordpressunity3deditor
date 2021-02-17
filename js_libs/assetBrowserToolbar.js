@@ -5,6 +5,7 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
     jQuery.ajax({
         url :  isAdmin == "back" ? 'admin-ajax.php' : my_ajax_object_fbrowse.ajax_url,
         type : 'POST',
+        dataType: 'json',
         data : {
             'action': 'wpunity_fetch_game_assets_action',
             'gameProjectSlug': gameProjectSlug,
@@ -13,12 +14,16 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
 
         success : function(responseRecords) {
 
+            console.log("responseRecords", responseRecords);
+
             responseRecords = responseRecords.items;
 
             file_Browsing_By_DB(responseRecords, gameProjectSlug, urlforAssetEdit);
         },
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR 51:" + thrownError);
+            console.log(ajaxOptions);
+            console.log(xhr);
         }
     });
 }
@@ -28,6 +33,8 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
  * @param responseData
  */
 function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
+
+
 
     var filemanager = jQuery('#assetBrowserToolbar'),
         // breadcrumbs = jQuery('.breadcrumbs'),

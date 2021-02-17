@@ -1,7 +1,7 @@
 <?php
 
 // Load Scripts
-function loadAsset3Dfunctions() {
+function wpunity_widget_functions() {
     
     // Stylesheet
     wp_enqueue_style('wpunity_widgets_stylesheet');
@@ -49,7 +49,8 @@ function loadAsset3Dfunctions() {
     // Load single asset
     wp_enqueue_script('Asset_viewer_3d_kernel');
 }
-add_action('wp_enqueue_scripts', 'loadAsset3Dfunctions' );
+
+
 
 // Creating the widget
 class wpunity_3d_widget extends WP_Widget {

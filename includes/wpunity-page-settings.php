@@ -1,9 +1,6 @@
 <?php
 
-if( is_admin() )
-    $my_settings_page = new ImcSettingsPage();
-
-class ImcSettingsPage {
+class Wpunity_settingsPage {
 
     /*
      * For easier overriding we declared the keys
@@ -20,9 +17,7 @@ class ImcSettingsPage {
      * current ones speak for themselves.
      */
     function __construct() {
-        add_action( 'init', array( &$this, 'load_settings' ) );
-        add_action( 'admin_init', array( &$this, 'register_general_settings' ) );
-        add_action( 'admin_menu', array( &$this, 'render_setting') );
+    
     }
 
     /*
@@ -192,61 +187,63 @@ class ImcSettingsPage {
     //LIST ALL HOOKS
     
     function dump_hook( $tag, $hook ) {
-        //ksort($hook);
-        
-        echo "<pre>>>>>>\t$tag<br>";
-        
-        
-        foreach( $hook as $priority => $functions ) {
-            
-            echo $priority;
-            
-            foreach( $functions as $function )
-                if( $function['function'] != 'list_hook_details' ) {
-                
-                    echo "\t";
-                    
-                    if (is_string($function['function']))
-                        echo $function['function'];
-                    elseif ($function['function'] instanceof Closure)
-                        print_r($function);
-                    elseif (is_string($function['function']))
-                            echo $function['function'][0] . ' -> ' . $function['function'][1];
-                    elseif (is_object($function['function'][0]))
-                        echo "(object) " . get_class($function['function'][0]) . ' -> ' . $function['function'][1];
-                    else
-                        print_r($function);
-                    echo ' (' . $function['accepted_args'] . ') <br>';
-                    
-                }
-        }
-        
-        echo '</pre>';
+    
+    
+    
+    
+    
+
+    
+    
     }
     
-    function isClosure($suspected_closure) {
-        
-        if (!is_array($suspected_closure)) {
-            print_r($suspected_closure);
-    
-            $reflection = new ReflectionFunction($suspected_closure);
-        }
-        
-        return (bool) $reflection->isClosure();
-    }
-    
+   
     function list_hooks( $filter = false ){
         global $wp_filter;
         
         $hooks = $wp_filter;
-        //print_r($hooks);
-        //ksort( $hooks );
-    
-        echo 'Priority ----- tag';
+        $i = 0;
+        echo "Order of functions";
+        echo "<table style='border: 1px solid black; background:#000000'>";
+        echo '<tr style="background: #ffffff"><td></td><td>tag</td><td>Priority</td><td>function</td></tr>';
         
         foreach( $hooks as $tag => $hook )
-            if ( false === $filter || false !== strpos( $tag, $filter ) )
-                $this->dump_hook($tag, $hook);
+            if ( false === $filter || false !== strpos( $tag, $filter ) ){
+                //$this->dump_hook($tag, $hook);
+    
+                foreach( $hook as $priority => $functions ) {
+                    foreach( $functions as $function )
+                        if( $function['function'] != 'list_hook_details' ) {
+                            if (is_string($function['function'])) {
+                                if (stripos($function['function'],'wpunity') !== false) {
+                                    $i++;
+                                    echo "<tr style='background: #ffffff'><td>".$i."</td><td>"
+                                        .$tag."</td><td>".$priority."</td><td>".$function['function']."</td></tr>";
+                                }
+                            }elseif ($function['function'] instanceof Closure){
+                                //print_r($function);
+                            }elseif (is_object($function['function'][0])) {
+                                if (stripos(get_class($function['function'][0]), 'wpunity') !== false) {
+                                    $i++;
+                                    echo "<tr style='background: #ffffff'><td>".$i."</td><td>".$tag."</td><td>".$priority.
+                                        "</td><td>"."(object) " .
+                                        get_class($function['function'][0]) . ' -> ' . $function['function'][1].
+                                        "</td></tr>";
+                        
+                                }
+                            }else {
+                                if (stripos($function['function'][0], 'wpunity') !== false) {
+                                    $i++;
+                                    echo "<tr style='background: #ffffff'><td>".$i."</td><td>".$tag."</td><td>".$priority.
+                                        "</td><td>".print_r($function,true)."</td></tr>";
+                                }
+                            }
+                            //echo ' (' . $function['accepted_args'] . ')';
+                        }
+                }
+            }
+    
+        echo "</table>";
     }
     
     

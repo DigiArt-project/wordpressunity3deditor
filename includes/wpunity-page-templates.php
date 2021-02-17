@@ -24,29 +24,20 @@ class wpUnityTemplate {
         // Add a filter to the attributes metabox to inject template into the cache.
         if ( version_compare( floatval( get_bloginfo( 'version' ) ), '4.7', '<' ) ) {
             // 4.6 and older
-            add_filter(
-                'page_attributes_dropdown_pages_args',
-                array( $this, 'register_project_templates' )
-            );
+            add_filter('page_attributes_dropdown_pages_args', array( $this, 'register_project_templates' ));
         } else {
             // Add a filter to the wp 4.7 version attributes metabox
-            add_filter(
-                'theme_page_templates', array( $this, 'add_new_template' )
-            );
+            // 73
+            add_filter('theme_page_templates', array( $this, 'add_new_template' ));
         }
 
         // Add a filter to the save post to inject out template into the page cache
-        add_filter(
-            'wp_insert_post_data',
-            array( $this, 'register_project_templates' )
-        );
+        add_filter('wp_insert_post_data', array( $this, 'register_project_templates'));
 
         // Add a filter to the template include to determine if the page has our
         // template assigned and return it's path
-        add_filter(
-            'template_include',
-            array( $this, 'view_project_template')
-        );
+        // 74
+        add_filter('template_include', array( $this, 'view_project_template'));
 
         // Add your templates to this array.
         $this->templates = array(
@@ -127,12 +118,16 @@ class wpUnityTemplate {
         return $template;
     }
 }
-add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
+
 
 //=================================================
 
 function wpunity_create_openGamePage() {
-
+    
+    $ff = fopen("output_order_log.txt","a");
+    fwrite($ff, 'register_activation_hook'.chr(13));
+    fclose($ff);
+    
     if (! wpunity_get_page_by_slug('wpunity-main')) {
         $new_page_id = wp_insert_post(array(
             'post_title' => 'WPUnity-Main',

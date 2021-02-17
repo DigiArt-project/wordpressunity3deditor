@@ -1,7 +1,5 @@
 <?php
 
-$wpunity_prefix = 'wpunity_game_';
-
 //All information about our meta box
 $wpunity_databox3 = array(
 	'id' => 'wpunity-games-databox',
@@ -12,20 +10,20 @@ $wpunity_databox3 = array(
 		array(
 			'name' => 'Latitude',
 			'desc' => 'Game\'s Latitude',
-			'id' => $wpunity_prefix . 'lat',
+			'id' => 'wpunity_game_lat',
 			'type' => 'text',
 			'std' => ''
 		),
 		array(
 			'name' => 'Longitude',
 			'desc' => 'Game\'s Longitude',
-			'id' => $wpunity_prefix . 'lng',
+			'id' => 'wpunity_game_lng',
 			'type' => 'text',
 			'std' => ''
 		),array(
 			'name' => 'collaborators_ids',
 			'desc' => 'ids of collaborators starting separated and ending by semicolon',
-			'id' => $wpunity_prefix . 'collaborators_ids',
+			'id' => 'wpunity_game_collaborators_ids',
 			'type' => 'text',
 			'std' => ""
 		)
@@ -33,9 +31,14 @@ $wpunity_databox3 = array(
 );
 
 
-// Create Game as custom type 'wpunity_game'
-function wpunity_games_construct(){
-	$labels = array(
+// Create  custom post type 'wpunity_game'
+function wpunity_project_cpt_construct(){
+    
+    $ff = fopen("output_order_log.txt","a");
+    fwrite($ff, '7 wpunity_games_construct'.chr(13));
+    fclose($ff);
+    
+    $labels = array(
 		'name'               => _x( 'Game Projects', 'post type general name'),
 		'singular_name'      => _x( 'Game Project', 'post type singular name'),
 		'menu_name'          => _x( 'Game Projects', 'admin menu'),
@@ -54,7 +57,8 @@ function wpunity_games_construct(){
 		'not_found'          => __( 'No Game Projects found.'),
 		'not_found_in_trash' => __( 'No Game Projects found in Trash.')
 	);
-	$args = array(
+	
+    $args = array(
 		'labels'                => $labels,
 		'description'           => 'A Game Project consists of several scenes',
 		'public'                => true,
@@ -63,8 +67,8 @@ function wpunity_games_construct(){
 		'show_in_nav_menus'     => false,
 		'menu_position'     => 26,
 		'menu_icon'         =>'dashicons-media-interactive',
-		'taxonomies'        => array('wpunity_game_cat' , 'wpunity_game_type'),
-		'supports'          => array('title','editor','custom-fields','revisions'),
+		'taxonomies'        => array('wpunity_game_type'),
+		'supports'          => array('title','author','editor','custom-fields','revisions'),
 		'hierarchical'      => false,
 		'has_archive'       => false,
 		'capabilities' => array(
@@ -76,50 +80,21 @@ function wpunity_games_construct(){
 			'read_private_posts' => 'read_private_wpunity_game',
 			'edit_post' => 'edit_wpunity_game',
 			'delete_post' => 'delete_wpunity_game',
-			'read_post' => 'read_wpunity_game',
-		),
+			'read_post' => 'read_wpunity_game'
+		)
 	);
+ 
 	register_post_type('wpunity_game', $args);
 }
 
-//==========================================================================================================================================
-
-// Create Game Category as custom taxonomy 'wpunity_game_cat'
-function wpunity_games_taxcategory(){
-	$labels = array(
-		'name'              => _x( 'Game Category', 'taxonomy general name'),
-		'singular_name'     => _x( 'Game Category', 'taxonomy singular name'),
-		'menu_name'         => _x( 'Game Categories', 'admin menu'),
-		'search_items'      => __( 'Search Game Categories'),
-		'all_items'         => __( 'All Game Categories'),
-		'parent_item'       => __( 'Parent Game Category'),
-		'parent_item_colon' => __( 'Parent Game Category:'),
-		'edit_item'         => __( 'Edit Game Category'),
-		'update_item'       => __( 'Update Game Category'),
-		'add_new_item'      => __( 'Add New Game Category'),
-		'new_item_name'     => __( 'New Game Category')
-	);
-	$args = array(
-		'description' => 'Category of Game',
-		'labels'    => $labels,
-		'public'    => false,
-		'show_ui'   => true,
-		'hierarchical' => true,
-		'show_admin_column' => true,
-		'capabilities' => array (
-			'manage_terms' => 'manage_game_cat',
-			'edit_terms' => 'manage_game_cat',
-			'delete_terms' => 'manage_game_cat',
-			'assign_terms' => 'edit_game_cat'
-		),
-	);
-	register_taxonomy('wpunity_game_cat', 'wpunity_game', $args);
-}
-
-//==========================================================================================================================================
 
 //Create Game Type as custom taxonomy 'wpunity_game_type'
-function wpunity_games_taxtype(){
+function wpunity_project_taxtype_create(){
+    
+    $ff = fopen("output_order_log.txt","a");
+    fwrite($ff, '9 wpunity_games_taxtype'.chr(13));
+    fclose($ff);
+    
 	$labels = array(
 		'name'              => _x( 'Game Type', 'taxonomy general name'),
 		'singular_name'     => _x( 'Game Type', 'taxonomy singular name'),
@@ -133,6 +108,7 @@ function wpunity_games_taxtype(){
 		'add_new_item'      => __( 'Add New Game Type'),
 		'new_item_name'     => __( 'New Game Type')
 	);
+	
 	$args = array(
 		'description' => 'Type of Game Project',
 		'labels'    => $labels,
@@ -147,11 +123,10 @@ function wpunity_games_taxtype(){
 			'assign_terms' => 'edit_game_type'
 		),
 	);
+	
 	register_taxonomy('wpunity_game_type', 'wpunity_game', $args);
 }
 
-
-//==========================================================================================================================================
 
 // Generate Taxonomy (for scenes & assets) with Game's slug/name
 // Create Default Scenes for this "Game"
@@ -243,54 +218,14 @@ function wpunity_create_folder_game( $new_status, $old_status, $post){
 
 //Create Game Category Box @ Game's backend
 function wpunity_games_taxcategory_box() {
-	
-	remove_meta_box( 'wpunity_game_catdiv', 'wpunity_game', 'side' ); //Removes the default metabox at side
-	
-	add_meta_box( 'tagsdiv-wpunity_game_cat','Game Category','wpunity_games_taxcategory_box_content', 'wpunity_game', 'side' , 'high'); //Adds the custom metabox with select box
-	
+
 	remove_meta_box( 'wpunity_game_typediv', 'wpunity_game', 'side' ); //Removes the default metabox at side
 	
 	add_meta_box( 'tagsdiv-wpunity_game_type','Game Type','wpunity_games_taxtype_box_content', 'wpunity_game', 'side' , 'high'); //Adds the custom metabox with select box
 	
 }
 
-function wpunity_games_taxcategory_box_content($post){
-	$tax_name = 'wpunity_game_cat';
-	?>
-	<div class="tagsdiv" id="<?php echo $tax_name; ?>">
-		
-		<p class="howto"><?php echo 'Select category for current Game' ?></p>
-		<?php
-		// Use nonce for verification
-		wp_nonce_field( plugin_basename( __FILE__ ), 'wpunity_game_cat_noncename' );
-		$type_IDs = wp_get_object_terms( $post->ID, 'wpunity_game_cat', array('fields' => 'ids') );
-		
-		$args = array(
-			'show_option_none'   => 'Select Category',
-			'orderby'            => 'name',
-			'hide_empty'         => 0,
-			'selected'           => $type_IDs[0],
-			'name'               => 'wpunity_game_cat',
-			'taxonomy'           => 'wpunity_game_cat',
-			'echo'               => 0,
-			'option_none_value'  => '-1',
-			'id' => 'wpunity-select-category-dropdown'
-		);
-		
-		$select = wp_dropdown_categories($args);
-		
-		$replace = "<select$1 required>";
-		$select  = preg_replace( '#<select([^>]*)>#', $replace, $select );
-		
-		$old_option = "<option value='-1'>";
-		$new_option = "<option disabled selected value=''>".'Select category'."</option>";
-		$select = str_replace($old_option, $new_option, $select);
-		
-		echo $select;
-		?>
-	</div>
-	<?php
-}
+
 
 function wpunity_games_taxtype_box_content($post){
 	$tax_name = 'wpunity_game_type';
@@ -338,43 +273,6 @@ function wpunity_games_taxtype_box_content($post){
 	<?php
 }
 
-// When the post is saved, also saves wpunity_game_cat / wpunity_game_type
-function wpunity_games_taxcategory_box_content_save( $post_id ) {
-	
-	global $wpdb;
-	// verify if this is an auto save routine.
-	// If it is our form has not been submitted, so we dont want to do anything
-	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) )
-		return;
-	
-	// verify this came from the our screen and with proper authorization,
-	// because save_post can be triggered at other times
-	
-	if (!isset($_POST['wpunity_game_cat_noncename']))
-		return;
-	
-	if ( !wp_verify_nonce( $_POST['wpunity_game_cat_noncename'], plugin_basename( __FILE__ ) ) )
-		return;
-	
-	// Check permissions
-	if ( 'wpunity_game' == $_POST['post_type'] )
-	{
-		if ( ! ( current_user_can( 'edit_page', $post_id )  ) )
-			return;
-	}
-	else
-	{
-		if ( ! ( current_user_can( 'edit_post', $post_id ) ) )
-			return;
-	}
-	
-	// OK, we're authenticated: we need to find and save the data
-	$type_ID = intval($_POST['wpunity_game_cat'], 10);
-	
-	$type = ( $type_ID > 0 ) ? get_term( $type_ID, 'wpunity_game_cat' )->slug : NULL;
-	
-	wp_set_object_terms(  $post_id , $type, 'wpunity_game_cat' );
-}
 
 function wpunity_games_taxtype_box_content_save( $post_id ) {
 	
@@ -413,27 +311,6 @@ function wpunity_games_taxtype_box_content_save( $post_id ) {
 	wp_set_object_terms(  $post_id , $type, 'wpunity_game_type' );
 }
 
-function wpunity_games_taxcategory_fill(){
-	wp_insert_term(
-		'Real Place', // the term
-		'wpunity_game_cat', // the taxonomy
-		array(
-			'description'=> 'Real places are places that exist in reality and were 3D scanned.',
-			'slug' => 'real_place',
-		)
-	);
-	
-	wp_insert_term(
-		'Virtual Place', // the term
-		'wpunity_game_cat', // the taxonomy
-		array(
-			'description'=> 'Virtual places do not exist in reality and they are a sort of iconic places to expose 3D scanned artifacts.',
-			'slug' => 'virtual_place',
-		)
-	);
-	
-}
-
 function wpunity_set_custom_wpunity_game_columns($columns) {
 	$columns['game_slug'] = 'Game Slug';
 	
@@ -461,7 +338,9 @@ function wpunity_set_custom_wpunity_game_columns_fill( $column, $post_id ) {
 
 //Add and Show the metabox with Custom Field for Game and the Compiler Box ($wpunity_databox3)
 function wpunity_games_databox_add() {
-	global $wpunity_databox3;
+	
+    global $wpunity_databox3;
+	
 	add_meta_box($wpunity_databox3['id'], 'Game Data', 'wpunity_games_databox_show', $wpunity_databox3['page'], $wpunity_databox3['context'], $wpunity_databox3['priority']);
 	add_meta_box('wpunity-games-assembler-box', 'Game Assembler', 'wpunity_games_assemblerbox_show', 'wpunity_game', 'side', 'low'); //Compiler Box
 	add_meta_box('wpunity-games-compiler-box', 'Game Compiler', 'wpunity_games_compilerbox_show', 'wpunity_game', 'side', 'low'); //Compiler Box
@@ -593,7 +472,17 @@ function wpunity_games_assemblerbox_show(){
 
 
 
+function wpunity_projects_taxtypes_define(){
 
+wp_insert_term('Energy', 'wpunity_game_type', array('description' => 'Energy Games', 'slug' => 'energy_games'));
+wp_insert_term('Archaeology','wpunity_game_type', array('description'=> 'Archaeology Games','slug'=>'archaeology_games'));
+wp_insert_term('Chemistry','wpunity_game_type',array('description'=> 'Chemistry Games','slug' => 'chemistry_games'));
+
+}
+
+
+
+//--------------------------- OBSOLETE ------------------------------
 
 
 //16 Settings for each Game Type as term_meta

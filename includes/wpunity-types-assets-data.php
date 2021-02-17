@@ -2,9 +2,11 @@
 
 //SIDEBAR of Asset3D with fetch-segmentation etc...
 
-function loadTypesAssetsDataScripts() {
+function wpunity_assets_scripts_and_styles() {
     
-    
+    $ff = fopen("output_order_log.txt","a");
+    fwrite($ff, '48 wpunity_assets_scripts_and_styles'.chr(13));
+    fclose($ff);
     
     // load css/wpunity_backend.css
     wp_enqueue_style('wpunity_backend');
@@ -50,11 +52,11 @@ function loadTypesAssetsDataScripts() {
 //		)
 //	);
 }
-add_action('wp_enqueue_scripts', 'loadTypesAssetsDataScripts' );
 
 
 
-add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
+
+
 
 function wpunity_assets_create_right_metaboxes() {
     
@@ -618,7 +620,7 @@ function wpunity_assets_databox_add() {
     add_meta_box($wpunity_databox1['id'], 'Asset Data', 'wpunity_assets_databox_show', $wpunity_databox1['page'], $wpunity_databox1['context'], $wpunity_databox1['priority']);
 }
 
-add_action('admin_menu', 'wpunity_assets_databox_add');
+
 
 function wpunity_assets_infobox_show(){
     ?>
@@ -1339,40 +1341,4 @@ function wpunity_assets_databox_save($post_id) {
         }
     }
 }
-
-// Save data from infobox
-add_action('save_post', 'wpunity_assets_databox_save');
-
-//==========================================================================================================================================
-
-// AJAXES for content interlinking
-add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
-//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
-add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
-add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
-
-
-// Peer conferencing
-add_action( 'wp_ajax_nopriv_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
-add_action( 'wp_ajax_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
-
-add_action( 'wp_ajax_wpunity_update_expert_log_action', 'wpunity_update_expert_log_callback');
-
-
-// AJAXES for semantics
-add_action( 'wp_ajax_wpunity_segment_obj_action', 'wpunity_segment_obj_action_callback' );
-add_action( 'wp_ajax_wpunity_monitor_segment_obj_action', 'wpunity_monitor_segment_obj_action_callback' );
-add_action( 'wp_ajax_wpunity_enlist_splitted_objs_action', 'wpunity_enlist_splitted_objs_action_callback' );
-
-add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_callback' );
-
-// AJAX for delete asset
-add_action('wp_ajax_wpunity_delete_asset_action', 'wpunity_delete_asset3d_frontend_callback');
-
-// AJAX for fetch asset
-add_action('wp_ajax_wpunity_fetch_asset_action', 'wpunity_fetch_asset3d_frontend_callback');
-
-
-//==========================================================================================================================================
-
 ?>

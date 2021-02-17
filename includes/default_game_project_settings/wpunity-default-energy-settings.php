@@ -4,7 +4,7 @@
 // CREATE ASSETS' TYPES with default values (ENERGY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_assets_taxcategory_energy_fill' );
+
 
 function wpunity_assets_taxcategory_energy_fill(){
 
@@ -74,44 +74,13 @@ function wpunity_assets_taxcategory_energy_fill(){
 // CREATE PROJECT SETTINGS with default values (ENERGY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_games_taxtype_energy_fill', 1 );
 
-function wpunity_games_taxtype_energy_fill(){
-
-  wp_insert_term(
-      'Energy', // the term
-      'wpunity_game_type', // the taxonomy
-      array(
-          'description' => 'Energy Games',
-          'slug' => 'energy_games',
-      )
-  );
-//  $inserted_term = get_term_by('slug', 'energy_games', 'wpunity_game_type');
-//
-//  update_term_meta($inserted_term->term_id, 'wpunity_audio_manager_term', wpunity_default_value_AudioManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_cluster_input_manager_term', wpunity_default_value_ClusterInputManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_dynamics_manager_term', wpunity_default_value_DynamicsManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_editor_build_settings_term', wpunity_default_value_EditorBuildSettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_editor_settings_term', wpunity_default_value_EditorSettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_graphics_settings_term', wpunity_default_value_GraphicsSettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_input_manager_term', wpunity_default_value_InputManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_nav_mesh_areas_term', wpunity_default_value_NavMeshAreas_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_network_manager_term', wpunity_default_value_NetworkManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_physics2d_settings_term', wpunity_default_value_Physics2DSettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_project_settings_term', wpunity_default_value_ProjectSettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_project_version_term', wpunity_default_value_ProjectVersion_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_quality_settings_term', wpunity_default_value_QualitySettings_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_tag_manager_term', wpunity_default_value_TagManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_time_manager_term', wpunity_default_value_TimeManager_energy_get(), true);
-//  update_term_meta($inserted_term->term_id, 'wpunity_unity_connect_settings_term', wpunity_default_value_unityConnect_energy_get(), true);
-
-}
 
 /***************************************************************************************************************/
 // CREATE SCENE TYPES (ENERGY GAMES)
 /***************************************************************************************************************/
 
-add_action( 'init', 'wpunity_scenes_types_energy_standard_cre' );
+
 
 function wpunity_scenes_types_energy_standard_cre(){
 

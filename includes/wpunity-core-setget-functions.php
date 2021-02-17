@@ -426,10 +426,17 @@ function get_assets($games_slugs){
 
 function wpunity_fetch_game_assets_action_callback(){
 
+	//$ff = fopen("output_assets_call.txt", "w");
+	
+	
+	
 	// Output the directory listing as JSON
 	header('Content-type: application/json');
 
 	$response = wpunity_getAllassets_byGameProject($_POST['gameProjectSlug'], $_POST['gameProjectID']);
+	
+//	fwrite($ff, print_r($response, true));
+
 	
 	for ($i=0; $i<count($response); $i++){
 		$response[$i]['name'] = $response[$i]['assetName'];
@@ -458,7 +465,7 @@ function wpunity_fetch_game_assets_action_callback(){
 	);
 	
 	
-//	$ff = fopen("output_get_assets.json","w");
+	
 //	fwrite($ff, print_r($jsonResp,true));
 //	fclose($ff);
 	

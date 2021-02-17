@@ -1,7 +1,6 @@
 <?php
 
-// Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
-add_action('add_meta_boxes','wpunity_assets_taxcategory_box');
+
 
 function wpunity_assets_taxcategory_box() {
     
@@ -254,7 +253,7 @@ function wpunity_assets_taxcategory_box_content_save( $post_id ) {
     wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_cat' );
 }
 
-add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
+
 
 
 // Save IPR category
@@ -295,7 +294,7 @@ function wpunity_assets_taxcategory_ipr_box_content_save( $post_id ) {
     wp_set_object_terms(  $post_id , $type, 'wpunity_asset3d_ipr_cat' );
 }
 
-add_action( 'save_post', 'wpunity_assets_taxcategory_ipr_box_content_save' );
+
 
 
 
@@ -352,7 +351,7 @@ function wpunity_assets_taxpgame_box_content_save( $post_id ) {
 
 }
 
-add_action( 'save_post', 'wpunity_assets_taxpgame_box_content_save' );
+
 
 //==========================================================================================================================================
 
@@ -398,15 +397,12 @@ function wpunity_assets_category_yamlFields_save( $term_id ) {
 }
 
 
-// Add the fields to the taxonomy, using our callback function
-add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yamlFields', 10, 2 );
-// Save the changes made on the taxonomy, using our callback function
-add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
+
 
 //==========================================================================================================================================
 
 
-add_filter( 'manage_wpunity_asset3d_posts_columns', 'wpunity_set_custom_wpunity_asset3d_columns' );
+
 
 function wpunity_set_custom_wpunity_asset3d_columns($columns) {
     $columns['asset_slug'] = 'Asset Slug';
@@ -414,8 +410,7 @@ function wpunity_set_custom_wpunity_asset3d_columns($columns) {
     return $columns;
 }
 
-// Add the data to the custom columns for the book post type:
-add_action( 'manage_wpunity_asset3d_posts_custom_column' , 'wpunity_set_custom_wpunity_asset3d_columns_fill', 10, 2 );
+
 
 function wpunity_set_custom_wpunity_asset3d_columns_fill( $column, $post_id ) {
     switch ( $column ) {

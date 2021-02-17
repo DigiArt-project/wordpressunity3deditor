@@ -8,6 +8,10 @@
  * Version: 0.1.5
  */
 
+$ff = fopen("output_order_log.txt","w");
+fwrite($ff,'----- This file displays the order of function execution ---'.chr(13));
+fclose($ff);
+
 /*
  * Change root .htaccess for uploading big data files
  *
@@ -33,6 +37,33 @@ echo ini_get('max_input_time').chr(10);
 $project_scope = 0;
 
 
+function wpunity_plugin_activate() {
+	
+	add_option( 'Activated_Plugin', 'WordpressUnity3DEditor' );
+	
+	/* activation code here */
+	// Display the alert box
+	
+	//echo '<script>alert("Welcome")</script>';
+	
+}
+register_activation_hook( __FILE__, 'wpunity_plugin_activate' );
+
+
+
+
+function wpunity_load_plugin() {
+	if(is_admin()&&get_option('Activated_Plugin')=='WordpressUnity3DEditor') {
+		delete_option('Activated_Plugin');
+		/* do some stuff once right after activation */
+		
+		
+		echo '<script>alert("Welcome to VRodos")</script>';
+	}
+}
+add_action('admin_init','wpunity_load_plugin');
+
+
 //===================================== Styles & Scripts ====================================
 function wpunity_load_jquery_scripts() {
 
@@ -50,6 +81,7 @@ function wpunity_load_jquery_scripts() {
 	wp_enqueue_style( 'jquery-ui-css' , plugin_dir_url( __FILE__ ) . 'css/jquery-ui.min.css' );
 	wp_enqueue_style( 'jquery-ui-theme-css' , plugin_dir_url( __FILE__ ) . 'css/jquery-ui.theme.min.css' );
 }
+// 44
 add_action('wp_enqueue_scripts', 'wpunity_load_jquery_scripts' );
 
 
@@ -174,7 +206,7 @@ function wpunity_register_scripts() {
 		wp_register_script($scriptsD[$i][0] , $scriptsD[$i][1], null, null, false );
 	}
 }
-
+// 45
 add_action('wp_enqueue_scripts', 'wpunity_register_scripts' );
 
 
@@ -213,6 +245,7 @@ function wpunity_register_styles() {
 	
 	wp_enqueue_style('wpunity_backend');
 }
+// 46
 add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 
 
@@ -220,66 +253,197 @@ add_action('wp_enqueue_scripts', 'wpunity_register_styles' );
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-widgets.php');
 
+// 47
+add_action('wp_enqueue_scripts', 'wpunity_widget_functions' );
+
+// 49
 add_action( 'widgets_init', 'wpunity_load_widget' );
 
 //----------------------- USER ROLES -------------------------------------------
 
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php');
 
+// Order : 4
 add_action( 'init', 'wpunity_add_customroles');
+
+// Order: 5
 add_action( 'init', 'wpunity_add_capabilities_to_adv_game_master');
+
+// Order: 6
 add_action( 'init', 'wpunity_add_capabilities_to_admin');
 
 //---------------------- Game Projects -------------------------------------------------
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php');
 
-add_action('init', 'wpunity_games_construct'); //wpunity_game 'GAMES'
-add_action('init', 'wpunity_games_taxcategory'); //wpunity_game_cat 'GAME CATEGORIES'
-add_action('init', 'wpunity_games_taxtype'); //wpunity_game_type 'GAME TYPES'
+// Order : 2
+add_action( 'init', 'wpunity_projects_taxtypes_define', 1 );
 
+// Order: 7
+add_action('init', 'wpunity_project_cpt_construct'); //wpunity_game 'GAMES'
+
+// Order: 9
+add_action('init', 'wpunity_project_taxtype_create'); //wpunity_game_type 'GAME TYPES'
+
+// 28
 add_action('transition_post_status','wpunity_create_folder_game', 9 , 3);
 
 
-add_action( 'init', 'wpunity_games_taxcategory_fill' );
-
+// 50
 add_filter( 'manage_wpunity_game_posts_columns', 'wpunity_set_custom_wpunity_game_columns' );
 
 //Create Game Category Box @ Game's backend
+// 51
 add_action('add_meta_boxes','wpunity_games_taxcategory_box');
 
-/* Do something with the data entered */
-add_action( 'save_post', 'wpunity_games_taxcategory_box_content_save' );
 
 /* Do something with the data entered */
+// 31
 add_action( 'save_post', 'wpunity_games_taxtype_box_content_save' );
 
 // Add the data to the custom columns for the game post type:
+// 55
 add_action( 'manage_wpunity_game_posts_custom_column' , 'wpunity_set_custom_wpunity_game_columns_fill', 10, 2 );
 
+// 40
 add_action('admin_menu', 'wpunity_games_databox_add');
+
+// 32
 add_action('save_post', 'wpunity_games_databox_save');
 
 //---------------------- Scenes ----------------------------------------------------
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php');
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-tax.php' );
+// Order : 11
+add_action('init', 'wpunity_scenes_construct'); //wpunity_scene 'SCENES'
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes-data.php' );
+// Order: 12
+add_action('init', 'wpunity_scenes_taxpgame'); //wpunity_scene_pgame  'SCENE GAMES'
+
+// Order: 13
+add_action('init', 'wpunity_scenes_taxyaml'); //wpunity_scene_yaml 'SCENE TYPES'
+
+// Create Scene's Game Box @ scene's backend
+// 52
+add_action('add_meta_boxes','wpunity_scenes_taxgame_box');
+
+//When the post is saved, also saves wpunity_game_cat
+//33
+add_action( 'save_post', 'wpunity_scenes_taxgame_box_content_save' );
+
+//34
+add_action( 'save_post', 'wpunity_scenes_taxyaml_box_content_save' );
+
+// 56
+add_filter( 'manage_wpunity_scene_posts_columns', 'wpunity_set_custom_wpunity_scene_columns' );
+
+// Add the data to the custom columns for the scene post type
+// 57
+add_action( 'manage_wpunity_scene_posts_custom_column' , 'wpunity_set_custom_wpunity_scene_columns_fill', 10, 2 );
+
+// 41
+add_action('admin_menu', 'wpunity_scenes_meta_definitions_add');
+
+// Save metas
+add_action('save_post', 'wpunity_scenes_metas_save');
 
 //===================================== Assets ============================================
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets.php' );
 
+// 14
+add_action('init', 'wpunity_assets_construct'); //wpunity_asset3d 'ASSETS 3D'
+
+// 15
+add_action('init', 'wpunity_assets_taxcategory'); //wpunity_asset3d_cat 'ASSET TYPES'
+
+// 16
+add_action('init', 'wpunity_assets_taxpgame'); //wpunity_asset3d_pgame 'ASSET GAMES'
+
+// 17
+add_action('init', 'wpunity_assets_taxcategory_ipr'); //wpunity_asset3d_ipr_cat 'ASSET IPR CATEG'
+
+// 35
+add_action('save_post','wpunity_create_pathdata_asset',10,3);
+
+// 18
+add_action('init','wpunity_allowAuthorEditing');
+
+// 58
+add_filter( 'wp_dropdown_users_args', 'change_user_dropdown', 10, 2 );
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
+// 36
+add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
+
+// 37
+add_action( 'save_post', 'wpunity_assets_taxcategory_ipr_box_content_save' );
+
+// 38
+add_action( 'save_post', 'wpunity_assets_taxpgame_box_content_save' );
+
+
+// Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
+// 53
+add_action('add_meta_boxes','wpunity_assets_taxcategory_box');
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-data.php' );
+
+// Save data from infobox
+// 39
+add_action('save_post', 'wpunity_assets_databox_save');
+
+// 42
+add_action('admin_menu', 'wpunity_assets_databox_add');
+
+// 48
+add_action('wp_enqueue_scripts', 'wpunity_assets_scripts_and_styles' );
+
+// 54
+add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
+
+// Add the fields to the taxonomy, using our callback function
+// 59
+add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yamlFields', 10, 2 );
+
+// Save the changes made on the taxonomy, using our callback function
+// 60
+add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
+
+// 61
+add_filter( 'manage_wpunity_asset3d_posts_columns', 'wpunity_set_custom_wpunity_asset3d_columns' );
+
+// Add the data to the custom columns for the book post type:
+// 62
+add_action( 'manage_wpunity_asset3d_posts_custom_column' , 'wpunity_set_custom_wpunity_asset3d_columns_fill', 10, 2 );
+
 
 //===================================== Other ============================================
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-upload-functions.php' );
 
+// 63
+add_filter( 'upload_dir', 'wpunity_upload_dir_forScenesOrAssets' );
+
+// 64
+add_filter( 'intermediate_image_sizes', 'wpunity_disable_imgthumbs_assets', 999 );
+
+// 65
+add_filter( 'sanitize_file_name', 'wpunity_overwrite_uploads', 10, 1 );
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
+
+// Set to the lowest priority in order to have game taxes available when joker games are created
+// 26
+add_action( 'init', 'wpunity_createJoker_activation', 100, 2 );
+
+// 66
+add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 5, 2 );
+
+// Remove Admin bar for non admins
+// 67
+add_action('after_setup_theme', 'wpunity_remove_admin_bar');
 
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functions.php' );
@@ -289,12 +453,33 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-setget-functi
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-settings.php' );
 
 
+
+if( is_admin() ){
+	$my_settings_page = new Wpunity_settingsPage();
+	//19
+	add_action( 'init', array( $my_settings_page, 'load_settings' ) );
+	
+	//29
+	add_action( 'admin_init', array( $my_settings_page, 'register_general_settings' ) );
+	
+	// 43
+	add_action( 'admin_menu', array( $my_settings_page, 'render_setting') );
+}
+
+
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-page-templates.php' );
+
+// 27
+add_action( 'plugins_loaded', array( 'wpUnityTemplate', 'get_instance' ) );
+
+// Order 1: Filters inside wpunity-page-templates
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/templates/edit-wpunity_asset3D-saveData.php' );
 
 
 // ---------  Create dedicated pages on plugin activation -------------------------
+// 68
 register_activation_hook(__FILE__,'wpunity_create_openGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editGamePage');
 register_activation_hook(__FILE__,'wpunity_create_editScenePage');
@@ -307,6 +492,8 @@ register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
 
 // -------------  Games versions table -------------------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-db-table-creations.php' );
+
+// 69
 register_activation_hook( __FILE__, 'wpunity_db_create_games_versions_table' );
 
 // ------------------- Add helper functions file ------------------------------------------
@@ -319,23 +506,53 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-project-assem
 
 //-------------------- Energy related ----------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-settings.php' );
+
+
+
+// 20
+add_action( 'init', 'wpunity_assets_taxcategory_energy_fill' );
+
+// 21
+add_action( 'init', 'wpunity_scenes_types_energy_standard_cre' );
+
+
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-yamls.php' );
+
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-energy-compile.php' );
+
+
 
 //------------------- Archaeology related -----------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-yamls.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-settings.php' );
+
+// 22
+add_action( 'init', 'wpunity_assets_taxcategory_archaeology_fill' );
+
+// 23
+add_action( 'init', 'wpunity_scenes_types_archaeology_standard_cre' );
+
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-archaeology-compile.php' );
 
 //-------------------- Chemistry related ------------------------
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-settings.php' );
+
+// 24
+add_action( 'init', 'wpunity_assets_taxcategory_chemistry_fill' );
+
+// 25
+add_action( 'init', 'wpunity_scenes_types_chemistry_standard_cre' );
+
+
 //include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-yamls.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-compile.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
 
-// ===================== Other ===================================
 
+// ===================== Mime type to allow Upload ===================================
 /**
  * Allow various file types to be uploaded.
  *
@@ -343,7 +560,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
  *
  * @return mixed
  */
-function my_mime_types($mime_types){
+function wpunity_mime_types($mime_types){
 	$mime_types['json'] = 'text/json';
 	$mime_types['obj'] = 'text/plain';
 	$mime_types['mp4'] = 'video/mp4';
@@ -357,19 +574,35 @@ function my_mime_types($mime_types){
 	$mime_types['glb'] = 'application/octet-stream';
 	return $mime_types;
 }
-add_filter('upload_mimes', 'my_mime_types', 1, 1);
+
+// 70
+add_filter('upload_mimes', 'wpunity_mime_types', 1, 1);
 
 
 
-//Scripts about Upload button in Metaboxes
+//---------- Admin site: Scripts about Upload button in Metaboxes ------
 add_action('plugins_loaded', function() {
 	if($GLOBALS['pagenow']=='post.php') {
-		wp_enqueue_script('media-upload');
-		wp_enqueue_script('thickbox');
-		wp_enqueue_style('thickbox');
+		add_action('admin_print_scripts', 'my_admin_scripts');
+		add_action('admin_print_styles',  'my_admin_styles');
 	}
 });
 
+function my_admin_scripts() {
+	wp_enqueue_script('jquery');
+	wp_enqueue_script('media-upload');
+	wp_enqueue_script('thickbox');
+}
+
+//wp_register_script('my-upload', WP_PLUGIN_URL.'/my-script.js', array('jquery','media-upload','thickbox'));
+//  wp_enqueue_script('my-upload');
+function my_admin_styles()  {
+	wp_enqueue_style('thickbox');
+	
+}
+
+
+// ---------- Shortcodes -------------
 /**
  *   shortcode to show content inside page with [visitor] Some content for the people just browsing your site. [/visitor]
  */
@@ -381,9 +614,7 @@ function visitor_check_shortcode( $atts, $content = null ) {
     return '';
 }
 
-/**
- * On reset password redirect to wpunity-main
- */
+// ------- lost passwords redirect ---------
 function wpunity_lost_password_redirect() {
     // Check if have submitted
     $confirm = ( isset($_GET['checkemail'] ) ? $_GET['checkemail'] : '' );
@@ -393,54 +624,8 @@ function wpunity_lost_password_redirect() {
         exit;
     }
 }
+// 71
 add_action('login_headerurl', 'wpunity_lost_password_redirect');
-
-
-//
-//                AJAXes   registration
-//
-
-// Ajax for fetching game's assets within asset browser widget at vr_editor
-add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
-
-
-add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
-add_action('wp_ajax_wpunity_undo_scene_async_action','wpunity_undo_scene_async_action_callback');
-add_action('wp_ajax_wpunity_redo_scene_async_action','wpunity_redo_scene_async_action_callback');
-
-
-add_action('wp_ajax_wpunity_save_expid_async_action','wpunity_save_expid_async_action_callback');
-
-// Ajax for saving gio asynchronoysly
-add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_action_callback');
-
-// Ajax for deleting scene
-add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
-
-// the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
-// the ajax phps are on wpunity-core-functions.php
-add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
-add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
-add_action( 'wp_ajax_wpunity_killtask_compiling_action', 'wpunity_killtask_compiling_action_callback' );
-add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
-
-// Assemble php from ajax call
-add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
-// Add the assepile php
-add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback' );
-
-// Callback for Ajax for delete game
-add_action('wp_ajax_wpunity_delete_game_action','wpunity_delete_gameproject_frontend_callback');
-
-// Callback for add collaborators
-add_action('wp_ajax_wpunity_collaborate_project_action','wpunity_collaborate_project_frontend_callback');
-
-// Callback for fetching collaborators from db
-add_action('wp_ajax_wpunity_fetch_collaborators_action','wpunity_fetch_collaborators_frontend_callback');
-
-add_action('wp_ajax_wpunity_create_game_action','wpunity_create_gameproject_frontend_callback');
-
-add_action('wp_ajax_wpunity_fetch_list_projects_action','wpunity_fetch_list_projects_callback');
 
 
 
@@ -477,7 +662,6 @@ remove_filter ('the_content', 'wpautop');
 
 
 /* ------------------------------ API ---------------------------------------- */
-
 /*
  * Get scene data by title
  */
@@ -515,7 +699,7 @@ add_action( 'rest_api_init', 'prefix_register_example_routes' );
 
 
 // Back-end restrict by author filtering
-function rudr_filter_by_the_author() {
+function wpunity_filter_by_the_author() {
 	$params = array(
 		'name' => 'author', // this is the "name" attribute for filter <select>
 		'show_option_all' => 'All authors' // label for all authors (display posts without filter)
@@ -527,13 +711,92 @@ function rudr_filter_by_the_author() {
 	wp_dropdown_users( $params ); // print the ready author list
 }
 
-add_action('restrict_manage_posts', 'rudr_filter_by_the_author');
+// 72
+add_action('restrict_manage_posts', 'wpunity_filter_by_the_author');
 
 
-// Back-end show author for games
-function my_cpt_support_author() {
-	add_post_type_support( 'wpunity_game', 'author' );
-}
-add_action('init', 'my_cpt_support_author');
+
+
+
+//
+//                AJAXes   registration
+//
+
+// -------- Ajax for game projects ------
+// Ajax for fetching game's assets within asset browser widget at vr_editor
+add_action( 'wp_ajax_wpunity_fetch_game_assets_action', 'wpunity_fetch_game_assets_action_callback' );
+
+// Callback for Ajax for delete game
+add_action('wp_ajax_wpunity_delete_game_action','wpunity_delete_gameproject_frontend_callback');
+
+// Callback for add collaborators
+add_action('wp_ajax_wpunity_collaborate_project_action','wpunity_collaborate_project_frontend_callback');
+
+// Callback for fetching collaborators from db
+add_action('wp_ajax_wpunity_fetch_collaborators_action','wpunity_fetch_collaborators_frontend_callback');
+
+add_action('wp_ajax_wpunity_create_game_action','wpunity_create_gameproject_frontend_callback');
+
+add_action('wp_ajax_wpunity_fetch_list_projects_action','wpunity_fetch_list_projects_callback');
+
+
+
+// ------ Ajaxes for scenes -----------
+add_action('wp_ajax_wpunity_save_scene_async_action','wpunity_save_scene_async_action_callback');
+add_action('wp_ajax_wpunity_undo_scene_async_action','wpunity_undo_scene_async_action_callback');
+add_action('wp_ajax_wpunity_redo_scene_async_action','wpunity_redo_scene_async_action_callback');
+
+
+add_action('wp_ajax_wpunity_save_expid_async_action','wpunity_save_expid_async_action_callback');
+
+// Ajax for saving gio asynchronoysly
+add_action('wp_ajax_wpunity_save_gio_async_action','wpunity_save_gio_async_action_callback');
+
+// Ajax for deleting scene
+add_action('wp_ajax_wpunity_delete_scene_action','wpunity_delete_scene_frontend_callback');
+
+
+//------ Ajaxes for Assets----
+// AJAXES for content interlinking
+add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
+//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
+add_action( 'wp_ajax_wpunity_fetch_image_action', 'wpunity_fetch_image_action_callback' );
+add_action( 'wp_ajax_wpunity_fetch_video_action', 'wpunity_fetch_video_action_callback' );
+
+
+// Peer conferencing
+add_action( 'wp_ajax_nopriv_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
+add_action( 'wp_ajax_wpunity_notify_confpeers_action', 'wpunity_notify_confpeers_callback');
+
+add_action( 'wp_ajax_wpunity_update_expert_log_action', 'wpunity_update_expert_log_callback');
+
+
+// AJAXES for semantics
+add_action( 'wp_ajax_wpunity_segment_obj_action', 'wpunity_segment_obj_action_callback' );
+add_action( 'wp_ajax_wpunity_monitor_segment_obj_action', 'wpunity_monitor_segment_obj_action_callback' );
+add_action( 'wp_ajax_wpunity_enlist_splitted_objs_action', 'wpunity_enlist_splitted_objs_action_callback' );
+
+add_action( 'wp_ajax_wpunity_classify_obj_action', 'wpunity_classify_obj_action_callback' );
+
+// AJAX for delete asset
+add_action('wp_ajax_wpunity_delete_asset_action', 'wpunity_delete_asset3d_frontend_callback');
+
+// AJAX for fetch asset
+add_action('wp_ajax_wpunity_fetch_asset_action', 'wpunity_fetch_asset3d_frontend_callback');
+
+// ------- Ajaxes for compiling ---------
+
+// the ajax js is in js_lib/request_game.js (see main functions.php for registering js)
+// the ajax phps are on wpunity-core-functions.php
+add_action( 'wp_ajax_wpunity_compile_action', 'wpunity_compile_action_callback' );
+add_action( 'wp_ajax_wpunity_monitor_compiling_action', 'wpunity_monitor_compiling_action_callback' );
+add_action( 'wp_ajax_wpunity_killtask_compiling_action', 'wpunity_killtask_compiling_action_callback' );
+add_action( 'wp_ajax_wpunity_game_zip_action', 'wpunity_game_zip_action_callback' );
+
+// Assemble php from ajax call
+add_action( 'wp_ajax_wpunity_assemble_action', 'wpunity_assemble_action_callback' );
+// Add the assepile php
+add_action( 'wp_ajax_wpunity_assepile_action', 'wpunity_assepile_action_callback' );
+
 
 ?>
