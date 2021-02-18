@@ -5,7 +5,7 @@ if( $perma_structure){$parameter_Scenepass = '?wpunity_scene=';} else {$paramete
 $parameter_assetpass = $perma_structure ? '?wpunity_asset=' : '&wpunity_asset=';
 
 // Load VR_Editor Scripts
-function load_vreditor_scripts()
+function wpunity_load_vreditor_scripts()
 {
     $vthreejs = 119;
 
@@ -40,10 +40,10 @@ function load_vreditor_scripts()
     wp_enqueue_style('wpunity_vr_editor_filebrowser');
     
 }
-add_action('wp_enqueue_scripts', 'load_vreditor_scripts' );
+add_action('wp_enqueue_scripts', 'wpunity_load_vreditor_scripts' );
 
 
-function load_custom_functions_vreditor(){
+function wpunity_load_custom_functions_vreditor(){
     wp_enqueue_script('wpunity_vr_editor_environmentals');
     wp_enqueue_script('wpunity_keyButtons');
     wp_enqueue_script('wpunity_rayCasters');
@@ -54,7 +54,7 @@ function load_custom_functions_vreditor(){
     wp_enqueue_script('wpunity_vr_editor_buttons');
     wp_enqueue_script('wpunity_vr_editor_analytics');
 }
-add_action('wp_enqueue_scripts', 'load_custom_functions_vreditor' );
+add_action('wp_enqueue_scripts', 'wpunity_load_custom_functions_vreditor' );
 ?>
 
 <script type="text/javascript">

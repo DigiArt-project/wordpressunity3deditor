@@ -267,7 +267,7 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php')
 add_action( 'init', 'wpunity_add_customroles');
 
 // Order: 5
-add_action( 'init', 'wpunity_add_capabilities_to_adv_game_master');
+add_action( 'init', 'wpunity_add_capabilities_to_adv_project_master');
 
 // Order: 6
 add_action( 'init', 'wpunity_add_capabilities_to_admin');
@@ -318,7 +318,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-scenes.php')
 add_action('init', 'wpunity_scenes_construct'); //wpunity_scene 'SCENES'
 
 // Order: 12
-add_action('init', 'wpunity_scenes_taxpgame'); //wpunity_scene_pgame  'SCENE GAMES'
+add_action('init', 'wpunity_scenes_parent_project_tax_define'); //wpunity_scene_pgame  'SCENE GAMES'
 
 // Order: 13
 add_action('init', 'wpunity_scenes_taxyaml'); //wpunity_scene_yaml 'SCENE TYPES'
@@ -437,6 +437,9 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php
 // Set to the lowest priority in order to have game taxes available when joker games are created
 // 26
 add_action( 'init', 'wpunity_createJoker_activation', 100, 2 );
+//add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
+//register_activation_hook( __FILE__ , 'wpunity_createJoker_activation' );
+
 
 // 66
 add_filter( 'wp_nav_menu_items','wpunity_loginout_menu_link', 5, 2 );
@@ -486,7 +489,6 @@ register_activation_hook(__FILE__,'wpunity_create_editScenePage');
 register_activation_hook(__FILE__,'wpunity_create_editScene2DPage');
 register_activation_hook(__FILE__,'wpunity_create_editSceneExamPage');
 register_activation_hook(__FILE__,'wpunity_create_editAsset3D');
-
 
 
 
@@ -550,6 +552,29 @@ add_action( 'init', 'wpunity_scenes_types_chemistry_standard_cre' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/default_game_project_settings/wpunity-default-chemistry-compile.php' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/PDBLoader.php' );
+
+
+
+// For Envisage only
+if ($project_scope === 1) {
+	// Add a new form element...
+	add_action('register_form', 'wpunity_extrapass_register_form');
+	// Finally, save our extra registration user meta.
+	add_action('user_register', 'wpunity_extrapass_user_register', 10, 1);
+	
+	add_action('show_user_profile', 'wpunity_extrapass_profile_fields');
+	add_action('edit_user_profile', 'wpunity_extrapass_profile_fields');
+	
+	add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
+}
+
+
+// ---- Content interlinking ----------
+
+add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
+
+// Translate
+//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
 
 
 // ===================== Mime type to allow Upload ===================================
@@ -636,7 +661,7 @@ add_action('login_headerurl', 'wpunity_lost_password_redirect');
 //include_once dirname( __FILE__ ) . '/includes/wpunity-core-functions.php';
 
 //include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-core-functions.php' );
-//register_activation_hook( __FILE__ , 'wpunity_createJoker_activation' );
+
 
 
 

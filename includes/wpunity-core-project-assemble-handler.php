@@ -106,7 +106,7 @@ function wpunity_fetch_list_projects_callback(){
     
     if (current_user_can('administrator')){
     
-    } elseif (current_user_can('adv_game_master')) {
+    } elseif (current_user_can('adv_project_master')) {
         //$custom_query_args['author'] = $user_id;
     
     }elseif (current_user_can('game_master')) {
@@ -137,7 +137,7 @@ function wpunity_fetch_list_projects_callback(){
            
            if (current_user_can('administrator')){
            
-           } elseif (current_user_can('adv_game_master')) {
+           } elseif (current_user_can('adv_project_master')) {
 
                $collaborators = get_post_meta(get_the_ID(),'wpunity_game_collaborators_ids')[0];
     
@@ -273,7 +273,7 @@ function wpunity_fetch_list_projects_callback(){
         echo '<hr class="WhiteSpaceSeparator">';
         echo '<div class="CenterContents">' .
                 '<i class="material-icons mdc-theme--text-icon-on-light" style="font-size: 96px;" aria-hidden="true"' .
-                    ' title="No game projects available">' .
+                    ' title="No projects available">' .
                     'games' .
                 '</i>'.
                 '<h3 class="mdc-typography--headline"> projects available</h3>' .

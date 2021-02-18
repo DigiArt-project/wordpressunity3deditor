@@ -3,10 +3,10 @@
 $pluginpath = dirname (plugin_dir_url( __DIR__  ));
 $pluginpath = str_replace('\\','/',$pluginpath);
 
-function load2DSceneEditorScripts() {
+function wpunity_load2DSceneEditorScripts_exams() {
 	wp_enqueue_script('wpunity_scripts');
 }
-add_action('wp_enqueue_scripts', 'load2DSceneEditorScripts' );
+add_action('wp_enqueue_scripts', 'wpunity_load2DSceneEditorScripts_exams' );
 
 // DELETE ASSET AJAX
 wp_enqueue_script( 'ajax-script_deleteasset', $pluginpath.'/js_libs/delete_ajaxes/delete_asset.js', array('jquery') );

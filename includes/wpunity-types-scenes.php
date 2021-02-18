@@ -115,32 +115,32 @@ function wpunity_scenes_construct(){
 
 
 // Create Scene Taxonomy, namely the game that the scene belongs
-function wpunity_scenes_taxpgame(){
+function wpunity_scenes_parent_project_tax_define(){
     
     $ff = fopen("output_order_log.txt","a");
     fwrite($ff, '12 wpunity_scenes_taxpgame'.chr(13));
     fclose($ff);
     
     $labels = array(
-        'name' => _x('Scene Game', 'taxonomy general name'),
-        'singular_name' => _x('Scene Game', 'taxonomy singular name'),
-        'menu_name' => _x('Scene Games', 'admin menu'),
-        'search_items' => __('Search Scene Games'),
-        'all_items' => __('All Scene Games'),
-        'parent_item' => __('Parent Scene Game'),
-        'parent_item_colon' => __('Parent Scene Game:'),
-        'edit_item' => __('Edit Scene Game'),
-        'update_item' => __('Update Scene Game'),
-        'add_new_item' => __('Add New Scene Game'),
-        'new_item_name' => __('New Scene Game')
+        'name' => _x('Parent Project', 'taxonomy general name'),
+        'singular_name' => _x('Parent Project', 'taxonomy singular name'),
+        'menu_name' => _x('Parent Projects', 'admin menu'),
+        'search_items' => __('Search Parent Projects'),
+        'all_items' => __('All Parent Projects'),
+        'parent_item' => __('Parent Project'),
+        'parent_item_colon' => __('Parent Project:'),
+        'edit_item' => __('Edit Parent Project'),
+        'update_item' => __('Update Parent Project'),
+        'add_new_item' => __('Add New Parent Project'),
+        'new_item_name' => __('New Parent Project')
     );
     
     $args = array(
-        'description' => 'Game that the Scene belongs',
+        'description' => 'Project that the Scene belongs',
         'labels' => $labels,
         'public' => false,
         'show_ui' => true,
-        'hierarchical' => true,
+        'hierarchical' => false,
         'show_admin_column' => true,
         'capabilities' => array (
             'manage_terms' => 'manage_taxpgame',

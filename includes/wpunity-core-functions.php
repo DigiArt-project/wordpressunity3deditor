@@ -313,10 +313,7 @@ function wpunity_createJoker_activation() {
 		$game_taxonomies_arch = array(
 			'wpunity_game_type' => array(
 				$archaeology_tax_id,
-			),
-//			'wpunity_game_cat' => array(
-//				$virtualplace_tax->term_id,
-//			)
+			)
 		);
 
 		$game_information_arch = array(
@@ -339,10 +336,7 @@ function wpunity_createJoker_activation() {
 		$game_taxonomies_ener = array(
 			'wpunity_game_type' => array(
 				$energy_tax_id,
-			),
-//			'wpunity_game_cat' => array(
-//				$virtualplace_tax->term_id,
-//			)
+			)
 		);
 
 		$game_information_ener = array(
@@ -386,13 +380,11 @@ function wpunity_createJoker_activation() {
 
 
 }
-//add_action( 'activated_plugin', 'wpunity_createJoker_activation', 10, 2 );
 
 
 
 
-//==========================================================================================================================================
-//==========================================================================================================================================
+
 
 function wpunity_getNonRegionalScenes($project_id) {
 	$game_post = get_post($project_id);
@@ -443,11 +435,8 @@ function wpunity_getNonRegionalScenes($project_id) {
 
 //Add new Field at registration form (3 steps)
 
-//1. Add a new form element...
-// For Envisage only
-if ($project_scope === 1) {
-    add_action('register_form', 'wpunity_extrapass_register_form');
-}
+
+
 function wpunity_extrapass_register_form() {
 
 	$extrapass = ( ! empty( $_POST['extra_pass'] ) ) ? sanitize_text_field( $_POST['extra_pass'] ) : '';
@@ -499,22 +488,14 @@ function wpunity_extrapass_registration_errors( $errors, $sanitized_user_login, 
 	return $errors;
 }
 
-//3. Finally, save our extra registration user meta.
-// For Envisage only
-if ($project_scope === 1) {
-    add_action('user_register', 'wpunity_extrapass_user_register', 10, 1);
-}
+//3. Finally, save our extra registration user meta. For Envisage only.
 function wpunity_extrapass_user_register( $user_id ) {
 	if ( ! empty( $_POST['extra_pass'] ) ) {
 		update_user_meta( $user_id, 'extra_pass', sanitize_text_field( $_POST['extra_pass'] ) );
 	}
 }
 
-// For Envisage only
-if ($project_scope === 1) {
-    add_action('show_user_profile', 'wpunity_extrapass_profile_fields');
-    add_action('edit_user_profile', 'wpunity_extrapass_profile_fields');
-}
+
 
 function wpunity_extrapass_profile_fields( $user ) {
 	?>
@@ -659,7 +640,7 @@ function wpunity_getProjectKeys($project_id, $project_type) {
 
 // STEP 1 for GIO data
 if ($project_scope === 1) {
-	add_action( 'user_register', 'wpunity_registrationUser_save', 10, 2 );
+
 }
 
 function wpunity_registrationUser_save( $user_id ) {
@@ -1682,10 +1663,6 @@ function wpunity_enlist_splitted_objs_action_callback(){
 }
 
 
-add_action( 'wp_ajax_wpunity_fetch_description_action', 'wpunity_fetch_description_action_callback' );
-
-
-//add_action( 'wp_ajax_wpunity_translate_action', 'wpunity_translate_action_callback' );
 
 //======================= CONTENT INTERLINKING =========================================================================
 

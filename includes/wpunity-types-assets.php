@@ -197,7 +197,7 @@ function change_user_dropdown( $query_args, $r ){
             unset($query_args['who']);
         }
         
-        $query_args['role__in'] = array('administrator','adv_game_master');
+        $query_args['role__in'] = array('administrator','adv_project_master');
         
         // unset default role
         //unset( $query_args['who'] );
@@ -209,7 +209,7 @@ function change_user_dropdown( $query_args, $r ){
 
 //    // list users whose role is e.g. 'Administrator' for 'page' post type
 //    if( $screen->post_type == 'page' ):
-//        $query_args['role'] = array('adv_game_master');
+//        $query_args['role'] = array('adv_project_master');
 //
 //        // unset default role
 //        unset( $query_args['who'] );

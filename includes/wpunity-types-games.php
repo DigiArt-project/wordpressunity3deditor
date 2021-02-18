@@ -39,28 +39,28 @@ function wpunity_project_cpt_construct(){
     fclose($ff);
     
     $labels = array(
-		'name'               => _x( 'Game Projects', 'post type general name'),
-		'singular_name'      => _x( 'Game Project', 'post type singular name'),
-		'menu_name'          => _x( 'Game Projects', 'admin menu'),
-		'name_admin_bar'     => _x( 'Game Project', 'add new on admin bar'),
+		'name'               => _x( 'Projects', 'post type general name'),
+		'singular_name'      => _x( 'Project', 'post type singular name'),
+		'menu_name'          => _x( 'Projects', 'admin menu'),
+		'name_admin_bar'     => _x( 'Project', 'add new on admin bar'),
 		'add_new'            => _x( 'Add New', 'add new on menu'),
-		'add_new_item'       => __( 'Add New Game Project'),
-		'new_item'           => __( 'New Game Project'),
+		'add_new_item'       => __( 'Add New Project'),
+		'new_item'           => __( 'New Project'),
 		'edit'               => __( 'Edit'),
-		'edit_item'          => __( 'Edit Game Project'),
+		'edit_item'          => __( 'Edit Project'),
 		'view'               => __( 'View'),
-		'view_item'          => __( 'View Game Project'),
-		'all_items'          => __( 'All Game Projects'),
-		'search_items'       => __( 'Search Game Projects'),
-		'parent_item_colon'  => __( 'Parent Game Projects:'),
-		'parent'             => __( 'Parent Game Project'),
-		'not_found'          => __( 'No Game Projects found.'),
-		'not_found_in_trash' => __( 'No Game Projects found in Trash.')
+		'view_item'          => __( 'View Project'),
+		'all_items'          => __( 'All Projects'),
+		'search_items'       => __( 'Search Projects'),
+		'parent_item_colon'  => __( 'Parent Projects:'),
+		'parent'             => __( 'Parent Project'),
+		'not_found'          => __( 'No Projects found.'),
+		'not_found_in_trash' => __( 'No Projects found in Trash.')
 	);
 	
     $args = array(
 		'labels'                => $labels,
-		'description'           => 'A Game Project consists of several scenes',
+		'description'           => 'A Project consists of several scenes',
 		'public'                => true,
 		'exclude_from_search'   => true,
 		'publicly_queryable'    => false,
@@ -72,14 +72,14 @@ function wpunity_project_cpt_construct(){
 		'hierarchical'      => false,
 		'has_archive'       => false,
 		'capabilities' => array(
-			'publish_posts' => 'publish_wpunity_game',
-			'edit_posts' => 'edit_wpunity_game',
-			'edit_others_posts' => 'edit_others_wpunity_game',
-			'delete_posts' => 'delete_wpunity_game',
-			'delete_others_posts' => 'delete_others_wpunity_game',
+			'publish_posts' => 'publish_wpunity_project',
+			'edit_posts' => 'edit_wpunity_project',
+			'edit_others_posts' => 'edit_others_wpunity_project',
+			'delete_posts' => 'delete_wpunity_project',
+			'delete_others_posts' => 'delete_others_wpunity_project',
 			'read_private_posts' => 'read_private_wpunity_game',
-			'edit_post' => 'edit_wpunity_game',
-			'delete_post' => 'delete_wpunity_game',
+			'edit_post' => 'edit_wpunity_project',
+			'delete_post' => 'delete_wpunity_project',
 			'read_post' => 'read_wpunity_game'
 		)
 	);

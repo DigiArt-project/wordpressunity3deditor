@@ -38,14 +38,14 @@ $isAdmin = is_admin() ? 'back' : 'front';
 <?php
 
 // Remove margin-top from page
-function remove_admin_login_header() {
+function wpunity_remove_admin_login_header() {
     remove_action('wp_head', '_admin_bar_bump_cb');
 }
-add_action('get_header', 'remove_admin_login_header');
+add_action('get_header', 'wpunity_remove_admin_login_header');
 
 
 // Load Scripts
-function loadAsset3DManagerScriptsAndStyles() {
+function wpunity_loadAsset3DManagerScriptsAndStyles() {
     
     // Stylesheet
     wp_enqueue_style('wpunity_asseteditor_stylesheet');
@@ -121,7 +121,7 @@ function loadAsset3DManagerScriptsAndStyles() {
     );
     
 }
-add_action('wp_enqueue_scripts', 'loadAsset3DManagerScriptsAndStyles' );
+add_action('wp_enqueue_scripts', 'wpunity_loadAsset3DManagerScriptsAndStyles' );
 
 // End Of Scripts Loading
 
