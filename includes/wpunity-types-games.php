@@ -60,11 +60,12 @@ function wpunity_project_cpt_construct(){
 	
     $args = array(
 		'labels'                => $labels,
-		'description'           => 'A Project consists of several scenes',
+		'description'           => 'A Project is the entity that defines a solid work item',
 		'public'                => true,
 		'exclude_from_search'   => true,
-		'publicly_queryable'    => false,
+		'publicly_queryable'    => true,
 		'show_in_nav_menus'     => false,
+		'show_ui'               => true,
 		'menu_position'     => 26,
 		'menu_icon'         =>'dashicons-media-interactive',
 		'taxonomies'        => array('wpunity_game_type'),
@@ -77,10 +78,10 @@ function wpunity_project_cpt_construct(){
 			'edit_others_posts' => 'edit_others_wpunity_project',
 			'delete_posts' => 'delete_wpunity_project',
 			'delete_others_posts' => 'delete_others_wpunity_project',
-			'read_private_posts' => 'read_private_wpunity_game',
+			'read_private_posts' => 'read_private_wpunity_project',
 			'edit_post' => 'edit_wpunity_project',
 			'delete_post' => 'delete_wpunity_project',
-			'read_post' => 'read_wpunity_game'
+			'read_post' => 'read_wpunity_project'
 		)
 	);
  
@@ -90,11 +91,8 @@ function wpunity_project_cpt_construct(){
 
 //Create Game Type as custom taxonomy 'wpunity_game_type'
 function wpunity_project_taxtype_create(){
-    
-    $ff = fopen("output_order_log.txt","a");
-    fwrite($ff, '9 wpunity_games_taxtype'.chr(13));
-    fclose($ff);
-    
+ 
+ 
 	$labels = array(
 		'name'              => _x( 'Game Type', 'taxonomy general name'),
 		'singular_name'     => _x( 'Game Type', 'taxonomy singular name'),
@@ -117,10 +115,10 @@ function wpunity_project_taxtype_create(){
 		'hierarchical' => true,
 		'show_admin_column' => true,
 		'capabilities' => array (
-			'manage_terms' => 'manage_game_type',
-			'edit_terms' => 'manage_game_type',
-			'delete_terms' => 'manage_game_type',
-			'assign_terms' => 'edit_game_type'
+			'manage_terms' => 'manage_project_type',
+			'edit_terms' => 'manage_project_type',
+			'delete_terms' => 'manage_project_type',
+			'assign_terms' => 'edit_project_type'
 		),
 	);
 	
@@ -475,7 +473,9 @@ function wpunity_games_assemblerbox_show(){
 function wpunity_projects_taxtypes_define(){
 
 wp_insert_term('Energy', 'wpunity_game_type', array('description' => 'Energy Games', 'slug' => 'energy_games'));
+
 wp_insert_term('Archaeology','wpunity_game_type', array('description'=> 'Archaeology Games','slug'=>'archaeology_games'));
+
 wp_insert_term('Chemistry','wpunity_game_type',array('description'=> 'Chemistry Games','slug' => 'chemistry_games'));
 
 }

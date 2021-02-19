@@ -8,9 +8,9 @@
  * Version: 0.1.5
  */
 
-$ff = fopen("output_order_log.txt","w");
-fwrite($ff,'----- This file displays the order of function execution ---'.chr(13));
-fclose($ff);
+//$ff = fopen("output_order_log.txt","w");
+//fwrite($ff,'----- This file displays the order of function execution ---'.chr(13));
+//fclose($ff);
 
 /*
  * Change root .htaccess for uploading big data files
@@ -37,31 +37,31 @@ echo ini_get('max_input_time').chr(10);
 $project_scope = 0;
 
 
-function wpunity_plugin_activate() {
-	
-	add_option( 'Activated_Plugin', 'WordpressUnity3DEditor' );
-	
-	/* activation code here */
-	// Display the alert box
-	
-	//echo '<script>alert("Welcome")</script>';
-	
-}
-register_activation_hook( __FILE__, 'wpunity_plugin_activate' );
-
-
-
-
-function wpunity_load_plugin() {
-	if(is_admin()&&get_option('Activated_Plugin')=='WordpressUnity3DEditor') {
-		delete_option('Activated_Plugin');
-		/* do some stuff once right after activation */
-		
-		
-		echo '<script>alert("Welcome to VRodos")</script>';
-	}
-}
-add_action('admin_init','wpunity_load_plugin');
+//function wpunity_plugin_activate() {
+//
+//	add_option( 'Activated_Plugin', 'WordpressUnity3DEditor' );
+//
+//	/* activation code here */
+//	// Display the alert box
+//
+//	//echo '<script>alert("Welcome")</script>';
+//
+//}
+//register_activation_hook( __FILE__, 'wpunity_plugin_activate' );
+//
+//
+//
+//
+//function wpunity_load_plugin() {
+//	if(is_admin()&&get_option('Activated_Plugin')=='WordpressUnity3DEditor') {
+//		delete_option('Activated_Plugin');
+//		/* do some stuff once right after activation */
+//
+//
+//		//echo '<script>alert("Welcome to VRodos")</script>';
+//	}
+//}
+//add_action('admin_init','wpunity_load_plugin');
 
 
 //===================================== Styles & Scripts ====================================
@@ -266,23 +266,23 @@ require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-users-roles.php')
 // Order : 4
 add_action( 'init', 'wpunity_add_customroles');
 
-// Order: 5
-add_action( 'init', 'wpunity_add_capabilities_to_adv_project_master');
-
 // Order: 6
 add_action( 'init', 'wpunity_add_capabilities_to_admin');
 
 //---------------------- Game Projects -------------------------------------------------
 require_once ( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-games.php');
 
-// Order : 2
-add_action( 'init', 'wpunity_projects_taxtypes_define', 1 );
 
 // Order: 7
-add_action('init', 'wpunity_project_cpt_construct'); //wpunity_game 'GAMES'
+add_action('init', 'wpunity_project_cpt_construct', 1); //wpunity_game 'GAMES'
 
 // Order: 9
-add_action('init', 'wpunity_project_taxtype_create'); //wpunity_game_type 'GAME TYPES'
+add_action('init', 'wpunity_project_taxtype_create', 2); //wpunity_game_type 'GAME TYPES'
+
+// Order : 2
+add_action( 'init', 'wpunity_projects_taxtypes_define', 3 );
+
+
 
 // 28
 add_action('transition_post_status','wpunity_create_folder_game', 9 , 3);

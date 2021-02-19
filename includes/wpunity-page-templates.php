@@ -28,7 +28,7 @@ class wpUnityTemplate {
         } else {
             // Add a filter to the wp 4.7 version attributes metabox
             // 73
-            add_filter('theme_page_templates', array( $this, 'add_new_template' ));
+            add_filter('theme_page_templates', array( $this,'add_new_template' ));
         }
 
         // Add a filter to the save post to inject out template into the page cache
@@ -249,6 +249,8 @@ function wpunity_create_editSceneExamPage() {
 // --- Page to edit an Asset ----
 function wpunity_create_editAsset3D() {
 
+    
+    
     if (! wpunity_get_page_by_slug('wpunity-3d-asset-creator')) {
         $new_page_id = wp_insert_post(array(
             'post_title' => 'WPUnity-3D Asset Creator',
@@ -261,6 +263,7 @@ function wpunity_create_editAsset3D() {
             'post_author' => get_user_by('id', 1)->user_id,
             'menu_order' => 0,
         ));
+        
         if ($new_page_id && !is_wp_error($new_page_id)) {
             update_post_meta($new_page_id, '_wp_page_template', '/templates/edit-wpunity_asset3D.php');
         }

@@ -7,6 +7,8 @@
 
 
 <?php
+
+
 //Create asset interfaces
 
 //ini_set('disp lay_errors', 1);
@@ -25,6 +27,12 @@ $hasTranslator = false;
 //}
 //// [START translate_translate_text]
 //use Google\Cloud\Translate\TranslateClient;
+
+
+
+
+
+
 
 
 // Is on back or front end ?
