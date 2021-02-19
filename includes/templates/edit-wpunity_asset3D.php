@@ -447,6 +447,8 @@ if($asset_id != null) {
     fclose($fp);
     
     
+    print_r($saved_term);
+    
     if($saved_term[0]->slug == 'terrain'){
         
         // Wind Energy Terrain
@@ -455,8 +457,6 @@ if($asset_id != null) {
     }elseif (in_array($saved_term[0]->slug , ['artifact'])) {
         // Image 1 : Featured image
         $images_urls[0] = get_the_post_thumbnail_url($asset_id);
-        
-        
         
         // Image 1,2,3,4
         for ($i=1; $i <= 4; $i++){

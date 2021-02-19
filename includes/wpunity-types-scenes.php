@@ -98,6 +98,7 @@ function wpunity_scenes_construct(){
         'supports' => array('title', 'author', 'editor', 'custom-fields', 'thumbnail','revisions'),
         'hierarchical' => false,
         'has_archive' => false,
+        //'map_meta_cap' => true,
         'capabilities' => array(
             'publish_posts' => 'publish_wpunity_scene',
             'edit_posts' => 'edit_wpunity_scene',

@@ -34,6 +34,7 @@ function wpunity_assets_construct(){
         'supports' => array('title', 'editor', 'custom-fields', 'thumbnail','revisions','author'),
         'hierarchical' => false,
         'has_archive' => false,
+        //'map_meta_cap'=>true,
         'capabilities' => array(
             'publish_posts' => 'publish_wpunity_asset3d',
             'edit_posts' => 'edit_wpunity_asset3d',

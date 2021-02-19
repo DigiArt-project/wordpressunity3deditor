@@ -63,7 +63,7 @@ function wpunity_project_cpt_construct(){
 		'description'           => 'A Project is the entity that defines a solid work item',
 		'public'                => true,
 		'exclude_from_search'   => true,
-		'publicly_queryable'    => true,
+		'publicly_queryable'    => false,
 		'show_in_nav_menus'     => false,
 		'show_ui'               => true,
 		'menu_position'     => 26,
@@ -72,6 +72,7 @@ function wpunity_project_cpt_construct(){
 		'supports'          => array('title','author','editor','custom-fields','revisions'),
 		'hierarchical'      => false,
 		'has_archive'       => false,
+        //'map_meta_cap'      => true,
 		'capabilities' => array(
 			'publish_posts' => 'publish_wpunity_project',
 			'edit_posts' => 'edit_wpunity_project',
