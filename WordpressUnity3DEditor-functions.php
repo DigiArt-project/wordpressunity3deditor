@@ -372,16 +372,15 @@ add_action('init','wpunity_allowAuthorEditing');
 // 58
 add_filter( 'wp_dropdown_users_args', 'change_user_dropdown', 10, 2 );
 
-include_once( plugin_dir_path( __FILE__ ) . 'includes/wpunity-types-assets-tax.php' );
 
 // 36
-add_action( 'save_post', 'wpunity_assets_taxcategory_box_content_save' );
+add_action( 'save_post', 'wpunity_asset_tax_category_box_content_save');
 
 // 37
 add_action( 'save_post', 'wpunity_assets_taxcategory_ipr_box_content_save' );
 
 // 38
-add_action( 'save_post', 'wpunity_assets_taxpgame_box_content_save' );
+add_action( 'save_post', 'wpunity_asset_project_box_content_save');
 
 
 // Create Asset Taxonomy Boxes (Category & Scene) @ asset's backend
@@ -405,11 +404,11 @@ add_action('add_meta_boxes','wpunity_assets_create_right_metaboxes');
 
 // Add the fields to the taxonomy, using our callback function
 // 59
-add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yamlFields', 10, 2 );
+//add_action( 'wpunity_asset3d_cat_edit_form_fields', 'wpunity_assets_category_yamlFields', 10, 2 );
 
 // Save the changes made on the taxonomy, using our callback function
 // 60
-add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
+//add_action( 'edited_wpunity_asset3d_cat', 'wpunity_assets_category_yamlFields_save', 10, 2 );
 
 // 61
 add_filter( 'manage_wpunity_asset3d_posts_columns', 'wpunity_set_custom_wpunity_asset3d_columns' );

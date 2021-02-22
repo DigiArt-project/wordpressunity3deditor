@@ -84,8 +84,13 @@ function wpunity_add_customroles() {
     $role->add_cap( 'edit_taxpgame' );
     $role->add_cap( 'manage_scene_yaml' );
     $role->add_cap( 'edit_scene_yaml' );
+    
     $role->add_cap( 'manage_asset3d_cat' );
+    $role->add_cap( 'manage_asset3d_iprcat' );
+    
     $role->add_cap( 'edit_asset3d_cat' );
+    $role->add_cap( 'edit_asset3d_iprcat' );
+    
     $role->add_cap( 'manage_asset3d_pgame' );
     $role->add_cap( 'edit_asset3d_pgame' );
     
@@ -137,8 +142,13 @@ function wpunity_add_capabilities_to_admin() {
     $role->add_cap( 'edit_taxpgame' );
     $role->add_cap( 'manage_scene_yaml' );
     $role->add_cap( 'edit_scene_yaml' );
+    
     $role->add_cap( 'manage_asset3d_cat' );
+    $role->add_cap( 'manage_asset3d_iprcat' );
+    
     $role->add_cap( 'edit_asset3d_cat' );
+    $role->add_cap( 'edit_asset3d_iprcat' );
+    
     $role->add_cap( 'manage_asset3d_pgame' );
     $role->add_cap( 'edit_asset3d_pgame' );
 

@@ -163,14 +163,14 @@ function wpunity_create_folder_game( $new_status, $old_status, $post){
 
 			//Create a parent game tax category for the scenes
 			wp_insert_term($gameTitle,'wpunity_scene_pgame', array(
-					'description'=> 'Scene of a Game',
+					'description'=> '-',
 					'slug' => $gameSlug,
 				)
 			);
 
 			//Create a parent game tax category for the assets
 			wp_insert_term($gameTitle,'wpunity_asset3d_pgame',array(
-					'description'=> 'Asset of a Game',
+					'description'=> '-',
 					'slug' => $gameSlug,
 				)
 			);

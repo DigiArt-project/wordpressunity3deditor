@@ -1304,7 +1304,6 @@ function wpunity_assets_databox_show(){
     <?php
 }
 
-//==========================================================================================================================================
 
 // Save data from this metabox with Custom Field for Asset3D ($wpunity_databox)
 function wpunity_assets_databox_save($post_id) {

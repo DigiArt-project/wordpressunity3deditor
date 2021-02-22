@@ -160,6 +160,7 @@ $asset_id_avail_joker = wpunity_get_assetids_joker($game_type_obj->string);
 
 $isUserloggedIn = is_user_logged_in();
 $current_user = wp_get_current_user();
+
 $login_username = $current_user->user_login;
 $isUserAdmin = current_user_can('administrator');
 
@@ -331,9 +332,7 @@ if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_
         wpunity_upload_asset_screenshot($_POST['sshotFileInput'], $asset_language_pack['assetTitleForm'], $asset_id);
     }
     
-    
     // Save parameters
-    
     switch ($assetCatTerm->slug){
         case 'consumer':
             wpunity_create_asset_consumerExtra_frontend($asset_id);
@@ -445,9 +444,6 @@ if($asset_id != null) {
     $fp = fopen("output_savedterm.txt","w");
     fwrite($fp, print_r($saved_term, true));
     fclose($fp);
-    
-    
-    print_r($saved_term);
     
     if($saved_term[0]->slug == 'terrain'){
         
