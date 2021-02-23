@@ -44,11 +44,6 @@ function wpunity_add_customroles() {
     
     add_role( 'adv_project_master6', 'Advanced Project Master 6');
     
-    
-    
-    
-    
-    
     $role = get_role( 'adv_project_master6' );
     
     //$role->add_cap('read');

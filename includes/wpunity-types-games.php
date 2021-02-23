@@ -95,17 +95,17 @@ function wpunity_project_taxtype_create(){
  
  
 	$labels = array(
-		'name'              => _x( 'Game Type', 'taxonomy general name'),
-		'singular_name'     => _x( 'Game Type', 'taxonomy singular name'),
-		'menu_name'         => _x( 'Game Types', 'admin menu'),
-		'search_items'      => __( 'Search Game Types'),
-		'all_items'         => __( 'All Game Types'),
-		'parent_item'       => __( 'Parent Game Type'),
-		'parent_item_colon' => __( 'Parent Game Type:'),
-		'edit_item'         => __( 'Edit Game Type'),
-		'update_item'       => __( 'Update Game Type'),
-		'add_new_item'      => __( 'Add New Game Type'),
-		'new_item_name'     => __( 'New Game Type')
+		'name'              => _x( 'Project Type', 'taxonomy general name'),
+		'singular_name'     => _x( 'Project Type', 'taxonomy singular name'),
+		'menu_name'         => _x( 'Project Types', 'admin menu'),
+		'search_items'      => __( 'Search Project Types'),
+		'all_items'         => __( 'All Project Types'),
+		'parent_item'       => __( 'Parent Project Type'),
+		'parent_item_colon' => __( 'Parent Project Type:'),
+		'edit_item'         => __( 'Edit Project Type'),
+		'update_item'       => __( 'Update Project Type'),
+		'add_new_item'      => __( 'Add New Project Type'),
+		'new_item_name'     => __( 'New Project Type')
 	);
 	
 	$args = array(

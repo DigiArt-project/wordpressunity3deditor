@@ -102,16 +102,14 @@ function wpunity_fetch_list_projects_callback(){
         /*'paged' => $paged,*/
     );
     
-    
-    
-    if (current_user_can('administrator')){
-    
-    } elseif (current_user_can('adv_project_master')) {
-        //$custom_query_args['author'] = $user_id;
-    
-    }elseif (current_user_can('game_master')) {
-        //$custom_query_args['author'] = $user_id;
-    }
+//    if (current_user_can('administrator')){
+//
+//    } elseif (current_user_can('adv_project_master')) {
+//        //$custom_query_args['author'] = $user_id;
+//
+//    }elseif (current_user_can('game_master')) {
+//        //$custom_query_args['author'] = $user_id;
+//    }
     
     
     // Get current page and append to custom query parameters array
@@ -137,7 +135,7 @@ function wpunity_fetch_list_projects_callback(){
            
            if (current_user_can('administrator')){
            
-           } elseif (current_user_can('adv_project_master')) {
+           } elseif (current_user_can('adv_project_master6')) {
 
                $collaborators = get_post_meta(get_the_ID(),'wpunity_game_collaborators_ids')[0];
     

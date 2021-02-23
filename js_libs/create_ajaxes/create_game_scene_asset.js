@@ -69,10 +69,6 @@ function fetchAllProjectsAndAddToDOM(current_user_id, parameter_Scenepass){
             console.log("List of Projects fetched");
             // Add list to div
             document.getElementById('ExistingProjectsDivDOM').innerHTML = res;
-
-
-
-
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log("Ajax Fetch List Projects Error: ERROR: 170" + thrownError);
