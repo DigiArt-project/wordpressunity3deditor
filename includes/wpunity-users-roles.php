@@ -1,9 +1,10 @@
 <?php
 
 //
-////echo print("<pre>".print_r(array_keys(get_role( 'adv_project_master' )->capabilities), true)."</pre>");
+//echo print("<pre>".print_r(array_keys(get_role( 'adv_project_master6' )->capabilities), true)."</pre>");
+
 //
-//$role = get_role( 'adv_project_master5' );
+//$role = get_role( 'adv_project_master6' );
 //
 //
 //
@@ -12,6 +13,7 @@
 //$role->add_cap('read');
 
 //$role->remove_cap('read');
+//$role->remove_cap('level_0');
 
 
 //$role->remove_cap('edit_wpunity_game');
@@ -40,14 +42,14 @@
 
 function wpunity_add_customroles() {
     
-    add_role( 'adv_project_master5', 'Advanced Project Master 5');
-    
-    $role = get_role( 'adv_project_master5' );
+    add_role( 'adv_project_master6', 'Advanced Project Master 6');
     
     
     
     
-    $role = get_role( 'adv_project_master5' );
+    
+    
+    $role = get_role( 'adv_project_master6' );
     
     //$role->add_cap('read');
     //$role->add_cap('level_0');
@@ -78,21 +80,21 @@ function wpunity_add_customroles() {
     
     //Caps about Taxonomies
 
-    $role->add_cap( 'manage_project_type' );
-    $role->add_cap( 'edit_project_type' );
-    $role->add_cap( 'manage_taxpgame' );
-    $role->add_cap( 'edit_taxpgame' );
-    $role->add_cap( 'manage_scene_yaml' );
-    $role->add_cap( 'edit_scene_yaml' );
+    $role->add_cap( 'manage_wpunity_project_type' );
+    $role->add_cap( 'edit_wpunity_project_type' );
+    $role->add_cap( 'manage_wpunity_taxpgame' );
+    $role->add_cap( 'edit_wpunity_taxpgame' );
+    $role->add_cap( 'manage_wpunity_scene_yaml' );
+    $role->add_cap( 'edit_wpunity_scene_yaml' );
     
-    $role->add_cap( 'manage_asset3d_cat' );
-    $role->add_cap( 'manage_asset3d_iprcat' );
+    $role->add_cap( 'manage_wpunity_asset3d_cat' );
+    $role->add_cap( 'manage_wpunity_asset3d_iprcat' );
     
-    $role->add_cap( 'edit_asset3d_cat' );
-    $role->add_cap( 'edit_asset3d_iprcat' );
+    $role->add_cap( 'edit_wpunity_asset3d_cat' );
+    $role->add_cap( 'edit_wpunity_asset3d_iprcat' );
     
-    $role->add_cap( 'manage_asset3d_pgame' );
-    $role->add_cap( 'edit_asset3d_pgame' );
+    $role->add_cap( 'manage_wpunity_asset3d_pgame' );
+    $role->add_cap( 'edit_wpunity_asset3d_pgame' );
     
     unset( $role );
 }
@@ -136,21 +138,21 @@ function wpunity_add_capabilities_to_admin() {
     $role->add_cap( 'read_wpunity_asset3d' );
 
     //Caps about Taxonomies
-    $role->add_cap( 'manage_project_type' );
-    $role->add_cap( 'edit_project_type' );
-    $role->add_cap( 'manage_taxpgame' );
-    $role->add_cap( 'edit_taxpgame' );
-    $role->add_cap( 'manage_scene_yaml' );
-    $role->add_cap( 'edit_scene_yaml' );
+    $role->add_cap( 'manage_wpunity_project_type' );
+    $role->add_cap( 'edit_wpunity_project_type' );
+    $role->add_cap( 'manage_wpunity_taxpgame' );
+    $role->add_cap( 'edit_wpunity_taxpgame' );
+    $role->add_cap( 'manage_wpunity_scene_yaml' );
+    $role->add_cap( 'edit_wpunity_scene_yaml' );
     
-    $role->add_cap( 'manage_asset3d_cat' );
-    $role->add_cap( 'manage_asset3d_iprcat' );
+    $role->add_cap( 'manage_wpunity_asset3d_cat' );
+    $role->add_cap( 'manage_wpunity_asset3d_iprcat' );
     
-    $role->add_cap( 'edit_asset3d_cat' );
-    $role->add_cap( 'edit_asset3d_iprcat' );
+    $role->add_cap( 'edit_wpunity_asset3d_cat' );
+    $role->add_cap( 'edit_wpunity_asset3d_iprcat' );
     
-    $role->add_cap( 'manage_asset3d_pgame' );
-    $role->add_cap( 'edit_asset3d_pgame' );
+    $role->add_cap( 'manage_wpunity_asset3d_pgame' );
+    $role->add_cap( 'edit_wpunity_asset3d_pgame' );
 
     unset( $role );
 

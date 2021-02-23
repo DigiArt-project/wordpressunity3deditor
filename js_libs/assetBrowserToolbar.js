@@ -14,16 +14,12 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
 
         success : function(responseRecords) {
 
-            console.log("responseRecords", responseRecords);
-
             responseRecords = responseRecords.items;
 
             file_Browsing_By_DB(responseRecords, gameProjectSlug, urlforAssetEdit);
         },
         error : function(xhr, ajaxOptions, thrownError){
             console.log("ERROR 51:" + thrownError);
-            console.log(ajaxOptions);
-            console.log(xhr);
         }
     });
 }
@@ -33,8 +29,6 @@ function wpunity_fetchSceneAssetsAjax(isAdmin, gameProjectSlug, urlforAssetEdit,
  * @param responseData
  */
 function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
-
-
 
     var filemanager = jQuery('#assetBrowserToolbar'),
         // breadcrumbs = jQuery('.breadcrumbs'),
@@ -170,36 +164,12 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                 function(event){openCategoryTab(event, this  );  }
                 );
 
-            // OLD ADD NEW BUTTON in File list
-            // // Get the link from the button of the joker game
-            // var addNewBtnLink = jQuery('#addNewAssetBtn').attr('href');
-            //
-            // // Assign the link to new button
-            // var newAssetBtn = jQuery(
-            //     '<br><a ' +
-            //     'draggable="false" ' +
-            //     'onclick="window.location.href='+ "'" + addNewBtnLink + "'" +'" ' +
-            //     'class="mdc-button mdc-button--raised mdc-button--primary mdc-theme--secondary-bg" ' +
-            //     'style="width:97%;" ' +
-            //     'data-mdc-auto-init="MDCRipple" ' +
-            //     '>' +
-            //     'Add new' +
-            //     '</a><br>');
-            //
-            // newAssetBtn.appendTo(fileList);
-
-
             for (i = 0; i < enlistData.length; i++) {
-
                 f = enlistData[i];
 
                 var fileSize = ''; //bytesToSize(f.size);
 
                 name = escapeHTML(f.name);
-
-                if(f.categoryName=="Molecule") {
-                    continue;
-                }
 
                 // Add the category in tabs if not yet added
                 if (jQuery("#assetCategTab").find("[id='" + f.categoryName + "']").length == 0) {
@@ -208,39 +178,18 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     //Assign different attributes to the element.
                     element.className = "tablinks";
                     element.id = f.categoryName;
-                    // if (f.categoryName.length > 18)
-                    //     element.innerText = f.categoryName.substring(0,10) + " ... " + f.categoryName.substring(f.categoryName.length-6, f.categoryName.length);
-                    // else
-                        element.innerHTML = "<i class='material-icons' title='"+ f.categoryName + ": "+ f.categoryDescription   + "' style='font-size:18px;'>" + f.categoryIcon + "</i>"    ;//f.categoryName;
+                    element.innerHTML = "<i class='material-icons' title='"+ f.categoryName + ": "+ f.categoryDescription   + "' style='font-size:18px;'>" + f.categoryIcon + "</i>"    ;//f.categoryName;
                     element.addEventListener("click", function(event){openCategoryTab(event, this  );  });
 
                     var foo = document.getElementById("assetCategTab");
                     //Append the element
+
                     foo.appendChild(element);
-                }
-
-                if(!f.objPath && !f.fbxPath)
-                    continue;
-
-                var fileType = f.objPath.split('.').pop();
-
-                /*var icon = '<span class="icon file f-'+f.categoryID+'">.'+f.categoryName+'</span>';*/
-                var img;
-                var imgFileExtension;
-
-                if (fileType.toUpperCase() === 'JPG' || fileType.toUpperCase()==='PNG') {
-                    imgFileExtension = '';
-                }
-
-                // Check if icon of obj exists  file.obj.png or file.obj.jpg
-                else if (fileType.toUpperCase() === 'OBJ') {
-                    imgFileExtension = '.jpg';
                 }
 
                 f.screenImagePath = f.screenImagePath ? f.screenImagePath : "../wp-content/plugins/wordpressunity3deditor/images/ic_no_sshot.png";
 
-
-                img = '<span class="mdc-list-item__start-detail CenterContents">'+
+                let img = '<span class="mdc-list-item__start-detail CenterContents">'+
                             '<img class="assetImg" draggable="false" src=' + encodeURI(f.screenImagePath) + '>'+
                             // '<span class="megabytesAsset mdc-typography--caption mdc-theme--text-secondary-on-light">'+ fileSize + '</span>'+
                       '</span>';
@@ -304,6 +253,8 @@ function file_Browsing_By_DB(responseData, gameProjectSlug, urlforAssetEdit) {
                     '<div class="progressSliderSubLine progressDecrease"></div>\n' +
                     '</div>' +
                     '</li>' );
+
+
 
                 file.appendTo(fileList);
             }

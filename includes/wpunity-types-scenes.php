@@ -144,10 +144,10 @@ function wpunity_scenes_parent_project_tax_define(){
         'hierarchical' => false,
         'show_admin_column' => true,
         'capabilities' => array (
-            'manage_terms' => 'manage_taxpgame',
-            'edit_terms' => 'manage_taxpgame',
-            'delete_terms' => 'manage_taxpgame',
-            'assign_terms' => 'edit_taxpgame'
+            'manage_terms' => 'manage_wpunity_taxpgame',
+            'edit_terms' => 'manage_wpunity_taxpgame',
+            'delete_terms' => 'manage_wpunity_taxpgame',
+            'assign_terms' => 'edit_wpunity_taxpgame'
         ),
     );
     
@@ -177,10 +177,10 @@ function wpunity_scenes_taxyaml(){
         'hierarchical' => true,
         'show_admin_column' => true,
         'capabilities' => array (
-            'manage_terms' => 'manage_scene_yaml',
-            'edit_terms' => 'manage_scene_yaml',
-            'delete_terms' => 'manage_scene_yaml',
-            'assign_terms' => 'edit_scene_yaml'
+            'manage_terms' => 'manage_wpunity_scene_yaml',
+            'edit_terms' => 'manage_wpunity_scene_yaml',
+            'delete_terms' => 'manage_wpunity_scene_yaml',
+            'assign_terms' => 'edit_wpunity_scene_yaml'
         ),
     );
     register_taxonomy('wpunity_scene_yaml', 'wpunity_scene', $args);

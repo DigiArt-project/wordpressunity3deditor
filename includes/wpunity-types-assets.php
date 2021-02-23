@@ -77,10 +77,10 @@ function wpunity_assets_taxcategory(){
         'hierarchical' => false,
         'show_admin_column' => true,
         'capabilities' => array (
-            'manage_terms' => 'manage_asset3d_cat',
-            'edit_terms' => 'manage_asset3d_cat',
-            'delete_terms' => 'manage_asset3d_cat',
-            'assign_terms' => 'edit_asset3d_cat'
+            'manage_terms' => 'manage_wpunity_asset3d_cat',
+            'edit_terms' => 'manage_wpunity_asset3d_cat',
+            'delete_terms' => 'manage_wpunity_asset3d_cat',
+            'assign_terms' => 'edit_wpunity_asset3d_cat'
         ),
     );
     register_taxonomy('wpunity_asset3d_cat', 'wpunity_asset3d', $args);
@@ -111,10 +111,10 @@ function wpunity_assets_taxpgame(){
         'hierarchical' => false,
         'show_admin_column' => true,
         'capabilities' => array (
-            'manage_terms' => 'manage_asset3d_pgame',
-            'edit_terms' => 'manage_asset3d_pgame',
-            'delete_terms' => 'manage_asset3d_pgame',
-            'assign_terms' => 'edit_asset3d_pgame'
+            'manage_terms' => 'manage_wpunity_asset3d_pgame',
+            'edit_terms' => 'manage_wpunity_asset3d_pgame',
+            'delete_terms' => 'manage_wpunity_asset3d_pgame',
+            'assign_terms' => 'edit_wpunity_asset3d_pgame'
         ),
     );
     register_taxonomy('wpunity_asset3d_pgame', 'wpunity_asset3d', $args);
@@ -144,10 +144,10 @@ function wpunity_assets_taxcategory_ipr(){
         'hierarchical' => false,
         'show_admin_column' => true,
         'capabilities' => array (
-            'manage_terms' => 'manage_asset3d_iprcat',
-            'edit_terms' => 'manage_asset3d_iprcat',
-            'delete_terms' => 'manage_asset3d_iprcat',
-            'assign_terms' => 'edit_asset3d_iprcat'
+            'manage_terms' => 'manage_wpunity_asset3d_iprcat',
+            'edit_terms' => 'manage_wpunity_asset3d_iprcat',
+            'delete_terms' => 'manage_wpunity_asset3d_iprcat',
+            'assign_terms' => 'edit_wpunity_asset3d_iprcat'
         ),
     );
     register_taxonomy('wpunity_asset3d_ipr_cat', 'wpunity_asset3d', $args);
@@ -269,8 +269,8 @@ function wpunity_asset_tax_category_box_content_save( $post_id ) {
         !wp_verify_nonce( $_POST['wpunity_asset3d_cat_noncename'], plugin_basename( __FILE__ ) ) ||
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
-        !current_user_can( 'edit_pages',$post_id ) || // Check permissions
-        !current_user_can( 'edit_asset3d_cat',$post_id ) // Verify that user can edit categories
+//        !current_user_can( 'edit_pages',$post_id ) || // Check permissions
+        !current_user_can( 'edit_wpunity_asset3d_cat',$post_id ) // Verify that user can edit categories
     ) {
         return;
     }
@@ -413,8 +413,8 @@ function wpunity_assets_taxcategory_ipr_box_content_save( $post_id ) {
         wp_is_post_revision( $post_id ) ||
         ! isset($_POST['wpunity_asset3d_ipr_cat_noncename']) ||
         !wp_verify_nonce( $_POST['wpunity_asset3d_ipr_cat_noncename'], plugin_basename( __FILE__ ) ) ||
-        !current_user_can( 'edit_pages', $post_id ) ||
-        !current_user_can( 'edit_asset3d_iprcat',$post_id ) // Verify that user can edit categories
+        //!current_user_can( 'edit_pages', $post_id ) ||
+        !current_user_can( 'edit_wpunity_asset3d_iprcat',$post_id ) // Verify that user can edit categories
     ) {
         return;
     }
@@ -438,8 +438,8 @@ function wpunity_asset_project_box_content_save($post_id ) {
         wp_is_post_revision( $post_id ) ||
         !isset($_POST['wpunity_asset3d_pgame_noncename']) ||
         !wp_verify_nonce( $_POST['wpunity_asset3d_pgame_noncename'], plugin_basename( __FILE__ ) ) ||
-        !current_user_can( 'edit_pages', $post_id ) ||
-        !current_user_can( 'edit_asset3d_pgame', $post_id )
+        //!current_user_can( 'edit_pages', $post_id ) ||
+        !current_user_can( 'edit_wpunity_asset3d_pgame', $post_id )
     ) {
         return;
     }

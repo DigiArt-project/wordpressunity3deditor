@@ -1,5 +1,10 @@
 <?php
 
+// Remove margin-top from page
+function wpunity_remove_admin_login_header() {
+    remove_action('wp_head', '_admin_bar_bump_cb');
+}
+
 function wpunity_addStrategy_APIcall($project_id, $strategy){
 
 	global $project_scope;

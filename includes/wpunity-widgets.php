@@ -442,11 +442,11 @@ class wpunity_3d_widget extends WP_Widget {
 
         <script>
             const path_url<?php echo $title;?> = "<?php echo $asset_3d_files['path'].'/'; ?>";
-            const mtl_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['mtl']; ?>";
-            const obj_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['obj']; ?>";
-            const pdb_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['pdb']; ?>";
-            const glb_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['glb'];?>";
-            const fbx_file_name<?php echo $title;?>= "<?php echo $asset_3d_files['fbx'];    ?>";
+            const mtl_file_name_widget<?php echo $title;?>= "<?php echo $asset_3d_files['mtl']; ?>";
+            const obj_file_name_widget<?php echo $title;?>= "<?php echo $asset_3d_files['obj']; ?>";
+            const pdb_file_name_widget<?php echo $title;?>= "<?php echo $asset_3d_files['pdb']; ?>";
+            const glb_file_name_widget<?php echo $title;?>= "<?php echo $asset_3d_files['glb'];?>";
+            const fbx_file_name_widget<?php echo $title;?>= "<?php echo $asset_3d_files['fbx'];    ?>";
 
             const cameraPositionX<?php echo $title;?>= "<?php echo $cameraPositionX; ?>";
             const cameraPositionY<?php echo $title;?>= "<?php echo $cameraPositionY; ?>";
@@ -456,7 +456,7 @@ class wpunity_3d_widget extends WP_Widget {
             const enableZoom<?php echo $title;?> = "<?php echo $enableZoom?>" === 'true';
             const enablePan<?php echo $title;?> = "<?php echo $enablePan?>" === 'true';
 
-            const textures_fbx_string_connected<?php echo $title;?> = "<?php echo $asset_3d_files['texturesFbx']; ?>";
+            const textures_fbx_string_connected_widget<?php echo $title;?> = "<?php echo $asset_3d_files['texturesFbx']; ?>";
             const back_3d_color<?php echo $title;?> = "<?php echo $back_3d_color; ?>";
             const audio_file<?php echo $title;?> = document.getElementById( 'audioFile' );
 
@@ -471,12 +471,12 @@ class wpunity_3d_widget extends WP_Widget {
                 canvasBackgroundColor<?php echo $title;?>,
                 audio_file<?php echo $title;?>,
                 path_url<?php echo $title;?>, // OBJ textures path
-                mtl_file_name<?php echo $title;?>,
-                obj_file_name<?php echo $title;?>,
-                pdb_file_name<?php echo $title;?>,
-                fbx_file_name<?php echo $title;?>,
-                glb_file_name<?php echo $title;?>,
-                textures_fbx_string_connected<?php echo $title;?>,
+                mtl_file_name_widget<?php echo $title;?>,
+                obj_file_name_widget<?php echo $title;?>,
+                pdb_file_name_widget<?php echo $title;?>,
+                fbx_file_name_widget<?php echo $title;?>,
+                glb_file_name_widget<?php echo $title;?>,
+                textures_fbx_string_connected_widget<?php echo $title;?>,
                 false,
                 canvasBackgroundColor<?php echo $title;?> === 'transparent',
                 !enablePan<?php echo $title;?>, // lock

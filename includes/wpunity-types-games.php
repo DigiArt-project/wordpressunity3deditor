@@ -116,10 +116,10 @@ function wpunity_project_taxtype_create(){
 		'hierarchical' => true,
 		'show_admin_column' => true,
 		'capabilities' => array (
-			'manage_terms' => 'manage_project_type',
-			'edit_terms' => 'manage_project_type',
-			'delete_terms' => 'manage_project_type',
-			'assign_terms' => 'edit_project_type'
+			'manage_terms' => 'manage_wpunity_project_type',
+			'edit_terms' => 'manage_wpunity_project_type',
+			'delete_terms' => 'manage_wpunity_project_type',
+			'assign_terms' => 'edit_wpunity_project_type'
 		),
 	);
 	
