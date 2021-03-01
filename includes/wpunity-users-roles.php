@@ -10,6 +10,12 @@
 //
 //
 
+//remove_role( 'adv_project_master3');
+//remove_role( 'adv_project_master2');
+//remove_role( 'adv_project_master1');
+
+
+
 //$role->add_cap('read');
 
 //$role->remove_cap('read');
@@ -42,9 +48,15 @@
 
 function wpunity_add_customroles() {
     
-    add_role( 'adv_project_master6', 'Advanced Project Master 6');
+    // These two roles to be removed it is for old version overlap
+    remove_role( 'adv_game_master');
+    remove_role( 'teacher');
     
-    $role = get_role( 'adv_project_master6' );
+    
+    // This is the new role
+    add_role( 'project_master', 'Project Master');
+    
+    $role = get_role( 'project_master' );
     
     //$role->add_cap('read');
     //$role->add_cap('level_0');

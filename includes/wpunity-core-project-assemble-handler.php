@@ -136,7 +136,7 @@ function wpunity_fetch_list_projects_callback(){
            if (current_user_can('administrator')){
     
             // ToDo: replace current_user_can with smth like current_user_is
-           } elseif (current_user_can('adv_project_master6')) {
+           } elseif (current_user_can('project_master')) {
 
                $collaborators = get_post_meta(get_the_ID(),'wpunity_game_collaborators_ids')[0];
     
