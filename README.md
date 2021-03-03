@@ -1,4 +1,14 @@
-wpUnity 
+---
+**NOTE**
+
+This repository is not maintained any more. The software is rebranded as VRodos (but it is still open source) under:
+https://github.com/VRodos/VRodos 
+
+---
+
+
+
+
 
 A Wordpress plugin for uploading 3D assets and assembling scenes through a web interface. 
 
