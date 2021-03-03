@@ -1,10 +1,10 @@
----
-***NOTE***
 
-This repository is not maintained any more. The software is rebranded as VRodos (but it is still open source) under:
-https://github.com/VRodos/VRodos 
+> ### NOTE:
 
----
+> ### This repository is not maintained any more. The software is rebranded as VRodos (but it is still open source) under:
+> https://github.com/VRodos/VRodos 
+
+
 
 
 
